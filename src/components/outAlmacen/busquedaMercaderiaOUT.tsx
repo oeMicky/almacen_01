@@ -4,7 +4,7 @@ import { images } from '~/assets';
 import TablaMercaderiasLocalizadasOUT from './tablaMercaderiasLocalizadasOUT';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';
 import SeleccionarEquivalenciaEnSalida from './seleccionarEquivalenciaEnSalida';
-import { CTX_ADD_VENTA, IItemVenta } from '../venta/addVenta';
+import { IItemVenta } from '../venta/addVenta'; //CTX_ADD_VENTA,
 import { elIdAuxiliar } from '~/functions/comunes';
 
 export const CTX_MERCA_SELECCIONADA = createContextId<IMercaSeleccionada>('mercaSeleccionada');
@@ -28,7 +28,7 @@ export interface IMercaSeleccionada {
 
 export default component$((props: { ancho: number; parametrosGlobales: any; item1: IItemVenta }) => {
   const ctx_PanelVenta = useContext(CTX_VENTA);
-  const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
+  // const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
   // const ctx_Merca_Seleccionada = useContext(CTX_MERCA_SELECCIONADA);
   const buscarMercaderias = useSignal(0);
   const itemSeleccionado = useSignal([]);

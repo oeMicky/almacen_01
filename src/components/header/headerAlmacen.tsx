@@ -1,6 +1,6 @@
 import { component$, useStylesScoped$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-import { CaoSLogo } from '../icons/cao-s';
+// import { CaoSLogo } from '../icons/cao-s';
 import style from './headerAlmacen.css?inline';
 import { images } from '~/assets';
 

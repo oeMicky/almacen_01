@@ -1,4 +1,4 @@
-import { $, component$, Resource, useContext, useResource$, useSignal } from '@builder.io/qwik';
+import { $, component$, Resource, useContext, useResource$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '../system/imgButton';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';
@@ -56,7 +56,7 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
       }}
       onResolved={(personas) => {
         console.log('onResolved 🍓🍓🍓🍓');
-        const { status, data, message } = personas;
+        const { data } = personas; //{ status, data, message }
         const misPersonas: IPersona[] = data;
         return (
           <>

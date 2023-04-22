@@ -1,4 +1,4 @@
-import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
+import { $, component$, useContext, useStore } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';
@@ -26,10 +26,10 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
   const ctx_PanelVenta = useContext(CTX_VENTA);
   const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
 
-  const descripEqui = useSignal('');
-  const cantid = useSignal(1);
+  // const descripEqui = useSignal('');
+  // const cantid = useSignal(1);
 
-  let ter: IItemVenta;
+  // let ter: IItemVenta;
 
   const parametrosInEquivalencia = useStore<IInEquivalencia>({
     descripcionEquivalencia: '',
@@ -38,7 +38,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
     laEquivalencia: 0,
     precioEquivalente: 0,
   });
-  const dataUniEqui = useSignal([]);
+  // const dataUniEqui = useSignal([]);
   console.log('props.itemSeleccionado props.itemSeleccionado props.itemSeleccionado', props.itemSeleccionado);
   return (
     <div style={{ width: props.ancho + 'px' }} class="container-modal">
@@ -199,7 +199,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
                   // idSerieDocumento.value = elOption.id;
                   // parametrosInEquivalencia.descripcionEquivalente = (e.target as HTMLSelectElement).attributes;
                   //
-                  let lasEquivalencias: Array<IEquivalencia> = props.itemSeleccionado.equivalencias;
+                  const lasEquivalencias: Array<IEquivalencia> = props.itemSeleccionado.equivalencias;
                   console.log('lasEquivalencias', lasEquivalencias);
                   const encontrado = lasEquivalencias.find(({ idUnidadEquivalencia }) => idUnidadEquivalencia === elOption.id);
                   console.log('encontrado', encontrado);

@@ -1,8 +1,8 @@
 import { component$, Slot } from '@builder.io/qwik';
 import { loader$ } from '@builder.io/qwik-city';
 
-import Header from '../components/header/header';
-import { CaoSLogo } from '../components/icons/cao-s';
+// import Header from '../components/header/header';
+// import { CaoSLogo } from '../components/icons/cao-s';
 
 export const useServerTimeLoader = loader$(() => {
   return {
@@ -11,7 +11,7 @@ export const useServerTimeLoader = loader$(() => {
 });
 
 export default component$(() => {
-  const serverTime = useServerTimeLoader();
+  // const serverTime = useServerTimeLoader();
 
   return (
     <Slot />

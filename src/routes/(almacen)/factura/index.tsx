@@ -2,9 +2,9 @@ import {
   $,
   component$,
   createContextId,
-  useContext,
+  // useContext,
   useContextProvider,
-  useResource$,
+  // useResource$,
   useSignal,
   useStore,
   useTask$,
@@ -14,7 +14,7 @@ import Button from '~/components/system/elButton';
 import { images } from '~/assets';
 import { hoy } from '~/functions/comunes';
 import TablaVentas from '~/components/venta/tablaVentas';
-import Modal from '~/components/system/elModal';
+// import Modal from '~/components/system/elModal';
 import AddVenta from '~/components/venta/addVenta';
 import { getIgvVenta } from '~/apis/venta.api';
 // import Venta from '~/components/venta/venta';
@@ -75,7 +75,7 @@ export default component$(() => {
   useContextProvider(CTX_VENTA, panelVenta);
   //#endregion CONTEXTO VENTA
 
-  const ventas = useStore([]);
+  // const ventas = useStore([]);
   const fechas = useStore({
     desde: hoy(),
     hasta: hoy(),

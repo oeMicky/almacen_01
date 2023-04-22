@@ -1,7 +1,7 @@
 import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
 import { images } from '~/assets';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';
-import { CTX_PERSONA } from '../venta/addVenta';
+// import { CTX_PERSONA } from '../venta/addVenta';
 import ImgButton from '../system/imgButton';
 import TablaPersonasHalladas from './tablaPersonasHalladas';
 
@@ -22,7 +22,7 @@ export interface IPersona {
 
 export default component$((props: ISeleccionarPersona) => {
   const ctx_PanelVenta = useContext(CTX_VENTA);
-  const ctx_PersonaSeleccionada = useContext(CTX_PERSONA);
+  // const ctx_PersonaSeleccionada = useContext(CTX_PERSONA);
   //   const personaSeleccionada = useSignal<IPersona>();
   // const personaSeleccionada = useStore<IPersona>({
   //   _id: '',

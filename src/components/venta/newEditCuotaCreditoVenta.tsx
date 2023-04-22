@@ -1,4 +1,4 @@
-import { $, component$, useContext, useStore, useTask$ } from '@builder.io/qwik';
+import { $, component$, useContext } from '@builder.io/qwik';
 import { images } from '~/assets';
 // import { , hoy } from '~/functions/comunes';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';

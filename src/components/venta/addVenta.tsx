@@ -2,7 +2,7 @@ import {
   $,
   component$,
   createContextId,
-  render,
+  // render,
   useContext,
   useContextProvider,
   useSignal,
@@ -16,18 +16,18 @@ import {
   getSeriesBoletaActivas,
   getSeriesNotaCreditoActivas,
   getSeriesNotaDebitoActivas,
-  getIgvVenta,
+  // getIgvVenta,
 } from '~/apis/venta.api';
 import { cerosALaIzquierda, elIdAuxiliar, formatoDDMMYYYY_PEN, hoy, redondeo2Decimales } from '~/functions/comunes';
 import SeleccionarPersona, { IPersona } from '../persona/seleccionarPersona';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';
 import { getTipoCambio } from '~/apis/apisExternas.api';
-import ElButton from '../system/elButton';
-import TablaCuotasCreditoVenta from './tablaCuotasCreditoVenta';
+// import ElButton from '../system/elButton';
+// import TablaCuotasCreditoVenta from './tablaCuotasCreditoVenta';
 import NewEditCuotaCreditoVenta from './newEditCuotaCreditoVenta';
-import TablaCuotas2 from './tablaCuotas2';
+// import TablaCuotas2 from './tablaCuotas2';
 import BusquedaMercaderiaOUT from '../outAlmacen/busquedaMercaderiaOUT';
-import { Form, action$, globalAction$, routeAction$ } from '@builder.io/qwik-city';
+// import { Form, action$, globalAction$, routeAction$ } from '@builder.io/qwik-city';
 import { inVenta } from '~/apis/venta.api';
 import AdjuntarCotizacion from './adjuntarCotizacion';
 
@@ -104,7 +104,7 @@ export interface IVenta {
 
 export default component$((props: { ancho: number; parametrosGlobales: any; igv: number }) => {
   const ctx_PanelVenta = useContext(CTX_VENTA);
-  const modificaciones_en_venta = useSignal(0);
+  // const modificaciones_en_venta = useSignal(0);
   const tipoDocumento = useSignal('01'); //FACTURA
   const idSerieDocumento = useSignal('');
   const serieDocumento = useSignal('');
@@ -118,7 +118,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
   let sumaTOTAL = 0;
   let subTOTAL = 0;
   let igvTOTAL = 0;
-  let sumaItems = 0;
+  // let sumaItems = 0;
   // const iT = useStore<ICuotaCreditoVenta>({
   //   idAuxiliar: -1,
   //   fechaCuota: hoy(),
@@ -139,7 +139,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
     precioUSD: 0,
     ventaUSD: 0,
   });
-  const item2: IItemVenta[] = [];
+  // const item2: IItemVenta[] = [];
 
   const cuota = useStore<ICuotaCreditoVenta>({
     idAuxiliar: 0,
@@ -324,10 +324,10 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
   });
   //#endregion CLIENTE
   //#region GENERALES DE FACTURA : Documento
-  const buscarSeriesVenta = $(async () => {
-    // const documento = (e.target as HTMLSelectElement).value;
-    alert('La alerta buscarSeriesVenta: ' + tipoDocumento.value);
-  });
+  // const buscarSeriesVenta = $(async () => {
+  //   // const documento = (e.target as HTMLSelectElement).value;
+  //   alert('La alerta buscarSeriesVenta: ' + tipoDocumento.value);
+  // });
   //#endregion
   //#region TIPO CAMBIO
   const obtenerTipoCambio = $(async (e: HTMLInputElement) => {
@@ -466,7 +466,8 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       return;
     }
     console.log('paso_______::::::______T', venta);
-    const aGrabar = await inVenta({
+    // const aGrabar =
+    await inVenta({
       idGrupoEmpresarial: props.parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: props.parametrosGlobales.idEmpresa,
 

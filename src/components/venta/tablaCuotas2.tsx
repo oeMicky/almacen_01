@@ -1,5 +1,5 @@
-import { $, component$, useBrowserVisibleTask$, useResource$ } from '@builder.io/qwik';
-import registro from '~/reports/98/registro';
+import { component$ } from '@builder.io/qwik';
+// import registro from '~/reports/98/registro';
 
 export default component$((props: { numero: number; registros: any[]; num_grabaciones: number }) => {
   //   useBrowserVisibleTask$(() => {

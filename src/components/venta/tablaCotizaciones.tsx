@@ -2,7 +2,7 @@ import { $, Resource, component$, useContext, useResource$, useSignal, useTask$ 
 import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
+//------- import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';
 import { CTX_ADD_VENTA } from './addVenta';
 
@@ -73,7 +73,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     console.log('a pdfFactura98', cotizacion.untrackedValue); //venta !== null &&
     if (typeof cotizacion.untrackedValue !== 'undefined') {
       console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion.untrackedValue);
-      pdfCotizacion98(cotizacion.untrackedValue);
+      //-------- pdfCotizacion98(cotizacion.untrackedValue);
     }
   });
   useTask$(async ({ track }) => {
@@ -102,7 +102,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
       }}
       onResolved={(cotizaciones) => {
         console.log('onResolved 🍓🍓🍓🍓');
-        const { status, data, message } = cotizaciones;
+        const { data } = cotizaciones; //{ status, data, message }
         const misCotizaciones: ICotizacion[] = data;
         // props.buscarVentas = false;
         return (

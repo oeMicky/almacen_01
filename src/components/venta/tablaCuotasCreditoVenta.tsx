@@ -1,8 +1,8 @@
-import { component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
+import { component$, useContext, useSignal } from '@builder.io/qwik';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN, redondeo2Decimales } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
-import { CTX_ADD_VENTA, ICuotaCreditoVenta } from './addVenta';
+import { CTX_ADD_VENTA } from './addVenta'; //ICuotaCreditoVenta
 
 // export interface ICuota {
 //   idAuxiliar: number;

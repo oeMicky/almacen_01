@@ -1,4 +1,4 @@
-import { $, component$, useSignal } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 
 interface IElBottun {
   id?: string;
@@ -16,8 +16,8 @@ interface IElBottun {
 // });
 
 export default component$((props: IElBottun) => {
-  const stateVisi = useSignal<string>('hidden');
-  const stateOpaci = useSignal<string>('0');
+  // const stateVisi = useSignal<string>('hidden');
+  // const stateOpaci = useSignal<string>('0');
 
   //   const mostarHint = () => {
   //     if (props.hint) {

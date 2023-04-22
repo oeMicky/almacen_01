@@ -2,7 +2,7 @@ import { $, Resource, component$, useContext, useResource$ } from '@builder.io/q
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';
-import { CTX_ADD_VENTA } from '../venta/addVenta';
+// import { CTX_ADD_VENTA } from '../venta/addVenta';
 import { CTX_MERCA_SELECCIONADA } from './busquedaMercaderiaOUT';
 
 export interface IMercaderia {
@@ -19,7 +19,7 @@ export interface IMercaderia {
 export default component$(
   (props: { buscarMercaderias: number; parametrosBusqueda: any; esAlmacen: boolean; seleccionado: any }) => {
     const ctx_PanelVenta = useContext(CTX_VENTA);
-    const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
+    // const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
     const ctx_Merca_Seleccionada = useContext(CTX_MERCA_SELECCIONADA);
 
     const lasMercaderias = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
@@ -58,7 +58,7 @@ export default component$(
         }}
         onResolved={(mercaderias) => {
           console.log('onResolved 🍓🍓🍓🍓');
-          const { status, data, message } = mercaderias;
+          const { data } = mercaderias; //{ status, data, message } status,, message
           const misMercaderias: IMercaderia[] = data;
           // props.buscarVentas = false;
           return (
@@ -77,7 +77,8 @@ export default component$(
                       </tr>
                     </thead>
                     <tbody>
-                      {misMercaderias.map((merca, index) => {
+                      {misMercaderias.map((merca) => {
+                        //, index
                         // const indexItem = index + 1;
                         return (
                           <tr key={merca._id}>

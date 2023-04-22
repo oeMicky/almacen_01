@@ -3,13 +3,13 @@ import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { images } from '~/assets';
 import styles from '../../components/tabla.css?inline';
 import ImgButton from '../system/imgButton';
-import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
+//------- import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
 
-interface IEstructura {
-  _id: string;
-  especie: string;
-  numero: number;
-}
+// interface IEstructura {
+//   _id: string;
+//   especie: string;
+//   numero: number;
+// }
 
 export interface IVenta {
   _id: string;
@@ -73,7 +73,7 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
     console.log('a pdfFactura98', venta.untrackedValue); //venta !== null &&
     if (typeof venta.untrackedValue !== 'undefined') {
       console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', venta.untrackedValue);
-      pdfFactura98(venta.untrackedValue);
+      //------------- pdfFactura98(venta.untrackedValue);
     }
   });
 
@@ -121,7 +121,7 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
         }}
         onResolved={(ventas) => {
           console.log('onResolved 🍓🍓🍓🍓');
-          const { status, data, message } = ventas;
+          const { data } = ventas; //{ status, data, message }
           const misVentas: IVenta[] = data;
           // props.buscarVentas = false;
           return (
