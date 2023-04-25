@@ -1,43 +1,214 @@
-header {
-  display: flex;
-  /* background: white; #00778F; */
-  background: #00778F;   
-  /* border-bottom: 10px solid var(--qwik-dark-purple); */
-}
 header.header-almacen {
   display: flex;
   /* background: white; #00778F; */
-  background: #b4eefb;   
+  background: #b4eefb;
   /* border-bottom: 10px solid var(--qwik-dark-purple); */
 }
+/******************************/
+/******************************/
+header {
+  background: #00778F;  
+} 
+.container-header {
+  max-width: 1110px;
+  margin-right: auto;
+  margin-left: auto;
 
-header .logo a {
+  /* border: rgb(255, 43, 43) 1px solid; */
+  display: flex;
+ justify-content: space-between;
+  height: 3.5rem;
+}
+.main_logo {
+  /* border: #11faf6 1px dashed; */
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* border: rgb(242, 238, 238) 1px dashed; */
+}
+#menu {
+  cursor: pointer;
+}
+.toggle-menu {
+  width: 56px
+}
+#toggle-menu-checkbox {
+  display: none;
+}
+.toggle-menu__checkbox:checked+.main-menu {
+  transform: translateY(0);
+}
+.main-menu {
+  list-style: none;
+  background-color: #019ebd;
+  padding-left: 0;
+  position: fixed;
+  top: 2.5rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+
+  transform: translateY(-150%);
+  transition: 0.3s;
+
+  /* border: rgb(19, 18, 18) 1px dashed; */
+}
+.main-menu__item {
+  padding: 0.5rem;
+}
+.main-menu__item:hover {
+  background-color: #025566;
+  /* border: turquoise 1px solid; */
+}
+.main-menu__link {
+  text-decoration: none;
+  color: rgb(215, 211, 211);
+}
+header li a {
+  /* display: inline-block;
+  padding: 15px 10px; */
+  /* color: #ee99ee; */
+  text-decoration: none;
+}
+a{
+  text-decoration: none;
+  color: rgb(214, 164, 164);
+}
+.frontera{
+  text-decoration: none;
+}
+@media screen and (min-width:768px) {
+  .toggle-menu {
+    display: none;
+  }
+  .main-menu {
+    position: relative;
+    display: flex;
+    background-color: #00778F;
+
+    transform: translateY(0);
+    transition: 0.3s;
+
+    top: 0rem;
+  }
+}
+/* header .logo a {
   display: inline-block;
   padding: 10px 10px 7px 20px;
+  border: #b4eefb 1px dashed;  
+} */
+/* #menu{
+  cursor: pointer;
 }
+.toggle-menu {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.5rem;
+  cursor: pointer;
+}
+@media screen and (min-width:768px) {
+  .toggle-menu {
+ display: none;
+  }
+}
+.toggle-menu__checkbox{
+  display: none;
+}
+.toggle-menu__checkbox:checked + .main-menu{
+transform: translateY(0);
+}
+.main-menu{
+list-style: none;
+padding-left: 0;
 
-header ul {
+position: absolute;
+top: 3.1rem;
+left: 0;
+width: 100%;
+
+background-color: rgb(35, 161, 161);
+
+display: flex;
+flex-direction: column;
+align-items: center;
+transform: translateY(-150%);
+transition: 0.3s;
+}
+@media screen and (min-width:768px){
+  .main-menu{
+    /* flex-direction: row;*/
+    /* transform: translateY(0);  */
+
+    /* display: inline;
+    position: relative; */
+
+/*    margin: 0;
+      padding: 3px 10px 0 0;
+      list-style: none;
+      flex: 1;
+      text-align: right;
+  }
+    .main-menu__item {
+      display: inline-block;
+        margin: 0;
+        padding: 0;
+    }
+        .main-menu__link {
+          display: inline-block;
+            padding: 15px 10px;
+            text-decoration: none;
+        }
+}
+.main-menu__item{
+padding: 1em;
+}
+.main-menu__link{
+text-decoration: none;
+}
+.main-menu__link:hover{
+color: rgb(32, 34, 34);
+} */
+
+
+
+/* header ul { */
+/* .main-menu {
+  position: initial;
+  top: 0;
+    right: 0;
+
   margin: 0;
   padding: 3px 10px 0 0;
   list-style: none;
   flex: 1;
-  text-align: right;
-}
+  text-align: end;
 
-header li {
+  border: #b4eefb 1px dashed;
+} */
+
+/* header li { */
+/* .main-menu__item {
   display: inline-block;
   margin: 0;
   padding: 0;
-}
+} */
 
-header li a {
+/* header li a { */
+/* .main-menu__link{
   display: inline-block;
   padding: 15px 10px;
-  /* color: #ee99ee; */
   text-decoration: none;
-}
+} */
 
-header li a:hover {
+/* header li a:hover { */
+/* .main-menu__link:hover {
   text-decoration: underline;
-}
+} */
 

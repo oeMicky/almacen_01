@@ -16,63 +16,55 @@ export default component$(() => {
   return (
     <>
       <Header />
-      <div class="container">
-        {/* INICIO */}
-        <section id="inicio" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', height: '500px' }}>
-          {/* frase */}
-          <div
-            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px 20px', color: '#00778F' }}
-          >
-            <label style={{ color: '#75ABB2', fontFamily: 'Roboto Condensed', fontSize: '2.4rem' }}>
-              Somos
-              <br />
-              <strong style={{ color: '#00778F' }}>CAO</strong>
-              <strong style={{ color: '#003F62' }}>-S</strong>{' '}
-              <strong style={{ color: '#003F62', fontSize: '1.86rem' }}>Software Development</strong>
-              <br />Y estamos para ayudarte
-            </label>
-          </div>
-          <img
-            src={images.caoSLogoGrandeWB}
-            alt="Logo grande"
-            style={{ width: '80%', justifySelf: 'center', alignSelf: 'center' }}
-            onClick$={() => {
-              darClick();
-            }}
-          />
-        </section>
-        {/* PORTAFOLIO */}
-        <section id="portafolio" style={{ display: 'flex', flexDirection: 'column' }}>
-          <h2 style={{ marginLeft: '15px' }}>PORTAFOLIO</h2>
-          <Portafolio
-            imagen={images.reunionPersonalWB}
-            // imagen={catalogoImagenes.reunionPersonalWB}
-            titulo={`SISMEM`}
-            subtitulo={`Sistema de gestión empresarial`}
-            parrafo={
-              'Plataforma de gestión de distintas áreas de una empresa, esta ordena y coordina los procesos que realizan las distintas áreas de la empresa.'
-            }
-          />
-          <Portafolio
-            imagen={images.revisandoPapelesWB}
-            titulo={`e-SERVICIO`}
-            subtitulo={`Gestión centro de servicio`}
-            parrafo={`Sistema para la gestión de un centro de servicios al cliente, con el podra realizar ordenes de servicios,
+      <main>
+        <div class="container">
+          {/* INICIO */}
+          <section id="inicio" class="seccion-inicio">
+            <div class="frase-principal">
+              <label style={{ color: '#75ABB2', fontFamily: 'Roboto Condensed', fontSize: '2.4rem' }}>
+                Somos
+                <br />
+                <strong style={{ color: '#00778F' }}>CAO</strong>
+                <strong style={{ color: '#003F62' }}>-S</strong>{' '}
+                <strong style={{ color: '#003F62', fontSize: '1.86rem' }}>Software Development</strong>
+                <br />Y estamos para ayudarte
+              </label>
+            </div>
+            <img src={images.caoSLogoGrandeWB} alt="Logo grande" class="imagen-principal" />
+          </section>
+          {/* PORTAFOLIO */}
+          <section id="portafolio" class="seccion-portafolio">
+            <h2 style={{ marginLeft: '15px' }}>PORTAFOLIO</h2>
+            <Portafolio
+              imagen={images.reunionPersonalWB}
+              // imagen={catalogoImagenes.reunionPersonalWB}
+              titulo={`SISMEM`}
+              subtitulo={`Sistema de gestión empresarial`}
+              parrafo={
+                'Plataforma de gestión de distintas áreas de una empresa, esta ordena y coordina los procesos que realizan las distintas áreas de la empresa.'
+              }
+            />
+            <Portafolio
+              imagen={images.revisandoPapelesWB}
+              titulo={`e-SERVICIO`}
+              subtitulo={`Gestión centro de servicio`}
+              parrafo={`Sistema para la gestión de un centro de servicios al cliente, con el podra realizar ordenes de servicios,
               cotizaciones, llevar el control de sus kardexs.`}
-          />
-        </section>
-        {/* ASOCIADOS */}
-        <section id="asociados">
-          <h2 style={{ marginLeft: '15px' }}>ASOCIADOS</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '15px 15px' }}>
-            {/* <Asociado></Asociado> */}
-            <Asociado imagen={images.panafoodsBnWB} ancho={'350px'} />
-            <Asociado imagen={images.igmBnWB} ancho={'200px'} />
-            <Asociado imagen={images.mgBnWB} ancho={'200px'} />
-            <Asociado imagen={images.sanMiguelBnWB} ancho={'200px'} />
-          </div>
-        </section>
-      </div>
+            />
+          </section>
+          {/* ASOCIADOS */}
+          <section id="asociados" class="seccion-asociados">
+            <h2 style={{ marginLeft: '15px' }}>ASOCIADOS</h2>
+            <div class="asociados">
+              <Asociado imagen={images.panafoodsBnWB} ancho={'350px'} />
+              <Asociado imagen={images.igmBnWB} ancho={'200px'} />
+              <Asociado imagen={images.mgBnWB} ancho={'200px'} />
+              <Asociado imagen={images.sanMiguelBnWB} ancho={'200px'} />
+            </div>
+          </section>
+        </div>
+      </main>
+
       <Footer />
     </>
   );

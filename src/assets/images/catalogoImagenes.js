@@ -23,6 +23,7 @@ import check from '../images/check.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
 import list from '../images/list.svg';
+import menu from '../images/menu.svg';
 import moneyBag from '../images/moneyBag.svg';
 import pdf from '../images/pdf.svg';
 import pdf_2 from '../images/pdf_2.svg';
@@ -63,6 +64,7 @@ export default {
   download,
   edit,
   list,
+  menu,
   moneyBag,
   pdf,
   pdf_2,
