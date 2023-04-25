@@ -1,4 +1,4 @@
-import { $, component$ } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 // import { Link } from '@builder.io/qwik-city';
 // import catalogoImagenes from '~/assets/images/catalogoImagenes';
@@ -9,9 +9,9 @@ import Header from '~/components/header/header';
 import Footer from '~/components/footer/footer';
 
 export default component$(() => {
-  const darClick = $(() => {
-    alert('⚡️⚡️⚡️⚡️pipipipi ddddd gui tu 700');
-  });
+  // const darClick = $(() => {
+  //   alert('⚡️⚡️⚡️⚡️pipipipi ddddd gui tu 700');
+  // });
 
   return (
     <>
