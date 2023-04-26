@@ -73,7 +73,7 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
     console.log('a pdfFactura98', venta.untrackedValue); //venta !== null &&
     if (typeof venta.untrackedValue !== 'undefined') {
       console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', venta.untrackedValue);
-      //------------- pdfFactura98(venta.untrackedValue);
+      // pdfFactura98(venta.untrackedValue);
     }
   });
 
