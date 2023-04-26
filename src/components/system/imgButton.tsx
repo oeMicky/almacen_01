@@ -30,6 +30,7 @@ export default component$((props: IImgButton) => {
         cursor: 'pointer',
         // borderRadius: '50%',
         padding: '2px 2px',
+        // filter: 'invert(1)',
       }}
       onClick$={props.onClick}
     />

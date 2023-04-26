@@ -18,15 +18,17 @@ export default component$(() => {
       <Header />
       <main>
         <div class="container">
-          {/* INICIO */}
+          {/* INICIO  style={{ color: '#75ABB2', fontFamily: 'Roboto Condensed', fontSize: '2.4rem',fontSize: '1.86rem' }}*/}
           <section id="inicio" class="seccion-inicio">
             <div class="frase-principal">
-              <label style={{ color: '#75ABB2', fontFamily: 'Roboto Condensed', fontSize: '2.4rem' }}>
+              <label>
                 Somos
                 <br />
                 <strong style={{ color: '#00778F' }}>CAO</strong>
                 <strong style={{ color: '#003F62' }}>-S</strong>{' '}
-                <strong style={{ color: '#003F62', fontSize: '1.86rem' }}>Software Development</strong>
+                <strong class="frase-principal-letraPeque" style={{ color: '#003F62' }}>
+                  Software Development
+                </strong>
                 <br />Y estamos para ayudarte
               </label>
             </div>
@@ -56,10 +58,14 @@ export default component$(() => {
           <section id="asociados" class="seccion-asociados">
             <h2 style={{ marginLeft: '15px' }}>ASOCIADOS</h2>
             <div class="asociados">
-              <Asociado imagen={images.panafoodsBnWB} ancho={'350px'} />
+              <Asociado imagen={images.panafoodsBnWB} ancho={'240px'} />
+              <Asociado imagen={images.igmBnWB} ancho={'160px'} />
+              <Asociado imagen={images.mgBnWB} ancho={'160px'} />
+              <Asociado imagen={images.sanMiguelBnWB} ancho={'180px'} />
+              {/* <Asociado imagen={images.panafoodsBnWB} ancho={'350px'} />
               <Asociado imagen={images.igmBnWB} ancho={'200px'} />
               <Asociado imagen={images.mgBnWB} ancho={'200px'} />
-              <Asociado imagen={images.sanMiguelBnWB} ancho={'200px'} />
+              <Asociado imagen={images.sanMiguelBnWB} ancho={'200px'} /> */}
             </div>
           </section>
         </div>

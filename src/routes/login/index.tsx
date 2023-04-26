@@ -96,7 +96,7 @@ export default component$(() => {
             <input
               class="boton-formulario"
               type="button"
-              value="Registrar"
+              value="Logearse"
               onClick$={() => {
                 // console.log('onClick');
                 enviar();
