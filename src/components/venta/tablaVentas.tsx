@@ -94,7 +94,7 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
     cleanup(() => abortController.abort('cleanup'));
 
     // const res = await fetch(`http://localhost:4000/api/venta/obtenerVentasPorFechas`, {
-    const res = await fetch(`https://backendalmacen-production.up.railway.app/api-/venta/obtenerVentasPorFechas`, {
+    const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
