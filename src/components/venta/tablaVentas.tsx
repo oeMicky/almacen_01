@@ -135,7 +135,7 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
                   >
                     desde tabla al falso
                   </button> */}
-                  <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                  <table class="tabla-venta" style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -155,14 +155,16 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
                         const indexItem = index + 1;
                         return (
                           <tr key={value._id}>
-                            <td>{indexItem}</td>
-                            <td>{formatoDDMMYYYY_PEN(value.fecha)}</td>
-                            <td>{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                            <td>{value.razonSocialNombre}</td>
-                            <td>{value.serie}</td>
-                            <td>{value.numeroDocumento}</td>
-                            <td style={{ textAlign: 'center' }}>{value.moneda}</td>
-                            <td style={{ textAlign: 'end' }}>
+                            <td data-label="Item">{indexItem}</td>
+                            <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
+                            <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
+                            <td data-label="Cliente">{value.razonSocialNombre}</td>
+                            <td data-label="Serie">{value.serie}</td>
+                            <td data-label="Nro">{value.numeroDocumento}</td>
+                            <td data-label="Moneda" style={{ textAlign: 'center' }}>
+                              {value.moneda}
+                            </td>
+                            <td data-label="Importe" style={{ textAlign: 'end' }}>
                               {value.moneda === 'PEN'
                                 ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
                                     // style: 'currency',
@@ -175,8 +177,8 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
                                     minimumFractionDigits: 2,
                                   })}
                             </td>
-                            <td>{value.metodoPago}</td>
-                            <td style={{ textAlign: 'center' }}>
+                            <td data-label="Pago">{value.metodoPago}</td>
+                            <td data-label="Acciones" style={{ textAlign: 'center' }}>
                               {/* , filter: 'invert(1)'
                               <ImgButton src={images.edit} alt="icono de editar" height={12} width={12} title="Editar venta" /> */}
                               <ImgButton

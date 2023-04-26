@@ -77,7 +77,7 @@ export default component$(() => {
 
   // const ventas = useStore([]);
   const fechas = useStore({
-    desde: hoy(),
+    desde: '2023-01-01', // hoy(),
     hasta: hoy(),
   });
   const parameBusqueda = useStore({
@@ -131,7 +131,7 @@ export default component$(() => {
   return (
     <div
       style={{
-        width: '1111px', //SIZES.anchoContenedor + 'px',
+        //width: '1111px', //SIZES.anchoContenedor + 'px',
         height: 'inherit',
         color: '#858585', //COLORS.lightGray2,
         // background: '#a5a5a5',

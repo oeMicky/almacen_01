@@ -47,6 +47,13 @@ a.linkHeaderPrincipal:hover {
 
   /* border: rgb(255, 43, 43) 1px solid; */
 }
+/* @media (max-width:500px) {
+.container {
+    width: auto;
+
+    border: rgb(0, 72, 255) 3px solid;
+  }
+} */
 /************************************/
 /*********SECCION INICIO*************/
 /************************************/
