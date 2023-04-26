@@ -5,9 +5,9 @@ import robotoMediumItalic from './robotoMediumItalic.js';
 import robotoRegular from './robotoRegular.js';
 
 const vfs = {
-  'Roboto-Italic.ttf': robotoItalic['Roboto-Italic.ttf'],
+  //   'Roboto-Italic.ttf': robotoItalic['Roboto-Italic.ttf'],
   'Roboto-Medium.ttf': robotoMedium['Roboto-Medium.ttf'],
-  'Roboto-MediumItalic.ttf': robotoMediumItalic['Roboto-MediumItalic.ttf'],
+  //   'Roboto-MediumItalic.ttf': robotoMediumItalic['Roboto-MediumItalic.ttf'],
   'Roboto-Regular.ttf': robotoRegular['Roboto-Regular.ttf'],
 };
 
