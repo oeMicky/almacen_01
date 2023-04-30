@@ -53,7 +53,9 @@ export default component$((props: ISeleccionarPersona) => {
   return (
     <div
       style={{
-        width: props.ancho + 'px',
+        // width: props.ancho + 'px',
+        width: 'auto',
+        padding: '2px',
       }}
       class="container-modal"
     >

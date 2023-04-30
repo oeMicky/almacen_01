@@ -1,9 +1,9 @@
-header.header-almacen {
+/* header.header-almacen {
   display: flex;
   /* background: white; #00778F; */
-  background: #b4eefb;
+/*  background: #b4eefb;*/
   /* border-bottom: 10px solid var(--qwik-dark-purple); */
-}
+/*} */
 /******************************/
 /******************************/
 header {
@@ -43,7 +43,7 @@ header {
   display: none;
 }
 .toggle-menu__checkbox:checked+.main-menu {
-  transform: translateY(0);
+  transform: translateY(0%);
 }
 .main-menu {
   list-style: none;
@@ -69,7 +69,7 @@ header {
 }
 .main-menu__link {
   text-decoration: none;
-  color: rgb(215, 211, 211);
+  color: #eee;
 }
 header li a {
   /* display: inline-block;

@@ -40,7 +40,7 @@ export default component$(() => {
               </a>
             </li>
             <li class="main-menu__item">
-              <Link style={{ color: 'rgb(215, 211, 211)', textDecoration: 'none' }} href="../login/">
+              <Link style={{ color: '#eee', textDecoration: 'none' }} href="../login/">
                 Ingresar
               </Link>
             </li>

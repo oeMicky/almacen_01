@@ -31,6 +31,7 @@ export default component$((props: IImgButton) => {
         // borderRadius: '50%',
         padding: '2px 2px',
         // filter: 'invert(1)',
+        // border: ' 1px solid red',
       }}
       onClick$={props.onClick}
     />

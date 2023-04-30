@@ -1,9 +1,10 @@
-import { $, component$, Resource, useContext, useResource$ } from '@builder.io/qwik';
+import { $, component$, Resource, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '../system/imgButton';
 import { CTX_VENTA } from '~/routes/(almacen)/factura';
 import { CTX_PERSONA } from '../venta/addVenta';
 import { IPersona } from './seleccionarPersona';
+import style from '../../components/tabla.css?inline';
 
 // interface IPersona {
 //   _id: string;
@@ -14,6 +15,8 @@ import { IPersona } from './seleccionarPersona';
 // }
 
 export default component$((props: { buscarPersona: number; parametrosBusqueda: any }) => {
+  useStylesScoped$(style);
+
   const ctx_PanelVenta = useContext(CTX_VENTA);
   const ctx_PersonaSeleccionada = useContext(CTX_PERSONA);
 
@@ -33,7 +36,9 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
     //   signal: abortController.signal,
     // });
     console.log('parametrosBusqueda', props.parametrosBusqueda);
-    const res = await fetch('http://localhost:4000/api/persona/obtenerPersonasPorDniRuc', {
+
+    // const res = await fetch('http://localhost:4000/api/persona/obtenerPersonasPorDniRuc', {
+    const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,11 +82,11 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
                       const indexItem = index + 1;
                       return (
                         <tr key={value._id}>
-                          <td>{indexItem}</td>
-                          <td>{value.tipoDocumentoIdentidad}</td>
-                          <td>{value.numeroIdentidad}</td>
-                          <td>{value.razonSocialNombre}</td>
-                          <td style={{ textAlign: 'center' }}>
+                          <td data-label="Item">{indexItem}</td>
+                          <td data-label="Tipo">{value.tipoDocumentoIdentidad}</td>
+                          <td data-label="Número">{value.numeroIdentidad}</td>
+                          <td data-label="R.Soc/Nomb">{value.razonSocialNombre}</td>
+                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
                             <ImgButton
                               src={images.check}
                               alt="icono de selección"

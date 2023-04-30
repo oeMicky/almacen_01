@@ -1,4 +1,5 @@
-const API = 'http://localhost:4000/api/venta';
+// const API = 'http://localhost:4000/api/venta';
+const API = 'https://backendalmacen-production.up.railway.app/api/venta';
 
 export const getSeriesFacturaActivas = async (parametros) => {
   console.log('//////api////////////******************obtener a getSeriesFactura');

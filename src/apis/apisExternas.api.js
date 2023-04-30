@@ -1,4 +1,5 @@
-const API = 'http://localhost:4000/api/apisExternas';
+// const API = 'http://localhost:4000/api/apisExternas';
+const API = 'https://backendalmacen-production.up.railway.app/api/apisExternas';
 
 export const getTipoCambio = async (parametros) => {
   console.log('//////api////////////******************ingreso a getTipoCambio');

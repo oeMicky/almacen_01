@@ -5,11 +5,12 @@ export default component$(() => {
   const fecha = new Date();
   const anio = fecha.getFullYear();
   return (
+    // style={{ display: 'flex', alignItems: 'center', marginBottom: '7px' }}
     <footer class="footer-principal">
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '7px' }}>
-        Powered by <CaoSLogo />
+      <div class="linea-uno">
+        <label>Powered by</label> <CaoSLogo />
       </div>
-      <div>© {anio}</div>
+      <div class="linea-dos">© {anio}</div>
     </footer>
   );
 });

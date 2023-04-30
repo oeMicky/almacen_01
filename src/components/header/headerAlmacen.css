@@ -1,8 +1,92 @@
 header {
-    display: flex;
+    /* display: flex; */
     /* background: white; #00778F; */
     background: #6abbcb;
     /* border-bottom: 10px solid var(--qwik-dark-purple); */
+    /* border: 1px red solid */
+}
+.container-header{
+    max-width: 1110px;
+        margin-right: auto;
+        margin-left: auto;
+    
+        /* border: rgb(255, 43, 43) 1px solid; */
+        display: flex;
+        justify-content: space-between;
+        height: 3.5rem;
+}
+.main-logo{
+    /* border: #11faf6 1px dashed; */
+        width: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+}
+.main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* border: rgb(242, 238, 238) 1px dashed; */
+}
+#menu {
+    cursor: pointer;
+}
+.toggle-menu {
+    width: 46px;
+    filter: invert(1); /*invierte el color*/
+    /* border: blue 1px dashed; */
+}
+#toggle-menu-checkbox {
+    display: none;
+}
+.toggle-menu__checkbox:checked+.main-menu {
+    transform: translateY(0%);
+}
+.main-menu {
+    list-style: none;
+    background-color: #6abbcb;
+    padding-left: 0;
+    position: fixed;
+    top: 2.5rem;
+    left: 0;
+    width: 100%;
+    text-align: center;
+
+    transform: translateY(-150%);
+    transition: 0.3s;
+
+    z-index: 1;
+
+    /* border: rgb(19, 18, 18) 1px dashed; */
+}
+.main-menu__item {
+    padding: 0.5rem;
+    color: red;
+}
+
+.main-menu__item:hover {
+    background-color: #5ca1ae;
+    /* border: turquoise 1px solid; */
+}
+@media screen and (min-width:768px) {
+    .toggle-menu {
+        display: none;
+    }
+
+    .main-menu {
+        position: relative;
+        display: flex;
+        background-color: #6abbcb;
+
+        transform: translateY(0);
+        transition: 0.3s;
+
+        top: 0rem;
+    }
+    .main-menu__item {
+            padding: 0.5rem 1rem;
+    }
 }
 
 /* header .logo a { */
@@ -10,18 +94,17 @@ header {
     /* padding: 10px 10px 7px 20px; */
 /* } */
 
-header ul {
+/* header ul {
     margin: 0;
     padding: 3px 10px 0 0;
     list-style: none;
     flex: 1;
     text-align: right;
+    border: 1px blue solid
 }
 
 header li {
     display: inline-block;
-     /* margin: 0; */
-    /*padding: 0; */
 }
 header li:hover {
     background-color: #61a9b8;
@@ -30,10 +113,9 @@ header li:hover {
 header li a {
     display: inline-block;
     padding: 15px 10px;
-    /* color: #ee99ee; */
     text-decoration: none;
 }
 
 header li a:hover {
     text-decoration: underline;
-}
+} */

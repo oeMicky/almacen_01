@@ -1,4 +1,5 @@
-const API = 'http://localhost:4000/api/persona';
+// const API = 'http://localhost:4000/api/persona';
+const API = 'https://backendalmacen-production.up.railway.app/api/persona';
 
 export const inUpPersona = async (parametros) => {
   console.log('//////api////////////******************inser/update en inUpPersona');

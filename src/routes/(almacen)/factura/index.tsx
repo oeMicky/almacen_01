@@ -7,6 +7,7 @@ import {
   // useResource$,
   useSignal,
   useStore,
+  useStylesScoped$,
   useTask$,
 } from '@builder.io/qwik';
 import ImgButton from '../../../components/system/imgButton';
@@ -17,6 +18,7 @@ import TablaVentas from '~/components/venta/tablaVentas';
 // import Modal from '~/components/system/elModal';
 import AddVenta from '~/components/venta/addVenta';
 import { getIgvVenta } from '~/apis/venta.api';
+import style from './index.css?inline';
 // import Venta from '~/components/venta/venta';
 // import { getVentasPorFechas } from '~/apis/venta.api';
 
@@ -42,6 +44,7 @@ import { getIgvVenta } from '~/apis/venta.api';
 export const CTX_VENTA = createContextId<any>('venta');
 
 export default component$(() => {
+  useStylesScoped$(style);
   console.log('🎟🎟🎟🎨🎨🎨');
   const parametrosGlobales = useStore({
     idGrupoEmpresarial: '60f097ca53621708ecc4e781',
@@ -129,90 +132,96 @@ export default component$(() => {
   // });
 
   return (
-    <div
-      style={{
-        //width: '1111px', //SIZES.anchoContenedor + 'px',
-        height: 'inherit',
-        color: '#858585', //COLORS.lightGray2,
-        // background: '#a5a5a5',
-        margin: '5px auto',
-        display: 'inherit',
-        justifyContent: 'inherit',
-        alignItems: 'inherit',
-      }}
-    >
-      {/*  TITULO  */}
-      <h3>
-        <u>Facturación</u>
-      </h3>
-      {/*  INTERVALOS DE FECHAS */}
-      <div style={{ display: 'flex', margin: '10px 0' }}>
-        <label style={{ marginRight: '10px' }}>
-          Desde:{' '}
-          <input
-            id="fechaDesde"
-            type="date"
-            value={parameBusqueda.fechaInicio}
-            onInput$={(e) => {
-              fechas.desde = (e.target as HTMLInputElement).value;
-            }}
-          />
-        </label>
+    <main>
+      <div
+        class="container"
+        // style={{
+        //   //width: '1111px', //SIZES.anchoContenedor + 'px',
+        //   height: 'inherit',
+        //   color: '#858585', //COLORS.lightGray2,
+        //   // background: '#a5a5a5',
+        //   margin: '5px auto',
+        //   display: 'inherit',
+        //   justifyContent: 'inherit',
+        //   alignItems: 'inherit',
+        // }}
+      >
+        {/*  TITULO  */}
+        <h3>
+          <u>Facturación</u>
+        </h3>
+        {/*  INTERVALOS DE FECHAS  style={{ display: 'flex', margin: '10px 0' }}*/}
+        {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
+        <div class="intervalo-fechas">
+          <label class="fechas">
+            Desde:{' '}
+            <input
+              id="fechaDesde"
+              type="date"
+              value={parameBusqueda.fechaInicio}
+              onInput$={(e) => {
+                fechas.desde = (e.target as HTMLInputElement).value;
+              }}
+            />
+          </label>
+          <label class="fechas">
+            Hasta:{' '}
+            <input
+              id="fechaHasta"
+              type="date"
+              value={parameBusqueda.fechaFinal}
+              onInput$={(e) => {
+                fechas.hasta = (e.target as HTMLInputElement).value;
+              }}
+            />
+          </label>
+          <div class="intervalo-fechas__botonBuscar">
+            <ImgButton
+              id="busquedaVentas"
+              src={images.searchPLUS}
+              alt="Icono de busqueda"
+              height={16}
+              width={16}
+              title="Buscar ventas"
+              onClick={$(async () => {
+                if (fechas.desde > fechas.hasta) {
+                  alert('Verifique las fechas de busqueda');
+                  document.getElementById('fechaDesde')?.focus();
+                  return;
+                }
+                console.log('click en lupa: parameBusqueda ', parameBusqueda);
 
-        <label style={{ marginRight: '5px' }}>
-          Hasta:{' '}
-          <input
-            id="fechaHasta"
-            type="date"
-            value={parameBusqueda.fechaFinal}
-            onInput$={(e) => {
-              fechas.hasta = (e.target as HTMLInputElement).value;
-            }}
-          />
-        </label>
-
-        <ImgButton
-          id="busquedaVentas"
-          src={images.searchPLUS}
-          alt="Icono de busqueda"
-          height={16}
-          width={16}
-          title="Buscar ventas"
-          onClick={$(async () => {
-            if (fechas.desde > fechas.hasta) {
-              alert('Verifique las fechas de busqueda');
-              document.getElementById('fechaDesde')?.focus();
-              return;
-            }
-            console.log('click en lupa: parameBusqueda ', parameBusqueda);
-
-            buscarVentas.value++;
-          })}
-        />
-      </div>
-      {/*  BOTONES   className="btn"  onClick={mostrarPanelVenta}  */}
-      <div style={{ marginBottom: '10px' }}>
-        <Button
-          name="ADD VENTA"
-          title="Add una ventas"
-          onClick={$(async () => {
-            let elIgv = await getIgvVenta(parametrosGlobales);
-            elIgv = elIgv.data;
-            igv.value = elIgv[0].igv;
-            panelVenta.mostrarPanelVenta = true;
-          })}
-        />
-        {panelVenta.mostrarPanelVenta && (
-          <div class="modal">
-            <AddVenta ancho={600} parametrosGlobales={parametrosGlobales} igv={igv.value} />
+                buscarVentas.value++;
+              })}
+            />
           </div>
-        )}
+        </div>
+        {/*  BOTONES   className="btn"  onClick={mostrarPanelVenta}  border: ' 1px solid blue',*/}
+        <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
+          <Button
+            name="ADD VENTA"
+            title="Add una ventas"
+            onClick={$(async () => {
+              let elIgv = await getIgvVenta(parametrosGlobales);
+              elIgv = elIgv.data;
+              console.log('elIgv', elIgv);
+              igv.value = 18; //elIgv[0].igv; //
+              console.log('igv.value::', igv.value);
+              panelVenta.mostrarPanelVenta = true;
+            })}
+          />
+          {panelVenta.mostrarPanelVenta && (
+            <div class="modal">
+              <AddVenta ancho={600} parametrosGlobales={parametrosGlobales} igv={igv.value} />
+            </div>
+          )}
+        </div>
+        {/* TABLA VENTAS */}
+        <div id="ventassss" style={{ margin: '10px 0' }}>
+          {buscarVentas.value > 0 ? <TablaVentas buscarVentas={buscarVentas.value} parameBusqueda={parameBusqueda} /> : ''}
+        </div>
       </div>
-      {/* TABLA VENTAS */}
-      <div id="ventassss" style={{ margin: '10px 0' }}>
-        {buscarVentas.value > 0 ? <TablaVentas buscarVentas={buscarVentas.value} parameBusqueda={parameBusqueda} /> : ''}
-      </div>
-    </div>
+    </main>
   );
 });
 
