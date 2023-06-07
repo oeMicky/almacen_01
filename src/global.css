@@ -77,13 +77,14 @@ a.linkHeaderPrincipal:hover {
   padding: 20px ;
   border: 1px solid #888;
   border-radius: 5px;
+  font-size: small;
 }
 .add-form {
   display: flex;
   flex-direction: column;
   margin: 6px 3px;
   /* font-size: 0.6rem; */
-  border: 1px dashed #888;
+  border: 1px dashed #ff0000;
 }
 .form-control {
   display: flex;
@@ -104,8 +105,8 @@ a.linkHeaderPrincipal:hover {
   width: 100%;
 }
 .btn-centro {
-  background-color: black;
-  color: white;
+  background-color: rgb(60, 60, 60);
+  color:rgb(224, 224, 224); 
   border-radius: 5px;
   border: none;
   padding: 2px 5px;
@@ -116,13 +117,14 @@ a.linkHeaderPrincipal:hover {
   justify-content: space-around;
 }
 .btn-centro:hover {
-  background-color: rgb(27, 27, 27);
-  color: rgb(230, 230, 230);
+  background-color: rgb(19, 19, 19);
+  color: rgb(221, 255, 0);
   border-radius: 5px;
   border: none;
   padding: 2px 5px;
   margin: 2px 2px;
   text-align: center;
+  font-weight: 600;
   display: inline-block;
   align-items: center;
   justify-content: space-around;
@@ -250,7 +252,23 @@ h2 {
       /* width: 60%; */
     }
 }
-
+/************************************/
+/*********INTERVALO DE FECHAS********/
+/************************************/
+.intervalo-fechas {
+  /* border: 1px solid red; */
+  display: flex;
+  margin-bottom: 10px;
+  padding-left: 3px;
+}
+.fechas {
+  font-size: 0.8rem;
+}
+.intervalo-fechas__botonBuscar {
+  width: 86px;
+  display: flex;
+  align-items: end
+}
 
 /* .footer-principal {
   background: rgb(0, 0, 0);

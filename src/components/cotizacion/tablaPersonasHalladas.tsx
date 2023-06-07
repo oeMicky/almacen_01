@@ -1,10 +1,14 @@
 import { $, component$, Resource, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-import ImgButton from '../system/imgButton';
-import { CTX_VENTA } from '~/routes/(almacen)/factura';
-import { CTX_PERSONA } from '../venta/addVenta';
+// import ImgButton from '../../system/imgButton';
+// // import { CTX_VENTA } from '~/routes/(almacen)/factura';
+// import { CTX_PERSONA } from '../../venta/addVenta';
 import { IPersona } from './seleccionarPersona';
-import style from '../../components/tabla.css?inline';
+import style from '../../../components/tabla.css?inline';
+import { CTX_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import ImgButton from '../system/imgButton';
+import { CTX_PERSONA } from '../venta/addVenta';
+// import style from '../../../components/tabla.css?inline';
 
 // interface IPersona {
 //   _id: string;
@@ -14,31 +18,28 @@ import style from '../../components/tabla.css?inline';
 //   razonSocialNombre: string;
 // }
 
-export default component$((props: { buscarPersona: number; parametrosBusqueda: any }) => {
+export default component$((props: { buscarPersona: number; parametrosBusqueda: any; contexto?: any }) => {
   useStylesScoped$(style);
+  console.log('cntrexto', props.contexto);
+  // const ctx = props.contexto === 'COTIZACION' ? useContext(CTX_COTIZACION) : useContext(CTX_VENTA);
 
-  const ctx_PanelVenta = useContext(CTX_VENTA);
+  //#region CONTEXTOS
+  // const ctx_PanelVenta = useContext(CTX_VENTA);
+  const ctx_PanelVenta = useContext(CTX_COTIZACION);
   const ctx_PersonaSeleccionada = useContext(CTX_PERSONA);
+  //#endregion CONTEXTOS
 
+  //#region BUSCANDO REGISTROS
   const lasPersonas = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     track(() => props.buscarPersona.valueOf());
 
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    // console.log('FETCH->: ', `http://localhost:4000/api/venta/obtenerVentasPorFechas`);
-    // const res = await fetch(`http://localhost:4000/api/venta/obtenerVentasPorFechas`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(props.parametrosBusqueda),
-    //   signal: abortController.signal,
-    // });
     console.log('parametrosBusqueda', props.parametrosBusqueda);
 
-    // const res = await fetch('http://localhost:4000/api/persona/obtenerPersonasPorDniRuc', {
-    const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
+    const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerPersonasPorDniRuc', {
+      // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,6 +49,8 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
     });
     return res.json();
   });
+  //#endregion BUSCANDO REGISTROS
+
   return (
     <Resource
       value={lasPersonas}
@@ -94,18 +97,19 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
                               width={12}
                               title={`Ver persona ${value._id}`}
                               onClick={$(() => {
-                                ctx_PersonaSeleccionada._id = value._id;
-                                ctx_PersonaSeleccionada.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
-                                ctx_PersonaSeleccionada.tipoDocumentoIdentidad = value.tipoDocumentoIdentidad;
-                                ctx_PersonaSeleccionada.numeroIdentidad = value.numeroIdentidad;
-                                ctx_PersonaSeleccionada.razonSocialNombre = value.razonSocialNombre;
-                                console.log(
-                                  'ctx_PersonaSeleccionada.razonSocialNombre',
-                                  ctx_PersonaSeleccionada.razonSocialNombre
-                                );
+                                // ctx_PersonaSeleccionada._id = value._id;
+                                // ctx_PersonaSeleccionada.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
+                                // ctx_PersonaSeleccionada.tipoDocumentoIdentidad = value.tipoDocumentoIdentidad;
+                                // ctx_PersonaSeleccionada.numeroIdentidad = value.numeroIdentidad;
+                                // ctx_PersonaSeleccionada.razonSocialNombre = value.razonSocialNombre;
+                                // console.log(
+                                //   'ctx_PersonaSeleccionada.razonSocialNombre',
+                                //   ctx_PersonaSeleccionada.razonSocialNombre
+                                // );
                                 ctx_PanelVenta.mostrarPanelSeleccionarPersona = false;
                                 ctx_PanelVenta.selecciono_Persona = true;
-                                // clickPDF.value = clickPDF.value + 1;
+                                // ctx.mostrarPanelSeleccionarPersona = false;
+                                // ctx.selecciono_Persona = true;
                               })}
                             />
                           </td>

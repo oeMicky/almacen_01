@@ -12,6 +12,7 @@ export default component$(() => {
   // const darClick = $(() => {
   //   alert('⚡️⚡️⚡️⚡️pipipipi ddddd gui tu 700');
   // });
+  console.log('first...//...', import.meta.env.VITE_URL);
 
   return (
     <>

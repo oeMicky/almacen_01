@@ -10,9 +10,12 @@ export const primeroDelMes = () => {
 };
 
 export const formatoDDMMYYYY_PEN = (fecha: any) => {
+  console.log('fecha ingresada', fecha);
   let fechaSalida = '';
   if (!isNaN(Date.parse(fecha))) {
+    console.log('fecha ingresada -> ingreso al parseo');
     fechaSalida = fecha.substr(8, 2) + '/' + fecha.substr(5, 2) + '/' + fecha.substr(0, 4);
+    console.log('fecha ingresada -> fechaSalida', fechaSalida);
   }
   return fechaSalida;
 };

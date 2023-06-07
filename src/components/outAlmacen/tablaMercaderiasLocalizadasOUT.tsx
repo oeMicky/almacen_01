@@ -1,9 +1,10 @@
-import { $, Resource, component$, useContext, useResource$ } from '@builder.io/qwik';
+import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 // import { CTX_ADD_VENTA } from '../venta/addVenta';
 import { CTX_MERCA_SELECCIONADA } from './busquedaMercaderiaOUT';
+import style from '../tabla.css?inline';
 
 export interface IMercaderia {
   _id: string;
@@ -18,10 +19,15 @@ export interface IMercaderia {
 
 export default component$(
   (props: { buscarMercaderias: number; parametrosBusqueda: any; esAlmacen: boolean; seleccionado: any }) => {
-    const ctx_PanelVenta = useContext(CTX_VENTA);
+    useStylesScoped$(style);
+
+    //#region CONTEXTOS
+    const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
     // const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
     const ctx_Merca_Seleccionada = useContext(CTX_MERCA_SELECCIONADA);
+    //#endregion CONTEXTOS
 
+    //#region BUSCANDO REGISTROS
     const lasMercaderias = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
       console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
       track(() => props.buscarMercaderias.valueOf());
@@ -31,8 +37,9 @@ export default component$(
       const abortController = new AbortController();
       cleanup(() => abortController.abort('cleanup'));
 
-      console.log('FETCH->: ', `http://localhost:4000/api/mercaderia/buscarMercaderiasPorDescripcion`);
-      const res = await fetch(`http://localhost:4000/api/mercaderia/buscarMercaderiasPorDescripcion`, {
+      // console.log('FETCH->: ', `http://localhost:4000/api/mercaderia/buscarMercaderiasPorDescripcion`);
+      // const res = await fetch(`http://localhost:4000/api/mercaderia/buscarMercaderiasPorDescripcion`, {
+      const res = await fetch(`${import.meta.env.VITE_URL}/api/mercaderia/buscarMercaderiasPorCodigo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,6 +49,7 @@ export default component$(
       });
       return res.json();
     });
+    //#endregion BUSCANDO REGISTROS
 
     return (
       <Resource
@@ -83,33 +91,36 @@ export default component$(
                         return (
                           <tr key={merca._id}>
                             {/* <td id={_id}>{codigo}</td> */}
-                            <td>{merca.descripcion}</td>
-                            <td>{merca.lineaTipo}</td>
-                            <td style={{ textAlign: 'end' }}>
+                            <td data-label="Descripción">{merca.descripcion}</td>
+                            <td data-label="Linea/Tipo">{merca.lineaTipo ? merca.lineaTipo : '_'}</td>
+                            {/* <td data-label="Linea/Tipo">{'_'}</td> */}
+                            <td data-label="Stock" style={{ textAlign: 'end' }}>
                               {merca.totalCantidadSaldo.$numberDecimal
                                 ? merca.totalCantidadSaldo.$numberDecimal
                                 : merca.totalCantidadSaldo}
                             </td>
-                            <td>{merca.unidad}</td>
+                            <td data-label="Uni">{merca.unidad ? merca.unidad : '_'}</td>
                             {props.esAlmacen ? (
-                              <td style={{ textAlign: 'end' }}>
-                                {merca.costoUnitarioMovil != null
+                              <td data-label="Costo" style={{ textAlign: 'end' }}>
+                                {merca.costoUnitarioMovil !== null
                                   ? merca.costoUnitarioMovil.$numberDecimal
                                     ? merca.costoUnitarioMovil.$numberDecimal
                                     : merca.costoUnitarioMovil
                                   : ''}
                               </td>
                             ) : (
-                              <td style={{ textAlign: 'end' }}>
-                                {merca.precio != null
-                                  ? merca.precio.$numberDecimal
+                              <td data-label="Precio" style={{ textAlign: 'end' }}>
+                                {merca.precio
+                                  ? merca.precio !== null
                                     ? merca.precio.$numberDecimal
-                                    : merca.precio
-                                  : ''}
+                                      ? merca.precio.$numberDecimal
+                                      : merca.precio
+                                    : ''
+                                  : '_'}
                               </td>
                             )}
 
-                            <td style={{ textAlign: 'center' }}>
+                            <td data-label="Acciones" style={{ textAlign: 'right' }}>
                               <ImgButton
                                 src={images.check}
                                 alt="icono de adicionar"
@@ -118,7 +129,7 @@ export default component$(
                                 title="Adicionar item-mercadería"
                                 onClick={$(() => {
                                   ctx_Merca_Seleccionada.mS = merca;
-                                  ctx_PanelVenta.mostrarSeleccionarEquivalenciaEnSalida = true;
+                                  ctx_docs_venta.mostrarSeleccionarEquivalenciaEnSalida = true;
                                 })}
                                 // onClick={() => {
                                 //   seleccionar({

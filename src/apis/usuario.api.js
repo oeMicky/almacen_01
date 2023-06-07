@@ -1,5 +1,5 @@
-// const API = 'http://localhost:4000/api/usuario';
-const API = 'https://backendalmacen-production.up.railway.app/api/usuario';
+const API = import.meta.env.VITE_URL + '/api/usuario';
+// const API = 'https://backendalmacen-production.up.railway.app/api/usuario';
 // backendalmacen02 - production.up.railway.app;
 
 export const getUsuario = async (parametros) => {

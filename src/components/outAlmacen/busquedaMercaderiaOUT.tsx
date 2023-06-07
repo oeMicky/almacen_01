@@ -2,7 +2,7 @@ import { $, component$, createContextId, useContext, useContextProvider, useSign
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import TablaMercaderiasLocalizadasOUT from './tablaMercaderiasLocalizadasOUT';
-import { CTX_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 import SeleccionarEquivalenciaEnSalida from './seleccionarEquivalenciaEnSalida';
 import { IItemVenta } from '../venta/addVenta'; //CTX_ADD_VENTA,
 import { elIdAuxiliar } from '~/functions/comunes';
@@ -27,25 +27,7 @@ export interface IMercaSeleccionada {
 }
 
 export default component$((props: { ancho: number; parametrosGlobales: any; item1: IItemVenta }) => {
-  const ctx_PanelVenta = useContext(CTX_VENTA);
-  // const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
-  // const ctx_Merca_Seleccionada = useContext(CTX_MERCA_SELECCIONADA);
-  const buscarMercaderias = useSignal(0);
-  const itemSeleccionado = useSignal([]);
-  const cadena = useStore({ aBuscar: 'a' });
-  const parametrosBusqueda = useStore({
-    idGrupoEmpresarial: props.parametrosGlobales.idGrupoEmpresarial,
-    idEmpresa: props.parametrosGlobales.idEmpresa,
-    idAlmacen: props.parametrosGlobales.idAlmacen,
-    cadenaABuscar: cadena.aBuscar,
-  });
-  useTask$(({ track }) => {
-    const cad = track(() => cadena.aBuscar);
-    parametrosBusqueda.cadenaABuscar = cad;
-    console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);
-    document.getElementById('codigoDescripcion')?.focus();
-  });
-  //#region MERCADERIA SELECCIONADA
+  //#region DEFINICON CTX_MERCA_SELECCIONADA
   const mercaSelec = useStore<IMercaSeleccionada>({
     mS: [],
     // idAuxiliuar: 0,
@@ -63,9 +45,34 @@ export default component$((props: { ancho: number; parametrosGlobales: any; item
     // unidad: '',
   });
   useContextProvider(CTX_MERCA_SELECCIONADA, mercaSelec);
-  //#endregion MERCADERIA SELECCIONADA
+  //#endregion DEFINICON CTX_MERCA_SELECCIONADA
+
+  //#region CONTEXTOS
+  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
+  // const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
+  // const ctx_Merca_Seleccionada = useContext(CTX_MERCA_SELECCIONADA);
+  //#endregion CONTEXTOS
+
+  //#region INICIALIZACION
+  const buscarMercaderias = useSignal(0);
+  const itemSeleccionado = useSignal([]);
+  const cadena = useStore({ aBuscar: 'a' });
+  const parametrosBusqueda = useStore({
+    idGrupoEmpresarial: props.parametrosGlobales.idGrupoEmpresarial,
+    idEmpresa: props.parametrosGlobales.idEmpresa,
+    idAlmacen: props.parametrosGlobales.idAlmacen,
+    cadenaABuscar: cadena.aBuscar,
+  });
+  useTask$(({ track }) => {
+    const cad = track(() => cadena.aBuscar);
+    parametrosBusqueda.cadenaABuscar = cad;
+    console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);
+    document.getElementById('codigoDescripcion')?.focus();
+  });
+  //#endregion INICIALIZACION
+
   return (
-    <div style={{ width: props.ancho + 'px' }} class="container-modal">
+    <div style={{ width: 'auto', border: '1px solid red', padding: '2px' }} class="container-modal">
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
@@ -75,7 +82,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; item
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_PanelVenta.mostrarVerAlmacen = false;
+            ctx_docs_venta.mostrarVerAlmacen = false;
           })}
         />
         <ImgButton
@@ -95,7 +102,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; item
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: '10px', fontSize: 'small', fontWeight: 'lighter' }}>
           {/* Buscar por */}
           <div style={{ display: 'flex' }}>
             <label style={{ marginRight: '10px' }}>Buscar </label>
@@ -129,12 +136,11 @@ export default component$((props: { ancho: number; parametrosGlobales: any; item
             <button
               onClick$={() => {
                 // venta.itemsVenta.push(elTarget);
-
                 props.item1.idAuxiliar = parseInt(elIdAuxiliar());
                 props.item1.descripcionEquivalencia = 'ale ale ale';
                 props.item1.unidadEquivalencia = 'uniale';
                 props.item1.codigo = 'ale ';
-                ctx_PanelVenta.grabo_ItemsVenta = true;
+                ctx_docs_venta.grabo_ItemsVenta = true;
                 // console.log('🛴🛴🛴🛴 venta.itemsVenta', venta.itemsVenta);
               }}
             >
@@ -164,7 +170,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; item
           ) : (
             <i style={{ fontSize: '0.7rem' }}>No existen ítems localizados</i>
           )} */}
-          {ctx_PanelVenta.mostrarSeleccionarEquivalenciaEnSalida && (
+          {ctx_docs_venta.mostrarSeleccionarEquivalenciaEnSalida && (
             <div class="modal">
               <SeleccionarEquivalenciaEnSalida
                 ancho={400}

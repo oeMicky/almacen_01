@@ -1,8 +1,8 @@
 import { $, component$, useContext, useStore } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_VENTA } from '~/routes/(almacen)/factura';
-import { CTX_ADD_VENTA, IItemVenta } from '../venta/addVenta';
+import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_F_B_NC_ND, IItemVenta } from '../venta/addVenta';
 import { elIdAuxiliar } from '~/functions/comunes';
 
 interface IEquivalencia {
@@ -23,8 +23,8 @@ interface IInEquivalencia {
 }
 
 export default component$((props: { ancho: number; itemSeleccionado: any; esAlmacen: boolean; item2: IItemVenta }) => {
-  const ctx_PanelVenta = useContext(CTX_VENTA);
-  const ctx_Add_Venta = useContext(CTX_ADD_VENTA);
+  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
+  const ctx_f_b_nc_nd = useContext(CTX_F_B_NC_ND);
 
   // const descripEqui = useSignal('');
   // const cantid = useSignal(1);
@@ -41,7 +41,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
   // const dataUniEqui = useSignal([]);
   console.log('props.itemSeleccionado props.itemSeleccionado props.itemSeleccionado', props.itemSeleccionado);
   return (
-    <div style={{ width: props.ancho + 'px' }} class="container-modal">
+    <div style={{ width: 'auto', border: '1px solid red', padding: '2px' }} class="container-modal">
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         {/* <Button name="T/C" onClick={tipoCambio} /> */}
@@ -52,7 +52,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_PanelVenta.mostrarSeleccionarEquivalenciaEnSalida = false;
+            ctx_docs_venta.mostrarSeleccionarEquivalenciaEnSalida = false;
           })}
         />
         {/* <ImgButton
@@ -92,7 +92,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
       {/* FORMULARIO */}
       <div class="add-form">
         {/* MERCADERIA */}
-        <div style={{ fontSize: 'small', fontWeight: 'lighter' }}>
+        <div style={{ fontSize: '0.7rem' }}>
           <div>Código:{` ${props.itemSeleccionado.codigo}`}</div>
           <div>Descripción:{` ${props.itemSeleccionado.descripcion}`}</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
@@ -137,7 +137,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
         <hr style={{ margin: '5px 0 5px 0' }} color={'#aaa'}></hr>
         {/* ------------------------------------------------------------------------------ */}
         {/* EQUIVALENCIA */}
-        <div style={{ fontSize: 'small', fontWeight: 'lighter' }}>
+        <div style={{ fontSize: '0.7rem' }}>
           {/* descripcion EQUIVALENCIA */}
           <div class="form-control">
             <label>Descripción</label>
@@ -186,7 +186,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
                 }}
               />
               <select
-                value={parametrosInEquivalencia.unidadEquivalencia}
+                // value={parametrosInEquivalencia.unidadEquivalencia}
                 id="selectUniEquivalencia"
                 style={{ width: '100%' }}
                 onChange$={(e) => {
@@ -222,7 +222,11 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
                 <option value="">-- Seleccione una opción --</option>
                 {props.itemSeleccionado.equivalencias.map((equi: any) => {
                   return (
-                    <option id={equi.idUnidadEquivalencia} value={equi.unidadEquivalencia}>
+                    <option
+                      id={equi.idUnidadEquivalencia}
+                      value={equi.unidadEquivalencia}
+                      selected={parametrosInEquivalencia.unidadEquivalencia === equi.unidadEquivalencia}
+                    >
                       {equi.unidadEquivalencia}
                     </option>
                   );
@@ -233,20 +237,21 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
           <hr style={{ margin: '5px 0 5px 0' }} color={'#aaa'}></hr>
           {/* ------------------------------------------------------------------------------ */}
           {/* la equivalencia */}
-          {parametrosInEquivalencia.laEquivalencia != null ? (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', marginBottom: '5px' }}>
+          {parametrosInEquivalencia.laEquivalencia !== null ? (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', marginBottom: '5px', fontSize: '0.7rem' }}>
               <div>
                 Stock equivalente:
                 <strong style={{ color: 'green' }}>
-                  {props.itemSeleccionado.totalCantidadSaldo != null
-                    ? ` ${
+                  {parametrosInEquivalencia.unidadEquivalencia !== ''
+                    ? //  props.itemSeleccionado.totalCantidadSaldo !== 'undefined'
+                      ` ${
                         props.itemSeleccionado.totalCantidadSaldo.$numberDecimal
                           ? props.itemSeleccionado.totalCantidadSaldo.$numberDecimal *
                             parametrosInEquivalencia.laEquivalencia.$numberDecimal
                           : props.itemSeleccionado.totalCantidadSaldo * parametrosInEquivalencia.laEquivalencia.$numberDecimal
                       }`
                     : ``}{' '}
-                  {parametrosInEquivalencia.unidadEquivalencia != null ? ` ${parametrosInEquivalencia.unidadEquivalencia}` : ``}
+                  {parametrosInEquivalencia.unidadEquivalencia !== '' ? ` ${parametrosInEquivalencia.unidadEquivalencia}` : ``}
                 </strong>
               </div>
               {props.esAlmacen ? (
@@ -286,7 +291,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
           value="Grabar "
           class="btn-centro"
           onClick$={() => {
-            ctx_Add_Venta.itemsVenta.push({
+            ctx_f_b_nc_nd.itemsVenta.push({
               idAuxiliar: parseInt(elIdAuxiliar()),
               item: 0,
               codigo: props.itemSeleccionado.codigo,
@@ -299,7 +304,7 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
               precioUSD: 0,
               ventaUSD: 0,
             });
-            console.log('🚕🚕🚕🚕 ctx_Add_Venta', ctx_Add_Venta.itemsVenta);
+            console.log('🚕🚕🚕🚕 ctx_Add_Venta', ctx_f_b_nc_nd.itemsVenta);
           }}
         />
       </div>

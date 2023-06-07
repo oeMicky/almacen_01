@@ -1,12 +1,12 @@
 import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 import { hoy, primeroDelMes } from '~/functions/comunes';
 import TablaCotizaciones from './tablaCotizaciones';
 
 export default component$((props: { ancho: number; parametrosGlobales: any }) => {
-  const ctx_PanelVenta = useContext(CTX_VENTA);
+  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
   const numeroOFecha = useSignal('Entre fechas');
   const buscarCotizaciones = useSignal(0);
   const fechas = useStore({
@@ -26,7 +26,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
     parametrosBusqueda.fechaFinal = fF;
   });
   return (
-    <div class="container-modal" style={{ width: props.ancho + 'px' }}>
+    <div class="container-modal" style={{ width: 'auto', border: '1px solid red', padding: '2px' }}>
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
@@ -36,14 +36,14 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_PanelVenta.mostrarAdjuntarCotizacion = false;
+            ctx_docs_venta.mostrarAdjuntarCotizacion = false;
           })}
           //   onClick={onCerrar}
         />
       </div>
-      {/* FORMULARIO onChange={cambiarBusqueda} */}
+      {/* FORMULARIO onChange={cambiarBusqueda}  style={{ marginBottom: '5px' }}*/}
       <div class="add-form">
-        <div style={{ marginBottom: '5px' }}>
+        <div class="form-control">
           <label style={{ marginRight: '10px' }}>Buscar por:</label>
           <select
             style={
@@ -84,12 +84,14 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
             // }}
           />
         </div>
-        {/* por Fechas*/}
+        {/* por Fechas  , display: 'flex', fontSize: '0.8rem', border: '1px solid red'*/}
         <div
           id="porFechas"
-          style={numeroOFecha.value === 'Entre fechas' ? { visibility: 'visible', display: 'flex' } : { visibility: 'collapse' }}
+          class="intervalo-fechas"
+          style={numeroOFecha.value === 'Entre fechas' ? { visibility: 'visible' } : { visibility: 'collapse' }}
         >
-          <label style={{ width: '210px', display: 'flex', justifyContent: 'space-between' }}>
+          {/*  style={{ width: '210px', display: 'flex', justifyContent: 'space-between' }} */}
+          <label class="fechas">
             Desde:{'     '}
             <input
               type="date"
@@ -100,7 +102,8 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
               }}
             />
           </label>
-          <label style={{ width: '174px', display: 'flex', justifyContent: 'space-between', marginLeft: '10px' }}>
+          {/*  style={{ width: '174px', display: 'flex', justifyContent: 'space-between', marginLeft: '10px' }}*/}
+          <label class="fechas">
             Hasta:
             <input
               type="date"
@@ -111,24 +114,26 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
               }}
             />
           </label>
-          <ImgButton
-            src={images.searchPLUS}
-            alt="Icono de busqueda por fechas"
-            height={16}
-            width={16}
-            title="Buscar por fechas"
-            onClick={$(() => {
-              if (fechas.desde > fechas.hasta) {
-                alert('Verifique las fechas de busqueda');
-                document.getElementById('fechaDesdeBusqueda')?.focus();
-                return;
-              }
-              // console.log('click en lupa: parameBusqueda ', parameBusqueda);
+          <div class="intervalo-fechas__botonBuscar">
+            <ImgButton
+              src={images.searchPLUS}
+              alt="Icono de busqueda por fechas"
+              height={16}
+              width={16}
+              title="Buscar por fechas"
+              onClick={$(() => {
+                if (fechas.desde > fechas.hasta) {
+                  alert('Verifique las fechas de busqueda');
+                  document.getElementById('fechaDesdeBusqueda')?.focus();
+                  return;
+                }
+                // console.log('click en lupa: parameBusqueda ', parameBusqueda);
 
-              buscarCotizaciones.value++;
-            })}
-            // onClick={buscarCotizacionesEntreFechas}
-          />
+                buscarCotizaciones.value++;
+              })}
+              // onClick={buscarCotizacionesEntreFechas}
+            />
+          </div>
         </div>
         {/* TABLA COTIZACIONES */}
         <div style={{ marginTop: '15px' }}>

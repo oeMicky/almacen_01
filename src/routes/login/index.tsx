@@ -1,11 +1,43 @@
-import { $, component$, useStore, useStylesScoped$ } from '@builder.io/qwik';
-import { Link, useNavigate } from '@builder.io/qwik-city'; //action$, Form,
+// import * as dotenv from 'dotenv';
+
+import { $, component$, createContextId, useContextProvider, useStore, useStylesScoped$ } from '@builder.io/qwik';
+import { Link, useNavigate, server$, type RequestEvent } from '@builder.io/qwik-city'; //action$, Form,
 import { getUsuario } from '~/apis/usuario.api';
 
 import styles from './login.css?inline';
 
+export const CTX_APP_ALMACEN = createContextId<any>('app.almacen');
+
+export const parametrosGlobales = {
+  idGrupoEmpresarial: '60f097ca53621708ecc4e781',
+  idEmpresa: '60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
+  parameRUC: '99999999999',
+  // parameRUC: 'chamo', // '99999999999',
+  parameRazonSocial: 'ACME SAC',
+  paraDireccion: 'ARKANZAS NRO 354',
+  idAlmacen: '60f3e61a41a71c1148bc4e29', //'608321ef5d922737c40831b1',
+  nombreAlmacen: 'Praga',
+  usuario: 'rey',
+  ingreso: false,
+};
+
 export default component$(() => {
+  //#region CONTEXTO
+  const definicion_CTX_APP_ALMACEN = useStore({
+    mostrarAddOrderServicio9: false,
+  });
+  useContextProvider(CTX_APP_ALMACEN, definicion_CTX_APP_ALMACEN);
+  //#endregion CONTEXTO
+
+  // dotenv.config();
   useStylesScoped$(styles);
+
+  // const serverFuncion = server$((requestEvent: RequestEvent) => {
+  //   return console.log(requestEvent.env.get('URL'));
+  // });
+  console.log('......................env', import.meta.url);
+  console.log('......................env PUBLIC_URL', import.meta.env.PUBLIC_URL);
+  // console.log('......................env URL:', requestEvent.env.get);
 
   const navigate = useNavigate();
 
@@ -40,7 +72,8 @@ export default component$(() => {
       console.log('el res', Kas.data);
       if (Kas.data.length === 1) {
         console.log('Ingreso al sistema.');
-        navigate('/factura');
+        // navigate('/factura');
+        navigate('/ordenServicio');
       }
     });
     registro.catch((err) => {
@@ -100,6 +133,7 @@ export default component$(() => {
               onClick$={() => {
                 // console.log('onClick');
                 enviar();
+                // serverFuncion();
                 // const usu = document.getElementById('inputUsuario')?.nodeValue;
                 // alert(`fraude-- {usu}`);
               }}
@@ -107,7 +141,7 @@ export default component$(() => {
           </form>
           <div>
             <Link class="desea-suscribirse" href="#">
-              Desea suscribirses?
+              Desea suscribirse?
             </Link>
           </div>
         </div>

@@ -1,5 +1,5 @@
-// const API = 'http://localhost:4000/api/venta';
-const API = 'https://backendalmacen-production.up.railway.app/api/venta';
+const API = import.meta.env.VITE_URL + '/api/venta';
+// const API = 'https://backendalmacen-production.up.railway.app/api/venta';
 
 export const getSeriesFacturaActivas = async (parametros) => {
   console.log('//////api////////////******************obtener a getSeriesFactura');
@@ -14,7 +14,7 @@ export const getSeriesFacturaActivas = async (parametros) => {
   return res.json();
 };
 export const getSeriesBoletaActivas = async (parametros) => {
-  console.log('//////api////////////******************obtener a getSeriesBoleta');
+  console.log('//////api////////////******************obtener a getSeriesBoletaActivas');
   console.log('parametros getSeriesBoletaActivas', parametros);
   const res = await fetch(API + '/obtenerSeriesBoletasActivas', {
     method: 'POST',
@@ -25,6 +25,7 @@ export const getSeriesBoletaActivas = async (parametros) => {
   });
   return res.json();
 };
+
 export const getSeriesNotaCreditoActivas = async (parametros) => {
   console.log('//////api////////////******************obtener a getSeriesNotaCreditoActivas');
   console.log('parametros getSeriesNotaCreditoActivas', parametros);
@@ -37,6 +38,7 @@ export const getSeriesNotaCreditoActivas = async (parametros) => {
   });
   return res.json();
 };
+
 export const getSeriesNotaDebitoActivas = async (parametros) => {
   console.log('//////api////////////******************obtener a getSeriesNotaDebitoActivas');
   console.log('parametros getSeriesNotaDebitoActivas', parametros);
@@ -49,6 +51,7 @@ export const getSeriesNotaDebitoActivas = async (parametros) => {
   });
   return res.json();
 };
+
 export const getIgvVenta = async (parametros) => {
   console.log('//////api////////////******************obtener a getIgvVenta');
   console.log('parametros getIgvVenta', parametros);

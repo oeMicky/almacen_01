@@ -1,49 +1,52 @@
-import { $, Resource, component$, useContext, useResource$, useSignal, useTask$ } from '@builder.io/qwik';
+import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
 import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 //------- import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
-import { CTX_VENTA } from '~/routes/(almacen)/factura';
-import { CTX_ADD_VENTA } from './addVenta';
+import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_F_B_NC_ND } from './addVenta';
+import style from '../../components/tabla.css?inline';
+import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 
-export interface ICotizacion {
-  _id: string;
-  idGrupoEmpresarial: string;
-  idEmpresa: string;
+// export interface ICotizacion {
+//   _id: string;
+//   idGrupoEmpresarial: string;
+//   idEmpresa: string;
 
-  correlativo: number;
-  fecha: any;
+//   correlativo: number;
+//   fecha: any;
 
-  idCliente: string;
-  codigoTipoDocumentoIdentidad: string;
-  tipoDocumentoIdentidad: string;
-  numeroIdentidad: string;
-  razonSocialNombreCliente: string;
-  // email: { type: String },
-  idVehiculo: string;
-  placa: string;
-  idVehiculoMarca: string;
-  vehiculoMarca: string;
-  idVehiculoModelo: string;
-  vehiculoModelo: string;
-  vin: string;
+//   idCliente: string;
+//   codigoTipoDocumentoIdentidad: string;
+//   tipoDocumentoIdentidad: string;
+//   numeroIdentidad: string;
+//   razonSocialNombreCliente: string;
+//   // email: { type: String },
+//   idVehiculo: string;
+//   placa: string;
+//   idVehiculoMarca: string;
+//   vehiculoMarca: string;
+//   idVehiculoModelo: string;
+//   vehiculoModelo: string;
+//   vin: string;
 
-  igv: number;
+//   igv: number;
 
-  vendedor: string;
+//   vendedor: string;
 
-  servicios: any;
-  repuestosLu: any;
+//   servicios: any;
+//   repuestosLubri: any;
 
-  montoSubTotalPEN: any;
-  montoIGVPEN: any;
-  montoTotalPEN: any;
-}
+//   montoSubTotalPEN: any;
+//   montoIGVPEN: any;
+//   montoTotalPEN: any;
+// }
 
 export default component$((props: { buscarCotizaciones: number; modoSeleccion: boolean; parametrosBusqueda: any }) => {
+  useStylesScoped$(style);
   //#region CONTEXTOS Y VARIABLES
-  const ctx_PanelVenta = useContext(CTX_VENTA);
-  const ctx_add_venta = useContext(CTX_ADD_VENTA);
+  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
+  const ctx_f_b_nc_nd = useContext(CTX_F_B_NC_ND);
   const clickPDF = useSignal(0);
   const cotizacionSeleccionada = useSignal<ICotizacion>();
   //#endregion CONTEXTOS Y VARIABLES
@@ -56,7 +59,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     cleanup(() => abortController.abort('cleanup'));
 
     // console.log('FETCH->: ', `http://localhost:4000/api/cotizacion/obtenerCotizacionesEntreFechas`);
-    const res = await fetch(`http://localhost:4000/api/cotizacion/obtenerCotizacionesEntreFechas`, {
+    console.log('FETCH->: ', `${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`);
+    const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -112,7 +116,6 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                 <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
-                      <th>Item</th>
                       <th>Cotización</th>
                       <th>Fecha</th>
                       <th>Nro. Doc</th>
@@ -122,16 +125,16 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                     </tr>
                   </thead>
                   <tbody>
-                    {misCotizaciones.map((value, index) => {
-                      const indexItem = index + 1;
+                    {misCotizaciones.map((value) => {
+                      //, index
+                      // const indexItem = index + 1;
                       return (
                         <tr key={value._id}>
-                          <td key={value._id}>{indexItem}</td>
-                          <td>{value.correlativo}</td>
-                          <td>{formatoDDMMYYYY_PEN(value.fecha)}</td>
-                          <td>{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                          <td>{value.razonSocialNombreCliente}</td>
-                          <td style={{ textAlign: 'end' }}>
+                          <td data-label="Cotización">{value.correlativo}</td>
+                          <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
+                          <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
+                          <td data-label="Cliente">{value.razonSocialNombreCliente}</td>
+                          <td data-label="Importe PEN" style={{ textAlign: 'end' }}>
                             {value.montoTotalPEN
                               ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
@@ -140,7 +143,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 })
                               : ''}
                           </td>
-                          <td style={{ textAlign: 'center' }}>
+                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
                             {props.modoSeleccion ? (
                               <>
                                 <ImgButton
@@ -151,15 +154,16 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   title="Selecionar cotización"
                                   onClick={$(() => {
                                     console.log('seleccionar cotiacion', value);
-                                    ctx_add_venta.cotizacion = value.correlativo;
-                                    ctx_add_venta.idCliente = value.idCliente;
-                                    ctx_add_venta.codigoTipoDocumentoIdentidad = parseInt(value.codigoTipoDocumentoIdentidad);
-                                    ctx_add_venta.tipoDocumentoIdentidad = value.tipoDocumentoIdentidad;
-                                    ctx_add_venta.numeroIdentidad = value.numeroIdentidad;
-                                    ctx_add_venta.razonSocialNombre = value.razonSocialNombreCliente;
+                                    ctx_f_b_nc_nd.cotizacion = value.correlativo;
+                                    ctx_f_b_nc_nd.idCliente = value.idCliente;
+                                    // ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = parseInt(value.codigoTipoDocumentoIdentidad);
+                                    ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
+                                    ctx_f_b_nc_nd.tipoDocumentoIdentidad = value.tipoDocumentoIdentidad;
+                                    ctx_f_b_nc_nd.numeroIdentidad = value.numeroIdentidad;
+                                    ctx_f_b_nc_nd.razonSocialNombre = value.razonSocialNombreCliente;
                                     value.servicios.map((ser: any) => {
                                       console.log('ser', ser);
-                                      ctx_add_venta.itemsVenta.push({
+                                      ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
                                         item: 0,
                                         codigo: ser.codigo,
@@ -173,8 +177,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         ventaUSD: 0,
                                       });
                                     });
-                                    value.repuestosLu.map((rep: any) => {
-                                      ctx_add_venta.itemsVenta.push({
+                                    value.repuestosLubri.map((rep: any) => {
+                                      ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
                                         item: 0,
                                         codigo: rep.codigo,
@@ -189,9 +193,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                       });
                                     });
 
-                                    ctx_PanelVenta.mostrarAdjuntarCotizacion = false;
+                                    ctx_docs_venta.mostrarAdjuntarCotizacion = false;
                                   })}
-                                  // onClick={() => seleccionarCotizacion(coti)}
                                 />
                               </>
                             ) : (

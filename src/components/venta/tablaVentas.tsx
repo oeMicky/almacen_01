@@ -93,8 +93,8 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    // const res = await fetch(`http://localhost:4000/api/venta/obtenerVentasPorFechas`, {
-    const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
+    const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
+      // const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
                             <td data-label="Cliente">{value.razonSocialNombre}</td>
                             <td data-label="Serie">{value.serie}</td>
                             <td data-label="Nro">{value.numeroDocumento}</td>
-                            <td data-label="Moneda" style={{ textAlign: 'center' }}>
+                            <td data-label="Moneda" style={{ textAlign: 'right' }}>
                               {value.moneda}
                             </td>
                             <td data-label="Importe" style={{ textAlign: 'end' }}>
@@ -178,7 +178,7 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
                                   })}
                             </td>
                             <td data-label="Pago">{value.metodoPago}</td>
-                            <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                            <td data-label="Acciones" style={{ textAlign: 'right' }}>
                               {/* , filter: 'invert(1)'
                               <ImgButton src={images.edit} alt="icono de editar" height={12} width={12} title="Editar venta" /> */}
                               <ImgButton

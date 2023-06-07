@@ -19,6 +19,7 @@ import TablaVentas from '~/components/venta/tablaVentas';
 import AddVenta from '~/components/venta/addVenta';
 import { getIgvVenta } from '~/apis/venta.api';
 import style from './index.css?inline';
+import { parametrosGlobales } from '../../login/index';
 // import Venta from '~/components/venta/venta';
 // import { getVentasPorFechas } from '~/apis/venta.api';
 
@@ -41,31 +42,23 @@ import style from './index.css?inline';
 //   return Array.isArray(json) ? json.map((repo: { name: string }) => repo.name) : Promise.reject(json);
 // }
 ////////////***************/////////////////////***********************///////////////////
-export const CTX_VENTA = createContextId<any>('venta');
+export const CTX_DOCS_VENTA = createContextId<any>('venta');
 
 export default component$(() => {
   useStylesScoped$(style);
   console.log('🎟🎟🎟🎨🎨🎨');
-  const parametrosGlobales = useStore({
-    idGrupoEmpresarial: '60f097ca53621708ecc4e781',
-    idEmpresa: '60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
-    parameRUC: '99999999999',
-    // parameRUC: 'chamo', // '99999999999',
-    parameRazonSocial: 'ACME SAC',
-    paraDireccion: 'ARKANZAS NRO 354',
-    idAlmacen: '60f3e61a41a71c1148bc4e29', //'608321ef5d922737c40831b1',
-    nombreAlmacen: 'Praga',
-    usuario: 'arnold',
-    ingreso: false,
-  });
+
   const buscarVentas = useSignal(0);
   const igv = useSignal(0);
-  //#region CONTEXTO VENTA
-  const panelVenta = useStore({
+
+  //#region DEFINICION CTX_DOCS_VENTA
+  const definicion_CTX_DOCS_VENTA = useStore({
     mostrarPanelVenta: false,
     grabo: false,
+
     mostrarPanelSeleccionarPersona: false,
     selecciono_Persona: false,
+
     mostrarPanelCuotasCredito: false,
     grabo_CuotaCredito: false,
     grabo_cuotas_numero: 0,
@@ -74,13 +67,18 @@ export default component$(() => {
     grabo_ItemsVenta: false,
     grabo_items_venta_numero: 0,
     mostrarAdjuntarCotizacion: false,
+
+    mostrarAddNewEditServicio: false,
+    mostrarAdicionarServicio: false,
+    mostrarServicioSeleccionado: false,
   });
-  useContextProvider(CTX_VENTA, panelVenta);
-  //#endregion CONTEXTO VENTA
+  useContextProvider(CTX_DOCS_VENTA, definicion_CTX_DOCS_VENTA);
+  //#endregion DEFINICION CTX_VENTA
 
   // const ventas = useStore([]);
   const fechas = useStore({
-    desde: '2023-01-01', // hoy(),
+    // desde: '2023-01-01', // hoy(),
+    desde: hoy(),
     hasta: hoy(),
   });
   const parameBusqueda = useStore({
@@ -95,6 +93,7 @@ export default component$(() => {
     parameBusqueda.fechaInicio = fI;
     parameBusqueda.fechaFinal = fF;
   });
+
   //TAREA: Buscar ventas
   // useTask$(({ track }) => {
   //   track(() => buscarVentas.value);
@@ -207,10 +206,10 @@ export default component$(() => {
               console.log('elIgv', elIgv);
               igv.value = 18; //elIgv[0].igv; //
               console.log('igv.value::', igv.value);
-              panelVenta.mostrarPanelVenta = true;
+              definicion_CTX_DOCS_VENTA.mostrarPanelVenta = true;
             })}
           />
-          {panelVenta.mostrarPanelVenta && (
+          {definicion_CTX_DOCS_VENTA.mostrarPanelVenta && (
             <div class="modal">
               <AddVenta ancho={600} parametrosGlobales={parametrosGlobales} igv={igv.value} />
             </div>

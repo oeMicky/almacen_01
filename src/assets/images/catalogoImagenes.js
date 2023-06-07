@@ -19,6 +19,7 @@ import caoSLinealDark from '../images/CAO-S-Lineal-dark.svg';
 import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
 
 import add from '../images/add.svg';
+import basedatos from '../images/basedatos.svg';
 import check from '../images/check.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
@@ -60,6 +61,7 @@ export default {
   caoSLinealLight,
 
   add,
+  basedatos,
   check,
   download,
   edit,
