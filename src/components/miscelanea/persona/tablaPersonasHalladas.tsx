@@ -2,10 +2,12 @@ import { $, component$, Resource, useContext, useResource$, useStylesScoped$ } f
 import { images } from '~/assets';
 import ImgButton from '../../system/imgButton';
 // import { CTX_VENTA } from '~/routes/(almacen)/factura';
-import { CTX_PERSONA } from '../../venta/addVenta';
-import { IPersona } from './seleccionarPersona';
-import style from '../../../components/tabla.css?inline';
-import { CTX_COTIZACION } from '~/routes/(almacen)/cotizacion';
+// import { CTX_PERSONA } from '../../venta/addVenta';
+// import { IPersona } from './seleccionarPersona';
+// import style from '../../../components/tabla.css?inline';
+import style from '../../tabla/tabla.css?inline';
+import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import { IPersona } from '~/interfaces/iPersona';
 // import style from '../../../components/tabla.css?inline';
 
 // interface IPersona {
@@ -22,8 +24,8 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
   // const ctx = props.contexto === 'COTIZACION' ? useContext(CTX_COTIZACION) : useContext(CTX_VENTA);
 
   // const ctx_PanelVenta = useContext(CTX_VENTA);
-  const ctx_PanelVenta = useContext(CTX_COTIZACION);
-  const ctx_PersonaSeleccionada = useContext(CTX_PERSONA);
+  const ctx_docs_cotizacion = useContext(CTX_DOCS_COTIZACION);
+  // const ctx_PersonaSeleccionada = useContext(CTX_PERSONA);
 
   const lasPersonas = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     track(() => props.buscarPersona.valueOf());
@@ -99,8 +101,8 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
                                 //   'ctx_PersonaSeleccionada.razonSocialNombre',
                                 //   ctx_PersonaSeleccionada.razonSocialNombre
                                 // );
-                                ctx_PanelVenta.mostrarPanelSeleccionarPersona = false;
-                                ctx_PanelVenta.selecciono_Persona = true;
+                                ctx_docs_cotizacion.mostrarPanelSeleccionarPersona = false;
+                                ctx_docs_cotizacion.selecciono_Persona = true;
                                 // ctx.mostrarPanelSeleccionarPersona = false;
                                 // ctx.selecciono_Persona = true;
                               })}

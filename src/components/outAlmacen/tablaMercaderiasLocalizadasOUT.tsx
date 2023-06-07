@@ -4,7 +4,8 @@ import { images } from '~/assets';
 import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 // import { CTX_ADD_VENTA } from '../venta/addVenta';
 import { CTX_MERCA_SELECCIONADA } from './busquedaMercaderiaOUT';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 
 export interface IMercaderia {
   _id: string;

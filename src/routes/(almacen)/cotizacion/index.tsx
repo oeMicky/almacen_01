@@ -42,11 +42,11 @@ export interface ICotizacion {
   montoTotalPEN: any;
 }
 
-export const CTX_COTIZACION = createContextId<any>('cotizacion');
+export const CTX_DOCS_COTIZACION = createContextId<any>('cotizacion');
 
 export default component$(() => {
   //#region CONTEXTO COTIZACION
-  const definicion_CTX_COTIZACION = useStore({
+  const definicion_CTX_DOCS_COTIZACION = useStore({
     mostrarPanelVenta: false,
     grabo: false,
     mostrarPanelSeleccionarPersona: false,
@@ -63,7 +63,7 @@ export default component$(() => {
     mostrarAdicionarServicio: false,
     mostrarServicioSeleccionado: false,
   });
-  useContextProvider(CTX_COTIZACION, definicion_CTX_COTIZACION);
+  useContextProvider(CTX_DOCS_COTIZACION, definicion_CTX_DOCS_COTIZACION);
   //#endregion CONTEXTO COTIZACION
 
   //#region INICIALIZANDO
@@ -166,11 +166,11 @@ export default component$(() => {
           {showAddCotizacion.value && (
             <div class="modal">
               <NewEditCotizacion
-                contexto={CTX_COTIZACION}
-                // ancho={'600px'}
-                // parametrosGlobales={parametrosGlobales}
-                // inicializacion={inicializacionCotizacion}
-                // onCerrar={cerrarPanelCotizacion}
+              // contexto={CTX_COTIZACION}
+              // ancho={'600px'}
+              // parametrosGlobales={parametrosGlobales}
+              // inicializacion={inicializacionCotizacion}
+              // onCerrar={cerrarPanelCotizacion}
               />
             </div>
           )}

@@ -1,9 +1,11 @@
 import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+// import style from '../../components/tabla/tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+// import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { IMercaderiaOUT } from '~/interfaces/iMercaderia';
 import { CTX_MERCADERIA_OUT } from './busquedaMercaderiaOUT';
 
@@ -82,7 +84,8 @@ export default component$((props: { esAlmacen: boolean; buscarMercaderiaOUT: num
                     </tr>
                   </thead>
                   <tbody>
-                    {misMercaderiasOUT.map((mercaOUTLocali, index) => {
+                    {misMercaderiasOUT.map((mercaOUTLocali) => {
+                      //, index
                       const { _id, descripcion, lineaTipo, totalCantidadSaldo, unidad, precio, costo } = mercaOUTLocali;
                       // const indexItem = index + 1;   , costoUnitarioMovil, precio
                       return (

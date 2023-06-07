@@ -1,6 +1,8 @@
 import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+// import style from '../../components/tabla/tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import { IServicio } from '~/interfaces/iServicio';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
@@ -79,14 +81,14 @@ export default component$((props: { buscarServicio: number; parametrosBusqueda: 
                   </thead>
                   <tbody>
                     {misServicios.map((serviLocali, index) => {
-                      const { _id, activo, codigo, descripcion, precio } = serviLocali;
+                      const { _id, codigo, descripcion, precioPEN } = serviLocali;
                       const indexItem = index + 1;
                       return (
                         <tr key={_id}>
                           <td data-label="Ítem">{indexItem}</td>
                           <td data-label="Código">{codigo ? codigo : '_'}</td>
                           <td data-label="Descripción">{descripcion ? descripcion : '_'}</td>
-                          <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td>
+                          <td data-label="Precio">{precioPEN.$numberDecimal ? precioPEN.$numberDecimal : '_'}</td>
                           <td data-label="Acciones">
                             <ImgButton
                               src={images.check}

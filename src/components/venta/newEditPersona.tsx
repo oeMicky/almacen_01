@@ -120,9 +120,10 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       persona.razonSocialNombre = '';
     }
     console.log('useAccionGrabarPersona...', persona);
-    let resultPersona;
+    // let resultPersona;
     if (persona.codigoTipoDocumentoIdentidad === '6') {
-      resultPersona = await registrarPersona(parametrosGlobales, {
+      // resultPersona =
+      await registrarPersona(parametrosGlobales, {
         idPersona: persona._id,
         codigoTipoDocumento: persona.codigoTipoDocumentoIdentidad,
         tipoDocumento: persona.tipoDocumentoIdentidad,
@@ -132,7 +133,8 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
         activo: persona.activo,
       });
     } else {
-      resultPersona = await registrarPersona(parametrosGlobales, {
+      // resultPersona =
+      await registrarPersona(parametrosGlobales, {
         idPersona: persona._id,
         codigoTipoDocumento: persona.codigoTipoDocumentoIdentidad,
         tipoDocumento: persona.tipoDocumentoIdentidad,

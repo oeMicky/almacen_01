@@ -1,12 +1,12 @@
 import { $, component$, useContext } from '@builder.io/qwik';
 import { images } from '~/assets';
 // import { , hoy } from '~/functions/comunes';
-import { CTX_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 import ImgButton from '../system/imgButton';
 import { ICuotaCreditoVenta } from './addVenta';
 
 export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuotaCreditoVenta }) => {
-  const ctx_PanelVenta = useContext(CTX_VENTA);
+  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
   // const cuota = useStore<ICuotaCreditoVenta>({
   //   idAuxiliar: 0,
   //   fechaCuota: hoy(),
@@ -25,9 +25,9 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
       return;
     }
     // alert(`paso ${props.cuota.idAuxiliar}`);
-    ctx_PanelVenta.mostrarPanelCuotasCredito = false;
-    ctx_PanelVenta.grabo_CuotaCredito = true;
-    ctx_PanelVenta.grabo_cuotas_numero++;
+    ctx_docs_venta.mostrarPanelCuotasCredito = false;
+    ctx_docs_venta.grabo_CuotaCredito = true;
+    ctx_docs_venta.grabo_cuotas_numero++;
   });
 
   return (
@@ -41,7 +41,7 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
           width={16}
           title="Cerrar formulario"
           //   onClick={cerrarFormulario}
-          onClick={$(() => (ctx_PanelVenta.mostrarPanelCuotasCredito = false))}
+          onClick={$(() => (ctx_docs_venta.mostrarPanelCuotasCredito = false))}
         />
         <ImgButton
           src={images.see}

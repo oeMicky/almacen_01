@@ -28,7 +28,9 @@ import { inVenta } from '~/apis/venta.api';
 import NewEditCuotaCreditoVenta from './newEditCuotaCreditoVenta';
 import BusquedaMercaderiaOUT from '../outAlmacen/busquedaMercaderiaOUT';
 import AdjuntarCotizacion from './adjuntarCotizacion';
-import styleTabla from '../../components/tabla.css?inline';
+// import styleTabla from '../../components/tabla.css?inline';
+import styleTabla from '../tabla/tabla.css?inline';
+
 import SeleccionarServicio from '../miscelanea/servicio/seleccionarServicio';
 import { IPersona } from '~/interfaces/iPersona';
 import SeleccionarPersona from './seleccionarPersona';
@@ -489,7 +491,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
     }
     console.log('paso_______::::::______T', definicion_CTX_F_B_NC_ND);
     // const aGrabar =
-    let ventaGRABADA = await inVenta({
+    const ventaGRABADA = await inVenta({
       idGrupoEmpresarial: props.parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: props.parametrosGlobales.idEmpresa,
 

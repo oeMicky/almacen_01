@@ -3,7 +3,9 @@ import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 // import { IPersona } from '../miscelanea/persona/seleccionarPersona';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+// import style from '../../components/tabla/tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import { CTX_CLIENTE_SELECCIONADO } from './newEditOrdenServicio';
 import { IPersona } from '~/interfaces/iPersona';
 

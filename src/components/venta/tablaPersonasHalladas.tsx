@@ -2,7 +2,8 @@ import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } f
 import { IPersona } from '~/interfaces/iPersona';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 import { CTX_CLIENTE_SELECCIONADO } from './addVenta';
 

@@ -1,5 +1,7 @@
 import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+// import style from '../../components/tabla/tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
@@ -65,9 +67,9 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                     </tr>
                   </thead>
                   <tbody>
-                    {misOrdenesServicio.map((ordServiLocali, index) => {
+                    {misOrdenesServicio.map((ordServiLocali) => {
                       const { _id, fechaInicio, correlativo, estado, tipo } = ordServiLocali;
-                      // const indexItem = index + 1;
+                      // const indexItem = index + 1; , index
                       return (
                         <tr key={_id}>
                           {/* <td data-label="Ítem">{indexItem}</td> */}

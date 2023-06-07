@@ -42,7 +42,7 @@ export default component$(() => {
 
   //#region INICIALIZACION
   const buscarOrdenesServicio = useSignal(0);
-  const showAddOrdenServicio = useSignal(false);
+  // const showAddOrdenServicio = useSignal(false);
   //*Fechas
   const fechas = useStore({
     desde: hoy(),

@@ -1,6 +1,7 @@
 import { $, Resource, component$, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { ICotizacion } from '~/routes/(almacen)/cotizacion';

@@ -1,17 +1,19 @@
 import { $, component$, useContext, useSignal } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import ElButton from '../system/elButton';
+// import ElButton from '../system/elButton';
 import { hoy } from '~/functions/comunes';
 import SeleccionarPersona from '../miscelanea/persona/seleccionarPersona';
 import { parametrosGlobales } from '~/routes/login';
-import { CTX_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
 
-export default component$((props: { contexto: any }) => {
+// export default component$((props: { contexto: any }) => {
+export default component$(() => {
   //#region CONTEXTO
-  const ctx = useContext(CTX_COTIZACION); // useContext(CTX_VENTA);
+  const ctx_docs_cotizacion = useContext(CTX_DOCS_COTIZACION); // useContext(CTX_VENTA);
   //#endregion CONTEXTO
-  console.log('ctx', ctx.mostrarAdjuntarCotizacion);
+
+  console.log('ctx', ctx_docs_cotizacion.mostrarAdjuntarCotizacion);
 
   //#region INICIALIZACION
   const showSeleccionarPersona = useSignal(false);

@@ -12,11 +12,11 @@ import {
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
-import { cerosALaIzquierda, formatoDDMMYYYY_PEN, hoy, redondeo2Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, hoy, redondeo2Decimales } from '~/functions/comunes';
 import ElSelect from '../system/elSelect';
 import { getTecnicosActivos } from '~/apis/tecnico.api';
 import { parametrosGlobales } from '~/routes/login';
-import { trace } from 'console';
+// import { trace } from 'console';
 import SeleccionarTecnico from './seleccionarTecnico';
 import SeleccionarPersona from './seleccionarPersona';
 // import { IPersona } from '../miscelanea/persona/seleccionarPersona';
@@ -27,7 +27,8 @@ import SeleccionarServicio from './seleccionarServicio';
 // import { IServicio } from '~/interfaces/iServicio';
 import { inUpOrdenServicio, rebuscarCorrelativo } from '~/apis/ordenServicio.api';
 import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import BusquedaMercaderiaOUT from './busquedaMercaderiaOUT';
 import { IPersona } from '~/interfaces/iPersona';
 
@@ -205,19 +206,19 @@ OBSERVACIÓN(ES):
   //#endregion VEHICULO
 
   //#region SERVICIOS
-  const fijarMontosServicios = $((e: any) => {
-    console.log(' eee', e);
+  // const fijarMontosServicios = $((e: any) => {
+  //   console.log(' eee', e);
 
-    console.log('eeeeeeeeeeeeeeeeee', e);
+  //   console.log('eeeeeeeeeeeeeeeeee', e);
 
-    // definicion_CTX_O_S.montoSubTotalPEN = e.subTOTAL;
-    // definicion_CTX_O_S.montoIGVPEN = e.igvTOTAL;
-    // definicion_CTX_O_S.montoTotalPEN = e.sumaTOTAL;
-    // console.log('first', definicion_CTX_O_S.montoSubTotalPEN, definicion_CTX_O_S.montoIGVPEN, definicion_CTX_O_S.montoTotalPEN);
-    // definicion_CTX_O_S.montoSubTotalUSD = 0;
-    // definicion_CTX_O_S.montoIGVUSD = 0;
-    // definicion_CTX_O_S.montoTotalUSD = 0;
-  });
+  //   // definicion_CTX_O_S.montoSubTotalPEN = e.subTOTAL;
+  //   // definicion_CTX_O_S.montoIGVPEN = e.igvTOTAL;
+  //   // definicion_CTX_O_S.montoTotalPEN = e.sumaTOTAL;
+  //   // console.log('first', definicion_CTX_O_S.montoSubTotalPEN, definicion_CTX_O_S.montoIGVPEN, definicion_CTX_O_S.montoTotalPEN);
+  //   // definicion_CTX_O_S.montoSubTotalUSD = 0;
+  //   // definicion_CTX_O_S.montoIGVUSD = 0;
+  //   // definicion_CTX_O_S.montoTotalUSD = 0;
+  // });
   //#endregion SERVICIOS
 
   //#region ON SUBMIT

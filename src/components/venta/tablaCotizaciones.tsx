@@ -5,7 +5,8 @@ import { images } from '~/assets';
 //------- import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
 import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 import { CTX_F_B_NC_ND } from './addVenta';
-import style from '../../components/tabla.css?inline';
+// import style from '../../components/tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 
 // export interface ICotizacion {

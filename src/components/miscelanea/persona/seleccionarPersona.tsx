@@ -4,7 +4,7 @@ import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 // import { CTX_PERSONA } from '../venta/addVenta';
 import ImgButton from '../../system/imgButton';
 import TablaPersonasHalladas from './tablaPersonasHalladas';
-import { CTX_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
 
 // interface ISeleccionarPersona {
 //   ancho?: number;
@@ -30,7 +30,7 @@ export default component$(
     //   if (props.contexto === 'VENTA') {
     //   ctx = useContext(CTX_VENTA);
     // }
-    const ctx = props.contexto === 'COTIZACION' ? useContext(CTX_COTIZACION) : useContext(CTX_DOCS_VENTA);
+    const ctx = props.contexto === 'COTIZACION' ? useContext(CTX_DOCS_COTIZACION) : useContext(CTX_DOCS_VENTA);
     //  useContext(CTX_VENTA);
     // const ctx = () => {
     //   switch (props.contexto) {

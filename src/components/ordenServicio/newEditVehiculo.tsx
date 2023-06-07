@@ -31,8 +31,8 @@ export default component$((props: { vehiculoSeleccio: any }) => {
 
   //#region INICIALIZAR
   const ini = useSignal(0);
-  const caracterValido = useSignal('');
-  const valido = useSignal(false);
+  // const caracterValido = useSignal('');
+  // const valido = useSignal(false);
   const lasMarcas = useSignal([]);
   const losModelos = useSignal([]);
 
@@ -55,26 +55,26 @@ export default component$((props: { vehiculoSeleccio: any }) => {
 
   //#region PLACA
   //   const validar_inputVehiculoPlaca = $((e: any): boolean => {
-  const validar_inputVehiculoPlaca = $((e: any) => {
-    console.log('validando', e);
-    const tecla = e.key ? e.key : e.which;
-    // if (tecla === '%') {
-    //   console.log(tecla);
-    //   return;
-    // }
+  // const validar_inputVehiculoPlaca = $((e: any) => {
+  //   console.log('validando', e);
+  //   const tecla = e.key ? e.key : e.which;
+  //   // if (tecla === '%') {
+  //   //   console.log(tecla);
+  //   //   return;
+  //   // }
 
-    // Patrón de entrada, en este caso solo acepta numeros y letras
-    const patron = /[A-Za-z0-9]/; // /[A-Za-z0-9]/;
-    console.log('first onKeyDown', tecla, patron.test(tecla));
-    // placaValida.value = patron.test(tecla);
-    // return patron.test(tecla);
-    if (patron.test(tecla)) {
-      vehiculo.placa = tecla.toUpperCase();
-      // (document.getElementById('inputVehiculoPlaca') as HTMLInputElement).value = tecla.toUpperCase();
-    } else {
-      // tecla=''
-    }
-  });
+  //   // Patrón de entrada, en este caso solo acepta numeros y letras
+  //   const patron = /[A-Za-z0-9]/; // /[A-Za-z0-9]/;
+  //   console.log('first onKeyDown', tecla, patron.test(tecla));
+  //   // placaValida.value = patron.test(tecla);
+  //   // return patron.test(tecla);
+  //   if (patron.test(tecla)) {
+  //     vehiculo.placa = tecla.toUpperCase();
+  //     // (document.getElementById('inputVehiculoPlaca') as HTMLInputElement).value = tecla.toUpperCase();
+  //   } else {
+  //     // tecla=''
+  //   }
+  // });
 
   // useTask$(({ track }) => {
   //   track(() => caracterValido.value);
@@ -209,15 +209,15 @@ export default component$((props: { vehiculoSeleccio: any }) => {
                 maxLength={10}
                 placeholder="Add placa: AAA123, TRU789, XRW695"
                 value={vehiculo.placa}
-                onKeyDown$={(e) => {
-                  // vehiculo.placa = (e.target as HTMLInputElement).value.trim().toUpperCase();
-                  // console.log('onKeyDown$', e.key, e.keyCode, e);
-                  // return false;
-                  // e.key.includes
-                  // if (patron.test(e.key)) {   //   console.log('onKeyDown$', e.key, e.keyCode, e);
-                  // } else {   //   console.log('onKeyDown$--stopPropagation', e.key, e.keyCode, e);
-                  // }
-                }}
+                // onKeyDown$={(e) => {
+                //   // vehiculo.placa = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                //   // console.log('onKeyDown$', e.key, e.keyCode, e);
+                //   // return false;
+                //   // e.key.includes
+                //   // if (patron.test(e.key)) {   //   console.log('onKeyDown$', e.key, e.keyCode, e);
+                //   // } else {   //   console.log('onKeyDown$--stopPropagation', e.key, e.keyCode, e);
+                //   // }
+                // }}
                 onChange$={(e) => {
                   vehiculo.placa = (e.target as HTMLInputElement).value.toUpperCase();
                 }}

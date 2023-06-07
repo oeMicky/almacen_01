@@ -1,7 +1,8 @@
 import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
-import style from '../../tabla.css?inline';
+// import style from '../../tabla.css?inline';
+import style from '../../tabla/tabla.css?inline';
 import { CTX_SERVICIO_SELECCIONADO } from './seleccionarServicio';
 import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 

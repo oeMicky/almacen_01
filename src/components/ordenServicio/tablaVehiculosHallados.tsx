@@ -2,7 +2,9 @@ import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } f
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
-import style from '../tabla.css?inline';
+// import style from '../tabla.css?inline';
+// import style from '../../components/tabla/tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import { IVehiculo } from '~/interfaces/iVehiculo';
 import { CTX_VEHICULO_SELECCIONADO } from './newEditOrdenServicio';
 

@@ -1,7 +1,8 @@
 import { $, component$, Resource, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { images } from '~/assets';
-import styles from '../../components/tabla.css?inline';
+// import styles from '../../components/tabla.css?inline';
+import style from '../tabla/tabla.css?inline';
 import ImgButton from '../system/imgButton';
 import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
 
@@ -66,7 +67,7 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
   const clickPDF = useSignal(0);
   const ventaSeleccionada = useSignal<IVenta>();
 
-  useStylesScoped$(styles);
+  useStylesScoped$(style);
   // const clikeado = useSignal(false);
 
   const verPDF = $((venta: any) => {

@@ -1,4 +1,4 @@
-import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';

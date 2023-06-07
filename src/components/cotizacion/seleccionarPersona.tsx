@@ -3,7 +3,7 @@ import { images } from '~/assets';
 // import { CTX_PERSONA } from '../venta/addVenta';
 // import ImgButton from '../../system/imgButton';
 // import TablaPersonasHalladas from './tablaPersonasHalladas';
-import { CTX_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
 import ImgButton from '../system/imgButton';
 
 // interface ISeleccionarPersona {
@@ -25,7 +25,7 @@ export interface IPersona {
 export default component$(
   (props: { ancho?: number; seleccionar?: string; parametrosGlobales: any; soloPersonasNaturales: boolean }) => {
     //#region CONTEXTO
-    const ctx = useContext(CTX_COTIZACION);
+    const ctx_docs_cotizacion = useContext(CTX_DOCS_COTIZACION);
     //#endregion CONTEXTO
 
     // const ctx_PersonaSeleccionada = useContext(CTX_PERSONA);
@@ -83,8 +83,8 @@ export default component$(
               // ctx_PanelVenta.mostrarPanelSeleccionarPersona = false;
               // ctx_PanelVenta.selecciono_Persona = false;
 
-              ctx.mostrarPanelSeleccionarPersona = false;
-              ctx.selecciono_Persona = false;
+              ctx_docs_cotizacion.mostrarPanelSeleccionarPersona = false;
+              ctx_docs_cotizacion.selecciono_Persona = false;
             })}
             // onClick={() => {
             //   const soloCerrar = true;

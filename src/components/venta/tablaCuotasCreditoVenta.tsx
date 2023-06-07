@@ -2,7 +2,7 @@ import { component$, useContext, useSignal } from '@builder.io/qwik';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN, redondeo2Decimales } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
-import { CTX_ADD_VENTA } from './addVenta'; //ICuotaCreditoVenta
+import { CTX_F_B_NC_ND } from './addVenta'; //ICuotaCreditoVenta
 
 // export interface ICuota {
 //   idAuxiliar: number;
@@ -11,7 +11,7 @@ import { CTX_ADD_VENTA } from './addVenta'; //ICuotaCreditoVenta
 // }numeroFilas: number;
 
 export default component$((props: { registros: any[]; numero: number }) => {
-  const ctx_add_venta_tabla = useContext(CTX_ADD_VENTA);
+  const ctx_f_b_nc_nd = useContext(CTX_F_B_NC_ND);
   const num_regi = useSignal(0);
 
   let sumaCuotas = 0; //useSignal(0);
@@ -112,7 +112,7 @@ export default component$((props: { registros: any[]; numero: number }) => {
           <th>
             <button
               onClick$={() => {
-                console.log('ctx_add_venta_tabla.cuotasCredito', ctx_add_venta_tabla.cuotasCredito);
+                console.log('ctx_add_venta_tabla.cuotasCredito', ctx_f_b_nc_nd.cuotasCredito);
               }}
             >
               ver ctx
