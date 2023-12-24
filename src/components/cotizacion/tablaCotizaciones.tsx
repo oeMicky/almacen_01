@@ -47,7 +47,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     if (typeof cotizacion !== 'undefined') {
       console.log('imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion);
       // pdfCotizacion98(cotizacion);
-      pdfCotizacionMG(cotizacion);
+      // pdfCotizacionMG(cotizacion);
     }
   });
 
