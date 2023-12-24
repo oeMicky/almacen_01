@@ -8,7 +8,7 @@ import { images } from '~/assets';
 // import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
 import { ICotizacion } from '~/interfaces/iCotizacion';
 import { CTX_INDEX_COTIZACION } from '~/routes/(almacen)/cotizacion';
-// import pdfCotizacionMG from '~/reports/MG/pdfCotizacionMG';
+import pdfCotizacionMG from '~/reports/MG/pdfCotizacionMG';
 
 export default component$((props: { buscarCotizaciones: number; modoSeleccion: boolean; parametrosBusqueda: any }) => {
   //#region CONTEXTOS
@@ -47,7 +47,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     if (typeof cotizacion !== 'undefined') {
       console.log('imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion);
       // pdfCotizacion98(cotizacion);
-      // pdfCotizacionMG(cotizacion);
+      pdfCotizacionMG(cotizacion);
     }
   });
 
