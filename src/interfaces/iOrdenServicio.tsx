@@ -1,5 +1,14 @@
 export interface IOrdenServicio {
   _id: string;
+  idGrupoEmpresarial: string;
+  idEmpresa: string;
+  idPeriodo: string;
+  periodo: number;
+
+  ruc: string;
+  empresa: string;
+  direccion: string;
+
   igv: number;
   fechaInicio: string;
   correlativo: number;
@@ -28,7 +37,42 @@ export interface IOrdenServicio {
 
   servicios: any;
   requisiciones: any;
+  // repuestosDespachados: any;
+}
+
+export interface IOrdenServicio_Requisicion {
+  _id: string;
+
+  fechaInicio: string;
+  correlativo: number;
+  estado: string;
+  tipo: string;
+
+  idCliente: string;
+  codigoTipoDocumentoIdentidad: string;
+  tipoDocumentoIdentidad: string;
+  numeroIdentidad: string;
+  razonSocialNombreCliente: string;
+
+  requisiciones: any;
   repuestosDespachados: any;
+}
+export interface IOrdenServicio_DespachoRequisicion {
+  _id: string;
+  idAuxiliar: number;
+  idKardex: string;
+
+  codigo: string;
+  descripcionEquivalencia: string;
+
+  stock: any;
+  cantidad: any;
+  unidadEquivalencia: string;
+  cantidadesDespachadas: any;
+  cantidadADespachar: any;
+  factor: number;
+  tipoEquivalencia: boolean;
+  laEquivalencia: any;
 }
 
 export interface IServicioSeleccionado {

@@ -8,12 +8,9 @@ import { images } from '~/assets';
 import Header from '~/components/header/header';
 import Footer from '~/components/footer/footer';
 
-export default component$(() => {
-  // const darClick = $(() => {
-  //   alert('⚡️⚡️⚡️⚡️pipipipi ddddd gui tu 700');
-  // });
-  console.log('first...//...', import.meta.env.VITE_URL);
+// export const CTX_0 = createContextId<any>('app.del_0');
 
+export default component$(() => {
   return (
     <>
       <Header />
@@ -71,7 +68,6 @@ export default component$(() => {
           </section>
         </div>
       </main>
-
       <Footer />
     </>
   );

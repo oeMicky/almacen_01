@@ -3,12 +3,15 @@ import { inUpServicio } from '~/apis/servicio.api';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 import { IServicio } from '~/interfaces/iServicio';
-import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_INDEX_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
+import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 import { parametrosGlobales } from '~/routes/login';
+import { CTX_BUSCAR_SERVICIO } from './buscarServicio';
+// import { CTX_SERVICIO } from './seleccionarServicio';
 
-export default component$((props: { serviSelecci: any }) => {
-  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
-
+export default component$((props: { serviSelecci: any; contexto: any }) => {
+  //#region DEFINICION SERVICIO - NEW  /EDIT
   const servicio = useStore<IServicio>({
     _id: props.serviSelecci._id ? props.serviSelecci._id : '',
     activo: props.serviSelecci.activo ? props.serviSelecci.activo : true,
@@ -16,16 +19,33 @@ export default component$((props: { serviSelecci: any }) => {
     descripcion: props.serviSelecci.descripcion ? props.serviSelecci.descripcion : '',
     precioPEN: props.serviSelecci.precioPEN ? props.serviSelecci.precioPEN : 0,
   });
+  //#endregion DEFINICION SERVICIO
+
+  //#region CONTEXTOS
+  let ctx: any = [];
+  switch (props.contexto) {
+    case 'orden servicio':
+      ctx = useContext(CTX_INDEX_ORDEN_SERVICIO);
+      break;
+    case 'venta':
+      ctx = useContext(CTX_INDEX_VENTA);
+      break;
+    case 'cotizacion':
+      ctx = useContext(CTX_INDEX_COTIZACION);
+      break;
+  }
+  const ctx_buscar_servicio = useContext(CTX_BUSCAR_SERVICIO);
+  //#endregion CONTEXTOS
 
   const onSubmit = $(async () => {
     if (servicio.descripcion === '') {
       alert('Ingrese la descripción del servicio.');
-      (document.getElementById('inputDescripcionServicio') as HTMLInputElement)?.focus();
+      (document.getElementById('in_descripcion_SERVICIO') as HTMLInputElement)?.focus();
       return;
     }
     if (servicio.precioPEN === '') {
       alert('Ingrese el preccio (PEN) del servicio.');
-      (document.getElementById('inputPrecioServicio') as HTMLInputElement)?.focus();
+      (document.getElementById('in_precio_SERVICIO') as HTMLInputElement)?.focus();
       return;
     }
 
@@ -44,11 +64,21 @@ export default component$((props: { serviSelecci: any }) => {
     });
     console.log('servicioGrabado', servicioGrabado);
 
-    ctx_docs_venta.mostrarAddNewEditServicio = false;
+    // ctx_docs_venta.mostrarAddNewEditServicio = false;
+    ctx_buscar_servicio.grabo_Servicio = true;
+
+    ctx.mostrarPanelNewEditServicio = false;
   });
 
   return (
-    <div style={{ width: 'auto', padding: '2px' }} class="container-modal">
+    <div
+      style={{
+        width: 'clamp(min(10vw, 20rem), 700px, max(90vw, 55rem))',
+        // width: 'auto',
+        padding: '2px',
+      }}
+      class="container-modal"
+    >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
@@ -58,7 +88,7 @@ export default component$((props: { serviSelecci: any }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_docs_venta.mostrarAddNewEditServicio = false;
+            ctx_buscar_servicio.mostrarPanelNewEditServicio = false;
           })}
           // onClick={(e) => {
           //   let soloCerrar = true;
@@ -77,7 +107,7 @@ export default component$((props: { serviSelecci: any }) => {
             <label>Código</label>
             <div class="form-control form-agrupado">
               <input
-                id="inputCodigoServicio"
+                id="in_codigo_SERVICIO"
                 style={{ width: '100%' }}
                 type="text"
                 disabled
@@ -92,7 +122,7 @@ export default component$((props: { serviSelecci: any }) => {
             <label>Descripción</label>
             <div class="form-control form-agrupado">
               <input
-                id="inputDescripcionServicio"
+                id="in_descripcion_SERVICIO"
                 style={{ width: '100%' }}
                 type="text"
                 autoFocus
@@ -107,7 +137,7 @@ export default component$((props: { serviSelecci: any }) => {
                 // onChange={(e) => setDescripcionEquivalencia(e.target.value.trim())}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    (document.getElementById('inputPrecioServicio') as HTMLInputElement)?.focus();
+                    (document.getElementById('in_precio_SERVICIO') as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -118,7 +148,7 @@ export default component$((props: { serviSelecci: any }) => {
             <label>Precio</label>
             <div class="form-control form-agrupado">
               <input
-                id="inputPrecioServicio"
+                id="in_precio_SERVICIO"
                 style={{ width: '100%' }}
                 type="text"
                 placeholder="Add precio (PEN)"
@@ -129,7 +159,7 @@ export default component$((props: { serviSelecci: any }) => {
                 // onChange={(e) => setPrecioPEN(e.target.value.trim())}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    (document.getElementById('buttonRegistrarServicio') as HTMLInputElement)?.focus();
+                    (document.getElementById('btn_registrar_SERVICIO') as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -139,7 +169,7 @@ export default component$((props: { serviSelecci: any }) => {
 
         {/* GRABAR   onClick={(e) => onSubmit(e)}*/}
         <input
-          id="buttonRegistrarServicio"
+          id="btn_registrar_SERVICIO"
           type="button"
           value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           // value={botonGrabar === '' ? 'Grabar' : `${botonGrabar}`}

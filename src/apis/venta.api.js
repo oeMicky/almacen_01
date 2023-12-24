@@ -1,6 +1,19 @@
 const API = import.meta.env.VITE_URL + '/api/venta';
 // const API = 'https://backendalmacen-production.up.railway.app/api/venta';
 
+export const getSeriesVentasActivasSegunTipo = async (parametros) => {
+  console.log('//////api////////////******************obtener a getSeriesVentasActivasSegunTipo');
+  console.log('parametros getSeriesVentasActivasSegunTipo', parametros);
+  const res = await fetch(API + '/obtenerSeriesVentasActivasSegunTipo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
 export const getSeriesFacturaActivas = async (parametros) => {
   console.log('//////api////////////******************obtener a getSeriesFactura');
   console.log('parametros getSeriesFacturaActivas', parametros);
@@ -13,6 +26,7 @@ export const getSeriesFacturaActivas = async (parametros) => {
   });
   return res.json();
 };
+
 export const getSeriesBoletaActivas = async (parametros) => {
   console.log('//////api////////////******************obtener a getSeriesBoletaActivas');
   console.log('parametros getSeriesBoletaActivas', parametros);
@@ -64,6 +78,7 @@ export const getIgvVenta = async (parametros) => {
   });
   return res.json();
 };
+
 export const inVenta = async (parametros) => {
   console.log('//////api////////////******************obtener a inVenta');
   console.log('parametros inVenta', parametros);
@@ -76,6 +91,7 @@ export const inVenta = async (parametros) => {
   });
   return res.json();
 };
+
 export const getVentasPorFechas = async (parametros) => {
   console.log('//////api////////////******************obtener a getVentasPorFechas');
   console.log('parametros getVentasPorFecha', parametros);

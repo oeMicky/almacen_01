@@ -1,28 +1,34 @@
-import { $, Resource, component$, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import style from '../tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { ICotizacion } from '~/routes/(almacen)/cotizacion';
-import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
+// import { ICotizacion } from '~/routes/(almacen)/cotizacion';
+// import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
+import { ICotizacion } from '~/interfaces/iCotizacion';
+import { CTX_INDEX_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import pdfCotizacionMG from '~/reports/MG/pdfCotizacionMG';
 
 export default component$((props: { buscarCotizaciones: number; modoSeleccion: boolean; parametrosBusqueda: any }) => {
+  //#region CONTEXTOS
+  const ctx_index_cotizacion = useContext(CTX_INDEX_COTIZACION);
+  //#endregion CONTEXTOS
+
   //#region INICIALIZACION
   useStylesScoped$(style);
   const clickPDF = useSignal(0);
   const cotizacionSeleccionada = useSignal<ICotizacion>();
   //#endregion INICIALIZACION
 
-  //#region TRAER COTIZACIONES
+  //#region BUSCANDO REGISTROS
   const lasCotizaciones = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     track(() => props.buscarCotizaciones.valueOf());
 
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    // console.log('FETCH->: ', `http://localhost:4000/api/cotizacion/obtenerCotizacionesEntreFechas`);
-    console.log('FETCH->: ', `${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`);
+    console.log('parametrosBusqueda', props.parametrosBusqueda);
     const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`, {
       method: 'POST',
       headers: {
@@ -33,20 +39,22 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     });
     return res.json();
   });
-  //#endregion TRAER COTIZACIONES
+  //#endregion BUSCANDO REGISTROS
 
   //#region VISUZALIZAR PDF
   const verPDF = $((cotizacion: any) => {
-    console.log('a pdfFactura98', cotizacion.untrackedValue); //venta !== null &&
-    if (typeof cotizacion.untrackedValue !== 'undefined') {
-      console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion.untrackedValue);
-      pdfCotizacion98(cotizacion.untrackedValue);
+    console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
+    if (typeof cotizacion !== 'undefined') {
+      console.log('imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion);
+      // pdfCotizacion98(cotizacion);
+      pdfCotizacionMG(cotizacion);
     }
   });
+
   useTask$(async ({ track }) => {
     track(() => clickPDF.value);
-    console.log('a useTask useTask useTask useTask:', clickPDF.value);
-    await verPDF(cotizacionSeleccionada);
+    console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
+    await verPDF(cotizacionSeleccionada.value);
   });
   //#endregion VISUZALIZAR PDF
 
@@ -89,10 +97,10 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                       // const indexItem = index + 1;
                       return (
                         <tr key={value._id}>
-                          <td data-label="Cotización">{value.correlativo}</td>
+                          <td data-label="Cotización">{value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}</td>
                           <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
                           <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                          <td data-label="Cliente">{value.razonSocialNombreCliente}</td>
+                          <td data-label="Cliente">{value.razonSocialNombre}</td>
                           <td data-label="Importe PEN" style={{ textAlign: 'end' }}>
                             {value.montoTotalPEN
                               ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
@@ -102,7 +110,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 })
                               : ''}
                           </td>
-                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
                             {props.modoSeleccion ? (
                               <>
                                 <ImgButton
@@ -162,6 +170,11 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 height={12}
                                 width={12}
                                 title="Editar venta"
+                                onClick={$(() => {
+                                  console.log('cotizacion', value);
+                                  ctx_index_cotizacion.cC = value;
+                                  ctx_index_cotizacion.mostrarPanelNewEditCotizacion = true;
+                                })}
                                 // onClick={() => {
                                 //   onEdit(coti);
                                 // }}

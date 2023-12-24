@@ -13,107 +13,85 @@ import {
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import {
-  getSeriesFacturaActivas,
-  getSeriesBoletaActivas,
-  getSeriesNotaCreditoActivas,
-  getSeriesNotaDebitoActivas,
+  // getSeriesFacturaActivas,
+  // getSeriesBoletaActivas,
+  // getSeriesNotaCreditoActivas,
+  // getSeriesNotaDebitoActivas,
+  getSeriesVentasActivasSegunTipo,
   // getIgvVenta,
 } from '~/apis/venta.api';
 //
-import { hoy, elIdAuxiliar, cerosALaIzquierda, redondeo2Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import {
+  hoy,
+  elIdAuxiliar,
+  cerosALaIzquierda,
+  redondeo2Decimales,
+  formatoDDMMYYYY_PEN,
+  ultimoDiaDelPeriodoX,
+} from '~/functions/comunes';
 // import SeleccionarPersona from '../miscelanea/persona/seleccionarPersona';
-import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
 import { getTipoCambio } from '~/apis/apisExternas.api';
 import { inVenta } from '~/apis/venta.api';
 import NewEditCuotaCreditoVenta from './newEditCuotaCreditoVenta';
-import BusquedaMercaderiaOUT from '../outAlmacen/busquedaMercaderiaOUT';
+// import BusquedaMercaderiaOUT from '../outAlmacen/busquedaMercaderiaOUT';
 import AdjuntarCotizacion from './adjuntarCotizacion';
 // import styleTabla from '../../components/tabla.css?inline';
 import styleTabla from '../tabla/tabla.css?inline';
-
-import SeleccionarServicio from '../miscelanea/servicio/seleccionarServicio';
+import BuscarPersona from '../miscelanea/persona/buscarPersona';
+import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
+import AdjuntarOrdenServicio from './adjuntarOrdenServicio';
 import { IPersona } from '~/interfaces/iPersona';
-import SeleccionarPersona from './seleccionarPersona';
+import { ICuotaCreditoVenta, IVenta } from '~/interfaces/iVenta';
+import { parametrosGlobales } from '~/routes/login';
+import BuscarServicio from '../miscelanea/servicio/buscarServicio';
+import BorrarItemVenta from './borrarItemVenta';
 
-// export const CTX_PERSONA = createContextId<IPersona>('ventaPersona');
-export const CTX_CLIENTE_SELECCIONADO = createContextId<IPersona>('cliente');
+export const CTX_CLIENTE_VENTA = createContextId<IPersona>('cliente');
 export const CTX_F_B_NC_ND = createContextId<IVenta>('addVenta');
+export const CTX_ADD_VENTA = createContextId<any>('add_venta');
 
-export interface IItemVenta {
-  idAuxiliar: number;
-  item: number;
-  codigo: string;
-  descripcionEquivalencia: string;
-  cantidad: number;
-  unidadEquivalencia: string;
-  costo: number;
-  precioPEN: number;
-  ventaPEN: number;
-  precioUSD: number;
-  ventaUSD: number;
-}
-
-export interface ICuotaCreditoVenta {
-  idAuxiliar: number;
-  fechaCuota: string;
-  importeCuotaPEN: number;
-}
-
-export interface IVenta {
-  codigoDocumento: string;
-  documentoVenta: string;
-  serie: string;
-  numeroDocumento: number;
-  fecha: string;
-
-  idCliente: string;
-  codigoTipoDocumentoIdentidad: string;
-  tipoDocumentoIdentidad: string;
-  numeroIdentidad: string;
-  razonSocialNombre: string;
-
-  igv: number;
-  enDolares: boolean;
-  moneda: string;
-  tipoCambio: number;
-
-  vendedor: string;
-  metodoPago: string;
-  verCuotasCredito: boolean;
-  cuotasCredito: any; // ICuotaCreditoVenta[];
-  importeTotalCuotasCredito: number;
-
-  cotizacion: number;
-  ordenServicio: number;
-
-  itemsVenta: any;
-
-  montoSubTotalPEN: number;
-  montoIGVPEN: number;
-  montoTotalPEN: number;
-
-  montoSubTotalUSD: number;
-  montoIGVUSD: number;
-  montoTotalUSD: number;
-}
-
-// export const addVenta = routeAction$(async () => {
-//   if (serieDocumento.value) {
-//     alert('Seleccione la serie.');
-//     document.getElementById('selectSerieVenta')?.focus();
-//   }
-// });
-
-export default component$((props: { ancho: number; parametrosGlobales: any; igv: number }) => {
+export default component$((props: { ancho: number; addPeriodo: any; igv: number }) => {
   useStylesScoped$(styleTabla);
+  //#region DEFINICION CTX_ADD_VENTA
+  const definicion_CTX_ADD_VENTA = useStore({
+    mostrarPanelCuotasCredito: false,
+    grabo_CuotaCredito: false,
+    mostrarVerAlmacen: false,
+
+    rol_Persona: '',
+    selecciono_Persona: false,
+    mostrarPanelBuscarPersona: false,
+    mostrarPanelBuscarServicio: false,
+    mostrarPanelBuscarMercaderiaOUT: false,
+
+    mostrarAdjuntarOS: false,
+    mostrarAdjuntarCotizacion: false,
+
+    mostrarPanelBorrarItemVenta: false,
+    borrar_idAuxilarVenta: 0,
+  });
+  useContextProvider(CTX_ADD_VENTA, definicion_CTX_ADD_VENTA);
+  //#endregion DEFINICION CTX_ADD_VENTA
+
   //#region DEFINICION CTX_F_B_NC_ND - NEW / EDIT
   const definicion_CTX_F_B_NC_ND = useStore<IVenta>(
     {
-      codigoDocumento: '',
-      documentoVenta: '',
+      _id: '',
+      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+      idEmpresa: parametrosGlobales.idEmpresa,
+      idPeriodo: props.addPeriodo.idPeriodo,
+      periodo: props.addPeriodo.periodo,
+
+      ruc: parametrosGlobales.RUC,
+      empresa: parametrosGlobales.RazonSocial,
+      direccion: parametrosGlobales.Direccion,
+
+      codigoTipoComprobantePago: '',
+      tipoComprobantePago: '',
       serie: '',
-      numeroDocumento: 0,
-      fecha: hoy(),
+      numero: 0,
+      fecha: '', //hoy(),
 
       idCliente: '',
       codigoTipoDocumentoIdentidad: '6',
@@ -125,6 +103,10 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       enDolares: false,
       moneda: 'PEN',
       tipoCambio: 0,
+
+      idOrdenServicio: '',
+      serieOrdenServicio: '',
+      numeroOrdenServicio: 0,
 
       vendedor: '',
       metodoPago: 'CONTADO',
@@ -150,23 +132,8 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
   useContextProvider(CTX_F_B_NC_ND, definicion_CTX_F_B_NC_ND);
   //#endregion DEFINICION CTX_F_B_NC_ND - NEW / EDIT
 
-  //#region DEFINICION CTX_PERSONA
-  // const laPersonaSeleccionada = useStore<IPersona>({
-  //   _id: '',
-  //   codigoTipoDocumentoIdentidad: '',
-  //   tipoDocumentoIdentidad: '',
-  //   numeroIdentidad: '',
-  //   razonSocialNombre: '',
-  //   nombre: '',
-  //   paterno: '',
-  //   materno: '',
-  //   activo: true,
-  // });
-  // useContextProvider(CTX_PERSONA, laPersonaSeleccionada);
-  //#endregion DEFINICION CTX_PERSONA
-
-  //#region DEFINICION CTX_CLIENTE_SELECCIONADO
-  const elClienteSeleccionado = useStore<IPersona>({
+  //#region DEFINICION CTX_CLIENTE_VENTA
+  const defini_CTX_CLIENTE_VENTA = useStore<IPersona>({
     _id: '',
     codigoTipoDocumentoIdentidad: '',
     tipoDocumentoIdentidad: '',
@@ -177,15 +144,14 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
     materno: '',
     activo: true,
   });
-  useContextProvider(CTX_CLIENTE_SELECCIONADO, elClienteSeleccionado);
-  //#endregion DEFINICION CTX_CLIENTE_SELECCIONADO
+  useContextProvider(CTX_CLIENTE_VENTA, defini_CTX_CLIENTE_VENTA);
+  //#endregion DEFINICION CTX_CLIENTE_VENTA
 
   //#region CONTEXTOS
-  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
+  const ctx_index_venta = useContext(CTX_INDEX_VENTA);
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
-
   const tipoDocumento = useSignal('01'); //FACTURA
   const idSerieDocumento = useSignal('');
   const serieDocumento = useSignal('');
@@ -200,24 +166,31 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
   let subTOTAL = 0;
   let igvTOTAL = 0;
 
-  const item = useStore<IItemVenta>({
-    idAuxiliar: 0, //parseInt(elIdAuxiliar()),
-    item: 0,
-    codigo: '',
-    descripcionEquivalencia: '',
-    cantidad: 0,
-    unidadEquivalencia: '',
-    costo: 0,
-    precioPEN: 0,
-    ventaPEN: 0,
-    precioUSD: 0,
-    ventaUSD: 0,
-  });
+  // const item = useStore<IItemVenta>({
+  //   idAuxiliar: 0, //parseInt(elIdAuxiliar()),
+  //   item: 0,
+  //   codigo: '',
+  //   descripcionEquivalencia: '',
+  //   cantidad: 0,
+  //   unidadEquivalencia: '',
+  //   costo: 0,
+  //   precioPEN: 0,
+  //   ventaPEN: 0,
+  //   precioUSD: 0,
+  //   ventaUSD: 0,
+  // });
 
   const cuota = useStore<ICuotaCreditoVenta>({
     idAuxiliar: 0,
     fechaCuota: hoy(),
     importeCuotaPEN: 99,
+  });
+
+  const borrarItemVenta = useStore({
+    idAuxiliar: '',
+    item: '',
+    codigo: '',
+    descripcion: '',
   });
   //#endregion INICIALIZACION
 
@@ -228,21 +201,23 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
     // alert(`tretre a useTask ${documento.value}`);
     let laSerie;
     const parametros = {
-      idGrupoEmpresarial: props.parametrosGlobales.idGrupoEmpresarial,
-      idEmpresa: props.parametrosGlobales.idEmpresa,
-      documento: tipoDocumento.value,
+      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+      idEmpresa: parametrosGlobales.idEmpresa,
+      idSucursal: parametrosGlobales.idSucursal,
+      codigo: tipoDocumento.value,
     };
 
     switch (tipoDocumento.value) {
       case '01': //FACTURA
         serieDocumento.value = '';
         // alert(`tretre a useTask FACTURA`);
-        laSerie = await getSeriesFacturaActivas(parametros);
+        // laSerie = await getSeriesFacturaActivas(parametros);
+        laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // console.log('laSerie', laSerie);
         dataSerie.value = laSerie.data;
         console.log('dataSerie.value', dataSerie.value);
-        definicion_CTX_F_B_NC_ND.codigoDocumento = '01';
-        definicion_CTX_F_B_NC_ND.documentoVenta = 'FACTURA';
+        definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '01';
+        definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'FACTURA';
         botonGrabar.value = 'Grabar FACTURA';
         // setSeries(laSerie.data);
         // setCodigoDocumento('01');
@@ -253,12 +228,13 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       case '03': //BOLETA
         serieDocumento.value = '';
         // alert(`tretre a useTask BOLETA`);
-        laSerie = await getSeriesBoletaActivas(parametros);
+        // laSerie = await getSeriesBoletaActivas(parametros);
+        laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
         console.log('dataSerie.value', dataSerie.value);
-        definicion_CTX_F_B_NC_ND.codigoDocumento = '03';
-        definicion_CTX_F_B_NC_ND.documentoVenta = 'BOLETA';
+        definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '03';
+        definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'BOLETA';
         botonGrabar.value = 'Grabar BOLETA';
         // setBotonGrabar('Grabar BOLETA');
 
@@ -266,12 +242,13 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       case '07': //NOTA DE CRÉDITO
         serieDocumento.value = '';
         // alert(`tretre a useTask NOTA DE CRÉDITO`);
-        laSerie = await getSeriesNotaCreditoActivas(parametros);
+        // laSerie = await getSeriesNotaCreditoActivas(parametros);
+        laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
         console.log('dataSerie.value', dataSerie.value);
-        definicion_CTX_F_B_NC_ND.codigoDocumento = '07';
-        definicion_CTX_F_B_NC_ND.documentoVenta = 'NOTA DE CRÉDITO';
+        definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '07';
+        definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'NOTA DE CRÉDITO';
         botonGrabar.value = 'Grabar NOTA DE CRÉDITO';
         // setBotonGrabar('Grabar NOTA DE CRÉDITO');
 
@@ -279,12 +256,13 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       case '08': //NOTA DE DÉBITO
         serieDocumento.value = '';
         // alert(`tretre a useTask NOTA DE DÉBITO`);
-        laSerie = await getSeriesNotaDebitoActivas(parametros);
+        // laSerie = await getSeriesNotaDebitoActivas(parametros);
+        laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
         console.log('dataSerie.value', dataSerie.value);
-        definicion_CTX_F_B_NC_ND.codigoDocumento = '08';
-        definicion_CTX_F_B_NC_ND.documentoVenta = 'NOTA DE DÉBITO';
+        definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '08';
+        definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'NOTA DE DÉBITO';
         botonGrabar.value = 'Grabar NOTA DE DÉBITO';
         // setBotonGrabar('Grabar NOTA DE DÉBITO');
 
@@ -315,8 +293,8 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       console.log('--Seleccione una opción--');
       // setIdTipoDocumento('');
       definicion_CTX_F_B_NC_ND.serie = '';
-      definicion_CTX_F_B_NC_ND.numeroDocumento = 0;
-      console.log('venta.serie', definicion_CTX_F_B_NC_ND.serie, definicion_CTX_F_B_NC_ND.numeroDocumento);
+      definicion_CTX_F_B_NC_ND.numero = 0;
+      console.log('venta.serie', definicion_CTX_F_B_NC_ND.serie, definicion_CTX_F_B_NC_ND.numero);
     } else {
       // console.log('elID', elID);
       // console.log('elValor', elValor);
@@ -327,22 +305,24 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       const corr = dataSerie.value.filter((ser: any) => ser._id === idSerieDocumento.value);
       const elCorre: { _id: string; codigo: string; serie: string; correlativo: number } = corr[0];
       console.log('corr.correlativo', elCorre.correlativo);
-      definicion_CTX_F_B_NC_ND.numeroDocumento = elCorre.correlativo + 1;
+      definicion_CTX_F_B_NC_ND.numero = elCorre.correlativo + 1;
     }
   });
   //#endregion GENERALES
 
   //#region CLIENTE
   useTask$(({ track }) => {
-    track(() => ctx_docs_venta.selecciono_Persona);
-    if (ctx_docs_venta.selecciono_Persona) {
+    track(() => definicion_CTX_ADD_VENTA.selecciono_Persona);
+    if (definicion_CTX_ADD_VENTA.selecciono_Persona && definicion_CTX_ADD_VENTA.rol_Persona === 'cliente') {
       // alert('evalua a la persona');
-      definicion_CTX_F_B_NC_ND.idCliente = elClienteSeleccionado._id;
-      definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = elClienteSeleccionado.codigoTipoDocumentoIdentidad;
-      definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = elClienteSeleccionado.tipoDocumentoIdentidad;
-      definicion_CTX_F_B_NC_ND.numeroIdentidad = elClienteSeleccionado.numeroIdentidad;
-      definicion_CTX_F_B_NC_ND.razonSocialNombre = elClienteSeleccionado.razonSocialNombre;
-      ctx_docs_venta.selecciono_Persona = false;
+      definicion_CTX_F_B_NC_ND.idCliente = defini_CTX_CLIENTE_VENTA._id;
+      definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = defini_CTX_CLIENTE_VENTA.codigoTipoDocumentoIdentidad;
+      definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = defini_CTX_CLIENTE_VENTA.tipoDocumentoIdentidad;
+      definicion_CTX_F_B_NC_ND.numeroIdentidad = defini_CTX_CLIENTE_VENTA.numeroIdentidad;
+      definicion_CTX_F_B_NC_ND.razonSocialNombre = defini_CTX_CLIENTE_VENTA.razonSocialNombre;
+
+      definicion_CTX_ADD_VENTA.rol_Persona = '';
+      definicion_CTX_ADD_VENTA.selecciono_Persona = false;
     }
   });
   //#endregion CLIENTE
@@ -383,8 +363,8 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
 
   //#region CUOTA CREDITO
   useTask$(({ track }) => {
-    track(() => ctx_docs_venta.mostrarPanelCuotasCredito);
-    if (ctx_docs_venta.grabo_CuotaCredito) {
+    track(() => definicion_CTX_ADD_VENTA.mostrarPanelCuotasCredito);
+    if (definicion_CTX_ADD_VENTA.grabo_CuotaCredito) {
       // alert(`${cuota.importeCuotaPEN}`);
       console.log('🤑 🤩 insertar cuota', cuota);
       const elTarget = JSON.parse(JSON.stringify(cuota));
@@ -397,37 +377,37 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
   //#endregion CUOTA CREDITO
 
   //#region ITEMS VENTA
-  const fijarMontos = $((e: any) => {
-    console.log(' eee', e);
+  // const fijarMontos = $((e: any) => {
+  //   console.log(' eee', e);
 
-    console.log('eeeeeeeeeeeeeeeeee', e);
-    if (definicion_CTX_F_B_NC_ND.enDolares) {
-      definicion_CTX_F_B_NC_ND.montoSubTotalUSD = e.subTOTAL;
-      definicion_CTX_F_B_NC_ND.montoIGVUSD = e.igvTOTAL;
-      definicion_CTX_F_B_NC_ND.montoTotalUSD = e.sumaTOTAL;
+  //   console.log('eeeeeeeeeeeeeeeeee', e);
+  //   if (definicion_CTX_F_B_NC_ND.enDolares) {
+  //     definicion_CTX_F_B_NC_ND.montoSubTotalUSD = e.subTOTAL;
+  //     definicion_CTX_F_B_NC_ND.montoIGVUSD = e.igvTOTAL;
+  //     definicion_CTX_F_B_NC_ND.montoTotalUSD = e.sumaTOTAL;
 
-      const tt = redondeo2Decimales(e.sumaTOTAL * definicion_CTX_F_B_NC_ND.tipoCambio);
-      const sub = redondeo2Decimales((tt * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
-      const i = redondeo2Decimales(tt - sub);
+  //     const tt = redondeo2Decimales(e.sumaTOTAL * definicion_CTX_F_B_NC_ND.tipoCambio);
+  //     const sub = redondeo2Decimales((tt * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
+  //     const i = redondeo2Decimales(tt - sub);
 
-      definicion_CTX_F_B_NC_ND.montoSubTotalPEN = sub;
-      definicion_CTX_F_B_NC_ND.montoIGVPEN = i;
-      definicion_CTX_F_B_NC_ND.montoTotalPEN = tt;
-    } else {
-      definicion_CTX_F_B_NC_ND.montoSubTotalPEN = e.subTOTAL;
-      definicion_CTX_F_B_NC_ND.montoIGVPEN = e.igvTOTAL;
-      definicion_CTX_F_B_NC_ND.montoTotalPEN = e.sumaTOTAL;
-      console.log(
-        'first',
-        definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
-        definicion_CTX_F_B_NC_ND.montoIGVPEN,
-        definicion_CTX_F_B_NC_ND.montoTotalPEN
-      );
-      definicion_CTX_F_B_NC_ND.montoSubTotalUSD = 0;
-      definicion_CTX_F_B_NC_ND.montoIGVUSD = 0;
-      definicion_CTX_F_B_NC_ND.montoTotalUSD = 0;
-    }
-  });
+  //     definicion_CTX_F_B_NC_ND.montoSubTotalPEN = sub;
+  //     definicion_CTX_F_B_NC_ND.montoIGVPEN = i;
+  //     definicion_CTX_F_B_NC_ND.montoTotalPEN = tt;
+  //   } else {
+  //     definicion_CTX_F_B_NC_ND.montoSubTotalPEN = e.subTOTAL;
+  //     definicion_CTX_F_B_NC_ND.montoIGVPEN = e.igvTOTAL;
+  //     definicion_CTX_F_B_NC_ND.montoTotalPEN = e.sumaTOTAL;
+  //     console.log(
+  //       'first',
+  //       definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
+  //       definicion_CTX_F_B_NC_ND.montoIGVPEN,
+  //       definicion_CTX_F_B_NC_ND.montoTotalPEN
+  //     );
+  //     definicion_CTX_F_B_NC_ND.montoSubTotalUSD = 0;
+  //     definicion_CTX_F_B_NC_ND.montoIGVUSD = 0;
+  //     definicion_CTX_F_B_NC_ND.montoTotalUSD = 0;
+  //   }
+  // });
   // useTask$(({ track }) => {
   //   track(() => ctx_PanelVenta.grabo_ItemsVenta);
   //   if (ctx_PanelVenta.grabo_ItemsVenta) {
@@ -460,13 +440,31 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
   // });
   //#endregion ITEMS VENTA
 
-  //#region SUBMIT
+  //#region ELIMINAR ITEM VENTA
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta);
+    if (definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta > 0) {
+      console.log('borrando...', definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta);
+      const newItems: any = definicion_CTX_F_B_NC_ND.itemsVenta.filter(
+        (docs: any) => docs.idAuxiliar !== definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta
+      );
+      definicion_CTX_F_B_NC_ND.itemsVenta = newItems;
+      definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta = 0;
+    }
+  });
+  //#endregion ELIMINAR ITEM VENTA
 
+  //#region SUBMIT
   const grabando = $(async () => {
     console.log('first::::::_______::::::______T');
     if (serieDocumento.value === '') {
       alert('Seleccione la serie.');
       document.getElementById('selectSerieVenta')?.focus();
+      return;
+    }
+    if (definicion_CTX_F_B_NC_ND.fecha === '') {
+      alert('Ingrese la fecha');
+      document.getElementById('in_Fecha')?.focus();
       return;
     }
     if (definicion_CTX_F_B_NC_ND.numeroIdentidad === '') {
@@ -492,17 +490,19 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
     console.log('paso_______::::::______T', definicion_CTX_F_B_NC_ND);
     // const aGrabar =
     const ventaGRABADA = await inVenta({
-      idGrupoEmpresarial: props.parametrosGlobales.idGrupoEmpresarial,
-      idEmpresa: props.parametrosGlobales.idEmpresa,
+      idGrupoEmpresarial: definicion_CTX_F_B_NC_ND.idGrupoEmpresarial,
+      idEmpresa: definicion_CTX_F_B_NC_ND.idEmpresa,
+      idPeriodo: definicion_CTX_F_B_NC_ND.idPeriodo,
+      periodo: definicion_CTX_F_B_NC_ND.periodo,
 
-      ruc: props.parametrosGlobales.parameRUC,
-      empresa: props.parametrosGlobales.parameRazonSocial,
-      direccion: props.parametrosGlobales.paraDireccion,
+      ruc: definicion_CTX_F_B_NC_ND.ruc,
+      empresa: definicion_CTX_F_B_NC_ND.empresa,
+      direccion: definicion_CTX_F_B_NC_ND.direccion,
 
-      codigoDocumento: definicion_CTX_F_B_NC_ND.codigoDocumento,
-      documentoVenta: definicion_CTX_F_B_NC_ND.documentoVenta,
+      codigoTipoComprobantePago: definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago,
+      tipoComprobantePago: definicion_CTX_F_B_NC_ND.tipoComprobantePago,
       serie: definicion_CTX_F_B_NC_ND.serie,
-      numeroDocumento: definicion_CTX_F_B_NC_ND.numeroDocumento,
+      numero: definicion_CTX_F_B_NC_ND.numero,
       fecha: definicion_CTX_F_B_NC_ND.fecha,
 
       idCliente: definicion_CTX_F_B_NC_ND.idCliente,
@@ -539,17 +539,22 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       // serieReferencia: venta.serieReferencia,
       // numeroReferencia: venta.numeroReferencia,
 
-      usuario: props.parametrosGlobales.usuario,
+      usuario: parametrosGlobales.usuario,
     });
+
+    if (ventaGRABADA.status === 400) {
+      alert('Falla al registrar la venta. ' + ventaGRABADA.message);
+      return;
+    }
 
     pasoProcesoGrabacion.value = true;
     if (ventaGRABADA) {
       grabo.value = true;
       //=> INICIALIZAR PARA LA SIGUIENTE VENTA
-      definicion_CTX_F_B_NC_ND.codigoDocumento = '';
-      definicion_CTX_F_B_NC_ND.documentoVenta = '';
+      definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '';
+      definicion_CTX_F_B_NC_ND.tipoComprobantePago = '';
       definicion_CTX_F_B_NC_ND.serie = '';
-      definicion_CTX_F_B_NC_ND.numeroDocumento = 0;
+      definicion_CTX_F_B_NC_ND.numero = 0;
       definicion_CTX_F_B_NC_ND.fecha = hoy();
 
       definicion_CTX_F_B_NC_ND.idCliente = '';
@@ -584,6 +589,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
     } else {
       grabo.value = false;
     }
+    console.log('paso_______::::::______ grabo.value', grabo.value);
   });
   //#endregion SUBMIT
 
@@ -592,7 +598,8 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
       class="container-modal"
       style={{
         // width: props.ancho + 'px',
-        width: 'auto',
+        width: 'clamp(min(10vw, 20rem), 700px, max(90vw, 55rem))',
+        // width: 'auto',
         background: `${definicion_CTX_F_B_NC_ND.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : ''}`,
         // border: '1px solid red',
         padding: '2px',
@@ -614,7 +621,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_docs_venta.mostrarPanelVenta = false;
+            ctx_index_venta.mostrarPanelVenta = false;
           })}
         />
         <ImgButton
@@ -635,6 +642,29 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE FACTURA */}
           <div>
+            {/* PERIODO */}
+            <div class="form-control">
+              <label>Periodo</label>
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_Periodo"
+                  style={{ width: '100%' }}
+                  type="number"
+                  // autoFocus
+                  disabled
+                  // placeholder="Add año DUA o DSI"
+                  value={definicion_CTX_F_B_NC_ND.periodo}
+                  // onInput$={(e) => {
+                  //   definicion_CTX_COMPRA.anioDUAoDSI = parseInt((e.target as HTMLInputElement).value.trim());
+                  // }}
+                  // onKeyPress$={(e) => {
+                  //   if (e.key === 'Enter') {
+                  //     (document.getElementById('in_Serie') as HTMLInputElement)?.focus();
+                  //   }
+                  // }}
+                />
+              </div>
+            </div>
             {/* Documento onChange={buscarSeriesVenta}   , fontSize: '0.7rem'*/}
             <div class="form-control">
               <label>Documento</label>
@@ -678,7 +708,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                     serieDocumento.value = (e.target as HTMLSelectElement).value;
                   }}
                 >
-                  <option value="">-- Seleccione una opción --</option>
+                  <option value="">-- Seleccione una serie --</option>
                   {dataSerie.value.map((ser: any) => {
                     return (
                       <option id={ser._id} value={ser.serie} selected={serieDocumento.value === ser.serie}>
@@ -695,10 +725,10 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
               <div class="form-control form-agrupado">
                 <input
                   id="inputNumeroDocumento"
-                  // style={{ width: '100%', border: '1px solid red' }}
+                  style={{ width: '100%' }}
                   type="text"
                   disabled
-                  value={definicion_CTX_F_B_NC_ND.numeroDocumento}
+                  value={definicion_CTX_F_B_NC_ND.numero}
                 />
               </div>
             </div>
@@ -707,14 +737,16 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
               <label>Fecha</label>
               <div class="form-control form-agrupado">
                 <input
-                  id="inputFecha"
+                  id="in_Fecha"
                   type="date"
-                  disabled
+                  // disabled
+                  min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                  max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
                   value={definicion_CTX_F_B_NC_ND.fecha}
                   onChange$={(e) => {
                     definicion_CTX_F_B_NC_ND.fecha = (e.target as HTMLInputElement).value;
                   }}
-                  // style={{ width: '100%' }}
+                  style={{ width: '100%' }}
                 />
               </div>
             </div>
@@ -756,21 +788,6 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                     C.EXT
                   </option>
                 </select>
-              </div>
-            </div>
-            {/* numero identidad*/}
-            <div class="form-control">
-              <label>Número identidad</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNumeroDocumentoIdentidad"
-                  // style={{ width: '100%' }}
-                  type="text"
-                  placeholder="Add número"
-                  value={definicion_CTX_F_B_NC_ND.numeroIdentidad}
-                  onChange$={(e) => (definicion_CTX_F_B_NC_ND.numeroIdentidad = (e.target as HTMLInputElement).value)}
-                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
-                />
                 <ImgButton
                   src={images.searchPLUS}
                   alt="Icono de buscar identidad"
@@ -779,28 +796,38 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                   title="Buscar datos de identidad"
                   // onClick={buscarCliente}
                   onClick={$(() => {
-                    ctx_docs_venta.mostrarPanelSeleccionarPersona = true;
+                    definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true;
                   })}
                 />
               </div>
             </div>
-            {ctx_docs_venta.mostrarPanelSeleccionarPersona && (
+            {definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona && (
               <div class="modal">
-                <SeleccionarPersona
-                  // ancho={520}
-                  seleccionar={'cliente'}
-                  // parametrosGlobales={props.parametrosGlobales}
-                  soloPersonasNaturales={false}
-                />
+                <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="venta" rol="cliente" />
               </div>
             )}
+            {/* numero identidad*/}
+            <div class="form-control">
+              <label>Número identidad</label>
+              <div class="form-control form-agrupado">
+                <input
+                  id="inputNumeroDocumentoIdentidad"
+                  style={{ width: '100%' }}
+                  type="text"
+                  placeholder="Add número"
+                  value={definicion_CTX_F_B_NC_ND.numeroIdentidad}
+                  onChange$={(e) => (definicion_CTX_F_B_NC_ND.numeroIdentidad = (e.target as HTMLInputElement).value)}
+                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                />
+              </div>
+            </div>
             {/* Razon Social / Nombre */}
             <div class="form-control">
               <label>Razón social / Nombre</label>
               <div class="form-control form-agrupado">
                 <input
                   id="inputNombreCliente"
-                  // style={{ width: '100%' }}
+                  style={{ width: '100%' }}
                   type="text"
                   placeholder="Razón social / Nombre"
                   value={definicion_CTX_F_B_NC_ND.razonSocialNombre}
@@ -837,7 +864,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
             <div class="form-control">
               <label>IGV (%)</label>
               <div class="form-control form-agrupado">
-                <input type="text" id="inputIGV" disabled value={definicion_CTX_F_B_NC_ND.igv + ' %'} />
+                <input type="text" id="inputIGV" disabled value={definicion_CTX_F_B_NC_ND.igv + ' %'} style={{ width: '100%' }} />
               </div>
             </div>
             {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
@@ -866,7 +893,13 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                 </label>
               </div>
               <div class="form-control form-agrupado">
-                <input id="inputTipoCambio" type="text" value={definicion_CTX_F_B_NC_ND.tipoCambio} disabled />
+                <input
+                  id="inputTipoCambio"
+                  type="text"
+                  value={definicion_CTX_F_B_NC_ND.tipoCambio}
+                  disabled
+                  style={{ width: '100%' }}
+                />
               </div>
             </div>
             <hr style={{ margin: '5px 0' }}></hr>
@@ -908,8 +941,8 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                         (cuota.fechaCuota = hoy()),
                         (cuota.importeCuotaPEN = 0),
                         (cuotaCredito_esEdit.value = false);
-                      ctx_docs_venta.mostrarPanelCuotasCredito = true;
-                      ctx_docs_venta.grabo_CuotaCredito = false;
+                      definicion_CTX_ADD_VENTA.mostrarPanelCuotasCredito = true;
+                      definicion_CTX_ADD_VENTA.grabo_CuotaCredito = false;
                     }}
                     // onClick$={() => (ctx_PanelVenta.mostrarPanelCuotasCredito = true)}
                   >
@@ -918,7 +951,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                 )}
               </div>
             </div>
-            {ctx_docs_venta.mostrarPanelCuotasCredito && (
+            {definicion_CTX_ADD_VENTA.mostrarPanelCuotasCredito && (
               <div class="modal">
                 <NewEditCuotaCreditoVenta
                   ancho={280}
@@ -1036,45 +1069,55 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
           {/* BOTONES */}
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', backgroundColor: '#74a6ab' }}>
-              <button id="btnVerAlmacen" onClick$={() => (ctx_docs_venta.mostrarVerAlmacen = true)} style={{ cursor: 'pointer' }}>
+              <button
+                id="btnVerAlmacen"
+                onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarMercaderiaOUT = true)}
+                style={{ cursor: 'pointer' }}
+              >
                 Ver almacén
               </button>
-              {ctx_docs_venta.mostrarVerAlmacen && (
+              {definicion_CTX_ADD_VENTA.mostrarPanelBuscarMercaderiaOUT && (
                 <div class="modal">
-                  <BusquedaMercaderiaOUT ancho={740} parametrosGlobales={props.parametrosGlobales} item1={item} />
+                  <BuscarMercaderiaOUT contexto="new_venta" esAlmacen={false} />
+                  {/* <BusquedaMercaderiaOUT ancho={740} parametrosGlobales={props.parametrosGlobales} item1={item} /> */}
                 </div>
               )}
               <button
                 id="btnAddServicio"
-                onClick$={() => (ctx_docs_venta.mostrarAdicionarServicio = true)}
+                onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarServicio = true)}
                 style={{ cursor: 'pointer' }}
               >
                 Add servicio
               </button>
-              {ctx_docs_venta.mostrarAdicionarServicio && (
+              {definicion_CTX_ADD_VENTA.mostrarPanelBuscarServicio && (
                 <div class="modal">
-                  <SeleccionarServicio parametrosGlobales={props.parametrosGlobales} />
+                  <BuscarServicio contexto="new_venta" />
                 </div>
               )}
-              <button id="btnAddServicio" disabled onClick$={() => (ctx_docs_venta.mostrarVerAlmacen = true)}>
-                Add concepto valor
+              <button id="btnAdjuntarOS" onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarOS = true)}>
+                Adjuntar O.S.
               </button>
+              {definicion_CTX_ADD_VENTA.mostrarAdjuntarOS && (
+                <div class="modal">
+                  <AdjuntarOrdenServicio />
+                </div>
+              )}
               <button
                 id="btnAdjuntarCotizacion"
-                onClick$={() => (ctx_docs_venta.mostrarAdjuntarCotizacion = true)}
+                onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarCotizacion = true)}
                 style={{ cursor: 'pointer' }}
               >
                 Adjuntar cotización
               </button>
-              {ctx_docs_venta.mostrarAdjuntarCotizacion && (
+              {definicion_CTX_ADD_VENTA.mostrarAdjuntarCotizacion && (
                 <div class="modal">
-                  <AdjuntarCotizacion ancho={700} parametrosGlobales={props.parametrosGlobales} />
+                  <AdjuntarCotizacion />
                 </div>
               )}
-              <button id="btnAdjuntarOS" disabled onClick$={() => (ctx_docs_venta.mostrarAdjuntarCotizacion = true)}>
-                Adjuntar O.S.
+              <button id="btnAddServicio" disabled onClick$={() => (definicion_CTX_ADD_VENTA.mostrarVerAlmacen = true)}>
+                Add concepto valor
               </button>
-              <button id="btnAdjuntarOS" disabled onClick$={() => (ctx_docs_venta.mostrarAdjuntarCotizacion = true)}>
+              <button id="btnAdjuntarOS" disabled onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarCotizacion = true)}>
                 Descuento x Doc
               </button>
             </div>
@@ -1092,6 +1135,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                   <thead>
                     <tr>
                       <th>Ítem</th>
+                      <th>Kx</th>
                       <th>Código</th>
                       <th>Descripción</th>
                       <th>Cantidad</th>
@@ -1118,18 +1162,19 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                         igvTOTAL = redondeo2Decimales(sumaTOTAL - subTOTAL);
                       }
 
-                      if (index + 1 === definicion_CTX_F_B_NC_ND.itemsVenta.length) {
-                        console.log(subTOTAL);
-                        console.log(igvTOTAL);
-                        console.log(sumaTOTAL);
-                        fijarMontos({ subTOTAL, igvTOTAL, sumaTOTAL });
-                      }
-                      // sumaItems = sumaItems + index;
+                      // if (index + 1 === definicion_CTX_F_B_NC_ND.itemsVenta.length) {
+                      //   console.log(subTOTAL);
+                      //   console.log(igvTOTAL);
+                      //   console.log(sumaTOTAL);
+                      //   fijarMontos({ subTOTAL, igvTOTAL, sumaTOTAL });
+                      // }
                       return (
                         <tr key={iTVen.idAuxiliar}>
                           <td data-label="Ítem" key={iTVen.idAuxiliar}>{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
+                          <td data-label="Kx">{iTVen.idKardex.substring(iTVen.idKardex.length - 6)}</td>
                           <td data-label="Código">{iTVen.codigo}</td>
                           <td data-label="Descripción">{iTVen.descripcionEquivalencia}</td>
+                          {/* ----------------------------------------------------- */}
                           <td data-label="Cantidad" style={{ textAlign: 'end' }}>
                             <input
                               style={{ width: '60px', textAlign: 'end' }}
@@ -1166,6 +1211,7 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                             />
                           </td>
                           <td data-label="Uni">{iTVen.unidadEquivalencia}</td>
+                          {/* ----------------------------------------------------- */}
                           <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
                             <input
                               style={{ width: '60px', textAlign: 'end' }}
@@ -1215,15 +1261,16 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                               // }}
                             />
                           </td>
+                          {/* ----------------------------------------------------- */}
                           <td data-label="Venta" style={{ textAlign: 'end' }}>
-                            {/* {iTVen.ventaPEN ? iTVen.ventaPEN : iTVen.ventaPEN.$numberDecimal} */}
-                            {definicion_CTX_F_B_NC_ND.enDolares
+                            {iTVen.ventaPEN ? iTVen.ventaPEN : iTVen.ventaPEN.$numberDecimal}
+                            {/* {definicion_CTX_F_B_NC_ND.enDolares
                               ? iTVen.ventaUSD
                                 ? redondeo2Decimales(iTVen.ventaUSD)
                                 : redondeo2Decimales(iTVen.ventaUSD.$numberDecimal)
                               : iTVen.ventaPEN
                               ? redondeo2Decimales(iTVen.ventaPEN)
-                              : redondeo2Decimales(iTVen.ventaPEN.$numberDecimal)}
+                              : redondeo2Decimales(iTVen.ventaPEN.$numberDecimal)} */}
                           </td>
                           <td data-label="Acciones" style={{ textAlign: 'right' }}>
                             <ImgButton
@@ -1232,9 +1279,13 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                               height={12}
                               width={12}
                               title="Eliminar ítem"
-                              // onClick={() => {
-                              //   onBorrar({ indexItem, idAuxiliarItemVenta });
-                              // }}
+                              onClick={$(() => {
+                                borrarItemVenta.idAuxiliar = iTVen.idAuxiliar;
+                                // borrarItemVenta.item = indexItemServi;
+                                borrarItemVenta.codigo = iTVen.codigo;
+                                borrarItemVenta.descripcion = iTVen.descripcionEquivalencia;
+                                definicion_CTX_ADD_VENTA.mostrarPanelBorrarItemVenta = true;
+                              })}
                             />
                           </td>
                         </tr>
@@ -1242,9 +1293,11 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                     })}
                   </tbody>
                   {/* style={{ display: 'flex', flexDirection: 'column', justifyItems: 'end', border: '1px dashed blue' }} */}
+                  {/* <tfoot style={{ display: 'flex',justifyContent:'right',aligItems: 'right', border: '1px solid blue' }}> */}
                   <tfoot>
-                    <tr style={{ display: 'flex', alignContent: 'center', border: '1px solid red' }}>
-                      <td colSpan={6} style={{ textAlign: 'end' }}>
+                    <tr>
+                      <td colSpan={6} style={{ textAlign: 'end' }}></td>
+                      <td colSpan={1} style={{ textAlign: 'end' }}>
                         Sub total
                       </td>
                       <td colSpan={1} style={{ textAlign: 'end' }}>
@@ -1255,8 +1308,9 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                         })}`}
                       </td>
                     </tr>
-                    <tr style={{ display: 'flex', alignContent: 'end', border: '1px solid green' }}>
-                      <td colSpan={6} style={{ textAlign: 'end' }}>
+                    <tr>
+                      <td colSpan={6} style={{ textAlign: 'end' }}></td>
+                      <td colSpan={1} style={{ textAlign: 'end' }}>
                         IGV
                       </td>
                       <td colSpan={1} style={{ textAlign: 'end' }}>
@@ -1267,8 +1321,9 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                         })}`}
                       </td>
                     </tr>
-                    <tr style={{ display: 'flex', alignContent: 'center', border: '1px solid red' }}>
-                      <td colSpan={6} style={{ textAlign: 'end' }}>
+                    <tr>
+                      <td colSpan={6} style={{ textAlign: 'end' }}></td>
+                      <td colSpan={1} style={{ textAlign: 'end' }}>
                         Total
                       </td>
                       <td colSpan={1} style={{ textAlign: 'end' }}>
@@ -1283,6 +1338,11 @@ export default component$((props: { ancho: number; parametrosGlobales: any; igv:
                 </table>
               ) : (
                 <i style={{ fontSize: '0.7rem' }}>No existen ítems para la venta</i>
+              )}
+              {definicion_CTX_ADD_VENTA.mostrarPanelBorrarItemVenta && (
+                <div class="modal">
+                  <BorrarItemVenta borrarItemVenta={borrarItemVenta} />
+                </div>
               )}
             </div>
           }

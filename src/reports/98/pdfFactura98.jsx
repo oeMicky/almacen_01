@@ -124,10 +124,10 @@ function pdfFactura98(venta) {
             text: [
               { text: 'Datos del documento\n', style: 'textoBold' },
               { text: 'Tipo de documento: ', style: 'textoBold' },
-              { text: venta.documentoVenta + '\n', style: 'texto' },
+              { text: venta.descripcionTCP + '\n', style: 'texto' },
               { text: 'Serie y correlativo: ', style: 'textoBold' },
               {
-                text: venta.serie + '-' + cerosALaIzquierda(venta.numeroDocumento, 8) + '\n',
+                text: venta.serie + '-' + cerosALaIzquierda(venta.numero, 8) + '\n',
                 style: 'texto',
               },
               { text: 'Fecha: ', style: 'textoBold' },

@@ -1,12 +1,12 @@
 import { $, component$, useContext } from '@builder.io/qwik';
 import { images } from '~/assets';
 // import { , hoy } from '~/functions/comunes';
-import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 import ImgButton from '../system/imgButton';
-import { ICuotaCreditoVenta } from './addVenta';
+import { ICuotaCreditoVenta } from '~/interfaces/iVenta';
+import { CTX_ADD_VENTA } from './addVenta';
 
 export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuotaCreditoVenta }) => {
-  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
+  const ctx_add_venta = useContext(CTX_ADD_VENTA);
   // const cuota = useStore<ICuotaCreditoVenta>({
   //   idAuxiliar: 0,
   //   fechaCuota: hoy(),
@@ -24,14 +24,19 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
       alert(`el monto es 0, revise. ${props.cuota.idAuxiliar}`);
       return;
     }
-    // alert(`paso ${props.cuota.idAuxiliar}`);
-    ctx_docs_venta.mostrarPanelCuotasCredito = false;
-    ctx_docs_venta.grabo_CuotaCredito = true;
-    ctx_docs_venta.grabo_cuotas_numero++;
+    ctx_add_venta.mostrarPanelCuotasCredito = false;
+    ctx_add_venta.grabo_CuotaCredito = true;
+    // ctx_docs_venta.grabo_cuotas_numero++;
   });
 
   return (
-    <div style={{ width: props.ancho + 'px' }} class="container-modal">
+    <div
+      style={{
+        width: 'clamp(min(10vw, 20rem), 800px, max(90vw, 55rem))',
+        //  width: props.ancho + 'px'
+      }}
+      class="container-modal"
+    >
       {/* BOTONES DEL MARCO   */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
@@ -40,8 +45,7 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
           height={16}
           width={16}
           title="Cerrar formulario"
-          //   onClick={cerrarFormulario}
-          onClick={$(() => (ctx_docs_venta.mostrarPanelCuotasCredito = false))}
+          onClick={$(() => (ctx_add_venta.mostrarPanelCuotasCredito = false))}
         />
         <ImgButton
           src={images.see}

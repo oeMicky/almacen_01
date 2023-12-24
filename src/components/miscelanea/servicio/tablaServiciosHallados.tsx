@@ -3,22 +3,33 @@ import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 // import style from '../../tabla.css?inline';
 import style from '../../tabla/tabla.css?inline';
-import { CTX_SERVICIO_SELECCIONADO } from './seleccionarServicio';
-import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
+// import { CTX_SERVICIO_SELECCIONADO } from './seleccionarServicio';
+// import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
+// import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
+// import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import { CTX_BUSCAR_SERVICIO } from './buscarServicio';
+import { IServicio } from '~/interfaces/iServicio';
 
-interface IServicio {
-  _id: string;
-  codigo: string;
-  descripcion: string;
-
-  precioPEN: any;
-}
-
-export default component$((props: { buscarServicios: number; parametrosBusqueda: any }) => {
+export default component$((props: { buscarServicios: number; parametrosBusqueda: any; contexto: any }) => {
   useStylesScoped$(style);
+
   //#region CONTEXTOS
-  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
-  const ctx_servicio_seleccionado = useContext(CTX_SERVICIO_SELECCIONADO);
+  // let ctx: any = [];
+  // switch (props.contexto) {
+  //   case 'orden servicio':
+  //     ctx = useContext(CTX_DOCS_ORDEN_SERVICIO);
+  //     console.log('swicth.......useContext(CTX_DOCS_ORDEN_SERVICIO)');
+  //     break;
+  //   case 'venta':
+  //     ctx = useContext(CTX_INDEX_VENTA);
+  //     console.log('swicth.......useContext(CTX_INDEX_VENTA)');
+  //     break;
+  //   case 'cotizacion':
+  //     ctx = useContext(CTX_DOCS_COTIZACION);
+  //     console.log('swicth.......useContext(CTX_DOCS_COTIZACION)');
+  //     break;
+  // }
+  const ctx_buscar_servicio = useContext(CTX_BUSCAR_SERVICIO);
   //#endregion CONTEXTOS
 
   //#region BUSCANDO REGISTROS
@@ -103,9 +114,11 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                               width={12}
                               title="Seleccionar servicio"
                               onClick={$(() => {
-                                console.log('serviLocali', serviLocali);
-                                ctx_servicio_seleccionado.sS = serviLocali;
-                                ctx_docs_venta.mostrarServicioSeleccionado = true;
+                                ctx_buscar_servicio.sS = serviLocali;
+                                ctx_buscar_servicio.mostrarPanelServicioSeleccionado = true;
+                                // console.log('serviLocali', serviLocali);
+                                // ctx_servicio_seleccionado.sS = serviLocali;
+                                // ctx_docs_venta.mostrarServicioSeleccionado = true;
                               })}
                               // onClick={() => {
                               //   servicioSeleccionado({
@@ -117,17 +130,8 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                               //   });
                               // }}
                             />
-                            <ImgButton
-                              src={images.edit}
-                              alt="icono de editar"
-                              height={12}
-                              width={12}
-                              title="Editar servicio"
-                              // onClick={() => {
-                              //   // asignarPrecio({ _id });
-                              // }}
-                            />
-                            {/* </div> */}
+                            <ImgButton src={images.edit} alt="icono de editar" height={12} width={12} title="Editar servicio" />
+                            <ImgButton src={images.see} alt="icono de editar" height={12} width={12} title="Editar ver" />
                           </td>
                         </tr>
                       );
@@ -137,7 +141,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encotraron registros</i>
+                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

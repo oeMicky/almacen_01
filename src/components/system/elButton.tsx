@@ -9,6 +9,7 @@ interface IElBottun {
   title: string;
   onClick?: any;
   class?: any;
+  estilos?: any;
 }
 
 // const mostarHint = $((ht: string) => {
@@ -47,6 +48,7 @@ export default component$((props: IElBottun) => {
     <button
       id={props.id}
       class={props.class}
+      style={props.estilos}
       disabled={props.disabled}
       title={props.title || ''}
       onClick$={props.onClick}

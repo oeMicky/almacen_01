@@ -38,3 +38,29 @@ export const inUpVehiculo = async (parametros) => {
   });
   return res.json();
 };
+
+export const inUpVehiculoMarca = async (parametros) => {
+  console.log('//////api////////////******************get en inUpVehiculoMarca');
+  console.log('parametros inUpVehiculoMarca', parametros);
+  const res = await fetch(API + '/inUpVehiculoMarca', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
+export const inUpVehiculoMarcaModelo = async (parametros) => {
+  console.log('//////api////////////******************get en inUpVehiculoMarcaModelo');
+  console.log('parametros inUpVehiculoMarcaModelo', parametros);
+  const res = await fetch(API + '/inUpVehiculoMarcaModelo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

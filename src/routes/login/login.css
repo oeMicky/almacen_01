@@ -6,6 +6,7 @@
 
 .input-formulario{
     width: 200px;
+    /* width: clamp(min(10vw,  20rem),300px,max(90vw, 55rem)); */
 }
 .boton-formulario {
     width: 100%;

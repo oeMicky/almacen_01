@@ -4,7 +4,10 @@ import { images } from '~/assets';
 // import styles from '../../components/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
 import ImgButton from '../system/imgButton';
-import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
+// import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
+// import pdfVentaMG from '~/reports/pdfVentaMG';
+import pdfVentaMG from '~/reports/MG/pdfVentaMG';
+import { IVenta } from '~/interfaces/iVenta';
 
 // interface IEstructura {
 //   _id: string;
@@ -12,69 +15,23 @@ import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
 //   numero: number;
 // }
 
-export interface IVenta {
-  _id: string;
-  idGrupoEmpresarial: string;
-  idEmpresa: string;
-
-  ruc: string;
-  empresa: string;
-  direccion: string;
-
-  codigoDocumento: string;
-  documentoVenta: string;
-  serie: string;
-  numeroDocumento: string;
-  fecha: any;
-
-  idCliente: string;
-  codigoTipoDocumentoIdentidad: string;
-  tipoDocumentoIdentidad: string;
-  numeroIdentidad: string;
-  razonSocialNombre: string;
-  email: string;
-
-  igv: any;
-  moneda: string;
-  tipoCambio: any;
-
-  vendedor: string;
-  metodoPago: string;
-  cuotasPago: any;
-  importeTotalCuotasCredito: any;
-
-  itemsVenta: any;
-
-  montoSubTotalPEN: any;
-  montoIGVPEN: any;
-  montoTotalPEN: any;
-
-  montoSubTotalUSD: any;
-  montoIGVUSD: any;
-  montoTotalUSD: any;
-
-  fechaReferencia: Date;
-  tipoReferencia: string;
-  serieReferencia: string;
-  numeroReferencia: string;
-
-  usuarioCrea: string;
-  usuarioModifica: string;
-}
-
-export default component$((props: { buscarVentas: number; parameBusqueda: { idGrupoEmpresarial: string } }) => {
+export default component$((props: { buscarVentas: number; parametrosBusqueda: any }) => {
   console.log('🎫🎫🎫🎫🎫🎫');
+  useStylesScoped$(style);
+
+  //#region INICIALIZACION
   const clickPDF = useSignal(0);
   const ventaSeleccionada = useSignal<IVenta>();
 
-  useStylesScoped$(style);
-  // const clikeado = useSignal(false);
+  //#endregion INICIALIZACION
 
+  //#region VER PDF
   const verPDF = $((venta: any) => {
     console.log('a pdfFactura98', venta.untrackedValue); //venta !== null &&
     if (typeof venta.untrackedValue !== 'undefined') {
       console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', venta.untrackedValue);
-      pdfFactura98(venta.untrackedValue);
+      // pdfFactura98(venta.untrackedValue);
+      pdfVentaMG(venta.untrackedValue);
     }
   });
 
@@ -84,9 +41,11 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
     // console.log('a useTask useTask useTask useTask 2:', clickPDF.value + 1);
     await verPDF(ventaSeleccionada);
   });
+  //#endregion VER PDF
 
+  //#region BUSCANDO REGISTROS
   const lasVentas = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    console.log('tablaVentas ->->-> parameBusqueda', props.parameBusqueda);
+    console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
     track(() => props.buscarVentas.valueOf());
 
     console.log('props.buscarVentas.valueOf', props.buscarVentas.valueOf());
@@ -100,11 +59,36 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(props.parameBusqueda),
+      body: JSON.stringify(props.parametrosBusqueda),
       signal: abortController.signal,
     });
     return res.json();
   });
+  //#endregion BUSCANDO REGISTROS
+
+  //#region CREAR Y DOWNLOAD XML
+  const createAndDownloadFile = $((nameFile: string) => {
+    const xmltext = '<sometag><someothertag></someothertag></sometag>';
+
+    const filename = nameFile; ///'file.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([xmltext], { type: 'text/plain' });
+
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    pom.setAttribute('download', filename);
+
+    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
+
+    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+    console.log('first xml');
+  });
+  //#endregion CREAR Y DOWNLOAD XML
 
   return (
     <>
@@ -140,12 +124,11 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
                     <thead>
                       <tr>
                         <th>Item</th>
-                        <th>Fecha</th>
                         <th>Nro. Doc</th>
                         <th>Cliente</th>
-                        <th>Serie</th>
-                        <th>Nro</th>
-                        <th>Moneda</th>
+                        <th>Ser-Nro</th>
+                        <th>Fecha</th>
+                        <th>Mon</th>
                         <th>Importe</th>
                         <th>Pago</th>
                         <th>Acciones</th>
@@ -157,12 +140,11 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
                         return (
                           <tr key={value._id}>
                             <td data-label="Item">{indexItem}</td>
-                            <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
                             <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
                             <td data-label="Cliente">{value.razonSocialNombre}</td>
-                            <td data-label="Serie">{value.serie}</td>
-                            <td data-label="Nro">{value.numeroDocumento}</td>
-                            <td data-label="Moneda" style={{ textAlign: 'right' }}>
+                            <td data-label="Ser-Nro">{value.serie + '-' + value.numero}</td>
+                            <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
+                            <td data-label="Mon" style={{ textAlign: 'right' }}>
                               {value.moneda}
                             </td>
                             <td data-label="Importe" style={{ textAlign: 'end' }}>
@@ -192,7 +174,22 @@ export default component$((props: { buscarVentas: number; parameBusqueda: { idGr
                                 // onClick={clikeado.value ? verPDF(value) : ''}
                                 onClick={$(() => {
                                   ventaSeleccionada.value = value;
-                                  clickPDF.value = clickPDF.value + 1;
+                                  clickPDF.value++;
+                                })}
+                              />
+                              <ImgButton
+                                src={images.xml}
+                                alt="icono de xml"
+                                height={12}
+                                width={12}
+                                title={`Ver xml ${value._id}`}
+                                // onClick={verPDF(value)}
+                                // onClick={clikeado.value ? verPDF(value) : ''}
+                                onClick={$(() => {
+                                  ventaSeleccionada.value = value;
+                                  createAndDownloadFile(value.serie + '-' + value.numero);
+                                  console.log('xml', ventaSeleccionada.value);
+                                  // clickPDF.value = clickPDF.value + 1;
                                 })}
                               />
                             </td>

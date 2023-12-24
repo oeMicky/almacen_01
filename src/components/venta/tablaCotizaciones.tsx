@@ -3,11 +3,12 @@ import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 //------- import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
-import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
-import { CTX_F_B_NC_ND } from './addVenta';
+// import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
+import { CTX_ADD_VENTA, CTX_F_B_NC_ND } from './addVenta';
 // import style from '../../components/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
-import { ICotizacion } from '~/routes/(almacen)/cotizacion';
+import { ICotizacion } from '~/interfaces/iCotizacion';
+// import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 
 // export interface ICotizacion {
 //   _id: string;
@@ -45,8 +46,9 @@ import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 
 export default component$((props: { buscarCotizaciones: number; modoSeleccion: boolean; parametrosBusqueda: any }) => {
   useStylesScoped$(style);
+
   //#region CONTEXTOS Y VARIABLES
-  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
+  const ctx_add_venta = useContext(CTX_ADD_VENTA);
   const ctx_f_b_nc_nd = useContext(CTX_F_B_NC_ND);
   const clickPDF = useSignal(0);
   const cotizacionSeleccionada = useSignal<ICotizacion>();
@@ -131,10 +133,10 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                       // const indexItem = index + 1;
                       return (
                         <tr key={value._id}>
-                          <td data-label="Cotización">{value.correlativo}</td>
+                          <td data-label="Cotización">{value.numero}</td>
                           <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
                           <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                          <td data-label="Cliente">{value.razonSocialNombreCliente}</td>
+                          <td data-label="Cliente">{value.razonSocialNombre}</td>
                           <td data-label="Importe PEN" style={{ textAlign: 'end' }}>
                             {value.montoTotalPEN
                               ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
@@ -144,7 +146,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 })
                               : ''}
                           </td>
-                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
                             {props.modoSeleccion ? (
                               <>
                                 <ImgButton
@@ -154,18 +156,20 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   width={12}
                                   title="Selecionar cotización"
                                   onClick={$(() => {
-                                    console.log('seleccionar cotiacion', value);
-                                    ctx_f_b_nc_nd.cotizacion = value.correlativo;
+                                    console.log('seleccionar cotizacion', value);
+                                    ctx_f_b_nc_nd.cotizacion = value.numero;
                                     ctx_f_b_nc_nd.idCliente = value.idCliente;
-                                    // ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = parseInt(value.codigoTipoDocumentoIdentidad);
+
                                     ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
                                     ctx_f_b_nc_nd.tipoDocumentoIdentidad = value.tipoDocumentoIdentidad;
                                     ctx_f_b_nc_nd.numeroIdentidad = value.numeroIdentidad;
-                                    ctx_f_b_nc_nd.razonSocialNombre = value.razonSocialNombreCliente;
+                                    ctx_f_b_nc_nd.razonSocialNombre = value.razonSocialNombre;
+                                    ctx_f_b_nc_nd.itemsVenta = [];
                                     value.servicios.map((ser: any) => {
                                       console.log('ser', ser);
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
+                                        idKardex: ser.idKardex,
                                         item: 0,
                                         codigo: ser.codigo,
                                         descripcionEquivalencia: ser.descripcionEquivalencia,
@@ -181,6 +185,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                     value.repuestosLubri.map((rep: any) => {
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
+                                        idMercaderia: rep.idMercaderia,
+                                        idEquivalencia: rep.idEquivalencia,
+                                        idKardex: rep.idKardex,
                                         item: 0,
                                         codigo: rep.codigo,
                                         descripcionEquivalencia: rep.descripcionEquivalencia,
@@ -191,10 +198,13 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         ventaPEN: rep.cantidad.$numberDecimal * rep.precioPEN.$numberDecimal,
                                         precioUSD: 0,
                                         ventaUSD: 0,
+                                        tipoEquivalencia: rep.tipoEquivalencia,
+                                        factor: rep.factor,
+                                        laEquivalencia: rep.laEquivalencia,
                                       });
                                     });
 
-                                    ctx_docs_venta.mostrarAdjuntarCotizacion = false;
+                                    ctx_add_venta.mostrarAdjuntarCotizacion = false;
                                   })}
                                 />
                               </>

@@ -14,6 +14,9 @@ import almacenIn from '../images/almacenIn.webp';
 import almacenOut from '../images/almacenOut.webp';
 import Cat from '../images/Cat.webp';
 import Os from '../images/Os.webp';
+import Pm from '../images/Pm.webp';
+import Cp from '../images/Cp.webp';
+import Logout from '../images/Logout.webp';
 
 import caoSLinealDark from '../images/CAO-S-Lineal-dark.svg';
 import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
@@ -23,7 +26,11 @@ import basedatos from '../images/basedatos.svg';
 import check from '../images/check.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
+import equal from '../images/equal.svg';
 import list from '../images/list.svg';
+import logout from '../images/logout.svg';
+import logout24 from '../images/logout24.svg';
+import logout32 from '../images/logout32.svg';
 import menu from '../images/menu.svg';
 import moneyBag from '../images/moneyBag.svg';
 import pdf from '../images/pdf.svg';
@@ -56,6 +63,9 @@ export default {
   almacenOut,
   Cat,
   Os,
+  Pm,
+  Cp,
+  Logout,
 
   caoSLinealDark,
   caoSLinealLight,
@@ -65,7 +75,11 @@ export default {
   check,
   download,
   edit,
+  equal,
   list,
+  logout,
+  logout24,
+  logout32,
   menu,
   moneyBag,
   pdf,

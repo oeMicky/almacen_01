@@ -6,72 +6,72 @@ import { parametrosGlobales } from '../../login/index';
 import TablaCotizaciones from '~/components/cotizacion/tablaCotizaciones';
 import ElButton from '~/components/system/elButton';
 import NewEditCotizacion from '~/components/cotizacion/newEditCotizacion';
+import { getIgvVenta } from '~/apis/venta.api';
+import ElSelect from '~/components/system/elSelect';
+import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 // import TablaCotizaciones from '~/components/venta/tablaCotizaciones';
 
-export interface ICotizacion {
-  _id: string;
-  idGrupoEmpresarial: string;
-  idEmpresa: string;
+// export interface ICotizacion {
+//   _id: string;
+//   idGrupoEmpresarial: string;
+//   idEmpresa: string;
 
-  correlativo: number;
-  fecha: any;
+//   correlativo: number;
+//   fecha: any;
 
-  idCliente: string;
-  codigoTipoDocumentoIdentidad: string;
-  tipoDocumentoIdentidad: string;
-  numeroIdentidad: string;
-  razonSocialNombreCliente: string;
-  // email: { type: String },
-  idVehiculo: string;
-  placa: string;
-  idVehiculoMarca: string;
-  vehiculoMarca: string;
-  idVehiculoModelo: string;
-  vehiculoModelo: string;
-  vin: string;
+//   idCliente: string;
+//   codigoTipoDocumentoIdentidad: string;
+//   tipoDocumentoIdentidad: string;
+//   numeroIdentidad: string;
+//   razonSocialNombreCliente: string;
+//   // email: { type: String },
+//   idVehiculo: string;
+//   placa: string;
+//   idVehiculoMarca: string;
+//   vehiculoMarca: string;
+//   idVehiculoModelo: string;
+//   vehiculoModelo: string;
+//   vin: string;
 
-  igv: number;
+//   igv: number;
 
-  vendedor: string;
+//   vendedor: string;
 
-  servicios: any;
-  repuestosLubri: any;
+//   servicios: any;
+//   repuestosLubri: any;
 
-  montoSubTotalPEN: any;
-  montoIGVPEN: any;
-  montoTotalPEN: any;
-}
+//   montoSubTotalPEN: any;
+//   montoIGVPEN: any;
+//   montoTotalPEN: any;
+// }
 
-export const CTX_DOCS_COTIZACION = createContextId<any>('cotizacion');
+// export const CTX_DOCS_COTIZACION = createContextId<any>('docs_cotizacion');
+
+export const CTX_INDEX_COTIZACION = createContextId<any>('index_cotizacion__');
 
 export default component$(() => {
-  //#region CONTEXTO COTIZACION
-  const definicion_CTX_DOCS_COTIZACION = useStore({
-    mostrarPanelVenta: false,
-    grabo: false,
-    mostrarPanelSeleccionarPersona: false,
-    selecciono_Persona: false,
-    mostrarPanelCuotasCredito: false,
-    grabo_CuotaCredito: false,
-    grabo_cuotas_numero: 0,
-    mostrarVerAlmacen: false,
-    mostrarSeleccionarEquivalenciaEnSalida: false,
-    grabo_ItemsVenta: false,
-    grabo_items_venta_numero: 0,
-    mostrarAdjuntarCotizacion: false,
-    mostrarAddNewEditServicio: false,
-    mostrarAdicionarServicio: false,
-    mostrarServicioSeleccionado: false,
+  //#region CTX_INDEX_COTIZACION
+  const definicion_CTX_INDEX_COTIZACION = useStore({
+    cC: [],
+    mostrarPanelNewEditCotizacion: false,
+    grabo_Cotizacion: false,
   });
-  useContextProvider(CTX_DOCS_COTIZACION, definicion_CTX_DOCS_COTIZACION);
-  //#endregion CONTEXTO COTIZACION
+  useContextProvider(CTX_INDEX_COTIZACION, definicion_CTX_INDEX_COTIZACION);
+  //#endregion CTX_INDEX_COTIZACION
 
-  //#region INICIALIZANDO
+  //#region INICIALIZACION
+  const ini = useSignal(0);
   const buscarCotizaciones = useSignal(0);
-  const showAddCotizacion = useSignal(false);
+  const igv = useSignal(0);
+  // const showAddCotizacion = useSignal(false);
+  // //
+  // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
+  //
+  const losPeriodosCargados = useSignal([]);
+  const periodo = useStore({ idPeriodo: '', periodo: '' });
   //*Fechas
   const fechas = useStore({
-    desde: hoy(),
+    desde: '2023-01-01', // hoy(),
     hasta: hoy(),
   });
   const parametrosBusqueda = useStore({
@@ -88,21 +88,54 @@ export default component$(() => {
   });
   //#endregion INICIALIZANDO
 
+  //#region ACTUALIZAR TABLA COTIZACIONES
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_INDEX_COTIZACION.grabo_Cotizacion);
+    if (definicion_CTX_INDEX_COTIZACION.grabo_Cotizacion) {
+      //actualizar TABLA ORDENES SERVICIO
+      // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
+      buscarCotizaciones.value++;
+      definicion_CTX_INDEX_COTIZACION.grabo_Cotizacion = false;
+    }
+  });
+  //#endregion ACTUALIZAR TABLA COTIZACIONES
+
+  //#region OBTENER PERIODOS
+  const cargarLosPeriodos = $(async () => {
+    const losPeri = await getPeriodos({
+      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+      idEmpresa: parametrosGlobales.idEmpresa,
+      bandera: 'Cotizaciones',
+    });
+    console.log('losPeri', losPeri);
+    losPeriodosCargados.value = losPeri.data;
+    console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+    // console.log('a cargar periodos');
+  });
+
+  useTask$(({ track }) => {
+    track(() => ini.value);
+
+    cargarLosPeriodos();
+  });
+  //#endregion OBTENER PERIODOS
+
   return (
     <main>
-      <div
-        class="container"
-        // style={{
-        //   width: '1111px', //SIZES.anchoContenedor + 'px',
-        //   height: 'inherit',
-        //   color: 'red', //COLORS.lightGray2,
-        //   margin: '5px auto',
-        //   display: 'inherit',
-        //   justifyContent: 'inherit',
-        //   alignItems: 'inherit',
-        // }}
-      >
+      <div class="container">
         {/*  TITULO  */}
+        {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem', paddingLetf: '5px' }}>
+          {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
+        </h1> */}
+        <div style={{ background: '#00778F' }}>
+          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
+            {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
+              .getItem('empresa')
+              ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
+              'usuario'
+            )}`}
+          </label>
+        </div>
         <h3>
           <u>Cotizaciones</u>
           {/* <u>{parametrosGlobales.nombreAlmacen}</u> */}
@@ -120,7 +153,6 @@ export default component$(() => {
               }}
             />
           </label>
-
           <label class="fechas">
             Hasta:{' '}
             <input
@@ -148,30 +180,73 @@ export default component$(() => {
                 buscarCotizaciones.value++;
                 console.log('buscarCotizaciones.value', buscarCotizaciones.value);
               })}
-              // onClick={buscarCotizacionesEntreFechas}
             />
           </div>
         </div>
-        <div style={{ display: 'flex', margin: '10px 0' }}></div>
+
         {/*  BOTONES */}
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
           <ElButton
             name="ADD COTIZACION"
             title="Add una cotización"
-            onClick={$(() => {
-              showAddCotizacion.value = true;
+            onClick={$(async () => {
+              //validar PERIODO
+              if (periodo.idPeriodo === '') {
+                alert('Seleccione el periodo.');
+                document.getElementById('se_periodo')?.focus();
+                ini.value++;
+                return;
+              }
+              //
+              let elIgv = await getIgvVenta({
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idEmpresa: parametrosGlobales.idEmpresa,
+              });
+              elIgv = elIgv.data;
+              console.log('elIgv', elIgv);
+              igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
+              console.log('igv.value::', igv.value);
+
+              definicion_CTX_INDEX_COTIZACION.cC = [];
+              definicion_CTX_INDEX_COTIZACION.mostrarPanelNewEditCotizacion = true;
             })}
           />
-          {/* <button className="btn" name="ADD COTIZACION" onClick={mostrarPanelCotizacion} title="Add una cotización" /> */}
-          {showAddCotizacion.value && (
+          <ElSelect
+            id={'se_periodo'}
+            estilos={{ width: '168px', marginLeft: '5px' }}
+            registros={losPeriodosCargados.value}
+            registroID={'_id'}
+            registroTEXT={'periodo'}
+            seleccione={'-- Seleccione periodo --'}
+            onChange={$(() => {
+              console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+              const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
+              const elIdx = elSelec.selectedIndex;
+              console.log('?', elIdx, elSelec[elIdx].id);
+              periodo.idPeriodo = elSelec[elIdx].id;
+              if (periodo.idPeriodo === '') {
+                periodo.periodo = '';
+              } else {
+                periodo.periodo = elSelec.value;
+              }
+            })}
+            onKeyPress={$((e: any) => {
+              if (e.key === 'Enter') {
+                (document.getElementById('in_Fecha_MICE') as HTMLSelectElement)?.focus();
+              }
+            })}
+          />
+          {/* <button
+            onClick$={() => {
+              console.log('button losPeriodosCargados.value', losPeriodosCargados.value);
+            }}
+          >
+            losPeriodosCargados.value
+          </button> */}
+
+          {definicion_CTX_INDEX_COTIZACION.mostrarPanelNewEditCotizacion && (
             <div class="modal">
-              <NewEditCotizacion
-              // contexto={CTX_COTIZACION}
-              // ancho={'600px'}
-              // parametrosGlobales={parametrosGlobales}
-              // inicializacion={inicializacionCotizacion}
-              // onCerrar={cerrarPanelCotizacion}
-              />
+              <NewEditCotizacion addPeriodo={periodo} cotizacionSelecci={definicion_CTX_INDEX_COTIZACION.cC} igv={igv.value} />
             </div>
           )}
         </div>
@@ -187,13 +262,16 @@ export default component$(() => {
           ) : (
             ''
           )}
-          {/* {cotizaciones.length ? (
-            <TablaCotizaciones registros={cotizaciones} verPDF={generarPDF} onEdit={editarCotizacion} />
-          ) : (
-            <i style={{ fontSize: '0.7rem' }}>No existen cotizaciones</i>
-          )} */}
         </div>
       </div>
     </main>
   );
 });
+
+{
+  /* {cotizaciones.length ? (
+            <TablaCotizaciones registros={cotizaciones} verPDF={generarPDF} onEdit={editarCotizacion} />
+          ) : (
+            <i style={{ fontSize: '0.7rem' }}>No existen cotizaciones</i>
+          )} */
+}

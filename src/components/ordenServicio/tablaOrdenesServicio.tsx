@@ -1,4 +1,4 @@
-import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
 // import style from '../tabla.css?inline';
 // import style from '../../components/tabla/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
@@ -6,14 +6,20 @@ import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
+import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
+import pdfOsMG from '~/reports/MG/pdfOsMG';
 
 export default component$((props: { buscarOrdenesServicio: number; parametrosBusqueda: any }) => {
   useStylesScoped$(style);
 
   //#region CONTEXTOS
-  const ctx_docs_orden_servicio = useContext(CTX_DOCS_ORDEN_SERVICIO);
+  const ctx_index_orden_servicio = useContext(CTX_INDEX_ORDEN_SERVICIO);
   //#endregion CONTEXTOS
+
+  //#region INICIALIZACION
+  const clickPDF = useSignal(0);
+  const osSeleccionada = useSignal<IOrdenServicio>();
+  //#endregion INICIALIZACION
 
   //#region BUSCANDO REGISTROS
   const lasOrdenesServicio = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
@@ -24,7 +30,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
 
     console.log('parametrosBusqueda', props.parametrosBusqueda);
 
-    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicio', {
+    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicioEntreFechas', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,6 +41,23 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
     return res.json();
   });
   //#endregion BUSCANDO REGISTROS
+
+  //#region VISUZALIZAR PDF
+  const verPDF = $((os: any) => {
+    console.log('a pdfOsMG', os); //venta !== null &&
+    if (typeof os !== 'undefined') {
+      console.log('imprimiendo ... imprimiendo ... imprimiendo ...', os);
+      // pdfCotizacion98(cotizacion);
+      pdfOsMG(os);
+    }
+  });
+
+  useTask$(async ({ track }) => {
+    track(() => clickPDF.value);
+    console.log('a osSeleccionada.value:', osSeleccionada.value);
+    await verPDF(osSeleccionada.value);
+  });
+  //#endregion VISUZALIZAR PDF
 
   return (
     <Resource
@@ -78,7 +101,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                           <td data-label="Estado">{estado ? estado : '_'}</td>
                           <td data-label="Tipo">{tipo ? tipo : '_'}</td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
                             {/* <ImgButton
                               src={images.check}
                               alt="icono de adicionar"
@@ -97,25 +120,25 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                             <ImgButton
                               src={images.edit}
                               alt="icono de editar"
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               title="Editar servicio"
                               onClick={$(() => {
-                                ctx_docs_orden_servicio.ordSerSe = ordServiLocali;
-                                ctx_docs_orden_servicio.mostrarAddOrderServicio0 = true;
+                                ctx_index_orden_servicio.oO = ordServiLocali;
+                                ctx_index_orden_servicio.mostrarPanelNewEditOrdenServicio = true;
                               })}
                             />
-                            {/* <ImgButton
+                            <ImgButton
                               src={images.pdf}
                               alt="icono de pdf"
-                              height={12}
-                              width={12}
-                              title={`Ver pdf ${value._id}`}
+                              height={14}
+                              width={14}
+                              title={`Ver pdf ${ordServiLocali._id}`}
                               onClick={$(() => {
-                                ventaSeleccionada.value = value;
-                                clickPDF.value = clickPDF.value + 1;
+                                osSeleccionada.value = ordServiLocali;
+                                clickPDF.value++;
                               })}
-                            /> */}
+                            />
                           </td>
                         </tr>
                       );

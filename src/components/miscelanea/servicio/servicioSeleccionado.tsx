@@ -1,34 +1,60 @@
 import { $, component$, useContext, useSignal } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
-import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
-import { elIdAuxiliar } from '~/functions/comunes';
-import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 
-export default component$((props: { ancho: number; itemSeleccionado: any; esAlmacen: boolean }) => {
+import { elIdAuxiliar } from '~/functions/comunes';
+// import { CTX_DOCS_VENTA } from '~/routes/(almacen)/venta';
+import { CTX_BUSCAR_SERVICIO } from './buscarServicio';
+// import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
+// import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
+import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
+import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
+import { CTX_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
+
+export default component$((props: { serviSelecci: any; contexto: any }) => {
   //#region CONTEXTOS
-  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
-  const ctx_f_b_nc_nd = useContext(CTX_F_B_NC_ND);
+  // let ctx: any = [];
+  let documento: any = [];
+  switch (props.contexto) {
+    case 'orden servicio':
+      console.log('contexto::: orden servicio');
+      // ctx = useContext(CTX_DOCS_ORDEN_SERVICIO);
+      documento = useContext(CTX_O_S).servicios;
+      break;
+    case 'new_venta':
+      console.log('contexto::: venta');
+      // ctx = useContext(CTX_DOCS_VENTA);
+      documento = useContext(CTX_F_B_NC_ND).itemsVenta;
+      break;
+    // case 'cotizacion':
+    //   console.log('contexto::: cotizacion');
+    //   ctx = useContext(CTX_DOCS_COTIZACION);
+    //   //
+    //   break;
+    case 'new_edit_cotizacion':
+      console.log('contexto::: new_edit_cotizacion');
+      // ctx = useContext(CTX_NEW_EDIT_COTIZACION);
+      documento = useContext(CTX_COTIZACION).servicios;
+      break;
+  }
+
+  const ctx_buscar_servicio = useContext(CTX_BUSCAR_SERVICIO);
   //#endregion CONTEXTOS
 
-  //#region INICIALIZANDO
   const cantidad = useSignal(1);
-  const precio = useSignal(props.itemSeleccionado.precioPEN.$numberDecimal);
-  // try {
+  const precio = useSignal(props.serviSelecci.precioPEN.$numberDecimal);
 
-  // } catch (error) {
-  //   console.log('error EN INICIALIZANDO: ', error);
-  // }
-  //#endregion INICIALIZANDO
-
-  // const enlaceServicio = useStore<IInEquivalencia>({
-  //   cantidad: 1,
-  //   unidad: '',
-  //   precio: ,
-  // });
-  console.log('props.itemSeleccionado props.itemSeleccionado props.itemSeleccionado', props.itemSeleccionado);
+  console.log('props.serviSelecci props.serviSelecci props.serviSelecci', props.serviSelecci);
   return (
-    <div style={{ width: 'auto', border: '1px solid red', padding: '2px' }} class="container-modal">
+    <div
+      style={{
+        width: 'clamp(min(10vw, 20rem), 700px, max(90vw, 55rem))',
+        // width: 'auto',
+        border: '1px solid red',
+        padding: '2px',
+      }}
+      class="container-modal"
+    >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
@@ -38,27 +64,16 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_docs_venta.mostrarServicioSeleccionado = false;
+            ctx_buscar_servicio.mostrarPanelServicioSeleccionado = false;
           })}
-        />
-        <ImgButton
-          src={images.see}
-          alt="Icono de ver clg"
-          height={16}
-          width={16}
-          title="Cerrar el formulario"
-          //   onClick={$(() => {
-          //     console.log('mercaSelec', mercaSelec);
-          //     console.log('mercaSelec.mS', mercaSelec.mS);
-          //   })}
         />
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* SERVICIO */}
         <div style={{ fontSize: '0.7rem' }}>
-          <div>Código:{` ${props.itemSeleccionado.codigo ? props.itemSeleccionado.codigo : '_'}`}</div>
-          <div>Descripción:{` ${props.itemSeleccionado.descripcion}`}</div>
+          <div>Código:{` ${props.serviSelecci.codigo ? props.serviSelecci.codigo : '_'}`}</div>
+          <div>Descripción:{` ${props.serviSelecci.descripcion}`}</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div>
               Cantidad:
@@ -88,7 +103,6 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
                 id="inputPrecioServicio"
                 style={{ width: '80px', textAlign: 'end', marginLeft: '5px' }}
                 value={precio.value}
-                // onChange={(e) => setPrecioEquivalente(e.target.value)}
                 onInput$={(e) => {
                   precio.value = parseFloat((e.target as HTMLInputElement).value);
                 }}
@@ -112,11 +126,13 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
           value="Grabar "
           class="btn-centro"
           onClick$={() => {
-            ctx_f_b_nc_nd.itemsVenta.push({
+            // documento.itemsVenta.push({
+            documento.push({
               idAuxiliar: parseInt(elIdAuxiliar()),
+              idKardex: '',
               item: 0,
-              codigo: props.itemSeleccionado.codigo ? props.itemSeleccionado.codigo : '_',
-              descripcionEquivalencia: props.itemSeleccionado.descripcion, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
+              codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '_',
+              descripcionEquivalencia: props.serviSelecci.descripcion, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
               cantidad: cantidad.value,
               unidadEquivalencia: '_',
               costo: 0,
@@ -125,8 +141,8 @@ export default component$((props: { ancho: number; itemSeleccionado: any; esAlma
               precioUSD: 0,
               ventaUSD: 0,
             });
-            ctx_docs_venta.mostrarServicioSeleccionado = false;
-            console.log('🚕🚕🚕🚕 ctx_f_b_nc_nd', ctx_f_b_nc_nd.itemsVenta);
+            ctx_buscar_servicio.mostrarPanelServicioSeleccionado = false;
+            // console.log('🚕🚕🚕🚕 ctx_f_b_nc_nd', ctx_f_b_nc_nd.itemsVenta);
           }}
         />
       </div>

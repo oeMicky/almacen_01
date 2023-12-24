@@ -1,11 +1,24 @@
 import { component$, useStylesScoped$ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import { Link, useNavigate } from '@builder.io/qwik-city';
 // import { CaoSLogo } from '../icons/cao-s';
 import style from './headerAlmacen.css?inline';
 import { images } from '~/assets';
 
+// export const CTX_APP_ALMACEN = createContextId<any>('app.almacen');
+
 export default component$(() => {
   useStylesScoped$(style);
+
+  const navegarA = useNavigate();
+
+  //#region DEFINICION CTX_APP_ALMACEN
+  // const definicion_CTX_APP_ALMACEN = useStore({
+  //   mostrarAddOrderServicio9: false,
+  //   compania: 'EASY!!!',
+  // });
+  // useContextProvider(CTX_APP_ALMACEN, definicion_CTX_APP_ALMACEN);
+  //#endregion DEFINICION CTX_APP_ALMACEN
+
   return (
     <header>
       <div class="container-header">
@@ -30,8 +43,28 @@ export default component$(() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
               }}
             >
-              <Link href="/factura/">
+              <Link href="/venta/">
                 <img src={images.Fac} style={{ width: '30px' }} />
+              </Link>
+            </li>
+            <li
+              class="main-menu__item"
+              onClick$={() => {
+                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+              }}
+            >
+              <Link href="/compra/">
+                <img src={images.Cp} style={{ width: '30px' }} />
+              </Link>
+            </li>
+            <li
+              class="main-menu__item"
+              onClick$={() => {
+                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+              }}
+            >
+              <Link href="/cotizacion/">
+                <img src={images.Ctz} style={{ width: '30px' }} />
               </Link>
             </li>
             <li
@@ -62,6 +95,7 @@ export default component$(() => {
             >
               <Link href="/outAlmacen/">
                 <img src={images.almacenOut} style={{ width: '30px' }} />
+                {/* <img src={images.logout32} style={{ width: '30px' }} /> */}
               </Link>
             </li>
             <li
@@ -74,7 +108,38 @@ export default component$(() => {
                 <img src={images.Kx} style={{ width: '30px' }} />
               </Link>
             </li>
+
             <li
+              class="main-menu__item"
+              onClick$={() => {
+                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                sessionStorage.removeItem('usuario');
+                sessionStorage.removeItem('SUCURSALES_ADJUNTAS');
+                sessionStorage.removeItem('ID');
+                sessionStorage.removeItem('idGrupoEmpresarial');
+                sessionStorage.removeItem('grupoEmpresarial');
+                sessionStorage.removeItem('idEmpresa');
+                sessionStorage.removeItem('empresa');
+                sessionStorage.removeItem('numeroIdentidad');
+                sessionStorage.removeItem('idSucursal');
+                sessionStorage.removeItem('sucursal');
+                // sessionStorage.clear;
+                navegarA('/');
+              }}
+            >
+              <img src={images.Logout} style={{ width: '32px' }} />
+            </li>
+            {/* <li
+              class="main-menu__item"
+              onClick$={() => {
+                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+              }}
+            >
+              <Link href="/parametros/">
+                <img src={images.Pm} style={{ width: '30px' }} />
+              </Link>
+            </li> */}
+            {/* <li
               class="main-menu__item"
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
@@ -83,17 +148,7 @@ export default component$(() => {
               <Link href="/catalogo/">
                 <img src={images.Cat} style={{ width: '30px' }} />
               </Link>
-            </li>
-            <li
-              class="main-menu__item"
-              onClick$={() => {
-                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
-              }}
-            >
-              <Link href="/cotizacion/">
-                <img src={images.Ctz} style={{ width: '30px' }} />
-              </Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </div>

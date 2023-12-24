@@ -100,7 +100,7 @@ a.linkHeaderPrincipal:hover {
   justify-content: space-between;
   border: 1px dashed blue
 }
-.form-control .form-agrupado input,
+/* .form-control .form-agrupado input, */
 .form-control .form-agrupado select{
   width: 100%;
 }
@@ -111,7 +111,7 @@ a.linkHeaderPrincipal:hover {
   border: none;
   padding: 2px 5px;
   margin: 2px 2px;
-  text-align: center;
+  text-align:  center;
   display: inline-block;
   align-items: center;
   justify-content: space-around;

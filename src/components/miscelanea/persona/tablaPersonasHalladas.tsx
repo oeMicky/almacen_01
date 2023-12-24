@@ -1,51 +1,183 @@
 import { $, component$, Resource, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '../../system/imgButton';
-// import { CTX_VENTA } from '~/routes/(almacen)/factura';
-// import { CTX_PERSONA } from '../../venta/addVenta';
-// import { IPersona } from './seleccionarPersona';
-// import style from '../../../components/tabla.css?inline';
 import style from '../../tabla/tabla.css?inline';
-import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
 import { IPersona } from '~/interfaces/iPersona';
-// import style from '../../../components/tabla.css?inline';
+import { CTX_CLIENTE_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
+import { CTX_ADD_VENTA, CTX_CLIENTE_VENTA } from '~/components/venta/addVenta';
+import { CTX_BUSCAR_PERSONA } from './buscarPersona';
+import { CTX_CLIENTE_OS, CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+import { CTX_NEW_IN_ALMACEN, CTX_REMITENTE_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import { CTX_NEW_EDIT_COMPRA, CTX_PROVEEDOR } from '~/components/compra/newEditCompra';
+import { parametrosGlobales } from '~/routes/login';
+import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
+import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 
-// interface IPersona {
-//   _id: string;
-//   codigoTipoDocumentoIdentidad: string;
-//   tipoDocumentoIdentidad: string;
-//   numeroIdentidad: string;
-//   razonSocialNombre: string;
-// }
-
-export default component$((props: { buscarPersona: number; parametrosBusqueda: any; contexto?: string }) => {
+//parametrosBusqueda: any;
+export default component$((props: { buscarPersona: number; soloPersonasNaturales: boolean; contexto: string; rol: string }) => {
   useStylesScoped$(style);
-  console.log('cntrexto', props.contexto);
+
+  //#region CONTEXTOS
+  let ctx: any = [];
+  let ctx_rol: any = [];
+  switch (props.contexto) {
+    case 'orden servicio':
+      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      console.log('swicth.......useContext(CTX_NEW_EDIT_ORDEN_SERVICIO)');
+      if (props.rol === 'cliente') {
+        ctx_rol = useContext(CTX_CLIENTE_OS);
+        console.log('swicth.......useContext(CTX_CLIENTE_OS)');
+      }
+      break;
+    case 'venta':
+      ctx = useContext(CTX_ADD_VENTA);
+      console.log('swicth.......useContext(CTX_ADD_VENTA)');
+      if (props.rol === 'cliente') {
+        ctx_rol = useContext(CTX_CLIENTE_VENTA);
+        console.log('swicth.......useContext(CTX_CLIENTE_VENTA)');
+      }
+      break;
+    case 'cotizacion':
+      ctx = useContext(CTX_NEW_EDIT_COTIZACION);
+      console.log('swicth.......useContext(CTX_NEW_EDIT_COTIZACION)');
+      if (props.rol === 'cliente') {
+        ctx_rol = useContext(CTX_CLIENTE_COTIZACION);
+        console.log('swicth.......useContext(CTX_CLIENTE_COTIZACION)');
+      }
+      break;
+    case 'new_in_almacen':
+      ctx = useContext(CTX_NEW_IN_ALMACEN);
+      console.log('swicth.......useContext(CTX_NEW_IN_ALMACEN)');
+      if (props.rol === 'remitente') {
+        ctx_rol = useContext(CTX_REMITENTE_IN_ALMACEN);
+        console.log('swicth.......useContext(CTX_REMITENTE_IN_ALMACEN)');
+      }
+      break;
+    case 'new_out_almacen':
+      ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      console.log('swicth.......useContext(CTX_NEW_OUT_ALMACEN)');
+      if (props.rol === 'destinatario') {
+        ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
+        console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
+      }
+      if (props.rol === 'cliente') {
+        ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
+        console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
+      }
+      break;
+    case 'new_edit_compra':
+      ctx = useContext(CTX_NEW_EDIT_COMPRA);
+      console.log('swicth.......useContext(CTX_NEW_EDIT_COMPRA)');
+      if (props.rol === 'proveedor') {
+        ctx_rol = useContext(CTX_PROVEEDOR);
+        console.log('swicth.......useContext(CTX_PROVEEDOR)');
+      }
+      break;
+    case 'buscar_tecnico':
+      ctx = useContext(CTX_BUSCAR_TECNICO);
+      break;
+  }
+  //
+  const ctx_buscar_persona = useContext(CTX_BUSCAR_PERSONA);
+  //#endregion CONTEXTOS
+
+  console.log('props.contexto', props.contexto);
   // const ctx = props.contexto === 'COTIZACION' ? useContext(CTX_COTIZACION) : useContext(CTX_VENTA);
 
-  // const ctx_PanelVenta = useContext(CTX_VENTA);
-  const ctx_docs_cotizacion = useContext(CTX_DOCS_COTIZACION);
-  // const ctx_PersonaSeleccionada = useContext(CTX_PERSONA);
-
+  //#region BUSCANDO REGISTROS
   const lasPersonas = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     track(() => props.buscarPersona.valueOf());
 
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda', props.parametrosBusqueda);
+    console.log('ctx_buscar_persona:::...', ctx_buscar_persona);
 
-    const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerPersonasPorDniRuc', {
-      // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(props.parametrosBusqueda),
-      signal: abortController.signal,
-    });
-    return res.json();
+    if (props.soloPersonasNaturales) {
+      if (ctx_buscar_persona.buscarPor === 'Nombre / Razón social') {
+        const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerSoloPersonasNaturalesPorRazonNombre', {
+          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+            idEmpresa: parametrosGlobales.idEmpresa,
+            buscarPor: ctx_buscar_persona.buscarPor,
+            cadenaABuscar: ctx_buscar_persona.conceptoABuscar,
+          }),
+          signal: abortController.signal,
+        });
+        return res.json();
+      }
+      if (ctx_buscar_persona.buscarPor === 'DNI / RUC') {
+        const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerSoloPersonasNaturalesPorDniRuc', {
+          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+            idEmpresa: parametrosGlobales.idEmpresa,
+            buscarPor: ctx_buscar_persona.buscarPor,
+            cadenaABuscar: ctx_buscar_persona.conceptoABuscar,
+          }),
+          signal: abortController.signal,
+        });
+        return res.json();
+      }
+    } else {
+      if (ctx_buscar_persona.buscarPor === 'Nombre / Razón social') {
+        const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerPersonasPorRazonNombre', {
+          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+            idEmpresa: parametrosGlobales.idEmpresa,
+            buscarPor: ctx_buscar_persona.buscarPor,
+            cadenaABuscar: ctx_buscar_persona.conceptoABuscar,
+          }),
+          signal: abortController.signal,
+        });
+        return res.json();
+      }
+      if (ctx_buscar_persona.buscarPor === 'DNI / RUC') {
+        const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerPersonasPorDniRuc', {
+          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+            idEmpresa: parametrosGlobales.idEmpresa,
+            buscarPor: ctx_buscar_persona.buscarPor,
+            cadenaABuscar: ctx_buscar_persona.conceptoABuscar,
+          }),
+          signal: abortController.signal,
+        });
+        return res.json();
+      }
+    }
+
+    // const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerPersonasPorDniRuc', {
+    //   // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(props.parametrosBusqueda),
+    //   signal: abortController.signal,
+    // });
+    // return res.json();
   });
+  //#endregion BUSCANDO REGISTROS
+
   return (
     <Resource
       value={lasPersonas}
@@ -58,7 +190,7 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(personas) => {
-        console.log('onResolved 🍓🍓🍓🍓');
+        console.log('onResolved 🍓🍓🍓🍓', personas);
         const { data } = personas; //{ status, data, message }
         const misPersonas: IPersona[] = data;
         return (
@@ -76,37 +208,69 @@ export default component$((props: { buscarPersona: number; parametrosBusqueda: a
                     </tr>
                   </thead>
                   <tbody>
-                    {misPersonas.map((value, index) => {
+                    {misPersonas.map((persoLocali, index) => {
+                      const { _id, codigoTipoDocumentoIdentidad, tipoDocumentoIdentidad, numeroIdentidad, razonSocialNombre } =
+                        persoLocali;
                       const indexItem = index + 1;
                       return (
-                        <tr key={value._id}>
+                        <tr key={_id}>
                           <td data-label="Ítem">{indexItem}</td>
-                          <td data-label="Tipo">{value.tipoDocumentoIdentidad}</td>
-                          <td data-label="Número">{value.numeroIdentidad}</td>
-                          <td data-label="R.Soc/Nomb">{value.razonSocialNombre}</td>
-                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                          <td data-label="Tipo">{tipoDocumentoIdentidad}</td>
+                          <td data-label="Número">{numeroIdentidad}</td>
+                          <td data-label="R.Soc/Nomb">{razonSocialNombre}</td>
+                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
                             <ImgButton
                               src={images.check}
                               alt="icono de selección"
                               height={12}
                               width={12}
-                              title={`Ver persona ${value._id}`}
+                              title={`Seleccionar persona`}
                               onClick={$(() => {
-                                // ctx_PersonaSeleccionada._id = value._id;
-                                // ctx_PersonaSeleccionada.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
-                                // ctx_PersonaSeleccionada.tipoDocumentoIdentidad = value.tipoDocumentoIdentidad;
-                                // ctx_PersonaSeleccionada.numeroIdentidad = value.numeroIdentidad;
-                                // ctx_PersonaSeleccionada.razonSocialNombre = value.razonSocialNombre;
-                                // console.log(
-                                //   'ctx_PersonaSeleccionada.razonSocialNombre',
-                                //   ctx_PersonaSeleccionada.razonSocialNombre
-                                // );
-                                ctx_docs_cotizacion.mostrarPanelSeleccionarPersona = false;
-                                ctx_docs_cotizacion.selecciono_Persona = true;
-                                // ctx.mostrarPanelSeleccionarPersona = false;
-                                // ctx.selecciono_Persona = true;
+                                if (props.contexto === 'new_out_almacen' && props.rol === 'cliente') {
+                                  ctx_buscar_persona.pP = persoLocali;
+                                  ctx.mostrarPanelVentasCliente = true;
+                                  console.log('TABLA_PERSONAS_HALLADAS: es verdadderoa.....');
+                                } else {
+                                  ctx_rol._id = _id;
+                                  ctx_rol.codigoTipoDocumentoIdentidad = codigoTipoDocumentoIdentidad;
+                                  ctx_rol.tipoDocumentoIdentidad = tipoDocumentoIdentidad;
+                                  ctx_rol.numeroIdentidad = numeroIdentidad;
+                                  ctx_rol.razonSocialNombre = razonSocialNombre;
+
+                                  ctx.mostrarPanelBuscarPersona = false;
+                                  ctx.idPersona = _id;
+                                  ctx.conceptoABuscar = numeroIdentidad;
+                                  ctx.rol_Persona = props.rol;
+                                  ctx.selecciono_Persona = true;
+                                }
                               })}
                             />
+                            <ImgButton
+                              src={images.edit}
+                              alt="icono de editar"
+                              height={12}
+                              width={12}
+                              title="Editar persona"
+                              onClick={$(() => {
+                                // ctx.personaSe = persoLocali;
+                                ctx_buscar_persona.pP = persoLocali;
+                                ctx_buscar_persona.mostrarPanelNewEditPersona = true;
+
+                                console.log('ctx', ctx);
+                                console.log('selecion', persoLocali);
+                              })}
+                            />
+                            {/* <ImgButton
+                              src={images.see}
+                              alt="icono de editar"
+                              height={12}
+                              width={12}
+                              title="Editar persona"
+                              onClick={$(() => {
+                                console.log('ctx...', ctx);
+                                console.log('ctx_rol...', ctx_rol);
+                              })}
+                            /> */}
                           </td>
                         </tr>
                       );

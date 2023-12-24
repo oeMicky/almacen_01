@@ -9,3 +9,15 @@ export interface IVehiculo {
   vehiculoModelo: string;
   vin: string;
 }
+
+export interface IMarcaVehicular {
+  _id: string;
+  vehiculoMarca: string;
+}
+
+export interface IModeloVehicular {
+  idVehiculoMarca: string;
+  vehiculoMarca: string;
+  idVehiculoModelo: string;
+  vehiculoModelo: string;
+}

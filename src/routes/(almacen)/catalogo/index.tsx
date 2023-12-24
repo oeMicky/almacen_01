@@ -3,16 +3,26 @@ import { component$ } from '@builder.io/qwik';
 export default component$(() => {
   return (
     <div
-      style={{
-        width: '1111px', //SIZES.anchoContenedor + 'px',
-        height: 'inherit',
-        color: 'red', //COLORS.lightGray2,
-        margin: '5px auto',
-        display: 'inherit',
-        justifyContent: 'inherit',
-        alignItems: 'inherit',
-      }}
+      class="container"
+      // style={{
+      //   width: '1111px', //SIZES.anchoContenedor + 'px',
+      //   height: 'inherit',
+      //   color: 'red', //COLORS.lightGray2,
+      //   margin: '5px auto',
+      //   display: 'inherit',
+      //   justifyContent: 'inherit',
+      //   alignItems: 'inherit',
+      // }}
     >
+      <div style={{ background: '#00778F' }}>
+        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
+          {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
+            .getItem('empresa')
+            ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
+            'usuario'
+          )}`}
+        </label>
+      </div>
       <h3>
         <u>Catálogo de mercaderías</u>
         {/* <u>Almacén: {parametrosGlobales.nombreAlmacen}</u> */}

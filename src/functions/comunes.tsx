@@ -3,19 +3,35 @@ export const hoy = () => {
   const al = hoy.getFullYear() + '-' + ('0' + (hoy.getMonth() + 1)).slice(-2) + '-' + ('0' + hoy.getDate()).slice(-2);
   return al;
 };
+
 export const primeroDelMes = () => {
   const hoy = new Date();
   const al = hoy.getFullYear() + '-' + ('0' + (hoy.getMonth() + 1)).slice(-2) + '-01';
   return al;
 };
 
+export const ultimoDelMes = () => {
+  const hoy = new Date();
+  const ultimo = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
+
+  return ultimo.getFullYear() + '-' + ('0' + (ultimo.getMonth() + 1)).slice(-2) + '-' + ('0' + ultimo.getDate()).slice(-2);
+};
+
+export const ultimoDiaDelPeriodoX = (periodo: string) => {
+  const anio = periodo.substring(0, 4);
+  const mes = periodo.substring(4, 6);
+
+  const ultimo = new Date(parseInt(anio), parseInt(mes), 0);
+  return ultimo.getFullYear() + '-' + ('0' + (ultimo.getMonth() + 1)).slice(-2) + '-' + ('0' + ultimo.getDate()).slice(-2);
+};
+
 export const formatoDDMMYYYY_PEN = (fecha: any) => {
-  console.log('fecha ingresada', fecha);
+  // console.log('fecha ingresada', fecha);
   let fechaSalida = '';
   if (!isNaN(Date.parse(fecha))) {
-    console.log('fecha ingresada -> ingreso al parseo');
+    // console.log('fecha ingresada -> ingreso al parseo');
     fechaSalida = fecha.substr(8, 2) + '/' + fecha.substr(5, 2) + '/' + fecha.substr(0, 4);
-    console.log('fecha ingresada -> fechaSalida', fechaSalida);
+    // console.log('fecha ingresada -> fechaSalida', fechaSalida);
   }
   return fechaSalida;
 };
@@ -47,6 +63,16 @@ export const cerosALaIzquierda = (num: any, size: number) => {
   return num;
 };
 
+export const formatear_2Decimales = (num: any) => {
+  let m = Number((Math.abs(num) * 100).toPrecision(15));
+  m = (Math.round(m) / 100) * Math.sign(num);
+  return m.toLocaleString('en-PE', {
+    // style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  });
+};
+
 export const formatear_4Decimales = (num: any) => {
   let m = Number((Math.abs(num) * 10000).toPrecision(15));
   m = (Math.round(m) / 10000) * Math.sign(num);
@@ -57,12 +83,22 @@ export const formatear_4Decimales = (num: any) => {
   });
 };
 
+export const formatear_6Decimales = (num: any) => {
+  let m = Number((Math.abs(num) * 1000000).toPrecision(15));
+  m = (Math.round(m) / 1000000) * Math.sign(num);
+  return m.toLocaleString('en-PE', {
+    // style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 6,
+  });
+};
+
 export const formatearMonedaPEN = (num: any) => {
   // console.log('el numero Decimal', num);
   let m = Number((Math.abs(num) * 100).toPrecision(15));
   m = (Math.round(m) / 100) * Math.sign(num);
   return m.toLocaleString('en-PE', {
-    style: 'currency',
+    // style: 'currency',
     currency: 'PEN',
     minimumFractionDigits: 2,
   });

@@ -1,12 +1,14 @@
 import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
+// import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
 import { hoy, primeroDelMes } from '~/functions/comunes';
 import TablaCotizaciones from './tablaCotizaciones';
+import { CTX_ADD_VENTA } from './addVenta';
+import { parametrosGlobales } from '~/routes/login';
 
-export default component$((props: { ancho: number; parametrosGlobales: any }) => {
-  const ctx_docs_venta = useContext(CTX_DOCS_VENTA);
+export default component$(() => {
+  const ctx_add_venta = useContext(CTX_ADD_VENTA);
   const numeroOFecha = useSignal('Entre fechas');
   const buscarCotizaciones = useSignal(0);
   const fechas = useStore({
@@ -14,8 +16,8 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
     hasta: hoy(),
   });
   const parametrosBusqueda = useStore({
-    idGrupoEmpresarial: props.parametrosGlobales.idGrupoEmpresarial,
-    idEmpresa: props.parametrosGlobales.idEmpresa,
+    idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+    idEmpresa: parametrosGlobales.idEmpresa,
     fechaInicio: fechas.desde,
     fechaFinal: fechas.hasta,
   });
@@ -26,7 +28,15 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
     parametrosBusqueda.fechaFinal = fF;
   });
   return (
-    <div class="container-modal" style={{ width: 'auto', border: '1px solid red', padding: '2px' }}>
+    <div
+      class="container-modal"
+      style={{
+        width: 'clamp(min(10vw, 20rem), 800px, max(90vw, 55rem))',
+        // width: 'auto',
+        border: '1px solid red',
+        padding: '2px',
+      }}
+    >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
@@ -36,14 +46,15 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_docs_venta.mostrarAdjuntarCotizacion = false;
+            ctx_add_venta.mostrarAdjuntarCotizacion = false;
           })}
           //   onClick={onCerrar}
         />
       </div>
       {/* FORMULARIO onChange={cambiarBusqueda}  style={{ marginBottom: '5px' }}*/}
       <div class="add-form">
-        <div class="form-control">
+        <h3>Adjuntar cotización</h3>
+        {/* <div class="form-control">
           <label style={{ marginRight: '10px' }}>Buscar por:</label>
           <select
             style={
@@ -63,10 +74,10 @@ export default component$((props: { ancho: number; parametrosGlobales: any }) =>
               }
             }}
           >
-            <option value="Número">Número</option>
+            <option value="Número" >Número</option>
             <option value="Entre fechas">Entre fechas</option>
           </select>
-        </div>
+        </div> */}
         {/* por Número*/}
         <div
           id="porNumero"
