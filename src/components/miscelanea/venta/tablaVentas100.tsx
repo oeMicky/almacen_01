@@ -1,6 +1,6 @@
 import { $, Resource, component$, useContext, useResource$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-// import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { IVenta } from '~/interfaces/iVenta';
@@ -8,10 +8,10 @@ import { CTX_VENTAS_CLIENTE } from './ventasCliente';
 
 export default component$((props: { buscarVentas100: number; parametrosBusqueda: any; contexto: string; esAlmacen: boolean }) => {
   //#region CONTEXTO
-  // let ctx: any = [];
+  let ctx: any = [];
   switch (props.contexto) {
     case 'new_out_almacen':
-      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
     // case 'new_venta':
     //   ctx = useContext(CTX_ADD_VENTA);
@@ -129,7 +129,7 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                                   return;
                                 }
                                 ctx_ventas_cliente.vV = venta100Locali;
-                                // ctx.mostrarPanelDespachoVenta = true;
+                                ctx.mostrarPanelDespachoVenta = true;
                                 // console.log('mercaINLocali', mercaINLocali);
                                 // if (mercaINLocali.KARDEXS.length === 0) {
                                 //   ctx_buscar_mercaderia_in.mM = mercaINLocali;

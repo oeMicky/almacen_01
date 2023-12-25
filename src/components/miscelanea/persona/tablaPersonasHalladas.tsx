@@ -7,11 +7,11 @@ import { CTX_CLIENTE_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/co
 import { CTX_ADD_VENTA, CTX_CLIENTE_VENTA } from '~/components/venta/addVenta';
 import { CTX_BUSCAR_PERSONA } from './buscarPersona';
 // import { CTX_CLIENTE_OS, CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
-// import { CTX_NEW_IN_ALMACEN, CTX_REMITENTE_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
-// import { CTX_NEW_EDIT_COMPRA, CTX_PROVEEDOR } from '~/components/compra/newEditCompra';
+import { CTX_NEW_IN_ALMACEN, CTX_REMITENTE_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import { CTX_NEW_EDIT_COMPRA, CTX_PROVEEDOR } from '~/components/compra/newEditCompra';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
-// import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 
 //parametrosBusqueda: any;
 export default component$((props: { buscarPersona: number; soloPersonasNaturales: boolean; contexto: string; rol: string }) => {
@@ -46,30 +46,30 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
       }
       break;
     case 'new_in_almacen':
-      // ctx = useContext(CTX_NEW_IN_ALMACEN);
-      // console.log('swicth.......useContext(CTX_NEW_IN_ALMACEN)');
-      // if (props.rol === 'remitente') {
-      //   ctx_rol = useContext(CTX_REMITENTE_IN_ALMACEN);
-      //   console.log('swicth.......useContext(CTX_REMITENTE_IN_ALMACEN)');
-      // }
+      ctx = useContext(CTX_NEW_IN_ALMACEN);
+      console.log('swicth.......useContext(CTX_NEW_IN_ALMACEN)');
+      if (props.rol === 'remitente') {
+        ctx_rol = useContext(CTX_REMITENTE_IN_ALMACEN);
+        console.log('swicth.......useContext(CTX_REMITENTE_IN_ALMACEN)');
+      }
       break;
     case 'new_out_almacen':
-      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      ctx = useContext(CTX_NEW_OUT_ALMACEN);
       console.log('swicth.......useContext(CTX_NEW_OUT_ALMACEN)');
       if (props.rol === 'destinatario') {
-        // ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
+        ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
         console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
       }
       if (props.rol === 'cliente') {
-        // ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
+        ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
         console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
       }
       break;
     case 'new_edit_compra':
-      // ctx = useContext(CTX_NEW_EDIT_COMPRA);
+      ctx = useContext(CTX_NEW_EDIT_COMPRA);
       console.log('swicth.......useContext(CTX_NEW_EDIT_COMPRA)');
       if (props.rol === 'proveedor') {
-        // ctx_rol = useContext(CTX_PROVEEDOR);
+        ctx_rol = useContext(CTX_PROVEEDOR);
         console.log('swicth.......useContext(CTX_PROVEEDOR)');
       }
       break;

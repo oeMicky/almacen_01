@@ -8,7 +8,7 @@ import MercaderiaOUTSeleccionada from './mercaderiaOUTSeleccionada';
 import AsignarPrecioOUT from './asignarPrecioOUT';
 import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
 // import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
-// import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import KardexsOUT from './kardexsOUT';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
@@ -46,7 +46,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean }) => {
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
       break;
     case 'new_out_almacen':
-      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
   }
   //#endregion CONTEXTOS

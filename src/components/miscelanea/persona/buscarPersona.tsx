@@ -10,10 +10,10 @@ import NewEditPersona from './newEditPersona';
 import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 // import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
-// import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
-// import { CTX_NEW_EDIT_COMPRA } from '~/components/compra/newEditCompra';
+import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import { CTX_NEW_EDIT_COMPRA } from '~/components/compra/newEditCompra';
 import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
-// import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import VentasCliente from '../venta/ventasCliente';
 
 export const CTX_BUSCAR_PERSONA = createContextId<any>('buscar_persona');
@@ -44,13 +44,13 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
       break;
     case 'new_in_almacen':
-      // ctx = useContext(CTX_NEW_IN_ALMACEN);
+      ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
     case 'new_out_almacen':
-      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
     case 'new_edit_compra':
-      // ctx = useContext(CTX_NEW_EDIT_COMPRA);
+      ctx = useContext(CTX_NEW_EDIT_COMPRA);
       break;
     case 'buscar_tecnico':
       ctx = useContext(CTX_BUSCAR_TECNICO);

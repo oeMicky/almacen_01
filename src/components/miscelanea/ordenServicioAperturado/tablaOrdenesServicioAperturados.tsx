@@ -4,7 +4,7 @@ import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
-// import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import { CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO } from './buscarOrdenServicioAperturado';
 
 export default component$(
@@ -12,10 +12,10 @@ export default component$(
     useStylesScoped$(style);
 
     //#region CONTEXTO
-    // let ctx: any = [];
+    let ctx: any = [];
     switch (props.contexto) {
       case 'egreso_de_almacen':
-        // ctx = useContext(CTX_NEW_OUT_ALMACEN);
+        ctx = useContext(CTX_NEW_OUT_ALMACEN);
         break;
       // case 'new_venta':
       //   ctx = useContext(CTX_ADD_VENTA);
@@ -101,7 +101,7 @@ export default component$(
                                     return;
                                   }
                                   ctx_buscar_orden_servicio_aperturado.oO = ordServiLocali;
-                                  // ctx.mostrarPanelDespachoRequisiciones = true;
+                                  ctx.mostrarPanelDespachoRequisiciones = true;
                                   // alert(`La orden de servicio # ...paso`);
                                   // ctx_servicio_seleccionado._id = _id;
                                   // ctx_servicio_seleccionado.codigo = codigo;

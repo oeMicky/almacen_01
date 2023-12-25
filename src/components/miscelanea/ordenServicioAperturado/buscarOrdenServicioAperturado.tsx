@@ -1,11 +1,11 @@
-import { $, component$, createContextId, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { images } from '~/assets';
-// import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import TablaOrdenesServicio from './tablaOrdenesServicioAperturados';
 import { parametrosGlobales } from '~/routes/login';
 import { hoy } from '~/functions/comunes';
-// import DespachoRequisiciones from './despachoRequisiciones';
+import DespachoRequisiciones from './despachoRequisiciones';
 
 export const CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO = createContextId<any>('buscar_orden_servicio__');
 
@@ -19,10 +19,10 @@ export default component$((props: { contexto: string }) => {
   //#endregion DEFINICIO CTX_BUSCAR_ORDEN_SERVICIO
 
   //#region CONTEXTO
-  // let ctx: any = [];
+  let ctx: any = [];
   switch (props.contexto) {
     case 'egreso_de_almacen':
-      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
     // case 'new_venta':
     //   ctx = useContext(CTX_ADD_VENTA);
@@ -60,7 +60,7 @@ export default component$((props: { contexto: string }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            // ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
+            ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
           })}
         />
         {/* <ImgButton
@@ -136,14 +136,14 @@ export default component$((props: { contexto: string }) => {
             ''
           )}
         </div>
-        {/* {ctx.mostrarPanelDespachoRequisiciones && (
+        {ctx.mostrarPanelDespachoRequisiciones && (
           <div class="modal">
             <DespachoRequisiciones
               contexto={props.contexto}
               osSeleccionada={definicion_CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO.oO}
             />
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
