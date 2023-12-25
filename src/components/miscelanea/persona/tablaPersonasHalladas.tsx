@@ -10,7 +10,7 @@ import { CTX_BUSCAR_PERSONA } from './buscarPersona';
 // import { CTX_NEW_IN_ALMACEN, CTX_REMITENTE_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 // import { CTX_NEW_EDIT_COMPRA, CTX_PROVEEDOR } from '~/components/compra/newEditCompra';
 import { parametrosGlobales } from '~/routes/login';
-import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
+// import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
 // import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 
 //parametrosBusqueda: any;
@@ -74,7 +74,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
       }
       break;
     case 'buscar_tecnico':
-      ctx = useContext(CTX_BUSCAR_TECNICO);
+      // ctx = useContext(CTX_BUSCAR_TECNICO);
       break;
   }
   //

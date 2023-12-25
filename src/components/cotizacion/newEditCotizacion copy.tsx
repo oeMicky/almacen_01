@@ -19,7 +19,7 @@ import { ICotizacion } from '~/interfaces/iCotizacion';
 import ElButton from '../system/elButton';
 import style from '../tabla/tabla.css?inline';
 import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
-import BuscarVehiculo from '../miscelanea/vehiculo/buscarVehiculo';
+// import BuscarVehiculo from '../miscelanea/vehiculo/buscarVehiculo';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import BuscarServicio from '../miscelanea/servicio/buscarServicio';
 import { getSeriesActivasCotizaciones, inUpCotizacion } from '~/apis/cotizacion.api';
@@ -658,9 +658,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           <hr style={{ margin: '5px 0' }}></hr>
         </div>
         {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo && (
-          <div class="modal">
-            <BuscarVehiculo contexto="cotizacion" />
-          </div>
+          <div class="modal">{/*<BuscarVehiculo contexto="cotizacion" /> */}</div>
         )}
         {/* ----------------------------------------------------- */}
         {/* BOTON SERVICIO */}
