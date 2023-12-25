@@ -1,9 +1,9 @@
 import { $, component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-// import { CTX_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import { CTX_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
-import { formatear_6Decimales } from '~/functions/comunes';
+import { elIdAuxiliar, formatear_6Decimales } from '~/functions/comunes';
 import { CTX_KARDEXS_IN } from './kardexsIN';
 
 export default component$(
@@ -16,11 +16,11 @@ export default component$(
     igv: number;
   }) => {
     //#region CONTEXTOS
-    // let documento: any = [];
+    let documento: any = [];
     switch (props.contextoParaDocumento) {
       case 'new_in_almacen':
         console.log('contexto::a: new_in_almacen');
-        // documento = useContext(CTX_IN_ALMACEN).itemsMercaderias;
+        documento = useContext(CTX_IN_ALMACEN).itemsMercaderias;
         break;
     }
 
@@ -333,26 +333,26 @@ export default component$(
               //   document.getElementById('selectUniEquivalencia_MICE')?.focus();
               //   return;
               // }
-              // documento.push({
-              //   idAuxiliar: parseInt(elIdAuxiliar()),
-              //   idMercaderia: props.mercaINSelecci._id,
-              //   idKardex: props.elKardex._id,
-              //   item: 0,
+              documento.push({
+                idAuxiliar: parseInt(elIdAuxiliar()),
+                idMercaderia: props.mercaINSelecci._id,
+                idKardex: props.elKardex._id,
+                item: 0,
 
-              //   codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '_',
-              //   descripcion: props.mercaINSelecci.descripcion,
+                codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '_',
+                descripcion: props.mercaINSelecci.descripcion,
 
-              //   IGV: elIGV.value,
+                IGV: elIGV.value,
 
-              //   cantidadIngresada: cantidad.value,
-              //   unidad: props.mercaINSelecci.unidad,
-              //   costoUnitarioPEN: costo.value,
-              //   subPEN: cantidad.value * costo.value,
-              //   valorUnitarioPEN: precio.value,
-              //   totPEN: cantidad.value * precio.value,
-              //   // precioUSD: 0,
-              //   // ventaUSD: 0,
-              // });
+                cantidadIngresada: cantidad.value,
+                unidad: props.mercaINSelecci.unidad,
+                costoUnitarioPEN: costo.value,
+                subPEN: cantidad.value * costo.value,
+                valorUnitarioPEN: precio.value,
+                totPEN: cantidad.value * precio.value,
+                // precioUSD: 0,
+                // ventaUSD: 0,
+              });
               // ctx.mostrarPanelMercaderiaINSeleccionada = false;
               if (props.contexto === 'buscar_mercaderia_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada = false;

@@ -1,6 +1,6 @@
-import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-// import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 import TablaMercaderiasIN from './tablaMercaderiasIN';
@@ -28,10 +28,10 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   //#endregion DEFINICION CTX_BUSCAR_MERCADERIA_IN - para eDITAR - para sELECCIONAR
 
   //#region CONTEXTOS
-  // let ctx: any = [];
+  let ctx: any = [];
   switch (props.contexto) {
     case 'new_in_almacen':
-      // ctx = useContext(CTX_NEW_IN_ALMACEN);
+      ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
     // case 'new_venta':
     //   ctx = useContext(CTX_ADD_VENTA);
@@ -103,7 +103,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            // ctx.mostrarPanelBuscarMercaderiaIN = false;
+            ctx.mostrarPanelBuscarMercaderiaIN = false;
           })}
         />
       </div>

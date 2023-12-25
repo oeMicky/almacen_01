@@ -10,7 +10,7 @@ import NewEditServicio from './newEditServicio';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
-// import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 
 export const CTX_BUSCAR_SERVICIO = createContextId<any>('servicio__');
 
@@ -29,7 +29,7 @@ export default component$((props: { contexto: any }) => {
   let ctx: any = [];
   switch (props.contexto) {
     case 'orden servicio':
-      // ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       break;
     // case 'venta':
     //   ctx = useContext(CTX_DOCS_VENTA);

@@ -8,7 +8,7 @@ import { CTX_BUSCAR_SERVICIO } from './buscarServicio';
 // import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 // import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
 import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
-// import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
+import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 
 export default component$((props: { serviSelecci: any; contexto: any }) => {
@@ -19,7 +19,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
     case 'orden servicio':
       console.log('contexto::: orden servicio');
       // ctx = useContext(CTX_DOCS_ORDEN_SERVICIO);
-      // documento = useContext(CTX_O_S).servicios;
+      documento = useContext(CTX_O_S).servicios;
       break;
     case 'new_venta':
       console.log('contexto::: venta');
