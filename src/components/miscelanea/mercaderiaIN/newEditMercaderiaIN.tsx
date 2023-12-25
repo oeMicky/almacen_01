@@ -24,7 +24,7 @@ import { parametrosGlobales } from '~/routes/login';
 import style from '../../tabla/tabla.css?inline';
 import { inUpMercaderia } from '~/apis/mercaderia.api';
 import NewEditMarcaIN from './newEditMarcaIN';
-import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
+// import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
 
 export const CTX_NEW_EDIT_MERCADERIA_IN = createContextId<any>('new_edit_mercaderia_IN');
 
@@ -99,11 +99,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
       ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
       break;
     case 'index_kardexs':
-      ctx = useContext(CTX_INDEX_KARDEX);
+      // ctx = useContext(CTX_INDEX_KARDEX);
       break;
-    // case 'cotizacion':
-    //   ctx = useContext(CTX_DOCS_COTIZACION);
-    //   break;
   }
 
   //const ctx_buscar_mercaderia_in = useContext(CTX_BUSCAR_MERCADERIA_IN);

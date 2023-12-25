@@ -21,6 +21,7 @@ import style from './index.css?inline';
 import { parametrosGlobales } from '../../login/index';
 import ElSelect from '~/components/system/elSelect';
 import { getPeriodos } from '~/apis/grupoEmpresarial.api';
+
 // import { CTX_DOCS_ORDEN_SERVICIO } from '../ordenServicio';
 // import Venta from '~/components/venta/venta';
 // import { getVentasPorFechas } from '~/apis/venta.api';
