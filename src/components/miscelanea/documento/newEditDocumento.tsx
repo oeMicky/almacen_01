@@ -1,7 +1,7 @@
 import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { loadTiposComprobantePago } from '~/apis/sunat.api';
 import { images } from '~/assets';
-import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+// import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
@@ -13,7 +13,6 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   const documentoIN = useStore<IDocumento>({
     _id: props.docSelecci._id ? props.docSelecci._id : '',
     idAuxiliar: props.docSelecci.idAuxiliar ? props.docSelecci.idAuxiliar : '',
-    // tipo: props.docSelecci.tipo ? props.docSelecci.tipo : '',
     codigoTCP: props.docSelecci.codigoTCP ? props.docSelecci.codigoTCP : '',
     descripcionTCP: props.docSelecci.descripcionTCP ? props.docSelecci.descripcionTCP : '',
     serie: props.docSelecci.serie ? props.docSelecci.serie : '',
@@ -28,21 +27,14 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   let ctxDocumentosAdjuntos: any = [];
   switch (props.contexto) {
     case 'new_in_almacen':
-      ctxDocumentosAdjuntos = useContext(CTX_IN_ALMACEN).documentosAdjuntos;
-      ctx = useContext(CTX_NEW_IN_ALMACEN);
+      // ctxDocumentosAdjuntos = useContext(CTX_IN_ALMACEN).documentosAdjuntos;
+      // ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
     case 'new_out_almacen':
       ctxDocumentosAdjuntos = useContext(CTX_OUT_ALMACEN).documentosAdjuntos;
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
-    // case 'venta':
-    //   ctx = useContext(CTX_DOCS_VENTA);
-    //   break;
-    // case 'cotizacion':
-    //   ctx = useContext(CTX_DOCS_COTIZACION);
-    //   break;
   }
-  //   const ctx_seleccionar_servicio = useContext(CTX_SELECCIONAR_SERVICIO);
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
