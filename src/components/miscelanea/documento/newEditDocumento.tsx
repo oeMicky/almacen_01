@@ -1,11 +1,11 @@
-import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { $, component$, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { loadTiposComprobantePago } from '~/apis/sunat.api';
 import { images } from '~/assets';
-import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
-import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+// import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+// import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
-import { elIdAuxiliar } from '~/functions/comunes';
+// import { elIdAuxiliar } from '~/functions/comunes';
 import { IDocumento } from '~/interfaces/iDocumento';
 
 export default component$((props: { docSelecci: any; contexto: string }) => {
@@ -24,16 +24,16 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   //#endregion DEFINICION DOCUMENTO
 
   //#region CONTEXTOS
-  let ctx: any = [];
-  let ctxDocumentosAdjuntos: any = [];
+  // let ctx: any = [];
+  // let ctxDocumentosAdjuntos: any = [];
   switch (props.contexto) {
     case 'new_in_almacen':
-      ctxDocumentosAdjuntos = useContext(CTX_IN_ALMACEN).documentosAdjuntos;
-      ctx = useContext(CTX_NEW_IN_ALMACEN);
+      // ctxDocumentosAdjuntos = useContext(CTX_IN_ALMACEN).documentosAdjuntos;
+      // ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
     case 'new_out_almacen':
-      ctxDocumentosAdjuntos = useContext(CTX_OUT_ALMACEN).documentosAdjuntos;
-      ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      // ctxDocumentosAdjuntos = useContext(CTX_OUT_ALMACEN).documentosAdjuntos;
+      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
     // case 'venta':
     //   ctx = useContext(CTX_DOCS_VENTA);
@@ -88,32 +88,27 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
     }
 
     if (documentoIN.idAuxiliar === '') {
-      ctxDocumentosAdjuntos.push({
-        idAuxiliar: parseInt(elIdAuxiliar()),
-        // tipo: props.docSelecci.tipo ? props.docSelecci.tipo : '',
-        codigoTCP: documentoIN.codigoTCP,
-        descripcionTCP: documentoIN.descripcionTCP,
-        fecha: documentoIN.fecha,
-        serie: documentoIN.serie,
-        numero: documentoIN.numero,
-
-        lote: documentoIN.lote,
-      });
-
-      ctx.mostrarPanelAdjuntarDocumento = false;
+      // ctxDocumentosAdjuntos.push({
+      //   idAuxiliar: parseInt(elIdAuxiliar()),
+      //   // tipo: props.docSelecci.tipo ? props.docSelecci.tipo : '',
+      //   codigoTCP: documentoIN.codigoTCP,
+      //   descripcionTCP: documentoIN.descripcionTCP,
+      //   fecha: documentoIN.fecha,
+      //   serie: documentoIN.serie,
+      //   numero: documentoIN.numero,
+      //   lote: documentoIN.lote,
+      // });
+      // ctx.mostrarPanelAdjuntarDocumento = false;
     } else {
-      const aMod: any = ctxDocumentosAdjuntos.find((docs: any) => docs.idAuxiliar === documentoIN.idAuxiliar);
-      console.log('aMod', aMod);
-
-      aMod.codigoTCP = documentoIN.codigoTCP;
-      aMod.descripcionTCP = documentoIN.descripcionTCP;
-      aMod.fecha = documentoIN.fecha;
-      aMod.serie = documentoIN.serie;
-      aMod.numero = documentoIN.numero;
-      aMod.lote = documentoIN.lote;
-
-      ctx.mostrarPanelAdjuntarDocumento = false;
-
+      // const aMod: any = ctxDocumentosAdjuntos.find((docs: any) => docs.idAuxiliar === documentoIN.idAuxiliar);
+      // console.log('aMod', aMod);
+      // aMod.codigoTCP = documentoIN.codigoTCP;
+      // aMod.descripcionTCP = documentoIN.descripcionTCP;
+      // aMod.fecha = documentoIN.fecha;
+      // aMod.serie = documentoIN.serie;
+      // aMod.numero = documentoIN.numero;
+      // aMod.lote = documentoIN.lote;
+      // ctx.mostrarPanelAdjuntarDocumento = false;
       // (aMod.descripcionEquivalencia = equivalenciaIN.descripcionEquivalencia),
       //   // laEquivalencia: props.equivaSelecci._id ? props.equivaSelecci._id : '',
       //   (aMod.idUnidadEquivalencia = equivalenciaIN.idUnidadEquivalencia),
@@ -143,7 +138,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx.mostrarPanelAdjuntarDocumento = false;
+            // ctx.mostrarPanelAdjuntarDocumento = false;
           })}
         />
       </div>

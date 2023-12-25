@@ -8,7 +8,7 @@ import { IMercaEquivalenciaOUT } from '~/interfaces/iMercaderia';
 import { CTX_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
 // import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
-import { CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+// import { CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
 import { CTX_KARDEXS_OUT } from './kardexsOUT';
 
@@ -33,7 +33,7 @@ export default component$(
         break;
       case 'new_out_almacen':
         console.log('contextoParaDocumento::: new_out_almacen');
-        documento = useContext(CTX_OUT_ALMACEN).itemsMercaderias;
+        // documento = useContext(CTX_OUT_ALMACEN).itemsMercaderias;
         break;
     }
 

@@ -1,18 +1,18 @@
-import { $, Resource, component$, useContext, useResource$, useSignal } from '@builder.io/qwik';
+import { $, Resource, component$, useResource$, useSignal } from '@builder.io/qwik';
 import { images } from '~/assets';
-import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+// import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
-import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 
 export default component$((props: { contexto: string; ventaSeleccionada: any }) => {
   //#region CONTEXTO
-  let ctx: any = [];
-  let documento: any = [];
+  // let ctx: any = [];
+  // let documento: any = [];
   // let documentoAdjunto: any = [];
   switch (props.contexto) {
     case 'new_out_almacen':
-      ctx = useContext(CTX_NEW_OUT_ALMACEN);
-      documento = useContext(CTX_OUT_ALMACEN);
+      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      // documento = useContext(CTX_OUT_ALMACEN);
       // documentoAdjunto = useContext(CTX_OUT_ALMACEN);
       break;
     // case 'new_venta':
@@ -71,7 +71,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx.mostrarPanelDespachoVenta = false;
+            // ctx.mostrarPanelDespachoVenta = false;
           })}
         />
         <ImgButton
@@ -291,33 +291,33 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             //** copiar los datos al panel de EGRESO */
 
             //ID DE LA ORDEN SERVICIO
-            documento.idDocumento = props.ventaSeleccionada._id;
+            // documento.idDocumento = props.ventaSeleccionada._id;
 
-            //DESTINATARIO
-            documento.idDestinatario = props.ventaSeleccionada.idCliente;
-            documento.codigoTipoDocumentoIdentidad = props.ventaSeleccionada.codigoTipoDocumentoIdentidad;
-            documento.tipoDocumentoIdentidad = props.ventaSeleccionada.tipoDocumentoIdentidad;
-            documento.numeroIdentidad = props.ventaSeleccionada.numeroIdentidad;
-            documento.razonSocialNombre = props.ventaSeleccionada.razonSocialNombreCliente;
+            // //DESTINATARIO
+            // documento.idDestinatario = props.ventaSeleccionada.idCliente;
+            // documento.codigoTipoDocumentoIdentidad = props.ventaSeleccionada.codigoTipoDocumentoIdentidad;
+            // documento.tipoDocumentoIdentidad = props.ventaSeleccionada.tipoDocumentoIdentidad;
+            // documento.numeroIdentidad = props.ventaSeleccionada.numeroIdentidad;
+            // documento.razonSocialNombre = props.ventaSeleccionada.razonSocialNombreCliente;
 
             //TIPO DE DOCUMENTO -> ORDEN DE SERVICIO
-            const numeroDocumentos = documento.documentosAdjuntos.length;
-            //borra todos los elementos del array
-            documento.documentosAdjuntos.splice(0, numeroDocumentos);
-            //inserta el elemento / documento en el array
-            documento.documentosAdjuntos.push({
-              codigoTCP: '00',
-              descripcionTCP: 'Otros',
-              fecha: props.ventaSeleccionada.fecha,
-              idAuxiliar: elIdAuxiliar(),
-              numero: props.ventaSeleccionada.correlativo,
-              serie: props.ventaSeleccionada.serie,
-            });
+            // const numeroDocumentos = documento.documentosAdjuntos.length;
+            // //borra todos los elementos del array
+            // documento.documentosAdjuntos.splice(0, numeroDocumentos);
+            // //inserta el elemento / documento en el array
+            // documento.documentosAdjuntos.push({
+            //   codigoTCP: '00',
+            //   descripcionTCP: 'Otros',
+            //   fecha: props.ventaSeleccionada.fecha,
+            //   idAuxiliar: elIdAuxiliar(),
+            //   numero: props.ventaSeleccionada.correlativo,
+            //   serie: props.ventaSeleccionada.serie,
+            // });
 
             //INSERTAR MERCADERIA
-            const numeroMercaderias = documento.itemsMercaderias.length;
-            //borra todos los elementos del array
-            documento.itemsMercaderias.splice(0, numeroMercaderias);
+            // const numeroMercaderias = documento.itemsMercaderias.length;
+            // //borra todos los elementos del array
+            // documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
             for (const despachoLocali of misDespachos.value) {
               const despa = despachoLocali.aDespachar.$numberDecimal
@@ -325,32 +325,32 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
                 : despachoLocali.aDespachar;
 
               if (despa > 0) {
-                documento.itemsMercaderias.push({
-                  idAuxiliar: parseInt(elIdAuxiliar()),
-                  idMercaderia: despachoLocali.idMercaderia,
-                  idEquivalencia: despachoLocali.idEquivalencia,
-                  idKardex: despachoLocali.idKardex,
-                  item: 0,
-                  codigo: despachoLocali.codigo ? despachoLocali.codigo : '_',
-                  descripcionEquivalencia: despachoLocali.descripcionEquivalencia,
-                  cantidadSacada: despa,
-                  unidadEquivalencia: despachoLocali.unidadEquivalencia,
-                  // costoPEN: props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
-                  // subTotalPEN:
-                  //   despa * props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
-                  costoUnitarioPEN: 66,
-                  subTotalPEN: despa * 66,
-                  precioUSD: 0,
-                  ventaUSD: 0,
-                  tipoEquivalencia: despachoLocali.tipoEquivalencia,
-                  factor: despachoLocali.factor,
-                  laEquivalencia: despachoLocali.laEquivalencia.$numberDecimal,
-                });
+                // documento.itemsMercaderias.push({
+                //   idAuxiliar: parseInt(elIdAuxiliar()),
+                //   idMercaderia: despachoLocali.idMercaderia,
+                //   idEquivalencia: despachoLocali.idEquivalencia,
+                //   idKardex: despachoLocali.idKardex,
+                //   item: 0,
+                //   codigo: despachoLocali.codigo ? despachoLocali.codigo : '_',
+                //   descripcionEquivalencia: despachoLocali.descripcionEquivalencia,
+                //   cantidadSacada: despa,
+                //   unidadEquivalencia: despachoLocali.unidadEquivalencia,
+                //   // costoPEN: props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
+                //   // subTotalPEN:
+                //   //   despa * props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
+                //   costoUnitarioPEN: 66,
+                //   subTotalPEN: despa * 66,
+                //   precioUSD: 0,
+                //   ventaUSD: 0,
+                //   tipoEquivalencia: despachoLocali.tipoEquivalencia,
+                //   factor: despachoLocali.factor,
+                //   laEquivalencia: despachoLocali.laEquivalencia.$numberDecimal,
+                // });
               }
             }
 
-            ctx.mostrarPanelDespachoRequisiciones = false;
-            ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
+            // ctx.mostrarPanelDespachoRequisiciones = false;
+            // ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
           }}
         />
       </div>
