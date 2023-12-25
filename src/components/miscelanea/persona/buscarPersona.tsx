@@ -11,7 +11,7 @@ import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizaci
 // import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
 // import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
-import { CTX_NEW_EDIT_COMPRA } from '~/components/compra/newEditCompra';
+// import { CTX_NEW_EDIT_COMPRA } from '~/components/compra/newEditCompra';
 import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
 // import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import VentasCliente from '../venta/ventasCliente';
@@ -50,7 +50,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
       // ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
     case 'new_edit_compra':
-      ctx = useContext(CTX_NEW_EDIT_COMPRA);
+      // ctx = useContext(CTX_NEW_EDIT_COMPRA);
       break;
     case 'buscar_tecnico':
       ctx = useContext(CTX_BUSCAR_TECNICO);
