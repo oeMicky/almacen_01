@@ -5,16 +5,16 @@ import { parametrosGlobales } from '~/routes/login';
 import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
 import { ITecnico } from '~/interfaces/iPersona';
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+// import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 
 export default component$((props: { buscarTecnico: number; contexto: string }) => {
   useStylesScoped$(style);
 
   //#region CONTEXTOS
-  let ctx: any = [];
+  // let ctx: any = [];
   switch (props.contexto) {
     case 'orden_servicio':
-      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      // ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       // documento = useContext(CTX_O_S);
       break;
   }
@@ -116,9 +116,8 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
                               width={12}
                               title={`Seleccionar técnico`}
                               onClick={$(() => {
-                                ctx.selecciono_Tecnico = true;
-
-                                ctx.mostrarPanelBuscarTecnico = false;
+                                // ctx.selecciono_Tecnico = true;
+                                // ctx.mostrarPanelBuscarTecnico = false;
                                 // ctx_rol._id = _id;
                                 // ctx_rol.codigoTipoDocumentoIdentidad = codigoTipoDocumentoIdentidad;
                                 // ctx_rol.tipoDocumentoIdentidad = tipoDocumentoIdentidad;

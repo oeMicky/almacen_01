@@ -4,7 +4,7 @@ import { CTX_BUSCAR_VEHICULO } from './buscarVehiculo';
 import { IVehiculo } from '~/interfaces/iVehiculo';
 import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
-import { CTX_NEW_EDIT_ORDEN_SERVICIO, CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
+// import { CTX_NEW_EDIT_ORDEN_SERVICIO, CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 
 export default component$((props: { buscarVehiculos: number; parametrosBusqueda: any; contexto: string }) => {
@@ -15,8 +15,8 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
   let documento: any = [];
   switch (props.contexto) {
     case 'orden servicio':
-      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
-      documento = useContext(CTX_O_S);
+      // ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      // documento = useContext(CTX_O_S);
       console.log('swicth.......useContext(CTX_NEW_EDIT_ORDEN_SERVICIO)');
       break;
     // case 'venta':

@@ -6,7 +6,7 @@ import { IPersona } from '~/interfaces/iPersona';
 import { CTX_CLIENTE_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_ADD_VENTA, CTX_CLIENTE_VENTA } from '~/components/venta/addVenta';
 import { CTX_BUSCAR_PERSONA } from './buscarPersona';
-import { CTX_CLIENTE_OS, CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+// import { CTX_CLIENTE_OS, CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 // import { CTX_NEW_IN_ALMACEN, CTX_REMITENTE_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 // import { CTX_NEW_EDIT_COMPRA, CTX_PROVEEDOR } from '~/components/compra/newEditCompra';
 import { parametrosGlobales } from '~/routes/login';
@@ -22,10 +22,10 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
   let ctx_rol: any = [];
   switch (props.contexto) {
     case 'orden servicio':
-      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      // ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       console.log('swicth.......useContext(CTX_NEW_EDIT_ORDEN_SERVICIO)');
       if (props.rol === 'cliente') {
-        ctx_rol = useContext(CTX_CLIENTE_OS);
+        // ctx_rol = useContext(CTX_CLIENTE_OS);
         console.log('swicth.......useContext(CTX_CLIENTE_OS)');
       }
       break;

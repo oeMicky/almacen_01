@@ -7,7 +7,7 @@ import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { IMercaEquivalenciaOUT } from '~/interfaces/iMercaderia';
 import { CTX_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
-import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
+// import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 // import { CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
 import { CTX_KARDEXS_OUT } from './kardexsOUT';
@@ -21,7 +21,7 @@ export default component$(
     switch (props.contextoParaDocumento) {
       case 'orden servicio':
         console.log('contextoParaDocumento::: orden servicio');
-        documento = useContext(CTX_O_S).requisiciones;
+        // documento = useContext(CTX_O_S).requisiciones;
         break;
       case 'new_venta':
         console.log('contextoParaDocumento::: new_venta');

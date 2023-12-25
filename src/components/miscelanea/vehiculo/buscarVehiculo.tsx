@@ -4,7 +4,7 @@ import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 import NewEditVehiculo from './newEditVehiculo';
 import TablaVehiculosHallados from './tablaVehiculosHallados';
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+// import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 
 export const CTX_BUSCAR_VEHICULO = createContextId<any>('vehiculo__');
@@ -26,7 +26,7 @@ export default component$((props: { contexto: string }) => {
   // let documento: any = [];
   switch (props.contexto) {
     case 'orden servicio':
-      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      // ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       // documento = useContext(CTX_O_S);
       break;
     // case 'venta':

@@ -8,7 +8,7 @@ import TablaPersonasHalladas from './tablaPersonasHalladas';
 // import { parametrosGlobales } from '~/routes/login';
 import NewEditPersona from './newEditPersona';
 import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+// import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
 // import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 // import { CTX_NEW_EDIT_COMPRA } from '~/components/compra/newEditCompra';
@@ -35,7 +35,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
   let ctx: any = [];
   switch (props.contexto) {
     case 'orden servicio':
-      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      // ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       break;
     case 'venta':
       ctx = useContext(CTX_ADD_VENTA);

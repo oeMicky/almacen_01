@@ -1,6 +1,6 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+// import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 import ImgButton from '~/components/system/imgButton';
 import TablaTecnicos from './tablaTecnicos';
 import BuscarPersona from '../persona/buscarPersona';
@@ -29,10 +29,10 @@ export default component$((props: { contexto: string }) => {
   //#endregion CONTEXTO
 
   //#region CONTEXTOS
-  let ctx: any = [];
+  // let ctx: any = [];
   switch (props.contexto) {
     case 'orden_servicio':
-      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      // ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       // documento = useContext(CTX_O_S);
       break;
   }
@@ -103,8 +103,8 @@ export default component$((props: { contexto: string }) => {
             width={16}
             title="Cerrar el formulario"
             onClick={$(() => {
-              ctx.mostrarPanelBuscarTecnico = false;
-              ctx.selecciono_Tecnico = false;
+              // ctx.mostrarPanelBuscarTecnico = false;
+              // ctx.selecciono_Tecnico = false;
             })}
           />
         </div>

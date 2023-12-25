@@ -7,7 +7,7 @@ import TablaMercaderiasOUT from './tablaMercaderiasOUT';
 import MercaderiaOUTSeleccionada from './mercaderiaOUTSeleccionada';
 import AsignarPrecioOUT from './asignarPrecioOUT';
 import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+// import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 // import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import KardexsOUT from './kardexsOUT';
 
@@ -34,7 +34,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean }) => {
   let ctx: any = [];
   switch (props.contexto) {
     case 'orden servicio':
-      ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      // ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       break;
     case 'new_venta':
       ctx = useContext(CTX_ADD_VENTA);

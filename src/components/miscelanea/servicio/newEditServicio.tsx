@@ -5,7 +5,7 @@ import ImgButton from '~/components/system/imgButton';
 import { IServicio } from '~/interfaces/iServicio';
 import { CTX_INDEX_COTIZACION } from '~/routes/(almacen)/cotizacion';
 import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
-import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
+// import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_SERVICIO } from './buscarServicio';
 // import { CTX_SERVICIO } from './seleccionarServicio';
@@ -25,7 +25,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
   let ctx: any = [];
   switch (props.contexto) {
     case 'orden servicio':
-      ctx = useContext(CTX_INDEX_ORDEN_SERVICIO);
+      // ctx = useContext(CTX_INDEX_ORDEN_SERVICIO);
       break;
     case 'venta':
       ctx = useContext(CTX_INDEX_VENTA);
