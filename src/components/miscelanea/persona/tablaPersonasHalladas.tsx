@@ -11,7 +11,7 @@ import { CTX_CLIENTE_OS, CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenS
 import { CTX_NEW_EDIT_COMPRA, CTX_PROVEEDOR } from '~/components/compra/newEditCompra';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
-import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+// import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 
 //parametrosBusqueda: any;
 export default component$((props: { buscarPersona: number; soloPersonasNaturales: boolean; contexto: string; rol: string }) => {
@@ -54,14 +54,14 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
       // }
       break;
     case 'new_out_almacen':
-      ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
       console.log('swicth.......useContext(CTX_NEW_OUT_ALMACEN)');
       if (props.rol === 'destinatario') {
-        ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
+        // ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
         console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
       }
       if (props.rol === 'cliente') {
-        ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
+        // ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
         console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
       }
       break;

@@ -1,10 +1,10 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+// import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import TablaVentas100 from './tablaVentas100';
 import { parametrosGlobales } from '~/routes/login';
-import DespachoVenta from './despachoVenta';
+// import DespachoVenta from './despachoVenta';
 
 export const CTX_VENTAS_CLIENTE = createContextId<any>('ventas_cliente');
 
@@ -18,10 +18,10 @@ export default component$((props: { contexto: string; cliente: any }) => {
   //#endregion DEFINICIO CTX_BUSCAR_ORDEN_SERVICIO
 
   //#region CONTEXTO
-  let ctx: any = [];
+  // let ctx: any = [];
   switch (props.contexto) {
     case 'new_out_almacen':
-      ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      // ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
     // case 'new_venta':
     //   ctx = useContext(CTX_ADD_VENTA);
@@ -72,7 +72,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx.mostrarPanelVentasCliente = false;
+            // ctx.mostrarPanelVentasCliente = false;
             console.log('VENTAS_CLIENTE: es falso.....');
           })}
         />
@@ -110,11 +110,11 @@ export default component$((props: { contexto: string; cliente: any }) => {
             ''
           )}
         </div>
-        {ctx.mostrarPanelDespachoVenta && (
+        {/* {ctx.mostrarPanelDespachoVenta && (
           <div class="modal">
             <DespachoVenta contexto={props.contexto} ventaSeleccionada={definicion_CTX_VENTAS_CLIENTE.vV} />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
