@@ -78,12 +78,12 @@ export default component$(
                     </thead>
                     <tbody>
                       {misOrdenesServicio.map((ordServiLocali) => {
-                        const { _id, fechaInicio, correlativo, razonSocialNombreCliente, requisiciones, tipo } = ordServiLocali;
+                        const { _id, fechaInicio, serie, numero, razonSocialNombreCliente, requisiciones, tipo } = ordServiLocali;
                         // const indexItem = index + 1; , index
                         return (
                           <tr key={_id}>
                             {/* <td data-label="Ítem">{indexItem}</td> */}
-                            <td data-label="OS">{correlativo ? correlativo : '_'}</td>
+                            <td data-label="OS">{serie + ' - ' + numero}</td>
                             <td data-label="Fecha">{fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}</td>
                             <td data-label="Estado">{razonSocialNombreCliente ? razonSocialNombreCliente : '_'}</td>
                             <td data-label="Tipo">{tipo ? tipo : '_'}</td>
@@ -97,7 +97,7 @@ export default component$(
                                 title="Seleccionar servicio"
                                 onClick={$(() => {
                                   if (requisiciones.length === 0) {
-                                    alert(`La orden de servicio # ${correlativo} no presenta requisiciones.`);
+                                    alert(`La orden de servicio # ${serie + ' - ' + numero} no presenta requisiciones.`);
                                     return;
                                   }
                                   ctx_buscar_orden_servicio_aperturado.oO = ordServiLocali;

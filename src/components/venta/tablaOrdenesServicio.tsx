@@ -79,7 +79,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                       // const indexItem = index + 1;
                       return (
                         <tr key={value._id}>
-                          <td data-label="O.S.">{value.correlativo}</td>
+                          <td data-label="O.S.">{value.serie + ' - ' + value.numero}</td>
                           <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fechaInicio)}</td>
                           <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
                           <td data-label="Cliente">{value.razonSocialNombreCliente}</td>
@@ -103,7 +103,14 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                   title="Selecionar cotización"
                                   onClick={$(() => {
                                     console.log('seleccionar cotizacion', value);
-                                    ctx_f_b_nc_nd.cotizacion = value.correlativo;
+                                    //
+                                    //
+                                    //
+                                    //
+                                    //
+                                    //
+
+                                    ctx_f_b_nc_nd.cotizacion = value.numero;
                                     ctx_f_b_nc_nd.idCliente = value.idCliente;
 
                                     ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;

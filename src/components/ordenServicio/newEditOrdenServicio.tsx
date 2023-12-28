@@ -25,7 +25,6 @@ import {
   borrarServicioOS,
   getSeriesActivasOrdenesServicio,
   inUpOrdenServicio,
-  rebuscarCorrelativo,
 } from '~/apis/ordenServicio.api';
 import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 import style from '../tabla/tabla.css?inline';
@@ -490,7 +489,7 @@ OBSERVACIÓN(ES):
       return;
     }
 
-    let ordenS = await inUpOrdenServicio({
+    const ordenS = await inUpOrdenServicio({
       idOrdenServicio: definicion_CTX_O_S._id,
       // idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       // idEmpresa: parametrosGlobales.idEmpresa,
