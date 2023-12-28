@@ -64,3 +64,16 @@ export const getOrdenesServicio = async (parametros) => {
   });
   return res.json();
 };
+
+export const getSeriesActivasOrdenesServicio = async (parametros) => {
+  console.log('//////api////////////******************obtener a getSeriesActivasOrdenesServicio');
+  console.log('parametros getSeriesActivasOrdenesServicio', parametros);
+  const res = await fetch(API + '/obtenerSeriesActivasOrdenesServicio', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

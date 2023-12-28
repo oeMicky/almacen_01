@@ -108,7 +108,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                           <td data-label="Acciones" style={{ textAlign: 'right' }}>
                             {/* <div style={{ display: 'flex', textAlign: 'right' }}> */}
                             <ImgButton
-                              src={images.check}
+                              src={images.check32}
                               alt="icono de adicionar"
                               height={12}
                               width={12}
@@ -130,8 +130,18 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                               //   });
                               // }}
                             />
-                            <ImgButton src={images.edit} alt="icono de editar" height={12} width={12} title="Editar servicio" />
-                            <ImgButton src={images.see} alt="icono de editar" height={12} width={12} title="Editar ver" />
+                            <ImgButton
+                              src={images.edit}
+                              alt="icono de editar"
+                              height={12}
+                              width={12}
+                              title="Editar servicio"
+                              onClick={$(() => {
+                                ctx_buscar_servicio.sS = serviLocali;
+                                ctx_buscar_servicio.mostrarPanelNewEditServicio = true;
+                              })}
+                            />
+                            {/* <ImgButton src={images.see} alt="icono de editar" height={12} width={12} title="Editar ver" /> */}
                           </td>
                         </tr>
                       );

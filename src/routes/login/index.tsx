@@ -9,14 +9,15 @@ import { getActivoGEEMP, getActivoGEEMPSUCUR } from '~/apis/grupoEmpresarial.api
 
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
-  paginaInicioDelSistema: '/cotizacion',
+  // paginaInicioDelSistema: '/cotizacion',
+  paginaInicioDelSistema: '/ordenServicio',
   //Grupo Empresarial
   idGrupoEmpresarial: '', //'60f097ca53621708ecc4e781',
   nombreGrupoEmpresarial: '', //'El Grupo Empresarial',
   //Empresa
   idEmpresa: '', //'60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
   RazonSocial: '', //'CORPORACION ACME I',
-  Direccion: 'ARKANZAS NRO 354',
+  Direccion: '', //'ARKANZAS NRO 354',
   RUC: '', //'99999999999',
   //Sucursal
   idSucursal: '', //'651ad18424595a30fe7926d2',
@@ -62,8 +63,8 @@ export default component$(() => {
 
   const definicion_CTX_LOGEO = useStore({
     // email: 'mvizconde@msn.com',
-    email: 'carlos@merma.com',
-    // email: 'paolo@cao.com',
+    // email: 'carlos@merma.com',
+    email: 'paolo@cao.com',
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
@@ -139,6 +140,7 @@ export default component$(() => {
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
+              parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -176,6 +178,7 @@ export default component$(() => {
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
+              parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
               parametrosGlobales.usuario = logeo.usuario;
               //  parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               //  parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -234,6 +237,7 @@ export default component$(() => {
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
+              parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -270,6 +274,7 @@ export default component$(() => {
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
+              parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
               parametrosGlobales.usuario = logeo.usuario;
               sessionStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
 

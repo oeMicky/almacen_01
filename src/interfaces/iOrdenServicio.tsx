@@ -9,9 +9,13 @@ export interface IOrdenServicio {
   empresa: string;
   direccion: string;
 
+  idSerieOrdenServicio: string;
+  serie: string;
+  numero: number;
+
   igv: number;
   fechaInicio: string;
-  correlativo: number;
+  // correlativo: number;
   estado: string;
   tipo: string;
   idTecnico: string;

@@ -701,8 +701,8 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   // style={{ width: '100%', fontSize: '0.7rem' }}
                   onChange$={(e) => {
                     const idx = (e.target as HTMLSelectElement).selectedIndex;
-                    const rere = e.target as HTMLSelectElement;
-                    const elOption = rere[idx];
+                    const elSelect = e.target as HTMLSelectElement;
+                    const elOption = elSelect[idx];
                     console.log('elOption', elOption.id);
                     idSerieDocumento.value = elOption.id;
                     serieDocumento.value = (e.target as HTMLSelectElement).value;

@@ -113,6 +113,9 @@ export const formatearMonedaUSD = (num: any) => {
     minimumFractionDigits: 2,
   });
 };
+export const formatearNumeroINT = (num: number) => {
+  return new Intl.NumberFormat('es-PE').format(num);
+};
 
 export const literal = (importe: any, moneda: string) => {
   console.log('importe->', importe);

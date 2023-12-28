@@ -67,7 +67,7 @@ export default component$(() => {
                   <td data-label="Empresa">{empre.empresa}</td>
                   <td data-label="Acciones" style={{ textAlign: 'center' }}>
                     <ImgButton
-                      src={images.check}
+                      src={images.check32}
                       alt="icono de selección"
                       height={12}
                       width={12}
@@ -112,6 +112,7 @@ export default component$(() => {
                           parametrosGlobales.idEmpresa = empre.idEmpresa;
                           parametrosGlobales.RazonSocial = empre.empresa;
                           parametrosGlobales.RUC = empre.numeroIdentidad;
+                          parametrosGlobales.Direccion = empre.direccion;
 
                           parametrosGlobales.idSucursal = empre.sucursales[0].idSucursal;
                           parametrosGlobales.sucursal = empre.sucursales[0].sucursal;

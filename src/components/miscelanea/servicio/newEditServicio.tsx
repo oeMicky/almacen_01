@@ -67,7 +67,8 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
     // ctx_docs_venta.mostrarAddNewEditServicio = false;
     ctx_buscar_servicio.grabo_Servicio = true;
 
-    ctx.mostrarPanelNewEditServicio = false;
+    // ctx.mostrarPanelNewEditServicio = false;
+    ctx_buscar_servicio.mostrarPanelNewEditServicio = false;
   });
 
   return (

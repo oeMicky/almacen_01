@@ -151,7 +151,7 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encotraron registros</i>
+                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

@@ -135,7 +135,7 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                           <td data-label="Marca">{vehiculoMarca ? vehiculoMarca : '_'}</td>
                           <td data-label="Modelo">{vehiculoModelo ? vehiculoModelo : '_'}</td>
                           <td data-label="VIN">{vin ? vin : '_'}</td>
-                          <td data-label="Acciones">
+                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
                             <ImgButton
                               src={images.check}
                               alt="icono de adicionar"

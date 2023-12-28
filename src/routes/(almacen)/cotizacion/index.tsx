@@ -183,7 +183,7 @@ export default component$(() => {
             />
           </div>
         </div>
-
+        {/* <button onClick$={() => console.log('parametros', parametrosGlobales)}>ver param</button> */}
         {/*  BOTONES */}
         <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
           <ElButton

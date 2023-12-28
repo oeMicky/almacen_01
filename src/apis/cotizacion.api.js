@@ -26,15 +26,28 @@ export const getSeriesActivasCotizaciones = async (parametros) => {
   return res.json();
 };
 
-// export const getIgvsCompra = async (parametros) => {
-//   console.log('//////api////////////******************obtener a getIgvsCompra');
-//   console.log('parametros getIgvsCompra', parametros);
-//   const res = await fetch(API + '/obtenerIgvsCompra', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(parametros),
-//   });
-//   return res.json();
-// };
+export const deServicioCotizacion = async (parametros) => {
+  console.log('//////api////////////******************obtener a deServicioCotizacion');
+  console.log('parametros deServicioCotizacion', parametros);
+  const res = await fetch(API + '/deServicioCotizacion', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
+export const deRepuestosLubriCotizacion = async (parametros) => {
+  console.log('//////api////////////******************obtener a deRepuestosLubriCotizacion');
+  console.log('parametros deRepuestosLubriCotizacion', parametros);
+  const res = await fetch(API + '/deRepuestosLubriCotizacion', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

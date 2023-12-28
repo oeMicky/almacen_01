@@ -59,7 +59,7 @@ export default component$(() => {
                 <td data-label="Sucursal">{sucur.sucursal}</td>
                 <td data-label="Acciones" style={{ textAlign: 'center' }}>
                   <ImgButton
-                    src={images.check}
+                    src={images.check32}
                     alt="icono de selección"
                     height={12}
                     width={12}
@@ -101,6 +101,7 @@ export default component$(() => {
                       parametrosGlobales.idEmpresa = ctx_listado_empresas.eE.idEmpresa;
                       parametrosGlobales.RazonSocial = ctx_listado_empresas.eE.empresa;
                       parametrosGlobales.RUC = ctx_listado_empresas.eE.numeroIdentidad;
+                      parametrosGlobales.Direccion = ctx_listado_empresas.eE.direccion;
 
                       parametrosGlobales.idSucursal = sucur.idSucursal;
                       parametrosGlobales.sucursal = sucur.sucursal;

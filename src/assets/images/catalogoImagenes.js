@@ -24,6 +24,7 @@ import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
 import add from '../images/add.svg';
 import basedatos from '../images/basedatos.svg';
 import check from '../images/check.svg';
+import check32 from '../images/check32.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
 import equal from '../images/equal.svg';
@@ -73,6 +74,7 @@ export default {
   add,
   basedatos,
   check,
+  check32,
   download,
   edit,
   equal,

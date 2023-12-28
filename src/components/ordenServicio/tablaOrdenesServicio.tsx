@@ -5,7 +5,7 @@ import style from '../tabla/tabla.css?inline';
 import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 import pdfOsMG from '~/reports/MG/pdfOsMG';
 
@@ -84,6 +84,8 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                       {/* <th>Ítem</th> */}
                       <th>OS</th>
                       <th>Fecha</th>
+                      <th>Cliente</th>
+                      <th>Placa</th>
                       <th>Estado</th>
                       <th>Tipo</th>
                       <th>Acciones</th>
@@ -91,13 +93,15 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                   </thead>
                   <tbody>
                     {misOrdenesServicio.map((ordServiLocali) => {
-                      const { _id, fechaInicio, correlativo, estado, tipo } = ordServiLocali;
+                      const { _id, fechaInicio, razonSocialNombreCliente, serie, numero, placa, estado, tipo } = ordServiLocali;
                       // const indexItem = index + 1; , index
                       return (
                         <tr key={_id}>
                           {/* <td data-label="Ítem">{indexItem}</td> */}
-                          <td data-label="OS">{correlativo ? correlativo : '_'}</td>
+                          <td data-label="OS">{serie + ' - ' + cerosALaIzquierda(numero, 8)}</td>
                           <td data-label="Fecha">{fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}</td>
+                          <td data-label="Cliente">{razonSocialNombreCliente}</td>
+                          <td data-label="Placa">{placa}</td>
                           <td data-label="Estado">{estado ? estado : '_'}</td>
                           <td data-label="Tipo">{tipo ? tipo : '_'}</td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}

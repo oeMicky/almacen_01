@@ -218,7 +218,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                           <td data-label="Tipo">{tipoDocumentoIdentidad}</td>
                           <td data-label="Número">{numeroIdentidad}</td>
                           <td data-label="R.Soc/Nomb">{razonSocialNombre}</td>
-                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
                             <ImgButton
                               src={images.check}
                               alt="icono de selección"
@@ -280,7 +280,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encotraron registros</i>
+                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

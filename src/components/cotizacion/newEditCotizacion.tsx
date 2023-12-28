@@ -22,7 +22,13 @@ import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT
 import BuscarVehiculo from '../miscelanea/vehiculo/buscarVehiculo';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import BuscarServicio from '../miscelanea/servicio/buscarServicio';
-import { getSeriesActivasCotizaciones, inUpCotizacion } from '~/apis/cotizacion.api';
+import {
+  deRepuestosLubriCotizacion,
+  deServicioCotizacion,
+  getSeriesActivasCotizaciones,
+  inUpCotizacion,
+} from '~/apis/cotizacion.api';
+import BorrarServicio from './borrarServicio';
 
 export const CTX_COTIZACION = createContextId<ICotizacion>('cotizacion');
 
@@ -45,6 +51,16 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     mostrarPanelBuscarVehiculo: false,
     mostrarPanelBuscarServicio: false,
     mostrarPanelBuscarMercaderiaOUT: false,
+
+    mostrarPanelDeleteItemServicio: false,
+    borrarServicio: [],
+    borrarIdServicio: '',
+    borrarIdAuxiliarServicio: 0,
+
+    mostrarPanelDeleteItemRepuestoLubri: false,
+    borrarRepuestoLubri: [],
+    borrarIdRepuestoLubri: '',
+    borrarIdAuxiliarRepuestoLubri: 0,
   });
   useContextProvider(CTX_NEW_EDIT_COTIZACION, definicion_CTX_NEW_EDIT_COTIZACION);
   //#endregion DEFINICION CTX_NEW_EDIT_COTIZACION
@@ -162,38 +178,73 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
   });
   //#endregion INICIALIZACION
 
-  //#region CAMBIO DE SERIE
-  // useTask$(async ({ track }) => {
-  //   track(() => serieCotizacion.value);
-  //   // const tre: HTMLSelectElement = document.getElementById('selectSerieVenta');
-  //   // const elID = tre.current[2].value;
-  //   if (ini.value > 0) {
-  //     if (serieCotizacion.value === '') {
-  //       // if (serieDocumento.value === '--Seleccione una opción--') {
-  //       console.log('--Seleccione una opción--');
-  //       // setIdTipoDocumento('');
-  //       definicion_CTX_COTIZACION.idSerieCotizacion = '';
-  //       definicion_CTX_COTIZACION.serie = '';
-  //       definicion_CTX_COTIZACION.numero = 0;
-  //       console.log(
-  //         'cotizacion: ',
-  //         definicion_CTX_COTIZACION.idSerieCotizacion,
-  //         definicion_CTX_COTIZACION.serie,
-  //         definicion_CTX_COTIZACION.numero
-  //       );
-  //     } else {
-  //       definicion_CTX_COTIZACION.idSerieCotizacion = idSerieCotizacion.value;
-  //       definicion_CTX_COTIZACION.serie = serieCotizacion.value;
+  //#region BORRAR SERVICIO
+  useTask$(async ({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarServicio);
 
-  //       console.log('cotizacion:', definicion_CTX_COTIZACION.idSerieCotizacion, definicion_CTX_COTIZACION.serie, dataSerie.value);
-  //       // const corr = dataSerie.value.filter((ser: any) => ser._id === idSerieCotizacion.value);
-  //       // const elCorre: { _id: string; codigo: string; serie: string; correlativo: number } = corr[0];
-  //       // console.log('corr.correlativo', elCorre.correlativo);
-  //       // definicion_CTX_COTIZACION.numero = elCorre.correlativo + 1;
-  //     }
-  //   }
-  // });
-  //#endregion CAMBIO DE SERIE
+    if (definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarServicio > 0) {
+      //borrar en la BD
+      if (
+        definicion_CTX_COTIZACION._id !== '' &&
+        typeof definicion_CTX_NEW_EDIT_COTIZACION.borrarIdServicio !== 'undefined' &&
+        definicion_CTX_NEW_EDIT_COTIZACION.borrarIdServicio !== ''
+      ) {
+        // console.log(
+        //   'desvincular SERIE COTIZACION -  en la BD...',
+        //   definicion_CTX_NEW_EDIT_SUCURSALES_ADJUNTAS.desvincular_IdSucursal
+        // );
+        await deServicioCotizacion({
+          idCotizacion: definicion_CTX_COTIZACION._id,
+          idServicio: definicion_CTX_NEW_EDIT_COTIZACION.borrarIdServicio,
+        });
+      }
+      //borrar en la App
+      const newItems: any = definicion_CTX_COTIZACION.servicios.filter(
+        (KKK: any) => KKK.idAuxiliar !== definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarServicio
+      );
+      console.log('newItems', newItems);
+      definicion_CTX_COTIZACION.servicios = newItems;
+
+      definicion_CTX_NEW_EDIT_COTIZACION.borrarIdServicio = '';
+      definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarServicio = 0;
+      definicion_CTX_NEW_EDIT_COTIZACION.borrarServicio = [];
+    }
+  });
+  //#endregion BORRAR SERVICIO
+
+  //#region BORRAR REPUESTO LUBRICANTE
+  useTask$(async ({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarRepuestoLubri);
+
+    if (definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarRepuestoLubri > 0) {
+      //borrar en la BD
+      if (
+        definicion_CTX_COTIZACION._id !== '' &&
+        typeof definicion_CTX_NEW_EDIT_COTIZACION.borrarIdRepuestoLubri !== 'undefined' &&
+        definicion_CTX_NEW_EDIT_COTIZACION.borrarIdRepuestoLubri !== ''
+      ) {
+        // console.log(
+        //   'desvincular SERIE COTIZACION -  en la BD...',
+        //   definicion_CTX_NEW_EDIT_SUCURSALES_ADJUNTAS.desvincular_IdSucursal
+        // );
+        await deRepuestosLubriCotizacion({
+          idCotizacion: definicion_CTX_COTIZACION._id,
+          idServicio: definicion_CTX_NEW_EDIT_COTIZACION.borrarIdRepuestoLubri,
+        });
+      }
+      //borrar en la App
+      const newItems: any = definicion_CTX_COTIZACION.servicios.filter(
+        (KKK: any) => KKK.idAuxiliar !== definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarRepuestoLubri
+      );
+      console.log('newItems', newItems);
+      definicion_CTX_COTIZACION.servicios = newItems;
+
+      definicion_CTX_NEW_EDIT_COTIZACION.borrarIdServicio = '';
+      definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarRepuestoLubri = 0;
+      definicion_CTX_NEW_EDIT_COTIZACION.borrarRepuestoLubri = [];
+    }
+  });
+  //#endregion BORRAR REPUESTO LUBRICANTE
 
   //#region CLIENTE
   useTask$(({ track }) => {
@@ -305,6 +356,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
       montoSubTotalPEN: definicion_CTX_COTIZACION.montoSubTotalPEN,
       montoIGVPEN: definicion_CTX_COTIZACION.montoIGVPEN,
       montoTotalPEN: definicion_CTX_COTIZACION.montoTotalPEN,
+
+      usuario: parametrosGlobales.usuario,
     });
 
     console.log('la coti', coti);
@@ -394,18 +447,27 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                     style={{ width: '100%' }}
                     type="text"
                     disabled
-                    value={definicion_CTX_COTIZACION.serie + ' - ' + cerosALaIzquierda(definicion_CTX_COTIZACION.numero, 8)}
+                    value={
+                      definicion_CTX_COTIZACION._id === ''
+                        ? definicion_CTX_COTIZACION.serie
+                        : definicion_CTX_COTIZACION.serie + ' - ' + cerosALaIzquierda(definicion_CTX_COTIZACION.numero, 8)
+                    }
                   />
                 ) : (
                   <select
                     id="selectSerieCotizacion"
                     onChange$={(e) => {
                       const idx = (e.target as HTMLSelectElement).selectedIndex;
-                      const rere = e.target as HTMLSelectElement;
-                      const elOption = rere[idx];
+                      const elSelect = e.target as HTMLSelectElement;
+                      const elOption = elSelect[idx];
                       console.log('elOption', elOption.id);
                       definicion_CTX_COTIZACION.idSerieCotizacion = elOption.id;
                       definicion_CTX_COTIZACION.serie = (e.target as HTMLSelectElement).value;
+                      // const elementoSerie: any = dataSerie.value.filter(
+                      //   (cor: any) => cor.idSerieCotizacion === definicion_CTX_COTIZACION.idSerieCotizacion
+                      // );
+                      // // console.log('first', elementoSerie[0].correlativo);
+                      // definicion_CTX_COTIZACION.numero = elementoSerie[0].correlativo;
                       document.getElementById('in_Fecha')?.focus();
                     }}
                   >
@@ -425,7 +487,6 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 )}
               </div>
             </div>
-
             {/* fecha */}
             <div class="form-control form-control-check">
               <label>Fecha</label>
@@ -743,8 +804,18 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                         <td data-label="Venta" style={{ textAlign: 'end' }}>
                           {iTCotiServi.ventaPEN.$numberDecimal ? iTCotiServi.ventaPEN.$numberDecimal : iTCotiServi.ventaPEN}
                         </td>
-                        <td data-label="Acciones" style={{ textAlign: 'right' }}>
-                          <ImgButton src={images.trash} alt="icono de eliminar" height={12} width={12} title="Eliminar ítem" />
+                        <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                          <ImgButton
+                            src={images.trash}
+                            alt="icono de eliminar"
+                            height={12}
+                            width={12}
+                            title="Eliminar ítem"
+                            onClick={$(() => {
+                              definicion_CTX_NEW_EDIT_COTIZACION.borrarServicio = iTCotiServi;
+                              definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelDeleteItemServicio = true;
+                            })}
+                          />
                         </td>
                       </tr>
                     );
@@ -791,6 +862,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               </table>
             ) : (
               <i style={{ fontSize: '0.7rem' }}>No existen servicios</i>
+            )}
+            {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelDeleteItemServicio && (
+              <div class="modal">
+                <BorrarServicio />
+              </div>
             )}
           </div>
           {/* ----------------------------------------------------- */}
@@ -940,7 +1016,17 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                           {iTRepuLubri.ventaPEN.$numberDecimal ? iTRepuLubri.ventaPEN.$numberDecimal : iTRepuLubri.ventaPEN}
                         </td>
                         <td data-label="Acciones" style={{ textAlign: 'right' }}>
-                          <ImgButton src={images.trash} alt="icono de eliminar" height={12} width={12} title="Eliminar ítem" />
+                          <ImgButton
+                            src={images.trash}
+                            alt="icono de eliminar"
+                            height={12}
+                            width={12}
+                            title="Eliminar ítem"
+                            onClick={$(() => {
+                              definicion_CTX_NEW_EDIT_COTIZACION.borrarRepuestoLubri = iTRepuLubri;
+                              definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelDeleteItemRepuestoLubri = true;
+                            })}
+                          />
                         </td>
                       </tr>
                     );
