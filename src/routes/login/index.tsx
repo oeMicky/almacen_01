@@ -1,7 +1,7 @@
 // import * as dotenv from 'dotenv';
 
 import { $, component$, useStore, useStylesScoped$ } from '@builder.io/qwik';
-import { Link, useNavigate } from '@builder.io/qwik-city'; //action$, Form,
+import { useNavigate } from '@builder.io/qwik-city'; //action$, Form,
 import { getUsuario } from '~/apis/usuario.api';
 
 import styles from './login.css?inline';

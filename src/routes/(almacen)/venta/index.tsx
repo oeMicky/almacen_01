@@ -12,7 +12,7 @@ import {
 import ImgButton from '../../../components/system/imgButton';
 import Button from '~/components/system/elButton';
 import { images } from '~/assets';
-import { hoy, primeroDelMes } from '~/functions/comunes';
+import { hoy } from '~/functions/comunes';
 import TablaVentas from '~/components/venta/tablaVentas';
 // import Modal from '~/components/system/elModal';
 import AddVenta from '~/components/venta/addVenta';
@@ -20,7 +20,7 @@ import { getIgvVenta } from '~/apis/venta.api';
 import style from './index.css?inline';
 import { parametrosGlobales } from '../../login/index';
 import ElSelect from '~/components/system/elSelect';
-import { getPeriodos } from '~/apis/grupoEmpresarial.api';
+// import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 
 // import { CTX_DOCS_ORDEN_SERVICIO } from '../ordenServicio';
 // import Venta from '~/components/venta/venta';

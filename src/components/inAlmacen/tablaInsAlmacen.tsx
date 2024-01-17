@@ -1,4 +1,4 @@
-import { $, Resource, component$, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { Resource, component$, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../tabla/tabla.css?inline';
 // import { CTX_INDEX_IN_ALMACEN } from '~/routes/(almacen)/inAlmacen';
 // import ImgButton from '../system/imgButton';

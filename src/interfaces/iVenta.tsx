@@ -41,7 +41,11 @@ export interface IVenta {
   importeTotalCuotasCredito: number;
 
   cotizacion: number;
-  ordenServicio: number;
+
+  // ordenServicio: number;
+  idOrdenServicio: string;
+  serieOrdenServicio: string;
+  numeroOrdenServicio: number;
 
   itemsVenta: any;
 

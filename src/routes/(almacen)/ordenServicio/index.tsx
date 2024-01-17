@@ -1,5 +1,5 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { getPeriodos } from '~/apis/grupoEmpresarial.api';
+// import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 import { getIgvVenta } from '~/apis/venta.api';
 import { images } from '~/assets';
 // import { CTX_APP_ALMACEN } from '~/components/header/headerAlmacen';

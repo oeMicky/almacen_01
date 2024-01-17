@@ -117,7 +117,11 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       importeTotalCuotasCredito: 0,
 
       cotizacion: 0,
-      ordenServicio: 0,
+
+      // ordenServicio: 0,
+      idOrdenServicio: '',
+      serieOrdenServicio: '',
+      numeroOrdenServicio: 0,
 
       itemsVenta: [],
 
@@ -526,7 +530,10 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       importeTotalCuotasCredito: definicion_CTX_F_B_NC_ND.importeTotalCuotasCredito,
 
       cotizacion: definicion_CTX_F_B_NC_ND.cotizacion,
-      ordenServicio: definicion_CTX_F_B_NC_ND.ordenServicio,
+      // ordenServicio: definicion_CTX_F_B_NC_ND.ordenServicio,
+      idOrdenServicio: definicion_CTX_F_B_NC_ND.idOrdenServicio,
+      serieOrdenServicio: definicion_CTX_F_B_NC_ND.serieOrdenServicio,
+      numeroOrdenServicio: definicion_CTX_F_B_NC_ND.numeroOrdenServicio,
 
       itemsVenta: definicion_CTX_F_B_NC_ND.itemsVenta,
 
@@ -580,7 +587,10 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       definicion_CTX_F_B_NC_ND.importeTotalCuotasCredito = 0;
 
       definicion_CTX_F_B_NC_ND.cotizacion = 0;
-      definicion_CTX_F_B_NC_ND.ordenServicio = 0;
+      // definicion_CTX_F_B_NC_ND.ordenServicio = 0;
+      definicion_CTX_F_B_NC_ND.idOrdenServicio = '';
+      definicion_CTX_F_B_NC_ND.serieOrdenServicio = '';
+      definicion_CTX_F_B_NC_ND.numeroOrdenServicio = 0;
 
       definicion_CTX_F_B_NC_ND.itemsVenta = [];
 

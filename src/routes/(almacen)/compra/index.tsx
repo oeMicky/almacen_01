@@ -1,13 +1,13 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { getIgvsCompra } from '~/apis/compra.api';
-import { getPeriodos } from '~/apis/grupoEmpresarial.api';
+// import { getIgvsCompra } from '~/apis/compra.api';
+// import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 import { images } from '~/assets';
 import NewEditCompra from '~/components/compra/newEditCompra';
 import TablaCompras from '~/components/compra/tablaCompras';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
-import { hoy, primeroDelMes, ultimoDelMes } from '~/functions/comunes';
+import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_INDEX_COMPRA = createContextId<any>('index_compra');

@@ -8,7 +8,7 @@ import ElButton from '~/components/system/elButton';
 import NewEditCotizacion from '~/components/cotizacion/newEditCotizacion';
 import { getIgvVenta } from '~/apis/venta.api';
 import ElSelect from '~/components/system/elSelect';
-import { getPeriodos } from '~/apis/grupoEmpresarial.api';
+// import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 // import TablaCotizaciones from '~/components/venta/tablaCotizaciones';
 
 // export interface ICotizacion {

@@ -1,5 +1,5 @@
-import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { getPeriodos } from '~/apis/grupoEmpresarial.api';
+import { component$, createContextId, useContextProvider, useStore } from '@builder.io/qwik';
+// import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 import { images } from '~/assets';
 import ElButton from '~/components/system/elButton';
 // import ElSelect from '~/components/system/elSelect';
@@ -18,7 +18,7 @@ export default component$(() => {
   //#endregion CTX_PRUEBA
 
   //#region INICIALIZACION
-  const ini = useSignal(0);
+  // const ini = useSignal(0);
 
   // const cargarPeriodos = $(async (parametros: any) => {
   //   const losPeri = await getPeriodos(parametros);

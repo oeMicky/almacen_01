@@ -1,6 +1,6 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { getIgvsCompra } from '~/apis/compra.api';
-import { getPeriodos } from '~/apis/grupoEmpresarial.api';
+// import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 // import { getIgvVenta } from '~/apis/venta.api';
 import { images } from '~/assets';
 import NewInAlmacen from '~/components/inAlmacen/newInAlmacen';

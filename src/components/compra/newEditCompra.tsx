@@ -7,8 +7,8 @@ import { ICompra } from '~/interfaces/iCompra';
 import { loadTiposComprobantePago } from '~/apis/sunat.api';
 import { IPersona } from '~/interfaces/iPersona';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
-import { getTipoCambio } from '~/apis/apisExternas.api';
-import { formatearMonedaPEN, ultimoDiaDelPeriodoX } from '~/functions/comunes';
+// import { getTipoCambio } from '~/apis/apisExternas.api';
+import { ultimoDiaDelPeriodoX } from '~/functions/comunes';
 import { getIgvsCompra, inUpCompra } from '~/apis/compra.api';
 import { parametrosGlobales } from '~/routes/login';
 
