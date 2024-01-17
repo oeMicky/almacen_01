@@ -95,12 +95,12 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(compra.fecha)}
                             </td>
-                            <td data-label="Mon" class="comoCadena">
-                              {compra.moneda}
+                            <td data-label="Mon" class="acciones" style={'moneda' in compra ? {} : { background: '#8A2BE2' }}>
+                              {'moneda' in compra ? compra.moneda : '_'}
                             </td>
                             <td data-label="Importe" class="comoNumero">
                               {/* {compra.totalPEN.$numberDecimal} */}
-                              {/* {typeof compra.totalPEN !== 'undefined'
+                              {/* {typeof compra.totalPEN !== 'undefined'  style={compra.moneda === '' ? { background: 'red' } : ''}
                                 ? compra.moneda === 'PEN'
                                   ? compra.totalPEN.$numberDecimal
                                   : compra.totalUSD.$numberDecimal
@@ -117,7 +117,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                       currency: 'PEN',
                                       minimumFractionDigits: 2,
                                     })
-                                : ''}
+                                : '_'}
                             </td>
                             <td data-label="Acciones" class="acciones">
                               <ImgButton

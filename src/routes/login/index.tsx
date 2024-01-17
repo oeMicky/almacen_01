@@ -10,8 +10,9 @@ import { getActivoGEEMP, getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEm
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
+  paginaInicioDelSistema: '/compra',
   // paginaInicioDelSistema: '/venta',
-  paginaInicioDelSistema: '/inAlmacen',
+  // paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',
