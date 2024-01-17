@@ -103,7 +103,7 @@ export default component$(
                             </td>
                             <td data-label="Uni">{unidad}</td>
                             {props.esAlmacen ? (
-                              <td data-label="Promd.Costo PEN">
+                              <td data-label="Promd.Costo PEN" style={{ textAlign: 'end' }}>
                                 {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
                                   ? promedioCostoUnitarioMovil.$numberDecimal
                                     ? promedioCostoUnitarioMovil.$numberDecimal
@@ -111,7 +111,7 @@ export default component$(
                                   : '_'}
                               </td>
                             ) : (
-                              <td data-label="Precio PEN">
+                              <td data-label="Precio PEN" style={{ textAlign: 'end' }}>
                                 {typeof precioPEN !== 'undefined' && precioPEN !== null
                                   ? precioPEN.$numberDecimal
                                     ? precioPEN.$numberDecimal

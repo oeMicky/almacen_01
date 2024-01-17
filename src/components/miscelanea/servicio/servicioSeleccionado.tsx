@@ -41,10 +41,12 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
   const ctx_buscar_servicio = useContext(CTX_BUSCAR_SERVICIO);
   //#endregion CONTEXTOS
 
+  //#region INICIALIZACION
   const cantidad = useSignal(1);
   const precio = useSignal(props.serviSelecci.precioPEN.$numberDecimal);
+  // console.log('props.serviSelecci props.serviSelecci props.serviSelecci', props.serviSelecci);
+  //#endregion INICIALIZACION
 
-  console.log('props.serviSelecci props.serviSelecci props.serviSelecci', props.serviSelecci);
   return (
     <div
       style={{
@@ -129,7 +131,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
             // documento.itemsVenta.push({
             documento.push({
               idAuxiliar: parseInt(elIdAuxiliar()),
-              idKardex: '',
+              idKardex: null,
               item: 0,
               codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '_',
               descripcionEquivalencia: props.serviSelecci.descripcion, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',

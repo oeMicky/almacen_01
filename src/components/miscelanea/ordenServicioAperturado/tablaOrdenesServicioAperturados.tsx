@@ -1,11 +1,12 @@
 import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
 import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
 import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import { CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO } from './buscarOrdenServicioAperturado';
+import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 
 export default component$(
   (props: { contexto: string; buscarOrdenesServicio: number; parametrosBusqueda: any; modoSeleccion: boolean }) => {
@@ -17,9 +18,9 @@ export default component$(
       case 'egreso_de_almacen':
         ctx = useContext(CTX_NEW_OUT_ALMACEN);
         break;
-      // case 'new_venta':
-      //   ctx = useContext(CTX_ADD_VENTA);
-      //   break;
+      case 'ingreso_a_almacen':
+        ctx = useContext(CTX_NEW_IN_ALMACEN);
+        break;
     }
 
     const ctx_buscar_orden_servicio_aperturado = useContext(CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO);
@@ -83,12 +84,20 @@ export default component$(
                         return (
                           <tr key={_id}>
                             {/* <td data-label="Ítem">{indexItem}</td> */}
-                            <td data-label="OS">{serie + ' - ' + numero}</td>
-                            <td data-label="Fecha">{fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}</td>
-                            <td data-label="Estado">{razonSocialNombreCliente ? razonSocialNombreCliente : '_'}</td>
-                            <td data-label="Tipo">{tipo ? tipo : '_'}</td>
+                            <td data-label="OS" class="comoCadena">
+                              {serie + ' - ' + cerosALaIzquierda(numero, 8)}
+                            </td>
+                            <td data-label="Fecha" class="comoCadena">
+                              {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}
+                            </td>
+                            <td data-label="Estado" class="comoCadena">
+                              {razonSocialNombreCliente ? razonSocialNombreCliente : '_'}
+                            </td>
+                            <td data-label="Tipo" class="comoCadena">
+                              {tipo ? tipo : '_'}
+                            </td>
                             {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                            <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                            <td data-label="Acciones" class="acciones">
                               <ImgButton
                                 src={images.check}
                                 alt="icono de adicionar"
@@ -96,12 +105,24 @@ export default component$(
                                 width={14}
                                 title="Seleccionar servicio"
                                 onClick={$(() => {
+                                  console.log('first', requisiciones);
                                   if (requisiciones.length === 0) {
-                                    alert(`La orden de servicio # ${serie + ' - ' + numero} no presenta requisiciones.`);
+                                    alert(
+                                      `La orden de servicio # ${
+                                        serie + ' - ' + cerosALaIzquierda(numero, 8)
+                                      } no presenta requisiciones.`
+                                    );
                                     return;
                                   }
+                                  console.log('second');
                                   ctx_buscar_orden_servicio_aperturado.oO = ordServiLocali;
-                                  ctx.mostrarPanelDespachoRequisiciones = true;
+                                  if (props.contexto === 'egreso_de_almacen') {
+                                    ctx.mostrarPanelDespachoRequisiciones = true;
+                                  }
+                                  if (props.contexto === 'ingreso_a_almacen') {
+                                    ctx.mostrarPanelReingresoRequisiciones = true;
+                                  }
+
                                   // alert(`La orden de servicio # ...paso`);
                                   // ctx_servicio_seleccionado._id = _id;
                                   // ctx_servicio_seleccionado.codigo = codigo;

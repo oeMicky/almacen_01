@@ -2,6 +2,7 @@ export interface IOrdenServicio {
   _id: string;
   idGrupoEmpresarial: string;
   idEmpresa: string;
+  idSucursal: string;
   idPeriodo: string;
   periodo: number;
 

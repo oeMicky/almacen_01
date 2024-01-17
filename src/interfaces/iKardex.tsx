@@ -10,7 +10,7 @@ export interface IMovimientoKARDEX {
   fechaHoraMovimiento: string;
 
   cantidadIngresada: any;
-  cantidadSalida: any;
+  cantidadSacada: any;
   cantidadSaldo: any;
   costoUnitario: any;
   costoUnitarioMovil: any;

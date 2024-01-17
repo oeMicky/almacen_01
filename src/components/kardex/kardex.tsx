@@ -1,4 +1,4 @@
-import { $, Resource, component$, useContext, useResource$, useSignal } from '@builder.io/qwik';
+import { $, Resource, component$, useContext, useResource$, useSignal, useStyles$ } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_KARDEXS } from './kardexs';
@@ -6,8 +6,10 @@ import { parametrosGlobales } from '~/routes/login';
 import { IMovimientoKARDEX } from '~/interfaces/iKardex';
 import { formatear_4Decimales, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
+import styles from '../tabla/tabla.css?inline';
 
 export default component$((props: { mercaSelecci: any; kardex: any; contexto: string }) => {
+  useStyles$(styles);
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
@@ -55,7 +57,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
   return (
     <div
       style={{
-        width: 'clamp(min(10vw, 20rem),800px, max(90vw, 55rem))',
+        width: 'clamp(min(10vw, 20rem),900px, max(90vw, 55rem))',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -133,7 +135,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                           <th>Costo Entrada PEN</th>
                           <th>Costo Salida PEN</th>
                           <th>Costo Saldo PEN</th>
-                          <th>Acciones</th>
+                          {/* <th>Acciones</th> */}
                         </tr>
                       </thead>
                       <tbody>
@@ -145,8 +147,9 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                             IS,
                             FISMA,
                             // fechaHoraMovimiento,
+
                             cantidadIngresada,
-                            cantidadSalida,
+                            cantidadSacada,
                             cantidadSaldo,
                             costoUnitario,
                             costoUnitarioMovil,
@@ -159,11 +162,13 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
 
                           return (
                             <tr key={_id} style={IS ? { color: 'blue' } : { color: 'red' }}>
-                              <td data-label="FISMA">{formatoDDMMYYYY_PEN(FISMA)}</td>
+                              <td data-label="FISMA" class="comoCadena">
+                                {formatoDDMMYYYY_PEN(FISMA)}
+                              </td>
                               <td
                                 data-label="Cnt.Entrada"
                                 title={IS ? (cantidadOrigen ? cantidadOrigen.$numberDecimal + ' ' + unidadEquivalencia : '') : ''}
-                                style={{ textAlign: 'right' }}
+                                class="comoNumero"
                               >
                                 {cantidadIngresada.$numberDecimal
                                   ? formatear_4Decimales(cantidadIngresada.$numberDecimal)
@@ -172,68 +177,68 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                               <td
                                 data-label="Cnt.Salida"
                                 title={IS ? '' : cantidadOrigen ? cantidadOrigen.$numberDecimal + ' ' + unidadEquivalencia : ''}
-                                style={{ textAlign: 'right' }}
+                                class="comoNumero"
                               >
-                                {cantidadSalida.$numberDecimal
-                                  ? formatear_4Decimales(cantidadSalida.$numberDecimal)
-                                  : formatear_4Decimales(cantidadSalida)}
+                                {cantidadSacada.$numberDecimal
+                                  ? formatear_4Decimales(cantidadSacada.$numberDecimal)
+                                  : formatear_4Decimales(cantidadSacada)}
                               </td>
                               <td data-label="Cnt.Saldo" style={{ textAlign: 'right' }}>
                                 {cantidadSaldo.$numberDecimal
                                   ? formatear_4Decimales(cantidadSaldo.$numberDecimal)
                                   : formatear_4Decimales(cantidadSaldo)}
                               </td>
-                              <td data-label="Uni" style={{ textAlign: 'center' }}>
+                              <td data-label="Uni" class="acciones">
                                 {props.mercaSelecci.unidad}
                               </td>
-                              <td data-label="Cts.Unita." style={{ textAlign: 'right' }}>
+                              <td data-label="Cts.Unita." class="comoNumero">
                                 {costoUnitario.$numberDecimal ? costoUnitario.$numberDecimal : costoUnitario}
                               </td>
-                              <td data-label="Cts.Unita.Movil" style={{ textAlign: 'right' }}>
+                              <td data-label="Cts.Unita.Movil" class="comoNumero">
                                 {costoUnitarioMovil.$numberDecimal ? costoUnitarioMovil.$numberDecimal : costoUnitarioMovil}
                               </td>
-                              <td data-label="Costo Entrada" style={{ textAlign: 'right' }}>
+                              <td data-label="Costo Entrada" class="comoNumero">
                                 {costoIngreso.$numberDecimal
                                   ? formatear_6Decimales(costoIngreso.$numberDecimal)
                                   : formatear_6Decimales(costoIngreso)}
                               </td>
-                              <td data-label="Costo Salida" style={{ textAlign: 'right' }}>
+                              <td data-label="Costo Salida" class="comoNumero">
                                 {costoSalida.$numberDecimal
                                   ? formatear_6Decimales(costoSalida.$numberDecimal)
                                   : formatear_6Decimales(costoSalida)}
                               </td>
-                              <td data-label="Costo Saldo" style={{ textAlign: 'right' }}>
+                              <td data-label="Costo Saldo" class="comoNumero">
                                 {costoSaldo.$numberDecimal
                                   ? formatear_6Decimales(costoSaldo.$numberDecimal)
                                   : formatear_6Decimales(costoSaldo)}
                               </td>
 
-                              <td data-label="Acciones" style={{ textAlign: 'right' }}>
-                                {/* <ImgButton
+                              {/* <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                                <ImgButton
                                   src={images.check}
                                   alt="icono de adicionar"
                                   height={12}
                                   width={12}
                                   title="Seleccionar mercadería"
-                                  onClick={$(() => {
-                                    console.log('mercaINLocali', mercaINLocali);
-                                    if (mercaINLocali.KARDEXS.length === 0) {
-                                      ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                      ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                      console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
-                                    }
-                                    if (mercaINLocali.KARDEXS.length === 1) {
-                                      ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                      ctx_buscar_mercaderia_in.kK = mercaINLocali.KARDEXS[0];
-                                      ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                      console.log('la mercaSeleccionada IN DIRECTA', ctx_buscar_mercaderia_in.mM);
-                                    }
-                                    if (mercaINLocali.KARDEXS.length > 1) {
-                                      ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                      ctx_buscar_mercaderia_in.mostrarPanelKardexsIN = true;
-                                      console.log('la mercaSeleccionada IN INDIRECTA', ctx_buscar_mercaderia_in.mM);
-                                    }
-                                  })}
+                                  // onClick={$(() => {
+                                  //   console.log('mercaINLocali', mercaINLocali);
+                                  //   if (mercaINLocali.KARDEXS.length === 0) {
+                                  //     ctx_buscar_mercaderia_in.mM = mercaINLocali;
+                                  //     ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
+                                  //     console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                  //   }
+                                  //   if (mercaINLocali.KARDEXS.length === 1) {
+                                  //     ctx_buscar_mercaderia_in.mM = mercaINLocali;
+                                  //     ctx_buscar_mercaderia_in.kK = mercaINLocali.KARDEXS[0];
+                                  //     ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
+                                  //     console.log('la mercaSeleccionada IN DIRECTA', ctx_buscar_mercaderia_in.mM);
+                                  //   }
+                                  //   if (mercaINLocali.KARDEXS.length > 1) {
+                                  //     ctx_buscar_mercaderia_in.mM = mercaINLocali;
+                                  //     ctx_buscar_mercaderia_in.mostrarPanelKardexsIN = true;
+                                  //     console.log('la mercaSeleccionada IN INDIRECTA', ctx_buscar_mercaderia_in.mM);
+                                  //   }
+                                  // })}
                                 />
                                 <ImgButton
                                   src={images.edit}
@@ -241,13 +246,13 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                                   height={14}
                                   width={14}
                                   title="Editar mercadería"
-                                  onClick={$(() => {
-                                    ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                    ctx_buscar_mercaderia_in.mostrarPanelNewEditMercaderiaIN = true;
-                                    console.log('la merca A Editar IN', ctx_buscar_mercaderia_in.mM);
-                                  })}
-                                /> */}
-                              </td>
+                                  // onClick={$(() => {
+                                  //   ctx_buscar_mercaderia_in.mM = mercaINLocali;
+                                  //   ctx_buscar_mercaderia_in.mostrarPanelNewEditMercaderiaIN = true;
+                                  //   console.log('la merca A Editar IN', ctx_buscar_mercaderia_in.mM);
+                                  // })}
+                                />
+                              </td> */}
                             </tr>
                           );
                         })}

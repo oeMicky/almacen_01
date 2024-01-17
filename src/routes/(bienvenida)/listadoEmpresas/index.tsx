@@ -107,6 +107,7 @@ export default component$(() => {
 
                           sessionStorage.setItem('idSucursal', empre.sucursales[0].idSucursal);
                           sessionStorage.setItem('sucursal', empre.sucursales[0].sucursal);
+                          sessionStorage.setItem('almacenActivo', empre.sucursales[0].almacenActivo);
                           parametrosGlobales.idGrupoEmpresarial = empre.idGrupoEmpresarial;
                           parametrosGlobales.nombreGrupoEmpresarial = empre.grupoEmpresarial;
                           parametrosGlobales.idEmpresa = empre.idEmpresa;
@@ -116,7 +117,21 @@ export default component$(() => {
 
                           parametrosGlobales.idSucursal = empre.sucursales[0].idSucursal;
                           parametrosGlobales.sucursal = empre.sucursales[0].sucursal;
-                          navegarA(parametrosGlobales.paginaInicioDelSistema);
+                          parametrosGlobales.almacenActivo = activo[0].almacenActivo;
+                          //PAGINA DE INICIO
+                          if (parametrosGlobales.almacenActivo) {
+                            navegarA(parametrosGlobales.paginaInicioDelSistema);
+                          } else {
+                            if (
+                              parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+                              parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+                              parametrosGlobales.paginaInicioDelSistema === '/kardex'
+                            ) {
+                              navegarA(parametrosGlobales.paginaInicioDefault);
+                            } else {
+                              navegarA(parametrosGlobales.paginaInicioDelSistema);
+                            }
+                          }
                         } else {
                           //VARIAS SUCURSALES
                           let activo = await getActivoGEEMP({

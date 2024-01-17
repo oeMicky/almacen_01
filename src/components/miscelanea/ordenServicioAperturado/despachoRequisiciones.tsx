@@ -4,7 +4,7 @@ import ImgButton from '~/components/system/imgButton';
 // import { CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO } from './buscarOrdenServicioAperturado';
 // import { IOrdenServicio_DespachoRequisicion } from '~/interfaces/iOrdenServicio';
 import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
-import { elIdAuxiliar } from '~/functions/comunes';
+import { cerosALaIzquierda, elIdAuxiliar } from '~/functions/comunes';
 
 export default component$((props: { contexto: string; osSeleccionada: any }) => {
   //#region OS_SELECCINADA
@@ -123,10 +123,18 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
         {/* CLIENTE */}
         <div style={{ fontSize: '0.8em' }}>
           <div style={{ margin: '5px 0' }}>ID:{` ${props.osSeleccionada._id} `}</div>
-          <div style={{ margin: '5px 0' }}>OS:{` ${props.osSeleccionada.correlativo} `}</div>
-          <div style={{ margin: '5px 0' }}>Cliente:{` ${props.osSeleccionada.razonSocialNombreCliente}`}</div>
-          <div style={{ margin: '5px 0' }}>Placa:{` ${props.osSeleccionada.placa} `}</div>
-          <div style={{ margin: '5px 0' }}>Kilometraje:{` ${props.osSeleccionada.kilometraje}`}</div>
+          <div style={{ margin: '5px 0' }}>
+            OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
+          </div>
+          <div style={{ margin: '5px 0' }}>
+            Cliente:<b>{` ${props.osSeleccionada.razonSocialNombreCliente}`}</b>
+          </div>
+          <div style={{ margin: '5px 0' }}>
+            Placa:<b>{` ${props.osSeleccionada.placa} `}</b>
+          </div>
+          <div style={{ margin: '5px 0' }}>
+            Kilometraje:<b>{` ${props.osSeleccionada.kilometraje}`}</b>
+          </div>
         </div>
         {/* TABLA DE REQUISICIONES */}
         <div class="form-control">
@@ -306,7 +314,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               console.log('canti - adas - por despa', canti, adas, despa);
               if (adas + despa > canti) {
                 alert(
-                  `ATENCIÓN: Se desea despachar mayor cantidad a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( ${adas} ) más lo que se desea despachar ahora ( ${despa} ), y se encuetra en la posición # ${i}`
+                  `ATENCIÓN: Se intenta despachar una cantidad mayor a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( ${adas} ) más lo que se desea despachar ahora ( ${despa} ), y se encuetra en la posición # ${i}`
                 );
                 todoCorrecto = false;
                 break;
@@ -339,8 +347,8 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               descripcionTCP: 'Otros',
               fecha: props.osSeleccionada.fechaInicio,
               idAuxiliar: elIdAuxiliar(),
-              numero: props.osSeleccionada.correlativo,
-              serie: 'OS01',
+              numero: props.osSeleccionada.numero,
+              serie: props.osSeleccionada.serie,
             });
 
             //INSERTAR MERCADERIA
@@ -348,29 +356,40 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             //borra todos los elementos del array
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
+            console.log('🚍🚍🚍🚍🚍numeroMercaderias', numeroMercaderias);
             for (const despachoLocali of misDespachos.value) {
-              const despa = despachoLocali.aDespachar.$numberDecimal
+              const despaEquiva = despachoLocali.aDespachar.$numberDecimal
                 ? despachoLocali.aDespachar.$numberDecimal
                 : despachoLocali.aDespachar;
+              console.log('🚍🚍🚍🚍🚍despaEquiva', despaEquiva);
+              if (despaEquiva > 0) {
+                // let despa = 0;
 
-              if (despa > 0) {
                 documento.itemsMercaderias.push({
                   idAuxiliar: parseInt(elIdAuxiliar()),
                   idMercaderia: despachoLocali.idMercaderia,
                   idEquivalencia: despachoLocali.idEquivalencia,
                   idKardex: despachoLocali.idKardex,
                   item: 0,
+
                   codigo: despachoLocali.codigo ? despachoLocali.codigo : '_',
+                  descripcion: despachoLocali.descripcion,
+                  cantidadSacada: despaEquiva * despachoLocali.laEquivalencia.$numberDecimal,
+                  unidad: despachoLocali.unidad,
+
                   descripcionEquivalencia: despachoLocali.descripcionEquivalencia,
-                  cantidadSacada: despa,
+                  cantidadSacadaEquivalencia: despaEquiva,
                   unidadEquivalencia: despachoLocali.unidadEquivalencia,
-                  // costoPEN: props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
-                  // subTotalPEN:
-                  //   despa * props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
-                  costoUnitarioPEN: 66,
-                  subTotalPEN: despa * 66,
+
+                  costoUnitarioPEN:
+                    despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
+                  subPEN:
+                    despaEquiva * despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
+                  // costoUnitarioPEN: 66,
+                  // subTotalPEN: despa * 66,
                   precioUSD: 0,
                   ventaUSD: 0,
+
                   tipoEquivalencia: despachoLocali.tipoEquivalencia,
                   factor: despachoLocali.factor,
                   laEquivalencia: despachoLocali.laEquivalencia.$numberDecimal,

@@ -388,7 +388,7 @@ function pdfCotizacionMG(cotizacion: any) {
       },
     },
     images: {
-      logo: logit.logoMerma,
+      logo: logit.logoMrBier,
       poweredBy: logit.logoPiePagina,
       // poweredBy: images.logoPiePagina,
 

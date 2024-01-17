@@ -1,5 +1,5 @@
 import { $, component$, Resource, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { images } from '~/assets';
 // import styles from '../../components/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
@@ -120,7 +120,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                   >
                     desde tabla al falso
                   </button> */}
-                  <table class="tabla-venta" style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                  <table class="tabla-venta" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -139,15 +139,25 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                         const indexItem = index + 1;
                         return (
                           <tr key={value._id}>
-                            <td data-label="Item">{indexItem}</td>
-                            <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                            <td data-label="Cliente">{value.razonSocialNombre}</td>
-                            <td data-label="Ser-Nro">{value.serie + '-' + value.numero}</td>
-                            <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
-                            <td data-label="Mon" style={{ textAlign: 'right' }}>
+                            <td data-label="Item" class="comoCadena">
+                              {indexItem}
+                            </td>
+                            <td data-label="Nro. Doc" class="comoCadena">
+                              {value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}
+                            </td>
+                            <td data-label="Cliente" class="comoCadena">
+                              {value.razonSocialNombre}
+                            </td>
+                            <td data-label="Ser-Nro" class="comoCadena">
+                              {value.serie + '-' + cerosALaIzquierda(value.numero, 8)}
+                            </td>
+                            <td data-label="Fecha" class="comoCadena">
+                              {formatoDDMMYYYY_PEN(value.fecha)}
+                            </td>
+                            <td data-label="Mon" class="acciones">
                               {value.moneda}
                             </td>
-                            <td data-label="Importe" style={{ textAlign: 'end' }}>
+                            <td data-label="Importe" class="comoNumero">
                               {value.moneda === 'PEN'
                                 ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
                                     // style: 'currency',
@@ -160,10 +170,10 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                     minimumFractionDigits: 2,
                                   })}
                             </td>
-                            <td data-label="Pago">{value.metodoPago}</td>
-                            <td data-label="Acciones" style={{ textAlign: 'right' }}>
-                              {/* , filter: 'invert(1)'
-                              <ImgButton src={images.edit} alt="icono de editar" height={12} width={12} title="Editar venta" /> */}
+                            <td data-label="Pago" class="comoCadena">
+                              {value.metodoPago}
+                            </td>
+                            <td data-label="Acciones" class="acciones">
                               <ImgButton
                                 src={images.pdf}
                                 alt="icono de pdf"

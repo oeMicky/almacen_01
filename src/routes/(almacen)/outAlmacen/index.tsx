@@ -7,7 +7,7 @@ import TablaOutsAlmacen from '~/components/outAlmacen/tablaOutsAlmacen';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
-import { hoy } from '~/functions/comunes';
+import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_INDEX_OUT_ALMACEN = createContextId<any>('index_out_almacen');
@@ -26,7 +26,7 @@ export default component$(() => {
   const ini = useSignal(0);
   const buscarOUTAlmacen = useSignal(0);
   // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
-  const losPeriodosCargados = useSignal([]);
+  const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
   const igv = useSignal(0);
   const porFechasT_porPeriodoF = useSignal(true);
@@ -35,30 +35,30 @@ export default component$(() => {
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
-    fechaInicio: '2023-01-01', // hoy(),
+    fechaInicio: primeroDelMes(), // '2023-01-01', // hoy(),
     fechaFinal: hoy(),
     periodo: '',
   });
   //#endregion INICIALIZACION
 
   //#region OBTENER PERIODOS
-  const cargarLosPeriodos = $(async () => {
-    const losPeri = await getPeriodos({
-      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-      idEmpresa: parametrosGlobales.idEmpresa,
-      bandera: 'outAlmacen',
-    });
-    console.log('losPeri', losPeri);
-    losPeriodosCargados.value = losPeri.data;
-    console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-    // console.log('a cargar periodos');
-  });
+  // const cargarLosPeriodos = $(async () => {
+  //   const losPeri = await getPeriodos({
+  //     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //     idEmpresa: parametrosGlobales.idEmpresa,
+  //     bandera: 'outAlmacen',
+  //   });
+  //   console.log('losPeri', losPeri);
+  //   losPeriodosCargados.value = losPeri.data;
+  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // console.log('a cargar periodos');
+  // });
 
-  useTask$(({ track }) => {
-    track(() => ini.value);
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
 
-    cargarLosPeriodos();
-  });
+  //   cargarLosPeriodos();
+  // });
   //#endregion OBTENER PERIODOS
 
   //#region ACTUALIZAR TABLA OUT ALMACEN
@@ -74,12 +74,12 @@ export default component$(() => {
 
   return (
     <div class="container">
-      {/*  TITULO {parametrosGlobales.nombreAlmacen} */}
+      {/*  IDENTIFICACION {parametrosGlobales.nombreAlmacen} */}
       {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem' }}>
         {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
       </h1> */}
       <div style={{ background: '#00778F' }}>
-        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -87,23 +87,24 @@ export default component$(() => {
           )}`}
         </label>
       </div>
-      <h3 style={{ marginBottom: '5px' }}>
+      <h4 style={{ margin: '8px 0 0 2px' }}>
         <u>Almacén: </u>
-      </h3>
+      </h4>
       {/* EGRESOS DE MERCADERIAS */}
-      <h4 style={{ marginBottom: '5px' }}>
+      <h4 style={{ margin: '4px 0 4px 0', display: 'flex' }}>
         <img
           src={images.almacenOut}
-          width={'20px'}
-          style={{ marginRight: '4px', left: 0, position: 'absolute' }}
+          width={'21'}
+          height={'21'}
+          style={{ marginRight: '2px ', left: 0 }}
           // onClick={() => console.log('ingreso')}
         ></img>
-        <label style={{ left: '24px', position: 'relative' }}>Egresos de mercaderías</label>
+        <label>Egresos de mercaderías</label>
       </h4>
       {/* DESDE - HASTA   */}
       <div class="intervalo-fechas">
         <label class="fechas">
-          Desde:{' '}
+          Desde:
           <input
             id="in_fechaDesde"
             type="date"
@@ -113,8 +114,8 @@ export default component$(() => {
             }}
           />
         </label>
-        <label class="fechas">
-          Hasta:{' '}
+        <label class="fechas" style={{ marginLeft: '4px' }}>
+          Hasta:
           <input
             id="in_fechaHasta"
             type="date"

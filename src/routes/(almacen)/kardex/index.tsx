@@ -31,7 +31,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: 'ac', //cadena.value,
+    cadenaABuscar: 'fre', //cadena.value,
   });
   //#endregion INICIALIZANDO
 
@@ -63,7 +63,7 @@ export default component$(() => {
         {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
       </h1> */}
       <div style={{ background: '#00778F' }}>
-        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -71,9 +71,9 @@ export default component$(() => {
           )}`}
         </label>
       </div>
-      <h3>
+      <h4 style={{ margin: '8px 0 4px 2px' }}>
         <u>Kardex</u>
-      </h3>
+      </h4>
 
       {/* BUSCAR POR */}
       <div style={{ display: 'flex', margin: '10px 0' }}>

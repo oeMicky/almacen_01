@@ -19,6 +19,7 @@ import {
   cerosALaIzquierda,
   formatear_6Decimales,
   formatoDDMMYYYY_PEN,
+  hoy,
   // redondeo2Decimales,
   ultimoDiaDelPeriodoX,
 } from '~/functions/comunes';
@@ -75,6 +76,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         ? props.outSelecci.idGrupoEmpresarial
         : parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: props.outSelecci.idEmpresa ? props.outSelecci.idEmpresa : parametrosGlobales.idEmpresa,
+      idSucursal: props.outSelecci.idSucursal ? props.outSelecci.idSucursal : parametrosGlobales.idSucursal,
       idAlmacen: props.outSelecci.idAlmacen ? props.outSelecci.idAlmacen : parametrosGlobales.idAlmacen,
 
       idPeriodo: props.outSelecci.idPeriodo ? props.outSelecci.idPeriodo : props.addPeriodo.idPeriodo,
@@ -90,7 +92,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
       // serie: props.inSelecci.serie ? props.inSelecci.serie : '',
       // numero: props.inSelecci.numero ? props.inSelecci.numero : 0,
-      FISMA: props.outSelecci.FISMA ? props.outSelecci.FISMA.substring(0, 10) : '', //hoy(),
+      FISMA: props.outSelecci.FISMA ? props.outSelecci.FISMA.substring(0, 10) : hoy(),
       igv: props.outSelecci.igv ? props.outSelecci.igv.$numberDecimal : props.igv,
 
       // correlativo: props.inSelecci.correlativo ? props.inSelecci.correlativo : 0,
@@ -295,6 +297,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         idEgresoDeAlmacen: definicion_CTX_OUT_ALMACEN._id,
         idGrupoEmpresarial: definicion_CTX_OUT_ALMACEN.idGrupoEmpresarial,
         idEmpresa: definicion_CTX_OUT_ALMACEN.idEmpresa,
+        idSucursal: definicion_CTX_OUT_ALMACEN.idSucursal,
         idAlmacen: definicion_CTX_OUT_ALMACEN.idAlmacen,
         idPeriodo: definicion_CTX_OUT_ALMACEN.idPeriodo,
         periodo: definicion_CTX_OUT_ALMACEN.periodo,
@@ -446,7 +449,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   valorSeleccionado={definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen}
                   registros={losMotivosCargados.value}
                   registroID={'_id'}
-                  registroTEXT={'motivoEgreso'}
+                  registroTEXT={'motivoSalida'}
                   seleccione={'-- Seleccione motivo egreso --'}
                   disabled={definicion_CTX_OUT_ALMACEN.itemsMercaderias.length === 0 ? false : true}
                   onChange={$(() => {
@@ -670,8 +673,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                         <td data-label="TCP">{iTDocAdj.descripcionTCP}</td>
                         <td data-label="Fecha">{formatoDDMMYYYY_PEN(iTDocAdj.fecha)}</td>
                         <td data-label="Serie">{iTDocAdj.serie}</td>
-                        <td data-label="Número">{iTDocAdj.numero}</td>
-                        <td data-label="Acc" style={{ textAlign: 'right' }}>
+                        <td data-label="Número">{cerosALaIzquierda(iTDocAdj.numero, 8)}</td>
+                        <td data-label="Acc" style={{ textAlign: 'center' }}>
                           <ImgButton
                             src={images.edit}
                             alt="icono de editar"
@@ -789,14 +792,16 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                             style={{ width: '60px', textAlign: 'end' }}
                             disabled
                             value={
-                              iTMercaIN.cantidadSacada.$numberDecimal
-                                ? iTMercaIN.cantidadSacada.$numberDecimal
-                                : iTMercaIN.cantidadSacada
+                              iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
+                                ? iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
+                                : iTMercaIN.cantidadSacadaEquivalencia
                             }
                             onChange$={(e) => {
-                              iTMercaIN.cantidadSacada = parseFloat((e.target as HTMLInputElement).value);
+                              iTMercaIN.cantidadSacadaEquivalencia = parseFloat((e.target as HTMLInputElement).value);
                               iTMercaIN.subTotalPEN =
-                                (iTMercaIN.cantidadSacada ? iTMercaIN.cantidadSacada : iTMercaIN.cantidadSacada.$numberDecimal) *
+                                (iTMercaIN.cantidadSacadaEquivalencia
+                                  ? iTMercaIN.cantidadSacadaEquivalencia
+                                  : iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal) *
                                 (iTMercaIN.costoUnitarioPEN
                                   ? iTMercaIN.costoUnitarioPEN
                                   : iTMercaIN.costoUnitarioPEN.$numberDecimal);
@@ -830,11 +835,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                               //   precio = costo * IGVCalculado;
                               // }
                               // iTMercaIN.precioPEN = formatear_6Decimales(precio);
-                              console.log('el costo modificado, cant', iTMercaIN.costoUnitarioPEN, iTMercaIN.cantidadSacada);
+                              console.log(
+                                'el costo modificado, cant',
+                                iTMercaIN.costoUnitarioPEN,
+                                iTMercaIN.cantidadSacadaEquivalencia
+                              );
                               iTMercaIN.subTotalPEN =
-                                (iTMercaIN.cantidadSacada.$numberDecimal
-                                  ? iTMercaIN.cantidadSacada.$numberDecimal
-                                  : iTMercaIN.cantidadSacada) *
+                                (iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
+                                  ? iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
+                                  : iTMercaIN.cantidadSacadaEquivalencia) *
                                 (iTMercaIN.costoUnitarioPEN.$numberDecimal
                                   ? iTMercaIN.costoUnitarioPEN.$numberDecimal
                                   : iTMercaIN.costoUnitarioPEN);
@@ -845,11 +854,11 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           />
                         </td>
                         <td data-label="SubTotalPEN" style={{ textAlign: 'end' }}>
-                          {iTMercaIN.subTotalPEN.$numberDecimal
-                            ? formatear_6Decimales(iTMercaIN.subTotalPEN.$numberDecimal)
-                            : formatear_6Decimales(iTMercaIN.subTotalPEN)}
+                          {iTMercaIN.subPEN.$numberDecimal
+                            ? formatear_6Decimales(iTMercaIN.subPEN.$numberDecimal)
+                            : formatear_6Decimales(iTMercaIN.subPEN)}
                         </td>
-                        <td data-label="Acc" style={{ textAlign: 'right' }}>
+                        <td data-label="Acc" style={{ textAlign: 'center' }}>
                           <ImgButton
                             src={images.trash}
                             alt="icono de eliminar"

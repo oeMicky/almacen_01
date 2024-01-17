@@ -12,7 +12,7 @@ import {
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
-import { cerosALaIzquierda, redondeo2Decimales, ultimoDiaDelPeriodoX } from '~/functions/comunes';
+import { cerosALaIzquierda, hoy, redondeo2Decimales, ultimoDiaDelPeriodoX } from '~/functions/comunes';
 import ElSelect from '../system/elSelect';
 import { getTecnico, getTecnicosActivos } from '~/apis/tecnico.api';
 import { parametrosGlobales } from '~/routes/login';
@@ -80,6 +80,7 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: number
         ? props.oSSelecci.idGrupoEmpresarial
         : parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: props.oSSelecci.idEmpresa ? props.oSSelecci.idEmpresa : parametrosGlobales.idEmpresa,
+      idSucursal: props.oSSelecci.idSucursal ? props.oSSelecci.idSucursal : parametrosGlobales.idSucursal,
       idPeriodo: props.oSSelecci.idPeriodo ? props.oSSelecci.idPeriodo : props.addPeriodo.idPeriodo,
       periodo: props.oSSelecci.periodo ? props.oSSelecci.periodo : props.addPeriodo.periodo,
 
@@ -91,7 +92,7 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: number
       serie: props.oSSelecci.serie ? props.oSSelecci.serie : '',
       numero: props.oSSelecci.numero ? props.oSSelecci.numero : 0,
 
-      fechaInicio: props.oSSelecci.fechaInicio ? props.oSSelecci.fechaInicio.substring(0, 10) : '', // hoy(),
+      fechaInicio: props.oSSelecci.fechaInicio ? props.oSSelecci.fechaInicio.substring(0, 10) : hoy(),
       // fechaInicio: props.oSSelecci.fechaInicio ? formatoDDMMYYYY_PEN(props.oSSelecci.fechaInicio) : hoy(),
       // fechaInicio: props.oSSelecci.fechaInicio ? '2025-05-25' : hoy(),
       // fechaInicio: props.oSSelecci.fechaInicio ? formatoDDMMYYYY_PEN('2023-05-25T00:00:00.000Z') : hoy(),
@@ -388,17 +389,32 @@ OBSERVACIÓN(ES):
   //#region ELIMINAR REQUISICION
   useTask$(async ({ track }) => {
     track(() => definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion);
+
     if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion > 0) {
       //verificar si ya se a DESPACHADO
       if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion !== '') {
+        console.log(
+          'definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion definicion_CTX_O_S.requisiciones.length',
+          definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion,
+          definicion_CTX_O_S.requisiciones.length
+        );
         if (definicion_CTX_O_S.requisiciones.length > 0) {
           const despachos: any = definicion_CTX_O_S.requisiciones.filter(
             (despa: any) => despa.idKardex === definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion
           );
-          if (despachos.length > 0) {
+          console.log('despachos', despachos);
+          if (despachos[0].cantidadDespachada > 0) {
             alert('El artículo no puede ser eliminado debido a que ha sido despachado por almacén.');
             return;
           }
+          //  else {
+          //   await borrarRequisicionOS({
+          //     idGrupoEmpresarial: definicion_CTX_O_S.idGrupoEmpresarial,
+          //     idEmpresa: definicion_CTX_O_S.idEmpresa,
+          //     idOrdenServicio: definicion_CTX_O_S._id,
+          //     idRequisicionOS: despachos[0]._id,
+          //   });
+          // }
         }
       }
 
@@ -428,6 +444,7 @@ OBSERVACIÓN(ES):
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion = 0;
     }
   });
+
   //#endregion ELIMINAR REQUISICION
 
   //#region ON SUBMIT
@@ -496,6 +513,7 @@ OBSERVACIÓN(ES):
 
       idGrupoEmpresarial: definicion_CTX_O_S.idGrupoEmpresarial,
       idEmpresa: definicion_CTX_O_S.idEmpresa,
+      idSucursal: definicion_CTX_O_S.idSucursal,
       idPeriodo: definicion_CTX_O_S.idPeriodo,
       periodo: definicion_CTX_O_S.periodo,
 
@@ -564,6 +582,8 @@ OBSERVACIÓN(ES):
     // ctx_index_cotizacion.mostrarPanelNewEditCotizacion = false;
     definicion_CTX_O_S._id = ordenS.data._id;
     definicion_CTX_O_S.numero = ordenS.data.numero;
+    definicion_CTX_O_S.servicios = ordenS.data.servicios;
+    definicion_CTX_O_S.requisiciones = ordenS.data.requisiciones;
   });
   //#endregion ON SUBMIT
 
@@ -587,12 +607,11 @@ OBSERVACIÓN(ES):
       >
         <ImgButton
           src={images.x}
-          alt="imageso de cerrar"
+          alt="imagen de cerrar"
           height={16}
           width={16}
-          title="Cerrar el formulario"
+          title="Ver datos"
           onClick={$(() => {
-            // ctx_PanelVenta.mostrarPanelVenta = false;
             ctx_index_orden_servicio.mostrarPanelNewEditOrdenServicio = false;
           })}
         />
@@ -606,7 +625,7 @@ OBSERVACIÓN(ES):
             console.log('definicion_CTX_O_S', definicion_CTX_O_S);
           })}
         />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="imagen de cerrar"
           height={16}
@@ -635,7 +654,7 @@ OBSERVACIÓN(ES):
           onClick={$(() => {
             console.log(' repuestosDespachados.value', repuestosDespachados.value);
           })}
-        />
+        /> */}
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.8rem' }}>Orden de servicio</h3>

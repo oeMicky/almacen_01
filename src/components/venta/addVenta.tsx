@@ -80,6 +80,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       _id: '',
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
+      idSucursal: parametrosGlobales.idSucursal,
       idPeriodo: props.addPeriodo.idPeriodo,
       periodo: props.addPeriodo.periodo,
 
@@ -89,6 +90,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
       codigoTipoComprobantePago: '',
       tipoComprobantePago: '',
+      idSerieVenta: '',
       serie: '',
       numero: 0,
       fecha: '', //hoy(),
@@ -99,14 +101,14 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       numeroIdentidad: '',
       razonSocialNombre: '',
 
-      igv: 0,
+      igv: props.igv,
       enDolares: false,
       moneda: 'PEN',
       tipoCambio: 0,
 
-      idOrdenServicio: '',
-      serieOrdenServicio: '',
-      numeroOrdenServicio: 0,
+      // idOrdenServicio: '',
+      // serieOrdenServicio: '',
+      // numeroOrdenServicio: 0,
 
       vendedor: '',
       metodoPago: 'CONTADO',
@@ -277,7 +279,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
     // elIgv = elIgv.data;
     // // console.log('elIgv', elIgv[0].igv);
     // venta.igv = elIgv[0].igv;
-    definicion_CTX_F_B_NC_ND.igv = props.igv;
+    // definicion_CTX_F_B_NC_ND.igv = props.igv;
   });
   //#endregion INICIALIZACION - TIPO DE DOCUMENTO F B NC ND
 
@@ -377,37 +379,37 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
   //#endregion CUOTA CREDITO
 
   //#region ITEMS VENTA
-  // const fijarMontos = $((e: any) => {
-  //   console.log(' eee', e);
+  const fijarMontos = $((e: any) => {
+    console.log(' eee', e);
 
-  //   console.log('eeeeeeeeeeeeeeeeee', e);
-  //   if (definicion_CTX_F_B_NC_ND.enDolares) {
-  //     definicion_CTX_F_B_NC_ND.montoSubTotalUSD = e.subTOTAL;
-  //     definicion_CTX_F_B_NC_ND.montoIGVUSD = e.igvTOTAL;
-  //     definicion_CTX_F_B_NC_ND.montoTotalUSD = e.sumaTOTAL;
+    console.log('eeeeeeeeeeeeeeeeee', e);
+    if (definicion_CTX_F_B_NC_ND.enDolares) {
+      definicion_CTX_F_B_NC_ND.montoSubTotalUSD = e.subTOTAL;
+      definicion_CTX_F_B_NC_ND.montoIGVUSD = e.igvTOTAL;
+      definicion_CTX_F_B_NC_ND.montoTotalUSD = e.sumaTOTAL;
 
-  //     const tt = redondeo2Decimales(e.sumaTOTAL * definicion_CTX_F_B_NC_ND.tipoCambio);
-  //     const sub = redondeo2Decimales((tt * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
-  //     const i = redondeo2Decimales(tt - sub);
+      const tt = redondeo2Decimales(e.sumaTOTAL * definicion_CTX_F_B_NC_ND.tipoCambio);
+      const sub = redondeo2Decimales((tt * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
+      const i = redondeo2Decimales(tt - sub);
 
-  //     definicion_CTX_F_B_NC_ND.montoSubTotalPEN = sub;
-  //     definicion_CTX_F_B_NC_ND.montoIGVPEN = i;
-  //     definicion_CTX_F_B_NC_ND.montoTotalPEN = tt;
-  //   } else {
-  //     definicion_CTX_F_B_NC_ND.montoSubTotalPEN = e.subTOTAL;
-  //     definicion_CTX_F_B_NC_ND.montoIGVPEN = e.igvTOTAL;
-  //     definicion_CTX_F_B_NC_ND.montoTotalPEN = e.sumaTOTAL;
-  //     console.log(
-  //       'first',
-  //       definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
-  //       definicion_CTX_F_B_NC_ND.montoIGVPEN,
-  //       definicion_CTX_F_B_NC_ND.montoTotalPEN
-  //     );
-  //     definicion_CTX_F_B_NC_ND.montoSubTotalUSD = 0;
-  //     definicion_CTX_F_B_NC_ND.montoIGVUSD = 0;
-  //     definicion_CTX_F_B_NC_ND.montoTotalUSD = 0;
-  //   }
-  // });
+      definicion_CTX_F_B_NC_ND.montoSubTotalPEN = sub;
+      definicion_CTX_F_B_NC_ND.montoIGVPEN = i;
+      definicion_CTX_F_B_NC_ND.montoTotalPEN = tt;
+    } else {
+      definicion_CTX_F_B_NC_ND.montoSubTotalPEN = e.subTOTAL;
+      definicion_CTX_F_B_NC_ND.montoIGVPEN = e.igvTOTAL;
+      definicion_CTX_F_B_NC_ND.montoTotalPEN = e.sumaTOTAL;
+      console.log(
+        'first',
+        definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
+        definicion_CTX_F_B_NC_ND.montoIGVPEN,
+        definicion_CTX_F_B_NC_ND.montoTotalPEN
+      );
+      definicion_CTX_F_B_NC_ND.montoSubTotalUSD = 0;
+      definicion_CTX_F_B_NC_ND.montoIGVUSD = 0;
+      definicion_CTX_F_B_NC_ND.montoTotalUSD = 0;
+    }
+  });
   // useTask$(({ track }) => {
   //   track(() => ctx_PanelVenta.grabo_ItemsVenta);
   //   if (ctx_PanelVenta.grabo_ItemsVenta) {
@@ -455,9 +457,9 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
   //#endregion ELIMINAR ITEM VENTA
 
   //#region SUBMIT
-  const grabando = $(async () => {
+  const grabandoVenta = $(async () => {
     console.log('first::::::_______::::::______T');
-    if (serieDocumento.value === '') {
+    if (definicion_CTX_F_B_NC_ND.serie === '') {
       alert('Seleccione la serie.');
       document.getElementById('selectSerieVenta')?.focus();
       return;
@@ -492,6 +494,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
     const ventaGRABADA = await inVenta({
       idGrupoEmpresarial: definicion_CTX_F_B_NC_ND.idGrupoEmpresarial,
       idEmpresa: definicion_CTX_F_B_NC_ND.idEmpresa,
+      idSucursal: definicion_CTX_F_B_NC_ND.idSucursal,
       idPeriodo: definicion_CTX_F_B_NC_ND.idPeriodo,
       periodo: definicion_CTX_F_B_NC_ND.periodo,
 
@@ -501,6 +504,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
       codigoTipoComprobantePago: definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago,
       tipoComprobantePago: definicion_CTX_F_B_NC_ND.tipoComprobantePago,
+      idSerieVenta: definicion_CTX_F_B_NC_ND.idSerieVenta,
       serie: definicion_CTX_F_B_NC_ND.serie,
       numero: definicion_CTX_F_B_NC_ND.numero,
       fecha: definicion_CTX_F_B_NC_ND.fecha,
@@ -553,6 +557,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       //=> INICIALIZAR PARA LA SIGUIENTE VENTA
       definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '';
       definicion_CTX_F_B_NC_ND.tipoComprobantePago = '';
+      definicion_CTX_F_B_NC_ND.idSerieVenta = '';
       definicion_CTX_F_B_NC_ND.serie = '';
       definicion_CTX_F_B_NC_ND.numero = 0;
       definicion_CTX_F_B_NC_ND.fecha = hoy();
@@ -563,7 +568,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       definicion_CTX_F_B_NC_ND.numeroIdentidad = '';
       definicion_CTX_F_B_NC_ND.razonSocialNombre = '';
 
-      definicion_CTX_F_B_NC_ND.igv = 0;
+      // definicion_CTX_F_B_NC_ND.igv = 0;
       definicion_CTX_F_B_NC_ND.enDolares = false;
       definicion_CTX_F_B_NC_ND.moneda = 'PEN';
       definicion_CTX_F_B_NC_ND.tipoCambio = 0;
@@ -674,6 +679,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   // style={{ width: '100%' }}
                   onChange$={(e) => {
                     tipoDocumento.value = (e.target as HTMLSelectElement).value;
+                    // alert('eligio ' + tipoDocumento.value);
                   }}
                 >
                   <option value={'01'} selected={tipoDocumento.value === '01'}>
@@ -693,6 +699,49 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
             </div>
             {/* Serie  key={ser._id} id={ser._id} value={ser.serie}*/}
             <div class="form-control">
+              <label>Serie</label>
+              <div class="form-control form-agrupado">
+                {
+                  <select
+                    id="selectSerieVenta"
+                    onChange$={(e) => {
+                      const idx = (e.target as HTMLSelectElement).selectedIndex;
+                      const elSelect = e.target as HTMLSelectElement;
+                      const elOption = elSelect[idx];
+                      console.log('elOption', elOption.id);
+                      definicion_CTX_F_B_NC_ND.idSerieVenta = elOption.id;
+                      definicion_CTX_F_B_NC_ND.serie = (e.target as HTMLSelectElement).value;
+                      document.getElementById('in_Fecha')?.focus();
+                    }}
+                  >
+                    <option value="">-- Seleccione una serie --</option>
+                    {dataSerie.value.map((ser: any) => {
+                      return (
+                        <option id={ser._id} value={ser.serie} selected={definicion_CTX_F_B_NC_ND.serie === ser.serie}>
+                          {ser.serie}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  // definicion_CTX_F_B_NC_ND.idSerieVenta !== '' ? (
+                  //   <input
+                  //     id="inputSerieOrdenServicio"
+                  //     style={{ width: '100%' }}
+                  //     type="text"
+                  //     disabled
+                  //     value={
+                  //       definicion_CTX_F_B_NC_ND._id === ''
+                  //         ? definicion_CTX_F_B_NC_ND.serie
+                  //         : definicion_CTX_F_B_NC_ND.serie + ' - ' + cerosALaIzquierda(definicion_CTX_F_B_NC_ND.numero, 8)
+                  //     }
+                  //   />
+                  // ) : (
+
+                  // )
+                }
+              </div>
+            </div>
+            {/* <div class="form-control">
               <label>Serie</label>
               <div class="form-control form-agrupado">
                 <select
@@ -718,9 +767,9 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   })}
                 </select>
               </div>
-            </div>
+            </div> */}
             {/* Numero de documento     value={numeroDocumento}*/}
-            <div class="form-control">
+            {/* <div class="form-control">
               <label>Número</label>
               <div class="form-control form-agrupado">
                 <input
@@ -731,7 +780,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   value={definicion_CTX_F_B_NC_ND.numero}
                 />
               </div>
-            </div>
+            </div> */}
             {/* fecha    onChange={(e) => setFecha(e.currentTarget.value)}*/}
             <div class="form-control">
               <label>Fecha</label>
@@ -1135,7 +1184,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   <thead>
                     <tr>
                       <th>Ítem</th>
-                      <th>Kx</th>
+                      {/* <th>Kx</th> */}
                       <th>Código</th>
                       <th>Descripción</th>
                       <th>Cantidad</th>
@@ -1146,7 +1195,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                     </tr>
                   </thead>
                   <tbody>
-                    {definicion_CTX_F_B_NC_ND.itemsVenta.map((iTVen: any, index: any) => {
+                    {definicion_CTX_F_B_NC_ND.itemsVenta.map((iTVen: any, index: number) => {
                       const indexItemVenta = index + 1;
                       if (definicion_CTX_F_B_NC_ND.enDolares) {
                         sumaTOTAL =
@@ -1162,17 +1211,19 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                         igvTOTAL = redondeo2Decimales(sumaTOTAL - subTOTAL);
                       }
 
-                      // if (index + 1 === definicion_CTX_F_B_NC_ND.itemsVenta.length) {
-                      //   console.log(subTOTAL);
-                      //   console.log(igvTOTAL);
-                      //   console.log(sumaTOTAL);
-                      //   fijarMontos({ subTOTAL, igvTOTAL, sumaTOTAL });
-                      // }
+                      if (index + 1 === definicion_CTX_F_B_NC_ND.itemsVenta.length) {
+                        console.log(subTOTAL);
+                        console.log(igvTOTAL);
+                        console.log(sumaTOTAL);
+                        fijarMontos({ subTOTAL, igvTOTAL, sumaTOTAL });
+                      }
                       return (
                         <tr key={iTVen.idAuxiliar}>
                           <td data-label="Ítem" key={iTVen.idAuxiliar}>{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
-                          <td data-label="Kx">{iTVen.idKardex.substring(iTVen.idKardex.length - 6)}</td>
-                          <td data-label="Código">{iTVen.codigo}</td>
+                          {/* <td data-label="Kx">{iTVen.idKardex.substring(iTVen.idKardex.length - 6)}</td> */}
+                          <td data-label="Código" style={{ textAlign: 'center' }}>
+                            {iTVen.codigo}
+                          </td>
                           <td data-label="Descripción">{iTVen.descripcionEquivalencia}</td>
                           {/* ----------------------------------------------------- */}
                           <td data-label="Cantidad" style={{ textAlign: 'end' }}>
@@ -1351,7 +1402,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
           type="submit"
           value={botonGrabar.value === '' ? 'Grabar' : `${botonGrabar.value}`}
           class="btn-centro"
-          onClick$={() => grabando()}
+          onClick$={() => grabandoVenta()}
           // onClick={(e) => onSubmit(e)}
         />
         {pasoProcesoGrabacion.value &&

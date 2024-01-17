@@ -12,7 +12,7 @@ import {
 import ImgButton from '../../../components/system/imgButton';
 import Button from '~/components/system/elButton';
 import { images } from '~/assets';
-import { hoy } from '~/functions/comunes';
+import { hoy, primeroDelMes } from '~/functions/comunes';
 import TablaVentas from '~/components/venta/tablaVentas';
 // import Modal from '~/components/system/elModal';
 import AddVenta from '~/components/venta/addVenta';
@@ -69,12 +69,12 @@ export default component$(() => {
   const igv = useSignal(0);
   // const xmlDoc = useSignal<any>();
 
-  const losPeriodosCargados = useSignal([]);
+  const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
 
   // const ventas = useStore([]);
   const fechas = useStore({
-    desde: '2023-01-01', // hoy(),
+    desde: '2023-01-01', //primeroDelMes(), //  '2023-01-01', // hoy(),
     // desde: hoy(),
     hasta: hoy(),
   });
@@ -121,46 +121,34 @@ export default component$(() => {
   // });
 
   //#region OBTENER PERIODOS
-  const cargarLosPeriodos = $(async () => {
-    const losPeri = await getPeriodos({
-      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-      idEmpresa: parametrosGlobales.idEmpresa,
-      bandera: 'Ventas',
-    });
-    console.log('losPeri', losPeri);
-    losPeriodosCargados.value = losPeri.data;
-    console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-    // console.log('a cargar periodos');
-  });
+  // const cargarLosPeriodos = $(async () => {
+  //   const losPeri = await getPeriodos({
+  //     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //     idEmpresa: parametrosGlobales.idEmpresa,
+  //     bandera: 'Ventas',
+  //   });
+  //   console.log('losPeri', losPeri);
+  //   losPeriodosCargados.value = losPeri.data;
+  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // console.log('a cargar periodos');
+  // });
 
-  useTask$(({ track }) => {
-    track(() => ini.value);
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
 
-    cargarLosPeriodos();
-  });
+  //   cargarLosPeriodos();
+  // });
   //#endregion OBTENER PERIODOS
 
   return (
     <main>
-      <div
-        class="container"
-        // style={{
-        //   //width: '1111px', //SIZES.anchoContenedor + 'px',
-        //   height: 'inherit',
-        //   color: '#858585', //COLORS.lightGray2,
-        //   // background: '#a5a5a5',
-        //   margin: '5px auto',
-        //   display: 'inherit',
-        //   justifyContent: 'inherit',
-        //   alignItems: 'inherit',
-        // }}
-      >
-        {/*  TITULO  */}
+      <div class="container">
+        {/*  IDENTIFICACION  */}
         {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem' }}>
           {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
         </h1> */}
         <div style={{ background: '#00778F' }}>
-          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
+          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
             {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
               .getItem('empresa')
               ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -168,9 +156,9 @@ export default component$(() => {
             )}`}
           </label>
         </div>
-        <h3>
+        <h4 style={{ margin: '8px 0 4px 2px' }}>
           <u>Facturación</u>
-        </h3>
+        </h4>
         {/*  INTERVALOS DE FECHAS  style={{ display: 'flex', margin: '10px 0' }}*/}
         {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
         <div class="intervalo-fechas">

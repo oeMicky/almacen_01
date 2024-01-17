@@ -2,6 +2,7 @@ export interface ICompra {
   _id: string;
   idGrupoEmpresarial: string;
   idEmpresa: string;
+  idSucursal: string;
   idPeriodo: string;
   periodo: number;
 
@@ -26,7 +27,7 @@ export interface ICompra {
   email: string;
 
   idElIgv: string;
-  elIgv: string;
+  elIgv: any;
 
   enDolares: boolean;
   moneda: string;
@@ -42,6 +43,12 @@ export interface ICompra {
   otrosPEN: any;
   totalPEN: any;
 
+  baseImponibleUSD: any;
+  igvUSD: any;
+  adquisicionesNoGravadasUSD: any;
+  iscUSD: any;
+  icbpUSD: any;
+  otrosUSD: any;
   totalUSD: any;
 
   fechaReferencia: Date;

@@ -1,16 +1,23 @@
-import { Resource, component$, useResource$, useStyles$ } from '@builder.io/qwik';
+import { $, Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
 import { ICompra } from '~/interfaces/iCompra';
 import style from '../tabla/tabla.css?inline';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_INDEX_COMPRA } from '~/routes/(almacen)/compra';
 
 export default component$((props: { buscarCompras: number; parametrosBusqueda: any }) => {
   useStyles$(style);
 
+  //#region CONTEXTO
+  const ctx_index_compra = useContext(CTX_INDEX_COMPRA);
+  //#region CONTEXTO
+
   //#region BUSCANDO REGISTROS
   const lasCompras = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
+    console.log('tablaCompras ->->-> parameBusqueda', props.parametrosBusqueda);
     track(() => props.buscarCompras.valueOf());
 
     console.log('props.buscarCompras.valueOf', props.buscarCompras.valueOf());
@@ -55,7 +62,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
             <>
               {misCompras.length > 0 ? (
                 <>
-                  <table class="tabla-venta" style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                  <table class="tabla-venta" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -69,46 +76,62 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                       </tr>
                     </thead>
                     <tbody>
-                      {misCompras.map((value, index) => {
+                      {misCompras.map((compra, index) => {
                         const indexItem = index + 1;
                         return (
-                          <tr key={value._id}>
-                            <td data-label="Item">{indexItem}</td>
-                            <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                            <td data-label="Proveedor">{value.razonSocialNombre}</td>
-                            <td data-label="Ser-Nro">{value.serie + '-' + value.numero}</td>
-                            <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
-                            <td data-label="Mon" style={{ textAlign: 'center' }}>
-                              {value.moneda}
+                          <tr key={compra._id}>
+                            <td data-label="Item" class="comoCadena">
+                              {indexItem}
                             </td>
-                            <td data-label="Importe" style={{ textAlign: 'end' }}>
-                              {typeof value.totalPEN !== 'undefined'
-                                ? value.moneda === 'PEN'
-                                  ? parseFloat(value.totalPEN.$numberDecimal).toLocaleString('en-PE', {
+                            <td data-label="Nro. Doc" class="comoCadena">
+                              {compra.tipoDocumentoIdentidad + ': ' + compra.numeroIdentidad}
+                            </td>
+                            <td data-label="Proveedor" class="comoCadena">
+                              {compra.razonSocialNombre}
+                            </td>
+                            <td data-label="Ser-Nro" class="comoCadena">
+                              {compra.serie + '-' + compra.numero}
+                            </td>
+                            <td data-label="Fecha" class="comoCadena">
+                              {formatoDDMMYYYY_PEN(compra.fecha)}
+                            </td>
+                            <td data-label="Mon" class="comoCadena">
+                              {compra.moneda}
+                            </td>
+                            <td data-label="Importe" class="comoNumero">
+                              {/* {compra.totalPEN.$numberDecimal} */}
+                              {/* {typeof compra.totalPEN !== 'undefined'
+                                ? compra.moneda === 'PEN'
+                                  ? compra.totalPEN.$numberDecimal
+                                  : compra.totalUSD.$numberDecimal
+                                : ''} */}
+                              {typeof compra.totalPEN !== 'undefined'
+                                ? compra.moneda === 'PEN'
+                                  ? parseFloat(compra.totalPEN.$numberDecimal).toLocaleString('en-PE', {
                                       // style: 'currency',
                                       currency: 'PEN',
                                       minimumFractionDigits: 2,
                                     })
-                                  : parseFloat(value.totalUSD.$numberDecimal).toLocaleString('en-US', {
+                                  : parseFloat(compra.totalUSD.$numberDecimal).toLocaleString('en-US', {
                                       // style: 'currency',
                                       currency: 'PEN',
                                       minimumFractionDigits: 2,
                                     })
                                 : ''}
                             </td>
-                            <td data-label="Acciones" style={{ textAlign: 'right' }}>
-                              {/* <ImgButton
-                                src={images.pdf}
-                                alt="icono de pdf"
-                                height={12}
-                                width={12}
-                                title={`Ver pdf ${value._id}`}
-                                // onClick={$(() => {
-                                //   ventaSeleccionada.value = value;
-                                //   clickPDF.value = clickPDF.value + 1;
-                                // })}
-                              />
+                            <td data-label="Acciones" class="acciones">
                               <ImgButton
+                                src={images.edit}
+                                alt="icono de pdf"
+                                height={14}
+                                width={14}
+                                title={`Editar documento`}
+                                onClick={$(() => {
+                                  ctx_index_compra.cC = compra;
+                                  ctx_index_compra.mostrarPanelCompra = true;
+                                })}
+                              />
+                              {/*  <ImgButton
                                 src={images.xml}
                                 alt="icono de xml"
                                 height={12}

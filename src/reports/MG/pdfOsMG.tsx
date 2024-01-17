@@ -18,7 +18,9 @@ function pdfOsMG(os: any) {
   console.log('os PDF', os);
 
   const servicios = os.servicios;
-  const repuestosDespachados = os.requisiciones;
+  // let repuestosDespachados: any = [];
+  const repuestosDespachados = os.requisiciones.filter((plot: any) => plot.cantidadDespachada.$numberDecimal > 0);
+  console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
   let totalServicios = 0;
   let totalRepuestos = 0;
 
@@ -27,6 +29,7 @@ function pdfOsMG(os: any) {
   // const rodape = [];
 
   const losServicios = servicios.map((ser: any, index: number) => {
+    console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
     const { descripcionEquivalencia, cantidad, precioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
     totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
@@ -51,7 +54,9 @@ function pdfOsMG(os: any) {
   });
 
   const losRepuestos = repuestosDespachados.map((repu: any, index: number) => {
+    console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
     const { codigo, descripcionEquivalencia, cantidadDespachada, precioPEN } = repu;
+    console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
     if (cantidadDespachada.$numberDecimal > 0) {
       const indexItem = index + 1;
       totalRepuestos = totalRepuestos + redondeo2Decimales(cantidadDespachada.$numberDecimal * precioPEN.$numberDecimal);
@@ -336,7 +341,6 @@ function pdfOsMG(os: any) {
             ...losRepuestos,
           ],
         },
-        // layout: 'itemsVentaLayout', //{ defaultBorder: false }, //'lightHorizontalLines', // 'noBorders', //'lightHorizontalLines',
         layout: 'noBorders',
       },
       {
@@ -439,7 +443,7 @@ function pdfOsMG(os: any) {
       },
     },
     images: {
-      logo: logit.logoMerma,
+      logo: logit.logoMrBier,
       poweredBy: logit.logoPiePagina,
 
       // morty: 'https://rickandmortyapi.com/api/character/avatar/795.jpeg',

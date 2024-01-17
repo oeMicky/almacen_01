@@ -1,7 +1,7 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
-import { hoy } from '~/functions/comunes';
+import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '../../login/index';
 import TablaCotizaciones from '~/components/cotizacion/tablaCotizaciones';
 import ElButton from '~/components/system/elButton';
@@ -67,11 +67,11 @@ export default component$(() => {
   // //
   // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
   //
-  const losPeriodosCargados = useSignal([]);
+  const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
   //*Fechas
   const fechas = useStore({
-    desde: '2023-01-01', // hoy(),
+    desde: primeroDelMes(), //  '2023-01-01', // hoy(),
     hasta: hoy(),
   });
   const parametrosBusqueda = useStore({
@@ -101,34 +101,34 @@ export default component$(() => {
   //#endregion ACTUALIZAR TABLA COTIZACIONES
 
   //#region OBTENER PERIODOS
-  const cargarLosPeriodos = $(async () => {
-    const losPeri = await getPeriodos({
-      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-      idEmpresa: parametrosGlobales.idEmpresa,
-      bandera: 'Cotizaciones',
-    });
-    console.log('losPeri', losPeri);
-    losPeriodosCargados.value = losPeri.data;
-    console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-    // console.log('a cargar periodos');
-  });
+  // const cargarLosPeriodos = $(async () => {
+  //   const losPeri = await getPeriodos({
+  //     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //     idEmpresa: parametrosGlobales.idEmpresa,
+  //     bandera: 'Cotizaciones',
+  //   });
+  //   console.log('losPeri', losPeri);
+  //   losPeriodosCargados.value = losPeri.data;
+  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // console.log('a cargar periodos');
+  // });
 
-  useTask$(({ track }) => {
-    track(() => ini.value);
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
 
-    cargarLosPeriodos();
-  });
+  //   cargarLosPeriodos();
+  // });
   //#endregion OBTENER PERIODOS
 
   return (
     <main>
       <div class="container">
-        {/*  TITULO  */}
+        {/*  IDENTIFICACION  */}
         {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem', paddingLetf: '5px' }}>
           {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
         </h1> */}
         <div style={{ background: '#00778F' }}>
-          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
+          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
             {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
               .getItem('empresa')
               ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -136,10 +136,9 @@ export default component$(() => {
             )}`}
           </label>
         </div>
-        <h3>
+        <h4 style={{ margin: '8px 0 4px 2px' }}>
           <u>Cotizaciones</u>
-          {/* <u>{parametrosGlobales.nombreAlmacen}</u> */}
-        </h3>
+        </h4>
         {/*  INTERVALOS DE FECHAS */}
         <div class="intervalo-fechas">
           <label class="fechas">

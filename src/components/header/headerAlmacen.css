@@ -67,6 +67,7 @@ header {
 
 .main-menu__item:hover {
     background-color: #5ca1ae;
+    border-radius: 8px;
     /* border: turquoise 1px solid; */
 }
 @media screen and (min-width:768px) {

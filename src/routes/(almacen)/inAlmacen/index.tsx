@@ -8,7 +8,7 @@ import TablaInsAlmacen from '~/components/inAlmacen/tablaInsAlmacen';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
-import { hoy } from '~/functions/comunes';
+import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_INDEX_IN_ALMACEN = createContextId<any>('index_in_almacen');
@@ -27,7 +27,7 @@ export default component$(() => {
   const ini = useSignal(0);
   const buscarInAlmacen = useSignal(0);
   // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
-  const losPeriodosCargados = useSignal([]);
+  const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
   // const igv = useSignal(0);
   const losIgvsCompra = useSignal([]);
@@ -38,30 +38,30 @@ export default component$(() => {
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
-    fechaInicio: '2023-01-01', // hoy(),
+    fechaInicio: primeroDelMes(), // '2023-01-01', // hoy(),
     fechaFinal: hoy(),
     periodo: '',
   });
   //#endregion INICIALIZACION
 
   //#region OBTENER PERIODOS
-  const cargarLosPeriodos = $(async () => {
-    const losPeri = await getPeriodos({
-      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-      idEmpresa: parametrosGlobales.idEmpresa,
-      bandera: 'inAlmacen',
-    });
-    console.log('losPeri', losPeri);
-    losPeriodosCargados.value = losPeri.data;
-    console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-    // console.log('a cargar periodos');
-  });
+  // const cargarLosPeriodos = $(async () => {
+  //   const losPeri = await getPeriodos({
+  //     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //     idEmpresa: parametrosGlobales.idEmpresa,
+  //     bandera: 'inAlmacen',
+  //   });
+  //   console.log('losPeri', losPeri);
+  //   losPeriodosCargados.value = losPeri.data;
+  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // console.log('a cargar periodos');
+  // });
 
-  useTask$(({ track }) => {
-    track(() => ini.value);
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
 
-    cargarLosPeriodos();
-  });
+  //   cargarLosPeriodos();
+  // });
   //#endregion OBTENER PERIODOS
 
   //#region ACTUALIZAR TABLA IN ALMACEN
@@ -77,12 +77,12 @@ export default component$(() => {
 
   return (
     <div class="container">
-      {/*  TITULO {parametrosGlobales.nombreAlmacen} */}
+      {/*  IDENTIFICACION {parametrosGlobales.nombreAlmacen} */}
       {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem' }}>
         {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
       </h1> */}
       <div style={{ background: '#00778F' }}>
-        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -90,18 +90,21 @@ export default component$(() => {
           )}`}
         </label>
       </div>
-      <h3 style={{ marginBottom: '5px' }}>
+      <h4 style={{ margin: '8px 0 0 2px' }}>
         <u>Almacén: </u>
-      </h3>
-      {/* SUB - TITULO: INGRESOS DE MERCADERIAS */}
-      <h4 style={{ marginBottom: '5px' }}>
+      </h4>
+      {/* SUB - TITULO: INGRESOS DE MERCADERIAS   border: '1px solid #ff0000',   border: '1px solid blue'*/}
+      <h4 style={{ margin: '4px 0 4px 0', display: 'flex' }}>
         <img
           src={images.almacenIn}
-          width={'20px'}
-          style={{ marginRight: '4px ', left: 0, position: 'absolute' }}
+          width={'21'}
+          height={'21'}
+          // style={{ marginRight: '4px ', left: 0, position: 'absolute' }}
+          style={{ marginRight: '2px ', left: 0 }}
           // onClick={() => console.log('ingreso')}
-        ></img>
-        <label style={{ left: '24px', position: 'relative' }}>Ingresos de mercaderías</label>
+        />
+        <label>Ingresos de mercaderías</label>
+        {/* <label style={{ left: '24px', position: 'relative' }}>Ingresos de mercaderías</label> */}
       </h4>
       {/* DESDE - HASTA   */}
       <div class="intervalo-fechas">
@@ -225,9 +228,7 @@ export default component$(() => {
             }
           })}
         />
-        {/* <button onClick$={() => console.log('parametrosGlobales inAlmacen -- ini.value', parametrosGlobales, ini.value)}>
-          los
-        </button> */}
+
         {definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen && (
           <div class="modal">
             <NewInAlmacen

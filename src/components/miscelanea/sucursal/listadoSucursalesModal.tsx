@@ -96,6 +96,7 @@ export default component$(() => {
 
                       sessionStorage.setItem('idSucursal', sucur.idSucursal);
                       sessionStorage.setItem('sucursal', sucur.sucursal);
+                      sessionStorage.setItem('almacenActivo', sucur.almacenActivo);
                       parametrosGlobales.idGrupoEmpresarial = ctx_listado_empresas.eE.idGrupoEmpresarial;
                       parametrosGlobales.nombreGrupoEmpresarial = ctx_listado_empresas.eE.grupoEmpresarial;
                       parametrosGlobales.idEmpresa = ctx_listado_empresas.eE.idEmpresa;
@@ -105,7 +106,21 @@ export default component$(() => {
 
                       parametrosGlobales.idSucursal = sucur.idSucursal;
                       parametrosGlobales.sucursal = sucur.sucursal;
-                      navegarA(parametrosGlobales.paginaInicioDelSistema);
+                      parametrosGlobales.almacenActivo = sucur.almacenActivo;
+                      //PAGINA DE INICIO
+                      if (parametrosGlobales.almacenActivo) {
+                        navegarA(parametrosGlobales.paginaInicioDelSistema);
+                      } else {
+                        if (
+                          parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+                          parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+                          parametrosGlobales.paginaInicioDelSistema === '/kardex'
+                        ) {
+                          navegarA(parametrosGlobales.paginaInicioDefault);
+                        } else {
+                          navegarA(parametrosGlobales.paginaInicioDelSistema);
+                        }
+                      }
                     })}
                   />
                 </td>

@@ -116,10 +116,10 @@ export default component$(
                                   : '_'}
                               </td>
                             )}
-                            <td data-label="Kx" style={{ textAlign: 'center' }}>
+                            <td data-label="Kx" class="acciones">
                               {KARDEXS.length === 0 ? 'No' : 'Si'}
                             </td>
-                            <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                            <td data-label="Acciones" class="acciones">
                               <ImgButton
                                 src={images.check}
                                 alt="icono de seleccionar"

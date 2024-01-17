@@ -62,14 +62,18 @@ header {
 }
 .main-menu__item {
   padding: 0.5rem;
+  /* */
 }
 .main-menu__item:hover {
+  /* background-color: turquoise; */
   background-color: #025566;
-  /* border: turquoise 1px solid; */
+  border-radius: 8px;
+/* border: turquoise 1px solid; */
 }
 .main-menu__link {
   text-decoration: none;
   color: #eee;
+  /* border-radius: 4px; */
 }
 header li a {
   /* display: inline-block;

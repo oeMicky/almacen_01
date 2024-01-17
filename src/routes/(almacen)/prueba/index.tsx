@@ -20,18 +20,18 @@ export default component$(() => {
   //#region INICIALIZACION
   const ini = useSignal(0);
 
-  const cargarPeriodos = $(async (parametros: any) => {
-    const losPeri = await getPeriodos(parametros);
+  // const cargarPeriodos = $(async (parametros: any) => {
+  //   const losPeri = await getPeriodos(parametros);
 
-    console.log('losPeri', losPeri);
-  });
+  //   console.log('losPeri', losPeri);
+  // });
 
-  useTask$(({ track }) => {
-    track(() => ini.value);
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
 
-    console.log('first');
-    cargarPeriodos({ idGrupoEmpresarial: '60f097ca53621708ecc4e781', idEmpresa: '60f097ca53621708ecc4e782', bandera: 'prueba' });
-  });
+  //   console.log('first');
+  //   cargarPeriodos({ idGrupoEmpresarial: '60f097ca53621708ecc4e781', idEmpresa: '60f097ca53621708ecc4e782', bandera: 'prueba' });
+  // });
   //#endregion INICIALIZACION
   return (
     <main>

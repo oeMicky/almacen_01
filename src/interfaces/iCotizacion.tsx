@@ -3,6 +3,7 @@ export interface ICotizacion {
 
   idGrupoEmpresarial: string;
   idEmpresa: string;
+  idSucursal: string;
   idPeriodo: string;
   periodo: number;
 

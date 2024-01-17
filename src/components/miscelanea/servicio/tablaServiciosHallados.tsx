@@ -80,7 +80,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                       <th>Código</th>
                       <th>Descripción</th>
                       <th>Precio PEN</th>
-                      <th>Ac</th>
+                      <th>Acc</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -105,7 +105,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                                 })
                               : ''}
                           </td>
-                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
                             {/* <div style={{ display: 'flex', textAlign: 'right' }}> */}
                             <ImgButton
                               src={images.check32}

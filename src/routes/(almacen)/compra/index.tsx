@@ -7,7 +7,7 @@ import TablaCompras from '~/components/compra/tablaCompras';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
-import { hoy, ultimoDelMes } from '~/functions/comunes';
+import { hoy, primeroDelMes, ultimoDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_INDEX_COMPRA = createContextId<any>('index_compra');
@@ -15,6 +15,8 @@ export const CTX_INDEX_COMPRA = createContextId<any>('index_compra');
 export default component$(() => {
   //#region DEFINICION CTX_INDEX_COMPRA
   const definicion_CTX_INDEX_COMPRA = useStore({
+    cC: [],
+
     mostrarPanelCompra: false,
     grabo_Compra: false,
   });
@@ -26,16 +28,16 @@ export default component$(() => {
   const buscarCompras = useSignal(0);
   // const losPeriodos = useStore({ idPeriodo: '', periodo: '' });
   // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
-  const losPeriodosCargados = useSignal([]);
+  const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
-  const losIgvsCompra = useSignal([]);
-  const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
+  // const losIgvsCompra = useSignal([]);
+  // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
 
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    fechaInicio: hoy(),
-    fechaFinal: ultimoDelMes(),
+    fechaInicio: primeroDelMes(), //
+    fechaFinal: hoy(), // ultimoDelMes(),
   });
   //#endregion INICIALIZACION
 
@@ -52,33 +54,33 @@ export default component$(() => {
   //#endregion ACTUALIZAR TABLA COMPRAS
 
   //#region OBTENER PERIODOS
-  const cargarLosPeriodos = $(async () => {
-    const losPeri = await getPeriodos({
-      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-      idEmpresa: parametrosGlobales.idEmpresa,
-      bandera: 'Compras',
-    });
-    console.log('losPeri', losPeri);
-    losPeriodosCargados.value = losPeri.data;
-    console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-    // console.log('a cargar periodos');
-  });
+  // const cargarLosPeriodos = $(async () => {
+  //   const losPeri = await getPeriodos({
+  //     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //     idEmpresa: parametrosGlobales.idEmpresa,
+  //     bandera: 'Compras',
+  //   });
+  //   console.log('losPeri', losPeri);
+  //   losPeriodosCargados.value = losPeri.data;
+  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // console.log('a cargar periodos');
+  // });
 
-  useTask$(({ track }) => {
-    track(() => ini.value);
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
 
-    cargarLosPeriodos();
-  });
+  //   cargarLosPeriodos();
+  // });
   //#endregion OBTENER PERIODOS
 
   return (
     <div class="container">
-      {/*  TITULO  */}
+      {/*  IDENTIFICACION  */}
       {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem' }}>
         {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
       </h1> */}
       <div style={{ background: '#00778F' }}>
-        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -86,9 +88,10 @@ export default component$(() => {
           )}`}
         </label>
       </div>
-      <h3>
+      <h4 style={{ margin: '8px 0 4px 2px' }}>
         <u>Compras</u>
-      </h3>
+      </h4>
+
       {/*  INTERVALOS DE FECHAS  style={{ display: 'flex', margin: '10px 0' }}*/}
       {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
       <div class="intervalo-fechas">
@@ -149,18 +152,18 @@ export default component$(() => {
               return;
             }
             // obteniendo IGVs de COMPRA
-            let elIgv = await getIgvsCompra({
-              idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-              idEmpresa: parametrosGlobales.idEmpresa,
-            });
-            elIgv = elIgv.data;
-            console.log('elIgv', elIgv);
-            losIgvsCompra.value = elIgv;
-            const tre = elIgv.filter((docs: any) => docs.default === true);
-            console.log('tre', tre);
-            (igvPorDefault.idElIgv = tre[0]._id), (igvPorDefault.elIgv = tre[0].igv), console.log('igvPorDefault', igvPorDefault);
-            // igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-            // console.log('igv.value::', igv.value);
+            // let elIgv = await getIgvsCompra({
+            //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+            //   idEmpresa: parametrosGlobales.idEmpresa,
+            // });
+            // elIgv = elIgv.data;
+            // console.log('elIgv', elIgv);
+            // losIgvsCompra.value = elIgv;
+            // const tre = elIgv.filter((docs: any) => docs.default === true);
+            // console.log('tre', tre);
+            // (igvPorDefault.idElIgv = tre[0]._id), (igvPorDefault.elIgv = tre[0].igv), console.log('igvPorDefault', igvPorDefault);
+
+            definicion_CTX_INDEX_COMPRA.cC = [];
             definicion_CTX_INDEX_COMPRA.mostrarPanelCompra = true;
           })}
         />
@@ -191,18 +194,14 @@ export default component$(() => {
             }
           })}
         />
-        {/* <button
-          onClick$={() => console.log('parametrosGlobales.periodos Compras - ini.value', parametrosGlobales.periodos, ini.value)}
-        >
-          los
-        </button> */}
+
         {definicion_CTX_INDEX_COMPRA.mostrarPanelCompra && (
           <div class="modal">
             <NewEditCompra
               addPeriodo={periodo}
-              compraSeleccionada={[]}
-              losIgvsCompra={losIgvsCompra.value}
-              igvPorDefault={igvPorDefault}
+              compraSeleccionada={definicion_CTX_INDEX_COMPRA.cC}
+              // losIgvsCompra={losIgvsCompra.value}
+              // igvPorDefault={igvPorDefault}
               //  ancho={600} parametrosGlobales={parametrosGlobales}
             />
           </div>

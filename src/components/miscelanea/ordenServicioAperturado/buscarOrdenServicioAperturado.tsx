@@ -4,8 +4,10 @@ import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import TablaOrdenesServicio from './tablaOrdenesServicioAperturados';
 import { parametrosGlobales } from '~/routes/login';
-import { hoy } from '~/functions/comunes';
+import { hoy, primeroDelMes } from '~/functions/comunes';
 import DespachoRequisiciones from './despachoRequisiciones';
+import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import ReingresoRequisiciones from './reingresoRequisiciones';
 
 export const CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO = createContextId<any>('buscar_orden_servicio__');
 
@@ -24,9 +26,9 @@ export default component$((props: { contexto: string }) => {
     case 'egreso_de_almacen':
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
-    // case 'new_venta':
-    //   ctx = useContext(CTX_ADD_VENTA);
-    //   break;
+    case 'ingreso_a_almacen':
+      ctx = useContext(CTX_NEW_IN_ALMACEN);
+      break;
   }
   //#endregion CONTEXTO
 
@@ -36,7 +38,7 @@ export default component$((props: { contexto: string }) => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    fechaInicio: '2023-01-01', //hoy(), //por.value,
+    fechaInicio: primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
     fechaFinal: hoy(), //cadena.value,
   });
   //#endregion INICIALIZACION
@@ -83,28 +85,29 @@ export default component$((props: { contexto: string }) => {
           class="intervalo-fechas"
           // style={numeroOFecha.value === 'Entre fechas' ? { visibility: 'visible' } : { visibility: 'collapse' }}
         >
-          <label class="fechas">
-            Desde:{'     '}
-            <input
-              type="date"
-              id="in_fechaDesde_MICE_ORDEN_SERVICIO"
-              value={parametrosBusqueda.fechaInicio}
-              onInput$={(e) => {
-                parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
-              }}
-            />
+          <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
+            Desde:
           </label>
-          <label class="fechas">
+          <input
+            type="date"
+            id="in_fechaDesde_MICE_ORDEN_SERVICIO"
+            value={parametrosBusqueda.fechaInicio}
+            onInput$={(e) => {
+              parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
+            }}
+          />
+          <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
             Hasta:
-            <input
-              type="date"
-              id="in_fechaHasta_MICE_ORDEN_SERVICIO"
-              value={parametrosBusqueda.fechaFinal}
-              onInput$={(e) => {
-                parametrosBusqueda.fechaFinal = (e.target as HTMLInputElement).value;
-              }}
-            />
           </label>
+          <input
+            type="date"
+            id="in_fechaHasta_MICE_ORDEN_SERVICIO"
+            value={parametrosBusqueda.fechaFinal}
+            onInput$={(e) => {
+              parametrosBusqueda.fechaFinal = (e.target as HTMLInputElement).value;
+            }}
+          />
+
           <div class="intervalo-fechas__botonBuscar">
             <ImgButton
               src={images.searchPLUS}
@@ -139,6 +142,14 @@ export default component$((props: { contexto: string }) => {
         {ctx.mostrarPanelDespachoRequisiciones && (
           <div class="modal">
             <DespachoRequisiciones
+              contexto={props.contexto}
+              osSeleccionada={definicion_CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO.oO}
+            />
+          </div>
+        )}
+        {ctx.mostrarPanelReingresoRequisiciones && (
+          <div class="modal">
+            <ReingresoRequisiciones
               contexto={props.contexto}
               osSeleccionada={definicion_CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO.oO}
             />

@@ -2,6 +2,7 @@ export interface IEgresoDeAlmacen {
   _id: string;
   idGrupoEmpresarial: string;
   idEmpresa: string;
+  idSucursal: string;
   idAlmacen: string;
   idPeriodo: string;
   periodo: number;

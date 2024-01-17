@@ -3,6 +3,7 @@ import { Link, useNavigate } from '@builder.io/qwik-city';
 // import { CaoSLogo } from '../icons/cao-s';
 import style from './headerAlmacen.css?inline';
 import { images } from '~/assets';
+import { parametrosGlobales } from '~/routes/login';
 
 // export const CTX_APP_ALMACEN = createContextId<any>('app.almacen');
 
@@ -78,6 +79,7 @@ export default component$(() => {
               </Link>
             </li>
             <li
+              hidden={!parametrosGlobales.almacenActivo}
               class="main-menu__item"
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
@@ -88,6 +90,7 @@ export default component$(() => {
               </Link>
             </li>
             <li
+              hidden={!parametrosGlobales.almacenActivo}
               class="main-menu__item"
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
@@ -99,6 +102,7 @@ export default component$(() => {
               </Link>
             </li>
             <li
+              hidden={!parametrosGlobales.almacenActivo}
               class="main-menu__item"
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
@@ -123,6 +127,7 @@ export default component$(() => {
                 sessionStorage.removeItem('numeroIdentidad');
                 sessionStorage.removeItem('idSucursal');
                 sessionStorage.removeItem('sucursal');
+                sessionStorage.removeItem('almacenActivo');
                 // sessionStorage.clear;
                 navegarA('/');
               }}

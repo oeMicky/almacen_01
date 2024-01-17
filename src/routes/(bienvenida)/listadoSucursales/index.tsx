@@ -81,9 +81,24 @@ export default component$(() => {
                         }
                         parametrosGlobales.idSucursal = sucur.idSucursal;
                         parametrosGlobales.sucursal = sucur.sucursal;
+                        parametrosGlobales.almacenActivo = activo[0].almacenActivo;
                         sessionStorage.setItem('idSucursal', sucur.idSucursal);
                         sessionStorage.setItem('sucursal', sucur.sucursal);
-                        navegarA(parametrosGlobales.paginaInicioDelSistema);
+                        sessionStorage.setItem('almacenActivo', activo[0].almacenActivo);
+                        //PAGINA DE INICIO
+                        if (parametrosGlobales.almacenActivo) {
+                          navegarA(parametrosGlobales.paginaInicioDelSistema);
+                        } else {
+                          if (
+                            parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+                            parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+                            parametrosGlobales.paginaInicioDelSistema === '/kardex'
+                          ) {
+                            navegarA(parametrosGlobales.paginaInicioDefault);
+                          } else {
+                            navegarA(parametrosGlobales.paginaInicioDelSistema);
+                          }
+                        }
                       })}
                     />
                   </td>

@@ -2,6 +2,7 @@ export interface IVenta {
   _id: string;
   idGrupoEmpresarial: string;
   idEmpresa: string;
+  idSucursal: string;
   idPeriodo: string;
   periodo: number;
 
@@ -11,8 +12,10 @@ export interface IVenta {
 
   codigoTipoComprobantePago: string;
   tipoComprobantePago: string;
+  idSerieVenta: string;
   serie: string;
   numero: number;
+
   fecha: string;
 
   idCliente: string;
@@ -26,9 +29,9 @@ export interface IVenta {
   moneda: string;
   tipoCambio: number;
 
-  idOrdenServicio: string;
-  serieOrdenServicio: string;
-  numeroOrdenServicio: number;
+  // idOrdenServicio: string;
+  // serieOrdenServicio: string;
+  // numeroOrdenServicio: number;
 
   vendedor: string;
   metodoPago: string;

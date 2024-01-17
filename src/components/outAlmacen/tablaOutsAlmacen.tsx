@@ -65,7 +65,7 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
           <>
             {misOutsAlmacen.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}>
+                <table style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}
@@ -92,13 +92,23 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                       return (
                         <tr key={_id}>
                           {/* <td data-label="Ítem">{indexItem}</td> */}
-                          <td data-label="Periodo">{periodo}</td>
-                          <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}</td>
-                          <td data-label="Motivo">{motivoEgresoAlmacen ? motivoEgresoAlmacen : '_'}</td>
-                          <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '_'}</td>
-                          <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '_'}</td>
+                          <td data-label="Periodo" class="comoCadena">
+                            {periodo}
+                          </td>
+                          <td data-label="FISMA" class="comoCadena">
+                            {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}
+                          </td>
+                          <td data-label="Motivo" class="comoCadena">
+                            {motivoEgresoAlmacen ? motivoEgresoAlmacen : '_'}
+                          </td>
+                          <td data-label="Doc" class="comoCadena">
+                            {numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '_'}
+                          </td>
+                          <td data-label="Razón social" class="comoCadena">
+                            {razonSocialNombre ? razonSocialNombre : '_'}
+                          </td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                          <td data-label="Acc" style={{ textAlign: 'right' }}>
+                          <td data-label="Acc" class="accciones">
                             {/* <ImgButton
                               src={images.edit}
                               alt="icono de editar"

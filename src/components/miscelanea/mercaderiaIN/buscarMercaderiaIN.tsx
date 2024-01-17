@@ -51,7 +51,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: 'acce 5', //cadena.value,
+    cadenaABuscar: '', // 'acce 5', //cadena.value,
   });
 
   //#region BUSCAR MERCADERIAS IN
@@ -87,7 +87,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   return (
     <div
       style={{
-        width: 'clamp(min(10vw, 20rem), 700px, max(90vw, 55rem))',
+        width: 'clamp(min(10vw, 20rem), 800px, max(90vw, 55rem))',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

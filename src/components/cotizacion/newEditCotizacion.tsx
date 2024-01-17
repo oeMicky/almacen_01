@@ -74,6 +74,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         ? props.cotizacionSelecci.idGrupoEmpresarial
         : parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: props.cotizacionSelecci.idEmpresa ? props.cotizacionSelecci.idEmpresa : parametrosGlobales.idEmpresa,
+      idSucursal: props.cotizacionSelecci.idSucursal ? props.cotizacionSelecci.idSucursal : parametrosGlobales.idSucursal,
       idPeriodo: props.cotizacionSelecci.idPeriodo ? props.cotizacionSelecci.idPeriodo : props.addPeriodo.idPeriodo,
       periodo: props.cotizacionSelecci.periodo ? props.cotizacionSelecci.periodo : props.addPeriodo.periodo,
 
@@ -320,6 +321,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
       idCotizacion: definicion_CTX_COTIZACION._id,
       idGrupoEmpresarial: definicion_CTX_COTIZACION.idGrupoEmpresarial,
       idEmpresa: definicion_CTX_COTIZACION.idEmpresa,
+      idSucursal: definicion_CTX_COTIZACION.idSucursal,
       idPeriodo: definicion_CTX_COTIZACION.idPeriodo,
       periodo: definicion_CTX_COTIZACION.periodo,
 

@@ -80,7 +80,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
           <>
             {misCotizaciones.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Cotización</th>
@@ -97,11 +97,19 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                       // const indexItem = index + 1;
                       return (
                         <tr key={value._id}>
-                          <td data-label="Cotización">{value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}</td>
-                          <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
-                          <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                          <td data-label="Cliente">{value.razonSocialNombre}</td>
-                          <td data-label="Importe PEN" style={{ textAlign: 'end' }}>
+                          <td data-label="Cotización" class="comoCadena">
+                            {value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}
+                          </td>
+                          <td data-label="Fecha" class="comoCadena">
+                            {formatoDDMMYYYY_PEN(value.fecha)}
+                          </td>
+                          <td data-label="Nro. Doc" class="comoCadena">
+                            {value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}
+                          </td>
+                          <td data-label="Cliente" class="comoCadena">
+                            {value.razonSocialNombre}
+                          </td>
+                          <td data-label="Importe PEN" class="comoNumero">
                             {value.montoTotalPEN
                               ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
@@ -110,7 +118,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 })
                               : ''}
                           </td>
-                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                          <td data-label="Acciones" class="acciones">
                             {props.modoSeleccion ? (
                               <>
                                 <ImgButton

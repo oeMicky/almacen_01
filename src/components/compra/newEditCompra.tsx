@@ -9,14 +9,14 @@ import { IPersona } from '~/interfaces/iPersona';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import { getTipoCambio } from '~/apis/apisExternas.api';
 import { formatearMonedaPEN, ultimoDiaDelPeriodoX } from '~/functions/comunes';
-import { inUpCompra } from '~/apis/compra.api';
+import { getIgvsCompra, inUpCompra } from '~/apis/compra.api';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_NEW_EDIT_COMPRA = createContextId<any>('new_editCompra');
 
 export const CTX_PROVEEDOR = createContextId<IPersona>('proveedor');
 
-export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorDefault: any; compraSeleccionada: any }) => {
+export default component$((props: { addPeriodo: any; compraSeleccionada: any }) => {
   //#region DEFINICION CTX_NEW_EDIT_COMPRA
   const definicion_CTX_NEW_EDIT_COMPRA = useStore({
     mostrarPanelBuscarPersona: false,
@@ -33,6 +33,7 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
       ? props.compraSeleccionada.idGrupoEmpresarial
       : parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: props.compraSeleccionada.idEmpresa ? props.compraSeleccionada.idEmpresa : parametrosGlobales.idEmpresa,
+    idSucursal: props.compraSeleccionada.idSucursal ? props.compraSeleccionada.idSucursal : parametrosGlobales.idSucursal,
     idPeriodo: props.compraSeleccionada.idPeriodo ? props.compraSeleccionada.idPeriodo : props.addPeriodo.idPeriodo,
     periodo: props.compraSeleccionada.periodo ? props.compraSeleccionada.periodo : props.addPeriodo.periodo,
 
@@ -45,7 +46,7 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
     serie: props.compraSeleccionada.serie ? props.compraSeleccionada.serie : '',
     numero: props.compraSeleccionada.numero ? props.compraSeleccionada.numero : '',
 
-    fecha: props.compraSeleccionada.fecha ? props.compraSeleccionada.fecha : '',
+    fecha: props.compraSeleccionada.fecha ? props.compraSeleccionada.fecha.substring(0, 10) : '',
     conFechaVencimiento: props.compraSeleccionada.conFechaVencimiento ? props.compraSeleccionada.conFechaVencimiento : false,
     fechaVencimiento: props.compraSeleccionada.fechaVencimiento ? props.compraSeleccionada.fechaVencimiento : '',
     anioDUAoDSI: props.compraSeleccionada.anioDUAoDSI ? props.compraSeleccionada.anioDUAoDSI : '',
@@ -61,26 +62,36 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
     razonSocialNombre: props.compraSeleccionada.razonSocialNombre ? props.compraSeleccionada.razonSocialNombre : '',
     email: props.compraSeleccionada.email ? props.compraSeleccionada.email : '',
 
-    idElIgv: props.compraSeleccionada.idElIgv ? props.compraSeleccionada.idElIgv : props.igvPorDefault.idElIgv,
-    elIgv: props.compraSeleccionada.elIgv ? props.compraSeleccionada.elIgv : props.igvPorDefault.elIgv,
+    idElIgv: props.compraSeleccionada.idElIgv ? props.compraSeleccionada.idElIgv : '',
+    elIgv: props.compraSeleccionada.elIgv ? props.compraSeleccionada.elIgv.$numberDecimal : '',
 
     enDolares: props.compraSeleccionada.enDolares ? props.compraSeleccionada.enDolares : false,
     moneda: props.compraSeleccionada.moneda ? props.compraSeleccionada.moneda : 'PEN',
-    tipoCambio: props.compraSeleccionada.tipoCambio ? props.compraSeleccionada.tipoCambio : '',
+    tipoCambio: props.compraSeleccionada.tipoCambio ? props.compraSeleccionada.tipoCambio.$numberDecimal : '',
 
     tipoCompra: props.compraSeleccionada.tipoCompra ? props.compraSeleccionada.tipoCompra : 'A',
-
-    baseImponiblePEN: props.compraSeleccionada.baseImponiblePEN ? props.compraSeleccionada.baseImponiblePEN : '',
-    igvPEN: props.compraSeleccionada.igvPEN ? props.compraSeleccionada.igvPEN : '',
+    //***************SOLES******************** */
+    baseImponiblePEN: props.compraSeleccionada.baseImponiblePEN ? props.compraSeleccionada.baseImponiblePEN.$numberDecimal : '',
+    igvPEN: props.compraSeleccionada.igvPEN ? props.compraSeleccionada.igvPEN.$numberDecimal : '',
     adquisicionesNoGravadasPEN: props.compraSeleccionada.adquisicionesNoGravadasPEN
-      ? props.compraSeleccionada.adquisicionesNoGravadasPEN
+      ? props.compraSeleccionada.adquisicionesNoGravadasPEN.$numberDecimal
       : '',
-    iscPEN: props.compraSeleccionada.iscPEN ? props.compraSeleccionada.iscPEN : '',
-    icbpPEN: props.compraSeleccionada.icbpPEN ? props.compraSeleccionada.icbpPEN : '',
-    otrosPEN: props.compraSeleccionada.otrosPEN ? props.compraSeleccionada.otrosPEN : '',
-    totalPEN: props.compraSeleccionada.totalPEN ? props.compraSeleccionada.totalPEN : '',
-
-    totalUSD: props.compraSeleccionada.totalUSD ? props.compraSeleccionada.totalUSD : '',
+    iscPEN: props.compraSeleccionada.iscPEN ? props.compraSeleccionada.iscPEN.$numberDecimal : '',
+    icbpPEN: props.compraSeleccionada.icbpPEN ? props.compraSeleccionada.icbpPEN.$numberDecimal : '',
+    otrosPEN: props.compraSeleccionada.otrosPEN ? props.compraSeleccionada.otrosPEN.$numberDecimal : '',
+    totalPEN: props.compraSeleccionada.totalPEN ? props.compraSeleccionada.totalPEN.$numberDecimal : '',
+    //****************************************** */
+    //***************DOLARES******************** */
+    baseImponibleUSD: props.compraSeleccionada.baseImponibleUSD ? props.compraSeleccionada.baseImponibleUSD.$numberDecimal : '',
+    igvUSD: props.compraSeleccionada.igvUSD ? props.compraSeleccionada.igvUSD.$numberDecimal : '',
+    adquisicionesNoGravadasUSD: props.compraSeleccionada.adquisicionesNoGravadasUSD
+      ? props.compraSeleccionada.adquisicionesNoGravadasUSD.$numberDecimal
+      : '',
+    iscUSD: props.compraSeleccionada.iscUSD ? props.compraSeleccionada.iscUSD.$numberDecimal : '',
+    icbpUSD: props.compraSeleccionada.icbpUSD ? props.compraSeleccionada.icbpUSD.$numberDecimal : '',
+    otrosUSD: props.compraSeleccionada.otrosUSD ? props.compraSeleccionada.otrosUSD.$numberDecimal : '',
+    totalUSD: props.compraSeleccionada.totalUSD ? props.compraSeleccionada.totalUSD.$numberDecimal : '',
+    //****************************************** */
 
     fechaReferencia: props.compraSeleccionada.fechaReferencia ? props.compraSeleccionada.fechaReferencia : '',
     tipoReferencia: props.compraSeleccionada.tipoReferencia ? props.compraSeleccionada.tipoReferencia : '',
@@ -114,8 +125,10 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
   //#region INICIALIZACION
   const ini = useSignal(0);
   const LosTCPcargados = useSignal([]);
-  // const LosIGVscargados = useSignal([]);
+  const LosIGVscargados = useSignal([]);
   // const esNumero = useSignal(false);
+  const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
+
   //#endregion INICIALIZACION
 
   //#region CARGAR LOS TCP
@@ -127,20 +140,29 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
     ini.value++;
   });
 
-  // const cargarLosIGVsCompra = $(async () => {
-  //   const LosIGVs = await getIgvsCompra({
-  //     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-  //     idEmpresa: parametrosGlobales.idEmpresa,
-  //   });
-  //   console.log('LosIGVs', LosIGVs);
-  //   LosIGVscargados.value = LosIGVs.data;
-  //   console.log(' LosIGVscargados.value', LosIGVscargados.value);
-  // });
+  const cargarLosIGVsCompra = $(async () => {
+    const LosIGVs = await getIgvsCompra({
+      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+      idEmpresa: parametrosGlobales.idEmpresa,
+    });
+    console.log('LosIGVs', LosIGVs);
+    LosIGVscargados.value = LosIGVs.data;
+    console.log(' LosIGVscargados.value', LosIGVscargados.value);
+    if (definicion_CTX_COMPRA._id === '') {
+      const tre: any = LosIGVscargados.value.filter((docs: any) => docs.default === true);
+      console.log('tretretretretretretretretre', tre);
+      igvPorDefault.idElIgv = tre[0]._id;
+      igvPorDefault.elIgv = tre[0].igv;
+      definicion_CTX_COMPRA.elIgv = tre[0].igv;
+      console.log('definicion_CTX_COMPRA.elIgv..........', definicion_CTX_COMPRA.elIgv);
+    }
+  });
 
   useTask$(({ track }) => {
     track(() => ini.value);
     if (ini.value === 0) {
       cargarLosTCP();
+      cargarLosIGVsCompra();
     }
 
     // ini.value++; forma blucle infinito
@@ -171,28 +193,24 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
     if (checkTC) {
       definicion_CTX_COMPRA.enDolares = true;
       console.log('ingreso al tipo de cambio');
-      let elTipoCambio = await getTipoCambio(definicion_CTX_COMPRA.fecha);
-      elTipoCambio = elTipoCambio.data;
-      console.log('elTipoCambio', elTipoCambio.venta);
-      definicion_CTX_COMPRA.moneda = elTipoCambio.moneda;
-      definicion_CTX_COMPRA.tipoCambio = elTipoCambio.venta;
-      // let itemsVVVVVV = await tablaItemsVentaADolares(elTipoCambio.venta);
-      // console.log('itemsVVVVVV', itemsVVVVVV);
+      // let elTipoCambio = await getTipoCambio(definicion_CTX_COMPRA.fecha);
+      // console.log('ingreso al tipo de cambio elTipoCambio.data');
+      // elTipoCambio = elTipoCambio.data;
+      // console.log('elTipoCambio', elTipoCambio.venta);
+      // definicion_CTX_COMPRA.moneda = elTipoCambio.moneda;
+      // definicion_CTX_COMPRA.tipoCambio = elTipoCambio.venta;
+      definicion_CTX_COMPRA.moneda = 'USD';
+      definicion_CTX_COMPRA.tipoCambio = 3.713;
     } else {
       console.log('ingreso al NNNNOOOOOO enDOLARES');
       definicion_CTX_COMPRA.enDolares = false;
       definicion_CTX_COMPRA.moneda = 'PEN';
       definicion_CTX_COMPRA.tipoCambio = 0;
-      // itemsVenta.map((itemV, index) => {
-      //   let { cantidad, precioPEN } = itemV;
-      //   itemV['ventaPEN'] = redondeo2Decimales(itemV['precioPEN'] * cantidad);
-      //   setItemsVenta([...itemsVenta.slice(0, index), itemV, ...itemsVenta.slice(index + 1, itemsVenta.length)]);
-      // });
     }
   });
   //#endregion TIPO CAMBIO
 
-  //#region RESUMEN DE MONTOS
+  //#region RESUMEN DE MONTOS SOLES
   const sumaTotal = $(() => {
     const bI = definicion_CTX_COMPRA.baseImponiblePEN ? definicion_CTX_COMPRA.baseImponiblePEN : 0;
     const igv = definicion_CTX_COMPRA.igvPEN ? definicion_CTX_COMPRA.igvPEN : 0;
@@ -201,21 +219,31 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
     const icbp = definicion_CTX_COMPRA.icbpPEN ? definicion_CTX_COMPRA.icbpPEN : 0;
     const otros = definicion_CTX_COMPRA.otrosPEN ? definicion_CTX_COMPRA.otrosPEN : 0;
 
-    console.log('montos RESUMEN', parseFloat(bI), igv, adqNoG, isc, icbp, otros);
+    // console.log('montos RESUMEN', parseFloat(bI), igv, adqNoG, isc, icbp, otros);
+    // console.log('montos RESUMEN', bI, igv, adqNoG, isc, icbp, otros);
 
-    definicion_CTX_COMPRA.totalPEN = formatearMonedaPEN(
-      parseFloat(bI) + parseFloat(igv) + parseFloat(adqNoG) + parseFloat(isc) + parseFloat(icbp) + parseFloat(otros)
-    );
+    definicion_CTX_COMPRA.totalPEN =
+      parseFloat(bI) + parseFloat(igv) + parseFloat(adqNoG) + parseFloat(isc) + parseFloat(icbp) + parseFloat(otros);
+    // definicion_CTX_COMPRA.totalPEN = formatearMonedaPEN(
+    //   parseFloat(bI) + parseFloat(igv) + parseFloat(adqNoG) + parseFloat(isc) + parseFloat(icbp) + parseFloat(otros)
+    // );
+    console.log('LA SUMA definicion_CTX_COMPRA.totalPEN ', definicion_CTX_COMPRA.totalPEN);
   });
 
   useTask$(({ track }) => {
     track(() => definicion_CTX_COMPRA.baseImponiblePEN);
     //
-    const bI = definicion_CTX_COMPRA.baseImponiblePEN ? definicion_CTX_COMPRA.baseImponiblePEN : 0;
+    console.log('definicion_CTX_COMPRA.baseImponiblePEN ', definicion_CTX_COMPRA.baseImponiblePEN);
+    const bI = definicion_CTX_COMPRA.baseImponiblePEN ? parseFloat(definicion_CTX_COMPRA.baseImponiblePEN) : 0;
     const elIGV = definicion_CTX_COMPRA.elIgv ? parseFloat(definicion_CTX_COMPRA.elIgv) : 0;
 
+    console.log('bIbIbIbIbIbIbI', bI);
+    console.log('elIGVelIGVelIGVelIGV', elIGV);
+
     if (ini.value > 0) {
+      console.log('elIGVelIGVelIGVelIGV./././././././../');
       definicion_CTX_COMPRA.igvPEN = (bI * elIGV) / 100;
+      console.log('definicion_CTX_COMPRA.igvPEN./././././././../', definicion_CTX_COMPRA.igvPEN);
     }
 
     sumaTotal();
@@ -223,15 +251,43 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
 
   useTask$(({ track }) => {
     track(() => definicion_CTX_COMPRA.elIgv);
+    console.log('***************ENTRO A EL IGV***********************');
     //
-    const bI = definicion_CTX_COMPRA.baseImponiblePEN ? definicion_CTX_COMPRA.baseImponiblePEN : 0;
-    const elIGV = definicion_CTX_COMPRA.elIgv ? parseFloat(definicion_CTX_COMPRA.elIgv) : 0;
+    if (definicion_CTX_COMPRA.enDolares) {
+      console.log('***************ENTRO A EL IGV***USD********************');
+      const bI = definicion_CTX_COMPRA.baseImponibleUSD ? parseFloat(definicion_CTX_COMPRA.baseImponibleUSD) : 0;
+      const elIGV = definicion_CTX_COMPRA.elIgv ? parseFloat(definicion_CTX_COMPRA.elIgv) : 0;
+      console.log('***************ENTRO A EL IGV***USD****', bI, elIGV);
+      if (ini.value > 0) {
+        console.log('***************ENTRO A EL IGV***USD////', bI, elIGV);
+        definicion_CTX_COMPRA.igvUSD = (bI * elIGV) / 100;
+        console.log('***************ENTRO A EL IGV***USD$$$$', bI, elIGV);
+        // sumaTotalDOLARES();
+        const bIUSD = definicion_CTX_COMPRA.baseImponibleUSD ? definicion_CTX_COMPRA.baseImponibleUSD : 0;
+        const igv = definicion_CTX_COMPRA.igvUSD ? definicion_CTX_COMPRA.igvUSD : 0;
+        const adqNoG = definicion_CTX_COMPRA.adquisicionesNoGravadasUSD ? definicion_CTX_COMPRA.adquisicionesNoGravadasUSD : 0;
+        const isc = definicion_CTX_COMPRA.iscUSD ? definicion_CTX_COMPRA.iscUSD : 0;
+        const icbp = definicion_CTX_COMPRA.icbpUSD ? definicion_CTX_COMPRA.icbpUSD : 0;
+        const otros = definicion_CTX_COMPRA.otrosUSD ? definicion_CTX_COMPRA.otrosUSD : 0;
+        definicion_CTX_COMPRA.totalUSD =
+          parseFloat(bIUSD) + parseFloat(igv) + parseFloat(adqNoG) + parseFloat(isc) + parseFloat(icbp) + parseFloat(otros);
+        console.log('***************ENTRO A EL IGV***USD!!!!', bI, elIGV);
+        //conversion
+        definicion_CTX_COMPRA.igvPEN = ((bI * elIGV) / 100) * parseFloat(definicion_CTX_COMPRA.tipoCambio);
+        // sumaTotal();
+        console.log('***************ENTRO A EL IGV***USD****', bI, elIGV);
+      }
+    } else {
+      console.log('***************ENTRO A EL IGV***PEN********************');
+      const bI = definicion_CTX_COMPRA.baseImponiblePEN ? parseFloat(definicion_CTX_COMPRA.baseImponiblePEN) : 0;
+      const elIGV = definicion_CTX_COMPRA.elIgv ? parseFloat(definicion_CTX_COMPRA.elIgv) : 0;
 
-    if (ini.value > 0) {
-      definicion_CTX_COMPRA.igvPEN = (bI * elIGV) / 100;
+      if (ini.value > 0) {
+        definicion_CTX_COMPRA.igvPEN = (bI * elIGV) / 100;
+      }
+
+      sumaTotal();
     }
-
-    sumaTotal();
   });
 
   useTask$(({ track }) => {
@@ -257,7 +313,102 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
     //
     sumaTotal();
   });
-  //#endregion RESUMEN DE MONTOS
+  //#endregion RESUMEN DE MONTOS SOLES
+
+  //#region RESUMEN DE MONTOS DOLARES
+  const sumaTotalDOLARES = $(() => {
+    // console.log('montos RESUMEN..**DOLARES--');
+    const bI = definicion_CTX_COMPRA.baseImponibleUSD ? definicion_CTX_COMPRA.baseImponibleUSD : 0;
+    const igv = definicion_CTX_COMPRA.igvUSD ? definicion_CTX_COMPRA.igvUSD : 0;
+    const adqNoG = definicion_CTX_COMPRA.adquisicionesNoGravadasUSD ? definicion_CTX_COMPRA.adquisicionesNoGravadasUSD : 0;
+    const isc = definicion_CTX_COMPRA.iscUSD ? definicion_CTX_COMPRA.iscUSD : 0;
+    const icbp = definicion_CTX_COMPRA.icbpUSD ? definicion_CTX_COMPRA.icbpUSD : 0;
+    const otros = definicion_CTX_COMPRA.otrosUSD ? definicion_CTX_COMPRA.otrosUSD : 0;
+    // console.log('montos RESUMEN', parseFloat(bI), igv, adqNoG, isc, icbp, otros);
+    // console.log('montos RESUMEN..**DOLARES', bI, igv, adqNoG, isc, icbp, otros);
+    definicion_CTX_COMPRA.totalUSD =
+      parseFloat(bI) + parseFloat(igv) + parseFloat(adqNoG) + parseFloat(isc) + parseFloat(icbp) + parseFloat(otros);
+    // definicion_CTX_COMPRA.totalPEN = formatearMonedaPEN(
+    //   parseFloat(bI) + parseFloat(igv) + parseFloat(adqNoG) + parseFloat(isc) + parseFloat(icbp) + parseFloat(otros)
+    // );
+    // console.log('LA SUMA definicion_CTX_COMPRA.totalUSD ', definicion_CTX_COMPRA.totalUSD);
+  });
+
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_COMPRA.baseImponibleUSD);
+    //
+    if (definicion_CTX_COMPRA.enDolares) {
+      console.log('definicion_CTX_COMPRA.baseImponibleUSD ', definicion_CTX_COMPRA.baseImponibleUSD);
+      const bI = definicion_CTX_COMPRA.baseImponibleUSD ? parseFloat(definicion_CTX_COMPRA.baseImponibleUSD) : 0;
+      const elIGV = definicion_CTX_COMPRA.elIgv ? parseFloat(definicion_CTX_COMPRA.elIgv) : 0;
+
+      console.log('bIbIbIbIbIbIbI USD ', bI);
+      console.log('elIGVelIGVelIGVelIGV USD ', elIGV);
+
+      if (ini.value > 0) {
+        console.log('elIGVelIGVelIGVelIGV USD ./././././././../');
+        definicion_CTX_COMPRA.igvUSD = (bI * elIGV) / 100;
+        console.log('definicion_CTX_COMPRA.igvUSD./././././././../', definicion_CTX_COMPRA.igvUSD);
+      }
+
+      sumaTotalDOLARES();
+
+      //conversion
+      const conversion = bI * parseFloat(definicion_CTX_COMPRA.tipoCambio);
+      definicion_CTX_COMPRA.baseImponiblePEN = conversion;
+    }
+  });
+
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_COMPRA.adquisicionesNoGravadasUSD);
+    //
+    if (definicion_CTX_COMPRA.enDolares) {
+      sumaTotalDOLARES();
+      //conversion
+      const bI = definicion_CTX_COMPRA.adquisicionesNoGravadasUSD
+        ? parseFloat(definicion_CTX_COMPRA.adquisicionesNoGravadasUSD)
+        : 0;
+      const conversion = bI * parseFloat(definicion_CTX_COMPRA.tipoCambio);
+      definicion_CTX_COMPRA.adquisicionesNoGravadasPEN = conversion;
+    }
+  });
+
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_COMPRA.iscUSD);
+    //
+    if (definicion_CTX_COMPRA.enDolares) {
+      sumaTotalDOLARES();
+      //conversion
+      const bI = definicion_CTX_COMPRA.iscUSD ? parseFloat(definicion_CTX_COMPRA.iscUSD) : 0;
+      const conversion = bI * parseFloat(definicion_CTX_COMPRA.tipoCambio);
+      definicion_CTX_COMPRA.iscPEN = conversion;
+    }
+  });
+
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_COMPRA.icbpUSD);
+    //
+    if (definicion_CTX_COMPRA.enDolares) {
+      sumaTotalDOLARES();
+      //conversion
+      const bI = definicion_CTX_COMPRA.icbpUSD ? parseFloat(definicion_CTX_COMPRA.icbpUSD) : 0;
+      const conversion = bI * parseFloat(definicion_CTX_COMPRA.tipoCambio);
+      definicion_CTX_COMPRA.icbpPEN = conversion;
+    }
+  });
+
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_COMPRA.otrosUSD);
+    //
+    if (definicion_CTX_COMPRA.enDolares) {
+      sumaTotalDOLARES();
+      //conversion
+      const bI = definicion_CTX_COMPRA.otrosUSD ? parseFloat(definicion_CTX_COMPRA.otrosUSD) : 0;
+      const conversion = bI * parseFloat(definicion_CTX_COMPRA.tipoCambio);
+      definicion_CTX_COMPRA.otrosPEN = conversion;
+    }
+  });
+  //#endregion RESUMEN DE MONTOS DOLARES
 
   //#region VALIDAR NUMERO
   // const validar_inputNumero = $((e: any) => {
@@ -369,6 +520,7 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
       idCompra: definicion_CTX_COMPRA._id,
       idGrupoEmpresarial: definicion_CTX_COMPRA.idGrupoEmpresarial,
       idEmpresa: definicion_CTX_COMPRA.idEmpresa,
+      idSucursal: definicion_CTX_COMPRA.idSucursal,
       idPeriodo: definicion_CTX_COMPRA.idPeriodo,
       periodo: definicion_CTX_COMPRA.periodo,
 
@@ -463,12 +615,24 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
           onClick={$(() => {
             console.log(
               'definicion_CTX_COMPRA - props.igvPorDefault',
-              definicion_CTX_COMPRA,
+              definicion_CTX_COMPRA
               // props.losIgvsCompra,
-              props.igvPorDefault
+              // props.igvPorDefault
             );
+            // console.log('props.igvPorDefault', props.igvPorDefault);
           })}
         />
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('props.losIgvsCompra', props.losIgvsCompra);
+          })}
+        /> */}
+        <ImgButton src={images.see} alt="Icono de cerrar" height={16} width={16} title="Cerrar el formulario" />
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.8rem' }}>Compra</h3>
@@ -909,9 +1073,15 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
                   style={{ width: '100%' }}
                   id="in_BaseImponible"
                   placeholder="Base imponible"
-                  value={definicion_CTX_COMPRA.baseImponiblePEN}
+                  value={
+                    definicion_CTX_COMPRA.enDolares
+                      ? definicion_CTX_COMPRA.baseImponibleUSD
+                      : definicion_CTX_COMPRA.baseImponiblePEN
+                  }
                   onChange$={(e) => {
-                    definicion_CTX_COMPRA.baseImponiblePEN = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    definicion_CTX_COMPRA.enDolares
+                      ? (definicion_CTX_COMPRA.baseImponibleUSD = (e.target as HTMLInputElement).value.trim().toUpperCase())
+                      : (definicion_CTX_COMPRA.baseImponiblePEN = (e.target as HTMLInputElement).value.trim().toUpperCase());
                     console.log('onChange..bI', definicion_CTX_COMPRA.baseImponiblePEN);
                   }}
                   onKeyUp$={(e) => {
@@ -935,14 +1105,18 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
                   style={{ width: '100%' }}
                   disabled
                   placeholder="IGV"
-                  value={definicion_CTX_COMPRA.igvPEN}
+                  value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.igvUSD : definicion_CTX_COMPRA.igvPEN}
                 />
                 <ElSelect
                   id={'se_igv'}
-                  valorSeleccionado={definicion_CTX_COMPRA.elIgv}
+                  // valorSeleccionado={definicion_CTX_COMPRA.elIgv}
+                  valorSeleccionado={
+                    parseFloat(definicion_CTX_COMPRA.elIgv)
+                    // definicion_CTX_COMPRA._id === '' ? definicion_CTX_COMPRA.elIgv : parseFloat(definicion_CTX_COMPRA.elIgv)
+                  }
                   // valorSeleccionado={18}
-                  // registros={LosIGVscargados.value}
-                  registros={props.losIgvsCompra}
+                  registros={LosIGVscargados.value}
+                  // registros={props.losIgvsCompra}
                   registroID={'_id'}
                   registroTEXT={'igv'}
                   textoAdicional=" %"
@@ -977,9 +1151,19 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
                   id="in_AdquisicionesNoGravadas"
                   style={{ width: '100%' }}
                   placeholder="Adquisiciones No Gravadas"
-                  value={definicion_CTX_COMPRA.adquisicionesNoGravadasPEN}
+                  value={
+                    definicion_CTX_COMPRA.enDolares
+                      ? definicion_CTX_COMPRA.adquisicionesNoGravadasUSD
+                      : definicion_CTX_COMPRA.adquisicionesNoGravadasPEN
+                  }
                   onChange$={(e) => {
-                    definicion_CTX_COMPRA.adquisicionesNoGravadasPEN = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    definicion_CTX_COMPRA.enDolares
+                      ? (definicion_CTX_COMPRA.adquisicionesNoGravadasUSD = (e.target as HTMLInputElement).value
+                          .trim()
+                          .toUpperCase())
+                      : (definicion_CTX_COMPRA.adquisicionesNoGravadasPEN = (e.target as HTMLInputElement).value
+                          .trim()
+                          .toUpperCase());
                   }}
                   onKeyPress$={(e) => {
                     if (e.key === 'Enter') {
@@ -1001,9 +1185,11 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
                   id="in_ISC"
                   style={{ width: '100%' }}
                   placeholder="ISC"
-                  value={definicion_CTX_COMPRA.iscPEN}
+                  value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.iscUSD : definicion_CTX_COMPRA.iscPEN}
                   onChange$={(e) => {
-                    definicion_CTX_COMPRA.iscPEN = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    definicion_CTX_COMPRA.enDolares
+                      ? (definicion_CTX_COMPRA.iscUSD = (e.target as HTMLInputElement).value.trim().toUpperCase())
+                      : (definicion_CTX_COMPRA.iscPEN = (e.target as HTMLInputElement).value.trim().toUpperCase());
                   }}
                   onKeyPress$={(e) => {
                     if (e.key === 'Enter') {
@@ -1025,9 +1211,11 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
                   id="in_ICBP"
                   style={{ width: '100%' }}
                   placeholder="ICBP"
-                  value={definicion_CTX_COMPRA.icbpPEN}
+                  value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.icbpUSD : definicion_CTX_COMPRA.icbpPEN}
                   onChange$={(e) => {
-                    definicion_CTX_COMPRA.icbpPEN = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    definicion_CTX_COMPRA.enDolares
+                      ? (definicion_CTX_COMPRA.icbpUSD = (e.target as HTMLInputElement).value.trim().toUpperCase())
+                      : (definicion_CTX_COMPRA.icbpPEN = (e.target as HTMLInputElement).value.trim().toUpperCase());
                   }}
                   onKeyPress$={(e) => {
                     if (e.key === 'Enter') {
@@ -1049,9 +1237,11 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
                   id="in_Otros"
                   style={{ width: '100%' }}
                   placeholder="Otros"
-                  value={definicion_CTX_COMPRA.otrosPEN}
+                  value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.otrosUSD : definicion_CTX_COMPRA.otrosPEN}
                   onChange$={(e) => {
-                    definicion_CTX_COMPRA.otrosPEN = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    definicion_CTX_COMPRA.enDolares
+                      ? (definicion_CTX_COMPRA.otrosUSD = (e.target as HTMLInputElement).value.trim().toUpperCase())
+                      : (definicion_CTX_COMPRA.otrosPEN = (e.target as HTMLInputElement).value.trim().toUpperCase());
                   }}
                   onKeyPress$={(e) => {
                     if (e.key === 'Enter') {
@@ -1074,7 +1264,7 @@ export default component$((props: { addPeriodo: any; losIgvsCompra: any; igvPorD
                   style={{ width: '100%' }}
                   placeholder="Total"
                   disabled
-                  value={definicion_CTX_COMPRA.totalPEN}
+                  value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.totalUSD : definicion_CTX_COMPRA.totalPEN}
                 />
               </div>
             </div>

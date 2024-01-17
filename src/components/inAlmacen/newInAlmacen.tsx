@@ -20,6 +20,7 @@ import {
   cerosALaIzquierda,
   formatear_6Decimales,
   formatoDDMMYYYY_PEN,
+  hoy,
   // hoy,
   // primeroDelMes,
   redondeo2Decimales,
@@ -34,6 +35,7 @@ import { IPersona } from '~/interfaces/iPersona';
 import { inIngresoAAlmacen, loadMotivosIngresoAAlmacen } from '~/apis/ingresosAAlmacen.api';
 import { parametrosGlobales } from '~/routes/login';
 import ElSelect from '../system/elSelect';
+import BuscarOrdenServicioAperturado from '../miscelanea/ordenServicioAperturado/buscarOrdenServicioAperturado';
 
 export const CTX_NEW_IN_ALMACEN = createContextId<any>('new_in_almacen');
 
@@ -56,6 +58,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
     borrarIdAuxiliarDoc: 0,
     borrarIdAuxiliar: 0,
     mostrarPanelDeleteDocumentoIN: false,
+
+    mostrarPanelBuscarOrdenServicioAperturado: false,
+    mostrarPanelReingresoRequisiciones: false,
   });
   useContextProvider(CTX_NEW_IN_ALMACEN, definicion_CTX_NEW_IN_ALMACEN);
   //#endregion DEFINICION CTX_NEW_IN_ALMACEN
@@ -69,6 +74,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
         ? props.inSelecci.idGrupoEmpresarial
         : parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: props.inSelecci.idEmpresa ? props.inSelecci.idEmpresa : parametrosGlobales.idEmpresa,
+      idSucursal: props.inSelecci.idSucursal ? props.inSelecci.idSucursal : parametrosGlobales.idSucursal,
       idAlmacen: props.inSelecci.idAlmacen ? props.inSelecci.idAlmacen : parametrosGlobales.idAlmacen,
 
       idPeriodo: props.inSelecci.idPeriodo ? props.inSelecci.idPeriodo : props.addPeriodo.idPeriodo,
@@ -80,10 +86,12 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
       idMotivoIngresoAlmacen: props.inSelecci.idMotivoIngresoAlmacen ? props.inSelecci.idMotivoIngresoAlmacen : '',
       motivoIngresoAlmacen: props.inSelecci.motivoIngresoAlmacen ? props.inSelecci.motivoIngresoAlmacen : '',
+      idDocumento: props.inSelecci.idDocumento ? props.inSelecci.idDocumento : '',
 
       // serie: props.inSelecci.serie ? props.inSelecci.serie : '',
       // numero: props.inSelecci.numero ? props.inSelecci.numero : 0,
-      FISMA: props.inSelecci.FISMA ? props.inSelecci.FISMA.substring(0, 10) : '', //hoy(),
+      FISMA: props.inSelecci.FISMA ? props.inSelecci.FISMA.substring(0, 10) : hoy(),
+      reingreso: props.inSelecci.reingreso ? props.inSelecci.reingreso : false,
 
       idElIgv: props.inSelecci.idElIgv ? props.inSelecci.idElIgv : props.igvCompraPorDefault.idElIgv,
       elIgv: props.inSelecci.igv ? props.inSelecci.igv.$numberDecimal : props.igvCompraPorDefault.elIgv,
@@ -290,6 +298,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
         idIngresoAAlmacen: definicion_CTX_IN_ALMACEN._id,
         idGrupoEmpresarial: definicion_CTX_IN_ALMACEN.idGrupoEmpresarial,
         idEmpresa: definicion_CTX_IN_ALMACEN.idEmpresa,
+        idSucursal: definicion_CTX_IN_ALMACEN.idSucursal,
         idAlmacen: definicion_CTX_IN_ALMACEN.idAlmacen,
         idPeriodo: definicion_CTX_IN_ALMACEN.idPeriodo,
         periodo: definicion_CTX_IN_ALMACEN.periodo,
@@ -300,10 +309,12 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
         idMotivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen,
         motivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen,
+        idDocumento: definicion_CTX_IN_ALMACEN.idDocumento,
 
         // serie: definicion_CTX_IN_ALMACEN.serie,
         // numero: definicion_CTX_IN_ALMACEN.numero,
         FISMA: definicion_CTX_IN_ALMACEN.FISMA,
+        reingreso: definicion_CTX_IN_ALMACEN.reingreso,
 
         idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
         elIgv: definicion_CTX_IN_ALMACEN.elIgv,
@@ -339,7 +350,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
     <div
       class="container-modal"
       style={{
-        width: 'clamp(min(10vw, 20rem),800px, max(90vw, 55rem))',
+        width: 'clamp(min(10vw, 20rem),900px, max(90vw, 55rem))',
         // width: 'auto',
         padding: '2px',
       }}
@@ -459,6 +470,19 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     } else {
                       definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen = elSelec.value;
                       // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                      switch (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen) {
+                        case 'ORDEN DE SERVICIO':
+                          // alert('Elegio os');
+                          definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado = true;
+                          break;
+                        // case 'VENTA':
+                        //   //alert('Elegio venta');
+                        //   definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
+                        //   break;
+
+                        default:
+                          break;
+                      }
                     }
                   })}
                   onKeyPress={$((e: any) => {
@@ -471,6 +495,11 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
             </div>
             <hr style={{ margin: '5px 0' }}></hr>
           </div>
+          {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado && (
+            <div class="modal">
+              <BuscarOrdenServicioAperturado contexto="ingreso_a_almacen" />
+            </div>
+          )}
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL REMITENTE */}
           <div>
@@ -640,8 +669,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         <td data-label="TCP">{iTDocAdj.descripcionTCP}</td>
                         <td data-label="Fecha">{formatoDDMMYYYY_PEN(iTDocAdj.fecha)}</td>
                         <td data-label="Serie">{iTDocAdj.serie}</td>
-                        <td data-label="Número">{iTDocAdj.numero}</td>
-                        <td data-label="Acc" style={{ textAlign: 'right' }}>
+                        <td data-label="Número">{cerosALaIzquierda(iTDocAdj.numero, 8)}</td>
+                        <td data-label="Acc" style={{ textAlign: 'center' }}>
                           <ImgButton
                             src={images.edit}
                             alt="icono de editar"
@@ -705,6 +734,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 class="btn"
                 name="Add mercadería"
                 title="Add mercadería"
+                disabled={definicion_CTX_IN_ALMACEN.reingreso}
                 onClick={$(() => {
                   if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '') {
                     alert('Seleccione el motivo de ingreso');
@@ -752,6 +782,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                       redondeo2Decimales(iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN);
 
                     suma_IGVPEN = suma_TotPEN - suma_SubPEN;
+                    console.log('🍄🍄🍄🍄🍄🍄🍄🍄🍄', suma_TotPEN, suma_SubPEN);
                     return (
                       <tr key={iTMercaIN.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar}>{`${cerosALaIzquierda(indexItemServi, 3)}`}</td>
@@ -761,19 +792,28 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             : ''}
                         </td>
                         <td data-label="Código">{iTMercaIN.codigo}</td>
-                        <td data-label="Descripción">{iTMercaIN.descripcion}</td>
+                        <td data-label="Descripción">
+                          {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}
+                        </td>
                         <td data-label="IGV">{iTMercaIN.IGV} %</td>
-                        <td data-label="Cantidad" style={{ textAlign: 'end' }}>
+                        <td data-label="Cantidad" class="comoNumero">
                           <input
+                            disabled={definicion_CTX_IN_ALMACEN.reingreso}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
-                              iTMercaIN.cantidadIngresada.$numberDecimal
+                              !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.cantidadIngresada.$numberDecimal
-                                : iTMercaIN.cantidadIngresada
+                                  ? iTMercaIN.cantidadIngresada.$numberDecimal
+                                  : iTMercaIN.cantidadIngresada
+                                : iTMercaIN.cantidadIngresadaEquivalencia.$numberDecimal
+                                ? iTMercaIN.cantidadIngresadaEquivalencia.$numberDecimal
+                                : iTMercaIN.cantidadIngresadaEquivalencia
                             }
                             onChange$={(e) => {
                               // const iv = itemsVentaK[index];
-                              iTMercaIN.cantidadIngresada = parseFloat((e.target as HTMLInputElement).value);
+                              !definicion_CTX_IN_ALMACEN.reingreso
+                                ? (iTMercaIN.cantidadIngresada = parseFloat((e.target as HTMLInputElement).value))
+                                : (iTMercaIN.cantidadIngresadaEquivalencia = parseFloat((e.target as HTMLInputElement).value));
 
                               iTMercaIN.subPEN =
                                 (iTMercaIN.cantidadIngresada
@@ -790,20 +830,28 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 (iTMercaIN.valorUnitarioPEN
                                   ? iTMercaIN.valorUnitarioPEN
                                   : iTMercaIN.valorUnitarioPEN.$numberDecimal);
+                              console.log('🍋🍋🍋🍋🍋🍋🍋🍋');
                             }}
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
                             }}
                           />
                         </td>
-                        <td data-label="Uni">{iTMercaIN.unidad}</td>
-                        <td data-label="costoUnitarioPEN" style={{ textAlign: 'end' }}>
+                        <td data-label="Uni">
+                          {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.unidad : iTMercaIN.unidadEquivalencia}
+                        </td>
+                        <td data-label="costoUnitarioPEN" class="comoNumero">
                           <input
+                            disabled={definicion_CTX_IN_ALMACEN.reingreso}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
-                              iTMercaIN.costoUnitarioPEN.$numberDecimal
+                              !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.costoUnitarioPEN.$numberDecimal
-                                : iTMercaIN.costoUnitarioPEN
+                                  ? iTMercaIN.costoUnitarioPEN.$numberDecimal
+                                  : iTMercaIN.costoUnitarioPEN
+                                : iTMercaIN.costoUnitarioPENEquivalencia.$numberDecimal
+                                ? iTMercaIN.costoUnitarioPENEquivalencia.$numberDecimal
+                                : iTMercaIN.costoUnitarioPENEquivalencia
                             }
                             onChange$={(e) => {
                               const costo = parseFloat((e.target as HTMLInputElement).value);
@@ -819,6 +867,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 precio = costo * IGVCalculado;
                               }
                               iTMercaIN.precioUniPEN = formatear_6Decimales(precio);
+                              console.log('iTMercaIN.IGV - IGVCalculado - precio', iTMercaIN.IGV, IGVCalculado, precio);
                               console.log('el costo modificado, cant', iTMercaIN.costoUnitarioPEN, iTMercaIN.cantidadIngresada);
                               iTMercaIN.subPEN =
                                 (iTMercaIN.cantidadIngresada
@@ -828,31 +877,48 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                   ? iTMercaIN.costoUnitarioPEN
                                   : iTMercaIN.costoUnitarioPEN.$numberDecimal);
 
+                              iTMercaIN.valorUnitarioPEN = precio;
                               iTMercaIN.totPEN =
                                 (iTMercaIN.cantidadIngresada
                                   ? iTMercaIN.cantidadIngresada
                                   : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                (iTMercaIN.valorUnitarioPEN
-                                  ? iTMercaIN.valorUnitarioPEN
-                                  : iTMercaIN.valorUnitarioPEN.$numberDecimal);
+                                (iTMercaIN.valorUnitarioPEN.$numberDecimal
+                                  ? iTMercaIN.valorUnitarioPEN.$numberDecimal
+                                  : iTMercaIN.valorUnitarioPEN);
+                              console.log(
+                                '🥪🥪🥪🥪🥪 iTMercaIN.cantidadIngresada - iTMercaIN.valorUnitarioPEN - iTMercaIN.valorUnitarioPEN.$numberDecimal',
+                                iTMercaIN.cantidadIngresada,
+                                iTMercaIN.valorUnitarioPEN,
+                                iTMercaIN.valorUnitarioPEN.$numberDecimal
+                              );
+                              console.log('🥪🥪🥪🥪🥪 iTMercaIN.subPEN - iTMercaIN.totPEN', iTMercaIN.subPEN, iTMercaIN.totPEN);
                             }}
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
                             }}
                           />
                         </td>
-                        <td data-label="SubPEN" style={{ textAlign: 'end' }}>
-                          {iTMercaIN.subPEN.$numberDecimal
-                            ? formatear_6Decimales(iTMercaIN.subPEN.$numberDecimal)
-                            : formatear_6Decimales(iTMercaIN.subPEN)}
+                        <td data-label="SubPEN" class="comoNumero">
+                          {!definicion_CTX_IN_ALMACEN.reingreso
+                            ? iTMercaIN.subPEN.$numberDecimal
+                              ? formatear_6Decimales(iTMercaIN.subPEN.$numberDecimal)
+                              : formatear_6Decimales(iTMercaIN.subPEN)
+                            : iTMercaIN.subPENEquivalencia.$numberDecimal
+                            ? formatear_6Decimales(iTMercaIN.subPENEquivalencia.$numberDecimal)
+                            : formatear_6Decimales(iTMercaIN.subPENEquivalencia)}
                         </td>
-                        <td data-label="valorUnitarioPEN" style={{ textAlign: 'end' }}>
+                        <td data-label="valorUnitarioPEN" class="comoNumero">
                           <input
+                            disabled={definicion_CTX_IN_ALMACEN.reingreso}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
-                              iTMercaIN.valorUnitarioPEN.$numberDecimal
+                              !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.valorUnitarioPEN.$numberDecimal
-                                : iTMercaIN.valorUnitarioPEN
+                                  ? iTMercaIN.valorUnitarioPEN.$numberDecimal
+                                  : iTMercaIN.valorUnitarioPEN
+                                : iTMercaIN.valorUnitarioPENEquivalencia.$numberDecimal
+                                ? iTMercaIN.valorUnitarioPENEquivalencia.$numberDecimal
+                                : iTMercaIN.valorUnitarioPENEquivalencia
                             }
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
@@ -885,6 +951,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 (iTMercaIN.costoUnitarioPEN
                                   ? iTMercaIN.costoUnitarioPEN
                                   : iTMercaIN.costoUnitarioPEN.$numberDecimal);
+                              console.log('🍋🍋🍋🍋🍋🍋🍋🍋');
                             }}
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
@@ -892,11 +959,15 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                           />
                         </td>
                         <td data-label="TotPEN" style={{ textAlign: 'end' }}>
-                          {iTMercaIN.totPEN.$numberDecimal
-                            ? formatear_6Decimales(iTMercaIN.totPEN.$numberDecimal)
-                            : formatear_6Decimales(iTMercaIN.totPEN)}
+                          {!definicion_CTX_IN_ALMACEN.reingreso
+                            ? iTMercaIN.totPEN.$numberDecimal
+                              ? formatear_6Decimales(iTMercaIN.totPEN.$numberDecimal)
+                              : formatear_6Decimales(iTMercaIN.totPEN)
+                            : iTMercaIN.totPENEquivalencia.$numberDecimal
+                            ? formatear_6Decimales(iTMercaIN.totPENEquivalencia.$numberDecimal)
+                            : formatear_6Decimales(iTMercaIN.totPENEquivalencia)}
                         </td>
-                        <td data-label="Acc" style={{ textAlign: 'right' }}>
+                        <td data-label="Acc" class="acciones">
                           <ImgButton
                             src={images.trash}
                             alt="icono de eliminar"

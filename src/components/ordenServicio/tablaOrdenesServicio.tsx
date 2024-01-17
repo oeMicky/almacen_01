@@ -78,7 +78,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
           <>
             {misOrdenesServicio.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}>
+                <table style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}
@@ -98,14 +98,26 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                       return (
                         <tr key={_id}>
                           {/* <td data-label="Ítem">{indexItem}</td> */}
-                          <td data-label="OS">{serie + ' - ' + cerosALaIzquierda(numero, 8)}</td>
-                          <td data-label="Fecha">{fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}</td>
-                          <td data-label="Cliente">{razonSocialNombreCliente}</td>
-                          <td data-label="Placa">{placa}</td>
-                          <td data-label="Estado">{estado ? estado : '_'}</td>
-                          <td data-label="Tipo">{tipo ? tipo : '_'}</td>
+                          <td data-label="OS" class="comoCadena">
+                            {serie + ' - ' + cerosALaIzquierda(numero, 8)}
+                          </td>
+                          <td data-label="Fecha" class="comoCadena">
+                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}
+                          </td>
+                          <td data-label="Cliente" class="comoCadena">
+                            {razonSocialNombreCliente}
+                          </td>
+                          <td data-label="Placa" class="comoCadena">
+                            {placa}
+                          </td>
+                          <td data-label="Estado" class="comoCadena">
+                            {estado ? estado : '_'}
+                          </td>
+                          <td data-label="Tipo" class="comoCadena">
+                            {tipo ? tipo : '_'}
+                          </td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                          <td data-label="Acciones" class="acciones">
                             {/* <ImgButton
                               src={images.check}
                               alt="icono de adicionar"

@@ -2,6 +2,7 @@ export interface IIngresoAAlmacen {
   _id: string;
   idGrupoEmpresarial: string;
   idEmpresa: string;
+  idSucursal: string;
   idAlmacen: string;
   idPeriodo: string;
   periodo: number;
@@ -12,10 +13,12 @@ export interface IIngresoAAlmacen {
 
   idMotivoIngresoAlmacen: string;
   motivoIngresoAlmacen: string;
+  idDocumento: string;
 
   // serie: string;
   // numero: number;
   FISMA: string;
+  reingreso: boolean;
 
   idElIgv: string;
   elIgv: number;

@@ -57,7 +57,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean }) => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: 'acce 5', //cadena.value,
+    cadenaABuscar: '', // 'acce 5', //cadena.value,
   });
 
   //#region BUSCAR MERCADERIAS OUT

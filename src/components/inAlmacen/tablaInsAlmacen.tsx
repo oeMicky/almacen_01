@@ -1,10 +1,12 @@
-import { Resource, component$, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { $, Resource, component$, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../tabla/tabla.css?inline';
 // import { CTX_INDEX_IN_ALMACEN } from '~/routes/(almacen)/inAlmacen';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
 
 export default component$((props: { buscarInAlmacen: number; porFechasT_porPeriodoF: boolean; parametrosBusqueda: any }) => {
   useStylesScoped$(style);
@@ -67,7 +69,7 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
           <>
             {misInsAlmacen.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}>
+                <table id="tablaInsAlmacen" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}
@@ -94,24 +96,46 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                       return (
                         <tr key={_id}>
                           {/* <td data-label="Ítem">{indexItem}</td> */}
-                          <td data-label="Periodo">{periodo}</td>
-                          <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}</td>
-                          <td data-label="Motivo">{motivoIngresoAlmacen ? motivoIngresoAlmacen : '_'}</td>
-                          <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '_'}</td>
-                          <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '_'}</td>
+                          <td data-label="Periodo" class="comoCadena">
+                            {periodo}
+                          </td>
+                          <td data-label="FISMA" class="comoCadena">
+                            {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}
+                          </td>
+                          <td data-label="Motivo" class="comoCadena">
+                            {motivoIngresoAlmacen ? motivoIngresoAlmacen : '_'}
+                          </td>
+                          <td data-label="Doc" class="comoCadena">
+                            {numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '_'}
+                          </td>
+                          <td data-label="Razón social" class="comoCadena">
+                            {razonSocialNombre ? razonSocialNombre : '_'}
+                          </td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                          <td data-label="Acc" style={{ textAlign: 'right' }}>
-                            {/* <ImgButton
-                              src={images.edit}
-                              alt="icono de editar"
-                              height={12}
-                              width={12}
-                              title="Editar servicio"
-                              onClick={$(() => {
-                                ctx_index_in_almacen.ordSerSe = inAlmaLocali;
-                                ctx_index_in_almacen.mostrarAddOrderServicio0 = true;
-                              })}
-                            /> */}
+                          <td
+                            data-label="Acciones"
+                            class="acciones"
+                            // id="alCentro"
+                            // style={window.screen.width > 750 ? { textAlign: 'center' } : { textAlign: 'right' }}
+                            // style={window.screen.availWidth > 1500 ? { background: 'red' } : { background: 'blue' }}
+                            // style={
+                            //   window.matchMedia('(max-width: 700px)').matches
+                            //     ? { background: 'red', borderRadius: '16px' }
+                            //     : { background: 'pink', borderRadius: '6px' }
+                            // }
+                            // style={{ textAlign: 'right' }}
+                          >
+                            <ImgButton
+                              src={images.see}
+                              alt="icono de ver"
+                              height={14}
+                              width={14}
+                              title="Ver ingreso a almacén"
+                              // onClick={$(() => {
+                              //   ctx_index_in_almacen.ordSerSe = inAlmaLocali;
+                              //   ctx_index_in_almacen.mostrarAddOrderServicio0 = true;
+                              // })}
+                            />
                           </td>
                         </tr>
                       );

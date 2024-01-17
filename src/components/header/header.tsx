@@ -26,7 +26,7 @@ export default component$(() => {
           <ul class="main-menu">
             <li class="main-menu__item">
               <a class="main-menu__link" href="#inicio" target="_blank">
-                Inicio
+                Inicios
               </a>
             </li>
             <li class="main-menu__item">

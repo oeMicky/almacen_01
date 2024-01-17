@@ -32,6 +32,7 @@ export default component$((props: ISelect) => {
       onChange$={props.onChange}
       onKeyPress$={props.onKeyPress}
       //   onFocus$={onFocus}  .toString()
+      // size={14}
     >
       <option value="">{SELECCION}</option>
       {props.registros.map((registro) => {

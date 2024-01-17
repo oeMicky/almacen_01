@@ -5,12 +5,17 @@ import { Link, useNavigate } from '@builder.io/qwik-city'; //action$, Form,
 import { getUsuario } from '~/apis/usuario.api';
 
 import styles from './login.css?inline';
-import { getActivoGEEMP, getActivoGEEMPSUCUR } from '~/apis/grupoEmpresarial.api';
+import { getActivoGEEMP, getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
 
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
-  paginaInicioDelSistema: '/ordenServicio',
+  // paginaInicioDelSistema: '/venta',
+  paginaInicioDelSistema: '/inAlmacen',
+  // paginaInicioDelSistema: '/outAlmacen',
+  // paginaInicioDelSistema: '/ordenServicio',
+  // paginaInicioDelSistema: '/kardex',
+  paginaInicioDefault: '/venta',
   //Grupo Empresarial
   idGrupoEmpresarial: '', //'60f097ca53621708ecc4e781',
   nombreGrupoEmpresarial: '', //'El Grupo Empresarial',
@@ -25,6 +30,7 @@ export const parametrosGlobales = {
   sucursalDireccion: 'Av. Pardo 9999',
   // parameRUC: 'chamo', // '99999999999',
   //Almacén
+  almacenActivo: false,
   idAlmacen: '60f3e61a41a71c1148bc4e29', //'608321ef5d922737c40831b1',
   nombreAlmacen: 'Praga',
   //Usuario
@@ -64,7 +70,9 @@ export default component$(() => {
   const definicion_CTX_LOGEO = useStore({
     // email: 'mvizconde@msn.com',
     // email: 'carlos@merma.com',
-    email: 'paolo@cao.com',
+    // email: 'paolo@cao.com',
+    // email: 'joseluis@cao.com',
+    email: 'bugsbunny@cao.com',
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
@@ -77,6 +85,26 @@ export default component$(() => {
   //   return await getActivoGEEMP(parametros);
   // });
   //#endregion ACTIVO GE EMP
+
+  //#region OBTENER PERIODOS
+  // const cargarLosPeriodos = $(async () => {
+  //   const losPeri = await getPeriodos({
+  //     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //     idEmpresa: parametrosGlobales.idEmpresa,
+  //     bandera: 'Ventas',
+  //   });
+  //   console.log('losPeri', losPeri);
+  //   losPeriodosCargados.value = losPeri.data;
+  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // console.log('a cargar periodos');
+  // });
+
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
+
+  //   cargarLosPeriodos();
+  // });
+  //#endregion OBTENER PERIODOS
 
   //#region ANALISIS DEL LOGEO
   const analisisDeLogeo = $(async (logeo: any) => {
@@ -135,6 +163,7 @@ export default component$(() => {
               sessionStorage.setItem('usuario', logeo.usuario);
               sessionStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
               sessionStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
+              sessionStorage.setItem('almacenActivo', logeo.sucursalesAdjuntas[0].sucursales[0].almacenActivo);
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -144,7 +173,27 @@ export default component$(() => {
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
-              navegarA(parametrosGlobales.paginaInicioDelSistema);
+              parametrosGlobales.almacenActivo = activo[0].almacenActivo;
+              const losPeri = await getPeriodos({
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idEmpresa: parametrosGlobales.idEmpresa,
+                bandera: '',
+              });
+              parametrosGlobales.periodos = losPeri.data;
+              //PAGINA DE INICIO
+              if (parametrosGlobales.almacenActivo) {
+                navegarA(parametrosGlobales.paginaInicioDelSistema);
+              } else {
+                if (
+                  parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+                  parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+                  parametrosGlobales.paginaInicioDelSistema === '/kardex'
+                ) {
+                  navegarA(parametrosGlobales.paginaInicioDefault);
+                } else {
+                  navegarA(parametrosGlobales.paginaInicioDelSistema);
+                }
+              }
             } else {
               console.log('...//VARIAS SUCURSALES');
               //VARIAS SUCURSALES
@@ -232,6 +281,7 @@ export default component$(() => {
 
               sessionStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
               sessionStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
+              sessionStorage.setItem('almacenActivo', logeo.sucursalesAdjuntas[0].sucursales[0].almacenActivo);
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -241,7 +291,27 @@ export default component$(() => {
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
-              navegarA(parametrosGlobales.paginaInicioDelSistema);
+              parametrosGlobales.almacenActivo = activo[0].almacenActivo;
+              const losPeri = await getPeriodos({
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idEmpresa: parametrosGlobales.idEmpresa,
+                bandera: '',
+              });
+              parametrosGlobales.periodos = losPeri.data;
+              //PAGINA DE INICIO
+              if (parametrosGlobales.almacenActivo) {
+                navegarA(parametrosGlobales.paginaInicioDelSistema);
+              } else {
+                if (
+                  parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+                  parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+                  parametrosGlobales.paginaInicioDelSistema === '/kardex'
+                ) {
+                  navegarA(parametrosGlobales.paginaInicioDefault);
+                } else {
+                  navegarA(parametrosGlobales.paginaInicioDelSistema);
+                }
+              }
             } else {
               console.log('...//VARIAS SUCURSALES');
               //VARIAS SUCURSALES
@@ -436,11 +506,11 @@ export default component$(() => {
               }}
             />
           </form>
-          <div>
+          {/* <div>
             <Link class="desea-suscribirse" href="#">
               Desea suscribirse?
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
