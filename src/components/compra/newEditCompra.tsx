@@ -972,7 +972,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                 <input
                   id="in_NumeroDocumentoIdentidad"
                   style={{ width: '100%' }}
-                  type="text"
+                  type="number"
                   placeholder="Add número identidad"
                   value={definicion_CTX_COMPRA.numeroIdentidad}
                   onChange$={(e) => (definicion_CTX_COMPRA.numeroIdentidad = (e.target as HTMLInputElement).value)}
@@ -1034,7 +1034,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <div class="form-control form-agrupado">
                 <input
                   id="in_TipoCambio"
-                  type="text"
+                  type="number"
                   placeholder="Tipo de cambio"
                   style={{ width: '100%' }}
                   value={definicion_CTX_COMPRA.tipoCambio}
@@ -1155,7 +1155,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <label>Adquisiciones No Gravadas</label>
               <div class="form-control form-agrupado">
                 <input
-                  type="text"
+                  type="number"
                   id="in_AdquisicionesNoGravadas"
                   style={{ width: '100%' }}
                   placeholder="Adquisiciones No Gravadas"
@@ -1189,7 +1189,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <label>ISC</label>
               <div class="form-control form-agrupado">
                 <input
-                  type="text"
+                  type="number"
                   id="in_ISC"
                   style={{ width: '100%' }}
                   placeholder="ISC"
@@ -1215,7 +1215,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <label>ICBP</label>
               <div class="form-control form-agrupado">
                 <input
-                  type="text"
+                  type="number"
                   id="in_ICBP"
                   style={{ width: '100%' }}
                   placeholder="ICBP"
@@ -1241,7 +1241,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <label>Otros</label>
               <div class="form-control form-agrupado">
                 <input
-                  type="text"
+                  type="number"
                   id="in_Otros"
                   style={{ width: '100%' }}
                   placeholder="Otros"
@@ -1267,7 +1267,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <label>Total</label>
               <div class="form-control form-agrupado">
                 <input
-                  type="text"
+                  type="number"
                   id="in_Total"
                   style={{ width: '100%' }}
                   placeholder="Total"

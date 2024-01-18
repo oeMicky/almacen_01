@@ -301,7 +301,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 id="in_numeroIdentidad_PERSONA"
                 style={{ width: '100%' }}
                 autoFocus
-                type="text"
+                type="number"
                 placeholder="Número identidad"
                 value={persona.numeroIdentidad}
                 onChange$={(e) => {
