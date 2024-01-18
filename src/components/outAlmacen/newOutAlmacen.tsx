@@ -343,7 +343,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     <div
       class="container-modal"
       style={{
-        width: 'clamp(332px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 800px)',
         // width: 'auto',
         padding: '2px',
       }}

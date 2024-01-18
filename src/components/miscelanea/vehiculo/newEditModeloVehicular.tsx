@@ -48,7 +48,7 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(332px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 700px)',
         // width: 'auto',
         padding: '1px',
       }}

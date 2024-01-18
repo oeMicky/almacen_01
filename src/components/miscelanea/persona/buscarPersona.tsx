@@ -106,7 +106,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
     <div
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(332px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 700px)',
         // width: 'auto',
         padding: '2px',
       }}

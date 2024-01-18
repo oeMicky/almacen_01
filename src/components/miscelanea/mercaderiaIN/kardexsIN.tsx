@@ -26,7 +26,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
   return (
     <div
       style={{
-        width: 'clamp(332px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 700px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
