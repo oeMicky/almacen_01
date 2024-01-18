@@ -95,10 +95,14 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(compra.fecha)}
                             </td>
-                            <td data-label="Mon" class="acciones" style={'moneda' in compra ? {} : { background: '#8A2BE2' }}>
+                            <td data-label="Mon" class="acciones" style={'tipoCompra' in compra ? {} : { background: '#FFD700' }}>
                               {'moneda' in compra ? compra.moneda : '_'}
                             </td>
-                            <td data-label="Importe" class="comoNumero">
+                            <td
+                              data-label="Importe"
+                              class="comoNumero"
+                              // style={'tipoCompra' in compra ? {} : { background:'#8A2BE2'  }}
+                            >
                               {/* {compra.totalPEN.$numberDecimal} */}
                               {/* {typeof compra.totalPEN !== 'undefined'  style={compra.moneda === '' ? { background: 'red' } : ''}
                                 ? compra.moneda === 'PEN'
