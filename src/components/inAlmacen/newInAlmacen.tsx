@@ -122,9 +122,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       documentosAdjuntos: props.inSelecci.documentosAdjuntos ? props.inSelecci.documentosAdjuntos : [],
       itemsMercaderias: props.inSelecci.itemsMercaderias ? props.inSelecci.itemsMercaderias : [],
 
-      //   montoSubTotalPEN: props.inSelecci.montoSubTotalPEN ? props.inSelecci.montoSubTotalPEN : 0,
-      //   montoIGVPEN: props.inSelecci.montoIGVPEN ? props.inSelecci.montoIGVPEN : 0,
-      //   montoTotalPEN: props.inSelecci.montoTotalPEN ? props.inSelecci.montoTotalPEN : 0,
+      montoSubTotalPEN: props.inSelecci.montoSubTotalPEN ? props.inSelecci.montoSubTotalPEN : 0,
+      montoIGVPEN: props.inSelecci.montoIGVPEN ? props.inSelecci.montoIGVPEN : 0,
+      montoTotalPEN: props.inSelecci.montoTotalPEN ? props.inSelecci.montoTotalPEN : 0,
     },
     { deep: true }
   );
@@ -328,6 +328,10 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
         documentosAdjuntos: definicion_CTX_IN_ALMACEN.documentosAdjuntos,
         itemsMercaderias: definicion_CTX_IN_ALMACEN.itemsMercaderias,
 
+        montoSubTotalPEN: definicion_CTX_IN_ALMACEN.montoSubTotalPEN,
+        montoIGVPEN: definicion_CTX_IN_ALMACEN.montoIGVPEN,
+        montoTotalPEN: definicion_CTX_IN_ALMACEN.montoTotalPEN,
+
         usuario: parametrosGlobales.usuario,
       });
 
@@ -350,7 +354,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
     <div
       class="container-modal"
       style={{
-        width: 'clamp(min(10vw, 20rem),900px, max(90vw, 55rem))',
+        width: 'clamp(386px, 86%,900px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -782,7 +786,10 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                       redondeo2Decimales(iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN);
 
                     suma_IGVPEN = suma_TotPEN - suma_SubPEN;
-                    console.log('🍄🍄🍄🍄🍄🍄🍄🍄🍄', suma_TotPEN, suma_SubPEN);
+                    definicion_CTX_IN_ALMACEN.montoSubTotalPEN = suma_SubPEN;
+                    definicion_CTX_IN_ALMACEN.montoIGVPEN = suma_IGVPEN;
+                    definicion_CTX_IN_ALMACEN.montoTotalPEN = suma_TotPEN;
+                    console.log('🍄🍄🍄🍄🍄🍄🍄🍄🍄', suma_TotPEN, suma_IGVPEN, suma_SubPEN);
                     return (
                       <tr key={iTMercaIN.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar}>{`${cerosALaIzquierda(indexItemServi, 3)}`}</td>

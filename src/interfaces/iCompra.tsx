@@ -6,6 +6,9 @@ export interface ICompra {
   idPeriodo: string;
   periodo: number;
 
+  idAlmacen: string;
+  idIngresoAAlmacen: string;
+
   ruc: string;
   empresa: string;
   direccion: string;

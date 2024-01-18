@@ -122,13 +122,30 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                             <td data-label="Acciones" class="acciones">
                               <ImgButton
                                 src={images.edit}
-                                alt="icono de pdf"
+                                alt="icono de editar"
                                 height={14}
                                 width={14}
                                 title={`Editar documento`}
                                 onClick={$(() => {
                                   ctx_index_compra.cC = compra;
                                   ctx_index_compra.mostrarPanelCompra = true;
+                                })}
+                              />
+                              <ImgButton
+                                src={images.mercaderia}
+                                alt="icono de mercaderías"
+                                height={14}
+                                width={14}
+                                title={`Ver mercaderías`}
+                                onClick={$(() => {
+                                  if (compra.idIngresoAAlmacen) {
+                                    alert(compra.idIngresoAAlmacen);
+                                  } else {
+                                    alert('la compra no cuenta con el ingreso de la mercadería al almacén');
+                                  }
+
+                                  // ctx_index_compra.cC = compra;
+                                  // ctx_index_compra.mostrarPanelCompra = true;
                                 })}
                               />
                               {/*  <ImgButton

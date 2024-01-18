@@ -613,7 +613,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       class="container-modal"
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(min(10vw, 20rem), 700px, max(90vw, 55rem))',
+        width: 'clamp(386px, 86%, 700px)',
         // width: 'auto',
         background: `${definicion_CTX_F_B_NC_ND.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : ''}`,
         // border: '1px solid red',

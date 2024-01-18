@@ -10,7 +10,7 @@ export default component$((props: { borrarServicio: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(min(10vw, 20rem),800px, max(90vw, 55rem))',
+        width: 'clamp(386px, 86%, 800px)',
         //  width: 'auto',
         border: '1px solid red',
         padding: '2px',

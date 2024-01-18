@@ -37,6 +37,9 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
     idPeriodo: props.compraSeleccionada.idPeriodo ? props.compraSeleccionada.idPeriodo : props.addPeriodo.idPeriodo,
     periodo: props.compraSeleccionada.periodo ? props.compraSeleccionada.periodo : props.addPeriodo.periodo,
 
+    idAlmacen: props.compraSeleccionada.idAlmacen ? props.compraSeleccionada.idAlmacen : '',
+    idIngresoAAlmacen: props.compraSeleccionada.idIngresoAAlmacen ? props.compraSeleccionada.idIngresoAAlmacen : '',
+
     ruc: props.compraSeleccionada.ruc ? props.compraSeleccionada.ruc : parametrosGlobales.RUC,
     empresa: props.compraSeleccionada.empresa ? props.compraSeleccionada.empresa : parametrosGlobales.RazonSocial,
     direccion: props.compraSeleccionada.direccion ? props.compraSeleccionada.direccion : parametrosGlobales.Direccion,
@@ -153,6 +156,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
       console.log('tretretretretretretretretre', tre);
       igvPorDefault.idElIgv = tre[0]._id;
       igvPorDefault.elIgv = tre[0].igv;
+      definicion_CTX_COMPRA.idElIgv = tre[0]._id;
       definicion_CTX_COMPRA.elIgv = tre[0].igv;
       console.log('definicion_CTX_COMPRA.elIgv..........', definicion_CTX_COMPRA.elIgv);
     }
@@ -561,7 +565,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
       iscPEN: definicion_CTX_COMPRA.iscPEN.replace(',', ''),
       icbpPEN: definicion_CTX_COMPRA.icbpPEN.replace(',', ''),
       otrosPEN: definicion_CTX_COMPRA.otrosPEN.replace(',', ''),
-      totalPEN: definicion_CTX_COMPRA.totalPEN.replace(',', ''),
+      // totalPEN: definicion_CTX_COMPRA.totalPEN.replace(',', ''),
+      totalPEN: definicion_CTX_COMPRA.totalPEN,
 
       fechaReferencia: definicion_CTX_COMPRA.fechaReferencia,
       tipoReferencia: definicion_CTX_COMPRA.tipoReferencia,
@@ -587,7 +592,10 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
   return (
     <div
       style={{
-        width: 'clamp(min(10vw, 20rem),800px, max(90vw, 55rem))',
+        // width: 'clamp(min(10vw, 20rem),800px, max(90vw, 55rem))',
+        // width: 'clamp(min(5vw, 4rem),800px, max(90vw, 55rem))',
+        // width: 'clamp(60px,800px, 1080px)',
+        width: 'clamp(386px, 86%, 800px)',
         // width: 'auto',
         padding: '2px',
         background: `${definicion_CTX_COMPRA.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : ''}`,

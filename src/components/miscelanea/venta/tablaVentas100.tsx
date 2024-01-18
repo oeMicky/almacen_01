@@ -93,11 +93,19 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
 
                       return (
                         <tr key={_id}>
-                          <td data-label="Ítem">{indexVenta}</td>
-                          <td data-label="Fecha">{formatoDDMMYYYY_PEN(fecha)}</td>
-                          <td data-label="Serie-Nro">{serie + '-' + numero}</td>
-                          <td data-label="Moneda">{moneda}</td>
-                          <td data-label="Importe">
+                          <td data-label="Ítem" class="comoCadena">
+                            {indexVenta}
+                          </td>
+                          <td data-label="Fecha" class="comoCadena">
+                            {formatoDDMMYYYY_PEN(fecha)}
+                          </td>
+                          <td data-label="Serie-Nro" class="comoCadena">
+                            {serie + ' - ' + numero}
+                          </td>
+                          <td data-label="Moneda" class="acciones">
+                            {moneda}
+                          </td>
+                          <td data-label="Importe" class="comoNumero">
                             {moneda === 'PEN'
                               ? parseFloat(montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
@@ -110,13 +118,15 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                                   minimumFractionDigits: 2,
                                 })}
                           </td>
-                          <td data-label="Pago">{metodoPago}</td>
-                          <td data-label="O.S.">
+                          <td data-label="Pago" class="comoCadena">
+                            {metodoPago}
+                          </td>
+                          <td data-label="O.S." class="comoCadena">
                             {(serieOrdenServicio ? serieOrdenServicio : '') +
-                              '-' +
+                              ' - ' +
                               (numeroOrdenServicio ? numeroOrdenServicio : '')}
                           </td>
-                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                          <td data-label="Acciones" class="acciones">
                             <ImgButton
                               src={images.check}
                               alt="icono de adicionar"

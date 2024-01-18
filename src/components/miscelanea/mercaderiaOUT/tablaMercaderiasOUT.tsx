@@ -95,13 +95,21 @@ export default component$(
                                 : { color: '' }
                             }
                           >
-                            <td data-label="Descripción">{descripcion}</td>
-                            <td data-label="Linea/Tipo">{lineaTipo}</td>
-                            <td data-label="Marca">{marca}</td>
-                            <td data-label="Stock" style={{ textAlign: 'end' }}>
+                            <td data-label="Descripción" class="comoCadena">
+                              {descripcion}
+                            </td>
+                            <td data-label="Linea/Tipo" class="comoCadena">
+                              {lineaTipo}
+                            </td>
+                            <td data-label="Marca" class="comoCadena">
+                              {marca}
+                            </td>
+                            <td data-label="Stock" class="comoNumero">
                               {totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}
                             </td>
-                            <td data-label="Uni">{unidad}</td>
+                            <td data-label="Uni" class="acciones">
+                              {unidad}
+                            </td>
                             {props.esAlmacen ? (
                               <td data-label="Promd.Costo PEN" style={{ textAlign: 'end' }}>
                                 {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
@@ -122,10 +130,10 @@ export default component$(
                             {/* <td data-label="Precio">
                             {typeof precio !== 'undefined' ? (precio.$numberDecimal ? precio.$numberDecimal : precio) : '_'}
                           </td> */}
-                            <td data-label="Kx" style={{ textAlign: 'center' }}>
+                            <td data-label="Kx" class="acciones">
                               {KARDEXS.length === 0 ? 'No' : 'Si'}
                             </td>
-                            <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                            <td data-label="Acciones" class="acciones">
                               <ImgButton
                                 src={images.check}
                                 alt="icono de adicionar"

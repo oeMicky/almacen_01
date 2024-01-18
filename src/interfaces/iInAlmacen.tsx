@@ -33,9 +33,9 @@ export interface IIngresoAAlmacen {
 
   // igv: number;
 
-  // montoSubTotalPEN: number;
-  // montoIGVPEN: number;
-  // montoTotalPEN: number;
+  montoSubTotalPEN: number;
+  montoIGVPEN: number;
+  montoTotalPEN: number;
 
   documentosAdjuntos: any;
   itemsMercaderias: any;

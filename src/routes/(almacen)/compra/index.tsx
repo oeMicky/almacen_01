@@ -151,17 +151,6 @@ export default component$(() => {
               ini.value++;
               return;
             }
-            // obteniendo IGVs de COMPRA
-            // let elIgv = await getIgvsCompra({
-            //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-            //   idEmpresa: parametrosGlobales.idEmpresa,
-            // });
-            // elIgv = elIgv.data;
-            // console.log('elIgv', elIgv);
-            // losIgvsCompra.value = elIgv;
-            // const tre = elIgv.filter((docs: any) => docs.default === true);
-            // console.log('tre', tre);
-            // (igvPorDefault.idElIgv = tre[0]._id), (igvPorDefault.elIgv = tre[0].igv), console.log('igvPorDefault', igvPorDefault);
 
             definicion_CTX_INDEX_COMPRA.cC = [];
             definicion_CTX_INDEX_COMPRA.mostrarPanelCompra = true;
