@@ -382,7 +382,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     <div
       class="container-modal"
       style={{
-        width: 'clamp(376px, 86%, 600px)',
+        width: 'clamp(346px, 86%, 600px)',
         // width: 'auto',
         padding: '2px',
       }}

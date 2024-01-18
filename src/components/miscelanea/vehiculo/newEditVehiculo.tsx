@@ -207,7 +207,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(376px, 86%, 700px)',
+        width: 'clamp(346px, 86%, 700px)',
         // width: 'auto',
         padding: '1px',
         // border: '3px dashed yellow',

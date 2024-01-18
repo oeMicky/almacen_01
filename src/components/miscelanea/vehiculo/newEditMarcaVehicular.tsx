@@ -43,7 +43,7 @@ export default component$((props: { marcaVehicularSelecci: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(376px, 86%, 700px)',
+        width: 'clamp(346px, 86%, 700px)',
         // width: 'auto',
         padding: '1px',
       }}
