@@ -200,7 +200,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 id="in_conceptoABuscar_PERSONA"
                 style={{ width: '100%' }}
                 autoFocus
-                type="text"
+                type={definicion_CTX_BUSCAR_PERSONA.buscarPor === 'DNI / RUC' ? 'number' : 'text'}
                 // value={parametrosBusqueda.cadenaABuscar}
                 // onChange$={(e) => (parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value.trim())}
                 value={definicion_CTX_BUSCAR_PERSONA.conceptoABuscar}
