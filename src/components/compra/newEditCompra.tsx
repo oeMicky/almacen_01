@@ -595,7 +595,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
         // width: 'clamp(min(10vw, 20rem),800px, max(90vw, 55rem))',
         // width: 'clamp(min(5vw, 4rem),800px, max(90vw, 55rem))',
         // width: 'clamp(60px,800px, 1080px)',
-        width: 'clamp(386px, 86%, 800px)',
+        width: 'clamp(376px, 86%, 800px)',
         // width: 'auto',
         padding: '2px',
         background: `${definicion_CTX_COMPRA.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : ''}`,

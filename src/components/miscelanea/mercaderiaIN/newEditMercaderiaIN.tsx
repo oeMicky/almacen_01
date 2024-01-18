@@ -382,7 +382,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 700px)',
+        width: 'clamp(376px, 86%, 700px)',
         // width: 'auto',
         padding: '1px',
       }}

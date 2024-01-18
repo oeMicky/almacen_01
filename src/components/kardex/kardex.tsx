@@ -57,7 +57,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 900px)',
+        width: 'clamp(376px, 86%, 900px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

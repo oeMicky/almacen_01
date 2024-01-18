@@ -44,7 +44,7 @@ export default component$((props: { idLineaTipo: string; idMarca: string; marca:
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 700px)',
+        width: 'clamp(376px, 86%, 700px)',
         // width: 'auto',
         padding: '1px',
         background: '#c0c0c0',

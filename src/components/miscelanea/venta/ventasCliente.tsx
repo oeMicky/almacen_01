@@ -57,7 +57,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
     <div
       class="container-modal"
       style={{
-        width: 'clamp(386px, 86%, 700px)',
+        width: 'clamp(376px, 86%, 700px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

@@ -83,7 +83,7 @@ export default component$((props: { contexto: string }) => {
       <div
         style={{
           // width: props.ancho + 'px',
-          width: 'clamp(386px, 86%, 700px)',
+          width: 'clamp(376px, 86%, 700px)',
           // width: 'auto',
           padding: '2px',
         }}

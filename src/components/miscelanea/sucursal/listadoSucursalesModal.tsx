@@ -16,7 +16,7 @@ export default component$(() => {
     <div
       class="container-modal"
       style={{
-        width: 'clamp(386px, 86%, 400px)',
+        width: 'clamp(376px, 86%, 400px)',
         // width: 'auto',
         padding: '2px',
       }}

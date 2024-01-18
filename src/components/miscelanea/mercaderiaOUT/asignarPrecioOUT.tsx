@@ -39,7 +39,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 600px)',
+        width: 'clamp(376px, 86%, 600px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

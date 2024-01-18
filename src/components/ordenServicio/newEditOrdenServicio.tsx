@@ -590,7 +590,7 @@ OBSERVACIÓN(ES):
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 800px)',
+        width: 'clamp(376px, 86%, 800px)',
         // width: 'auto',
         padding: '1px',
         // border: '3px dashed yellow',
