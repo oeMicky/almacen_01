@@ -1077,7 +1077,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <label>Base imponible</label>
               <div class="form-control form-agrupado">
                 <input
-                  type="text"
+                  type="number"
                   style={{ width: '100%' }}
                   id="in_BaseImponible"
                   placeholder="Base imponible"
@@ -1108,7 +1108,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <label>IGV</label>
               <div class="form-control form-agrupado">
                 <input
-                  type="text"
+                  type="number"
                   id="in_IGV"
                   style={{ width: '100%' }}
                   disabled
