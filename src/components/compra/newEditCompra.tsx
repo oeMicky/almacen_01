@@ -826,7 +826,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                 <input
                   id="in_Numero"
                   style={{ width: '100%' }}
-                  type="text"
+                  type="number"
                   // pattern="[0-9]*"
                   // pattern="[0-9]{1,25}"
                   // required
