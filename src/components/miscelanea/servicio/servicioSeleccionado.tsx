@@ -50,7 +50,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(346px, 86%, 700px)',
+        width: 'clamp(338px, 86%, 700px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

@@ -12,7 +12,7 @@ export default component$((props: { borrarDocumento: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(346px, 86%, 600px)',
+        width: 'clamp(338px, 86%, 600px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

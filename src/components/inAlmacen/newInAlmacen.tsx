@@ -354,7 +354,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
     <div
       class="container-modal"
       style={{
-        width: 'clamp(346px, 86%,900px)',
+        width: 'clamp(338px, 86%,900px)',
         // width: 'auto',
         padding: '2px',
       }}

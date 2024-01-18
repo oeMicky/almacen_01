@@ -81,7 +81,7 @@ export default component$((props: { contexto: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(346px, 86%, 800px)',
+        width: 'clamp(338px, 86%, 800px)',
         // width: 'auto',
         padding: '2px',
       }}
