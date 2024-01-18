@@ -32,7 +32,7 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
   return (
     <div
       style={{
-        width: 'clamp(338px, 86%, 800px)',
+        width: 'clamp(332px, 86%, 800px)',
         //  width: props.ancho + 'px'
       }}
       class="container-modal"
