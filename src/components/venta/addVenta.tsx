@@ -613,7 +613,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       class="container-modal"
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(330px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 800px)',
         // width: 'auto',
         background: `${definicion_CTX_F_B_NC_ND.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : ''}`,
         // border: '1px solid red',
@@ -1235,14 +1235,19 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                       }
                       return (
                         <tr key={iTVen.idAuxiliar}>
-                          <td data-label="Ítem" key={iTVen.idAuxiliar}>{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
+                          <td data-label="Ítem" key={iTVen.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(
+                            indexItemVenta,
+                            3
+                          )}`}</td>
                           {/* <td data-label="Kx">{iTVen.idKardex.substring(iTVen.idKardex.length - 6)}</td> */}
-                          <td data-label="Código" style={{ textAlign: 'center' }}>
+                          <td data-label="Código" class="comoCadena">
                             {iTVen.codigo}
                           </td>
-                          <td data-label="Descripción">{iTVen.descripcionEquivalencia}</td>
+                          <td data-label="Descripción" class="comoCadena">
+                            {iTVen.descripcionEquivalencia}
+                          </td>
                           {/* ----------------------------------------------------- */}
-                          <td data-label="Cantidad" style={{ textAlign: 'end' }}>
+                          <td data-label="Cantidad" class="comoNumero">
                             <input
                               type="number"
                               style={{ width: '60px', textAlign: 'end' }}
@@ -1278,9 +1283,11 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                               // }}
                             />
                           </td>
-                          <td data-label="Uni">{iTVen.unidadEquivalencia}</td>
+                          <td data-label="Uni" class="acciones">
+                            {iTVen.unidadEquivalencia}
+                          </td>
                           {/* ----------------------------------------------------- */}
-                          <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
+                          <td data-label="Precio Uni" class="comoNumero">
                             <input
                               type="number"
                               style={{ width: '60px', textAlign: 'end' }}
@@ -1331,7 +1338,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                             />
                           </td>
                           {/* ----------------------------------------------------- */}
-                          <td data-label="Venta" style={{ textAlign: 'end' }}>
+                          <td data-label="Venta" class="comoNumero">
                             {iTVen.ventaPEN ? iTVen.ventaPEN : iTVen.ventaPEN.$numberDecimal}
                             {/* {definicion_CTX_F_B_NC_ND.enDolares
                               ? iTVen.ventaUSD
@@ -1341,7 +1348,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                               ? redondeo2Decimales(iTVen.ventaPEN)
                               : redondeo2Decimales(iTVen.ventaPEN.$numberDecimal)} */}
                           </td>
-                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                          <td data-label="Acciones" class="acciones">
                             <ImgButton
                               src={images.trash}
                               alt="icono de eliminar"
@@ -1365,43 +1372,43 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   {/* <tfoot style={{ display: 'flex',justifyContent:'right',aligItems: 'right', border: '1px solid blue' }}> */}
                   <tfoot>
                     <tr>
-                      <td colSpan={6} style={{ textAlign: 'end' }}></td>
-                      <td colSpan={1} style={{ textAlign: 'end' }}>
+                      <td colSpan={6} class="comoNumero">
                         Sub total
                       </td>
-                      <td colSpan={1} style={{ textAlign: 'end' }}>
+                      <td colSpan={1} class="comoNumero">
                         {`${subTOTAL.toLocaleString('en-PE', {
                           style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
                       </td>
+                      <td colSpan={1} />
                     </tr>
                     <tr>
-                      <td colSpan={6} style={{ textAlign: 'end' }}></td>
-                      <td colSpan={1} style={{ textAlign: 'end' }}>
+                      <td colSpan={6} class="comoNumero">
                         IGV
                       </td>
-                      <td colSpan={1} style={{ textAlign: 'end' }}>
+                      <td colSpan={1} class="comoNumero">
                         {`${igvTOTAL.toLocaleString('en-PE', {
                           style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
-                      </td>
+                      </td>{' '}
+                      <td colSpan={1} />
                     </tr>
                     <tr>
-                      <td colSpan={6} style={{ textAlign: 'end' }}></td>
-                      <td colSpan={1} style={{ textAlign: 'end' }}>
+                      <td colSpan={6} class="comoNumero">
                         Total
                       </td>
-                      <td colSpan={1} style={{ textAlign: 'end' }}>
+                      <td colSpan={1} class="comoNumero">
                         {`${sumaTOTAL.toLocaleString('en-PE', {
                           style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
-                      </td>
+                      </td>{' '}
+                      <td colSpan={1} />
                     </tr>
                   </tfoot>
                 </table>
