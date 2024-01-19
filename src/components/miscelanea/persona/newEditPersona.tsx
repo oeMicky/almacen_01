@@ -313,7 +313,8 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e) => {
-                  console.log('-1-1-1-1-1-1', e.key);
+                  alert('onKeyUp-1-1-1');
+                  // console.log('onKeyPress-1-1-1-1-1-1', e.key);
                   // if (e.key === 'Enter') {
                   //   console.log('55555555', persona.numeroIdentidad);
                   //   buscarPersonaEnAPIExterna();
@@ -326,29 +327,29 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   //   }
                   // }
                 }}
-                // onKeyUp$={(e) => {
-                //   console.log('333333333', e.key);
-                //   if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Next' || e.key === 'Done' || e.key === 'Go') {
-                //     alert('KeyUp - Enter - Tab - Next');
-                //     console.log('4444444', persona.numeroIdentidad);
-                //     // console.log('das', (document.getElementById('tipoDocumentoIdentidad') as HTMLSelectElement).value);
-                //     if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
-                //       console.log('6666666');
-                //       buscarPersonaEnAPIExterna();
-                //       document.getElementById('in_razonSocial_PERSONA')?.focus();
-                //     } else {
-                //       //   alert('Ingrese un valor a buscar');
-                //       document.getElementById('in_nombre_PERSONA')?.focus();
-                //     }
-                //   }
-                //   if (e.key === 'Escape') {
-                //     document.getElementById('se_tipoDocumentoIdentidad_PERSONA')?.focus();
-                //   }
-                // }}
-                // onKeyDown$={(e) => {
-                //   console.log('000000000000', e.key);
-                //   alert('0000000');
-                // }}
+                onKeyUp$={(e) => {
+                  alert('onKeyUp 3333');
+                  // if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Next' || e.key === 'Done' || e.key === 'Go') {
+                  //   alert('KeyUp - Enter - Tab - Next');
+                  //   console.log('4444444', persona.numeroIdentidad);
+                  //   // console.log('das', (document.getElementById('tipoDocumentoIdentidad') as HTMLSelectElement).value);
+                  //   if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
+                  //     console.log('6666666');
+                  //     buscarPersonaEnAPIExterna();
+                  //     document.getElementById('in_razonSocial_PERSONA')?.focus();
+                  //   } else {
+                  //     //   alert('Ingrese un valor a buscar');
+                  //     document.getElementById('in_nombre_PERSONA')?.focus();
+                  //   }
+                  // }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('se_tipoDocumentoIdentidad_PERSONA')?.focus();
+                  // }
+                }}
+                onKeyDown$={(e) => {
+                  // console.log('onKeyDown000000000000', e.key);
+                  alert('onKeyDown 0000');
+                }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
                 }}
