@@ -254,7 +254,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 style={{ border: 'none', textDecoration: 'none' }}
                 onFocusin$={() => {
                   console.log('btn_Busqueda -> onFocusin');
-                  buscarPersona.value++;
+                  localizarPersonas();
+                  // buscarPersona.value++;
                 }}
               >
                 <ImgButton
