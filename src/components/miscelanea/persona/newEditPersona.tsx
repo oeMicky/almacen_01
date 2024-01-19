@@ -388,6 +388,10 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                       document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                     }
                   }}
+                  onFocusin$={(e) => {
+                    alert(`INGRESO... ${e}`);
+                    console.log('INGRESO', e);
+                  }}
                 />
                 <strong style={{ color: condicion.value === 'HABIDO' ? 'green' : 'red', marginLeft: '5px' }}>
                   {condicion.value}
