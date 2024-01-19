@@ -390,7 +390,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   }}
                   onFocusin$={(e) => {
                     // alert(`INGRESO... ${e}`);
-                    // console.log('INGRESO', e);
+                    console.log('INGRESO', e);
                     buscarPersonaEnAPIExterna();
                   }}
                 />
