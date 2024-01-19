@@ -88,6 +88,8 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   const buscarPersonaEnAPIExterna = $(async () => {
     if (persona.numeroIdentidad === '') {
       alert('Ingrese el número de identidad.');
+      persona.razonSocialNombre = '';
+      condicion.value = '';
       document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
       return;
     }
@@ -305,18 +307,31 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 placeholder="Número identidad"
                 value={persona.numeroIdentidad}
                 onChange$={(e) => {
+                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
                   persona.numeroIdentidad = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
-                onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    buscarPersonaEnAPIExterna();
-                  }
-                }}
+                // onKeyPress$={(e) => {
+                //   if (e.key === 'Enter') {
+                //     console.log('55555555', persona.numeroIdentidad);
+                //     buscarPersonaEnAPIExterna();
+                //     if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
+                //       console.log('6666666');
+                //       document.getElementById('in_razonSocial_PERSONA')?.focus();
+                //     } else {
+                //       //   alert('Ingrese un valor a buscar');
+                //       document.getElementById('in_nombre_PERSONA')?.focus();
+                //     }
+                //   }
+                // }}
                 onKeyUp$={(e) => {
                   if (e.key === 'Enter') {
+                    alert('KeyUp - Enter');
+                    console.log('4444444', persona.numeroIdentidad);
                     // console.log('das', (document.getElementById('tipoDocumentoIdentidad') as HTMLSelectElement).value);
                     if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
+                      console.log('6666666');
                       buscarPersonaEnAPIExterna();
                       document.getElementById('in_razonSocial_PERSONA')?.focus();
                     } else {

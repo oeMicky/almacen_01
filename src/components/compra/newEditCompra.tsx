@@ -972,6 +972,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                 <input
                   id="in_NumeroDocumentoIdentidad"
                   style={{ width: '100%' }}
+                  disabled
                   type="number"
                   placeholder="Add número identidad"
                   value={definicion_CTX_COMPRA.numeroIdentidad}
@@ -987,6 +988,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                 <input
                   id="in_NombreProveedor"
                   style={{ width: '100%' }}
+                  disabled
                   type="text"
                   placeholder="Razón social / Nombre"
                   value={definicion_CTX_COMPRA.razonSocialNombre}
