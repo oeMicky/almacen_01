@@ -313,8 +313,8 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e) => {
-                  alert('onKeyUp-1-1-1');
-                  // console.log('onKeyPress-1-1-1-1-1-1', e.key);
+                  alert('onKeyPress1-1-1');
+                  console.log('onKeyPress-1-1-1-1-1-1', e.key);
                   // if (e.key === 'Enter') {
                   //   console.log('55555555', persona.numeroIdentidad);
                   //   buscarPersonaEnAPIExterna();
@@ -329,6 +329,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 }}
                 onKeyUp$={(e) => {
                   alert('onKeyUp 3333');
+                  console.log('onKeyUp-3333', e.key);
                   // if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Next' || e.key === 'Done' || e.key === 'Go') {
                   //   alert('KeyUp - Enter - Tab - Next');
                   //   console.log('4444444', persona.numeroIdentidad);
@@ -347,8 +348,8 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   // }
                 }}
                 onKeyDown$={(e) => {
-                  // console.log('onKeyDown000000000000', e.key);
                   alert('onKeyDown 0000');
+                  console.log('onKeyDown000000000000', e.key);
                 }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
