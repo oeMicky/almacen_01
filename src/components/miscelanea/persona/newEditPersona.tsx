@@ -317,6 +317,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   if (e.key === 'Enter') {
                     // console.log('das', (document.getElementById('tipoDocumentoIdentidad') as HTMLSelectElement).value);
                     if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
+                      buscarPersonaEnAPIExterna();
                       document.getElementById('in_razonSocial_PERSONA')?.focus();
                     } else {
                       //   alert('Ingrese un valor a buscar');
