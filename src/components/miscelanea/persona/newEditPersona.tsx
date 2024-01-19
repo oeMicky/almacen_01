@@ -344,6 +344,10 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     document.getElementById('se_tipoDocumentoIdentidad_PERSONA')?.focus();
                   }
                 }}
+                onKeyDown$={(e) => {
+                  console.log('000000000000', e.key);
+                  alert('0000000');
+                }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
                 }}
