@@ -222,10 +222,13 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                       document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
                       return;
                     } else {
-                      console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                      console.log(
+                        '⚓⚓⚓⚓⚓definicion_CTX_BUSCAR_PERSONA.conceptoABuscar',
+                        definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
+                      );
                       document.getElementById('btn_Busqueda')?.focus();
                     }
-                    console.log('plopppppp');
+                    console.log('🚆🚆🚆🚆🚆plopppppp');
                     // buscarPersona.value++;
 
                     // if ((document.getElementById('in_conceptoABuscar_MICE') as HTMLInputElement).value.trim() !== '') {
@@ -253,7 +256,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 type="button"
                 style={{ border: 'none', textDecoration: 'none' }}
                 onFocusin$={() => {
-                  console.log('btn_Busqueda -> onFocusin');
+                  alert('🚕🚕🚕🚕🚕');
+                  console.log('🚅🚅🚅🚅🚅🚅btn_Busqueda -> onFocusin');
                   localizarPersonas();
                   // buscarPersona.value++;
                 }}
