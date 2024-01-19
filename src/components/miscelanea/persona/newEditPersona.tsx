@@ -327,7 +327,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 // }}
                 onKeyUp$={(e) => {
                   console.log('333333333', e.key);
-                  if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Next') {
+                  if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Next' || e.key === 'Done' || e.key === 'Go') {
                     alert('KeyUp - Enter - Tab - Next');
                     console.log('4444444', persona.numeroIdentidad);
                     // console.log('das', (document.getElementById('tipoDocumentoIdentidad') as HTMLSelectElement).value);
