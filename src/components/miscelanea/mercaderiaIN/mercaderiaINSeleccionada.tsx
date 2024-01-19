@@ -256,7 +256,7 @@ export default component$(
               <input
                 id="in_Cantidad_MICE"
                 style={{ width: '120px', textAlign: 'end' }}
-                type="text"
+                type="number"
                 autoFocus
                 placeholder="Add cantidad"
                 value={cantidad.value}
@@ -279,7 +279,7 @@ export default component$(
               <input
                 id="in_CostoPEN_MICE"
                 style={{ width: '120px', textAlign: 'end' }}
-                type="text"
+                type="number"
                 placeholder="Add costo"
                 value={formatear_6Decimales(costo.value)}
                 onChange$={(e) => {
@@ -302,7 +302,7 @@ export default component$(
               <input
                 id="in_PrecioPEN_MICE"
                 style={{ width: '120px', textAlign: 'end' }}
-                type="text"
+                type="number"
                 placeholder="Add precio"
                 value={formatear_6Decimales(precio.value)}
                 onChange$={(e) => {

@@ -550,7 +550,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 <input
                   id="in_NumeroDocumentoIdentidad"
                   style={{ width: '100%' }}
-                  type="text"
+                  type="number"
                   placeholder="Add número"
                   value={definicion_CTX_COTIZACION.numeroIdentidad}
                 />
@@ -585,7 +585,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               <label>IGV (%)</label>
               <div class="form-control form-agrupado">
                 <input
-                  type={'text'}
+                  type="number"
                   id={'inputIGV'}
                   style={{ width: '100%' }}
                   disabled
@@ -635,7 +635,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               <input
                 id="inputMarca"
                 style={{ width: '100%' }}
-                type="email"
+                type="text"
                 placeholder="Marca"
                 disabled
                 value={definicion_CTX_COTIZACION.vehiculoMarca}
@@ -649,7 +649,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               <input
                 id="inputModelo"
                 style={{ width: '100%' }}
-                type="email"
+                type="text"
                 placeholder="Modelo"
                 disabled
                 value={definicion_CTX_COTIZACION.vehiculoModelo}
@@ -663,7 +663,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               <input
                 id="inputVIN"
                 style={{ width: '100%' }}
-                type="email"
+                type="text"
                 placeholder="VIN"
                 disabled
                 value={definicion_CTX_COTIZACION.vin}

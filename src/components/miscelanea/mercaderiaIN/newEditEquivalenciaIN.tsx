@@ -328,7 +328,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; equiv
               <input
                 id="in_factorIN_MICE"
                 // style={{ width: '100%' }}
-                type="text"
+                type="number"
                 placeholder="Factor de equivalencia"
                 value={equivalenciaIN.factor}
                 onChange$={(e) => {

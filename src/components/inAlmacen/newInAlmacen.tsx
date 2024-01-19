@@ -805,6 +805,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         <td data-label="IGV">{iTMercaIN.IGV} %</td>
                         <td data-label="Cantidad" class="comoNumero">
                           <input
+                            type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
@@ -849,6 +850,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         </td>
                         <td data-label="costoUnitarioPEN" class="comoNumero">
                           <input
+                            type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
@@ -916,6 +918,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         </td>
                         <td data-label="valorUnitarioPEN" class="comoNumero">
                           <input
+                            type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={

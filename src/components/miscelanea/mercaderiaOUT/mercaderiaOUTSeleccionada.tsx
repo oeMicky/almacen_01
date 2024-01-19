@@ -210,7 +210,7 @@ export default component$(
                 <input
                   id="in_Cantidad_mercaderiaOUTSeleccionada"
                   style={{ width: '100%', textAlign: 'end', marginRight: '2px', background: '#ffff80' }}
-                  type="text"
+                  type="number"
                   placeholder="Add cantidad"
                   value={cantidadSacada.value}
                   onChange$={(e) => {
@@ -324,6 +324,7 @@ export default component$(
                     Precio equiv. (PEN):{' '}
                     <input
                       id="in_PrecioEquivalente_mercaderiaOUTSeleccionada"
+                      type="number"
                       style={{ width: '80px', textAlign: 'end', background: '#ffff80' }}
                       value={precioEquivalente.value}
                       onChange$={(e) => {

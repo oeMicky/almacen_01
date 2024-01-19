@@ -151,7 +151,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
               <input
                 id="in_precio_SERVICIO"
                 style={{ width: '100%' }}
-                type="text"
+                type="number"
                 placeholder="Add precio (PEN)"
                 value={servicio.precioPEN}
                 onChange$={(e) => {

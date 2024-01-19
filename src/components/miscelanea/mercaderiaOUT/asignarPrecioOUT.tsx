@@ -95,14 +95,14 @@ export default component$((props: { mercaOUTSelecci: any }) => {
           <div class="form-control">
             <label>Costo</label>
             <div class="form-control form-agrupado">
-              <input id="inputCosto_MICE" style={{ width: '100%' }} type="text" disabled placeholder="Costo" />
+              <input id="inputCosto_MICE" style={{ width: '100%' }} type="number" disabled placeholder="Costo" />
             </div>
           </div>
           {/* Utilidad */}
           <div class="form-control">
             <label>Utilidad</label>
             <div class="form-control form-agrupado">
-              <input id="inputUtilidad_MICE" style={{ width: '100%' }} type="text" disabled placeholder="Utilidad" />
+              <input id="inputUtilidad_MICE" style={{ width: '100%' }} type="number" disabled placeholder="Utilidad" />
             </div>
           </div>
           {/* Precio */}
@@ -113,7 +113,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
                 id="inputPrecio_MICE"
                 autoFocus
                 style={{ width: '100%', textAlign: 'end', marginRight: '2px' }}
-                type="text"
+                type="number"
                 placeholder="Adicionar Precio"
                 // value={props.mercaOUTSelecci.precio.$numberDecimal}
                 // value={props.mercaOUTSelecci.precio ? props.mercaOUTSelecci.precio.$numberDecimal : 0}

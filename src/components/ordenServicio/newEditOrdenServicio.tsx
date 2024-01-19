@@ -890,7 +890,7 @@ OBSERVACIÓN(ES):
                 <input
                   id="inputNumeroIdentidad"
                   style={{ width: '100%' }}
-                  type="text"
+                  type="number"
                   disabled
                   placeholder="Add número identidad"
                   value={definicion_CTX_O_S.numeroIdentidad}
@@ -931,7 +931,7 @@ OBSERVACIÓN(ES):
             <div class="form-control">
               <label>IGV (%)</label>
               <div class="form-control form-agrupado">
-                <input type="text" id="inputIGV" disabled value={definicion_CTX_O_S.igv + ' %'} style={{ width: '100%' }} />
+                <input type="number" id="inputIGV" disabled value={definicion_CTX_O_S.igv + ' %'} style={{ width: '100%' }} />
               </div>
             </div>
           </div>
@@ -980,7 +980,7 @@ OBSERVACIÓN(ES):
                 <input
                   id="inputMarca"
                   style={{ width: '100%' }}
-                  type="email"
+                  type="text"
                   placeholder="Marca"
                   disabled
                   value={definicion_CTX_O_S.vehiculoMarca}
@@ -994,7 +994,7 @@ OBSERVACIÓN(ES):
                 <input
                   id="inputModelo"
                   style={{ width: '100%' }}
-                  type="email"
+                  type="text"
                   placeholder="Modelo"
                   disabled
                   value={definicion_CTX_O_S.vehiculoModelo}
@@ -1008,7 +1008,7 @@ OBSERVACIÓN(ES):
                 <input
                   id="inputVIN"
                   style={{ width: '100%' }}
-                  type="email"
+                  type="text"
                   placeholder="VIN"
                   disabled
                   value={definicion_CTX_O_S.vin}
@@ -1022,7 +1022,7 @@ OBSERVACIÓN(ES):
                 <input
                   id="inputKilometraje"
                   style={{ width: '100%' }}
-                  type="text"
+                  type="number"
                   placeholder="Add kilometraje"
                   value={definicion_CTX_O_S.kilometraje}
                   // onKeyDown$={(e) => {
@@ -1211,6 +1211,7 @@ OBSERVACIÓN(ES):
                         <td data-label="Descripción">{iTSer.descripcionEquivalencia}</td>
                         <td data-label="Cantidad" style={{ textAlign: 'end' }}>
                           <input
+                            type="number"
                             disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={iTSer.cantidad.$numberDecimal ? iTSer.cantidad.$numberDecimal : iTSer.cantidad}
@@ -1227,6 +1228,7 @@ OBSERVACIÓN(ES):
                         <td data-label="Uni">{iTSer.unidadEquivalencia}</td>
                         <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
                           <input
+                            type="number"
                             disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN}
@@ -1404,6 +1406,7 @@ OBSERVACIÓN(ES):
                         <td data-label="Descripción">{iTRequi.descripcionEquivalencia}</td>
                         <td data-label="Cantidad" style={{ textAlign: 'end' }}>
                           <input
+                            type="number"
                             disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={iTRequi.cantidad.$numberDecimal ? iTRequi.cantidad.$numberDecimal : iTRequi.cantidad}
@@ -1419,6 +1422,7 @@ OBSERVACIÓN(ES):
                         <td data-label="Uni">{iTRequi.unidadEquivalencia}</td>
                         <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
                           <input
+                            type="number"
                             disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             style={{ width: '60px', textAlign: 'end' }}
                             value={iTRequi.precioPEN.$numberDecimal ? iTRequi.precioPEN.$numberDecimal : iTRequi.precioPEN}

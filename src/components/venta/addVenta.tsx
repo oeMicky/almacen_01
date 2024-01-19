@@ -872,7 +872,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                 <input
                   id="inputNumeroDocumentoIdentidad"
                   style={{ width: '100%' }}
-                  type="text"
+                  type="number"
                   placeholder="Add número"
                   value={definicion_CTX_F_B_NC_ND.numeroIdentidad}
                   onChange$={(e) => (definicion_CTX_F_B_NC_ND.numeroIdentidad = (e.target as HTMLInputElement).value)}
@@ -923,7 +923,13 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
             <div class="form-control">
               <label>IGV (%)</label>
               <div class="form-control form-agrupado">
-                <input type="text" id="inputIGV" disabled value={definicion_CTX_F_B_NC_ND.igv + ' %'} style={{ width: '100%' }} />
+                <input
+                  type="number"
+                  id="inputIGV"
+                  disabled
+                  value={definicion_CTX_F_B_NC_ND.igv + ' %'}
+                  style={{ width: '100%' }}
+                />
               </div>
             </div>
             {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
@@ -954,7 +960,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
               <div class="form-control form-agrupado">
                 <input
                   id="inputTipoCambio"
-                  type="text"
+                  type="number"
                   value={definicion_CTX_F_B_NC_ND.tipoCambio}
                   disabled
                   style={{ width: '100%' }}
@@ -1238,6 +1244,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                           {/* ----------------------------------------------------- */}
                           <td data-label="Cantidad" style={{ textAlign: 'end' }}>
                             <input
+                              type="number"
                               style={{ width: '60px', textAlign: 'end' }}
                               value={iTVen.cantidad.$numberDecimal ? iTVen.cantidad.$numberDecimal : iTVen.cantidad}
                               onChange$={(e) => {
@@ -1275,6 +1282,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                           {/* ----------------------------------------------------- */}
                           <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
                             <input
+                              type="number"
                               style={{ width: '60px', textAlign: 'end' }}
                               value={
                                 definicion_CTX_F_B_NC_ND.enDolares

@@ -236,7 +236,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
               <input
                 id="in_Numero_DOCUMENTO"
                 style={{ width: '100%' }}
-                type="text"
+                type="number"
                 placeholder="Add número"
                 value={documentoIN.numero}
                 onChange$={(e) => {

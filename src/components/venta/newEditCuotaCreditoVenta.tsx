@@ -79,7 +79,7 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
           <label>Importe</label>
           <div class="form-control form-agrupado">
             <input
-              type="text"
+              type="number"
               id="inputImporteCuota"
               style={{ width: '100%' }}
               placeholder="Add importe cuota"

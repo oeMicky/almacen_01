@@ -789,6 +789,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                         {/* <td data-label="IGV">{iTMercaIN.IGV} %</td> */}
                         <td data-label="Cantidad" style={{ textAlign: 'end' }}>
                           <input
+                            type="number"
                             style={{ width: '60px', textAlign: 'end' }}
                             disabled
                             value={
@@ -814,6 +815,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                         <td data-label="Uni">{iTMercaIN.unidadEquivalencia}</td>
                         <td data-label="costoUnitarioPEN" style={{ textAlign: 'end' }}>
                           <input
+                            type="number"
                             style={{ width: '60px', textAlign: 'end' }}
                             disabled
                             value={

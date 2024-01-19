@@ -81,6 +81,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
               Cantidad:
               <input
                 id="inputCantidadServicio"
+                type="number"
                 style={{ width: '80px', textAlign: 'end', marginLeft: '5px' }}
                 autoFocus
                 value={cantidad.value}
@@ -103,6 +104,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
               Precio:
               <input
                 id="inputPrecioServicio"
+                type="number"
                 style={{ width: '80px', textAlign: 'end', marginLeft: '5px' }}
                 value={precio.value}
                 onInput$={(e) => {
