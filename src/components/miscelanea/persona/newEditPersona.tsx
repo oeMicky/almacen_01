@@ -312,21 +312,21 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
-                // onKeyPress$={(event: any) => {
-                //   // alert(`onKeyPress... ${event}`);
-                //   // console.log('onKeyPress-1-1-1-1-1-1', event.key);
-                //   // if (e.key === 'Enter') {
-                //   //   console.log('55555555', persona.numeroIdentidad);
-                //   //   buscarPersonaEnAPIExterna();
-                //   //   if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
-                //   //     console.log('6666666');
-                //   //     document.getElementById('in_razonSocial_PERSONA')?.focus();
-                //   //   } else {
-                //   //     //   alert('Ingrese un valor a buscar');
-                //   //     document.getElementById('in_nombre_PERSONA')?.focus();
-                //   //   }
-                //   // }
-                // }}
+                onKeyPress$={(e: any) => {
+                  // alert(`onKeyPress... ${event}`);
+                  // console.log('onKeyPress-1-1-1-1-1-1', event.key);
+                  if (e.key === 'Enter') {
+                    // console.log('55555555', persona.numeroIdentidad);
+                    // buscarPersonaEnAPIExterna();
+                    if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
+                      // console.log('6666666');
+                      document.getElementById('in_razonSocial_PERSONA')?.focus();
+                    } else {
+                      //   alert('Ingrese un valor a buscar');
+                      document.getElementById('in_nombre_PERSONA')?.focus();
+                    }
+                  }
+                }}
                 // onKeyUp$={(e) => {
                 //   // alert(`onKeyUp... ${e}`);
                 //   // console.log('onKeyUp-3333', e.key);
@@ -380,14 +380,26 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   onChange$={(e) => {
                     persona.razonSocialNombre = (e.target as HTMLInputElement).value.trim().toUpperCase();
                   }}
-                  onKeyUp$={(e) => {
+                  onKeyPress$={(e: any) => {
+                    // alert(`onKeyPress... ${event}`);
+                    // console.log('onKeyPress-1-1-1-1-1-1', event.key);
                     if (e.key === 'Enter') {
+                      // console.log('55555555', persona.numeroIdentidad);
+                      // buscarPersonaEnAPIExterna();
+                      // if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
+                      // console.log('6666666');
                       document.getElementById('btn_grabar_PERSONA')?.focus();
                     }
-                    if (e.key === 'Escape') {
-                      document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
-                    }
                   }}
+                  // onKeyUp$={(e) => {
+                  //   if (e.key === 'Enter') {
+                  //     console.log('$$$$$$$$$$$$$$$$$$$$$$');
+                  //     document.getElementById('btn_grabar_PERSONA')?.focus();
+                  //   }
+                  //   if (e.key === 'Escape') {
+                  //     document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
+                  //   }
+                  // }}
                   onFocusin$={(e) => {
                     // alert(`INGRESO... ${e}`);
                     console.log('INGRESO', e);
@@ -464,6 +476,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     }}
                     onKeyUp$={(e) => {
                       if (e.key === 'Enter') {
+                        console.log('###############');
                         document.getElementById('btn_grabar_PERSONA')?.focus();
                       }
                       if (e.key === 'Escape') {
