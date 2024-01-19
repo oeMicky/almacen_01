@@ -221,8 +221,13 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                       alert('Ingrese un valor para su busqueda.{.{.');
                       document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
                       return;
+                    } else {
+                      console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                      document.getElementById('btn_Busqueda')?.focus();
                     }
-                    buscarPersona.value++;
+                    console.log('plopppppp');
+                    // buscarPersona.value++;
+
                     // if ((document.getElementById('in_conceptoABuscar_MICE') as HTMLInputElement).value.trim() !== '') {
                     //   if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
                     //     alert('Ingrese un valor para su busqueda(=)' + definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
@@ -243,17 +248,38 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   (e.target as HTMLInputElement).select();
                 }}
               />
-              <ImgButton
-                src={images.searchPLUS}
-                alt="Icono de buscar persona"
-                height={16}
-                width={16}
-                title="Buscar persona"
-                // onClick={localizarPersonas}
-                onClick={$(() => {
-                  localizarPersonas();
-                })}
-              />
+              <button
+                id="btn_Busqueda"
+                type="button"
+                style={{ border: 'none', textDecoration: 'none' }}
+                onFocusin$={() => {
+                  console.log('btn_Busqueda -> onFocusin');
+                  buscarPersona.value++;
+                }}
+              >
+                <ImgButton
+                  id="imgBtn_BuscarPersona"
+                  src={images.searchPLUS}
+                  alt="Icono de buscar persona"
+                  height={16}
+                  width={16}
+                  title="Buscar persona"
+                  // onClick={localizarPersonas}
+                  // onClick={$(() => {
+                  //   console.log('onClick');
+                  //   localizarPersonas();
+                  // })}
+                  // onFocusin={$(() => {
+                  //   console.log('onFocusin');
+                  //   buscarPersona.value++;
+                  // })}
+                  // onFocus={$(() => {
+                  //   console.log('onFocus');
+                  //   buscarPersona.value++;
+                  // })}
+                />
+              </button>
+
               <ImgButton
                 src={images.add}
                 alt="Icono de adicionar persona"

@@ -9,6 +9,8 @@ interface IImgButton {
   title: string;
   hidden?: boolean;
   onClick?: any;
+  onFocusin?: any;
+  onFocus?: any;
 }
 
 export default component$((props: IImgButton) => {
@@ -34,6 +36,8 @@ export default component$((props: IImgButton) => {
         // border: ' 1px solid red',
       }}
       onClick$={props.onClick}
+      onFocusin$={props.onFocusin}
+      onFocus$={props.onFocus}
     />
     // <img
     //   style={{
