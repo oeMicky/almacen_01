@@ -919,6 +919,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
               <div class="form-control form-agrupado">
                 <select
                   id="se_TipoDocumentoLiteral"
+                  disabled
                   // value={6}
                   // value={definicion_CTX_COMPRA.tipoDocumentoIdentidad}
                   // onChange={cambioTipoDocumento}

@@ -199,7 +199,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
               <input
                 id="in_conceptoABuscar_PERSONA"
                 style={{ width: '100%' }}
-                autoFocus
+                // autoFocus
                 type={definicion_CTX_BUSCAR_PERSONA.buscarPor === 'DNI / RUC' ? 'number' : 'text'}
                 // value={parametrosBusqueda.cadenaABuscar}
                 // onChange$={(e) => (parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value.trim())}
@@ -214,56 +214,60 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                   console.log('onChange', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 }}
-                // onKeyDown$={(e) => {
-                //   alert('🚧🚧🚧🚧🚧');
-                //   console.log('first', e);
-                //   // if (e.key===) {
+                onKeyDown$={(e) => {
+                  // alert('🚧🚧🚧🚧🚧');
+                  console.log('🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧first', e);
+                  // if (e.key===) {
 
-                //   // }
-                // }}
-                // onKeyUp$={() => {
-                //   alert('⛽⛽⛽⛽⛽');
-                //   console.log('first');
-                // }}
-                // onKeyPress$={(e) => {
-                //   // alert('🚧🚧🚧🚧🚧');
-                //   if (e.key === 'Enter') {
-                //     if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
-                //       console.log(
-                //         'definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?',
-                //         definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
-                //       );
-                //       alert('Ingrese un valor para su busqueda.{.{.');
-                //       document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
-                //       return;
-                //     } else {
-                //       console.log(
-                //         '⚓⚓⚓⚓⚓definicion_CTX_BUSCAR_PERSONA.conceptoABuscar',
-                //         definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
-                //       );
-                //       alert('🚆🚆🚆🚆🚆');
-                //       document.getElementById('btn_Busqueda')?.focus();
-                //       // document.getElementById('imgBtn_BuscarPersona')?.focus();
-                //     }
-                //     console.log('🚆🚆🚆🚆🚆plopppppp');
-                //     // buscarPersona.value++;
+                  // }
+                }}
+                onKeyUp$={(e) => {
+                  // alert('');
+                  console.log('⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽first', e);
+                }}
+                onKeyPress$={(e) => {
+                  // alert('🚧🚧🚧🚧🚧');
+                  console.log('🚐🚐🚐🚐🚌🚐🚐🚌🚌🚐🚐🚐🚐🚌🚐🚐first', e);
+                  if (e.key === 'Enter') {
+                    console.log('🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎');
+                    // document.getElementById('imgBtn_BuscarPersona')?.focus();
+                    document.getElementById('btn_Busqueda')?.focus();
+                    // if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
+                    //   console.log(
+                    //     'definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?',
+                    //     definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
+                    //   );
+                    //   alert('Ingrese un valor para su busqueda.{.{.');
+                    //   document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
+                    //   return;
+                    // } else {
+                    //   console.log(
+                    //     '⚓⚓⚓⚓⚓definicion_CTX_BUSCAR_PERSONA.conceptoABuscar',
+                    //     definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
+                    //   );
+                    //   alert('🚆🚆🚆🚆🚆');
+                    //   document.getElementById('btn_Busqueda')?.focus();
+                    //   // document.getElementById('imgBtn_BuscarPersona')?.focus();
+                    // }
+                    // console.log('🚆🚆🚆🚆🚆plopppppp');
+                    // buscarPersona.value++;
 
-                //     // if ((document.getElementById('in_conceptoABuscar_MICE') as HTMLInputElement).value.trim() !== '') {
-                //     //   if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
-                //     //     alert('Ingrese un valor para su busqueda(=)' + definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
-                //     //     document.getElementById('in_conceptoABuscar_MICE')?.focus();
-                //     //     return;
-                //     //   }
-                //     //   buscarPersona.value++;
-                //     // } else {
-                //     //   alert('Ingrese un valor a buscar');
-                //     //   document.getElementById('in_conceptoABuscar_MICE')?.focus();
-                //     // }
-                //   }
-                //   if (e.key === 'Escape') {
-                //     document.getElementById('se_buscarPor_PERSONA')?.focus();
-                //   }
-                // }}
+                    // if ((document.getElementById('in_conceptoABuscar_MICE') as HTMLInputElement).value.trim() !== '') {
+                    //   if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
+                    //     alert('Ingrese un valor para su busqueda(=)' + definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                    //     document.getElementById('in_conceptoABuscar_MICE')?.focus();
+                    //     return;
+                    //   }
+                    //   buscarPersona.value++;
+                    // } else {
+                    //   alert('Ingrese un valor a buscar');
+                    //   document.getElementById('in_conceptoABuscar_MICE')?.focus();
+                    // }
+                  }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('se_buscarPor_PERSONA')?.focus();
+                  // }
+                }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
                 }}
@@ -285,14 +289,14 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 //   localizarPersonas();
                 //   // buscarPersona.value++;
                 // })}
-                onFocus={$(() => {
-                  console.log('onFocus');
-                  alert('foco imgBtn_BuscarPersona');
-                  localizarPersonas();
-                  // buscarPersona.value++;
-                })}
+                // onFocus={$(() => {
+                //   console.log('onFocus');
+                //   alert('foco imgBtn_BuscarPersona');
+                //   localizarPersonas();
+                //   // buscarPersona.value++;
+                // })}
               /> */}
-              <input
+              {/* <input
                 id="btn_Busqueda"
                 type="button"
                 value="BUS"
@@ -304,24 +308,24 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   console.log('🚧🚧🚧🚧🚧btn_Busqueda -> onFocus');
                   localizarPersonas();
                 }}
-              />
-              {/* <button
+              /> */}
+              <button
                 id="btn_Busqueda"
                 type="button"
                 style={{ border: 'none', textDecoration: 'none' }}
-                onFocus$={() => {
-                  console.log('🚅🚅🚅🚅🚅🚅btn_Busqueda -> onFocus');
-                  localizarPersonas();
-                }}
-                onFocusin$={() => {
-                  // alert('🚕🚕🚕🚕🚕');
-                  console.log('🚕🚕🚕🚕🚕btn_Busqueda -> onFocusin');
-                  localizarPersonas();
-                  // buscarPersona.value++;
-                }}
+                // onFocus$={() => {
+                //   console.log('🚅🚅🚅🚅🚅🚅btn_Busqueda -> onFocus');
+                //   localizarPersonas();
+                // }}
+                // onFocusin$={() => {
+                //   // alert('🚕🚕🚕🚕🚕');
+                //   console.log('🚕🚕🚕🚕🚕btn_Busqueda -> onFocusin');
+                //   localizarPersonas();
+                //   // buscarPersona.value++;
+                // }}
               >
                 busca
-              </button> */}
+              </button>
 
               <ImgButton
                 src={images.add}
