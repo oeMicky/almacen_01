@@ -226,7 +226,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                         '⚓⚓⚓⚓⚓definicion_CTX_BUSCAR_PERSONA.conceptoABuscar',
                         definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
                       );
-                      document.getElementById('btn_Busqueda')?.focus();
+                      // document.getElementById('btn_Busqueda')?.focus();
+                      document.getElementById('imgBtn_BuscarPersona')?.focus();
                     }
                     console.log('🚆🚆🚆🚆🚆plopppppp');
                     // buscarPersona.value++;
