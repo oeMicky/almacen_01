@@ -215,6 +215,10 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   alert('🚧🚧🚧🚧🚧');
                   console.log('first', e);
                 }}
+                onKeyUp$={() => {
+                  alert('⛽⛽⛽⛽⛽');
+                  console.log('first');
+                }}
                 onKeyPress$={(e) => {
                   // alert('🚧🚧🚧🚧🚧');
                   if (e.key === 'Enter') {
