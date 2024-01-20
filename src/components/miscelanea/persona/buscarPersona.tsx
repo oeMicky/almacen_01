@@ -213,7 +213,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // }}
                 onKeyDown$={(e) => {
                   alert('🚧🚧🚧🚧🚧');
-                  console.log('first');
+                  console.log('first', e);
                 }}
                 onKeyPress$={(e) => {
                   // alert('🚧🚧🚧🚧🚧');
