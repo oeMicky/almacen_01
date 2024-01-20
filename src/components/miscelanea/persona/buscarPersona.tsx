@@ -259,10 +259,10 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 width={16}
                 title="Buscar persona"
                 // onClick={localizarPersonas}
-                // onClick={$(() => {
-                //   console.log('onClick');
-                //   localizarPersonas();
-                // })}
+                onClick={$(() => {
+                  console.log('🚧🚧🚧🚧🚧onClick');
+                  localizarPersonas();
+                })}
                 onFocusin={$(() => {
                   console.log('🚕🚕🚕🚕🚕onFocusin');
                   localizarPersonas();
