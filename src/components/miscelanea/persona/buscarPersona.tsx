@@ -207,8 +207,9 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // onInput$={(e) => {
                 //   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                 // }}
-                onSuspend$={() => console.log('onSuspend')}
-                onSubmit$={() => console.log('onSubmit')}
+
+                onSuspend$={() => alert('onSuspend')}
+                onSubmit$={() => alert('onSubmit')}
                 onChange$={(e) => {
                   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                   console.log('onChange', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
@@ -216,6 +217,9 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 onKeyDown$={(e) => {
                   alert('🚧🚧🚧🚧🚧');
                   console.log('first', e);
+                  // if (e.key===) {
+
+                  // }
                 }}
                 onKeyUp$={() => {
                   alert('⛽⛽⛽⛽⛽');
