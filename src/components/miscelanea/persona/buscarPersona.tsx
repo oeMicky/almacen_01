@@ -265,7 +265,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // })}
                 onFocusin={$(() => {
                   console.log('🚕🚕🚕🚕🚕onFocusin');
-                  buscarPersona.value++;
+                  localizarPersonas();
+                  // buscarPersona.value++;
                 })}
                 // onFocus={$(() => {
                 //   console.log('onFocus');
