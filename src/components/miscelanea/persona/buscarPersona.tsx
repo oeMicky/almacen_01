@@ -263,15 +263,16 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   console.log('🚧🚧🚧🚧🚧onClick');
                   localizarPersonas();
                 })}
-                onFocusin={$(() => {
-                  console.log('🚕🚕🚕🚕🚕onFocusin');
+                // onFocusin={$(() => {
+                //   console.log('🚕🚕🚕🚕🚕onFocusin');
+                //   localizarPersonas();
+                //   // buscarPersona.value++;
+                // })}
+                onFocus={$(() => {
+                  console.log('onFocus');
                   localizarPersonas();
                   // buscarPersona.value++;
                 })}
-                // onFocus={$(() => {
-                //   console.log('onFocus');
-                //   buscarPersona.value++;
-                // })}
               />
               {/* <button
                 id="btn_Busqueda"
