@@ -208,62 +208,62 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 //   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                 // }}
                 onFocusout$={() => localizarPersonas()}
-                onSuspend$={() => alert('onSuspend')}
-                onSubmit$={() => alert('onSubmit')}
+                // onSuspend$={() => alert('onSuspend')}
+                // onSubmit$={() => alert('onSubmit')}
                 onChange$={(e) => {
                   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                   console.log('onChange', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 }}
-                onKeyDown$={(e) => {
-                  alert('🚧🚧🚧🚧🚧');
-                  console.log('first', e);
-                  // if (e.key===) {
+                // onKeyDown$={(e) => {
+                //   alert('🚧🚧🚧🚧🚧');
+                //   console.log('first', e);
+                //   // if (e.key===) {
 
-                  // }
-                }}
-                onKeyUp$={() => {
-                  alert('⛽⛽⛽⛽⛽');
-                  console.log('first');
-                }}
-                onKeyPress$={(e) => {
-                  // alert('🚧🚧🚧🚧🚧');
-                  if (e.key === 'Enter') {
-                    if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
-                      console.log(
-                        'definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?',
-                        definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
-                      );
-                      alert('Ingrese un valor para su busqueda.{.{.');
-                      document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
-                      return;
-                    } else {
-                      console.log(
-                        '⚓⚓⚓⚓⚓definicion_CTX_BUSCAR_PERSONA.conceptoABuscar',
-                        definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
-                      );
-                      alert('🚆🚆🚆🚆🚆');
-                      document.getElementById('btn_Busqueda')?.focus();
-                      // document.getElementById('imgBtn_BuscarPersona')?.focus();
-                    }
-                    console.log('🚆🚆🚆🚆🚆plopppppp');
-                    // buscarPersona.value++;
+                //   // }
+                // }}
+                // onKeyUp$={() => {
+                //   alert('⛽⛽⛽⛽⛽');
+                //   console.log('first');
+                // }}
+                // onKeyPress$={(e) => {
+                //   // alert('🚧🚧🚧🚧🚧');
+                //   if (e.key === 'Enter') {
+                //     if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
+                //       console.log(
+                //         'definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?',
+                //         definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
+                //       );
+                //       alert('Ingrese un valor para su busqueda.{.{.');
+                //       document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
+                //       return;
+                //     } else {
+                //       console.log(
+                //         '⚓⚓⚓⚓⚓definicion_CTX_BUSCAR_PERSONA.conceptoABuscar',
+                //         definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
+                //       );
+                //       alert('🚆🚆🚆🚆🚆');
+                //       document.getElementById('btn_Busqueda')?.focus();
+                //       // document.getElementById('imgBtn_BuscarPersona')?.focus();
+                //     }
+                //     console.log('🚆🚆🚆🚆🚆plopppppp');
+                //     // buscarPersona.value++;
 
-                    // if ((document.getElementById('in_conceptoABuscar_MICE') as HTMLInputElement).value.trim() !== '') {
-                    //   if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
-                    //     alert('Ingrese un valor para su busqueda(=)' + definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
-                    //     document.getElementById('in_conceptoABuscar_MICE')?.focus();
-                    //     return;
-                    //   }
-                    //   buscarPersona.value++;
-                    // } else {
-                    //   alert('Ingrese un valor a buscar');
-                    //   document.getElementById('in_conceptoABuscar_MICE')?.focus();
-                    // }
-                  }
-                  if (e.key === 'Escape') {
-                    document.getElementById('se_buscarPor_PERSONA')?.focus();
-                  }
-                }}
+                //     // if ((document.getElementById('in_conceptoABuscar_MICE') as HTMLInputElement).value.trim() !== '') {
+                //     //   if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
+                //     //     alert('Ingrese un valor para su busqueda(=)' + definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                //     //     document.getElementById('in_conceptoABuscar_MICE')?.focus();
+                //     //     return;
+                //     //   }
+                //     //   buscarPersona.value++;
+                //     // } else {
+                //     //   alert('Ingrese un valor a buscar');
+                //     //   document.getElementById('in_conceptoABuscar_MICE')?.focus();
+                //     // }
+                //   }
+                //   if (e.key === 'Escape') {
+                //     document.getElementById('se_buscarPor_PERSONA')?.focus();
+                //   }
+                // }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
                 }}
