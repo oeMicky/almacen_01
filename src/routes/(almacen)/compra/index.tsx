@@ -7,6 +7,7 @@ import TablaCompras from '~/components/compra/tablaCompras';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
+import Spinner from '~/components/system/spinner';
 import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -19,6 +20,8 @@ export default component$(() => {
 
     mostrarPanelCompra: false,
     grabo_Compra: false,
+
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_INDEX_COMPRA, definicion_CTX_INDEX_COMPRA);
   //#endregion DEFINICION CTX_INDEX_COMPRA
@@ -134,6 +137,8 @@ export default component$(() => {
               console.log('click en lupa: parametrosBusqueda ', parametrosBusqueda);
 
               buscarCompras.value++;
+
+              definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
             })}
           />
         </div>
@@ -204,6 +209,12 @@ export default component$(() => {
           ''
         )}
       </div>
+      {/* MOSTRAR SPINNER */}
+      {definicion_CTX_INDEX_COMPRA.mostrarSpinner && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 });

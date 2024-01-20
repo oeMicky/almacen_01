@@ -6,6 +6,7 @@ import { getUsuario } from '~/apis/usuario.api';
 
 import styles from './login.css?inline';
 import { getActivoGEEMP, getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
+import Spinner from '~/components/system/spinner';
 
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
@@ -69,6 +70,7 @@ export default component$(() => {
   const navegarA = useNavigate();
 
   const definicion_CTX_LOGEO = useStore({
+    mostrarSpinner: false,
     // email: 'mvizconde@msn.com',
     // email: 'carlos@merma.com',
     // email: 'paolo@cao.com',
@@ -381,6 +383,7 @@ export default component$(() => {
     }
     console.log('::::::_______PASO -> ingresarAlSistema::::::______');
 
+    definicion_CTX_LOGEO.mostrarSpinner = true;
     let elLogeo = await getUsuario({
       usuario: definicion_CTX_LOGEO.email.trim(),
       clave: definicion_CTX_LOGEO.contrasena.trim(),
@@ -393,6 +396,7 @@ export default component$(() => {
         console.log('analisisDeLogeo');
         analisisDeLogeo(elLogeo[0]);
       } else {
+        definicion_CTX_LOGEO.mostrarSpinner = false;
         alert('El usuario no se encuentra activo, pongase en contacto con el administrador.');
       }
 
@@ -404,6 +408,7 @@ export default component$(() => {
     } else {
       // sessionStorage.removeItem('ID');
       // sessionStorage.removeItem('NOMBRE');
+      definicion_CTX_LOGEO.mostrarSpinner = false;
       alert('El correo o la contraseña estan erradas.');
     }
 
@@ -512,6 +517,12 @@ export default component$(() => {
               Desea suscribirse?
             </Link>
           </div> */}
+          {/* MOSTRAR SPINNER */}
+          {definicion_CTX_LOGEO.mostrarSpinner && (
+            <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Spinner />
+            </div>
+          )}
         </div>
       </div>
     </>

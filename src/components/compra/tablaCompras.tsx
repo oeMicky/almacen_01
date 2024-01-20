@@ -50,6 +50,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
         onRejected={() => {
           console.log('onRejected 🍍🍍🍍🍍');
           // props.buscarVentas = false;
+          ctx_index_compra.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(compras) => {
@@ -57,6 +58,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
           const { data } = compras; //{ status, data, message }
           const misCompras: ICompra[] = data;
           // props.buscarVentas = false;
+          ctx_index_compra.mostrarSpinner = false;
           console.log('misCompras', misCompras);
           return (
             <>

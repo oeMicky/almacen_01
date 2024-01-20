@@ -68,14 +68,16 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
 
   //#region CREAR Y DOWNLOAD XML
   const createAndDownloadFile = $((nameFile: string) => {
-    const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    const xmltext = 'hOLA A TODOS';
 
     const filename = nameFile; ///'file.xml';
     const pom = document.createElement('a');
     const bb = new Blob([xmltext], { type: 'text/plain' });
 
     pom.setAttribute('href', window.URL.createObjectURL(bb));
-    pom.setAttribute('download', filename);
+    // pom.setAttribute('download', filename);
+    pom.setAttribute('download', filename + '.txt');
 
     pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
     pom.draggable = true;

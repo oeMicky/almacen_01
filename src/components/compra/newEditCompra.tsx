@@ -947,7 +947,17 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                     C.EXT
                   </option>
                 </select>
-                <ImgButton
+                <input
+                  id="in_BuscarProveedor"
+                  type="image"
+                  src={images.searchPLUS}
+                  height={16}
+                  width={16}
+                  style={{ padding: '2px' }}
+                  // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                  onClick$={() => (definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona = true)}
+                />
+                {/* <ImgButton
                   id="img_buscarProveedor"
                   src={images.searchPLUS}
                   alt="Icono de buscar identidad"
@@ -958,7 +968,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   onClick={$(() => {
                     definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona = true;
                   })}
-                />
+                /> */}
               </div>
             </div>
             {definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona && (
@@ -1283,7 +1293,6 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
             <hr style={{ margin: '5px 0' }}></hr>
           </div>
         </div>
-
         {/* GRABAR   onClick={(e) => onSubmit(e)}*/}
         <input
           id="bu_RegistrarDocumentoIN_MICE"
