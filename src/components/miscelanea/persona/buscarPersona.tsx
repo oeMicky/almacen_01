@@ -231,7 +231,9 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   if (e.key === 'Enter') {
                     console.log('🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎');
                     // document.getElementById('imgBtn_BuscarPersona')?.focus();
-                    document.getElementById('btn_Busqueda')?.focus();
+                    // document.getElementById('btn_Busqueda')?.focus();
+                    document.getElementById('in_Buscar')?.focus();
+
                     // if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
                     //   console.log(
                     //     'definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?',
@@ -272,6 +274,15 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   (e.target as HTMLInputElement).select();
                 }}
               />
+              <input
+                id="in_Buscar"
+                type="image"
+                src={images.searchPLUS}
+                height={16}
+                width={16}
+                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                onClick$={() => localizarPersonas()}
+              />
               {/* <ImgButton
                 id="imgBtn_BuscarPersona"
                 src={images.searchPLUS}
@@ -309,7 +320,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   localizarPersonas();
                 }}
               /> */}
-              <button
+              {/* <button
                 id="btn_Busqueda"
                 type="button"
                 style={{ border: 'none', textDecoration: 'none' }}
@@ -325,7 +336,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // }}
               >
                 busca
-              </button>
+              </button> */}
 
               <ImgButton
                 src={images.add}
