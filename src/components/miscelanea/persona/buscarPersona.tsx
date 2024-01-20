@@ -204,13 +204,15 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // value={parametrosBusqueda.cadenaABuscar}
                 // onChange$={(e) => (parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value.trim())}
                 value={definicion_CTX_BUSCAR_PERSONA.conceptoABuscar}
-                onInput$={(e) => {
-                  definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
-                }}
-                // onChange$={(e) => {
+                // onInput$={(e) => {
                 //   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
-                //   console.log('onChange', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 // }}
+                onSuspend$={() => console.log('onSuspend')}
+                onSubmit$={() => console.log('onSubmit')}
+                onChange$={(e) => {
+                  definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
+                  console.log('onChange', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                }}
                 onKeyDown$={(e) => {
                   alert('🚧🚧🚧🚧🚧');
                   console.log('first', e);
