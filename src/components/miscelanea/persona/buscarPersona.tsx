@@ -232,7 +232,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                     console.log('🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎🌎');
                     // document.getElementById('imgBtn_BuscarPersona')?.focus();
                     // document.getElementById('btn_Busqueda')?.focus();
-                    document.getElementById('in_Buscar')?.focus();
+                    document.getElementById('in_BuscarPersona')?.focus();
 
                     // if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
                     //   console.log(
@@ -275,13 +275,27 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 }}
               />
               <input
-                id="in_Buscar"
+                id="in_BuscarPersona"
                 type="image"
                 src={images.searchPLUS}
                 height={16}
                 width={16}
+                style={{ padding: '2px' }}
                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
                 onClick$={() => localizarPersonas()}
+              />
+              <input
+                id="in_AdicionarPersona"
+                type="image"
+                src={images.add}
+                height={16}
+                width={16}
+                style={{ padding: '2px' }}
+                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                onClick$={() => {
+                  definicion_CTX_BUSCAR_PERSONA.pP = [];
+                  definicion_CTX_BUSCAR_PERSONA.mostrarPanelNewEditPersona = true;
+                }}
               />
               {/* <ImgButton
                 id="imgBtn_BuscarPersona"
@@ -338,7 +352,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 busca
               </button> */}
 
-              <ImgButton
+              {/* <ImgButton
                 src={images.add}
                 alt="Icono de adicionar persona"
                 height={16}
@@ -348,7 +362,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   definicion_CTX_BUSCAR_PERSONA.pP = [];
                   definicion_CTX_BUSCAR_PERSONA.mostrarPanelNewEditPersona = true;
                 })}
-              />
+              /> */}
             </div>
           </div>
         </div>
