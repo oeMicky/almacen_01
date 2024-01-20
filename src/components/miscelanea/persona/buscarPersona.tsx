@@ -207,7 +207,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // onInput$={(e) => {
                 //   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                 // }}
-
+                onFocusout$={() => localizarPersonas()}
                 onSuspend$={() => alert('onSuspend')}
                 onSubmit$={() => alert('onSubmit')}
                 onChange$={(e) => {
