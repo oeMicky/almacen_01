@@ -276,7 +276,16 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   // buscarPersona.value++;
                 })}
               /> */}
-              <button
+              <input
+                id="btn_Busqueda"
+                type="button"
+                value="BUS"
+                onFocus$={() => {
+                  console.log('🚅🚅🚅🚅🚅🚅btn_Busqueda -> onFocus');
+                  localizarPersonas();
+                }}
+              />
+              {/* <button
                 id="btn_Busqueda"
                 type="button"
                 style={{ border: 'none', textDecoration: 'none' }}
@@ -292,7 +301,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 }}
               >
                 busca
-              </button>
+              </button> */}
 
               <ImgButton
                 src={images.add}
