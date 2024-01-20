@@ -211,8 +211,12 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 //   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                 //   console.log('onChange', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 // }}
-                onKeyPress$={(e) => {
+                onKeyDown$={(e) => {
                   alert('🚧🚧🚧🚧🚧');
+                  console.log('first');
+                }}
+                onKeyPress$={(e) => {
+                  // alert('🚧🚧🚧🚧🚧');
                   if (e.key === 'Enter') {
                     if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
                       console.log(
