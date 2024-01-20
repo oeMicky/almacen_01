@@ -226,8 +226,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                         '⚓⚓⚓⚓⚓definicion_CTX_BUSCAR_PERSONA.conceptoABuscar',
                         definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
                       );
-                      // document.getElementById('btn_Busqueda')?.focus();
-                      document.getElementById('imgBtn_BuscarPersona')?.focus();
+                      document.getElementById('btn_Busqueda')?.focus();
+                      // document.getElementById('imgBtn_BuscarPersona')?.focus();
                     }
                     console.log('🚆🚆🚆🚆🚆plopppppp');
                     // buscarPersona.value++;
@@ -252,7 +252,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                   (e.target as HTMLInputElement).select();
                 }}
               />
-              <ImgButton
+              {/* <ImgButton
                 id="imgBtn_BuscarPersona"
                 src={images.searchPLUS}
                 alt="Icono de buscar persona"
@@ -271,23 +271,28 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // })}
                 onFocus={$(() => {
                   console.log('onFocus');
+                  alert('foco imgBtn_BuscarPersona');
                   localizarPersonas();
                   // buscarPersona.value++;
                 })}
-              />
-              {/* <button
+              /> */}
+              <button
                 id="btn_Busqueda"
                 type="button"
                 style={{ border: 'none', textDecoration: 'none' }}
+                onFocus$={() => {
+                  console.log('🚅🚅🚅🚅🚅🚅btn_Busqueda -> onFocus');
+                  localizarPersonas();
+                }}
                 onFocusin$={() => {
                   // alert('🚕🚕🚕🚕🚕');
-                  console.log('🚅🚅🚅🚅🚅🚅btn_Busqueda -> onFocusin');
+                  console.log('🚕🚕🚕🚕🚕btn_Busqueda -> onFocusin');
                   localizarPersonas();
                   // buscarPersona.value++;
                 }}
               >
-                
-              </button> */}
+                busca
+              </button>
 
               <ImgButton
                 src={images.add}
