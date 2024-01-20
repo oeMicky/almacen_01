@@ -212,6 +212,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 //   console.log('onChange', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 // }}
                 onKeyPress$={(e) => {
+                  alert('🚧🚧🚧🚧🚧');
                   if (e.key === 'Enter') {
                     if (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar === '') {
                       console.log(
@@ -226,6 +227,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                         '⚓⚓⚓⚓⚓definicion_CTX_BUSCAR_PERSONA.conceptoABuscar',
                         definicion_CTX_BUSCAR_PERSONA.conceptoABuscar
                       );
+                      alert('🚆🚆🚆🚆🚆');
                       document.getElementById('btn_Busqueda')?.focus();
                       // document.getElementById('imgBtn_BuscarPersona')?.focus();
                     }
