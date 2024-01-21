@@ -17,6 +17,7 @@ export default component$(() => {
   //#region DEFINICION CTX_INDEX_COMPRA
   const definicion_CTX_INDEX_COMPRA = useStore({
     cC: [],
+    miscCs: [],
 
     mostrarPanelCompra: false,
     grabo_Compra: false,
@@ -27,7 +28,7 @@ export default component$(() => {
   //#endregion DEFINICION CTX_INDEX_COMPRA
 
   //#region INICIALIZACION
-  const ini = useSignal(0);
+  // const ini = useSignal(0);
   const buscarCompras = useSignal(0);
   // const losPeriodos = useStore({ idPeriodo: '', periodo: '' });
   // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
@@ -39,7 +40,7 @@ export default component$(() => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    idPeriodo: periodo.idPeriodo,
+    idPeriodo: '',
     // fechaInicio: primeroDelMes(), //
     // fechaFinal: hoy(), // ultimoDelMes(),
   });
@@ -76,6 +77,32 @@ export default component$(() => {
   //   cargarLosPeriodos();
   // });
   //#endregion OBTENER PERIODOS
+
+  //#region CREAR Y DOWNLOAD TXT
+  const createAndDownloadFile = $((nameFile: string, texto: string) => {
+    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    // const texto = 'hOLA A TODOS';
+
+    const filename = nameFile; ///'file.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([texto], { type: 'text/plain' });
+
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    // pom.setAttribute('download', filename);
+    pom.setAttribute('download', filename + '.txt');
+
+    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
+
+    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+    console.log('first txt');
+  });
+  //#endregion CREAR Y DOWNLOAD TXT
 
   return (
     <div class="container">
@@ -154,7 +181,7 @@ export default component$(() => {
             if (periodo.idPeriodo === '') {
               alert('Seleccione el periodo.');
               document.getElementById('se_periodo')?.focus();
-              ini.value++;
+              // ini.value++;
               return;
             }
 
@@ -181,6 +208,9 @@ export default component$(() => {
             } else {
               periodo.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+              parametrosBusqueda.idPeriodo = periodo.idPeriodo;
+              // console.log('💨💨💨💨💨💨first', periodo);
+              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
               buscarCompras.value++;
 
               definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
@@ -192,7 +222,63 @@ export default component$(() => {
             }
           })}
         />
-
+        <ElButton
+          name="PLE"
+          title="Descargar PLE"
+          estilos={{ marginLeft: '4px' }}
+          onClick={$(async () => {
+            //validar PERIODO
+            if (periodo.idPeriodo === '') {
+              alert('Seleccione el periodo.');
+              document.getElementById('se_periodo')?.focus();
+              // ini.value++;
+              return;
+            }
+            // console.log('definicion_CTX_INDEX_COMPRA.miscCs', definicion_CTX_INDEX_COMPRA.miscCs);
+            if (definicion_CTX_INDEX_COMPRA.miscCs.length === 0) {
+              alert('El PLE del presente periodo no presenta datos para exportar.');
+              document.getElementById('se_periodo')?.focus();
+              // ini.value++;
+              return;
+            }
+            let aExportar = '';
+            definicion_CTX_INDEX_COMPRA.miscCs.map((com) => {
+              const {
+                codigoTipoDocumentoIdentidad,
+                tipoDocumentoIdentidad,
+                numeroIdentidad,
+                razonSocialNombre,
+                codigoTCP,
+                descripcionTCP,
+                fecha,
+                serie,
+                numero,
+              } = com;
+              aExportar =
+                aExportar +
+                codigoTipoDocumentoIdentidad +
+                '|' +
+                tipoDocumentoIdentidad +
+                '|' +
+                numeroIdentidad +
+                '|' +
+                razonSocialNombre +
+                '|' +
+                codigoTCP +
+                '|' +
+                descripcionTCP +
+                '|' +
+                fecha +
+                '|' +
+                serie +
+                '|' +
+                numero +
+                '\n';
+            });
+            // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
+            createAndDownloadFile('elPLE' + periodo.periodo, aExportar);
+          })}
+        />
         {definicion_CTX_INDEX_COMPRA.mostrarPanelCompra && (
           <div class="modal">
             <NewEditCompra

@@ -58,6 +58,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
           console.log('onResolved 🍓🍓🍓🍓');
           const { data } = compras; //{ status, data, message }
           const misCompras: ICompra[] = data;
+          ctx_index_compra.miscCs = misCompras;
           // props.buscarVentas = false;
           ctx_index_compra.mostrarSpinner = false;
           console.log('misCompras', misCompras);
