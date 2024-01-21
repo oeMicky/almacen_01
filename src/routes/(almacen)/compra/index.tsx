@@ -1,14 +1,14 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 // import { getIgvsCompra } from '~/apis/compra.api';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
-import { images } from '~/assets';
+// import { images } from '~/assets';
 import NewEditCompra from '~/components/compra/newEditCompra';
 import TablaCompras from '~/components/compra/tablaCompras';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
-import ImgButton from '~/components/system/imgButton';
+// import ImgButton from '~/components/system/imgButton';
 import Spinner from '~/components/system/spinner';
-import { hoy, primeroDelMes } from '~/functions/comunes';
+// import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_INDEX_COMPRA = createContextId<any>('index_compra');
@@ -39,8 +39,9 @@ export default component$(() => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    fechaInicio: primeroDelMes(), //
-    fechaFinal: hoy(), // ultimoDelMes(),
+    idPeriodo: periodo.idPeriodo,
+    // fechaInicio: primeroDelMes(), //
+    // fechaFinal: hoy(), // ultimoDelMes(),
   });
   //#endregion INICIALIZACION
 
@@ -97,7 +98,7 @@ export default component$(() => {
 
       {/*  INTERVALOS DE FECHAS  style={{ display: 'flex', margin: '10px 0' }}*/}
       {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
-      <div class="intervalo-fechas">
+      {/* <div class="intervalo-fechas">
         <label class="fechas">
           Desde:{' '}
           <input
@@ -142,7 +143,7 @@ export default component$(() => {
             })}
           />
         </div>
-      </div>
+      </div> */}
       {/*  BOTONES   className="btn"  onClick={mostrarPanelVenta}  border: ' 1px solid blue',*/}
       <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
         <ElButton
@@ -180,6 +181,9 @@ export default component$(() => {
             } else {
               periodo.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+              buscarCompras.value++;
+
+              definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
             }
           })}
           onKeyPress={$((e: any) => {

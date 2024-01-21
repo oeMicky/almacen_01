@@ -25,7 +25,8 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    const res = await fetch(`${import.meta.env.VITE_URL}/api/compra/obtenerComprasPorFechas`, {
+    const res = await fetch(`${import.meta.env.VITE_URL}/api/compra/obtenerComprasPorPeriodo`, {
+      // const res = await fetch(`${import.meta.env.VITE_URL}/api/compra/obtenerComprasPorFechas`, {
       // const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
       method: 'POST',
       headers: {
