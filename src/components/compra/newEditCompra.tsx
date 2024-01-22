@@ -11,6 +11,7 @@ import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import { ultimoDiaDelPeriodoX } from '~/functions/comunes';
 import { getIgvsCompra, inUpCompra } from '~/apis/compra.api';
 import { parametrosGlobales } from '~/routes/login';
+import { getTipoCambio } from '~/apis/apisExternas.api';
 
 export const CTX_NEW_EDIT_COMPRA = createContextId<any>('new_editCompra');
 
@@ -73,6 +74,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
     tipoCambio: props.compraSeleccionada.tipoCambio ? props.compraSeleccionada.tipoCambio.$numberDecimal : '',
 
     tipoCompra: props.compraSeleccionada.tipoCompra ? props.compraSeleccionada.tipoCompra : 'A',
+    //****************************************** */
     //***************SOLES******************** */
     baseImponiblePEN: props.compraSeleccionada.baseImponiblePEN ? props.compraSeleccionada.baseImponiblePEN.$numberDecimal : '',
     igvPEN: props.compraSeleccionada.igvPEN ? props.compraSeleccionada.igvPEN.$numberDecimal : '',
@@ -95,6 +97,16 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
     otrosUSD: props.compraSeleccionada.otrosUSD ? props.compraSeleccionada.otrosUSD.$numberDecimal : '',
     totalUSD: props.compraSeleccionada.totalUSD ? props.compraSeleccionada.totalUSD.$numberDecimal : '',
     //****************************************** */
+    //***************DETRACCION***************** */
+    detraccion: props.compraSeleccionada.detraccion ? props.compraSeleccionada.detraccion : false,
+    detraccionPorcentaje: props.compraSeleccionada.detraccionPorcentaje
+      ? props.compraSeleccionada.detraccionPorcentaje.$numberDecimal
+      : '',
+    detraccionConstancia: props.compraSeleccionada.detraccionConstancia ? props.compraSeleccionada.detraccionConstancia : '',
+    detraccionMontoPEN: props.compraSeleccionada.detraccionMontoPEN
+      ? props.compraSeleccionada.detraccionMontoPEN.$numberDecimal
+      : '',
+    detraccionFecha: props.compraSeleccionada.detraccionFecha ? props.compraSeleccionada.detraccionFecha.substring(0, 10) : '',
 
     fechaReferencia: props.compraSeleccionada.fechaReferencia ? props.compraSeleccionada.fechaReferencia : '',
     tipoReferencia: props.compraSeleccionada.tipoReferencia ? props.compraSeleccionada.tipoReferencia : '',
@@ -196,15 +208,16 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
     const checkTC = e.checked;
     if (checkTC) {
       definicion_CTX_COMPRA.enDolares = true;
-      console.log('ingreso al tipo de cambio');
-      // let elTipoCambio = await getTipoCambio(definicion_CTX_COMPRA.fecha);
-      // console.log('ingreso al tipo de cambio elTipoCambio.data');
-      // elTipoCambio = elTipoCambio.data;
-      // console.log('elTipoCambio', elTipoCambio.venta);
-      // definicion_CTX_COMPRA.moneda = elTipoCambio.moneda;
-      // definicion_CTX_COMPRA.tipoCambio = elTipoCambio.venta;
-      definicion_CTX_COMPRA.moneda = 'USD';
-      definicion_CTX_COMPRA.tipoCambio = 3.713;
+      console.log('ingreso al tipo de cambio', definicion_CTX_COMPRA.fecha);
+      let elTipoCambio = await getTipoCambio(definicion_CTX_COMPRA.fecha);
+      console.log('ingreso al tipo de cambio elTipoCambio.data');
+      elTipoCambio = elTipoCambio.data;
+      console.log('elTipoCambio', elTipoCambio.venta);
+      definicion_CTX_COMPRA.moneda = elTipoCambio.moneda;
+      definicion_CTX_COMPRA.tipoCambio = elTipoCambio.venta;
+
+      // definicion_CTX_COMPRA.moneda = 'USD';
+      // definicion_CTX_COMPRA.tipoCambio = 3.713;
     } else {
       console.log('ingreso al NNNNOOOOOO enDOLARES');
       definicion_CTX_COMPRA.enDolares = false;
@@ -517,6 +530,33 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
       document.getElementById('in_BaseImponible')?.focus();
       return;
     }
+    if (definicion_CTX_COMPRA.detraccion) {
+      if (definicion_CTX_COMPRA.detraccionPorcentaje === '') {
+        alert('Ingrese el porcentaje de la detracción');
+        document.getElementById('in_DetraccionPorcentaje')?.focus();
+        return;
+      }
+      if (definicion_CTX_COMPRA.detraccionConstancia === '') {
+        alert('Ingrese la constancia de la detracción');
+        document.getElementById('in_DetraccionConstancia')?.focus();
+        return;
+      }
+      if (definicion_CTX_COMPRA.detraccionMontoPEN === '') {
+        alert('Ingrese el monto de la detracción');
+        document.getElementById('in_DetraccionMonto')?.focus();
+        return;
+      }
+      if (definicion_CTX_COMPRA.detraccionFecha === '') {
+        alert('Ingrese la fecha de la detracción');
+        document.getElementById('in_DetraccionFecha')?.focus();
+        return;
+      }
+    } else {
+      definicion_CTX_COMPRA.detraccionPorcentaje = '';
+      definicion_CTX_COMPRA.detraccionConstancia = '';
+      definicion_CTX_COMPRA.detraccionMontoPEN = '';
+      definicion_CTX_COMPRA.detraccionFecha = '';
+    }
     //
     console.log('definicion_CTX_COMPRA', definicion_CTX_COMPRA);
     //enviar datos al SERVIDOR
@@ -554,11 +594,14 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
 
       enDolares: definicion_CTX_COMPRA.enDolares,
       moneda: definicion_CTX_COMPRA.moneda,
-      tipoCambio: definicion_CTX_COMPRA.tipoCambio.replace(',', ''),
+      // tipoCambio: definicion_CTX_COMPRA.tipoCambio.replace(',', ''),
+      tipoCambio: definicion_CTX_COMPRA.tipoCambio,
 
       tipoCompra: definicion_CTX_COMPRA.tipoCompra,
-
-      baseImponiblePEN: definicion_CTX_COMPRA.baseImponiblePEN.replace(',', ''),
+      //****************************************** */
+      //***************SOLES******************** */
+      // baseImponiblePEN: definicion_CTX_COMPRA.baseImponiblePEN.replace(',', ''),
+      baseImponiblePEN: definicion_CTX_COMPRA.baseImponiblePEN,
       // igvPEN: definicion_CTX_COMPRA.igvPEN.replace(',', ''),
       igvPEN: definicion_CTX_COMPRA.igvPEN,
       adquisicionesNoGravadasPEN: definicion_CTX_COMPRA.adquisicionesNoGravadasPEN.replace(',', ''),
@@ -567,6 +610,22 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
       otrosPEN: definicion_CTX_COMPRA.otrosPEN.replace(',', ''),
       // totalPEN: definicion_CTX_COMPRA.totalPEN.replace(',', ''),
       totalPEN: definicion_CTX_COMPRA.totalPEN,
+      //****************************************** */
+      //***************DOLARES******************** */
+      baseImponibleUSD: definicion_CTX_COMPRA.baseImponibleUSD,
+      igvUSD: definicion_CTX_COMPRA.igvUSD,
+      adquisicionesNoGravadasUSD: definicion_CTX_COMPRA.adquisicionesNoGravadasUSD,
+      iscUSD: definicion_CTX_COMPRA.iscUSD,
+      icbpUSD: definicion_CTX_COMPRA.icbpUSD,
+      otrosUSD: definicion_CTX_COMPRA.otrosUSD,
+      totalUSD: definicion_CTX_COMPRA.totalUSD,
+      //****************************************** */
+      //***************DETRACCION***************** */
+      detraccion: definicion_CTX_COMPRA.detraccion,
+      detraccionPorcentaje: definicion_CTX_COMPRA.detraccionPorcentaje,
+      detraccionConstancia: definicion_CTX_COMPRA.detraccionConstancia,
+      detraccionMontoPEN: definicion_CTX_COMPRA.detraccionMontoPEN,
+      detraccionFecha: definicion_CTX_COMPRA.detraccionFecha,
 
       fechaReferencia: definicion_CTX_COMPRA.fechaReferencia,
       tipoReferencia: definicion_CTX_COMPRA.tipoReferencia,
@@ -1009,15 +1068,9 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
             <hr style={{ margin: '5px 0' }}></hr>
           </div>
           {/* ----------------------------------------------------- */}
-          {/* IGV - TC */}
+          {/* -----------------------TC---------------------------- */}
+          {/* ----------------------------------------------------- */}
           <div>
-            {/* IGV */}
-            {/* <div class="form-control">
-              <label>IGV (%)</label>
-              <div class="form-control form-agrupado">
-                <input type="text" id="inputIGV" disabled value={definicion_CTX_COMPRA.igv + ' %'} />
-              </div>
-            </div> */}
             {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
             <div class="form-control">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
@@ -1025,16 +1078,17 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   type="checkbox"
                   id="chbx_TipoCambio"
                   checked={definicion_CTX_COMPRA.enDolares ? true : false}
-                  // onClick$={(e) => {
-                  //   venta.enDolares = (e.target as HTMLInputElement).checked;
-                  // }}
                   onClick$={(e) => {
+                    if (definicion_CTX_COMPRA.fecha === '') {
+                      (e.target as HTMLInputElement).checked = false;
+                      document.getElementById('in_Fecha')?.focus();
+                      return;
+                    }
                     obtenerTipoCambio(e.target as HTMLInputElement);
                   }}
                 />
                 <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>USD </strong>
-                {''}
-                <label
+                {/* <label
                   style={{ textAlign: 'start' }}
                   for="chbx_TipoCambio"
                   // onClick$={
@@ -1042,7 +1096,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   // }
                 >
                   Tipo Cambio (USD)
-                </label>
+                </label> */}
               </div>
               <div class="form-control form-agrupado">
                 <input
@@ -1051,7 +1105,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   placeholder="Tipo de cambio"
                   style={{ width: '100%' }}
                   value={definicion_CTX_COMPRA.tipoCambio}
-                  disabled
+                  // disabled
                 />
               </div>
             </div>
@@ -1093,7 +1147,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   type="number"
                   style={{ width: '100%' }}
                   id="in_BaseImponible"
-                  placeholder="Base imponible"
+                  placeholder={!definicion_CTX_COMPRA.enDolares ? 'Base imponible PEN' : 'Base imponible USD'}
                   value={
                     definicion_CTX_COMPRA.enDolares
                       ? definicion_CTX_COMPRA.baseImponibleUSD
@@ -1125,7 +1179,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   id="in_IGV"
                   style={{ width: '100%' }}
                   disabled
-                  placeholder="IGV"
+                  placeholder={!definicion_CTX_COMPRA.enDolares ? 'IGV PEN' : 'IGV USD'}
                   value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.igvUSD : definicion_CTX_COMPRA.igvPEN}
                 />
                 <ElSelect
@@ -1171,7 +1225,9 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   type="number"
                   id="in_AdquisicionesNoGravadas"
                   style={{ width: '100%' }}
-                  placeholder="Adquisiciones No Gravadas"
+                  placeholder={
+                    !definicion_CTX_COMPRA.enDolares ? 'Adquisiciones No Gravadas PEN' : 'Adquisiciones No Gravadas USD'
+                  }
                   value={
                     definicion_CTX_COMPRA.enDolares
                       ? definicion_CTX_COMPRA.adquisicionesNoGravadasUSD
@@ -1205,7 +1261,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   type="number"
                   id="in_ISC"
                   style={{ width: '100%' }}
-                  placeholder="ISC"
+                  placeholder={!definicion_CTX_COMPRA.enDolares ? 'ISC PEN' : 'ISC USD'}
                   value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.iscUSD : definicion_CTX_COMPRA.iscPEN}
                   onChange$={(e) => {
                     definicion_CTX_COMPRA.enDolares
@@ -1231,7 +1287,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   type="number"
                   id="in_ICBP"
                   style={{ width: '100%' }}
-                  placeholder="ICBP"
+                  placeholder={!definicion_CTX_COMPRA.enDolares ? 'ICBP PEN' : 'ICBP USD'}
                   value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.icbpUSD : definicion_CTX_COMPRA.icbpPEN}
                   onChange$={(e) => {
                     definicion_CTX_COMPRA.enDolares
@@ -1257,7 +1313,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   type="number"
                   id="in_Otros"
                   style={{ width: '100%' }}
-                  placeholder="Otros"
+                  placeholder={!definicion_CTX_COMPRA.enDolares ? 'Otros PEN' : 'Otros USD'}
                   value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.otrosUSD : definicion_CTX_COMPRA.otrosPEN}
                   onChange$={(e) => {
                     definicion_CTX_COMPRA.enDolares
@@ -1266,7 +1322,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   }}
                   onKeyPress$={(e) => {
                     if (e.key === 'Enter') {
-                      document.getElementById('bu_RegistrarDocumentoIN_MICE')?.focus();
+                      document.getElementById('chbx_Detraccion')?.focus();
                     }
                   }}
                   onFocusin$={(e) => {
@@ -1283,13 +1339,125 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                   type="number"
                   id="in_Total"
                   style={{ width: '100%' }}
-                  placeholder="Total"
+                  placeholder={!definicion_CTX_COMPRA.enDolares ? 'Total PEN' : 'Total USD'}
                   disabled
                   value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.totalUSD : definicion_CTX_COMPRA.totalPEN}
                 />
               </div>
             </div>
 
+            <hr style={{ margin: '5px 0' }}></hr>
+          </div>
+          {/* ----------------------------------------------------- */}
+          {/* DETRACCION */}
+          <div>
+            <div class="form-control">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
+                <input
+                  type="checkbox"
+                  id="chbx_Detraccion"
+                  checked={definicion_CTX_COMPRA.detraccion}
+                  onChange$={(e) => (definicion_CTX_COMPRA.detraccion = (e.target as HTMLInputElement).checked)}
+                />
+                <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>Detracción</strong>
+              </div>
+            </div>
+            <div id="zona_Detraccion" hidden={!definicion_CTX_COMPRA.detraccion}>
+              {/* Detracción Porcentaje */}
+              <div class="form-control">
+                <label>Porcentaje de detracción</label>
+                <div class="form-control form-agrupado">
+                  <input
+                    type="number"
+                    id="in_DetraccionPorcentaje"
+                    style={{ width: '100%' }}
+                    placeholder={'Porcentaje de detracción'}
+                    value={definicion_CTX_COMPRA.detraccionPorcentaje}
+                    onChange$={(e) => {
+                      definicion_CTX_COMPRA.detraccionPorcentaje = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        document.getElementById('in_DetraccionConstancia')?.focus();
+                      }
+                    }}
+                    onFocusin$={(e) => {
+                      (e.target as HTMLInputElement).select();
+                    }}
+                  />
+                </div>
+              </div>
+              {/* Detracción Constancia */}
+              <div class="form-control">
+                <label>Constancia de detracción</label>
+                <div class="form-control form-agrupado">
+                  <input
+                    type="number"
+                    id="in_DetraccionConstancia"
+                    style={{ width: '100%' }}
+                    placeholder={'Constancia de detracción'}
+                    value={definicion_CTX_COMPRA.detraccionConstancia}
+                    onChange$={(e) => {
+                      definicion_CTX_COMPRA.detraccionConstancia = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        document.getElementById('in_DetraccionMonto')?.focus();
+                      }
+                    }}
+                    onFocusin$={(e) => {
+                      (e.target as HTMLInputElement).select();
+                    }}
+                  />
+                </div>
+              </div>
+              {/* Detracción Monto */}
+              <div class="form-control">
+                <label>Monto de detracción</label>
+                <div class="form-control form-agrupado">
+                  <input
+                    type="number"
+                    id="in_DetraccionMonto"
+                    style={{ width: '100%' }}
+                    placeholder={'Monto de detracción PEN'}
+                    value={definicion_CTX_COMPRA.detraccionMontoPEN}
+                    onChange$={(e) => {
+                      definicion_CTX_COMPRA.detraccionMontoPEN = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        document.getElementById('in_DetraccionFecha')?.focus();
+                      }
+                    }}
+                    onFocusin$={(e) => {
+                      (e.target as HTMLInputElement).select();
+                    }}
+                  />
+                </div>
+              </div>
+              {/* Detracción Fecha */}
+              <div class="form-control">
+                <label>Fecha de detracción</label>
+                <div class="form-control form-agrupado">
+                  <input
+                    id="in_DetraccionFecha"
+                    style={{ width: '100%' }}
+                    type="date"
+                    placeholder="Fecha de detracción"
+                    max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                    value={definicion_CTX_COMPRA.detraccionFecha}
+                    onInput$={(e) => {
+                      definicion_CTX_COMPRA.detraccionFecha = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        (document.getElementById('bu_RegistrarDocumentoIN_MICE') as HTMLInputElement)?.focus();
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
             <hr style={{ margin: '5px 0' }}></hr>
           </div>
         </div>

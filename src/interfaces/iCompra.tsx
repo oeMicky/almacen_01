@@ -54,6 +54,12 @@ export interface ICompra {
   otrosUSD: any;
   totalUSD: any;
 
+  detraccion: boolean;
+  detraccionPorcentaje: any;
+  detraccionConstancia: string;
+  detraccionMontoPEN: any;
+  detraccionFecha: string;
+
   fechaReferencia: Date;
   tipoReferencia: string;
   serieReferencia: string;

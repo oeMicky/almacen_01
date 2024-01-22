@@ -74,6 +74,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                         <th>Proveedor</th>
                         <th>Ser-Nro</th>
                         <th>Fecha</th>
+                        <th>Dt</th>
                         <th>Mon</th>
                         <th>Importe</th>
                         <th>Acciones</th>
@@ -98,6 +99,9 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                             </td>
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(compra.fecha)}
+                            </td>
+                            <td data-label="Dt" class="acciones">
+                              {compra.detraccion ? 'Si' : '-'}
                             </td>
                             <td data-label="Mon" class="acciones" style={'tipoCompra' in compra ? {} : { background: '#FFD700' }}>
                               {'moneda' in compra ? compra.moneda : '_'}

@@ -8,6 +8,7 @@ import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 // import ImgButton from '~/components/system/imgButton';
 import Spinner from '~/components/system/spinner';
+import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -242,7 +243,7 @@ export default component$(() => {
               return;
             }
             let aExportar = '';
-            definicion_CTX_INDEX_COMPRA.miscCs.map((com) => {
+            definicion_CTX_INDEX_COMPRA.miscCs.map((com: any) => {
               const {
                 codigoTipoDocumentoIdentidad,
                 tipoDocumentoIdentidad,
@@ -253,9 +254,55 @@ export default component$(() => {
                 fecha,
                 serie,
                 numero,
+                baseImponiblePEN,
+                igvPEN,
+                adquisicionesNoGravadasPEN,
+                iscPEN,
+                icbpPEN,
+                otrosPEN,
+                totalPEN,
+                detraccion,
+                detraccionConstancia,
+                detraccionFecha,
+                detraccionMontoPEN,
+                detraccionPorcentaje,
               } = com;
+              //
+              // let bI,
+              //   iGV,
+              //   adNO,
+              //   isc,
+              //   icbp,
+              //   otros,
+              //   total,
+              //   detra,
+              //   detraConsta,
+              //   detraM,
+              //   detraPorc = '';
+              const bI = typeof baseImponiblePEN === 'undefined' ? '' : baseImponiblePEN.$numberDecimal;
+              const iGV = typeof igvPEN === 'undefined' ? '' : igvPEN.$numberDecimal;
+              const adNO = typeof adquisicionesNoGravadasPEN === 'undefined' ? '' : adquisicionesNoGravadasPEN.$numberDecimal;
+              const isc = typeof iscPEN === 'undefined' ? '' : iscPEN.$numberDecimal;
+              const icbp = typeof icbpPEN === 'undefined' ? '' : icbpPEN.$numberDecimal;
+              const otros = typeof otrosPEN === 'undefined' ? '' : otrosPEN.$numberDecimal;
+              const total = typeof totalPEN === 'undefined' ? '' : totalPEN.$numberDecimal;
+              const detra = typeof detraccion === 'undefined' ? '' : detraccion;
+              const detraConsta = typeof detraccionConstancia === 'undefined' ? '' : detraccionConstancia;
+              const detraM = typeof detraccionMontoPEN === 'undefined' ? '' : detraccionMontoPEN.$numberDecimal;
+              const detraPorc = typeof detraccionPorcentaje === 'undefined' ? '' : detraccionPorcentaje.$numberDecimal;
+
               aExportar =
                 aExportar +
+                formatoDDMMYYYY_PEN(fecha) +
+                '|' +
+                codigoTCP +
+                '|' +
+                descripcionTCP +
+                '|' +
+                serie +
+                '|' +
+                numero +
+                '|' +
                 codigoTipoDocumentoIdentidad +
                 '|' +
                 tipoDocumentoIdentidad +
@@ -264,18 +311,33 @@ export default component$(() => {
                 '|' +
                 razonSocialNombre +
                 '|' +
-                codigoTCP +
+                bI +
                 '|' +
-                descripcionTCP +
+                iGV +
                 '|' +
-                fecha +
+                adNO +
                 '|' +
-                serie +
+                isc +
                 '|' +
-                numero +
+                icbp +
+                '|' +
+                otros +
+                '|' +
+                total +
+                '|' +
+                detra +
+                '|' +
+                detraConsta +
+                '|' +
+                formatoDDMMYYYY_PEN(detraccionFecha) +
+                '|' +
+                detraM +
+                '|' +
+                detraPorc +
+                '|' +
                 '\n';
             });
-            // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
+            // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
             createAndDownloadFile('elPLE' + periodo.periodo, aExportar);
           })}
         />
