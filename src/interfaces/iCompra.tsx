@@ -64,10 +64,10 @@ export interface ICompra {
   retencion: boolean;
   retencionPorcentaje: any;
 
-  fechaReferencia: Date;
-  tipoReferencia: string;
-  serieReferencia: string;
-  numeroReferencia: number;
+  referenciaFecha: string;
+  referenciaTipo: string;
+  referenciaSerie: string;
+  referenciaNumero: number;
 
   usuarioCrea: string;
   usuarioModifica: string;

@@ -120,10 +120,10 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
       ? props.compraSeleccionada.retencionPorcentaje.$numberDecimal
       : '',
 
-    fechaReferencia: props.compraSeleccionada.fechaReferencia ? props.compraSeleccionada.fechaReferencia : '',
-    tipoReferencia: props.compraSeleccionada.tipoReferencia ? props.compraSeleccionada.tipoReferencia : '',
-    serieReferencia: props.compraSeleccionada.serieReferencia ? props.compraSeleccionada.serieReferencia : '',
-    numeroReferencia: props.compraSeleccionada.numeroReferencia ? props.compraSeleccionada.numeroReferencia : '',
+    referenciaFecha: props.compraSeleccionada.referenciaFecha ? props.compraSeleccionada.referenciaFecha.substring(0, 10) : '',
+    referenciaTipo: props.compraSeleccionada.referenciaTipo ? props.compraSeleccionada.referenciaTipo : '',
+    referenciaSerie: props.compraSeleccionada.referenciaSerie ? props.compraSeleccionada.referenciaSerie : '',
+    referenciaNumero: props.compraSeleccionada.referenciaNumero ? props.compraSeleccionada.referenciaNumero : '',
 
     usuarioCrea: props.compraSeleccionada.usuarioCrea ? props.compraSeleccionada.usuarioCrea : '',
     usuarioModifica: props.compraSeleccionada.usuarioModifica ? props.compraSeleccionada.usuarioModifica : '',
@@ -665,11 +665,12 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
       agenteRetencion: definicion_CTX_COMPRA.agenteRetencion,
       retencion: definicion_CTX_COMPRA.retencion,
       retencionPorcentaje: definicion_CTX_COMPRA.retencionPorcentaje,
-
-      fechaReferencia: definicion_CTX_COMPRA.fechaReferencia,
-      tipoReferencia: definicion_CTX_COMPRA.tipoReferencia,
-      serieReferencia: definicion_CTX_COMPRA.serieReferencia,
-      numeroReferencia: definicion_CTX_COMPRA.numeroReferencia,
+      //********************************************** */
+      //***********DOCUMENTO REFERIDO - NC ND********* */
+      referenciaFecha: definicion_CTX_COMPRA.referenciaFecha,
+      referenciaTipo: definicion_CTX_COMPRA.referenciaTipo,
+      referenciaSerie: definicion_CTX_COMPRA.referenciaSerie,
+      referenciaNumero: definicion_CTX_COMPRA.referenciaNumero,
 
       usuario: parametrosGlobales.usuario,
     });
@@ -904,6 +905,101 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
               </div>
             </div>
             <hr style={{ margin: '5px 0' }}></hr>
+            {/* ----------------------------------------------------- */}
+            {/* ***NC -- ND -- */}
+            <div
+              id="zona_NC_ND"
+              style={{ background: 'grey' }}
+              hidden={definicion_CTX_COMPRA.codigoTCP === '07' || definicion_CTX_COMPRA.codigoTCP === '08' ? false : true}
+            >
+              <div class="form-control">
+                <div class="form-control form-agrupado" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'left' }}>
+                  <input
+                    id="in_NC_ND_Fecha"
+                    // style={{ width: '100%' }}
+                    // disabled
+                    type="date"
+                    placeholder="Add NC/ND Fecha"
+                    value={definicion_CTX_COMPRA.referenciaFecha}
+                    onChange$={(e) => (definicion_CTX_COMPRA.referenciaFecha = (e.target as HTMLInputElement).value)}
+                    // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                  />
+                  <input
+                    id="in_NC_ND_TCP"
+                    // style={{ width: '100%' }}
+                    // disabled
+                    type="number"
+                    placeholder="Add NC/ND TCP"
+                    value={definicion_CTX_COMPRA.referenciaTipo}
+                    onChange$={(e) => (definicion_CTX_COMPRA.referenciaTipo = (e.target as HTMLInputElement).value)}
+                    // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                  />
+                  <input
+                    id="in_NC_ND_Serie"
+                    // style={{ width: '100%' }}
+                    // disabled
+                    type="text"
+                    placeholder="Add NC/ND Serie"
+                    value={definicion_CTX_COMPRA.referenciaSerie}
+                    onChange$={(e) => (definicion_CTX_COMPRA.referenciaSerie = (e.target as HTMLInputElement).value)}
+                    // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                  />
+                  <input
+                    id="in_NC_ND_Numero"
+                    // style={{ width: '100%' }}
+                    // disabled
+                    type="number"
+                    placeholder="Add NC/ND Numero"
+                    value={definicion_CTX_COMPRA.referenciaNumero}
+                    onChange$={(e) =>
+                      (definicion_CTX_COMPRA.referenciaNumero = parseInt((e.target as HTMLInputElement).value.trim()))
+                    }
+                    // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                  />
+                  {/* <div>
+                    <input
+                      type="checkbox"
+                      id="chbx_NC_ND_TipoCambio"
+                      // checked={definicion_CTX_COMPRA.enDolares ? true : false}
+                      // onClick$={(e) => {
+                      //   if (definicion_CTX_COMPRA.fecha === '') {
+                      //     (e.target as HTMLInputElement).checked = false;
+                      //     document.getElementById('in_Fecha')?.focus();
+                      //     return;
+                      //   }
+                      //   obtenerTipoCambio(e.target as HTMLInputElement);
+                      // }}
+                    />
+                    <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>USD </strong>
+                    <input
+                      id="in_NC_ND_TipoCambio"
+                      // style={{ width: '100%' }}
+                      // disabled
+                      type="number"
+                      placeholder="Add NC/ND TipoCambio"
+                      value={definicion_CTX_COMPRA.numeroIdentidad}
+                      onChange$={(e) => (definicion_CTX_COMPRA.numeroIdentidad = (e.target as HTMLInputElement).value)}
+                      // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                    />
+                  </div>
+
+                  <input
+                    id="in_NC_ND_Monto"
+                    // style={{ width: '100%' }}
+                    // disabled
+                    type="number"
+                    placeholder="Add NC/ND Monto"
+                    value={definicion_CTX_COMPRA.numeroIdentidad}
+                    onChange$={(e) => (definicion_CTX_COMPRA.numeroIdentidad = (e.target as HTMLInputElement).value)}
+                    // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                  /> */}
+                </div>
+              </div>
+            </div>
+            <hr
+              style={{ margin: '5px 0' }}
+              hidden={definicion_CTX_COMPRA.codigoTCP === '07' || definicion_CTX_COMPRA.codigoTCP === '08' ? false : true}
+            ></hr>
           </div>
           {/* ----------------------------------------------------- */}
           <div>
