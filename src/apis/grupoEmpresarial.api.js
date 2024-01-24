@@ -38,3 +38,16 @@ export const getActivoGEEMPSUCUR = async (parametros) => {
   });
   return res.json();
 };
+
+export const inUpDetraccion = async (parametros) => {
+  console.log('//////api////////////******************obtener a inUpDetraccion');
+  console.log('parametros inUpDetraccion', parametros);
+  const res = await fetch(API + '/inUpDetraccion', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

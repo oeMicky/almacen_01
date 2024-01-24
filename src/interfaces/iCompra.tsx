@@ -60,6 +60,10 @@ export interface ICompra {
   detraccionMontoPEN: any;
   detraccionFecha: string;
 
+  agenteRetencion: boolean;
+  retencion: boolean;
+  retencionPorcentaje: any;
+
   fechaReferencia: Date;
   tipoReferencia: string;
   serieReferencia: string;

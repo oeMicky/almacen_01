@@ -12,22 +12,27 @@ import { ultimoDiaDelPeriodoX } from '~/functions/comunes';
 import { getIgvsCompra, inUpCompra } from '~/apis/compra.api';
 import { parametrosGlobales } from '~/routes/login';
 import { getTipoCambio } from '~/apis/apisExternas.api';
+import BuscarDetraccionPorcentaje from './buscarDetraccionPorcentaje';
 
 export const CTX_NEW_EDIT_COMPRA = createContextId<any>('new_editCompra');
 
 export const CTX_PROVEEDOR = createContextId<IPersona>('proveedor');
 
-export default component$((props: { addPeriodo: any; compraSeleccionada: any }) => {
+export const CTX_COMPRA = createContextId<ICompra>('compra');
+
+export default component$((props: { addPeriodo: any; compraSeleccionada: any; agenteRetencion: boolean }) => {
   //#region DEFINICION CTX_NEW_EDIT_COMPRA
   const definicion_CTX_NEW_EDIT_COMPRA = useStore({
     mostrarPanelBuscarPersona: false,
     rol_Persona: '',
     selecciono_Persona: false,
+
+    mostrarPanelBuscarDetraccionPorcentaje: false,
   });
   useContextProvider(CTX_NEW_EDIT_COMPRA, definicion_CTX_NEW_EDIT_COMPRA);
   //#endregion DEFINICION CTX_NEW_EDIT_COMPRA
 
-  //#region DEFINICION CTX_COMPRA - NEW  /  EDIT
+  //#region DEFINICION CTX_COMPRA
   const definicion_CTX_COMPRA = useStore<ICompra>({
     _id: props.compraSeleccionada._id ? props.compraSeleccionada._id : '',
     idGrupoEmpresarial: props.compraSeleccionada.idGrupoEmpresarial
@@ -98,7 +103,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
     totalUSD: props.compraSeleccionada.totalUSD ? props.compraSeleccionada.totalUSD.$numberDecimal : '',
     //****************************************** */
     //***************DETRACCION***************** */
-    detraccion: props.compraSeleccionada.detraccion ? props.compraSeleccionada.detraccion : false,
+    detraccion: props.compraSeleccionada.detraccion ? props.compraSeleccionada.detraccion : true, // false,
     detraccionPorcentaje: props.compraSeleccionada.detraccionPorcentaje
       ? props.compraSeleccionada.detraccionPorcentaje.$numberDecimal
       : '',
@@ -107,6 +112,13 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
       ? props.compraSeleccionada.detraccionMontoPEN.$numberDecimal
       : '',
     detraccionFecha: props.compraSeleccionada.detraccionFecha ? props.compraSeleccionada.detraccionFecha.substring(0, 10) : '',
+    //****************************************** */
+    //***************RETENCION***************** */
+    agenteRetencion: props.compraSeleccionada.retencion ? props.compraSeleccionada.retencion : props.agenteRetencion.valueOf(),
+    retencion: props.compraSeleccionada.retencion ? props.compraSeleccionada.retencion : false,
+    retencionPorcentaje: props.compraSeleccionada.retencionPorcentaje
+      ? props.compraSeleccionada.retencionPorcentaje.$numberDecimal
+      : '',
 
     fechaReferencia: props.compraSeleccionada.fechaReferencia ? props.compraSeleccionada.fechaReferencia : '',
     tipoReferencia: props.compraSeleccionada.tipoReferencia ? props.compraSeleccionada.tipoReferencia : '',
@@ -116,7 +128,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
     usuarioCrea: props.compraSeleccionada.usuarioCrea ? props.compraSeleccionada.usuarioCrea : '',
     usuarioModifica: props.compraSeleccionada.usuarioModifica ? props.compraSeleccionada.usuarioModifica : '',
   });
-  //#endregion DEFINICION CTX_COMPRA - NEW  /  EDIT
+  useContextProvider(CTX_COMPRA, definicion_CTX_COMPRA);
+  //#endregion DEFINICION CTX_COMPRA
 
   //#region DEFINICION CTX_PROVEEDOR
   const definion_CTX_PROVEEDOR = useStore<IPersona>({
@@ -245,6 +258,18 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
     //   parseFloat(bI) + parseFloat(igv) + parseFloat(adqNoG) + parseFloat(isc) + parseFloat(icbp) + parseFloat(otros)
     // );
     console.log('LA SUMA definicion_CTX_COMPRA.totalPEN ', definicion_CTX_COMPRA.totalPEN);
+    //DETRACCION
+    if (definicion_CTX_COMPRA.detraccion) {
+      if (definicion_CTX_COMPRA.detraccionPorcentaje) {
+        const TT = definicion_CTX_COMPRA.totalPEN.$numberDecimal
+          ? definicion_CTX_COMPRA.totalPEN.$numberDecimal
+          : definicion_CTX_COMPRA.totalPEN;
+        const PP = definicion_CTX_COMPRA.detraccionPorcentaje.$numberDecimal
+          ? definicion_CTX_COMPRA.detraccionPorcentaje.$numberDecimal
+          : definicion_CTX_COMPRA.detraccionPorcentaje;
+        definicion_CTX_COMPRA.detraccionMontoPEN = (TT * PP) / 100;
+      }
+    }
   });
 
   useTask$(({ track }) => {
@@ -557,6 +582,15 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
       definicion_CTX_COMPRA.detraccionMontoPEN = '';
       definicion_CTX_COMPRA.detraccionFecha = '';
     }
+    if (definicion_CTX_COMPRA.retencion) {
+      if (definicion_CTX_COMPRA.retencionPorcentaje === '') {
+        alert('Ingrese el porcentaje de la retención');
+        document.getElementById('in_RetencionPorcentaje')?.focus();
+        return;
+      }
+    } else {
+      definicion_CTX_COMPRA.retencionPorcentaje = '';
+    }
     //
     console.log('definicion_CTX_COMPRA', definicion_CTX_COMPRA);
     //enviar datos al SERVIDOR
@@ -626,6 +660,11 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
       detraccionConstancia: definicion_CTX_COMPRA.detraccionConstancia,
       detraccionMontoPEN: definicion_CTX_COMPRA.detraccionMontoPEN,
       detraccionFecha: definicion_CTX_COMPRA.detraccionFecha,
+      //****************************************** */
+      //***************RETENCION***************** */
+      agenteRetencion: definicion_CTX_COMPRA.agenteRetencion,
+      retencion: definicion_CTX_COMPRA.retencion,
+      retencionPorcentaje: definicion_CTX_COMPRA.retencionPorcentaje,
 
       fechaReferencia: definicion_CTX_COMPRA.fechaReferencia,
       tipoReferencia: definicion_CTX_COMPRA.tipoReferencia,
@@ -681,7 +720,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
           title="Cerrar el formulario"
           onClick={$(() => {
             console.log(
-              'definicion_CTX_COMPRA - props.igvPorDefault',
+              'definicion_CTX_COMPRA',
               definicion_CTX_COMPRA
               // props.losIgvsCompra,
               // props.igvPorDefault
@@ -766,6 +805,108 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                 />
               </div>
             </div>
+            <hr style={{ margin: '5px 0' }}></hr>
+          </div>{' '}
+          {/* ----------------------------------------------------- */}
+          {/* GENERALES DEL PROVEEDOR */}
+          <div>
+            {/* tipo de documento identidad*/}
+            <div class="form-control">
+              <label>Tipo documento</label>
+              <div class="form-control form-agrupado">
+                <select
+                  id="se_TipoDocumentoLiteral"
+                  disabled
+                  // value={6}
+                  // value={definicion_CTX_COMPRA.tipoDocumentoIdentidad}
+                  // onChange={cambioTipoDocumento}
+                  onChange$={(e) => {
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const rere = e.target as HTMLSelectElement;
+                    const elOption = rere[idx];
+                    console.log('elOption', elOption.id);
+                    //
+                    // console.log('idx', idx.item.arguments(id));
+                    // const csd = (e.target as HTMLSelectElement).current[idx];
+                    // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
+                    definicion_CTX_COMPRA.codigoTipoDocumentoIdentidad = elOption.id;
+                    definicion_CTX_COMPRA.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
+                  }}
+                  // style={{ width: '100%' }}
+                >
+                  <option id="1" value="DNI" selected={definicion_CTX_COMPRA.tipoDocumentoIdentidad === 'DNI'}>
+                    DNI
+                  </option>
+                  <option id="6" value="RUC" selected={definicion_CTX_COMPRA.tipoDocumentoIdentidad === 'RUC'}>
+                    RUC
+                  </option>
+                  <option id="4" value="C.EXT" selected={definicion_CTX_COMPRA.tipoDocumentoIdentidad === 'C.EXT'}>
+                    C.EXT
+                  </option>
+                </select>
+                <input
+                  id="in_BuscarProveedor"
+                  type="image"
+                  src={images.searchPLUS}
+                  height={16}
+                  width={16}
+                  style={{ padding: '2px' }}
+                  // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                  onClick$={() => (definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona = true)}
+                />
+                {/* <ImgButton
+                  id="img_buscarProveedor"
+                  src={images.searchPLUS}
+                  alt="Icono de buscar identidad"
+                  height={16}
+                  width={16}
+                  title="Buscar datos de identidad"
+                  // onClick={buscarCliente}
+                  onClick={$(() => {
+                    definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona = true;
+                  })}
+                /> */}
+              </div>
+            </div>
+            {definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona && (
+              <div class="modal">
+                <BuscarPersona soloPersonasNaturales={false} seleccionar="proveedor" contexto="new_edit_compra" rol="proveedor" />
+              </div>
+            )}
+            {/* numero identidad*/}
+            <div class="form-control">
+              <label>Número identidad</label>
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_NumeroDocumentoIdentidad"
+                  style={{ width: '100%' }}
+                  disabled
+                  type="number"
+                  placeholder="Add número identidad"
+                  value={definicion_CTX_COMPRA.numeroIdentidad}
+                  onChange$={(e) => (definicion_CTX_COMPRA.numeroIdentidad = (e.target as HTMLInputElement).value)}
+                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                />
+              </div>
+            </div>
+            {/* Razon Social / Nombre */}
+            <div class="form-control">
+              <label>Razón social / Nombre</label>
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_NombreProveedor"
+                  style={{ width: '100%' }}
+                  disabled
+                  type="text"
+                  placeholder="Razón social / Nombre"
+                  value={definicion_CTX_COMPRA.razonSocialNombre}
+                />
+              </div>
+            </div>
+            <hr style={{ margin: '5px 0' }}></hr>
+          </div>
+          {/* ----------------------------------------------------- */}
+          <div>
             {/* Fecha */}
             <div class="form-control">
               <label>Fecha</label>
@@ -970,106 +1111,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
             <hr style={{ margin: '5px 0' }}></hr>
           </div>
           {/* ----------------------------------------------------- */}
-          {/* GENERALES DEL PROVEEDOR */}
-          <div>
-            {/* tipo de documento identidad*/}
-            <div class="form-control">
-              <label>Tipo documento</label>
-              <div class="form-control form-agrupado">
-                <select
-                  id="se_TipoDocumentoLiteral"
-                  disabled
-                  // value={6}
-                  // value={definicion_CTX_COMPRA.tipoDocumentoIdentidad}
-                  // onChange={cambioTipoDocumento}
-                  onChange$={(e) => {
-                    const idx = (e.target as HTMLSelectElement).selectedIndex;
-                    const rere = e.target as HTMLSelectElement;
-                    const elOption = rere[idx];
-                    console.log('elOption', elOption.id);
-                    //
-                    // console.log('idx', idx.item.arguments(id));
-                    // const csd = (e.target as HTMLSelectElement).current[idx];
-                    // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
-                    definicion_CTX_COMPRA.codigoTipoDocumentoIdentidad = elOption.id;
-                    definicion_CTX_COMPRA.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
-                  }}
-                  // style={{ width: '100%' }}
-                >
-                  <option id="1" value="DNI" selected={definicion_CTX_COMPRA.tipoDocumentoIdentidad === 'DNI'}>
-                    DNI
-                  </option>
-                  <option id="6" value="RUC" selected={definicion_CTX_COMPRA.tipoDocumentoIdentidad === 'RUC'}>
-                    RUC
-                  </option>
-                  <option id="4" value="C.EXT" selected={definicion_CTX_COMPRA.tipoDocumentoIdentidad === 'C.EXT'}>
-                    C.EXT
-                  </option>
-                </select>
-                <input
-                  id="in_BuscarProveedor"
-                  type="image"
-                  src={images.searchPLUS}
-                  height={16}
-                  width={16}
-                  style={{ padding: '2px' }}
-                  // onFocusin$={() => console.log('☪☪☪☪☪☪')}
-                  onClick$={() => (definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona = true)}
-                />
-                {/* <ImgButton
-                  id="img_buscarProveedor"
-                  src={images.searchPLUS}
-                  alt="Icono de buscar identidad"
-                  height={16}
-                  width={16}
-                  title="Buscar datos de identidad"
-                  // onClick={buscarCliente}
-                  onClick={$(() => {
-                    definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona = true;
-                  })}
-                /> */}
-              </div>
-            </div>
-            {definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona && (
-              <div class="modal">
-                <BuscarPersona soloPersonasNaturales={false} seleccionar="proveedor" contexto="new_edit_compra" rol="proveedor" />
-              </div>
-            )}
-            {/* numero identidad*/}
-            <div class="form-control">
-              <label>Número identidad</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_NumeroDocumentoIdentidad"
-                  style={{ width: '100%' }}
-                  disabled
-                  type="number"
-                  placeholder="Add número identidad"
-                  value={definicion_CTX_COMPRA.numeroIdentidad}
-                  onChange$={(e) => (definicion_CTX_COMPRA.numeroIdentidad = (e.target as HTMLInputElement).value)}
-                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
-                />
-              </div>
-            </div>
-            {/* Razon Social / Nombre */}
-            <div class="form-control">
-              <label>Razón social / Nombre</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_NombreProveedor"
-                  style={{ width: '100%' }}
-                  disabled
-                  type="text"
-                  placeholder="Razón social / Nombre"
-                  value={definicion_CTX_COMPRA.razonSocialNombre}
-                />
-              </div>
-            </div>
-            <hr style={{ margin: '5px 0' }}></hr>
-          </div>
-          {/* ----------------------------------------------------- */}
           {/* -----------------------TC---------------------------- */}
-          {/* ----------------------------------------------------- */}
           <div>
             {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
             <div class="form-control">
@@ -1372,7 +1414,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                     id="in_DetraccionPorcentaje"
                     style={{ width: '100%' }}
                     placeholder={'Porcentaje de detracción'}
-                    value={definicion_CTX_COMPRA.detraccionPorcentaje}
+                    value={definicion_CTX_COMPRA.detraccionPorcentaje.$numberDecimal}
                     onChange$={(e) => {
                       definicion_CTX_COMPRA.detraccionPorcentaje = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
@@ -1384,6 +1426,16 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                     onFocusin$={(e) => {
                       (e.target as HTMLInputElement).select();
                     }}
+                  />
+                  <input
+                    id="in_BuscarDetraccionPorcentaje"
+                    type="image"
+                    src={images.searchPLUS}
+                    height={16}
+                    width={16}
+                    style={{ padding: '2px' }}
+                    // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                    onClick$={() => (definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarDetraccionPorcentaje = true)}
                   />
                 </div>
               </div>
@@ -1420,7 +1472,11 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                     id="in_DetraccionMonto"
                     style={{ width: '100%' }}
                     placeholder={'Monto de detracción PEN'}
-                    value={definicion_CTX_COMPRA.detraccionMontoPEN}
+                    value={
+                      definicion_CTX_COMPRA.detraccionMontoPEN.$numberDecimal
+                        ? definicion_CTX_COMPRA.detraccionMontoPEN.$numberDecimal
+                        : definicion_CTX_COMPRA.detraccionMontoPEN
+                    }
                     onChange$={(e) => {
                       definicion_CTX_COMPRA.detraccionMontoPEN = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
@@ -1451,8 +1507,55 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any }) 
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('bu_RegistrarDocumentoIN_MICE') as HTMLInputElement)?.focus();
+                        (document.getElementById('chbx_Retencion') as HTMLInputElement)?.focus();
                       }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <hr style={{ margin: '5px 0' }}></hr>
+          </div>
+          {definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarDetraccionPorcentaje && (
+            <div class="modal">
+              <BuscarDetraccionPorcentaje />
+            </div>
+          )}
+          {/* ----------------------------------------------------- */}
+          {/* RETENCION */}
+          <div id="zona_Retencion_Primaria" hidden={!definicion_CTX_COMPRA.agenteRetencion}>
+            <div class="form-control">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
+                <input
+                  type="checkbox"
+                  id="chbx_Retencion"
+                  checked={definicion_CTX_COMPRA.retencion}
+                  onChange$={(e) => (definicion_CTX_COMPRA.retencion = (e.target as HTMLInputElement).checked)}
+                />
+                <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>Retención</strong>
+              </div>
+            </div>
+            <div id="zona_Retencion_Secundaria" hidden={!definicion_CTX_COMPRA.retencion}>
+              {/* Retencion Porcentaje */}
+              <div class="form-control">
+                <label>Porcentaje de retención</label>
+                <div class="form-control form-agrupado">
+                  <input
+                    type="number"
+                    id="in_RetencionPorcentaje"
+                    style={{ width: '100%' }}
+                    placeholder={'Porcentaje de retención'}
+                    value={definicion_CTX_COMPRA.retencionPorcentaje}
+                    onChange$={(e) => {
+                      definicion_CTX_COMPRA.retencionPorcentaje = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                    }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        document.getElementById('bu_RegistrarDocumentoIN_MICE')?.focus();
+                      }
+                    }}
+                    onFocusin$={(e) => {
+                      (e.target as HTMLInputElement).select();
                     }}
                   />
                 </div>

@@ -54,7 +54,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
           ctx_index_compra.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
-        onResolved={(compras) => {
+        onResolved={(compras: any) => {
           console.log('onResolved 🍓🍓🍓🍓');
           const { data } = compras; //{ status, data, message }
           const misCompras: ICompra[] = data;
@@ -72,11 +72,12 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                         <th>Item</th>
                         <th>Nro. Doc</th>
                         <th>Proveedor</th>
-                        <th>Ser-Nro</th>
                         <th>Fecha</th>
-                        <th>Dt</th>
-                        <th>Mon</th>
+                        <th>Ser-Nro</th>
                         <th>Importe</th>
+                        <th>Mon</th>
+                        <th>Dt</th>
+                        <th>Rt</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
@@ -93,18 +94,12 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                             </td>
                             <td data-label="Proveedor" class="comoCadena">
                               {compra.razonSocialNombre}
-                            </td>
-                            <td data-label="Ser-Nro" class="comoCadena">
-                              {compra.serie + '-' + compra.numero}
-                            </td>
+                            </td>{' '}
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(compra.fecha)}
                             </td>
-                            <td data-label="Dt" class="acciones">
-                              {compra.detraccion ? 'Si' : '-'}
-                            </td>
-                            <td data-label="Mon" class="acciones" style={'tipoCompra' in compra ? {} : { background: '#FFD700' }}>
-                              {'moneda' in compra ? compra.moneda : '_'}
+                            <td data-label="Ser-Nro" class="comoCadena">
+                              {compra.serie + '-' + compra.numero}
                             </td>
                             <td
                               data-label="Importe"
@@ -130,6 +125,15 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                       minimumFractionDigits: 2,
                                     })
                                 : '_'}
+                            </td>{' '}
+                            <td data-label="Mon" class="acciones" style={'tipoCompra' in compra ? {} : { background: '#FFD700' }}>
+                              {'moneda' in compra ? compra.moneda : '_'}
+                            </td>
+                            <td data-label="Dt" class="acciones">
+                              {compra.detraccion ? 'Si' : '-'}
+                            </td>
+                            <td data-label="Rt" class="acciones">
+                              {compra.retencion ? 'Si' : '-'}
                             </td>
                             <td data-label="Acciones" class="acciones">
                               <ImgButton
@@ -146,6 +150,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                               <ImgButton
                                 src={images.mercaderia}
                                 alt="icono de mercaderías"
+                                hidden={compra.idIngresoAAlmacen ? false : true}
                                 height={14}
                                 width={14}
                                 title={`Ver mercaderías`}

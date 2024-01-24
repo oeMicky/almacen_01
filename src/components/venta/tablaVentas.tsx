@@ -130,8 +130,8 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                         <th>Cliente</th>
                         <th>Ser-Nro</th>
                         <th>Fecha</th>
-                        <th>Mon</th>
                         <th>Importe</th>
+                        <th>Mon</th>
                         <th>Pago</th>
                         <th>Acciones</th>
                       </tr>
@@ -156,9 +156,6 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(value.fecha)}
                             </td>
-                            <td data-label="Mon" class="acciones">
-                              {value.moneda}
-                            </td>
                             <td data-label="Importe" class="comoNumero">
                               {value.moneda === 'PEN'
                                 ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
@@ -171,6 +168,9 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })}
+                            </td>
+                            <td data-label="Mon" class="acciones">
+                              {value.moneda}
                             </td>
                             <td data-label="Pago" class="comoCadena">
                               {value.metodoPago}

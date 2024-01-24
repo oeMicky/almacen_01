@@ -9,9 +9,9 @@ import {
   useStylesScoped$,
   useTask$,
 } from '@builder.io/qwik';
-import ImgButton from '../../../components/system/imgButton';
+// import ImgButton from '../../../components/system/imgButton';
 import Button from '~/components/system/elButton';
-import { images } from '~/assets';
+// import { images } from '~/assets';
 import { hoy } from '~/functions/comunes';
 import TablaVentas from '~/components/venta/tablaVentas';
 // import Modal from '~/components/system/elModal';
@@ -161,7 +161,7 @@ export default component$(() => {
         </h4>
         {/*  INTERVALOS DE FECHAS  style={{ display: 'flex', margin: '10px 0' }}*/}
         {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
-        <div class="intervalo-fechas">
+        {/* <div class="intervalo-fechas">
           <label class="fechas">
             Desde:{' '}
             <input
@@ -204,7 +204,7 @@ export default component$(() => {
               })}
             />
           </div>
-        </div>
+        </div> */}
         {/*  BOTONES   className="btn"  onClick={mostrarPanelVenta}  border: ' 1px solid blue',*/}
         <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
           {/* <button

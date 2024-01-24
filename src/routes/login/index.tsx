@@ -26,6 +26,8 @@ export const parametrosGlobales = {
   RazonSocial: '', //'CORPORACION ACME I',
   Direccion: '', //'ARKANZAS NRO 354',
   RUC: '', //'99999999999',
+  agenteRetencion: false,
+  agentePercepcion: false,
   //Sucursal
   idSucursal: '', //'651ad18424595a30fe7926d2',
   sucursal: '', //'Pardo',
@@ -166,13 +168,15 @@ export default component$(() => {
               sessionStorage.setItem('usuario', logeo.usuario);
               sessionStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
               sessionStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
-              sessionStorage.setItem('almacenActivo', logeo.sucursalesAdjuntas[0].sucursales[0].almacenActivo);
+              sessionStorage.setItem('almacenActivo', activo[0].almacenActivo);
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
               parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+              parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+              parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -231,6 +235,8 @@ export default component$(() => {
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
               parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+              parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+              parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
               parametrosGlobales.usuario = logeo.usuario;
               //  parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               //  parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -284,13 +290,15 @@ export default component$(() => {
 
               sessionStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
               sessionStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
-              sessionStorage.setItem('almacenActivo', logeo.sucursalesAdjuntas[0].sucursales[0].almacenActivo);
+              sessionStorage.setItem('almacenActivo', activo[0].almacenActivo);
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
               parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+              parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+              parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -348,6 +356,8 @@ export default component$(() => {
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
               parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+              parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+              parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
               parametrosGlobales.usuario = logeo.usuario;
               sessionStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
 
