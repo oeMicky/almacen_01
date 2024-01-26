@@ -1181,7 +1181,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                 <input
                   type="text"
                   id="in_Observacion"
-                  disabled
                   value={definicion_CTX_F_B_NC_ND.observacion}
                   style={{ width: '100%', background: 'yellow' }}
                   placeholder="Observación"
