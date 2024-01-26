@@ -118,18 +118,12 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
           const { data } = ventas; //{ status, data, message }
           const misVentas: IVenta[] = data;
           ctx_index_venta.mostrarSpinner = false;
+          console.log(misVentas);
           // props.buscarVentas = false;
           return (
             <>
               {misVentas.length > 0 ? (
                 <>
-                  {/* <button
-                    onClick$={() => {
-                      console.log('ventaSeleccionada', ventaSeleccionada.value);
-                    }}
-                  >
-                    desde tabla al falso
-                  </button> */}
                   <table class="tabla-venta" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>

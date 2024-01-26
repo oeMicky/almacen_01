@@ -536,7 +536,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       serieOrdenServicio: definicion_CTX_F_B_NC_ND.serieOrdenServicio,
       numeroOrdenServicio: definicion_CTX_F_B_NC_ND.numeroOrdenServicio,
 
-      observacion: definicion_CTX_F_B_NC_ND.observacion,
+      observacion: definicion_CTX_F_B_NC_ND.observacion.toUpperCase(),
 
       itemsVenta: definicion_CTX_F_B_NC_ND.itemsVenta,
 
@@ -1174,9 +1174,9 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
           {/* ----------------------------------------------------- */}
           {/* OBSERVACION */}
           <div>
-            {/* IGV */}
+            {/* OBSERVACION */}
             <div class="form-control">
-              <label>IGV (%)</label>
+              <label>Observación</label>
               <div class="form-control form-agrupado">
                 <input
                   type="text"
@@ -1184,10 +1184,12 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   value={definicion_CTX_F_B_NC_ND.observacion}
                   style={{ width: '100%', background: 'yellow' }}
                   placeholder="Observación"
+                  onChange$={(e) => {
+                    definicion_CTX_F_B_NC_ND.observacion = (e.target as HTMLInputElement).value.toUpperCase();
+                  }}
                 />
               </div>
             </div>
-
             <hr style={{ margin: '5px 0' }}></hr>
           </div>
           {/* ----------------------------------------------------- */}
