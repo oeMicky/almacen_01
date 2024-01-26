@@ -1,13 +1,14 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import { hoy, primeroDelMes } from '~/functions/comunes';
+// import { images } from '~/assets';
+// import ImgButton from '~/components/system/imgButton';
+// import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '../../login/index';
 import TablaCotizaciones from '~/components/cotizacion/tablaCotizaciones';
 import ElButton from '~/components/system/elButton';
 import NewEditCotizacion from '~/components/cotizacion/newEditCotizacion';
 import { getIgvVenta } from '~/apis/venta.api';
 import ElSelect from '~/components/system/elSelect';
+import Spinner from '~/components/system/spinner';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 // import TablaCotizaciones from '~/components/venta/tablaCotizaciones';
 
@@ -55,6 +56,8 @@ export default component$(() => {
     cC: [],
     mostrarPanelNewEditCotizacion: false,
     grabo_Cotizacion: false,
+
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_INDEX_COTIZACION, definicion_CTX_INDEX_COTIZACION);
   //#endregion CTX_INDEX_COTIZACION
@@ -70,22 +73,23 @@ export default component$(() => {
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
   //*Fechas
-  const fechas = useStore({
-    desde: primeroDelMes(), //  '2023-01-01', // hoy(),
-    hasta: hoy(),
-  });
+  // const fechas = useStore({
+  //   desde: primeroDelMes(), //  '2023-01-01', // hoy(),
+  //   hasta: hoy(),
+  // });
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    fechaInicio: fechas.desde,
-    fechaFinal: fechas.hasta,
+    idPeriodo: '',
+    // fechaInicio: fechas.desde,
+    // fechaFinal: fechas.hasta,
   });
-  useTask$(({ track }) => {
-    const fI = track(() => fechas.desde);
-    const fF = track(() => fechas.hasta);
-    parametrosBusqueda.fechaInicio = fI;
-    parametrosBusqueda.fechaFinal = fF;
-  });
+  // useTask$(({ track }) => {
+  //   const fI = track(() => fechas.desde);
+  //   const fF = track(() => fechas.hasta);
+  //   parametrosBusqueda.fechaInicio = fI;
+  //   parametrosBusqueda.fechaFinal = fF;
+  // });
   //#endregion INICIALIZANDO
 
   //#region ACTUALIZAR TABLA COTIZACIONES
@@ -140,7 +144,7 @@ export default component$(() => {
           <u>Cotizaciones</u>
         </h4>
         {/*  INTERVALOS DE FECHAS */}
-        <div class="intervalo-fechas">
+        {/* <div class="intervalo-fechas">
           <label class="fechas">
             Desde:{' '}
             <input
@@ -181,7 +185,7 @@ export default component$(() => {
               })}
             />
           </div>
-        </div>
+        </div> */}
         {/* <button onClick$={() => console.log('parametros', parametrosGlobales)}>ver param</button> */}
         {/*  BOTONES */}
         <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
@@ -227,6 +231,13 @@ export default component$(() => {
                 periodo.periodo = '';
               } else {
                 periodo.periodo = elSelec.value;
+
+                parametrosBusqueda.idPeriodo = periodo.idPeriodo;
+                // console.log('💨💨💨💨💨💨first', periodo);
+                // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+                buscarCotizaciones.value++;
+
+                definicion_CTX_INDEX_COTIZACION.mostrarSpinner = true;
               }
             })}
             onKeyPress={$((e: any) => {
@@ -260,6 +271,12 @@ export default component$(() => {
             />
           ) : (
             ''
+          )}
+          {/* MOSTRAR SPINNER */}
+          {definicion_CTX_INDEX_COTIZACION.mostrarSpinner && (
+            <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Spinner />
+            </div>
           )}
         </div>
       </div>

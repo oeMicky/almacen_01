@@ -101,7 +101,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       numeroIdentidad: '',
       razonSocialNombre: '',
 
-      igv: props.igv,
+      igv: props.igv.valueOf(),
       enDolares: false,
       moneda: 'PEN',
       tipoCambio: 0,
@@ -122,6 +122,8 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       idOrdenServicio: '',
       serieOrdenServicio: '',
       numeroOrdenServicio: 0,
+
+      observacion: '',
 
       itemsVenta: [],
 
@@ -287,8 +289,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
   });
   //#endregion INICIALIZACION - TIPO DE DOCUMENTO F B NC ND
 
-  //TAREAS DIVERSAS
-
   //#region GENERALES
   useTask$(async ({ track }) => {
     track(() => serieDocumento.value);
@@ -342,6 +342,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
   //#region TIPO CAMBIO
   const obtenerTipoCambio = $(async (e: HTMLInputElement) => {
+    console.log('ingreso al obtenerTipoCambio  obtenerTipoCambio  obtenerTipoCambio');
     const checkTC = e.checked;
     if (checkTC) {
       definicion_CTX_F_B_NC_ND.enDolares = true;
@@ -535,6 +536,8 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       serieOrdenServicio: definicion_CTX_F_B_NC_ND.serieOrdenServicio,
       numeroOrdenServicio: definicion_CTX_F_B_NC_ND.numeroOrdenServicio,
 
+      observacion: definicion_CTX_F_B_NC_ND.observacion,
+
       itemsVenta: definicion_CTX_F_B_NC_ND.itemsVenta,
 
       montoSubTotalPEN: definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
@@ -592,6 +595,8 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       definicion_CTX_F_B_NC_ND.serieOrdenServicio = '';
       definicion_CTX_F_B_NC_ND.numeroOrdenServicio = 0;
 
+      definicion_CTX_F_B_NC_ND.observacion = '';
+
       definicion_CTX_F_B_NC_ND.itemsVenta = [];
 
       definicion_CTX_F_B_NC_ND.montoSubTotalPEN = 0;
@@ -605,6 +610,9 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       grabo.value = false;
     }
     console.log('paso_______::::::______ grabo.value', grabo.value);
+
+    //OCULTAR MENSAJE DE GRABACION
+    setTimeout(() => (pasoProcesoGrabacion.value = false), 3000);
   });
   //#endregion SUBMIT
 
@@ -650,12 +658,14 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
           })}
         />
       </div>
+      {/* TITULO */}
+      <h3 style={{ fontSize: '0.8rem' }}>Venta</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* GENERALES style={{ fontSize: '0.6rem' }} */}
         <div>
           {/* ----------------------------------------------------- */}
-          {/* GENERALES DE FACTURA */}
+          {/* PERIODO */}
           <div>
             {/* PERIODO */}
             <div class="form-control">
@@ -677,135 +687,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   //     (document.getElementById('in_Serie') as HTMLInputElement)?.focus();
                   //   }
                   // }}
-                />
-              </div>
-            </div>
-            {/* Documento onChange={buscarSeriesVenta}   , fontSize: '0.7rem'*/}
-            <div class="form-control">
-              <label>Documento</label>
-              <div class="form-control form-agrupado">
-                <select
-                  id="selectDocumentoVenta"
-                  // style={{ width: '100%' }}
-                  onChange$={(e) => {
-                    tipoDocumento.value = (e.target as HTMLSelectElement).value;
-                    // alert('eligio ' + tipoDocumento.value);
-                  }}
-                >
-                  <option value={'01'} selected={tipoDocumento.value === '01'}>
-                    FACTURA
-                  </option>
-                  <option value={'03'} selected={tipoDocumento.value === '03'}>
-                    BOLETA
-                  </option>
-                  <option value={'07'} selected={tipoDocumento.value === '07'}>
-                    NOTA DE CRÉDITO
-                  </option>
-                  <option value={'08'} selected={tipoDocumento.value === '08'}>
-                    NOTA DE DÉBITO
-                  </option>
-                </select>
-              </div>
-            </div>
-            {/* Serie  key={ser._id} id={ser._id} value={ser.serie}*/}
-            <div class="form-control">
-              <label>Serie</label>
-              <div class="form-control form-agrupado">
-                {
-                  <select
-                    id="selectSerieVenta"
-                    onChange$={(e) => {
-                      const idx = (e.target as HTMLSelectElement).selectedIndex;
-                      const elSelect = e.target as HTMLSelectElement;
-                      const elOption = elSelect[idx];
-                      console.log('elOption', elOption.id);
-                      definicion_CTX_F_B_NC_ND.idSerieVenta = elOption.id;
-                      definicion_CTX_F_B_NC_ND.serie = (e.target as HTMLSelectElement).value;
-                      document.getElementById('in_Fecha')?.focus();
-                    }}
-                  >
-                    <option value="">-- Seleccione una serie --</option>
-                    {dataSerie.value.map((ser: any) => {
-                      return (
-                        <option id={ser._id} value={ser.serie} selected={definicion_CTX_F_B_NC_ND.serie === ser.serie}>
-                          {ser.serie}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  // definicion_CTX_F_B_NC_ND.idSerieVenta !== '' ? (
-                  //   <input
-                  //     id="inputSerieOrdenServicio"
-                  //     style={{ width: '100%' }}
-                  //     type="text"
-                  //     disabled
-                  //     value={
-                  //       definicion_CTX_F_B_NC_ND._id === ''
-                  //         ? definicion_CTX_F_B_NC_ND.serie
-                  //         : definicion_CTX_F_B_NC_ND.serie + ' - ' + cerosALaIzquierda(definicion_CTX_F_B_NC_ND.numero, 8)
-                  //     }
-                  //   />
-                  // ) : (
-
-                  // )
-                }
-              </div>
-            </div>
-            {/* <div class="form-control">
-              <label>Serie</label>
-              <div class="form-control form-agrupado">
-                <select
-                  // value={serieDocumento.value}
-                  id="selectSerieVenta"
-                  // style={{ width: '100%', fontSize: '0.7rem' }}
-                  onChange$={(e) => {
-                    const idx = (e.target as HTMLSelectElement).selectedIndex;
-                    const elSelect = e.target as HTMLSelectElement;
-                    const elOption = elSelect[idx];
-                    console.log('elOption', elOption.id);
-                    idSerieDocumento.value = elOption.id;
-                    serieDocumento.value = (e.target as HTMLSelectElement).value;
-                  }}
-                >
-                  <option value="">-- Seleccione una serie --</option>
-                  {dataSerie.value.map((ser: any) => {
-                    return (
-                      <option id={ser._id} value={ser.serie} selected={serieDocumento.value === ser.serie}>
-                        {ser.serie}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-            </div> */}
-            {/* Numero de documento     value={numeroDocumento}*/}
-            {/* <div class="form-control">
-              <label>Número</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNumeroDocumento"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled
-                  value={definicion_CTX_F_B_NC_ND.numero}
-                />
-              </div>
-            </div> */}
-            {/* fecha    onChange={(e) => setFecha(e.currentTarget.value)}*/}
-            <div class="form-control">
-              <label>Fecha</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Fecha"
-                  type="date"
-                  // disabled
-                  min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
-                  value={definicion_CTX_F_B_NC_ND.fecha}
-                  onChange$={(e) => {
-                    definicion_CTX_F_B_NC_ND.fecha = (e.target as HTMLInputElement).value;
-                  }}
-                  style={{ width: '100%' }}
                 />
               </div>
             </div>
@@ -917,19 +798,93 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
             <hr style={{ margin: '5px 0' }}></hr>
           </div>
           {/* ----------------------------------------------------- */}
+          {/* GENERALES DE FACTURA */}
+          <div>
+            {/* Documento */}
+            <div class="form-control">
+              <label>Documento</label>
+              <div class="form-control form-agrupado">
+                <select
+                  id="selectDocumentoVenta"
+                  // style={{ width: '100%' }}
+                  onChange$={(e) => {
+                    tipoDocumento.value = (e.target as HTMLSelectElement).value;
+                    // alert('eligio ' + tipoDocumento.value);
+                  }}
+                >
+                  <option value={'01'} selected={tipoDocumento.value === '01'}>
+                    FACTURA
+                  </option>
+                  <option value={'03'} selected={tipoDocumento.value === '03'}>
+                    BOLETA
+                  </option>
+                  <option value={'07'} selected={tipoDocumento.value === '07'}>
+                    NOTA DE CRÉDITO
+                  </option>
+                  <option value={'08'} selected={tipoDocumento.value === '08'}>
+                    NOTA DE DÉBITO
+                  </option>
+                </select>
+              </div>
+            </div>
+            {/* Serie  */}
+            <div class="form-control">
+              <label>Serie</label>
+              <div class="form-control form-agrupado">
+                {
+                  <select
+                    id="selectSerieVenta"
+                    onChange$={(e) => {
+                      const idx = (e.target as HTMLSelectElement).selectedIndex;
+                      const elSelect = e.target as HTMLSelectElement;
+                      const elOption = elSelect[idx];
+                      console.log('elOption', elOption.id);
+                      definicion_CTX_F_B_NC_ND.idSerieVenta = elOption.id;
+                      definicion_CTX_F_B_NC_ND.serie = (e.target as HTMLSelectElement).value;
+                      document.getElementById('in_Fecha')?.focus();
+                    }}
+                  >
+                    <option value="">-- Seleccione una serie --</option>
+                    {dataSerie.value.map((ser: any) => {
+                      return (
+                        <option id={ser._id} value={ser.serie} selected={definicion_CTX_F_B_NC_ND.serie === ser.serie}>
+                          {ser.serie}
+                        </option>
+                      );
+                    })}
+                  </select>
+                }
+              </div>
+            </div>
+            {/* fecha    */}
+            <div class="form-control">
+              <label>Fecha</label>
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_Fecha_Para_Venta"
+                  type="date"
+                  // disabled
+                  min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                  max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                  value={definicion_CTX_F_B_NC_ND.fecha}
+                  onChange$={(e) => {
+                    definicion_CTX_F_B_NC_ND.fecha = (e.target as HTMLInputElement).value;
+                  }}
+                  style={{ width: '100%' }}
+                />
+              </div>
+            </div>
+            <hr style={{ margin: '5px 0' }}></hr>
+          </div>
+          {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
           <div>
             {/* IGV */}
             <div class="form-control">
               <label>IGV (%)</label>
               <div class="form-control form-agrupado">
-                <input
-                  type="number"
-                  id="inputIGV"
-                  disabled
-                  value={definicion_CTX_F_B_NC_ND.igv + ' %'}
-                  style={{ width: '100%' }}
-                />
+                <strong style={{ fontSize: '0.9rem', fontWeight: '400', paddingLeft: '4px', paddingRight: '24px' }}>IGV</strong>
+                <input type="text" id="inputIGV" disabled value={definicion_CTX_F_B_NC_ND.igv + ' %'} style={{ width: '100%' }} />
               </div>
             </div>
             {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
@@ -937,16 +892,43 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
                 <input
                   type="checkbox"
-                  id="checkboxTipoCambio"
+                  id="chbx_TipoCambio_Para_Venta"
                   // onClick$={(e) => {
                   //   venta.enDolares = (e.target as HTMLInputElement).checked;
                   // }}
                   onClick$={(e) => {
+                    if (definicion_CTX_F_B_NC_ND.fecha === '') {
+                      alert('Ingrese la fecha para esta venta');
+                      (e.target as HTMLInputElement).checked = false;
+                      document.getElementById('in_Fecha_Para_Venta')?.focus();
+                      return;
+                    }
                     obtenerTipoCambio(e.target as HTMLInputElement);
                   }}
                 />
-                <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>USD </strong>
-                {''}
+                <strong
+                  style={{ fontSize: '0.9rem', fontWeight: '400', cursor: 'pointer' }}
+                  onClick$={() => {
+                    if ((document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked === false) {
+                      if (definicion_CTX_F_B_NC_ND.fecha === '') {
+                        alert('Ingrese la fecha para esta venta');
+                        // (e.target as HTMLInputElement).checked = false;
+                        (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
+                        document.getElementById('in_Fecha_Para_Venta')?.focus();
+                        return;
+                      }
+                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = true;
+                    } else {
+                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
+                      // definicion_CTX_F_B_NC_ND.enDolares = false;
+                    }
+                    obtenerTipoCambio(document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement);
+                    // document.getElementById('chbx_TipoCambio_Para_Venta')?.onclick;
+                  }}
+                >
+                  USD
+                </strong>
+                {/* {''}
                 <label
                   style={{ textAlign: 'start' }}
                   for="checkboxTipoCambio"
@@ -955,7 +937,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   // }
                 >
                   Tipo Cambio (USD)
-                </label>
+                </label> */}
               </div>
               <div class="form-control form-agrupado">
                 <input
@@ -1179,12 +1161,32 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   <AdjuntarCotizacion />
                 </div>
               )}
-              <button id="btnAddServicio" disabled onClick$={() => (definicion_CTX_ADD_VENTA.mostrarVerAlmacen = true)}>
+              {/* <button id="btnAddServicio" disabled onClick$={() => (definicion_CTX_ADD_VENTA.mostrarVerAlmacen = true)}>
                 Add concepto valor
               </button>
               <button id="btnAdjuntarOS" disabled onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarCotizacion = true)}>
                 Descuento x Doc
-              </button>
+              </button> */}
+            </div>
+
+            <hr style={{ margin: '5px 0' }}></hr>
+          </div>
+          {/* ----------------------------------------------------- */}
+          {/* OBSERVACION */}
+          <div>
+            {/* IGV */}
+            <div class="form-control">
+              <label>IGV (%)</label>
+              <div class="form-control form-agrupado">
+                <input
+                  type="text"
+                  id="in_Observacion"
+                  disabled
+                  value={definicion_CTX_F_B_NC_ND.observacion}
+                  style={{ width: '100%', background: 'yellow' }}
+                  placeholder="Observación"
+                />
+              </div>
             </div>
 
             <hr style={{ margin: '5px 0' }}></hr>
@@ -1440,93 +1442,3 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
     </div>
   );
 });
-
-// export const TablaCuotasCreditoVenta = component$((props: { registros: any }) => {
-//   return (
-//     <table style={{ fontSize: '0.7em', fontWeight: 'lighter', margin: '5px 0' }}>
-//       <thead>
-//         <tr>
-//           <th>Nro. Cuota</th>
-//           <th>Fecha</th>
-//           <th>Importe</th>
-//           <th>Acciones</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         {props.registros.map((value: any, index: any) => {
-//           //   const { idAuxiliar, fechaCuota, importeCuotaPEN } = cuota;
-//           const indexItem = index + 1;
-//           // sumaCuotas.value = sumaCuotas.value + redondeo2Decimales(cuota.importeCuotaPEN);
-//           // sumaCuotas = sumaCuotas + redondeo2Decimales(value.importeCuotaPEN);
-
-//           //   importeTotal(sumaCuotas);
-//           // Cuota{}
-//           return (
-//             <tr key={value.idAuxiliar}>
-//               <td key={value.idAuxiliar}>{`${cerosALaIzquierda(indexItem, 3)}`}</td>
-//               <td>{formatoDDMMYYYY_PEN(value.fechaCuota)}</td>
-//               <td style={{ textAlign: 'end' }}>
-//                 {/* {cuota.importeCuotaPEN} */}
-//                 {`${value.importeCuotaPEN.toLocaleString('en-PE', {
-//                   // style: 'currency',
-//                   currency: 'PEN',
-//                   minimumFractionDigits: 2,
-//                 })}`}
-//               </td>
-//               <td style={{ textAlign: 'center' }}>
-//                 <ImgButton
-//                   src={images.edit}
-//                   alt="icono de editar"
-//                   height={12}
-//                   width={12}
-//                   title="Editar ítem"
-//                   //   onClick={() => {
-//                   //     mostrarEdit({
-//                   //       idAuxiliar,
-//                   //       fechaCuota,
-//                   //       importeCuotaPEN,
-//                   //     });
-//                   //   }}
-//                 />
-//                 <ImgButton
-//                   src={images.trash}
-//                   alt="icono de eliminar"
-//                   height={12}
-//                   width={12}
-//                   title="Eliminar ítem"
-//                   //   onClick={() => {
-//                   //     onDel(idAuxiliar);
-//                   //   }}
-//                 />
-//               </td>
-//             </tr>
-//           );
-//         })}
-//       </tbody>
-//       <tfoot>
-//         <tr>
-//           <th colSpan={2} style={{ textAlign: 'end' }}>
-//             Suma Cuotas
-//           </th>
-//           <th colSpan={1} style={{ textAlign: 'end' }}>
-//             {/* {`${sumaCuotas.toLocaleString('en-PE', {
-//               style: 'currency',
-//               currency: 'PEN',
-//               minimumFractionDigits: 2,
-//             })}`} */}
-//           </th>
-//           <th>
-//             <button
-//               onClick$={() => {
-//                 console.log('props.registros', props.registros);
-//                 // console.log('ctx_add_venta_tabla.cuotasCredito', venta.cuotasCredito);
-//               }}
-//             >
-//               ver ctx
-//             </button>
-//           </th>
-//         </tr>
-//       </tfoot>
-//     </table>
-//   );
-// });

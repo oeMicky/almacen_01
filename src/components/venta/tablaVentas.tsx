@@ -1,4 +1,4 @@
-import { $, component$, Resource, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
+import { $, component$, Resource, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { images } from '~/assets';
 // import styles from '../../components/tabla.css?inline';
@@ -8,6 +8,7 @@ import ImgButton from '../system/imgButton';
 // import pdfVentaMG from '~/reports/pdfVentaMG';
 import pdfVentaMG from '~/reports/MG/pdfVentaMG';
 import { IVenta } from '~/interfaces/iVenta';
+import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
 
 // interface IEstructura {
 //   _id: string;
@@ -18,6 +19,10 @@ import { IVenta } from '~/interfaces/iVenta';
 export default component$((props: { buscarVentas: number; parametrosBusqueda: any }) => {
   console.log('🎫🎫🎫🎫🎫🎫');
   useStylesScoped$(style);
+
+  //#region CONTEXTO
+  const ctx_index_venta = useContext(CTX_INDEX_VENTA);
+  //#region CONTEXTO
 
   //#region INICIALIZACION
   const clickPDF = useSignal(0);
@@ -53,7 +58,8 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
+    const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorPeriodo`, {
+      // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
       // const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
       method: 'POST',
       headers: {
@@ -104,12 +110,14 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
         onRejected={() => {
           console.log('onRejected 🍍🍍🍍🍍');
           // props.buscarVentas = false;
+          ctx_index_venta.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ventas) => {
           console.log('onResolved 🍓🍓🍓🍓');
           const { data } = ventas; //{ status, data, message }
           const misVentas: IVenta[] = data;
+          ctx_index_venta.mostrarSpinner = false;
           // props.buscarVentas = false;
           return (
             <>

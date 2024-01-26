@@ -1,14 +1,15 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 import { getIgvVenta } from '~/apis/venta.api';
-import { images } from '~/assets';
+// import { images } from '~/assets';
 // import { CTX_APP_ALMACEN } from '~/components/header/headerAlmacen';
 import NewEditOrdenServicio from '~/components/ordenServicio/newEditOrdenServicio';
 import TablaOrdenesServicio from '~/components/ordenServicio/tablaOrdenesServicio';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
-import ImgButton from '~/components/system/imgButton';
-import { hoy, primeroDelMes } from '~/functions/comunes';
+// import ImgButton from '~/components/system/imgButton';
+import Spinner from '~/components/system/spinner';
+// import { hoy, primeroDelMes } from '~/functions/comunes';
 // import { CTX_0 } from '~/routes';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -25,6 +26,7 @@ export default component$(() => {
     // grabo_vehiculo: false,
     // mostrarPanelNewEditVehiculo: false,
     // mostrarPanelVehiculoSeleccionado: false,
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_INDEX_ORDEN_SERVICIO, definicion_CTX_INDEX_ORDEN_SERVICIO);
   //#endregion CTX_INDEX_ORDEN_SERVICIO
@@ -84,9 +86,10 @@ export default component$(() => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    fechaInicio: primeroDelMes(), // hoy(),
-    fechaFinal: hoy(),
-    periodo: '',
+    idPeriodo: '',
+    // fechaInicio: primeroDelMes(), // hoy(),
+    // fechaFinal: hoy(),
+    // periodo: '',
   });
   // useTask$(({ track }) => {
   //   const fI = track(() => fechas.desde);
@@ -158,7 +161,7 @@ export default component$(() => {
         <u>Ordenes de Servicio</u>
       </h4>
       {/*  INTERVALOS DE FECHAS */}
-      <div class="intervalo-fechas">
+      {/* <div class="intervalo-fechas">
         <label class="fechas">
           Desde:{' '}
           <input
@@ -215,8 +218,7 @@ export default component$(() => {
             // onClick={buscarOrdenesServiciosPorFechas}
           />
         </div>
-        {/* <button onClick$={() => console.log('first', parametrosBusqueda)}>ver</button> */}
-      </div>
+      </div> */}
       {/*  BOTONES */}
       <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
         {/* <button
@@ -272,6 +274,12 @@ export default component$(() => {
             } else {
               periodo.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+              parametrosBusqueda.idPeriodo = periodo.idPeriodo;
+              // console.log('💨💨💨💨💨💨first', periodo);
+              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+              buscarOrdenesServicio.value++;
+
+              definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarSpinner = true;
             }
           })}
           onKeyPress={$((e: any) => {
@@ -316,6 +324,12 @@ export default component$(() => {
           ''
         )}
       </div>
+      {/* MOSTRAR SPINNER */}
+      {definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarSpinner && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 });

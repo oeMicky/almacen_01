@@ -47,6 +47,8 @@ export interface IVenta {
   serieOrdenServicio: string;
   numeroOrdenServicio: number;
 
+  observacion: string;
+
   itemsVenta: any;
 
   montoSubTotalPEN: number;

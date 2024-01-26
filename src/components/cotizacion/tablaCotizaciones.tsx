@@ -29,7 +29,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     cleanup(() => abortController.abort('cleanup'));
 
     console.log('parametrosBusqueda', props.parametrosBusqueda);
-    const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`, {
+    const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesPorPeriodo`, {
+      // const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -69,12 +70,14 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
       onRejected={() => {
         console.log('onRejected 🍍🍍🍍🍍');
         // props.buscarVentas = false;
+        ctx_index_cotizacion.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(cotizaciones) => {
         console.log('onResolved 🍓🍓🍓🍓');
         const { data } = cotizaciones; //{ status, data, message }
         const misCotizaciones: ICotizacion[] = data;
+        ctx_index_cotizacion.mostrarSpinner = false;
         // props.buscarVentas = false;
         return (
           <>

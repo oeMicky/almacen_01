@@ -30,7 +30,8 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
 
     console.log('parametrosBusqueda', props.parametrosBusqueda);
 
-    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicioEntreFechas', {
+    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicioPorPeriodo', {
+      // const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicioEntreFechas', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,12 +69,14 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
       }}
       onRejected={() => {
         console.log('onRejected 🍍🍍🍍🍍');
+        ctx_index_orden_servicio.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ordenesServicio) => {
         console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
         const { data } = ordenesServicio; //{ status, data, message }
         const misOrdenesServicio: IOrdenServicio[] = data;
+        ctx_index_orden_servicio.mostrarSpinner = false;
         return (
           <>
             {misOrdenesServicio.length > 0 ? (

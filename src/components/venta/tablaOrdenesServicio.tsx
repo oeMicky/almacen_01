@@ -83,7 +83,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                           <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fechaInicio)}</td>
                           <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
                           <td data-label="Cliente">{value.razonSocialNombreCliente}</td>
-                          <td data-label="Importe PEN" style={{ textAlign: 'end' }}>
+                          <td data-label="Importe PEN" class="comoNumero">
                             {/* {value.montoTotalPEN
                               ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
@@ -92,7 +92,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                 })
                               : ''} */}
                           </td>
-                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                          <td data-label="Acciones" class="acciones">
                             {props.modoSeleccion ? (
                               <>
                                 <ImgButton

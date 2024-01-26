@@ -192,7 +192,7 @@ function pdfVentaMG(venta: any) {
                     text: [
                       { text: 'Observación: ', style: 'textoBold' },
                       {
-                        text: 'GUIA DE REMISON REMITENTE NRO 006-1169',
+                        text: venta.observacion,
                         style: 'text',
                       },
                     ],

@@ -7,12 +7,12 @@ import {
   useSignal,
   useStore,
   useStylesScoped$,
-  useTask$,
+  // useTask$,
 } from '@builder.io/qwik';
 // import ImgButton from '../../../components/system/imgButton';
 import Button from '~/components/system/elButton';
 // import { images } from '~/assets';
-import { hoy } from '~/functions/comunes';
+// import { hoy } from '~/functions/comunes';
 import TablaVentas from '~/components/venta/tablaVentas';
 // import Modal from '~/components/system/elModal';
 import AddVenta from '~/components/venta/addVenta';
@@ -20,6 +20,7 @@ import { getIgvVenta } from '~/apis/venta.api';
 import style from './index.css?inline';
 import { parametrosGlobales } from '../../login/index';
 import ElSelect from '~/components/system/elSelect';
+import Spinner from '~/components/system/spinner';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 
 // import { CTX_DOCS_ORDEN_SERVICIO } from '../ordenServicio';
@@ -55,6 +56,8 @@ export default component$(() => {
   const definicion_CTX_INDEX_VENTA = useStore({
     mostrarPanelVenta: false,
     grabo: false,
+
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_INDEX_VENTA, definicion_CTX_INDEX_VENTA);
   //#endregion DEFINICION CTX_INDEX_VENTA
@@ -73,23 +76,25 @@ export default component$(() => {
   const periodo = useStore({ idPeriodo: '', periodo: '' });
 
   // const ventas = useStore([]);
-  const fechas = useStore({
-    desde: '2023-01-01', //primeroDelMes(), //  '2023-01-01', // hoy(),
-    // desde: hoy(),
-    hasta: hoy(),
-  });
+  // const fechas = useStore({
+  //   desde: '2023-01-01', //primeroDelMes(), //  '2023-01-01', // hoy(),
+  //   // desde: hoy(),
+  //   hasta: hoy(),
+  // });
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    fechaInicio: fechas.desde,
-    fechaFinal: fechas.hasta,
+    idPeriodo: '',
+    // fechaInicio: fechas.desde,
+    // fechaFinal: fechas.hasta,
   });
-  useTask$(({ track }) => {
-    const fI = track(() => fechas.desde);
-    const fF = track(() => fechas.hasta);
-    parametrosBusqueda.fechaInicio = fI;
-    parametrosBusqueda.fechaFinal = fF;
-  });
+
+  // useTask$(({ track }) => {
+  //   const fI = track(() => fechas.desde);
+  //   const fF = track(() => fechas.hasta);
+  //   parametrosBusqueda.fechaInicio = fI;
+  //   parametrosBusqueda.fechaFinal = fF;
+  // });
   //#endregion INICIALIZACION
 
   // const createAndOpenFile = $(() => {
@@ -149,9 +154,9 @@ export default component$(() => {
         </h1> */}
         <div style={{ background: '#00778F' }}>
           <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
-            {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
+            {` ${localStorage.getItem('numeroIdentidad')} - ${localStorage
               .getItem('empresa')
-              ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
+              ?.toLocaleUpperCase()} - Sucursal: ${localStorage.getItem('sucursal')} - Usuario: ${localStorage.getItem(
               'usuario'
             )}`}
           </label>
@@ -226,7 +231,11 @@ export default component$(() => {
                 return;
               }
               //
-              let elIgv = await getIgvVenta(parametrosGlobales);
+              // let elIgv = await getIgvVenta(parametrosGlobales);
+              let elIgv = await getIgvVenta({
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idEmpresa: parametrosGlobales.idEmpresa,
+              });
               elIgv = elIgv.data;
               console.log('elIgv', elIgv);
               igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
@@ -253,6 +262,12 @@ export default component$(() => {
               } else {
                 periodo.periodo = elSelec.value;
                 // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                parametrosBusqueda.idPeriodo = periodo.idPeriodo;
+                // console.log('💨💨💨💨💨💨first', periodo);
+                // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+                buscarVentas.value++;
+
+                definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
               }
             })}
             onKeyPress={$((e: any) => {
@@ -311,6 +326,12 @@ export default component$(() => {
             ''
           )}
         </div>
+        {/* MOSTRAR SPINNER */}
+        {definicion_CTX_INDEX_VENTA.mostrarSpinner && (
+          <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Spinner />
+          </div>
+        )}
       </div>
     </main>
   );

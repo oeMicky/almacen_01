@@ -1,6 +1,6 @@
-import { Resource, component$, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../tabla/tabla.css?inline';
-// import { CTX_INDEX_IN_ALMACEN } from '~/routes/(almacen)/inAlmacen';
+import { CTX_INDEX_IN_ALMACEN } from '~/routes/(almacen)/inAlmacen';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
@@ -12,7 +12,7 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
   useStylesScoped$(style);
 
   //#region CONTEXTOS
-  // const ctx_index_in_almacen = useContext(CTX_INDEX_IN_ALMACEN);
+  const ctx_index_in_almacen = useContext(CTX_INDEX_IN_ALMACEN);
   //#endregion CONTEXTOS
 
   //#region BUSCANDO REGISTROS
@@ -59,12 +59,14 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
       }}
       onRejected={() => {
         console.log('onRejected 🍍🍍🍍🍍');
+        ctx_index_in_almacen.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ordenesServicio) => {
         console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
         const { data } = ordenesServicio; //{ status, data, message }
         const misInsAlmacen: IIngresoAAlmacen[] = data;
+        ctx_index_in_almacen.mostrarSpinner = false;
         return (
           <>
             {misInsAlmacen.length > 0 ? (

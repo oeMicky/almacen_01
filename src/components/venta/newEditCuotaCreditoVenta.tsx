@@ -32,7 +32,7 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 330px)',
         //  width: props.ancho + 'px'
       }}
       class="container-modal"
@@ -56,6 +56,8 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
           onClick={$(() => console.log('cuota.idAuxiliar', props.cuota.idAuxiliar))}
         />
       </div>
+      {/* TITULO */}
+      <h3 style={{ fontSize: '0.8rem' }}>Cuota</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* fecha */}

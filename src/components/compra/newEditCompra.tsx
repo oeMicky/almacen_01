@@ -103,7 +103,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
     totalUSD: props.compraSeleccionada.totalUSD ? props.compraSeleccionada.totalUSD.$numberDecimal : '',
     //****************************************** */
     //***************DETRACCION***************** */
-    detraccion: props.compraSeleccionada.detraccion ? props.compraSeleccionada.detraccion : true, // false,
+    detraccion: props.compraSeleccionada.detraccion ? props.compraSeleccionada.detraccion : false,
     detraccionPorcentaje: props.compraSeleccionada.detraccionPorcentaje
       ? props.compraSeleccionada.detraccionPorcentaje.$numberDecimal
       : '',
@@ -187,11 +187,64 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
     }
   });
 
+  const convertirAValoresAbsolutos_Por_NC_ND = $(() => {
+    console.log('🥖🥖🥖🥖🥖convertirAValoresAbsolutos_Por_NC_ND');
+    //****************************************** */
+    //***************SOLES******************** */
+    definicion_CTX_COMPRA.baseImponiblePEN = props.compraSeleccionada.baseImponiblePEN
+      ? Math.abs(props.compraSeleccionada.baseImponiblePEN.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.igvPEN = props.compraSeleccionada.igvPEN
+      ? Math.abs(props.compraSeleccionada.igvPEN.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.adquisicionesNoGravadasPEN = props.compraSeleccionada.adquisicionesNoGravadasPEN
+      ? Math.abs(props.compraSeleccionada.adquisicionesNoGravadasPEN.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.iscPEN = props.compraSeleccionada.iscPEN
+      ? Math.abs(props.compraSeleccionada.iscPEN.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.icbpPEN = props.compraSeleccionada.icbpPEN
+      ? Math.abs(props.compraSeleccionada.icbpPEN.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.otrosPEN = props.compraSeleccionada.otrosPEN
+      ? Math.abs(props.compraSeleccionada.otrosPEN.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.totalPEN = props.compraSeleccionada.totalPEN
+      ? Math.abs(props.compraSeleccionada.totalPEN.$numberDecimal)
+      : '';
+    //****************************************** */
+    //***************DOLARES******************** */
+    definicion_CTX_COMPRA.baseImponibleUSD = props.compraSeleccionada.baseImponibleUSD
+      ? Math.abs(props.compraSeleccionada.baseImponibleUSD.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.igvUSD = props.compraSeleccionada.igvUSD
+      ? Math.abs(props.compraSeleccionada.igvUSD.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.adquisicionesNoGravadasUSD = props.compraSeleccionada.adquisicionesNoGravadasUSD
+      ? Math.abs(props.compraSeleccionada.adquisicionesNoGravadasUSD.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.iscUSD = props.compraSeleccionada.iscUSD
+      ? Math.abs(props.compraSeleccionada.iscUSD.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.icbpUSD = props.compraSeleccionada.icbpUSD
+      ? Math.abs(props.compraSeleccionada.icbpUSD.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.otrosUSD = props.compraSeleccionada.otrosUSD
+      ? Math.abs(props.compraSeleccionada.otrosUSD.$numberDecimal)
+      : '';
+    definicion_CTX_COMPRA.totalUSD = props.compraSeleccionada.totalUSD
+      ? Math.abs(props.compraSeleccionada.totalUSD.$numberDecimal)
+      : '';
+  });
+
   useTask$(({ track }) => {
     track(() => ini.value);
     if (ini.value === 0) {
       cargarLosTCP();
       cargarLosIGVsCompra();
+      if (definicion_CTX_COMPRA.codigoTCP === '07' || definicion_CTX_COMPRA.codigoTCP === '08') {
+        convertirAValoresAbsolutos_Por_NC_ND();
+      }
     }
 
     // ini.value++; forma blucle infinito
@@ -591,6 +644,83 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
     } else {
       definicion_CTX_COMPRA.retencionPorcentaje = '';
     }
+    if (definicion_CTX_COMPRA.codigoTCP === '07' || definicion_CTX_COMPRA.codigoTCP === '08') {
+      if (definicion_CTX_COMPRA.referenciaFecha === '') {
+        alert('Ingrese la fecha de referencia de NC/ND');
+        document.getElementById('in_NC_ND_Fecha')?.focus();
+        return;
+      }
+      if (definicion_CTX_COMPRA.referenciaTipo === '') {
+        alert('Ingrese el tipo del documento referenciado');
+        document.getElementById('in_NC_ND_TCP')?.focus();
+        return;
+      }
+      if (definicion_CTX_COMPRA.referenciaSerie === '') {
+        alert('Ingrese la serie del documento referenciado');
+        document.getElementById('in_NC_ND_Serie')?.focus();
+        return;
+      }
+      if (
+        definicion_CTX_COMPRA.referenciaNumero.toString() === '' ||
+        definicion_CTX_COMPRA.referenciaNumero.toString() === 'NaN'
+      ) {
+        alert('Ingrese el número valido del documento referenciado');
+        document.getElementById('in_NC_ND_Numero')?.focus();
+        return;
+      }
+      console.log('🥖🥖🥖🥖🥖 REVISION ... convertirAValoresAbsolutos_Por_NC_ND');
+      //****************************************** */
+      //***************SOLES******************** */
+      definicion_CTX_COMPRA.baseImponiblePEN = definicion_CTX_COMPRA.baseImponiblePEN.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.baseImponiblePEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.baseImponiblePEN) * -1;
+      definicion_CTX_COMPRA.igvPEN = definicion_CTX_COMPRA.igvPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.igvPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.igvPEN) * -1;
+      definicion_CTX_COMPRA.adquisicionesNoGravadasPEN = definicion_CTX_COMPRA.adquisicionesNoGravadasPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.adquisicionesNoGravadasPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.adquisicionesNoGravadasPEN) * -1;
+      definicion_CTX_COMPRA.iscPEN = definicion_CTX_COMPRA.iscPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.iscPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.iscPEN) * -1;
+      definicion_CTX_COMPRA.icbpPEN = definicion_CTX_COMPRA.icbpPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.icbpPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.icbpPEN) * -1;
+      definicion_CTX_COMPRA.otrosPEN = definicion_CTX_COMPRA.otrosPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.otrosPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.otrosPEN) * -1;
+      definicion_CTX_COMPRA.totalPEN = definicion_CTX_COMPRA.totalPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.totalPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.totalPEN) * -1;
+      //****************************************** */
+      //***************DOLARES******************** */
+      definicion_CTX_COMPRA.baseImponibleUSD = definicion_CTX_COMPRA.baseImponibleUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.baseImponibleUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.baseImponibleUSD) * -1;
+      definicion_CTX_COMPRA.igvUSD = definicion_CTX_COMPRA.igvUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.igvUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.igvUSD) * -1;
+      definicion_CTX_COMPRA.adquisicionesNoGravadasUSD = definicion_CTX_COMPRA.adquisicionesNoGravadasUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.adquisicionesNoGravadasUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.adquisicionesNoGravadasUSD) * -1;
+      definicion_CTX_COMPRA.iscUSD = definicion_CTX_COMPRA.iscUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.iscUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.iscUSD) * -1;
+      definicion_CTX_COMPRA.icbpUSD = definicion_CTX_COMPRA.icbpUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.icbpUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.icbpUSD) * -1;
+      definicion_CTX_COMPRA.otrosUSD = definicion_CTX_COMPRA.otrosUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.otrosUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.otrosUSD) * -1;
+      definicion_CTX_COMPRA.totalUSD = definicion_CTX_COMPRA.totalUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_COMPRA.totalUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_COMPRA.totalUSD) * -1;
+    } else {
+      definicion_CTX_COMPRA.referenciaFecha = '';
+      definicion_CTX_COMPRA.referenciaTipo = '';
+      definicion_CTX_COMPRA.referenciaSerie = '';
+      definicion_CTX_COMPRA.referenciaNumero = 0;
+    }
     //
     console.log('definicion_CTX_COMPRA', definicion_CTX_COMPRA);
     //enviar datos al SERVIDOR
@@ -638,10 +768,10 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
       baseImponiblePEN: definicion_CTX_COMPRA.baseImponiblePEN,
       // igvPEN: definicion_CTX_COMPRA.igvPEN.replace(',', ''),
       igvPEN: definicion_CTX_COMPRA.igvPEN,
-      adquisicionesNoGravadasPEN: definicion_CTX_COMPRA.adquisicionesNoGravadasPEN.replace(',', ''),
-      iscPEN: definicion_CTX_COMPRA.iscPEN.replace(',', ''),
-      icbpPEN: definicion_CTX_COMPRA.icbpPEN.replace(',', ''),
-      otrosPEN: definicion_CTX_COMPRA.otrosPEN.replace(',', ''),
+      adquisicionesNoGravadasPEN: definicion_CTX_COMPRA.adquisicionesNoGravadasPEN,
+      iscPEN: definicion_CTX_COMPRA.iscPEN,
+      icbpPEN: definicion_CTX_COMPRA.icbpPEN,
+      otrosPEN: definicion_CTX_COMPRA.otrosPEN,
       // totalPEN: definicion_CTX_COMPRA.totalPEN.replace(',', ''),
       totalPEN: definicion_CTX_COMPRA.totalPEN,
       //****************************************** */
@@ -941,7 +1071,9 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                     type="text"
                     placeholder="Add NC/ND Serie"
                     value={definicion_CTX_COMPRA.referenciaSerie}
-                    onChange$={(e) => (definicion_CTX_COMPRA.referenciaSerie = (e.target as HTMLInputElement).value)}
+                    onChange$={(e) =>
+                      (definicion_CTX_COMPRA.referenciaSerie = (e.target as HTMLInputElement).value.toUpperCase())
+                    }
                     // onChange={(e) => setNumeroIdentidad(e.target.value)}
                   />
                   <input
@@ -1214,10 +1346,11 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
                 <input
                   type="checkbox"
-                  id="chbx_TipoCambio"
+                  id="chbx_TipoCambio_Para_Compra"
                   checked={definicion_CTX_COMPRA.enDolares ? true : false}
                   onClick$={(e) => {
                     if (definicion_CTX_COMPRA.fecha === '') {
+                      alert('Ingrese la fecha para esta compra');
                       (e.target as HTMLInputElement).checked = false;
                       document.getElementById('in_Fecha')?.focus();
                       return;
@@ -1225,16 +1358,28 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                     obtenerTipoCambio(e.target as HTMLInputElement);
                   }}
                 />
-                <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>USD </strong>
-                {/* <label
-                  style={{ textAlign: 'start' }}
-                  for="chbx_TipoCambio"
-                  // onClick$={
-                  //   (document.getElementById('checkboxTipoCambio')?.checked = !document.getElementById('checkboxTipoCambio'))
-                  // }
+                <strong
+                  style={{ fontSize: '0.9rem', fontWeight: '400', cursor: 'pointer' }}
+                  onClick$={() => {
+                    if ((document.getElementById('chbx_TipoCambio_Para_Compra') as HTMLInputElement).checked === false) {
+                      if (definicion_CTX_COMPRA.fecha === '') {
+                        alert('Ingrese la fecha para esta venta');
+                        // (e.target as HTMLInputElement).checked = false;
+                        (document.getElementById('chbx_TipoCambio_Para_Compra') as HTMLInputElement).checked = false;
+                        document.getElementById('in_Fecha_Para_Venta')?.focus();
+                        return;
+                      }
+                      (document.getElementById('chbx_TipoCambio_Para_Compra') as HTMLInputElement).checked = true;
+                    } else {
+                      (document.getElementById('chbx_TipoCambio_Para_Compra') as HTMLInputElement).checked = false;
+                      // definicion_CTX_F_B_NC_ND.enDolares = false;
+                    }
+                    obtenerTipoCambio(document.getElementById('chbx_TipoCambio_Para_Compra') as HTMLInputElement);
+                    // document.getElementById('chbx_TipoCambio_Para_Compra')?.onclick;
+                  }}
                 >
-                  Tipo Cambio (USD)
-                </label> */}
+                  USD
+                </strong>
               </div>
               <div class="form-control form-agrupado">
                 <input

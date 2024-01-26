@@ -7,8 +7,9 @@ import NewInAlmacen from '~/components/inAlmacen/newInAlmacen';
 import TablaInsAlmacen from '~/components/inAlmacen/tablaInsAlmacen';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
-import ImgButton from '~/components/system/imgButton';
-import { hoy, primeroDelMes } from '~/functions/comunes';
+// import ImgButton from '~/components/system/imgButton';
+import Spinner from '~/components/system/spinner';
+// import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_INDEX_IN_ALMACEN = createContextId<any>('index_in_almacen');
@@ -19,6 +20,8 @@ export default component$(() => {
     iNS: [],
     mostrarPanelNewInAlmacen: false,
     grabo_InAlmacen: false,
+
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_INDEX_IN_ALMACEN, definicion_CTX_INDEX_IN_ALMACEN);
   //#endregion DEFINICION CTX_INDEX_IN_ALMACEN
@@ -32,15 +35,16 @@ export default component$(() => {
   // const igv = useSignal(0);
   const losIgvsCompra = useSignal([]);
   const igvCompraPorDefault = useStore({ idElIgv: '', elIgv: '' });
-  const porFechasT_porPeriodoF = useSignal(true);
+  const porFechasT_porPeriodoF = useSignal(false);
 
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
-    fechaInicio: primeroDelMes(), // '2023-01-01', // hoy(),
-    fechaFinal: hoy(),
+    // fechaInicio: primeroDelMes(), // '2023-01-01', // hoy(),
+    // fechaFinal: hoy(),
     periodo: '',
+    idPeriodo: '',
   });
   //#endregion INICIALIZACION
 
@@ -107,7 +111,7 @@ export default component$(() => {
         {/* <label style={{ left: '24px', position: 'relative' }}>Ingresos de mercaderías</label> */}
       </h4>
       {/* DESDE - HASTA   */}
-      <div class="intervalo-fechas">
+      {/* <div class="intervalo-fechas">
         <label class="fechas">
           Desde:{' '}
           <input
@@ -160,7 +164,7 @@ export default component$(() => {
             // onClick={buscarCotizacionesEntreFechas}
           />
         </div>
-      </div>
+      </div> */}
       {/* ADD INGRESO DE MERCADERIAS */}
       <div>
         <ElButton
@@ -220,6 +224,12 @@ export default component$(() => {
               periodo.periodo = elSelec.value;
               parametrosBusqueda.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+              parametrosBusqueda.idPeriodo = periodo.idPeriodo;
+              // console.log('💨💨💨💨💨💨first', periodo);
+              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+              buscarInAlmacen.value++;
+
+              definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = true;
             }
           })}
           onKeyPress={$((e: any) => {
@@ -257,6 +267,12 @@ export default component$(() => {
           ''
         )}
       </div>
+      {/* MOSTRAR SPINNER */}
+      {definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 });

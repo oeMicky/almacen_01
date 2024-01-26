@@ -11,8 +11,8 @@ import Spinner from '~/components/system/spinner';
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
-  paginaInicioDelSistema: '/compra',
-  // paginaInicioDelSistema: '/venta',
+  // paginaInicioDelSistema: '/compra',
+  paginaInicioDelSistema: '/venta',
   // paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
@@ -113,7 +113,7 @@ export default component$(() => {
 
   //#region ANALISIS DEL LOGEO
   const analisisDeLogeo = $(async (logeo: any) => {
-    sessionStorage.setItem('ID', logeo._id);
+    localStorage.setItem('ID', logeo._id);
     if (typeof logeo.sucursalesAdjuntas === 'undefined' || logeo.sucursalesAdjuntas.length === 0) {
       console.log('/ningunaEmpresa/ningunaEmpresa/ningunaEmpresa/ningunaEmpresa');
       navegarA('/ningunaEmpresa');
@@ -160,15 +160,16 @@ export default component$(() => {
                 return;
               }
               ///////////
-              sessionStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
-              sessionStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
-              sessionStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
-              sessionStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
-              sessionStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
-              sessionStorage.setItem('usuario', logeo.usuario);
-              sessionStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
-              sessionStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
-              sessionStorage.setItem('almacenActivo', activo[0].almacenActivo);
+
+              localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
+              localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
+              localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
+              localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
+              localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
+              localStorage.setItem('usuario', logeo.usuario);
+              localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
+              localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
+              localStorage.setItem('almacenActivo', activo[0].almacenActivo);
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -222,13 +223,13 @@ export default component$(() => {
                 );
                 return;
               }
-              sessionStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
-              sessionStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
-              sessionStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
-              sessionStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
-              sessionStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
-              sessionStorage.setItem('usuario', logeo.usuario);
-              sessionStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
+              localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
+              localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
+              localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
+              localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
+              localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
+              localStorage.setItem('usuario', logeo.usuario);
+              localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -281,16 +282,16 @@ export default component$(() => {
                 return;
               }
 
-              sessionStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
-              sessionStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
-              sessionStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
-              sessionStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
-              sessionStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
-              sessionStorage.setItem('usuario', logeo.usuario);
+              localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
+              localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
+              localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
+              localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
+              localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
+              localStorage.setItem('usuario', logeo.usuario);
 
-              sessionStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
-              sessionStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
-              sessionStorage.setItem('almacenActivo', activo[0].almacenActivo);
+              localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
+              localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
+              localStorage.setItem('almacenActivo', activo[0].almacenActivo);
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -344,12 +345,12 @@ export default component$(() => {
                 );
                 return;
               }
-              sessionStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
-              sessionStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
-              sessionStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
-              sessionStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
-              sessionStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
-              sessionStorage.setItem('usuario', logeo.usuario);
+              localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
+              localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
+              localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
+              localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
+              localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
+              localStorage.setItem('usuario', logeo.usuario);
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -359,7 +360,7 @@ export default component$(() => {
               parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
               parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
               parametrosGlobales.usuario = logeo.usuario;
-              sessionStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
+              localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
 
               navegarA('/listadoSucursales');
             }
@@ -369,9 +370,9 @@ export default component$(() => {
         console.log('...//VARIAS EMPRESA');
         //VARIAS EMPRESA
 
-        sessionStorage.setItem('usuario', logeo.usuario);
+        localStorage.setItem('usuario', logeo.usuario);
         parametrosGlobales.usuario = logeo.usuario;
-        sessionStorage.setItem('SUCURSALES_ADJUNTAS', JSON.stringify(logeo.sucursalesAdjuntas));
+        localStorage.setItem('SUCURSALES_ADJUNTAS', JSON.stringify(logeo.sucursalesAdjuntas));
         navegarA('/listadoEmpresas');
       }
     }
