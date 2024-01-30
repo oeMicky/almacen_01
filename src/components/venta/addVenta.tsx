@@ -244,9 +244,9 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
         // alert(`tretre a useTask FACTURA`);
         // laSerie = await getSeriesFacturaActivas(parametros);
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
-        // console.log('laSerie', laSerie);
+        //
         dataSerie.value = laSerie.data;
-        console.log('dataSerie.value', dataSerie.value);
+
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '01';
         definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'FACTURA';
         botonGrabar.value = 'Grabar FACTURA';
@@ -263,7 +263,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
-        console.log('dataSerie.value', dataSerie.value);
+
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '03';
         definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'BOLETA';
         botonGrabar.value = 'Grabar BOLETA';
@@ -277,7 +277,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
-        console.log('dataSerie.value', dataSerie.value);
+
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '07';
         definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'NOTA DE CRÉDITO';
         botonGrabar.value = 'Grabar NOTA DE CRÉDITO';
@@ -291,7 +291,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
-        console.log('dataSerie.value', dataSerie.value);
+
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '08';
         definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'NOTA DE DÉBITO';
         botonGrabar.value = 'Grabar NOTA DE DÉBITO';
@@ -300,13 +300,12 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
         break;
 
       default:
-        console.log(`Sorry, we are out of ${tipoDocumento}.`);
         break;
     }
     //
     // let elIgv = await getIgvVenta(props.parametrosGlobales);
     // elIgv = elIgv.data;
-    // // console.log('elIgv', elIgv[0].igv);
+    // //
     // venta.igv = elIgv[0].igv;
     // definicion_CTX_F_B_NC_ND.igv = props.igv;
   });
@@ -319,21 +318,20 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
     // const elID = tre.current[2].value;
     if (serieDocumento.value === '') {
       // if (serieDocumento.value === '--Seleccione una opción--') {
-      console.log('--Seleccione una opción--');
+
       // setIdTipoDocumento('');
       definicion_CTX_F_B_NC_ND.serie = '';
       definicion_CTX_F_B_NC_ND.numero = 0;
-      console.log('venta.serie', definicion_CTX_F_B_NC_ND.serie, definicion_CTX_F_B_NC_ND.numero);
     } else {
-      // console.log('elID', elID);
-      // console.log('elValor', elValor);
-      // console.log('elValor', elValor.substring(0, 3));
+      //
+      //
+      //
 
       definicion_CTX_F_B_NC_ND.serie = serieDocumento.value;
-      console.log('venta.serie...:', idSerieDocumento.value, definicion_CTX_F_B_NC_ND.serie, dataSerie.value);
+
       const corr = dataSerie.value.filter((ser: any) => ser._id === idSerieDocumento.value);
       const elCorre: { _id: string; codigo: string; serie: string; correlativo: number } = corr[0];
-      console.log('corr.correlativo', elCorre.correlativo);
+
       definicion_CTX_F_B_NC_ND.numero = elCorre.correlativo + 1;
     }
   });
@@ -365,20 +363,18 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
   //#region TIPO CAMBIO
   const obtenerTipoCambio = $(async (e: HTMLInputElement) => {
-    console.log('ingreso al obtenerTipoCambio  obtenerTipoCambio  obtenerTipoCambio');
     const checkTC = e.checked;
     if (checkTC) {
       definicion_CTX_F_B_NC_ND.enDolares = true;
-      console.log('ingreso al tipo de cambio');
+
       let elTipoCambio = await getTipoCambio(definicion_CTX_F_B_NC_ND.fecha);
       elTipoCambio = elTipoCambio.data;
-      console.log('elTipoCambio', elTipoCambio.venta);
+
       definicion_CTX_F_B_NC_ND.moneda = elTipoCambio.moneda;
       definicion_CTX_F_B_NC_ND.tipoCambio = elTipoCambio.venta;
       // let itemsVVVVVV = await tablaItemsVentaADolares(elTipoCambio.venta);
-      // console.log('itemsVVVVVV', itemsVVVVVV);
+      //
     } else {
-      console.log('ingreso al NNNNOOOOOO enDOLARES');
       definicion_CTX_F_B_NC_ND.enDolares = false;
       definicion_CTX_F_B_NC_ND.moneda = 'PEN';
       definicion_CTX_F_B_NC_ND.tipoCambio = 0;
@@ -396,11 +392,11 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
     track(() => definicion_CTX_ADD_VENTA.mostrarPanelCuotasCredito);
     if (definicion_CTX_ADD_VENTA.grabo_CuotaCredito) {
       // alert(`${cuota.importeCuotaPEN}`);
-      console.log('🤑 🤩 insertar cuota', cuota);
+
       const elTarget = JSON.parse(JSON.stringify(cuota));
-      console.log('🤩🤩🤩 insertar cuota elTarget', elTarget);
+
       const iT = elTarget;
-      console.log('🤩🤩🤩 iT', iT);
+
       definicion_CTX_F_B_NC_ND.cuotasCredito.push(iT);
     }
   });
@@ -408,9 +404,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
   //#region ITEMS VENTA
   const fijarMontos = $((e: any) => {
-    console.log(' eee', e);
-
-    console.log('eeeeeeeeeeeeeeeeee', e);
     if (definicion_CTX_F_B_NC_ND.enDolares) {
       definicion_CTX_F_B_NC_ND.baseImponibleUSD = e.subTOTAL;
       definicion_CTX_F_B_NC_ND.igvUSD = e.igvTOTAL;
@@ -441,32 +434,32 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
   // useTask$(({ track }) => {
   //   track(() => ctx_PanelVenta.grabo_ItemsVenta);
   //   if (ctx_PanelVenta.grabo_ItemsVenta) {
-  //     console.log('🤑🤑🤑🤑🤑 🤩 insertar item', item);
+  //
   //     const elTarget = JSON.parse(JSON.stringify(item));
-  //     console.log('🤩🤩🤩🤩🤩 insertar cuota elTarget', elTarget);
+  //
   //     // venta.itemsVenta = [...venta.itemsVenta, elTarget];
   //     ctx_PanelVenta.grabo_ItemsVenta = false;
-  //     //   console.log('🤩🤩venta.itemsVenta🤑🤑', venta.itemsVenta);
+  //     //
   //   }
   // });
   // const insertarItem = $(async () => {
-  //   return console.log('insertando.............');
+  //   return
   // });
   // useTask$(({ track }) => {
   //   track(() => indexItemVenta.value);
-  //   console.log('👉👉💂‍♂️indexItemVenta.value');
+  //
   // });
   // useTask$(({ track }) => {
   //   track(() => venta.itemsVenta);
-  //   console.log('💂‍♂️💂‍♂️💂‍♂️  venta.itemsVenta ');
+  //
   // });
   // useTask$(({ track }) => {
   //   track(() => venta);
-  //   console.log('💂‍♂️🤑💂‍♂️🤑💂‍♂️  venta ');
+  //
   // });
   // useTask$(({ track }) => {
   //   track(() => venta.itemsVenta.length);
-  //   console.log('💂‍♂️🤩💂‍♂️🤩💂‍♂️🤩  venta.itemsVenta.length ', venta.itemsVenta.length);
+  //
   // });
   //#endregion ITEMS VENTA
 
@@ -474,7 +467,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
   useTask$(({ track }) => {
     track(() => definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta);
     if (definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta > 0) {
-      console.log('borrando...', definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta);
       const newItems: any = definicion_CTX_F_B_NC_ND.itemsVenta.filter(
         (docs: any) => docs.idAuxiliar !== definicion_CTX_ADD_VENTA.borrar_idAuxilarVenta
       );
@@ -486,7 +478,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
   //#region SUBMIT
   const grabandoVenta = $(async () => {
-    console.log('first::::::_______::::::______T');
     if (definicion_CTX_F_B_NC_ND.serie === '') {
       alert('Seleccione la serie.');
       document.getElementById('selectSerieVenta')?.focus();
@@ -544,7 +535,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
         document.getElementById('in_VENTA_NC_ND_Numero')?.focus();
         return;
       }
-      console.log('🥖🥖🥖🥖🥖 REVISION ... convertirAValoresAbsolutos_Por_NC_ND');
+
       //****************************************** */
       //***************SOLES******************** */
       definicion_CTX_F_B_NC_ND.baseImponiblePEN = definicion_CTX_F_B_NC_ND.baseImponiblePEN.$numberDecimal
@@ -603,7 +594,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       definicion_CTX_F_B_NC_ND.referenciaSerie = '';
       definicion_CTX_F_B_NC_ND.referenciaNumero = 0;
     }
-    console.log('paso_______::::::______T', definicion_CTX_F_B_NC_ND);
+
     // const aGrabar =
     const ventaGRABADA = await inVenta({
       idGrupoEmpresarial: definicion_CTX_F_B_NC_ND.idGrupoEmpresarial,
@@ -759,7 +750,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
     } else {
       grabo.value = false;
     }
-    console.log('paso_______::::::______ grabo.value', grabo.value);
 
     //OCULTAR MENSAJE DE GRABACION
     setTimeout(() => (pasoProcesoGrabacion.value = false), 3000);
@@ -797,16 +787,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
             ctx_index_venta.mostrarPanelVenta = false;
           })}
         />
-        <ImgButton
-          src={images.see}
-          alt="Icono de ver"
-          height={16}
-          width={16}
-          title="ver"
-          onClick={$(() => {
-            console.log('definicion_CTX_F_B_NC_ND', definicion_CTX_F_B_NC_ND);
-          })}
-        />
+        <ImgButton src={images.see} alt="Icono de ver" height={16} width={16} title="ver" onClick={$(() => {})} />
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.8rem' }}>Venta</h3>
@@ -858,9 +839,9 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                     const idx = (e.target as HTMLSelectElement).selectedIndex;
                     const rere = e.target as HTMLSelectElement;
                     const elOption = rere[idx];
-                    console.log('elOption', elOption.id);
+
                     //
-                    // console.log('idx', idx.item.arguments(id));
+                    //
                     // const csd = (e.target as HTMLSelectElement).current[idx];
                     // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
                     definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = elOption.id;
@@ -988,7 +969,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                       const idx = (e.target as HTMLSelectElement).selectedIndex;
                       const elSelect = e.target as HTMLSelectElement;
                       const elOption = elSelect[idx];
-                      console.log('elOption', elOption.id);
+
                       definicion_CTX_F_B_NC_ND.idSerieVenta = elOption.id;
                       definicion_CTX_F_B_NC_ND.serie = (e.target as HTMLSelectElement).value;
                       document.getElementById('in_Fecha')?.focus();
@@ -1181,7 +1162,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   // onChange={changeMetodoPago}
                   onChange$={() => {
                     definicion_CTX_F_B_NC_ND.verCuotasCredito = !definicion_CTX_F_B_NC_ND.verCuotasCredito;
-                    console.log('definicion_CTX_F_B_NC_ND.metodoPago', definicion_CTX_F_B_NC_ND.metodoPago);
                   }}
                   style={definicion_CTX_F_B_NC_ND.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
                 >
@@ -1442,9 +1422,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                       }
 
                       if (index + 1 === definicion_CTX_F_B_NC_ND.itemsVenta.length) {
-                        console.log(subTOTAL);
-                        console.log(igvTOTAL);
-                        console.log(sumaTOTAL);
                         fijarMontos({ subTOTAL, igvTOTAL, sumaTOTAL });
                       }
                       return (
@@ -1499,14 +1476,14 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                               onChange$={(e) => {
                                 // const iv = itemsVentaK[index];
                                 const precio = parseFloat((e.target as HTMLInputElement).value);
-                                console.log('el precio modificado', precio);
+
                                 if (definicion_CTX_F_B_NC_ND.enDolares) {
                                   iTVen.precioUSD = precio;
                                   iTVen.ventaUSD = iTVen.cantidad * iTVen.precioUSD;
                                   iTVen.ventaPEN = iTVen.cantidad * iTVen.precioPEN;
                                 } else {
                                   iTVen.precioPEN = precio;
-                                  console.log('el precio modificado, cant', iTVen.precioPEN, iTVen.cantidad);
+
                                   iTVen.ventaPEN =
                                     (iTVen.cantidad ? iTVen.cantidad : iTVen.cantidad.$numberDecimal) *
                                     (iTVen.precioPEN ? iTVen.precioPEN : iTVen.precioPEN.$numberDecimal);

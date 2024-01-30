@@ -1,8 +1,8 @@
 const API = import.meta.env.VITE_URL + '/api/vehiculo';
 
 export const getMarcasVehiculares = async (parametros) => {
-  console.log('//////api////////////******************get en getMarcasVehiculares');
-  console.log('parametros getMarcasVehiculares', parametros);
+  // console.log('//////api////////////******************get en getMarcasVehiculares');
+  // console.log('parametros getMarcasVehiculares', parametros);
   const res = await fetch(API + '/obtenerMarcasVehiculares', {
     method: 'POST',
     headers: {
@@ -14,8 +14,8 @@ export const getMarcasVehiculares = async (parametros) => {
 };
 
 export const getModelosVehiculares = async (parametros) => {
-  console.log('//////api////////////******************get en getModelosVehiculares');
-  console.log('parametros getModelosVehiculares', parametros);
+  // console.log('//////api////////////******************get en getModelosVehiculares');
+  // console.log('parametros getModelosVehiculares', parametros);
   const res = await fetch(API + '/obtenerModelosVehiculares', {
     method: 'POST',
     headers: {
@@ -27,8 +27,8 @@ export const getModelosVehiculares = async (parametros) => {
 };
 
 export const inUpVehiculo = async (parametros) => {
-  console.log('//////api////////////******************get en inUpVehiculo');
-  console.log('parametros inUpVehiculo', parametros);
+  // console.log('//////api////////////******************get en inUpVehiculo');
+  // console.log('parametros inUpVehiculo', parametros);
   const res = await fetch(API + '/inUpVehiculo', {
     method: 'POST',
     headers: {
@@ -40,8 +40,8 @@ export const inUpVehiculo = async (parametros) => {
 };
 
 export const inUpVehiculoMarca = async (parametros) => {
-  console.log('//////api////////////******************get en inUpVehiculoMarca');
-  console.log('parametros inUpVehiculoMarca', parametros);
+  // console.log('//////api////////////******************get en inUpVehiculoMarca');
+  // console.log('parametros inUpVehiculoMarca', parametros);
   const res = await fetch(API + '/inUpVehiculoMarca', {
     method: 'POST',
     headers: {
@@ -53,8 +53,8 @@ export const inUpVehiculoMarca = async (parametros) => {
 };
 
 export const inUpVehiculoMarcaModelo = async (parametros) => {
-  console.log('//////api////////////******************get en inUpVehiculoMarcaModelo');
-  console.log('parametros inUpVehiculoMarcaModelo', parametros);
+  // console.log('//////api////////////******************get en inUpVehiculoMarcaModelo');
+  // console.log('parametros inUpVehiculoMarcaModelo', parametros);
   const res = await fetch(API + '/inUpVehiculoMarcaModelo', {
     method: 'POST',
     headers: {

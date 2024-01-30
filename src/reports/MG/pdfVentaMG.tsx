@@ -217,8 +217,8 @@ function pdfVentaMG(venta: any) {
                       venta.igv.$numberDecimal +
                       '%: ' +
                       (venta.moneda === 'PEN'
-                        ? formatearMonedaPEN(venta.montoIGVPEN.$numberDecimal)
-                        : 'USD ' + formatearMonedaUSD(venta.montoIGVUSD.$numberDecimal)),
+                        ? formatearMonedaPEN(venta.igvPEN.$numberDecimal)
+                        : 'USD ' + formatearMonedaUSD(venta.igvUSD.$numberDecimal)),
                     style: 'textoBoldRight',
                   },
                 ],
@@ -237,8 +237,8 @@ function pdfVentaMG(venta: any) {
               {
                 text:
                   venta.moneda === 'PEN'
-                    ? literal(venta.montoTotalPEN.$numberDecimal, 'PEN')
-                    : literal(venta.montoTotalUSD.$numberDecimal, 'USD'),
+                    ? literal(venta.totalPEN.$numberDecimal, 'PEN')
+                    : literal(venta.totalUSD.$numberDecimal, 'USD'),
                 style: 'textoBold',
               },
             ],
@@ -255,13 +255,13 @@ function pdfVentaMG(venta: any) {
                     text:
                       'Total gravadas: ' +
                       (venta.moneda === 'PEN'
-                        ? formatearMonedaPEN(venta.montoSubTotalPEN.$numberDecimal)
-                        : 'USD ' + formatearMonedaUSD(venta.montoSubTotalUSD.$numberDecimal)) +
+                        ? formatearMonedaPEN(venta.baseImponiblePEN.$numberDecimal)
+                        : 'USD ' + formatearMonedaUSD(venta.baseImponibleUSD.$numberDecimal)) +
                       '\n' +
                       'Importe total de la venta: ' +
                       (venta.moneda === 'PEN'
-                        ? formatearMonedaPEN(venta.montoTotalPEN.$numberDecimal)
-                        : 'USD ' + formatearMonedaUSD(venta.montoTotalUSD.$numberDecimal)),
+                        ? formatearMonedaPEN(venta.totalPEN.$numberDecimal)
+                        : 'USD ' + formatearMonedaUSD(venta.totalUSD.$numberDecimal)),
                     style: 'textoBoldRight',
                   },
                 ],

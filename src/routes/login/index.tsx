@@ -12,8 +12,8 @@ import Spinner from '~/components/system/spinner';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
   // paginaInicioDelSistema: '/compra',
-  // paginaInicioDelSistema: '/venta',
-  paginaInicioDelSistema: '/inAlmacen',
+  paginaInicioDelSistema: '/venta',
+  // paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',
@@ -63,11 +63,11 @@ export default component$(() => {
   useStylesScoped$(styles);
 
   // const serverFuncion = server$((requestEvent: RequestEvent) => {
-  //   return console.log(requestEvent.env.get('URL'));
+  //   return
   // });
-  // console.log('......................env', import.meta.url);
-  // console.log('......................env PUBLIC_URL', import.meta.env.PUBLIC_URL);
-  // console.log('......................env URL:', requestEvent.env.get);
+  //
+  //
+  //
 
   const navegarA = useNavigate();
 
@@ -98,10 +98,10 @@ export default component$(() => {
   //     idEmpresa: parametrosGlobales.idEmpresa,
   //     bandera: 'Ventas',
   //   });
-  //   console.log('losPeri', losPeri);
+  //
   //   losPeriodosCargados.value = losPeri.data;
-  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-  //   // console.log('a cargar periodos');
+  //
+  //   //
   // });
 
   // useTask$(({ track }) => {
@@ -115,24 +115,19 @@ export default component$(() => {
   const analisisDeLogeo = $(async (logeo: any) => {
     localStorage.setItem('ID', logeo._id);
     if (typeof logeo.sucursalesAdjuntas === 'undefined' || logeo.sucursalesAdjuntas.length === 0) {
-      console.log('/ningunaEmpresa/ningunaEmpresa/ningunaEmpresa/ningunaEmpresa');
       navegarA('/ningunaEmpresa');
     } else {
       if (logeo.sucursalesAdjuntas.length === 1) {
-        console.log('...//UNA EMPRESA');
         //UNA EMPRESA
 
         if (logeo.sucursalesAdjuntas[0].todasLasSucursales === true) {
-          console.log('...//UNA EMPRESA  todasLasSucursales === true');
           if (
             typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
             logeo.sucursalesAdjuntas[0].sucursales.length === 0
           ) {
-            console.log('/ningunaSucursal/ningunaSucursal/ningunaSucursal/ningunaSucursal');
             navegarA('/ningunaSucursal');
           } else {
             if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
-              console.log('...//UNA SUCURSAL');
               //UNA SUCURSAL
               let activo = await getActivoGEEMPSUCUR({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -140,7 +135,7 @@ export default component$(() => {
                 idSucursal: logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal,
               });
               activo = activo.data;
-              console.log('activo', activo);
+
               if (!activo[0].activoGE) {
                 alert(
                   `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
@@ -203,14 +198,13 @@ export default component$(() => {
                 }
               }
             } else {
-              console.log('...//VARIAS SUCURSALES');
               //VARIAS SUCURSALES
               let activo = await getActivoGEEMP({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
                 idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
               });
               activo = activo.data;
-              console.log('activo', activo);
+
               if (!activo[0].activoGE) {
                 alert(
                   `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
@@ -245,16 +239,13 @@ export default component$(() => {
             }
           }
         } else {
-          console.log('...//UNA EMPRESA  todasLasSucursales === false');
           if (
             typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
             logeo.sucursalesAdjuntas[0].sucursales.length === 0
           ) {
-            console.log('/ningunaSucursal/ningunaSucursal/ningunaSucursal/ningunaSucursal');
             navegarA('/ningunaSucursal');
           } else {
             if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
-              console.log('...//UNA SUCURSAL');
               //UNA SUCURSAL
               let activo = await getActivoGEEMPSUCUR({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -262,7 +253,7 @@ export default component$(() => {
                 idSucursal: logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal,
               });
               activo = activo.data;
-              console.log('activo', activo);
+
               if (!activo[0].activoGE) {
                 alert(
                   `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
@@ -325,14 +316,13 @@ export default component$(() => {
                 }
               }
             } else {
-              console.log('...//VARIAS SUCURSALES');
               //VARIAS SUCURSALES
               let activo = await getActivoGEEMP({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
                 idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
               });
               activo = activo.data;
-              console.log('activo', activo);
+
               if (!activo[0].activoGE) {
                 alert(
                   `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
@@ -367,7 +357,6 @@ export default component$(() => {
           }
         }
       } else {
-        console.log('...//VARIAS EMPRESA');
         //VARIAS EMPRESA
 
         localStorage.setItem('usuario', logeo.usuario);
@@ -381,7 +370,6 @@ export default component$(() => {
 
   //#region INGRESAR AL SISTEMA
   const enviar = $(async () => {
-    console.log('::::::ingresarAlSistema::::::______');
     if (definicion_CTX_LOGEO.email.trim() === '') {
       alert('Ingrese el email.');
       document.getElementById('in_email_INICIAR')?.focus();
@@ -392,7 +380,6 @@ export default component$(() => {
       document.getElementById('in_contrasena_INICIAR')?.focus();
       return;
     }
-    console.log('::::::_______PASO -> ingresarAlSistema::::::______');
 
     definicion_CTX_LOGEO.mostrarSpinner = true;
     let elLogeo = await getUsuario({
@@ -400,11 +387,9 @@ export default component$(() => {
       clave: definicion_CTX_LOGEO.contrasena.trim(),
     });
     elLogeo = elLogeo.data;
-    console.log('elLogeo', elLogeo);
 
     if (elLogeo.length === 1) {
       if (elLogeo[0].activo) {
-        console.log('analisisDeLogeo');
         analisisDeLogeo(elLogeo[0]);
       } else {
         definicion_CTX_LOGEO.mostrarSpinner = false;
@@ -434,15 +419,15 @@ export default component$(() => {
     //     //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     //     //   idEmpresa: parametrosGlobales.idEmpresa,
     //     // });
-    //     // console.log('losPeri', losPeri);
+    //     //
     //     // parametrosGlobales.periodos = losPeri.data;
-    //     // console.log(' losPeriodosCargados.value', parametrosGlobales.periodos);
+    //     //
 
     //     // parametrosGlobales.periodosTOS = 'miguelito';
     //     //
-    //     console.log('el res', Kas.data);
+    //
     //     if (Kas.data.length === 1) {
-    //       console.log('Ingreso al sistema.');
+    //
     //       // navigate('/venta');
     //       // navigate('/ordenServicio');
     //       // navigate('/inAlmacen');
@@ -452,7 +437,7 @@ export default component$(() => {
     //     }
     //   });
     //   registro.catch((err) => {
-    //     console.log('el err', err);
+    //
     //   });
   });
   //#endregion INGRESAR AL SISTEMA
@@ -515,7 +500,7 @@ export default component$(() => {
               type="button"
               value="Logearse"
               onClick$={() => {
-                // console.log('onClick');
+                //
                 enviar();
                 // serverFuncion();
                 // const usu = document.getElementById('inputUsuario')?.nodeValue;

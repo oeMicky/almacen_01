@@ -2,8 +2,8 @@ const API = import.meta.env.VITE_URL + '/api/venta';
 // const API = 'https://backendalmacen-production.up.railway.app/api/venta';
 
 export const getSeriesVentasActivasSegunTipo = async (parametros) => {
-  console.log('//////api////////////******************obtener a getSeriesVentasActivasSegunTipo');
-  console.log('parametros getSeriesVentasActivasSegunTipo', parametros);
+  // console.log('//////api////////////******************obtener a getSeriesVentasActivasSegunTipo');
+  // console.log('parametros getSeriesVentasActivasSegunTipo', parametros);
   const res = await fetch(API + '/obtenerSeriesVentasActivasSegunTipo', {
     method: 'POST',
     headers: {
@@ -15,8 +15,8 @@ export const getSeriesVentasActivasSegunTipo = async (parametros) => {
 };
 
 export const getSeriesFacturaActivas = async (parametros) => {
-  console.log('//////api////////////******************obtener a getSeriesFactura');
-  console.log('parametros getSeriesFacturaActivas', parametros);
+  // console.log('//////api////////////******************obtener a getSeriesFactura');
+  // console.log('parametros getSeriesFacturaActivas', parametros);
   const res = await fetch(API + '/obtenerSeriesFacturasActivas', {
     method: 'POST',
     headers: {
@@ -28,8 +28,8 @@ export const getSeriesFacturaActivas = async (parametros) => {
 };
 
 export const getSeriesBoletaActivas = async (parametros) => {
-  console.log('//////api////////////******************obtener a getSeriesBoletaActivas');
-  console.log('parametros getSeriesBoletaActivas', parametros);
+  // console.log('//////api////////////******************obtener a getSeriesBoletaActivas');
+  // console.log('parametros getSeriesBoletaActivas', parametros);
   const res = await fetch(API + '/obtenerSeriesBoletasActivas', {
     method: 'POST',
     headers: {
@@ -41,8 +41,8 @@ export const getSeriesBoletaActivas = async (parametros) => {
 };
 
 export const getSeriesNotaCreditoActivas = async (parametros) => {
-  console.log('//////api////////////******************obtener a getSeriesNotaCreditoActivas');
-  console.log('parametros getSeriesNotaCreditoActivas', parametros);
+  // console.log('//////api////////////******************obtener a getSeriesNotaCreditoActivas');
+  // console.log('parametros getSeriesNotaCreditoActivas', parametros);
   const res = await fetch(API + '/obtenerSeriesNotasCreditoActivas', {
     method: 'POST',
     headers: {
@@ -54,8 +54,8 @@ export const getSeriesNotaCreditoActivas = async (parametros) => {
 };
 
 export const getSeriesNotaDebitoActivas = async (parametros) => {
-  console.log('//////api////////////******************obtener a getSeriesNotaDebitoActivas');
-  console.log('parametros getSeriesNotaDebitoActivas', parametros);
+  // console.log('//////api////////////******************obtener a getSeriesNotaDebitoActivas');
+  // console.log('parametros getSeriesNotaDebitoActivas', parametros);
   const res = await fetch(API + '/obtenerSeriesNotasDebitoActivas', {
     method: 'POST',
     headers: {
@@ -67,8 +67,8 @@ export const getSeriesNotaDebitoActivas = async (parametros) => {
 };
 
 export const getIgvVenta = async (parametros) => {
-  console.log('//////api////////////******************obtener a getIgvVenta');
-  console.log('parametros getIgvVenta', parametros);
+  // console.log('//////api////////////******************obtener a getIgvVenta');
+  // console.log('parametros getIgvVenta', parametros);
   const res = await fetch(API + '/obtenerIgvVenta', {
     method: 'POST',
     headers: {
@@ -80,8 +80,8 @@ export const getIgvVenta = async (parametros) => {
 };
 
 export const inVenta = async (parametros) => {
-  console.log('//////api////////////******************obtener a inVenta');
-  console.log('parametros inVenta', parametros);
+  // console.log('//////api////////////******************obtener a inVenta');
+  // console.log('parametros inVenta', parametros);
   const res = await fetch(API + '/inVenta', {
     method: 'POST',
     headers: {
@@ -93,8 +93,8 @@ export const inVenta = async (parametros) => {
 };
 
 export const getVentasPorFechas = async (parametros) => {
-  console.log('//////api////////////******************obtener a getVentasPorFechas');
-  console.log('parametros getVentasPorFecha', parametros);
+  // console.log('//////api////////////******************obtener a getVentasPorFechas');
+  // console.log('parametros getVentasPorFecha', parametros);
   const res = await fetch(API + '/obtenerVentasPorFechas', {
     method: 'POST',
     headers: {

@@ -3,7 +3,7 @@ import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { images } from '~/assets';
 // import styles from '../../components/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
-import ImgButton from '../system/imgButton';
+// import ImgButton from '../system/imgButton';
 // import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
 // import pdfVentaMG from '~/reports/pdfVentaMG';
 import pdfVentaMG from '~/reports/MG/pdfVentaMG';
@@ -17,7 +17,7 @@ import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
 // }
 
 export default component$((props: { buscarVentas: number; parametrosBusqueda: any }) => {
-  console.log('🎫🎫🎫🎫🎫🎫');
+  // console.log('🎫🎫🎫🎫🎫🎫');
   useStylesScoped$(style);
 
   //#region CONTEXTO
@@ -32,9 +32,9 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
 
   //#region VER PDF
   const verPDF = $((venta: any) => {
-    console.log('a pdfFactura98', venta.untrackedValue); //venta !== null &&
+    // console.log('a pdfFactura98', venta.untrackedValue); //venta !== null &&
     if (typeof venta.untrackedValue !== 'undefined') {
-      console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', venta.untrackedValue);
+      // console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', venta.untrackedValue);
       // pdfFactura98(venta.untrackedValue);
       pdfVentaMG(venta.untrackedValue);
     }
@@ -42,7 +42,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
 
   useTask$(async ({ track }) => {
     track(() => clickPDF.value);
-    console.log('a useTask useTask useTask useTask:', clickPDF.value);
+    // console.log('a useTask useTask useTask useTask:', clickPDF.value);
     // console.log('a useTask useTask useTask useTask 2:', clickPDF.value + 1);
     await verPDF(ventaSeleccionada);
   });
@@ -50,10 +50,10 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
 
   //#region BUSCANDO REGISTROS
   const lasVentas = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
+    // console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
     track(() => props.buscarVentas.valueOf());
 
-    console.log('props.buscarVentas.valueOf', props.buscarVentas.valueOf());
+    // console.log('props.buscarVentas.valueOf', props.buscarVentas.valueOf());
     // if (props.buscarVentas.valueOf()) {
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
@@ -94,7 +94,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
     // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
     // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
     // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-    console.log('first xml');
+    // console.log('first xml');
   });
   //#endregion CREAR Y DOWNLOAD XML
 
@@ -118,7 +118,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
           const { data } = ventas; //{ status, data, message }
           const misVentas: IVenta[] = data;
           ctx_index_venta.mostrarSpinner = false;
-          console.log(misVentas);
+          // console.log(misVentas);
           // props.buscarVentas = false;
           return (
             <>
@@ -178,33 +178,34 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                               {value.metodoPago}
                             </td>
                             <td data-label="Acciones" class="acciones">
-                              <ImgButton
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
                                 src={images.pdf}
-                                alt="icono de pdf"
+                                title="Ver pdf"
                                 height={12}
                                 width={12}
-                                title={`Ver pdf ${value._id}`}
-                                // onClick={verPDF(value)}
-                                // onClick={clikeado.value ? verPDF(value) : ''}
-                                onClick={$(() => {
+                                style={{ margin: '2px' }}
+                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
                                   ventaSeleccionada.value = value;
                                   clickPDF.value++;
-                                })}
+                                }}
                               />
-                              <ImgButton
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
                                 src={images.xml}
-                                alt="icono de xml"
+                                title="Ver xml"
                                 height={12}
                                 width={12}
-                                title={`Ver xml ${value._id}`}
-                                // onClick={verPDF(value)}
-                                // onClick={clikeado.value ? verPDF(value) : ''}
-                                onClick={$(() => {
+                                style={{ margin: '2px' }}
+                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
                                   ventaSeleccionada.value = value;
                                   createAndDownloadFile(value.serie + '-' + value.numero);
                                   console.log('xml', ventaSeleccionada.value);
-                                  // clickPDF.value = clickPDF.value + 1;
-                                })}
+                                }}
                               />
                             </td>
                           </tr>

@@ -87,7 +87,6 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
       return;
     }
     buscarPersona.value++;
-    console.log('🧵🧵🧵🧵🧵');
   });
   //#endregion BUSCAR PERSONAS
 
@@ -179,6 +178,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 onChange$={(e) => {
                   definicion_CTX_BUSCAR_PERSONA.buscarPor = (e.target as HTMLSelectElement).value;
                   document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
+                  // document.getElementById('in_conceptoABuscar_PERSONA').select();
                 }}
               >
                 <option value={'DNI / RUC'} selected={definicion_CTX_BUSCAR_PERSONA.buscarPor === 'DNI / RUC'}>
@@ -205,17 +205,17 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // onFocusout$={() => localizarPersonas()}
                 onChange$={(e) => {
                   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
-                  console.log('onChange---', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                  // console.log('onChange---', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 }}
                 onKeyDown$={(e) => {
-                  console.log('🚐🚐🚐🚐🚌🚐🚐🚌🚌🚐🚐🚐🚐🚌🚐🚐first', e);
+                  // console.log('🚐🚐🚐🚐🚌🚐🚐🚌🚌🚐🚐🚐🚐🚌🚐🚐first', e);
 
                   if (e.key === 'Escape') {
-                    console.log('🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧first', e);
+                    // console.log('🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧first', e);
                     document.getElementById('se_buscarPor_PERSONA')?.focus();
                   }
                   if (e.key === 'Enter') {
-                    console.log('⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽first', e);
+                    // console.log('⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽first', e);
                     document.getElementById('in_BuscarPersona')?.focus();
                   }
                 }}
@@ -252,7 +252,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 height={16}
                 width={16}
                 style={{ margin: '2px' }}
-                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                 onClick$={() => {
                   definicion_CTX_BUSCAR_PERSONA.pP = [];
                   definicion_CTX_BUSCAR_PERSONA.mostrarPanelNewEditPersona = true;

@@ -32,7 +32,7 @@ import Spinner from '~/components/system/spinner';
 // }
 
 // export async function getVentasPorFechas(parameBusqueda: any, controller?: AbortController): Promise<string[]> {
-//   console.log('FETCH', `http://localhost:4000/api/venta/obtenerVentasPorFechas`);
+//
 //   const resp = await fetch(`http://localhost:4000/api/venta/obtenerVentasPorFechas`, {
 //     method: 'POST',
 //     headers: {
@@ -41,7 +41,7 @@ import Spinner from '~/components/system/spinner';
 //     body: JSON.stringify(parameBusqueda),
 //     signal: controller?.signal,
 //   });
-//   console.log('FETCH resolved');
+//
 //   const json = await resp.json();
 //   return Array.isArray(json) ? json.map((repo: { name: string }) => repo.name) : Promise.reject(json);
 // }
@@ -50,7 +50,7 @@ export const CTX_INDEX_VENTA = createContextId<any>('index_venta');
 
 export default component$(() => {
   useStylesScoped$(style);
-  console.log('🎟🎟🎟🎨🎨🎨');
+  //
 
   //#region DEFINICION CTX_INDEX_VENTA
   const definicion_CTX_INDEX_VENTA = useStore({
@@ -113,15 +113,15 @@ export default component$(() => {
 
   //   pom.click();
 
-  //   console.log('first xml');
+  //
   // });
 
   //TAREA: Buscar ventas
   // useTask$(({ track }) => {
   //   track(() => buscarVentas.value);
-  //   console.log('ir buscarVentas ... ir buscarVentas ... ir buscarVentas ... ir buscarVentas ...');
+  //
   //   if (buscarVentas.value > 0) {
-  //     console.log('buscando Ventas ... buscando Ventas ... buscando Ventas ... buscando Ventas ...');
+  //
   //   }
   // });
 
@@ -132,10 +132,10 @@ export default component$(() => {
   //     idEmpresa: parametrosGlobales.idEmpresa,
   //     bandera: 'Ventas',
   //   });
-  //   console.log('losPeri', losPeri);
+  //
   //   losPeriodosCargados.value = losPeri.data;
-  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-  //   // console.log('a cargar periodos');
+  //
+  //   //
   // });
 
   // useTask$(({ track }) => {
@@ -203,7 +203,7 @@ export default component$(() => {
                   document.getElementById('fechaDesde')?.focus();
                   return;
                 }
-                console.log('click en lupa: parametrosBusqueda ', parametrosBusqueda);
+                
 
                 buscarVentas.value++;
               })}
@@ -214,7 +214,7 @@ export default component$(() => {
         <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
           {/* <button
             onClick$={() => {
-              console.log('ctx_docs_orden_servicio.compania', ctx_docs_orden_servicio.compania);
+              
             }}
           >
             compañia
@@ -237,9 +237,9 @@ export default component$(() => {
                 idEmpresa: parametrosGlobales.idEmpresa,
               });
               elIgv = elIgv.data;
-              console.log('elIgv', elIgv);
+              //
               igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-              console.log('igv.value::', igv.value);
+              //
               definicion_CTX_INDEX_VENTA.mostrarPanelVenta = true;
             })}
           />
@@ -252,10 +252,9 @@ export default component$(() => {
             registroTEXT={'periodo'}
             seleccione={'-- Seleccione periodo --'}
             onChange={$(() => {
-              console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
               const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
               const elIdx = elSelec.selectedIndex;
-              console.log('?', elIdx, elSelec[elIdx].id);
+
               periodo.idPeriodo = elSelec[elIdx].id;
               if (periodo.idPeriodo === '') {
                 periodo.periodo = '';
@@ -263,8 +262,8 @@ export default component$(() => {
                 periodo.periodo = elSelec.value;
                 // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                 parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-                // console.log('💨💨💨💨💨💨first', periodo);
-                // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+                //
+                //
                 buscarVentas.value++;
 
                 definicion_CTX_INDEX_VENTA.mostrarSpinner = true;

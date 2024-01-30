@@ -1,8 +1,8 @@
 const API = import.meta.env.VITE_URL + '/api/egresosDeAlmacen';
 
 export const loadMotivosEgresoDeAlmacen = async (parametros) => {
-  console.log('//////api////////////****************** en loadMotivosEgresoDeAlmacen');
-  console.log('parametros loadMotivosEgresoDeAlmacen', parametros);
+  // console.log('//////api////////////****************** en loadMotivosEgresoDeAlmacen');
+  // console.log('parametros loadMotivosEgresoDeAlmacen', parametros);
   const res = await fetch(API + '/listarMotivosEgresoDeAlmacen', {
     method: 'POST',
     headers: {
@@ -14,8 +14,8 @@ export const loadMotivosEgresoDeAlmacen = async (parametros) => {
 };
 
 export const inEgresoDeAlmacen = async (parametros) => {
-  console.log('//////api////////////****************** en inEgresoDeAlmacen');
-  console.log('parametros inEgresoDeAlmacen', parametros);
+  // console.log('//////api////////////****************** en inEgresoDeAlmacen');
+  // console.log('parametros inEgresoDeAlmacen', parametros);
   const res = await fetch(API + '/inEgresoDeAlmacen', {
     method: 'POST',
     headers: {

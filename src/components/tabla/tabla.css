@@ -70,6 +70,10 @@ tfoot td {
     /* background: pink; */
     text-align: right;
 }
+.accionesLeft {
+    /* background: pink; */
+    text-align: left;
+}
 
 /**********RESPONSIVE*********/
 /**********CHROME=>min-width:750px*********/
@@ -143,6 +147,11 @@ tfoot td {
         text-align: right;
     }
    .acciones {
+        /* border: 5px solid blue;
+        background:yellow;  */
+        text-align: center;
+    }
+   .accionesLeft {
         /* border: 5px solid blue;
         background:yellow;  */
         text-align: center;

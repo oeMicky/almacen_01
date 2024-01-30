@@ -290,59 +290,55 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       document.getElementById('bu_Add_Mercaderia')?.focus();
       return;
     }
-    try {
-      const inAlma = await inIngresoAAlmacen({
-        idIngresoAAlmacen: definicion_CTX_IN_ALMACEN._id,
-        idGrupoEmpresarial: definicion_CTX_IN_ALMACEN.idGrupoEmpresarial,
-        idEmpresa: definicion_CTX_IN_ALMACEN.idEmpresa,
-        idSucursal: definicion_CTX_IN_ALMACEN.idSucursal,
-        idAlmacen: definicion_CTX_IN_ALMACEN.idAlmacen,
-        idPeriodo: definicion_CTX_IN_ALMACEN.idPeriodo,
-        periodo: definicion_CTX_IN_ALMACEN.periodo,
 
-        ruc: definicion_CTX_IN_ALMACEN.ruc,
-        empresa: definicion_CTX_IN_ALMACEN.empresa,
-        direccion: definicion_CTX_IN_ALMACEN.direccion,
+    const inAlma = await inIngresoAAlmacen({
+      idIngresoAAlmacen: definicion_CTX_IN_ALMACEN._id,
+      idGrupoEmpresarial: definicion_CTX_IN_ALMACEN.idGrupoEmpresarial,
+      idEmpresa: definicion_CTX_IN_ALMACEN.idEmpresa,
+      idSucursal: definicion_CTX_IN_ALMACEN.idSucursal,
+      idAlmacen: definicion_CTX_IN_ALMACEN.idAlmacen,
+      idPeriodo: definicion_CTX_IN_ALMACEN.idPeriodo,
+      periodo: definicion_CTX_IN_ALMACEN.periodo,
 
-        idMotivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen,
-        motivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen,
-        idDocumento: definicion_CTX_IN_ALMACEN.idDocumento,
+      ruc: definicion_CTX_IN_ALMACEN.ruc,
+      empresa: definicion_CTX_IN_ALMACEN.empresa,
+      direccion: definicion_CTX_IN_ALMACEN.direccion,
 
-        // serie: definicion_CTX_IN_ALMACEN.serie,
-        // numero: definicion_CTX_IN_ALMACEN.numero,
-        FISMA: definicion_CTX_IN_ALMACEN.FISMA,
-        reingreso: definicion_CTX_IN_ALMACEN.reingreso,
+      idMotivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen,
+      motivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen,
+      idDocumento: definicion_CTX_IN_ALMACEN.idDocumento,
 
-        idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
-        elIgv: definicion_CTX_IN_ALMACEN.elIgv,
+      // serie: definicion_CTX_IN_ALMACEN.serie,
+      // numero: definicion_CTX_IN_ALMACEN.numero,
+      FISMA: definicion_CTX_IN_ALMACEN.FISMA,
+      reingreso: definicion_CTX_IN_ALMACEN.reingreso,
 
-        idRemitente: definicion_CTX_IN_ALMACEN.idRemitente,
-        codigoTipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad,
-        tipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad,
-        numeroIdentidad: definicion_CTX_IN_ALMACEN.numeroIdentidad,
-        razonSocialNombre: definicion_CTX_IN_ALMACEN.razonSocialNombre,
+      idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
+      elIgv: definicion_CTX_IN_ALMACEN.elIgv,
 
-        documentosAdjuntos: definicion_CTX_IN_ALMACEN.documentosAdjuntos,
-        itemsMercaderias: definicion_CTX_IN_ALMACEN.itemsMercaderias,
+      idRemitente: definicion_CTX_IN_ALMACEN.idRemitente,
+      codigoTipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad,
+      tipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad,
+      numeroIdentidad: definicion_CTX_IN_ALMACEN.numeroIdentidad,
+      razonSocialNombre: definicion_CTX_IN_ALMACEN.razonSocialNombre,
 
-        montoSubTotalPEN: definicion_CTX_IN_ALMACEN.montoSubTotalPEN,
-        montoIGVPEN: definicion_CTX_IN_ALMACEN.montoIGVPEN,
-        montoTotalPEN: definicion_CTX_IN_ALMACEN.montoTotalPEN,
+      documentosAdjuntos: definicion_CTX_IN_ALMACEN.documentosAdjuntos,
+      itemsMercaderias: definicion_CTX_IN_ALMACEN.itemsMercaderias,
 
-        usuario: parametrosGlobales.usuario,
-      });
+      montoSubTotalPEN: definicion_CTX_IN_ALMACEN.montoSubTotalPEN,
+      montoIGVPEN: definicion_CTX_IN_ALMACEN.montoIGVPEN,
+      montoTotalPEN: definicion_CTX_IN_ALMACEN.montoTotalPEN,
 
-      if (inAlma.status === 400) {
-        alert('Falla al registrar la inAlmacen. ' + inAlma.message);
-        return;
-      }
+      usuario: parametrosGlobales.usuario,
+    });
 
-      ctx_index_in_almacen.grabo_InAlmacen = true;
-      ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
-    } catch (error) {
-      console.log('el error', error);
-      // return res.status(400).json({ status: 400, message: error.message + ' /inUpEvento' });
+    if (inAlma.status === 400) {
+      alert('Falla al registrar la inAlmacen. ' + inAlma.message);
+      return;
     }
+
+    ctx_index_in_almacen.grabo_InAlmacen = true;
+    ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
   });
   //#endregion REGISTRAR_INGRESO
 

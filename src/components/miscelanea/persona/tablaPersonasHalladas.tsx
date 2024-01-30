@@ -23,54 +23,54 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
   switch (props.contexto) {
     case 'orden servicio':
       ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
-      console.log('swicth.......useContext(CTX_NEW_EDIT_ORDEN_SERVICIO)');
+      // console.log('swicth.......useContext(CTX_NEW_EDIT_ORDEN_SERVICIO)');
       if (props.rol === 'cliente') {
         ctx_rol = useContext(CTX_CLIENTE_OS);
-        console.log('swicth.......useContext(CTX_CLIENTE_OS)');
+        // console.log('swicth.......useContext(CTX_CLIENTE_OS)');
       }
       break;
     case 'venta':
       ctx = useContext(CTX_ADD_VENTA);
-      console.log('swicth.......useContext(CTX_ADD_VENTA)');
+      // console.log('swicth.......useContext(CTX_ADD_VENTA)');
       if (props.rol === 'cliente') {
         ctx_rol = useContext(CTX_CLIENTE_VENTA);
-        console.log('swicth.......useContext(CTX_CLIENTE_VENTA)');
+        // console.log('swicth.......useContext(CTX_CLIENTE_VENTA)');
       }
       break;
     case 'cotizacion':
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
-      console.log('swicth.......useContext(CTX_NEW_EDIT_COTIZACION)');
+      // console.log('swicth.......useContext(CTX_NEW_EDIT_COTIZACION)');
       if (props.rol === 'cliente') {
         ctx_rol = useContext(CTX_CLIENTE_COTIZACION);
-        console.log('swicth.......useContext(CTX_CLIENTE_COTIZACION)');
+        // console.log('swicth.......useContext(CTX_CLIENTE_COTIZACION)');
       }
       break;
     case 'new_in_almacen':
       ctx = useContext(CTX_NEW_IN_ALMACEN);
-      console.log('swicth.......useContext(CTX_NEW_IN_ALMACEN)');
+      // console.log('swicth.......useContext(CTX_NEW_IN_ALMACEN)');
       if (props.rol === 'remitente') {
         ctx_rol = useContext(CTX_REMITENTE_IN_ALMACEN);
-        console.log('swicth.......useContext(CTX_REMITENTE_IN_ALMACEN)');
+        // console.log('swicth.......useContext(CTX_REMITENTE_IN_ALMACEN)');
       }
       break;
     case 'new_out_almacen':
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
-      console.log('swicth.......useContext(CTX_NEW_OUT_ALMACEN)');
+      // console.log('swicth.......useContext(CTX_NEW_OUT_ALMACEN)');
       if (props.rol === 'destinatario') {
         ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
-        console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
+        // console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
       }
       if (props.rol === 'cliente') {
         ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
-        console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
+        // console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
       }
       break;
     case 'new_edit_compra':
       ctx = useContext(CTX_NEW_EDIT_COMPRA);
-      console.log('swicth.......useContext(CTX_NEW_EDIT_COMPRA)');
+      // console.log('swicth.......useContext(CTX_NEW_EDIT_COMPRA)');
       if (props.rol === 'proveedor') {
         ctx_rol = useContext(CTX_PROVEEDOR);
-        console.log('swicth.......useContext(CTX_PROVEEDOR)');
+        // console.log('swicth.......useContext(CTX_PROVEEDOR)');
       }
       break;
     case 'buscar_tecnico':
@@ -81,7 +81,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
   const ctx_buscar_persona = useContext(CTX_BUSCAR_PERSONA);
   //#endregion CONTEXTOS
 
-  console.log('props.contexto', props.contexto);
+  // console.log('props.contexto', props.contexto);
   // const ctx = props.contexto === 'COTIZACION' ? useContext(CTX_COTIZACION) : useContext(CTX_VENTA);
 
   //#region BUSCANDO REGISTROS
@@ -91,7 +91,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('ctx_buscar_persona:::...', ctx_buscar_persona);
+    // console.log('ctx_buscar_persona:::...', ctx_buscar_persona);
 
     if (props.soloPersonasNaturales) {
       if (ctx_buscar_persona.buscarPor === 'Nombre / Razón social') {
@@ -182,15 +182,15 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
     <Resource
       value={lasPersonas}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
+        // console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
+        // console.log('onRejected 🍍🍍🍍🍍');
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(personas) => {
-        console.log('onResolved 🍓🍓🍓🍓', personas);
+        // console.log('onResolved 🍓🍓🍓🍓', personas);
         const { data } = personas; //{ status, data, message }
         const misPersonas: IPersona[] = data;
         return (
@@ -218,16 +218,16 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                           <td data-label="Tipo">{tipoDocumentoIdentidad}</td>
                           <td data-label="Número">{numeroIdentidad}</td>
                           <td data-label="R.Soc/Nomb">{razonSocialNombre}</td>
-                          <td data-label="Acciones" class="acciones">
+                          <td data-label="Acciones" class="accionesLeft">
                             <input
                               // id="in_BuscarDetraccion"
                               type="image"
                               src={images.check32}
                               title="Seleccionar persona"
-                              height={14}
-                              width={14}
+                              height={12}
+                              width={12}
                               style={{ margin: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 if (props.contexto === 'new_out_almacen' && props.rol === 'cliente') {
                                   ctx_buscar_persona.pP = persoLocali;
@@ -253,10 +253,10 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                               type="image"
                               src={images.edit}
                               title="Editar persona"
-                              height={14}
-                              width={14}
+                              height={12}
+                              width={12}
                               style={{ margin: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_persona.pP = persoLocali;
                                 ctx_buscar_persona.mostrarPanelNewEditPersona = true;
