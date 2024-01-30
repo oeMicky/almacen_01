@@ -98,13 +98,16 @@ export default component$(
                             </td>
                             {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
                             <td data-label="Acciones" class="acciones">
-                              <ImgButton
-                                src={images.check}
-                                alt="icono de adicionar"
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
+                                src={images.check32}
+                                title="Seleccionar servicio"
                                 height={14}
                                 width={14}
-                                title="Seleccionar servicio"
-                                onClick={$(() => {
+                                style={{ padding: '2px' }}
+                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
                                   console.log('first', requisiciones);
                                   if (requisiciones.length === 0) {
                                     alert(
@@ -122,26 +125,9 @@ export default component$(
                                   if (props.contexto === 'ingreso_a_almacen') {
                                     ctx.mostrarPanelReingresoRequisiciones = true;
                                   }
+                                }}
+                              />
 
-                                  // alert(`La orden de servicio # ...paso`);
-                                  // ctx_servicio_seleccionado._id = _id;
-                                  // ctx_servicio_seleccionado.codigo = codigo;
-                                  // ctx_servicio_seleccionado.descripcion = descripcion;
-                                  // ctx_servicio_seleccionado.precio = precio;
-                                  // ctx_docs_orden_servicio.mostrarPanelSeleccionarServicio0 = false;
-                                  // ctx_docs_orden_servicio.selecciono_Servicio0 = true;
-                                })}
-                              />
-                              <ImgButton
-                                src={images.see}
-                                alt="icono de editar"
-                                height={14}
-                                width={14}
-                                title="Editar servicio"
-                                onClick={$(() => {
-                                  console.log('first', ordServiLocali);
-                                })}
-                              />
                               {/*   <ImgButton
                               src={images.pdf}
                               alt="icono de pdf"

@@ -8,7 +8,7 @@ import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 // import ImgButton from '~/components/system/imgButton';
 import Spinner from '~/components/system/spinner';
-// import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -80,29 +80,29 @@ export default component$(() => {
   //#endregion OBTENER PERIODOS
 
   //#region CREAR Y DOWNLOAD TXT
-  // const createAndDownloadFile = $((nameFile: string, texto: string) => {
-  //   // const xmltext = '<sometag><someothertag></someothertag></sometag>';
-  //   // const texto = 'hOLA A TODOS';
+  const createAndDownloadFile = $((nameFile: string, texto: string) => {
+    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    // const texto = 'hOLA A TODOS';
 
-  //   const filename = nameFile; ///'file.xml';
-  //   const pom = document.createElement('a');
-  //   const bb = new Blob([texto], { type: 'text/plain' });
+    const filename = nameFile; ///'file.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([texto], { type: 'text/plain' });
 
-  //   pom.setAttribute('href', window.URL.createObjectURL(bb));
-  //   // pom.setAttribute('download', filename);
-  //   pom.setAttribute('download', filename + '.txt');
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    // pom.setAttribute('download', filename);
+    pom.setAttribute('download', filename + '.txt');
 
-  //   pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
-  //   pom.draggable = true;
-  //   pom.classList.add('dragout');
+    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
 
-  //   pom.click();
+    pom.click();
 
-  //   // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
-  //   // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
-  //   // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-  //   console.log('first txt');
-  // });
+    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+    console.log('first txt');
+  });
   //#endregion CREAR Y DOWNLOAD TXT
 
   return (
@@ -223,7 +223,7 @@ export default component$(() => {
             }
           })}
         />
-        {/* <ElButton
+        <ElButton
           name="PLE"
           title="Descargar PLE"
           estilos={{ marginLeft: '4px' }}
@@ -329,7 +329,7 @@ export default component$(() => {
             // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
             createAndDownloadFile('elPLE' + periodo.periodo, aExportar);
           })}
-        /> */}
+        />
         {/* <button onClick$={() => console.log('parametrosGlobales', parametrosGlobales)}>paratere</button> */}
         {definicion_CTX_INDEX_COMPRA.mostrarPanelCompra && (
           <div class="modal">

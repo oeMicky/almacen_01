@@ -134,13 +134,16 @@ export default component$(
                               {KARDEXS.length === 0 ? 'No' : 'Si'}
                             </td>
                             <td data-label="Acciones" class="acciones">
-                              <ImgButton
-                                src={images.check}
-                                alt="icono de adicionar"
-                                height={12}
-                                width={12}
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
+                                src={images.check32}
                                 title="Seleccionar mercadería"
-                                onClick={$(() => {
+                                height={14}
+                                width={14}
+                                style={{ padding: '2px' }}
+                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
                                   if (mercaOUTLocali.KARDEXS.length === 0) {
                                     alert('No existe kardex para el producto seleccionado.');
                                     return;
@@ -163,22 +166,23 @@ export default component$(
                                     ctx_buscar_mercaderia_out.mostrarPanelKardexsOUT = true;
                                     console.log('la mercade seleccionada OUT -INDIRECTA', ctx_buscar_mercaderia_out.mM);
                                   }
-                                })}
+                                }}
                               />
-                              <ImgButton
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
                                 src={images.moneyBag}
-                                alt="icono de asignar precio"
-                                height={12}
-                                width={12}
                                 title="Asignar precio"
-                                onClick={$(() => {
+                                height={14}
+                                width={14}
+                                style={{ padding: '2px' }}
+                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
                                   ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
                                   ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = true;
-                                  // console.log('para precio++++++', ctx_seleccionar_mercaderia_out.mM);
-                                  //   ctx_mercaderia_out.mM = mercaOUTLocali;
-                                  //   ctx_docs_orden_servicio.mostrarPanelAsignarPrecio = true;
-                                })}
+                                }}
                               />
+
                               {/* <ImgButton
                                 src={images.see}
                                 alt="icono de asignar precio"

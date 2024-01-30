@@ -401,6 +401,11 @@ export default component$(
                     tipoEquivalencia: equivalencia.tipoEquivalencia,
                     factor: equivalencia.factor,
                     laEquivalencia: equivalencia.laEquivalencia,
+
+                    exonerado: props.mercaOUTSelecci.exonerado,
+                    inafecto: props.mercaOUTSelecci.inafecto,
+                    sujetoAPercepcion: props.mercaOUTSelecci.sujetoAPercepcion,
+                    percepcion: props.mercaOUTSelecci.percepcion,
                   });
               // ctx.mostrarPanelMercaderiaOUTSeleccionada = false;
               if (props.contexto === 'buscar_mercaderia_out') {
@@ -416,25 +421,3 @@ export default component$(
     );
   }
 );
-
-// (alert(`esAlmacen ${props.esAlmacen}`),
-//                   console.log('idAuxiliar', parseInt(elIdAuxiliar())),
-//                   console.log('props.elKardex._id', props.elKardex._id),
-//                   console.log('codigo', props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_'),
-//                   console.log('descripcionEquivalencia', equivalencia.descripcionEquivalencia),
-//                   console.log('cantidad', cantidad.value),
-//                   console.log('unidadEquivalencia', equivalencia.unidadEquivalencia),
-//                   console.log('costo', 0),
-//                   console.log(
-//                     'precioPEN',
-//                     props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal
-//                   ),
-//                   console.log(
-//                     'ventaPEN',
-//                     cantidad.value * props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal
-//                   ),
-//                   console.log('precioUSD', 0),
-//                   console.log('ventaUSD', 0),
-//                   console.log('tipoEquivalencia', equivalencia.tipoEquivalencia),
-//                   console.log('factor', equivalencia.factor),
-//                   console.log('laEquivalencia', equivalencia.laEquivalencia))

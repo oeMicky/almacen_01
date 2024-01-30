@@ -108,39 +108,37 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
                           <td data-label="Tipo">{tipoDocumentoIdentidad}</td>
                           <td data-label="Número">{numeroIdentidad}</td>
                           <td data-label="R.Soc/Nomb">{razonSocialNombre}</td>
-                          <td data-label="Acciones" style={{ textAlign: 'right' }}>
-                            <ImgButton
-                              src={images.check}
-                              alt="icono de selección"
-                              height={12}
-                              width={12}
-                              title={`Seleccionar técnico`}
-                              onClick={$(() => {
+                          <td data-label="Acciones" class="acciones">
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
+                              src={images.check32}
+                              title="Seleccionar técnico"
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 ctx.selecciono_Tecnico = true;
 
                                 ctx.mostrarPanelBuscarTecnico = false;
-                                // ctx_rol._id = _id;
-                                // ctx_rol.codigoTipoDocumentoIdentidad = codigoTipoDocumentoIdentidad;
-                                // ctx_rol.tipoDocumentoIdentidad = tipoDocumentoIdentidad;
-                                // ctx_rol.numeroIdentidad = numeroIdentidad;
-                                // ctx_rol.razonSocialNombre = razonSocialNombre;
-                                // ctx.mostrarPanelBuscarPersona = false;
-                                // ctx.rol_Persona = props.rol;
-                                // ctx.selecciono_Persona = true;
-                              })}
+                              }}
                             />
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.edit}
-                              alt="icono de editar"
-                              height={12}
-                              width={12}
                               title="Editar persona"
-                              onClick={$(() => {
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 // ctx_buscar_persona.pP = persoLocali;
                                 // ctx_buscar_persona.mostrarPanelNewEditPersona = true;
                                 // console.log('ctx', ctx);
                                 // console.log('selecion', persoLocali);
-                              })}
+                              }}
                             />
                           </td>
                         </tr>

@@ -136,10 +136,16 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; equiv
   });
   //#endregion ACTUALIZAR UNIDADES EQUIVALENTES
 
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.laLineaTipo);
+
+    ctx_new_edit_mercaderia_in.grabo_lineaTipo = true;
+  });
+
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 560px)',
         // width: 'auto',
         padding: '1px',
       }}

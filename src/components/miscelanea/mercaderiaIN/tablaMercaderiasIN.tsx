@@ -120,13 +120,16 @@ export default component$(
                               {KARDEXS.length === 0 ? 'No' : 'Si'}
                             </td>
                             <td data-label="Acciones" class="acciones">
-                              <ImgButton
-                                src={images.check}
-                                alt="icono de seleccionar"
-                                height={12}
-                                width={12}
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
+                                src={images.check32}
                                 title="Seleccionar mercadería"
-                                onClick={$(() => {
+                                height={14}
+                                width={14}
+                                style={{ padding: '2px', marginRight: '2px' }}
+                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
                                   console.log('mercaINLocali', mercaINLocali);
                                   if (mercaINLocali.KARDEXS.length === 0) {
                                     ctx_buscar_mercaderia_in.mM = mercaINLocali;
@@ -144,19 +147,22 @@ export default component$(
                                     ctx_buscar_mercaderia_in.mostrarPanelKardexsIN = true;
                                     console.log('la mercaSeleccionada IN INDIRECTA', ctx_buscar_mercaderia_in.mM);
                                   }
-                                })}
+                                }}
                               />
-                              <ImgButton
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
                                 src={images.edit}
-                                alt="icono de editar"
+                                title="Editar mercadería"
                                 height={14}
                                 width={14}
-                                title="Editar mercadería"
-                                onClick={$(() => {
+                                style={{ padding: '2px ', marginRight: '2px' }}
+                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
                                   ctx_buscar_mercaderia_in.mM = mercaINLocali;
                                   ctx_buscar_mercaderia_in.mostrarPanelNewEditMercaderiaIN = true;
                                   console.log('la merca A Editar IN', ctx_buscar_mercaderia_in.mM);
-                                })}
+                                }}
                               />
                             </td>
                           </tr>

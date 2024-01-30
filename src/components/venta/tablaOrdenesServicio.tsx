@@ -95,13 +95,16 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                           <td data-label="Acciones" class="acciones">
                             {props.modoSeleccion ? (
                               <>
-                                <ImgButton
-                                  src={images.check}
-                                  alt="icono seleccionar cotización"
-                                  height={12}
-                                  width={12}
-                                  title="Selecionar cotización"
-                                  onClick={$(() => {
+                                <input
+                                  // id="in_BuscarDetraccion"
+                                  type="image"
+                                  src={images.check32}
+                                  title="Seleccionar cotización"
+                                  height={14}
+                                  width={14}
+                                  style={{ padding: '2px' }}
+                                  onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                  onClick$={() => {
                                     console.log('seleccionar cotizacion', value);
                                     //
                                     //
@@ -151,31 +154,37 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                     // });
 
                                     ctx_add_venta.mostrarAdjuntarCotizacion = false;
-                                  })}
+                                  }}
                                 />
                               </>
                             ) : (
-                              <ImgButton
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
                                 src={images.edit}
-                                alt="icono de editar"
-                                height={12}
-                                width={12}
                                 title="Editar venta"
-                                // onClick={() => {
-                                //   onEdit(coti);
+                                height={14}
+                                width={14}
+                                style={{ padding: '2px' }}
+                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                // onClick$={() => {
+
                                 // }}
                               />
                             )}
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.pdf}
-                              alt="icono ver pdf"
-                              height={12}
-                              width={12}
                               title="Ver pdf"
-                              onClick={$(() => {
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 osSeleccionada.value = value;
                                 clickPDF.value++;
-                              })}
+                              }}
                             />
                           </td>
                         </tr>

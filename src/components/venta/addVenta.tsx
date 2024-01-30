@@ -127,13 +127,36 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
       itemsVenta: [],
 
-      montoSubTotalPEN: 0,
-      montoIGVPEN: 0,
-      montoTotalPEN: 0,
+      baseImponiblePEN: 0,
+      igvPEN: 0,
+      exoneradoPEN: 0,
+      inafectoPEN: 0,
+      iscPEN: 0,
+      icbpPEN: 0,
+      otrosPEN: 0,
+      totalPEN: 0,
 
-      montoSubTotalUSD: 0,
-      montoIGVUSD: 0,
-      montoTotalUSD: 0,
+      baseImponibleUSD: 0,
+      igvUSD: 0,
+      exoneradoUSD: 0,
+      inafectoUSD: 0,
+      iscUSD: 0,
+      icbpUSD: 0,
+      otrosUSD: 0,
+      totalUSD: 0,
+
+      // montoSubTotalPEN: 0,
+      // montoIGVPEN: 0,
+      // montoTotalPEN: 0,
+
+      // montoSubTotalUSD: 0,
+      // montoIGVUSD: 0,
+      // montoTotalUSD: 0,
+
+      referenciaFecha: '',
+      referenciaTipo: '',
+      referenciaSerie: '',
+      referenciaNumero: 0,
     },
     { deep: true }
   );
@@ -389,30 +412,30 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
     console.log('eeeeeeeeeeeeeeeeee', e);
     if (definicion_CTX_F_B_NC_ND.enDolares) {
-      definicion_CTX_F_B_NC_ND.montoSubTotalUSD = e.subTOTAL;
-      definicion_CTX_F_B_NC_ND.montoIGVUSD = e.igvTOTAL;
-      definicion_CTX_F_B_NC_ND.montoTotalUSD = e.sumaTOTAL;
+      definicion_CTX_F_B_NC_ND.baseImponibleUSD = e.subTOTAL;
+      definicion_CTX_F_B_NC_ND.igvUSD = e.igvTOTAL;
+      definicion_CTX_F_B_NC_ND.totalUSD = e.sumaTOTAL;
 
       const tt = redondeo2Decimales(e.sumaTOTAL * definicion_CTX_F_B_NC_ND.tipoCambio);
       const sub = redondeo2Decimales((tt * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
       const i = redondeo2Decimales(tt - sub);
 
-      definicion_CTX_F_B_NC_ND.montoSubTotalPEN = sub;
-      definicion_CTX_F_B_NC_ND.montoIGVPEN = i;
-      definicion_CTX_F_B_NC_ND.montoTotalPEN = tt;
+      definicion_CTX_F_B_NC_ND.baseImponiblePEN = sub;
+      definicion_CTX_F_B_NC_ND.igvPEN = i;
+      definicion_CTX_F_B_NC_ND.totalPEN = tt;
     } else {
-      definicion_CTX_F_B_NC_ND.montoSubTotalPEN = e.subTOTAL;
-      definicion_CTX_F_B_NC_ND.montoIGVPEN = e.igvTOTAL;
-      definicion_CTX_F_B_NC_ND.montoTotalPEN = e.sumaTOTAL;
+      definicion_CTX_F_B_NC_ND.baseImponiblePEN = e.subTOTAL;
+      definicion_CTX_F_B_NC_ND.igvPEN = e.igvTOTAL;
+      definicion_CTX_F_B_NC_ND.totalPEN = e.sumaTOTAL;
       console.log(
         'first',
-        definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
-        definicion_CTX_F_B_NC_ND.montoIGVPEN,
-        definicion_CTX_F_B_NC_ND.montoTotalPEN
+        definicion_CTX_F_B_NC_ND.baseImponiblePEN,
+        definicion_CTX_F_B_NC_ND.igvPEN,
+        definicion_CTX_F_B_NC_ND.totalPEN
       );
-      definicion_CTX_F_B_NC_ND.montoSubTotalUSD = 0;
-      definicion_CTX_F_B_NC_ND.montoIGVUSD = 0;
-      definicion_CTX_F_B_NC_ND.montoTotalUSD = 0;
+      definicion_CTX_F_B_NC_ND.baseImponibleUSD = 0;
+      definicion_CTX_F_B_NC_ND.igvUSD = 0;
+      definicion_CTX_F_B_NC_ND.totalUSD = 0;
     }
   });
   // useTask$(({ track }) => {
@@ -494,6 +517,92 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       document.getElementById('btnVerAlmacen')?.focus();
       return;
     }
+    if (
+      definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '07' ||
+      definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '08'
+    ) {
+      if (definicion_CTX_F_B_NC_ND.referenciaFecha === '') {
+        alert('Ingrese la fecha de referencia de NC/ND');
+        document.getElementById('in_VENTA_NC_ND_Fecha')?.focus();
+        return;
+      }
+      if (definicion_CTX_F_B_NC_ND.referenciaTipo === '') {
+        alert('Ingrese el tipo del documento referenciado');
+        document.getElementById('in_VENTA_NC_ND_TCP')?.focus();
+        return;
+      }
+      if (definicion_CTX_F_B_NC_ND.referenciaSerie === '') {
+        alert('Ingrese la serie del documento referenciado');
+        document.getElementById('in_VENTA_NC_ND_Serie')?.focus();
+        return;
+      }
+      if (
+        definicion_CTX_F_B_NC_ND.referenciaNumero.toString() === '' ||
+        definicion_CTX_F_B_NC_ND.referenciaNumero.toString() === 'NaN'
+      ) {
+        alert('Ingrese el número valido del documento referenciado');
+        document.getElementById('in_VENTA_NC_ND_Numero')?.focus();
+        return;
+      }
+      console.log('🥖🥖🥖🥖🥖 REVISION ... convertirAValoresAbsolutos_Por_NC_ND');
+      //****************************************** */
+      //***************SOLES******************** */
+      definicion_CTX_F_B_NC_ND.baseImponiblePEN = definicion_CTX_F_B_NC_ND.baseImponiblePEN.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.baseImponiblePEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.baseImponiblePEN) * -1;
+      definicion_CTX_F_B_NC_ND.igvPEN = definicion_CTX_F_B_NC_ND.igvPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.igvPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.igvPEN) * -1;
+      definicion_CTX_F_B_NC_ND.exoneradoPEN = definicion_CTX_F_B_NC_ND.exoneradoPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.exoneradoPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.exoneradoPEN) * -1;
+      definicion_CTX_F_B_NC_ND.inafectoPEN = definicion_CTX_F_B_NC_ND.inafectoPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.inafectoPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.inafectoPEN) * -1;
+      definicion_CTX_F_B_NC_ND.iscPEN = definicion_CTX_F_B_NC_ND.iscPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.iscPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.iscPEN) * -1;
+      definicion_CTX_F_B_NC_ND.icbpPEN = definicion_CTX_F_B_NC_ND.icbpPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.icbpPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.icbpPEN) * -1;
+      definicion_CTX_F_B_NC_ND.otrosPEN = definicion_CTX_F_B_NC_ND.otrosPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.otrosPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.otrosPEN) * -1;
+      definicion_CTX_F_B_NC_ND.totalPEN = definicion_CTX_F_B_NC_ND.totalPEN.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.totalPEN.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.totalPEN) * -1;
+      //****************************************** */
+      //***************DOLARES******************** */
+      definicion_CTX_F_B_NC_ND.baseImponibleUSD = definicion_CTX_F_B_NC_ND.baseImponibleUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.baseImponibleUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.baseImponibleUSD) * -1;
+      definicion_CTX_F_B_NC_ND.igvUSD = definicion_CTX_F_B_NC_ND.igvUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.igvUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.igvUSD) * -1;
+      definicion_CTX_F_B_NC_ND.exoneradoUSD = definicion_CTX_F_B_NC_ND.exoneradoUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.exoneradoUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.exoneradoUSD) * -1;
+      definicion_CTX_F_B_NC_ND.inafectoUSD = definicion_CTX_F_B_NC_ND.inafectoUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.inafectoUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.inafectoUSD) * -1;
+      definicion_CTX_F_B_NC_ND.iscUSD = definicion_CTX_F_B_NC_ND.iscUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.iscUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.iscUSD) * -1;
+      definicion_CTX_F_B_NC_ND.icbpUSD = definicion_CTX_F_B_NC_ND.icbpUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.icbpUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.icbpUSD) * -1;
+      definicion_CTX_F_B_NC_ND.otrosUSD = definicion_CTX_F_B_NC_ND.otrosUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.otrosUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.otrosUSD) * -1;
+      definicion_CTX_F_B_NC_ND.totalUSD = definicion_CTX_F_B_NC_ND.totalUSD.$numberDecimal
+        ? Math.abs(definicion_CTX_F_B_NC_ND.totalUSD.$numberDecimal) * -1
+        : Math.abs(definicion_CTX_F_B_NC_ND.totalUSD) * -1;
+    } else {
+      definicion_CTX_F_B_NC_ND.referenciaFecha = '';
+      definicion_CTX_F_B_NC_ND.referenciaTipo = '';
+      definicion_CTX_F_B_NC_ND.referenciaSerie = '';
+      definicion_CTX_F_B_NC_ND.referenciaNumero = 0;
+    }
     console.log('paso_______::::::______T', definicion_CTX_F_B_NC_ND);
     // const aGrabar =
     const ventaGRABADA = await inVenta({
@@ -540,18 +649,36 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
       itemsVenta: definicion_CTX_F_B_NC_ND.itemsVenta,
 
-      montoSubTotalPEN: definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
-      montoIGVPEN: definicion_CTX_F_B_NC_ND.montoIGVPEN,
-      montoTotalPEN: definicion_CTX_F_B_NC_ND.montoTotalPEN,
+      baseImponiblePEN: definicion_CTX_F_B_NC_ND.baseImponiblePEN,
+      igvPEN: definicion_CTX_F_B_NC_ND.igvPEN,
+      exoneradoPEN: definicion_CTX_F_B_NC_ND.exoneradoPEN,
+      inafectoPEN: definicion_CTX_F_B_NC_ND.inafectoPEN,
+      iscPEN: definicion_CTX_F_B_NC_ND.iscPEN,
+      icbpPEN: definicion_CTX_F_B_NC_ND.icbpPEN,
+      otrosPEN: definicion_CTX_F_B_NC_ND.otrosPEN,
+      totalPEN: definicion_CTX_F_B_NC_ND.totalPEN,
 
-      montoSubTotalUSD: definicion_CTX_F_B_NC_ND.montoSubTotalUSD,
-      montoIGVUSD: definicion_CTX_F_B_NC_ND.montoIGVUSD,
-      montoTotalUSD: definicion_CTX_F_B_NC_ND.montoTotalUSD,
+      baseImponibleUSD: definicion_CTX_F_B_NC_ND.baseImponibleUSD,
+      igvUSD: definicion_CTX_F_B_NC_ND.igvUSD,
+      exoneradoUSD: definicion_CTX_F_B_NC_ND.exoneradoUSD,
+      inafectoUSD: definicion_CTX_F_B_NC_ND.inafectoUSD,
+      iscUSD: definicion_CTX_F_B_NC_ND.iscUSD,
+      icbpUSD: definicion_CTX_F_B_NC_ND.icbpUSD,
+      otrosUSD: definicion_CTX_F_B_NC_ND.otrosUSD,
+      totalUSD: definicion_CTX_F_B_NC_ND.totalUSD,
 
-      // fechaReferencia: venta.fechaReferencia,
-      // tipoReferencia: venta.tipoReferencia,
-      // serieReferencia: venta.serieReferencia,
-      // numeroReferencia: venta.numeroReferencia,
+      // montoSubTotalPEN: definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
+      // montoIGVPEN: definicion_CTX_F_B_NC_ND.montoIGVPEN,
+      // montoTotalPEN: definicion_CTX_F_B_NC_ND.montoTotalPEN,
+
+      // montoSubTotalUSD: definicion_CTX_F_B_NC_ND.montoSubTotalUSD,
+      // montoIGVUSD: definicion_CTX_F_B_NC_ND.montoIGVUSD,
+      // montoTotalUSD: definicion_CTX_F_B_NC_ND.montoTotalUSD,
+
+      referenciaFecha: definicion_CTX_F_B_NC_ND.referenciaFecha,
+      referenciaTipo: definicion_CTX_F_B_NC_ND.referenciaTipo,
+      referenciaSerie: definicion_CTX_F_B_NC_ND.referenciaSerie,
+      referenciaNumero: definicion_CTX_F_B_NC_ND.referenciaNumero,
 
       usuario: parametrosGlobales.usuario,
     });
@@ -599,13 +726,36 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
       definicion_CTX_F_B_NC_ND.itemsVenta = [];
 
-      definicion_CTX_F_B_NC_ND.montoSubTotalPEN = 0;
-      definicion_CTX_F_B_NC_ND.montoIGVPEN = 0;
-      definicion_CTX_F_B_NC_ND.montoTotalPEN = 0;
+      definicion_CTX_F_B_NC_ND.baseImponiblePEN = 0;
+      definicion_CTX_F_B_NC_ND.igvPEN = 0;
+      definicion_CTX_F_B_NC_ND.exoneradoPEN = 0;
+      definicion_CTX_F_B_NC_ND.inafectoPEN = 0;
+      definicion_CTX_F_B_NC_ND.iscPEN = 0;
+      definicion_CTX_F_B_NC_ND.icbpPEN = 0;
+      definicion_CTX_F_B_NC_ND.otrosPEN = 0;
+      definicion_CTX_F_B_NC_ND.totalPEN = 0;
 
-      definicion_CTX_F_B_NC_ND.montoSubTotalUSD = 0;
-      definicion_CTX_F_B_NC_ND.montoIGVUSD = 0;
-      definicion_CTX_F_B_NC_ND.montoTotalUSD = 0;
+      definicion_CTX_F_B_NC_ND.baseImponibleUSD = 0;
+      definicion_CTX_F_B_NC_ND.igvUSD = 0;
+      definicion_CTX_F_B_NC_ND.exoneradoUSD = 0;
+      definicion_CTX_F_B_NC_ND.inafectoUSD = 0;
+      definicion_CTX_F_B_NC_ND.iscUSD = 0;
+      definicion_CTX_F_B_NC_ND.icbpUSD = 0;
+      definicion_CTX_F_B_NC_ND.otrosUSD = 0;
+      definicion_CTX_F_B_NC_ND.totalUSD = 0;
+
+      // definicion_CTX_F_B_NC_ND.montoSubTotalPEN = 0;
+      // definicion_CTX_F_B_NC_ND.montoIGVPEN = 0;
+      // definicion_CTX_F_B_NC_ND.montoTotalPEN = 0;
+
+      // definicion_CTX_F_B_NC_ND.montoSubTotalUSD = 0;
+      // definicion_CTX_F_B_NC_ND.montoIGVUSD = 0;
+      // definicion_CTX_F_B_NC_ND.montoTotalUSD = 0;
+
+      definicion_CTX_F_B_NC_ND.referenciaFecha = '';
+      definicion_CTX_F_B_NC_ND.referenciaTipo = '';
+      definicion_CTX_F_B_NC_ND.referenciaSerie = '';
+      definicion_CTX_F_B_NC_ND.referenciaNumero = 0;
     } else {
       grabo.value = false;
     }
@@ -876,6 +1026,66 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
             </div>
             <hr style={{ margin: '5px 0' }}></hr>
           </div>
+          {/* ----------------------------------------------------- */}
+          {/* ***NC -- ND -- */}
+          <div
+            id="zona_NC_ND"
+            style={{ background: 'grey' }}
+            hidden={tipoDocumento.value === '07' || tipoDocumento.value === '08' ? false : true}
+          >
+            <div class="form-control">
+              <div class="form-control form-agrupado" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'left' }}>
+                <input
+                  id="in_VENTA_NC_ND_Fecha"
+                  // style={{ width: '100%' }}
+                  // disabled
+                  type="date"
+                  placeholder="Add NC/ND Fecha"
+                  value={definicion_CTX_F_B_NC_ND.referenciaFecha}
+                  onChange$={(e) => (definicion_CTX_F_B_NC_ND.referenciaFecha = (e.target as HTMLInputElement).value)}
+                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                />
+                <input
+                  id="in_VENTA_NC_ND_TCP"
+                  // style={{ width: '100%' }}
+                  // disabled
+                  type="number"
+                  placeholder="Add NC/ND TCP"
+                  value={definicion_CTX_F_B_NC_ND.referenciaTipo}
+                  onChange$={(e) => (definicion_CTX_F_B_NC_ND.referenciaTipo = (e.target as HTMLInputElement).value)}
+                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                />
+                <input
+                  id="in_VENTA_NC_ND_Serie"
+                  // style={{ width: '100%' }}
+                  // disabled
+                  type="text"
+                  placeholder="Add NC/ND Serie"
+                  value={definicion_CTX_F_B_NC_ND.referenciaSerie}
+                  onChange$={(e) =>
+                    (definicion_CTX_F_B_NC_ND.referenciaSerie = (e.target as HTMLInputElement).value.toUpperCase())
+                  }
+                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                />
+                <input
+                  id="in_VENTA_NC_ND_Numero"
+                  // style={{ width: '100%' }}
+                  // disabled
+                  type="number"
+                  placeholder="Add NC/ND Numero"
+                  value={definicion_CTX_F_B_NC_ND.referenciaNumero}
+                  onChange$={(e) =>
+                    (definicion_CTX_F_B_NC_ND.referenciaNumero = parseInt((e.target as HTMLInputElement).value.trim()))
+                  }
+                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <hr
+            style={{ margin: '5px 0' }}
+            hidden={tipoDocumento.value === '07' || tipoDocumento.value === '08' ? false : true}
+          ></hr>
           {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
           <div>
@@ -1185,7 +1395,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   style={{ width: '100%', background: 'yellow' }}
                   placeholder="Observación"
                   onChange$={(e) => {
-                    definicion_CTX_F_B_NC_ND.observacion = (e.target as HTMLInputElement).value.toUpperCase();
+                    definicion_CTX_F_B_NC_ND.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
                   }}
                 />
               </div>
@@ -1203,13 +1413,14 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   <thead>
                     <tr>
                       <th>Ítem</th>
-                      {/* <th>Kx</th> */}
                       <th>Código</th>
                       <th>Descripción</th>
                       <th>Cantidad</th>
                       <th>Uni</th>
                       <th>Precio Uni</th>
                       <th>Venta </th>
+                      <th>Exo</th>
+                      <th>Ina</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -1242,7 +1453,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                             indexItemVenta,
                             3
                           )}`}</td>
-                          {/* <td data-label="Kx">{iTVen.idKardex.substring(iTVen.idKardex.length - 6)}</td> */}
                           <td data-label="Código" class="comoCadena">
                             {iTVen.codigo}
                           </td>
@@ -1267,23 +1477,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                                     (iTVen.precioPEN ? iTVen.precioPEN : iTVen.precioPEN.$numberDecimal);
                                 }
                               }}
-                              // onChange={(e) => {
-                              //   const iv = itemsVentaK[index];
-                              //   iv['cantidad'] = Number.parseFloat(e.target.value);
-                              //   if (venta.enDolares) {
-                              //     console.log('TablaItemsVenta enDolares cantidad');
-                              //     iv['ventaUSD'] = iv['cantidad'] * iv['precioUSD'];
-                              //     iv['ventaPEN'] = iv['cantidad'] * iv['precioPEN'];
-                              //   } else {
-                              //     console.log('TablaItemsVenta enPEN cantidad');
-                              //     iv['ventaPEN'] = iv['cantidad'] * iv['precioPEN'];
-                              //   }
-                              //   setItemsVentaK([
-                              //     ...itemsVentaK.slice(0, index),
-                              //     iv,
-                              //     ...itemsVentaK.slice(index + 1, itemsVentaK.length),
-                              //   ]);
-                              // }}
                             />
                           </td>
                           <td data-label="Uni" class="acciones">
@@ -1319,25 +1512,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                                     (iTVen.precioPEN ? iTVen.precioPEN : iTVen.precioPEN.$numberDecimal);
                                 }
                               }}
-                              // onChange={(e) => {
-                              //   const iv = itemsVentaK[index];
-
-                              //   if (venta.enDolares) {
-                              //     console.log('TablaItemsVenta enDolares precioPEN');
-                              //     iv['precioUSD'] = e.target.value;
-                              //     iv['ventaUSD'] = iv['cantidad'] * iv['precioUSD'];
-                              //     iv['ventaPEN'] = iv['cantidad'] * iv['precioPEN'];
-                              //   } else {
-                              //     console.log('TablaItemsVenta PEN precioPEN');
-                              //     iv['precioPEN'] = e.target.value;
-                              //     iv['ventaPEN'] = iv['cantidad'] * iv['precioPEN'];
-                              //   }
-                              //   setItemsVentaK([
-                              //     ...itemsVentaK.slice(0, index),
-                              //     iv,
-                              //     ...itemsVentaK.slice(index + 1, itemsVentaK.length),
-                              //   ]);
-                              // }}
                             />
                           </td>
                           {/* ----------------------------------------------------- */}
@@ -1350,6 +1524,12 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                               : iTVen.ventaPEN
                               ? redondeo2Decimales(iTVen.ventaPEN)
                               : redondeo2Decimales(iTVen.ventaPEN.$numberDecimal)} */}
+                          </td>
+                          <td data-label="Exo" class="acciones">
+                            {iTVen.exonerado ? 'Si' : '-'}
+                          </td>
+                          <td data-label="Ina" class="acciones">
+                            {iTVen.inafecto ? 'Si' : '-'}
                           </td>
                           <td data-label="Acciones" class="acciones">
                             <ImgButton
@@ -1385,7 +1565,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                           minimumFractionDigits: 2,
                         })}`}
                       </td>
-                      <td colSpan={1} />
+                      <td colSpan={3} />
                     </tr>
                     <tr>
                       <td colSpan={6} class="comoNumero">
@@ -1398,7 +1578,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                           minimumFractionDigits: 2,
                         })}`}
                       </td>{' '}
-                      <td colSpan={1} />
+                      <td colSpan={3} />
                     </tr>
                     <tr>
                       <td colSpan={6} class="comoNumero">
@@ -1411,7 +1591,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                           minimumFractionDigits: 2,
                         })}`}
                       </td>{' '}
-                      <td colSpan={1} />
+                      <td colSpan={3} />
                     </tr>
                   </tfoot>
                 </table>

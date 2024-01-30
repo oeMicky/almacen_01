@@ -105,41 +105,35 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                                 })
                               : ''}
                           </td>
-                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                          <td data-label="Acciones" class="acciones">
                             {/* <div style={{ display: 'flex', textAlign: 'right' }}> */}
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.check32}
-                              alt="icono de adicionar"
-                              height={12}
-                              width={12}
                               title="Seleccionar servicio"
-                              onClick={$(() => {
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 ctx_buscar_servicio.sS = serviLocali;
                                 ctx_buscar_servicio.mostrarPanelServicioSeleccionado = true;
-                                // console.log('serviLocali', serviLocali);
-                                // ctx_servicio_seleccionado.sS = serviLocali;
-                                // ctx_docs_venta.mostrarServicioSeleccionado = true;
-                              })}
-                              // onClick={() => {
-                              //   servicioSeleccionado({
-                              //     _id,
-                              //     codigo,
-                              //     descripcion,
-                              //     cantidad: 1,
-                              //     precio,
-                              //   });
-                              // }}
+                              }}
                             />
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.edit}
-                              alt="icono de editar"
-                              height={12}
-                              width={12}
                               title="Editar servicio"
-                              onClick={$(() => {
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 ctx_buscar_servicio.sS = serviLocali;
                                 ctx_buscar_servicio.mostrarPanelNewEditServicio = true;
-                              })}
+                              }}
                             />
                             {/* <ImgButton src={images.see} alt="icono de editar" height={12} width={12} title="Editar ver" /> */}
                           </td>

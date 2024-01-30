@@ -108,14 +108,17 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
                     </td>
                     <td data-label="Uni">{props.mercaINSelecci.unidad}</td>
 
-                    <td data-label="Acc" style={{ textAlign: 'right' }}>
-                      <ImgButton
-                        src={images.check}
-                        alt="icono de seleccionar"
+                    <td data-label="Acc" class="acciones">
+                      <input
+                        // id="in_BuscarDetraccion"
+                        type="image"
+                        src={images.check32}
+                        title="Seleccionar ítem"
                         height={14}
                         width={14}
-                        title="Seleccionar ítem"
-                        onClick={$(() => {
+                        style={{ padding: '2px' }}
+                        onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                        onClick$={() => {
                           ctx_index_kardex.mM = props.mercaINSelecci;
                           ctx_index_kardex.kK = props.mercaINSelecci.KARDEXS[index];
                           // definicion_CTX_KARDEXS_IN.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = true;
@@ -123,7 +126,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
                           console.log('la mercade seleccionada -  KARDEX', ctx_index_kardex.kK);
 
                           definicion_CTX_KARDEXS.mostrarPanelKARDEX = true;
-                        })}
+                        }}
                       />
                     </td>
                   </tr>

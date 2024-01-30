@@ -15,7 +15,7 @@ interface IImgButton {
 
 export default component$((props: IImgButton) => {
   // const clikeado = useSignal(false);
-  console.log('🎈🎈🎈🎈🎈🎈clikeado');
+  // console.log('🎈🎈🎈🎈🎈🎈clikeado');
   return (
     <img
       id={props.id}

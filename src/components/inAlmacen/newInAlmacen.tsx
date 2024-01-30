@@ -65,7 +65,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
   useContextProvider(CTX_NEW_IN_ALMACEN, definicion_CTX_NEW_IN_ALMACEN);
   //#endregion DEFINICION CTX_NEW_IN_ALMACEN
 
-  //#region DEFINICION CTX_IN_ALMACEN - NEW / EDIT
+  //#region DEFINICION CTX_IN_ALMACEN
   const definicion_CTX_IN_ALMACEN = useStore<IIngresoAAlmacen>(
     {
       _id: props.inSelecci._id ? props.inSelecci._id : '',
@@ -129,7 +129,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
     { deep: true }
   );
   useContextProvider(CTX_IN_ALMACEN, definicion_CTX_IN_ALMACEN);
-  //#endregion DEFINICION CTX_IN_ALMACEN - NEW / EDIT
+  //#endregion DEFINICION CTX_IN_ALMACEN
 
   //#region DEFINICION CTX_REMITENTE_IN_ALMACEN
   const defini_CTX_REMITENTE_IN_ALMACEN = useStore<IPersona>({
@@ -171,7 +171,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
   const borrarItemMerca = useStore({
     idAuxiliar: '',
-    item: '',
+    item: 0,
     codigo: '',
     descripcion: '',
   });
@@ -185,9 +185,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
     });
-    console.log('losMotivos', losMotivos);
+
     losMotivosCargados.value = losMotivos.data;
-    console.log(' losMotivosCargados.value', losMotivosCargados.value);
   });
 
   useTask$(({ track }) => {
@@ -217,7 +216,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_IN_ALMACEN.borrarIdAuxiliarDoc);
     if (definicion_CTX_NEW_IN_ALMACEN.borrarIdAuxiliarDoc > 0) {
-      console.log('borrando...', definicion_CTX_NEW_IN_ALMACEN.borrarIdAuxiliarDoc);
       const newItems: any = definicion_CTX_IN_ALMACEN.documentosAdjuntos.filter(
         (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_IN_ALMACEN.borrarIdAuxiliarDoc
       );
@@ -231,7 +229,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_IN_ALMACEN.borrarIdAuxiliar);
     if (definicion_CTX_NEW_IN_ALMACEN.borrarIdAuxiliar > 0) {
-      console.log('borrando...', definicion_CTX_NEW_IN_ALMACEN.borrarIdAuxiliar);
       const newItems: any = definicion_CTX_IN_ALMACEN.itemsMercaderias.filter(
         (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_IN_ALMACEN.borrarIdAuxiliar
       );
@@ -335,8 +332,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
         usuario: parametrosGlobales.usuario,
       });
 
-      console.log('Grabó el ingreso al almacén - inAlma: ', inAlma);
-
       if (inAlma.status === 400) {
         alert('Falla al registrar la inAlmacen. ' + inAlma.message);
         return;
@@ -344,9 +339,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
       ctx_index_in_almacen.grabo_InAlmacen = true;
       ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
-    } catch (error) {
-      console.log('ERROR - inAlma: ', error);
-    }
+    } catch (error) {}
   });
   //#endregion REGISTRAR_INGRESO
 
@@ -354,7 +347,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%,900px)',
+        width: 'clamp(330px, 96%,1000px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -382,9 +375,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           height={16}
           width={16}
           title="Cerrar el formulario"
-          onClick={$(() => {
-            console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
-          })}
+          onClick={$(() => {})}
         />
       </div>
       {/* FORMULARIO */}
@@ -464,10 +455,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   seleccione={'-- Seleccione motivo ingreso --'}
                   disabled={definicion_CTX_IN_ALMACEN.itemsMercaderias.length === 0 ? false : true}
                   onChange={$(() => {
-                    console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                     const elSelec = document.getElementById('se_motivoIngreso') as HTMLSelectElement;
                     const elIdx = elSelec.selectedIndex;
-                    console.log('?', elIdx, elSelec[elIdx].id);
+
                     definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen = elSelec[elIdx].id;
                     if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '') {
                       definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen = '';
@@ -520,9 +510,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     const idx = (e.target as HTMLSelectElement).selectedIndex;
                     const rere = e.target as HTMLSelectElement;
                     const elOption = rere[idx];
-                    console.log('elOption', elOption.id);
+
                     //
-                    // console.log('idx', idx.item.arguments(id));
+                    //
                     // const csd = (e.target as HTMLSelectElement).current[idx];
                     // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
                     definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad = elOption.id;
@@ -540,7 +530,18 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     C.EXT
                   </option>
                 </select>
-                <ImgButton
+                <input
+                  id="in_BuscarREMITENTE"
+                  type="image"
+                  src={images.searchPLUS}
+                  title="Buscar datos de identidad"
+                  height={16}
+                  width={16}
+                  style={{ margin: '2px 2px' }}
+                  // onFocusin$={() => }
+                  onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true)}
+                />
+                {/* <ImgButton
                   id="img_buscarREMITENTE"
                   src={images.searchPLUS}
                   alt="Icono de buscar identidad"
@@ -551,7 +552,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   onClick={$(() => {
                     definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true;
                   })}
-                />
+                /> */}
               </div>
             </div>
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona && (
@@ -774,7 +775,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   </tr>
                 </thead>
                 <tbody>
-                  {definicion_CTX_IN_ALMACEN.itemsMercaderias.map((iTMercaIN: any, index: any) => {
+                  {definicion_CTX_IN_ALMACEN.itemsMercaderias.map((iTMercaIN: any, index: number) => {
                     const indexItemServi = index + 1;
 
                     suma_SubPEN =
@@ -786,10 +787,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                       redondeo2Decimales(iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN);
 
                     suma_IGVPEN = suma_TotPEN - suma_SubPEN;
-                    definicion_CTX_IN_ALMACEN.montoSubTotalPEN = suma_SubPEN;
-                    definicion_CTX_IN_ALMACEN.montoIGVPEN = suma_IGVPEN;
-                    definicion_CTX_IN_ALMACEN.montoTotalPEN = suma_TotPEN;
-                    console.log('🍄🍄🍄🍄🍄🍄🍄🍄🍄', suma_TotPEN, suma_IGVPEN, suma_SubPEN);
+
                     return (
                       <tr key={iTMercaIN.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar}>{`${cerosALaIzquierda(indexItemServi, 3)}`}</td>
@@ -838,7 +836,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 (iTMercaIN.valorUnitarioPEN
                                   ? iTMercaIN.valorUnitarioPEN
                                   : iTMercaIN.valorUnitarioPEN.$numberDecimal);
-                              console.log('🍋🍋🍋🍋🍋🍋🍋🍋');
                             }}
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
@@ -864,7 +861,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             }
                             onChange$={(e) => {
                               const costo = parseFloat((e.target as HTMLInputElement).value);
-                              console.log('el costo modificado', costo);
+
                               iTMercaIN.costoUnitarioPEN = costo;
                               let IGVCalculado;
                               let precio;
@@ -876,8 +873,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 precio = costo * IGVCalculado;
                               }
                               iTMercaIN.precioUniPEN = formatear_6Decimales(precio);
-                              console.log('iTMercaIN.IGV - IGVCalculado - precio', iTMercaIN.IGV, IGVCalculado, precio);
-                              console.log('el costo modificado, cant', iTMercaIN.costoUnitarioPEN, iTMercaIN.cantidadIngresada);
+
                               iTMercaIN.subPEN =
                                 (iTMercaIN.cantidadIngresada
                                   ? iTMercaIN.cantidadIngresada
@@ -900,7 +896,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 iTMercaIN.valorUnitarioPEN,
                                 iTMercaIN.valorUnitarioPEN.$numberDecimal
                               );
-                              console.log('🥪🥪🥪🥪🥪 iTMercaIN.subPEN - iTMercaIN.totPEN', iTMercaIN.subPEN, iTMercaIN.totPEN);
                             }}
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
@@ -932,7 +927,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             }
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
-                              console.log('el precio modificado', precio);
+
                               iTMercaIN.valorUnitarioPEN = precio;
                               let IGVCalculado;
                               let costo;
@@ -944,7 +939,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 costo = precio / IGVCalculado;
                               }
                               iTMercaIN.costoUnitarioPEN = formatear_6Decimales(costo);
-                              console.log('el precio modificado, cant', iTMercaIN.valorUnitarioPEN, iTMercaIN.cantidadIngresada);
 
                               iTMercaIN.totPEN =
                                 (iTMercaIN.cantidadIngresada
@@ -961,7 +955,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 (iTMercaIN.costoUnitarioPEN
                                   ? iTMercaIN.costoUnitarioPEN
                                   : iTMercaIN.costoUnitarioPEN.$numberDecimal);
-                              console.log('🍋🍋🍋🍋🍋🍋🍋🍋');
                             }}
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
@@ -1001,21 +994,21 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 <tfoot>
                   <tr>
                     <td colSpan={8} style={{ textAlign: 'end' }}></td>
-                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                    <td colSpan={1} class="comoNumero">
                       {`${suma_SubPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
-                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                    <td colSpan={1} class="comoNumero">
                       {`${suma_IGVPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
-                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                    <td colSpan={1} class="comoNumero">
                       {`${suma_TotPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',

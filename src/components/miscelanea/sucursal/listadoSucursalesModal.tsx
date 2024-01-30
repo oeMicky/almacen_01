@@ -57,14 +57,17 @@ export default component$(() => {
               <tr key={indexItemVenta}>
                 <td data-label="Ítem" key={indexItemVenta}>{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
                 <td data-label="Sucursal">{sucur.sucursal}</td>
-                <td data-label="Acciones" style={{ textAlign: 'center' }}>
-                  <ImgButton
+                <td data-label="Acciones" class="acciones">
+                  <input
+                    // id="in_BuscarDetraccion"
+                    type="image"
                     src={images.check32}
-                    alt="icono de selección"
-                    height={12}
-                    width={12}
                     title="Seleccionar sucursal"
-                    onClick={$(async () => {
+                    height={14}
+                    width={14}
+                    style={{ padding: '2px' }}
+                    onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                    onClick$={async () => {
                       let activo = await getActivoGEEMPSUCUR({
                         idGrupoEmpresarial: ctx_listado_empresas.eE.idGrupoEmpresarial,
                         idEmpresa: ctx_listado_empresas.eE.idEmpresa,
@@ -121,7 +124,7 @@ export default component$(() => {
                           navegarA(parametrosGlobales.paginaInicioDelSistema);
                         }
                       }
-                    })}
+                    }}
                   />
                 </td>
               </tr>

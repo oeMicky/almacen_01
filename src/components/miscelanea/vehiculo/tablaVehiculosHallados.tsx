@@ -135,14 +135,17 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                           <td data-label="Marca">{vehiculoMarca ? vehiculoMarca : '_'}</td>
                           <td data-label="Modelo">{vehiculoModelo ? vehiculoModelo : '_'}</td>
                           <td data-label="VIN">{vin ? vin : '_'}</td>
-                          <td data-label="Acciones" style={{ textAlign: 'center' }}>
-                            <ImgButton
-                              src={images.check}
-                              alt="icono de adicionar"
-                              height={12}
-                              width={12}
+                          <td data-label="Acciones" class="acciones">
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
+                              src={images.check32}
                               title="Seleccionar persona"
-                              onClick={$(() => {
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 documento.idVehiculo = _id;
                                 documento.placa = placa;
                                 documento.idVehiculoMarca = idVehiculoMarca;
@@ -152,19 +155,22 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                                 documento.vin = vin;
 
                                 ctx.mostrarPanelBuscarVehiculo = false;
-                              })}
+                              }}
                             />
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.edit}
-                              alt="icono de editar"
-                              height={12}
-                              width={12}
                               title="Editar vehículo"
-                              onClick={$(() => {
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 ctx_buscar_vehiculo.vV = vehiLocali;
                                 console.log('desde tablVehiuclosHallados', ctx_buscar_vehiculo.vV);
                                 ctx_buscar_vehiculo.mostrarPanelNewEditVehiculo = true;
-                              })}
+                              }}
                             />
                           </td>
                         </tr>

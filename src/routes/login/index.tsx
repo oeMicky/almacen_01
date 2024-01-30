@@ -12,8 +12,8 @@ import Spinner from '~/components/system/spinner';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
   // paginaInicioDelSistema: '/compra',
-  paginaInicioDelSistema: '/venta',
-  // paginaInicioDelSistema: '/inAlmacen',
+  // paginaInicioDelSistema: '/venta',
+  paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',

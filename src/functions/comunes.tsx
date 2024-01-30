@@ -26,33 +26,33 @@ export const ultimoDiaDelPeriodoX = (periodo: string) => {
 };
 
 export const formatoDDMMYYYY_PEN = (fecha: any) => {
-  // console.log('fecha ingresada', fecha);
+  //
   let fechaSalida = '';
   if (!isNaN(Date.parse(fecha))) {
-    // console.log('fecha ingresada -> ingreso al parseo');
+    //
     fechaSalida = fecha.substr(8, 2) + '/' + fecha.substr(5, 2) + '/' + fecha.substr(0, 4);
-    // console.log('fecha ingresada -> fechaSalida', fechaSalida);
+    //
   }
   return fechaSalida;
 };
 
 export const redondeo_0_Decimales = (num: any) => {
-  // console.log('el numero Decimal', num);
+  //
   const m = Number((Math.abs(num) * 1).toPrecision(15));
   return (Math.round(m) / 1) * Math.sign(num);
 };
 export const redondeo2Decimales = (num: any) => {
-  // console.log('el numero Decimal', num);
+  //
   const m = Number((Math.abs(num) * 100).toPrecision(15));
   return (Math.round(m) / 100) * Math.sign(num);
 };
 export const redondeo3Decimales = (num: any) => {
-  // console.log('el numero Decimal', num);
+  //
   const m = Number((Math.abs(num) * 1000).toPrecision(15));
   return (Math.round(m) / 1000) * Math.sign(num);
 };
 export const redondeo4Decimales = (num: any) => {
-  // console.log('el numero Decimal', num);
+  //
   const m = Number((Math.abs(num) * 10000).toPrecision(15));
   return (Math.round(m) / 10000) * Math.sign(num);
 };
@@ -66,35 +66,39 @@ export const cerosALaIzquierda = (num: any, size: number) => {
 export const formatear_2Decimales = (num: any) => {
   let m = Number((Math.abs(num) * 100).toPrecision(15));
   m = (Math.round(m) / 100) * Math.sign(num);
-  return m.toLocaleString('en-PE', {
-    // style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  });
+  return m;
+  // return m.toLocaleString('en-PE', {
+  //   // style: 'currency',
+  //   currency: 'USD',
+  //   minimumFractionDigits: 2,
+  // });
 };
 
 export const formatear_4Decimales = (num: any) => {
   let m = Number((Math.abs(num) * 10000).toPrecision(15));
   m = (Math.round(m) / 10000) * Math.sign(num);
-  return m.toLocaleString('en-PE', {
-    // style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 4,
-  });
+  return m;
+  // return m.toLocaleString('en-PE', {
+  //   // style: 'currency',
+  //   currency: 'USD',
+  //   minimumFractionDigits: 4,
+  // });
 };
 
 export const formatear_6Decimales = (num: any) => {
   let m = Number((Math.abs(num) * 1000000).toPrecision(15));
   m = (Math.round(m) / 1000000) * Math.sign(num);
-  return m.toLocaleString('en-PE', {
-    // style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 6,
-  });
+
+  return m;
+  // return m.toLocaleString('en-PE', {
+  //   // style: 'currency',
+  //   currency: 'USD',
+  //   minimumFractionDigits: 6,
+  // });
 };
 
 export const formatearMonedaPEN = (num: any) => {
-  // console.log('el numero Decimal', num);
+  //
   let m = Number((Math.abs(num) * 100).toPrecision(15));
   m = (Math.round(m) / 100) * Math.sign(num);
   return m.toLocaleString('en-PE', {
@@ -104,7 +108,7 @@ export const formatearMonedaPEN = (num: any) => {
   });
 };
 export const formatearMonedaUSD = (num: any) => {
-  // console.log('el numero Decimal', num);
+  //
   let m = Number((Math.abs(num) * 100).toPrecision(15));
   m = (Math.round(m) / 100) * Math.sign(num);
   return m.toLocaleString('en-PE', {
@@ -118,24 +122,21 @@ export const formatearNumeroINT = (num: number) => {
 };
 
 export const literal = (importe: any, moneda: string) => {
-  console.log('importe->', importe);
   if (importe < 0 || importe >= 1000000) {
-    console.log('interbalo fuera de cero');
     return '';
   }
   if (importe === '0') {
-    console.log('entro a cero');
     return moneda === 'PEN' ? 'CERO y 00/100 SOLES' : 'CERO y 00/100 DOLARES AMERICANOS';
   } else {
-    // console.log('NO cero');
+    //
     let LITERAL_DEL_ENTERO = '';
     let LITERAL_DEL_DECIMAL = '';
     let LITERAL_DE_LA_MONEDA = '';
     //descomponiendo el importe en su ENTERO y su DECIMAL
     const ENTERO = Math.trunc(Math.abs(importe));
-    console.log('ENTERO', ENTERO);
+
     const DECIMAL = redondeo_0_Decimales(100 * (Math.abs(importe) - ENTERO));
-    console.log('DECIMAL', DECIMAL);
+
     //importe en CADENA
     const CADENA = ENTERO.toString();
     //longitud de la CADENA
@@ -174,12 +175,12 @@ export const literal = (importe: any, moneda: string) => {
         //
         CIEN_DECENAS = cd_15_14_13_12_11 !== '' ? cd_15_14_13_12_11 : '';
       }
-      console.log('INDICE, DIGITO, CIEN_DECENAS', INDICE, DIGITO, CIEN_DECENAS);
+
       //
       LITERAL_DEL_ENTERO = LITERAL_DEL_ENTERO + componiendoLiteral_ENTERO(INDICE, DIGITO, CIEN_DECENAS);
     }
     // componiendo el DECIMAL
-    console.log('DECIMAL', DECIMAL);
+
     LITERAL_DEL_DECIMAL = cerosALaIzquierda(DECIMAL, 2) + '/100';
     //componiendo la MONEDA
     LITERAL_DE_LA_MONEDA = moneda === 'PEN' ? 'SOLES' : 'DOLARES AMERICANOS';
@@ -270,7 +271,6 @@ const componer_centenas_decenas_unidades = (indice: number, digito: string, cien
             ? 'ONCE '
             : '';
       } else {
-        console.log('entro a 5 - ', digito);
         valor = digito === '1' ? 'DIEZ ' : '';
         //el digito siguiente es CERO???
         esCERO = cien_decenas.substring(1);
@@ -296,9 +296,7 @@ const componer_centenas_decenas_unidades = (indice: number, digito: string, cien
       cien_decenas === '14' ||
       cien_decenas === '15'
     ) {
-      console.log('+--nada--+');
     } else {
-      console.log('entro a 5 - ', digito);
       valor =
         digito === '9'
           ? 'NUEVE '

@@ -127,37 +127,23 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                               (numeroOrdenServicio ? numeroOrdenServicio : '')}
                           </td>
                           <td data-label="Acciones" class="acciones">
-                            <ImgButton
-                              src={images.check}
-                              alt="icono de adicionar"
-                              height={12}
-                              width={12}
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
+                              src={images.check32}
                               title="Seleccionar venta"
-                              onClick={$(() => {
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 if (typeof idOrdenServicio !== 'undefined' && idOrdenServicio !== '') {
                                   alert(`La venta presenta adjunto orden de servicio ${idOrdenServicio}.`);
                                   return;
                                 }
                                 ctx_ventas_cliente.vV = venta100Locali;
                                 ctx.mostrarPanelDespachoVenta = true;
-                                // console.log('mercaINLocali', mercaINLocali);
-                                // if (mercaINLocali.KARDEXS.length === 0) {
-                                //   ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                //   ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                //   console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
-                                // }
-                                // if (mercaINLocali.KARDEXS.length === 1) {
-                                //   ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                //   ctx_buscar_mercaderia_in.kK = mercaINLocali.KARDEXS[0];
-                                //   ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                //   console.log('la mercaSeleccionada IN DIRECTA', ctx_buscar_mercaderia_in.mM);
-                                // }
-                                // if (mercaINLocali.KARDEXS.length > 1) {
-                                //   ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                //   ctx_buscar_mercaderia_in.mostrarPanelKardexsIN = true;
-                                //   console.log('la mercaSeleccionada IN INDIRECTA', ctx_buscar_mercaderia_in.mM);
-                                // }
-                              })}
+                              }}
                             />
                           </td>
                         </tr>

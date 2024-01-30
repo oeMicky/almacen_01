@@ -115,25 +115,22 @@ export default component$((props: { mercaOUTSelecci: any; esAlmacen: boolean; co
                     </td>
                     <td data-label="Uni">{props.mercaOUTSelecci.unidad}</td>
 
-                    <td data-label="Acc" style={{ textAlign: 'right' }}>
-                      <ImgButton
-                        src={images.check}
-                        alt="icono de eliminar"
+                    <td data-label="Acc" class="acciones">
+                      <input
+                        // id="in_BuscarDetraccion"
+                        type="image"
+                        src={images.check32}
+                        title="Eliminar ítem"
                         height={14}
                         width={14}
-                        title="Eliminar ítem"
-                        onClick={$(() => {
+                        style={{ padding: '2px' }}
+                        onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                        onClick$={() => {
                           ctx_buscar_mercaderia_out.mM = props.mercaOUTSelecci;
                           ctx_buscar_mercaderia_out.kK = props.mercaOUTSelecci.KARDEXS[index];
                           definicion_CTX_KARDEXS_OUT.mostrarPanelMercaderiaOUTSeleccionada_DesdeKARDEXS = true;
                           console.log('la mercade seleccionada OUT --INDIRECTA', ctx_buscar_mercaderia_out.mM);
-
-                          // borrarItemMerca.idAuxiliar = iTMercaIN.idAuxiliar;
-                          // borrarItemMerca.item = indexItemServi;
-                          // borrarItemMerca.codigo = iTMercaIN.codigo;
-                          // borrarItemMerca.descripcion = iTMercaIN.descripcion;
-                          // definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT = true;
-                        })}
+                        }}
                       />
                     </td>
                   </tr>

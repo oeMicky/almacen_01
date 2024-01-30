@@ -44,14 +44,17 @@ export default component$(() => {
                 <tr key={indexItemVenta}>
                   <td data-label="Ítem" key={indexItemVenta}>{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
                   <td data-label="Sucursal">{sucur.sucursal}</td>
-                  <td data-label="Acciones" style={{ textAlign: 'center' }}>
-                    <ImgButton
-                      src={images.check}
-                      alt="icono de selección"
-                      height={12}
-                      width={12}
+                  <td data-label="Acciones" class="acciones">
+                    <input
+                      // id="in_BuscarDetraccion"
+                      type="image"
+                      src={images.check32}
                       title="Seleccionar sucursal"
-                      onClick={$(async () => {
+                      height={14}
+                      width={14}
+                      style={{ padding: '2px' }}
+                      onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                      onClick$={async () => {
                         let activo = await getActivoGEEMPSUCUR({
                           idGrupoEmpresarial: sessionStorage.getItem('idGrupoEmpresarial'),
                           idEmpresa: sessionStorage.getItem('idEmpresa'),
@@ -99,7 +102,7 @@ export default component$(() => {
                             navegarA(parametrosGlobales.paginaInicioDelSistema);
                           }
                         }
-                      })}
+                      }}
                     />
                   </td>
                 </tr>

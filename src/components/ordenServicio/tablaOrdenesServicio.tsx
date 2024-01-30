@@ -121,42 +121,33 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                           </td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
                           <td data-label="Acciones" class="acciones">
-                            {/* <ImgButton
-                              src={images.check}
-                              alt="icono de adicionar"
-                              height={12}
-                              width={12}
-                              title="Seleccionar servicio"
-                              onClick={$(() => {
-                                // ctx_servicio_seleccionado._id = _id;
-                                // ctx_servicio_seleccionado.codigo = codigo;
-                                // ctx_servicio_seleccionado.descripcion = descripcion;
-                                // ctx_servicio_seleccionado.precio = precio;
-                                // ctx_docs_orden_servicio.mostrarPanelSeleccionarServicio0 = false;
-                                // ctx_docs_orden_servicio.selecciono_Servicio0 = true;
-                              })}
-                            /> */}
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.edit}
-                              alt="icono de editar"
+                              title="Editar servicio"
                               height={14}
                               width={14}
-                              title="Editar servicio"
-                              onClick={$(() => {
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 ctx_index_orden_servicio.oO = ordServiLocali;
                                 ctx_index_orden_servicio.mostrarPanelNewEditOrdenServicio = true;
-                              })}
+                              }}
                             />
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.pdf}
-                              alt="icono de pdf"
+                              title="Ver pdf "
                               height={14}
                               width={14}
-                              title={`Ver pdf ${ordServiLocali._id}`}
-                              onClick={$(() => {
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 osSeleccionada.value = ordServiLocali;
                                 clickPDF.value++;
-                              })}
+                              }}
                             />
                           </td>
                         </tr>

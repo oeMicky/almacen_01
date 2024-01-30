@@ -65,14 +65,17 @@ export default component$(() => {
                   <td data-label="Ítem" key={indexItemVenta}>{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
                   <td data-label="Grupo empresarial">{empre.grupoEmpresarial}</td>
                   <td data-label="Empresa">{empre.empresa}</td>
-                  <td data-label="Acciones" style={{ textAlign: 'center' }}>
-                    <ImgButton
+                  <td data-label="Acciones" class="acciones">
+                    <input
+                      // id="in_BuscarDetraccion"
+                      type="image"
                       src={images.check32}
-                      alt="icono de selección"
-                      height={12}
-                      width={12}
                       title="Seleccionar empresa"
-                      onClick={$(async () => {
+                      height={14}
+                      width={14}
+                      style={{ padding: '2px' }}
+                      onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                      onClick$={async () => {
                         if (empre.sucursales.length === 1) {
                           //UNA UNICA SUCURSAL
                           let activo = await getActivoGEEMPSUCUR({
@@ -154,11 +157,7 @@ export default component$(() => {
                           definicion_CTX_LISTADO_EMPRESAS.eE = empre;
                           definicion_CTX_LISTADO_EMPRESAS.mostrarPanelListadoSucursales = true;
                         }
-
-                        // sessionStorage.setItem('idSucursal', empre.idSucursal);
-                        // sessionStorage.setItem('sucursal', empre.sucursal);
-                        // navegarA('/prueba');
-                      })}
+                      }}
                     />
                   </td>
                 </tr>

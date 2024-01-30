@@ -124,12 +124,15 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                           <td data-label="Acciones" class="acciones">
                             {props.modoSeleccion ? (
                               <>
-                                <ImgButton
-                                  src={images.check}
-                                  alt="icono seleccionar cotización"
-                                  height={12}
-                                  width={12}
+                                <input
+                                  // id="in_BuscarDetraccion"
+                                  type="image"
+                                  src={images.check32}
+                                  height={14}
+                                  width={14}
+                                  style={{ padding: '2px' }}
                                   title="Selecionar cotización"
+                                  onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                   //   onClick={$(() => {
                                   //     console.log('seleccionar cotiacion', value);
                                   //     ctx_add_venta.cotizacion = value.correlativo;
@@ -175,32 +178,35 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 />
                               </>
                             ) : (
-                              <ImgButton
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
                                 src={images.edit}
-                                alt="icono de editar"
-                                height={12}
-                                width={12}
                                 title="Editar venta"
-                                onClick={$(() => {
+                                height={14}
+                                width={14}
+                                style={{ padding: '2px' }}
+                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
                                   console.log('cotizacion', value);
                                   ctx_index_cotizacion.cC = value;
                                   ctx_index_cotizacion.mostrarPanelNewEditCotizacion = true;
-                                })}
-                                // onClick={() => {
-                                //   onEdit(coti);
-                                // }}
+                                }}
                               />
                             )}
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.pdf}
-                              alt="icono ver pdf"
-                              height={12}
-                              width={12}
-                              title="Ver pdf"
-                              onClick={$(() => {
+                              title="Editar pdf"
+                              height={14}
+                              width={14}
+                              style={{ padding: '2px' }}
+                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 cotizacionSeleccionada.value = value;
                                 clickPDF.value++;
-                              })}
+                              }}
                             />
                           </td>
                         </tr>

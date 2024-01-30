@@ -51,7 +51,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
   useContextProvider(CTX_NEW_EDIT_MERCADERIA_IN, definicion_CTX_NEW_EDIT_MERCADERIA_IN);
   //#endregion DEFINICION CTX_NEW_EDIT_COTIZACION
 
-  //#region DEFINICION MERCADERIA - NEW  /  EDIT
+  //#region DEFINICION MERCADERIA
   const definicion_CTX_MERCADERIA_IN = useStore<IMercaderiaIN>({
     _id: props.mercaSeleccio._id ? props.mercaSeleccio._id : '',
 
@@ -90,7 +90,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     precioPEN: props.mercaSeleccio.precioPEN ? props.mercaSeleccio.precioPEN : 0,
   });
   useContextProvider(CTX_MERCADERIA_IN, definicion_CTX_MERCADERIA_IN);
-  //#endregion DEFINICION MERCADERIA - NEW  /  EDIT
+  //#endregion DEFINICION MERCADERIA
 
   //#region CONTEXTOS
   let ctx: any = [];
@@ -237,35 +237,6 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
   });
   //#endregion ACTUALIZAR LINEA / TIPO
 
-  //#region ACTUALIZAR UNIDAD
-  useTask$(({ track }) => {
-    track(() => definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidad);
-    if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidad) {
-      //ORDENAR UNIDADES
-      const uno: any = definicion_CTX_NEW_EDIT_MERCADERIA_IN.laLineaTipo;
-      console.log('uno unidad', uno);
-      const dos: any = uno.unidades;
-      //ORDENANDO UNIDADES EQUIVALENCIAS
-      const unisOrde: any = dos.sort((a: any, b: any) => {
-        const uniA = a.unidad.toUpperCase(); // ignore upper and lowercase
-        const uniB = b.unidad.toUpperCase(); // ignore upper and lowercase
-        if (uniA < uniB) {
-          return -1;
-        }
-        if (uniA > uniB) {
-          return 1;
-        }
-        // names must be equal
-        return 0;
-      });
-      console.log('first - unisOrde', unisOrde);
-      lasUnidades.value = unisOrde;
-
-      definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidad = false;
-    }
-  });
-  //#endregion ACTUALIZAR UNIDAD
-
   //#region ACTUALIZAR MARCA
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_marca);
@@ -296,6 +267,35 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     }
   });
   //#endregion ACTUALIZAR MARCA
+
+  //#region ACTUALIZAR UNIDAD
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidad);
+    if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidad) {
+      //ORDENAR UNIDADES
+      const uno: any = definicion_CTX_NEW_EDIT_MERCADERIA_IN.laLineaTipo;
+      console.log('uno unidad', uno);
+      const dos: any = uno.unidades;
+      //ORDENANDO UNIDADES EQUIVALENCIAS
+      const unisOrde: any = dos.sort((a: any, b: any) => {
+        const uniA = a.unidad.toUpperCase(); // ignore upper and lowercase
+        const uniB = b.unidad.toUpperCase(); // ignore upper and lowercase
+        if (uniA < uniB) {
+          return -1;
+        }
+        if (uniA > uniB) {
+          return 1;
+        }
+        // names must be equal
+        return 0;
+      });
+      console.log('first - unisOrde', unisOrde);
+      lasUnidades.value = unisOrde;
+
+      definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidad = false;
+    }
+  });
+  //#endregion ACTUALIZAR UNIDAD
 
   useTask$(({ track }) => {
     track(() => ini.value);
@@ -950,19 +950,19 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
                         <td data-label="Descripción Equivalencia">{iTEqui.descripcionEquivalencia}</td>
                         {/* <td data-label="Tipo Equivalencia">{iTEqui.tipoEquivalencia ? 'T' : 'F'}</td> */}
 
-                        <td data-label="Uni Eq" style={{ textAlign: 'end' }}>
+                        <td data-label="Uni Eq" class="comoNumero">
                           {iTEqui.unidadEquivalencia}
                         </td>
-                        <td data-label="=" style={{ textAlign: 'center' }}>
+                        <td data-label="=" class="acciones">
                           =
                         </td>
-                        <td data-label="Factor" style={{ textAlign: 'end' }}>
+                        <td data-label="Factor" class="acciones">
                           {iTEqui.tipoEquivalencia ? iTEqui.factor : '1/' + iTEqui.factor}
                         </td>
-                        <td data-label="Uni" style={{ textAlign: 'start' }}>
+                        <td data-label="Uni" class="comoCadena">
                           {definicion_CTX_MERCADERIA_IN.unidad}
                         </td>
-                        <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                        <td data-label="Acciones" class="acciones">
                           <ImgButton
                             src={images.edit}
                             alt="icono de editar"

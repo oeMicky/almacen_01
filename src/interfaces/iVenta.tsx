@@ -51,13 +51,36 @@ export interface IVenta {
 
   itemsVenta: any;
 
-  montoSubTotalPEN: number;
-  montoIGVPEN: number;
-  montoTotalPEN: any;
+  baseImponiblePEN: any;
+  igvPEN: any;
+  exoneradoPEN: any;
+  inafectoPEN: any;
+  iscPEN: any;
+  icbpPEN: any;
+  otrosPEN: any;
+  totalPEN: any;
 
-  montoSubTotalUSD: number;
-  montoIGVUSD: number;
-  montoTotalUSD: any;
+  baseImponibleUSD: any;
+  igvUSD: any;
+  exoneradoUSD: any;
+  inafectoUSD: any;
+  iscUSD: any;
+  icbpUSD: any;
+  otrosUSD: any;
+  totalUSD: any;
+
+  // montoSubTotalPEN: any;
+  // montoIGVPEN: any;
+  // montoTotalPEN: any;
+
+  // montoSubTotalUSD: any;
+  // montoIGVUSD: any;
+  // montoTotalUSD: any;
+
+  referenciaFecha: string;
+  referenciaTipo: string;
+  referenciaSerie: string;
+  referenciaNumero: number;
 }
 
 export interface ICuotaCreditoVenta {

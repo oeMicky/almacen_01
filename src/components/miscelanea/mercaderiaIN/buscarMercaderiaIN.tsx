@@ -58,7 +58,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   const localizarMercaderiasIN = $(() => {
     if (parametrosBusqueda.cadenaABuscar === '') {
       alert('Ingrese un valor para su busqueda 🦪');
-      //document.getElementById('inputBusquedaServicio_MICE')?.focus();
+      document.getElementById('in_codigoDescripcion_BUSCAR_MERCADERIA_IN')?.focus();
       return;
     }
     buscarMercaderiasIN.value++;
@@ -118,7 +118,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
             <label style={{ marginRight: '10px' }}></label>
             <div class="form-control form-agrupado">
               <input
-                id="in_codigoDescripcion_MERCADERIA_IN"
+                id="in_codigoDescripcion_BUSCAR_MERCADERIA_IN"
                 autoFocus
                 style={{ width: '100%' }}
                 type="text"

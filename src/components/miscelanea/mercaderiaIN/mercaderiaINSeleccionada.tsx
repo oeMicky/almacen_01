@@ -19,7 +19,6 @@ export default component$(
     let documento: any = [];
     switch (props.contextoParaDocumento) {
       case 'new_in_almacen':
-        console.log('contexto::a: new_in_almacen');
         documento = useContext(CTX_IN_ALMACEN).itemsMercaderias;
         break;
     }
@@ -28,11 +27,9 @@ export default component$(
     let ctx: any = [];
     switch (props.contexto) {
       case 'buscar_mercaderia_in':
-        console.log('contexto::a: buscar_mercaderia_in');
         ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
         break;
       case 'kardexs_in':
-        console.log('contexto::a: kardexs_in');
         ctx = useContext(CTX_KARDEXS_IN);
         break;
     }
@@ -64,7 +61,7 @@ export default component$(
     //#region calcularCosto();
     const calcularCosto = $(() => {
       if (elIGV.value === 0) {
-        costo.value = precio.value;
+        costo.value = precio.value * 1;
       } else {
         costo.value = precio.value / IGVCalculado.value;
       }
@@ -110,17 +107,14 @@ export default component$(
               // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = false;
             })}
           />
-          <ImgButton
-            src={images.print}
+          {/* <ImgButton
+            src={images.see}
             alt="Icono de cerrar"
             height={16}
             width={16}
             title="Cerrar el formulario"
-            onClick={$(() => {
-              console.log('mercaINSelecci', props.mercaINSelecci);
-              console.log('elKardex', props.elKardex);
-            })}
-          />
+            onClick={$(() => }
+          /> */}
         </div>
         {/* FORMULARIO */}
         <div class="add-form">
@@ -298,7 +292,7 @@ export default component$(
             </div>
             {/* Precio (PEN): */}
             <div style={{ margin: '5px 0' }}>
-              Precio Uni (PEN):{' '}
+              Valor Uni (PEN):{' '}
               <input
                 id="in_PrecioPEN_MICE"
                 style={{ width: '120px', textAlign: 'end' }}
@@ -307,6 +301,7 @@ export default component$(
                 value={formatear_6Decimales(precio.value)}
                 onChange$={(e) => {
                   precio.value = parseFloat((e.target as HTMLInputElement).value);
+
                   calcularCosto();
                 }}
                 onFocusin$={(e) => {
@@ -328,11 +323,6 @@ export default component$(
             value="Grabar "
             class="btn-centro"
             onClick$={() => {
-              // if (equivalencia.idUnidadEquivalencia === '') {
-              //   alert('Seleccionar una equivalencia');
-              //   document.getElementById('selectUniEquivalencia_MICE')?.focus();
-              //   return;
-              // }
               documento.push({
                 idAuxiliar: parseInt(elIdAuxiliar()),
                 idMercaderia: props.mercaINSelecci._id,
@@ -350,10 +340,7 @@ export default component$(
                 subPEN: cantidad.value * costo.value,
                 valorUnitarioPEN: precio.value,
                 totPEN: cantidad.value * precio.value,
-                // precioUSD: 0,
-                // ventaUSD: 0,
               });
-              // ctx.mostrarPanelMercaderiaINSeleccionada = false;
               if (props.contexto === 'buscar_mercaderia_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada = false;
               }
