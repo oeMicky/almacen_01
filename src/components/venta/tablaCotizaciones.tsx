@@ -1,6 +1,6 @@
 import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
 import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import ImgButton from '../system/imgButton';
+// import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 //------- import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
 // import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';

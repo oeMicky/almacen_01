@@ -339,7 +339,10 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
       ctx_index_in_almacen.grabo_InAlmacen = true;
       ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
-    } catch (error) {}
+    } catch (error) {
+      console.log('el error', error);
+      // return res.status(400).json({ status: 400, message: error.message + ' /inUpEvento' });
+    }
   });
   //#endregion REGISTRAR_INGRESO
 

@@ -1,7 +1,7 @@
-import { $, component$, useSignal, useStyles$, useTask$ } from '@builder.io/qwik';
+import { component$, useSignal, useStyles$, useTask$ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
+// import ImgButton from '~/components/system/imgButton';
 import { cerosALaIzquierda } from '~/functions/comunes';
 import styles from '../../../components/tabla/tabla.css?inline';
 import { getActivoGEEMPSUCUR } from '~/apis/grupoEmpresarial.api';

@@ -1,7 +1,7 @@
-import { $, Resource, component$, useContext, useResource$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
-import ImgButton from '~/components/system/imgButton';
+// import ImgButton from '~/components/system/imgButton';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { IVenta } from '~/interfaces/iVenta';
 import { CTX_VENTAS_CLIENTE } from './ventasCliente';
@@ -82,8 +82,8 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                         serie,
                         numero,
                         moneda,
-                        montoTotalPEN,
-                        montoTotalUSD,
+                        totalPEN,
+                        totalUSD,
                         metodoPago,
                         idOrdenServicio,
                         serieOrdenServicio,
@@ -107,12 +107,12 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                           </td>
                           <td data-label="Importe" class="comoNumero">
                             {moneda === 'PEN'
-                              ? parseFloat(montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
+                              ? parseFloat(totalPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
                                   currency: 'PEN',
                                   minimumFractionDigits: 2,
                                 })
-                              : parseFloat(montoTotalUSD.$numberDecimal).toLocaleString('en-US', {
+                              : parseFloat(totalUSD.$numberDecimal).toLocaleString('en-US', {
                                   // style: 'currency',
                                   currency: 'PEN',
                                   minimumFractionDigits: 2,

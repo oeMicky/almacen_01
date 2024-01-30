@@ -2,7 +2,7 @@ import { $, Resource, component$, useContext, useResource$, useSignal, useStyles
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import style from '../tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
-import ImgButton from '../system/imgButton';
+// import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 // import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 // import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';

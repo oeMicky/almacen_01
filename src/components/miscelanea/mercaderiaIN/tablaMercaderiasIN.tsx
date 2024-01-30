@@ -1,6 +1,6 @@
-import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
+// import ImgButton from '~/components/system/imgButton';
 import { IMercaderiaIN } from '~/interfaces/iMercaderia';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';

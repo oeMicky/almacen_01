@@ -1,8 +1,8 @@
-import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
 import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import ImgButton from '~/components/system/imgButton';
+// import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
 import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import { CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO } from './buscarOrdenServicioAperturado';

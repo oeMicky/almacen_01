@@ -1,6 +1,6 @@
-import { $, component$, Resource, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { component$, Resource, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-import ImgButton from '../../system/imgButton';
+// import ImgButton from '../../system/imgButton';
 import style from '../../tabla/tabla.css?inline';
 import { IPersona } from '~/interfaces/iPersona';
 import { CTX_CLIENTE_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';

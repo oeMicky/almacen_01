@@ -1,7 +1,7 @@
-import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useSignal, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../tabla/tabla.css?inline';
 import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
-import ImgButton from '../system/imgButton';
+// import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { CTX_ADD_VENTA, CTX_F_B_NC_ND } from './addVenta';

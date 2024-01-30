@@ -3,7 +3,7 @@ import { $, Resource, component$, useContext, useResource$, useSignal, useStyles
 // import style from '../../components/tabla/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
 import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
-import ImgButton from '../system/imgButton';
+// import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';

@@ -1,8 +1,8 @@
-import { $, Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_TECNICO } from './buscarTecnico';
 import { parametrosGlobales } from '~/routes/login';
-import ImgButton from '~/components/system/imgButton';
+// import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
 import { ITecnico } from '~/interfaces/iPersona';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';

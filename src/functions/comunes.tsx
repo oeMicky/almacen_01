@@ -296,6 +296,7 @@ const componer_centenas_decenas_unidades = (indice: number, digito: string, cien
       cien_decenas === '14' ||
       cien_decenas === '15'
     ) {
+      console.log('nada');
     } else {
       valor =
         digito === '9'

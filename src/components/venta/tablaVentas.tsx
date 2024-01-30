@@ -160,12 +160,12 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                             </td>
                             <td data-label="Importe" class="comoNumero">
                               {value.moneda === 'PEN'
-                                ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
+                                ? parseFloat(value.totalPEN.$numberDecimal).toLocaleString('en-PE', {
                                     // style: 'currency',
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })
-                                : parseFloat(value.montoTotalUSD.$numberDecimal).toLocaleString('en-US', {
+                                : parseFloat(value.totalUSD.$numberDecimal).toLocaleString('en-US', {
                                     // style: 'currency',
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,
