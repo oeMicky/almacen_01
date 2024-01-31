@@ -289,7 +289,7 @@ export default component$(() => {
           <ElSelect
             id={'se_periodo_VENTA'}
             // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
-            estilos={{ width: '168px', marginLeft: '5px' }}
+            estilos={{ width: '108px', marginLeft: '5px' }}
             registros={losPeriodosCargados.value}
             registroID={'_id'}
             registroTEXT={'periodo'}
