@@ -293,7 +293,7 @@ export default component$(() => {
             registros={losPeriodosCargados.value}
             registroID={'_id'}
             registroTEXT={'periodo'}
-            seleccione={'-- Seleccione periodo --'}
+            seleccione={'-- Selecc. periodo --'}
             onChange={$(() => {
               const elSelec = document.getElementById('se_periodo_VENTA') as HTMLSelectElement;
               const elIdx = elSelec.selectedIndex;
@@ -346,7 +346,7 @@ export default component$(() => {
             title="PLE de ventas"
             // height={16}
             // width={16}
-            style={{ marginLeft: '12px' }}
+            style={{ marginLeft: '16px' }}
             // onFocusin$={() => console.log('☪☪☪☪☪☪')}
             onClick$={() => {
               if (parametrosBusqueda.idPeriodo === '') {

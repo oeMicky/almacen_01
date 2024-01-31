@@ -199,7 +199,7 @@ export default component$(() => {
           registros={losPeriodosCargados.value}
           registroID={'_id'}
           registroTEXT={'periodo'}
-          seleccione={'-- Seleccione periodo --'}
+          seleccione={'-- Selecc. periodo --'}
           onChange={$(() => {
             console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
             const elSelec = document.getElementById('se_periodo_COMPRA') as HTMLSelectElement;
@@ -251,7 +251,7 @@ export default component$(() => {
           // src={images.searchPLUS}
           value="PLE"
           title="PLE de compras"
-          style={{ marginLeft: '10px' }}
+          style={{ marginLeft: '16px' }}
           // onFocusin$={() => console.log('☪☪☪☪☪☪')}
           onClick$={() => {
             //validar PERIODO
