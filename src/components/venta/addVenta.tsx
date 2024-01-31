@@ -204,8 +204,8 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
 
   let sumaTOTAL = 0;
 
-  let subTOTAL = 0;
-  let igvTOTAL = 0;
+  // let subTOTAL = 0;
+  // let igvTOTAL = 0;
 
   // const item = useStore<IItemVenta>({
   //   idAuxiliar: 0, //parseInt(elIdAuxiliar()),
@@ -1468,6 +1468,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                             t_igv = redondeo2Decimales(vv - t_bi);
                           }
                         }
+                        (t_isc = t_isc + 0), (t_icbp = t_icbp + 0), (t_otros = t_otros + 0);
                         sumaTOTAL = sumaTOTAL + t_bi + t_igv + t_exo + t_ina + t_isc + t_icbp + t_otros;
                         sumaTOTAL_BI = sumaTOTAL_BI + t_bi;
                         sumaTOTAL_IGV = sumaTOTAL_IGV + t_igv;
