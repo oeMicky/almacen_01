@@ -346,7 +346,7 @@ export default component$(() => {
             title="PLE de ventas"
             // height={16}
             // width={16}
-            style={{ marginLeft: '2px' }}
+            style={{ marginLeft: '10px' }}
             // onFocusin$={() => console.log('☪☪☪☪☪☪')}
             onClick$={() => {
               if (parametrosBusqueda.idPeriodo === '') {
