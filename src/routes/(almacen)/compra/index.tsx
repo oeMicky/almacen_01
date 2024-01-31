@@ -251,7 +251,7 @@ export default component$(() => {
           // src={images.searchPLUS}
           value="PLE"
           title="PLE de compras"
-          style={{ marginLeft: '20px' }}
+          style={{ marginLeft: '12px' }}
           // onFocusin$={() => console.log('☪☪☪☪☪☪')}
           onClick$={() => {
             //validar PERIODO
