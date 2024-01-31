@@ -1,4 +1,5 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
 // import { getIgvsCompra } from '~/apis/compra.api';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 // import { images } from '~/assets';
@@ -54,6 +55,7 @@ export default component$(() => {
       //actualizar TABLA ORDENES SERVICIO
       // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
       buscarCompras.value++;
+      definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
       definicion_CTX_INDEX_COMPRA.grabo_Compra = false;
     }
   });
@@ -191,7 +193,7 @@ export default component$(() => {
           })}
         />
         <ElSelect
-          id={'se_periodo'}
+          id={'se_periodo_COMPRA'}
           // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
           estilos={{ width: '168px', marginLeft: '5px' }}
           registros={losPeriodosCargados.value}
@@ -200,7 +202,7 @@ export default component$(() => {
           seleccione={'-- Seleccione periodo --'}
           onChange={$(() => {
             console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-            const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
+            const elSelec = document.getElementById('se_periodo_COMPRA') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
             console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
@@ -223,22 +225,46 @@ export default component$(() => {
             }
           })}
         />
-        <ElButton
-          name="PLE"
-          title="Descargar PLE"
-          estilos={{ marginLeft: '4px' }}
-          onClick={$(async () => {
+        <input
+          // id="in_BuscarDetraccion"
+          type="image"
+          src={images.searchPLUS}
+          title="Refrescar ventas"
+          height={16}
+          width={16}
+          style={{ marginLeft: '2px' }}
+          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+          onClick$={() => {
+            if (parametrosBusqueda.idPeriodo === '') {
+              alert('Debe seleccionar el periodo');
+              document.getElementById('se_periodo_COMPRA')?.focus();
+              return;
+            }
+
+            buscarCompras.value++;
+            definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
+          }}
+        />
+        <input
+          // id="in_BuscarDetraccion"
+          type="button"
+          // src={images.searchPLUS}
+          value="PLE"
+          title="PLE de compras"
+          style={{ marginLeft: '20px' }}
+          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+          onClick$={() => {
             //validar PERIODO
             if (periodo.idPeriodo === '') {
               alert('Seleccione el periodo.');
-              document.getElementById('se_periodo')?.focus();
+              document.getElementById('se_periodo_COMPRA')?.focus();
               // ini.value++;
               return;
             }
             // console.log('definicion_CTX_INDEX_COMPRA.miscCs', definicion_CTX_INDEX_COMPRA.miscCs);
             if (definicion_CTX_INDEX_COMPRA.miscCs.length === 0) {
               alert('El PLE del presente periodo no presenta datos para exportar.');
-              document.getElementById('se_periodo')?.focus();
+              document.getElementById('se_periodo_COMPRA')?.focus();
               // ini.value++;
               return;
             }
@@ -327,8 +353,8 @@ export default component$(() => {
                 '\n';
             });
             // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
-            createAndDownloadFile('elPLE' + periodo.periodo, aExportar);
-          })}
+            createAndDownloadFile('elPLE_COMPRA_' + periodo.periodo, aExportar);
+          }}
         />
         {/* <button onClick$={() => console.log('parametrosGlobales', parametrosGlobales)}>paratere</button> */}
         {definicion_CTX_INDEX_COMPRA.mostrarPanelCompra && (

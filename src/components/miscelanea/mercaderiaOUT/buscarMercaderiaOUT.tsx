@@ -135,15 +135,18 @@ export default component$((props: { contexto: string; esAlmacen: boolean }) => {
                   }
                 }}
               />
-              <ImgButton
+              <input
+                // id="in_BuscarDetraccion"
+                type="image"
                 src={images.searchPLUS}
-                alt="Icono de buscar de mercadería"
-                height={16}
-                width={16}
                 title="Buscar datos de mercadería"
-                onClick={$(() => {
+                height={12}
+                width={12}
+                style={{ margin: '2px' }}
+                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                onClick$={() => {
                   localizarMercaderiasOUT();
-                })}
+                }}
               />
             </div>
           </div>

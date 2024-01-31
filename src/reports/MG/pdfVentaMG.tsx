@@ -258,6 +258,16 @@ function pdfVentaMG(venta: any) {
                         ? formatearMonedaPEN(venta.baseImponiblePEN.$numberDecimal)
                         : 'USD ' + formatearMonedaUSD(venta.baseImponibleUSD.$numberDecimal)) +
                       '\n' +
+                      'Exonedado: ' +
+                      (venta.moneda === 'PEN'
+                        ? formatearMonedaPEN(venta.exoneradoPEN.$numberDecimal)
+                        : 'USD ' + formatearMonedaUSD(venta.exoneradoUSD.$numberDecimal)) +
+                      '\n' +
+                      'Inafecto: ' +
+                      (venta.moneda === 'PEN'
+                        ? formatearMonedaPEN(venta.inafectoPEN.$numberDecimal)
+                        : 'USD ' + formatearMonedaUSD(venta.inafectoUSD.$numberDecimal)) +
+                      '\n' +
                       'Importe total de la venta: ' +
                       (venta.moneda === 'PEN'
                         ? formatearMonedaPEN(venta.totalPEN.$numberDecimal)

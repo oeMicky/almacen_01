@@ -193,7 +193,17 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
   const grabo = useSignal(false);
 
   let sumaCuotas = 0;
+
+  let sumaTOTAL_BI = 0;
+  let sumaTOTAL_IGV = 0;
+  let sumaTOTAL_EXO = 0;
+  let sumaTOTAL_INAFEC = 0;
+  let sumaTOTAL_ISC = 0;
+  let sumaTOTAL_ICBP = 0;
+  let sumaTOTAL_OTROS = 0;
+
   let sumaTOTAL = 0;
+
   let subTOTAL = 0;
   let igvTOTAL = 0;
 
@@ -405,28 +415,41 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
   //#region ITEMS VENTA
   const fijarMontos = $((e: any) => {
     if (definicion_CTX_F_B_NC_ND.enDolares) {
-      definicion_CTX_F_B_NC_ND.baseImponibleUSD = e.subTOTAL;
-      definicion_CTX_F_B_NC_ND.igvUSD = e.igvTOTAL;
-      definicion_CTX_F_B_NC_ND.totalUSD = e.sumaTOTAL;
-
-      const tt = redondeo2Decimales(e.sumaTOTAL * definicion_CTX_F_B_NC_ND.tipoCambio);
-      const sub = redondeo2Decimales((tt * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
-      const i = redondeo2Decimales(tt - sub);
-
-      definicion_CTX_F_B_NC_ND.baseImponiblePEN = sub;
-      definicion_CTX_F_B_NC_ND.igvPEN = i;
-      definicion_CTX_F_B_NC_ND.totalPEN = tt;
+      // definicion_CTX_F_B_NC_ND.baseImponibleUSD = e.subTOTAL;
+      // definicion_CTX_F_B_NC_ND.igvUSD = e.igvTOTAL;
+      // definicion_CTX_F_B_NC_ND.totalUSD = e.sumaTOTAL_IGV + e.sumaTOTAL_EXO + e.sumaTOTAL_INAFEC;
+      // const tt = redondeo2Decimales(e.sumaTOTAL * definicion_CTX_F_B_NC_ND.tipoCambio);
+      // const sub = redondeo2Decimales((tt * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
+      // const i = redondeo2Decimales(tt - sub);
+      // definicion_CTX_F_B_NC_ND.baseImponiblePEN = sub;
+      // definicion_CTX_F_B_NC_ND.igvPEN = i;
+      // definicion_CTX_F_B_NC_ND.totalPEN = tt;
     } else {
-      definicion_CTX_F_B_NC_ND.baseImponiblePEN = e.subTOTAL;
-      definicion_CTX_F_B_NC_ND.igvPEN = e.igvTOTAL;
+      definicion_CTX_F_B_NC_ND.baseImponiblePEN = e.sumaTOTAL_BI;
+      definicion_CTX_F_B_NC_ND.exoneradoPEN = e.sumaTOTAL_EXO;
+      definicion_CTX_F_B_NC_ND.inafectoPEN = e.sumaTOTAL_INAFEC;
+      definicion_CTX_F_B_NC_ND.iscPEN = e.sumaTOTAL_ISC;
+      definicion_CTX_F_B_NC_ND.icbpPEN = e.sumaTOTAL_ICBP;
+      definicion_CTX_F_B_NC_ND.otrosPEN = e.sumaTOTAL_OTROS;
+      definicion_CTX_F_B_NC_ND.igvPEN = e.sumaTOTAL_IGV;
       definicion_CTX_F_B_NC_ND.totalPEN = e.sumaTOTAL;
       console.log(
         'first',
         definicion_CTX_F_B_NC_ND.baseImponiblePEN,
+        definicion_CTX_F_B_NC_ND.exoneradoPEN,
+        definicion_CTX_F_B_NC_ND.inafectoPEN,
+        definicion_CTX_F_B_NC_ND.iscPEN,
+        definicion_CTX_F_B_NC_ND.icbpPEN,
+        definicion_CTX_F_B_NC_ND.otrosPEN,
         definicion_CTX_F_B_NC_ND.igvPEN,
         definicion_CTX_F_B_NC_ND.totalPEN
       );
       definicion_CTX_F_B_NC_ND.baseImponibleUSD = 0;
+      definicion_CTX_F_B_NC_ND.exoneradoUSD = 0;
+      definicion_CTX_F_B_NC_ND.inafectoUSD = 0;
+      definicion_CTX_F_B_NC_ND.iscUSD = 0;
+      definicion_CTX_F_B_NC_ND.icbpUSD = 0;
+      definicion_CTX_F_B_NC_ND.otrosUSD = 0;
       definicion_CTX_F_B_NC_ND.igvUSD = 0;
       definicion_CTX_F_B_NC_ND.totalUSD = 0;
     }
@@ -641,21 +664,21 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       itemsVenta: definicion_CTX_F_B_NC_ND.itemsVenta,
 
       baseImponiblePEN: definicion_CTX_F_B_NC_ND.baseImponiblePEN,
-      igvPEN: definicion_CTX_F_B_NC_ND.igvPEN,
       exoneradoPEN: definicion_CTX_F_B_NC_ND.exoneradoPEN,
       inafectoPEN: definicion_CTX_F_B_NC_ND.inafectoPEN,
       iscPEN: definicion_CTX_F_B_NC_ND.iscPEN,
       icbpPEN: definicion_CTX_F_B_NC_ND.icbpPEN,
       otrosPEN: definicion_CTX_F_B_NC_ND.otrosPEN,
+      igvPEN: definicion_CTX_F_B_NC_ND.igvPEN,
       totalPEN: definicion_CTX_F_B_NC_ND.totalPEN,
 
       baseImponibleUSD: definicion_CTX_F_B_NC_ND.baseImponibleUSD,
-      igvUSD: definicion_CTX_F_B_NC_ND.igvUSD,
       exoneradoUSD: definicion_CTX_F_B_NC_ND.exoneradoUSD,
       inafectoUSD: definicion_CTX_F_B_NC_ND.inafectoUSD,
       iscUSD: definicion_CTX_F_B_NC_ND.iscUSD,
       icbpUSD: definicion_CTX_F_B_NC_ND.icbpUSD,
       otrosUSD: definicion_CTX_F_B_NC_ND.otrosUSD,
+      igvUSD: definicion_CTX_F_B_NC_ND.igvUSD,
       totalUSD: definicion_CTX_F_B_NC_ND.totalUSD,
 
       // montoSubTotalPEN: definicion_CTX_F_B_NC_ND.montoSubTotalPEN,
@@ -747,8 +770,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       definicion_CTX_F_B_NC_ND.referenciaTipo = '';
       definicion_CTX_F_B_NC_ND.referenciaSerie = '';
       definicion_CTX_F_B_NC_ND.referenciaNumero = 0;
-    } else {
-      grabo.value = false;
     }
 
     //OCULTAR MENSAJE DE GRABACION
@@ -761,7 +782,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
       class="container-modal"
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 880px)',
         // width: 'auto',
         background: `${definicion_CTX_F_B_NC_ND.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : ''}`,
         // border: '1px solid red',
@@ -784,6 +805,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
+            ctx_index_venta.grabo_Venta = grabo;
             ctx_index_venta.mostrarPanelVenta = false;
           })}
         />
@@ -1407,22 +1429,77 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   <tbody>
                     {definicion_CTX_F_B_NC_ND.itemsVenta.map((iTVen: any, index: number) => {
                       const indexItemVenta = index + 1;
+                      let t_bi = 0,
+                        t_igv = 0,
+                        t_exo = 0,
+                        t_ina = 0,
+                        t_isc = 0,
+                        t_icbp = 0,
+                        t_otros = 0;
                       if (definicion_CTX_F_B_NC_ND.enDolares) {
-                        sumaTOTAL =
-                          sumaTOTAL +
-                          redondeo2Decimales(iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD);
-                        subTOTAL = redondeo2Decimales((sumaTOTAL * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
-                        igvTOTAL = redondeo2Decimales(sumaTOTAL - subTOTAL);
+                        // if (iTVen.exonerado || iTVen.inafecto) {
+                        //   sumaTOTAL =
+                        //     sumaTOTAL +
+                        //     redondeo2Decimales(iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD);
+                        //   subTOTAL = redondeo2Decimales(sumaTOTAL);
+                        // } else {
+                        //   subTOTAL = redondeo2Decimales((sumaTOTAL * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
+                        // }
+                        // igvTOTAL = redondeo2Decimales(sumaTOTAL - subTOTAL);
                       } else {
-                        sumaTOTAL =
-                          sumaTOTAL +
-                          redondeo2Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
-                        subTOTAL = redondeo2Decimales((sumaTOTAL * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
-                        igvTOTAL = redondeo2Decimales(sumaTOTAL - subTOTAL);
+                        if (iTVen.exonerado) {
+                          t_exo = redondeo2Decimales(
+                            iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
+                          );
+                        } else {
+                          if (iTVen.inafecto) {
+                            t_ina = redondeo2Decimales(
+                              iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
+                            );
+                          } else {
+                            // sumaTOTAL_IGV =
+                            //   sumaTOTAL_IGV +
+                            //   redondeo2Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
+                            // subTOTAL = redondeo2Decimales((sumaTOTAL_IGV * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
+                            const vv = redondeo2Decimales(
+                              iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
+                            );
+                            t_bi = redondeo2Decimales((vv * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
+                            t_igv = redondeo2Decimales(vv - t_bi);
+                          }
+                        }
+                        sumaTOTAL = sumaTOTAL + t_bi + t_igv + t_exo + t_ina + t_isc + t_icbp + t_otros;
+                        sumaTOTAL_BI = sumaTOTAL_BI + t_bi;
+                        sumaTOTAL_IGV = sumaTOTAL_IGV + t_igv;
+                        sumaTOTAL_EXO = sumaTOTAL_EXO + t_exo;
+                        sumaTOTAL_INAFEC = sumaTOTAL_INAFEC + t_ina;
+                        sumaTOTAL_ISC = sumaTOTAL_ISC + t_isc;
+                        sumaTOTAL_ICBP = sumaTOTAL_ICBP + t_icbp;
+                        sumaTOTAL_OTROS = sumaTOTAL_OTROS + t_otros;
+                        // igvTOTAL = redondeo2Decimales(sumaTOTAL_IGV - subTOTAL);
                       }
-
+                      console.log(
+                        `valores ${index + 1} : `,
+                        sumaTOTAL,
+                        sumaTOTAL_BI,
+                        sumaTOTAL_IGV,
+                        sumaTOTAL_EXO,
+                        sumaTOTAL_INAFEC,
+                        sumaTOTAL_ISC,
+                        sumaTOTAL_ICBP,
+                        sumaTOTAL_OTROS
+                      );
                       if (index + 1 === definicion_CTX_F_B_NC_ND.itemsVenta.length) {
-                        fijarMontos({ subTOTAL, igvTOTAL, sumaTOTAL });
+                        fijarMontos({
+                          sumaTOTAL,
+                          sumaTOTAL_BI,
+                          sumaTOTAL_IGV,
+                          sumaTOTAL_EXO,
+                          sumaTOTAL_INAFEC,
+                          sumaTOTAL_ISC,
+                          sumaTOTAL_ICBP,
+                          sumaTOTAL_OTROS,
+                        });
                       }
                       return (
                         <tr key={iTVen.idAuxiliar}>
@@ -1509,19 +1586,22 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                             {iTVen.inafecto ? 'Si' : '-'}
                           </td>
                           <td data-label="Acciones" class="acciones">
-                            <ImgButton
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
                               src={images.trash}
-                              alt="icono de eliminar"
+                              title="Eliminar ítem"
                               height={12}
                               width={12}
-                              title="Eliminar ítem"
-                              onClick={$(() => {
+                              style={{ margin: '2px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
                                 borrarItemVenta.idAuxiliar = iTVen.idAuxiliar;
                                 // borrarItemVenta.item = indexItemServi;
                                 borrarItemVenta.codigo = iTVen.codigo;
                                 borrarItemVenta.descripcion = iTVen.descripcionEquivalencia;
                                 definicion_CTX_ADD_VENTA.mostrarPanelBorrarItemVenta = true;
-                              })}
+                              }}
                             />
                           </td>
                         </tr>
@@ -1533,10 +1613,37 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                   <tfoot>
                     <tr>
                       <td colSpan={6} class="comoNumero">
-                        Sub total
+                        Base Imponible
                       </td>
                       <td colSpan={1} class="comoNumero">
-                        {`${subTOTAL.toLocaleString('en-PE', {
+                        {`${sumaTOTAL_BI.toLocaleString('en-PE', {
+                          style: 'currency',
+                          currency: 'PEN',
+                          minimumFractionDigits: 2,
+                        })}`}
+                      </td>
+                      <td colSpan={3} />
+                    </tr>
+
+                    <tr>
+                      <td colSpan={6} class="comoNumero">
+                        Exoneredo
+                      </td>
+                      <td colSpan={1} class="comoNumero">
+                        {`${sumaTOTAL_EXO.toLocaleString('en-PE', {
+                          style: 'currency',
+                          currency: 'PEN',
+                          minimumFractionDigits: 2,
+                        })}`}
+                      </td>
+                      <td colSpan={3} />
+                    </tr>
+                    <tr>
+                      <td colSpan={6} class="comoNumero">
+                        Inafecto
+                      </td>
+                      <td colSpan={1} class="comoNumero">
+                        {`${sumaTOTAL_INAFEC.toLocaleString('en-PE', {
                           style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
@@ -1549,7 +1656,7 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                         IGV
                       </td>
                       <td colSpan={1} class="comoNumero">
-                        {`${igvTOTAL.toLocaleString('en-PE', {
+                        {`${sumaTOTAL_IGV.toLocaleString('en-PE', {
                           style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,

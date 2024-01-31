@@ -96,7 +96,7 @@ a.linkHeaderPrincipal:hover {
   flex-direction: column;
   margin: 6px 3px;
   /* font-size: 0.6rem; */
-  border: 1px dashed #ff0000;
+  /* border: 1px dashed #ff0000; */
 }
 .form-control {
   display: flex;
@@ -110,7 +110,7 @@ a.linkHeaderPrincipal:hover {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  border: 1px dashed blue
+  /* border: 1px dashed blue */
 }
 /* .form-control .form-agrupado input, */
 .form-control .form-agrupado select{

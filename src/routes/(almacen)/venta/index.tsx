@@ -7,6 +7,7 @@ import {
   useSignal,
   useStore,
   useStylesScoped$,
+  useTask$,
   // useTask$,
 } from '@builder.io/qwik';
 // import ImgButton from '../../../components/system/imgButton';
@@ -21,6 +22,8 @@ import style from './index.css?inline';
 import { parametrosGlobales } from '../../login/index';
 import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
+import { images } from '~/assets';
+import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 
 // import { CTX_DOCS_ORDEN_SERVICIO } from '../ordenServicio';
@@ -54,8 +57,10 @@ export default component$(() => {
 
   //#region DEFINICION CTX_INDEX_VENTA
   const definicion_CTX_INDEX_VENTA = useStore({
+    miscVts: [],
+
     mostrarPanelVenta: false,
-    grabo: false,
+    grabo_Venta: false,
 
     mostrarSpinner: false,
   });
@@ -144,6 +149,44 @@ export default component$(() => {
   //   cargarLosPeriodos();
   // });
   //#endregion OBTENER PERIODOS
+
+  //#region REFRESCAR REGISTROS
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_INDEX_VENTA.grabo_Venta);
+    if (definicion_CTX_INDEX_VENTA.grabo_Venta) {
+      buscarVentas.value++;
+
+      definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
+      definicion_CTX_INDEX_VENTA.grabo_Venta = false;
+    }
+  });
+  //#endregion REFRESCAR REGISTROS
+
+  //#region CREAR Y DOWNLOAD TXT
+  const createAndDownloadFile = $((nameFile: string, texto: string) => {
+    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    // const texto = 'hOLA A TODOS';
+
+    const filename = nameFile; ///'file.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([texto], { type: 'text/plain' });
+
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    // pom.setAttribute('download', filename);
+    pom.setAttribute('download', filename + '.txt');
+
+    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
+
+    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+    console.log('first txt');
+  });
+  //#endregion CREAR Y DOWNLOAD TXT
 
   return (
     <main>
@@ -244,7 +287,7 @@ export default component$(() => {
             })}
           />
           <ElSelect
-            id={'se_periodo'}
+            id={'se_periodo_VENTA'}
             // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
             estilos={{ width: '168px', marginLeft: '5px' }}
             registros={losPeriodosCargados.value}
@@ -252,7 +295,7 @@ export default component$(() => {
             registroTEXT={'periodo'}
             seleccione={'-- Seleccione periodo --'}
             onChange={$(() => {
-              const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
+              const elSelec = document.getElementById('se_periodo_VENTA') as HTMLSelectElement;
               const elIdx = elSelec.selectedIndex;
 
               periodo.idPeriodo = elSelec[elIdx].id;
@@ -274,6 +317,139 @@ export default component$(() => {
                 (document.getElementById('in_Fecha_MICE') as HTMLSelectElement)?.focus();
               }
             })}
+          />
+          <input
+            // id="in_BuscarDetraccion"
+            type="image"
+            src={images.searchPLUS}
+            title="Refrescar ventas"
+            height={16}
+            width={16}
+            style={{ marginLeft: '2px' }}
+            // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+            onClick$={() => {
+              if (parametrosBusqueda.idPeriodo === '') {
+                alert('Debe seleccionar el periodo');
+                document.getElementById('se_periodo_VENTA')?.focus();
+                return;
+              }
+              buscarVentas.value++;
+
+              definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
+            }}
+          />
+          <input
+            // id="in_BuscarDetraccion"
+            type="button"
+            // src={images.searchPLUS}
+            value="PLE"
+            title="PLE de ventas"
+            // height={16}
+            // width={16}
+            style={{ marginLeft: '20px' }}
+            // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+            onClick$={() => {
+              if (parametrosBusqueda.idPeriodo === '') {
+                alert('Debe seleccionar el periodo');
+                document.getElementById('se_periodo_VENTA')?.focus();
+                return;
+              }
+              if (definicion_CTX_INDEX_VENTA.miscVts.length === 0) {
+                alert('El PLE del presente periodo no presenta datos para exportar.');
+                document.getElementById('se_periodo_VENTA')?.focus();
+                // ini.value++;
+                return;
+              }
+              let aExportar = '';
+              definicion_CTX_INDEX_VENTA.miscVts.map((com: any) => {
+                const {
+                  codigoTipoDocumentoIdentidad,
+                  tipoDocumentoIdentidad,
+                  numeroIdentidad,
+                  razonSocialNombre,
+                  codigoTipoComprobantePago,
+                  tipoComprobantePago,
+                  fecha,
+                  serie,
+                  numero,
+
+                  baseImponiblePEN,
+                  exoneradoPEN,
+                  inafectoPEN,
+                  iscPEN,
+                  icbpPEN,
+                  otrosPEN,
+                  igvPEN,
+                  totalPEN,
+
+                  referenciaFecha,
+                  referenciaTipo,
+                  referenciaSerie,
+                  referenciaNumero,
+                } = com;
+
+                const bI = typeof baseImponiblePEN === 'undefined' ? '' : baseImponiblePEN.$numberDecimal;
+                const iGV = typeof igvPEN === 'undefined' ? '' : igvPEN.$numberDecimal;
+                const exo = typeof exoneradoPEN === 'undefined' ? '' : exoneradoPEN.$numberDecimal;
+                const ina = typeof inafectoPEN === 'undefined' ? '' : inafectoPEN.$numberDecimal;
+                const isc = typeof iscPEN === 'undefined' ? '' : iscPEN.$numberDecimal;
+                const icbp = typeof icbpPEN === 'undefined' ? '' : icbpPEN.$numberDecimal;
+                const otros = typeof otrosPEN === 'undefined' ? '' : otrosPEN.$numberDecimal;
+                const total = typeof totalPEN === 'undefined' ? '' : totalPEN.$numberDecimal;
+                const refeFe = typeof referenciaFecha === 'undefined' ? '' : referenciaFecha;
+                const refeTipo = typeof referenciaTipo === 'undefined' ? '' : referenciaTipo;
+                const refeSerie = typeof referenciaSerie === 'undefined' ? '' : referenciaSerie;
+                const refeNumero = typeof referenciaNumero === 'undefined' ? '' : referenciaNumero;
+
+                aExportar =
+                  aExportar +
+                  formatoDDMMYYYY_PEN(fecha) +
+                  '|' +
+                  codigoTipoComprobantePago +
+                  '|' +
+                  tipoComprobantePago +
+                  '|' +
+                  serie +
+                  '|' +
+                  numero +
+                  '|' +
+                  codigoTipoDocumentoIdentidad +
+                  '|' +
+                  tipoDocumentoIdentidad +
+                  '|' +
+                  numeroIdentidad +
+                  '|' +
+                  razonSocialNombre +
+                  '|' +
+                  bI +
+                  '|' +
+                  iGV +
+                  '|' +
+                  exo +
+                  '|' +
+                  ina +
+                  '|' +
+                  isc +
+                  '|' +
+                  icbp +
+                  '|' +
+                  otros +
+                  '|' +
+                  total +
+                  '|' +
+                  formatoDDMMYYYY_PEN(refeFe) +
+                  '|' +
+                  refeTipo +
+                  '|' +
+                  refeSerie +
+                  '|' +
+                  refeNumero +
+                  '|' +
+                  '\n';
+              });
+              // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
+              createAndDownloadFile('elPLE_VENTA_' + periodo.periodo, aExportar);
+            }}
           />
           {/* <textarea id="source" value={'holas'}></textarea> */}
           {/* <button

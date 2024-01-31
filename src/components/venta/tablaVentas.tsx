@@ -117,6 +117,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
           console.log('onResolved 🍓🍓🍓🍓');
           const { data } = ventas; //{ status, data, message }
           const misVentas: IVenta[] = data;
+          ctx_index_venta.miscVts = misVentas;
           ctx_index_venta.mostrarSpinner = false;
           // console.log(misVentas);
           // props.buscarVentas = false;

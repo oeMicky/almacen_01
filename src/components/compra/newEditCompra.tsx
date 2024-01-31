@@ -152,6 +152,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
 
   //#region INICIALIZACION
   const ini = useSignal(0);
+  const grabo = useSignal(false);
   const LosTCPcargados = useSignal([]);
   const LosIGVscargados = useSignal([]);
   // const esNumero = useSignal(false);
@@ -813,7 +814,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
     }
 
     //
-    ctx_index_compra.grabo_Compra = true;
+    grabo.value = true;
     ctx_index_compra.mostrarPanelCompra = false;
   });
   //#endregion REGISTRAR COMPRA
@@ -840,6 +841,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
+            ctx_index_compra.grabo_Compra = grabo;
             ctx_index_compra.mostrarPanelCompra = false;
           })}
         />

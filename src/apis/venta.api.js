@@ -80,8 +80,8 @@ export const getIgvVenta = async (parametros) => {
 };
 
 export const inVenta = async (parametros) => {
-  // console.log('//////api////////////******************obtener a inVenta');
-  // console.log('parametros inVenta', parametros);
+  console.log('//////api////////////******************obtener a inVenta');
+  console.log('parametros inVenta', parametros);
   const res = await fetch(API + '/inVenta', {
     method: 'POST',
     headers: {
