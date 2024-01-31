@@ -1446,6 +1446,23 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                         //   subTOTAL = redondeo2Decimales((sumaTOTAL * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
                         // }
                         // igvTOTAL = redondeo2Decimales(sumaTOTAL - subTOTAL);
+                        if (iTVen.exonerado) {
+                          t_exo = redondeo2Decimales(
+                            iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
+                          );
+                        } else {
+                          if (iTVen.inafecto) {
+                            t_ina = redondeo2Decimales(
+                              iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
+                            );
+                          } else {
+                            const vv = redondeo2Decimales(
+                              iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
+                            );
+                            t_bi = redondeo2Decimales((vv * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
+                            t_igv = redondeo2Decimales(vv - t_bi);
+                          }
+                        }
                       } else {
                         if (iTVen.exonerado) {
                           t_exo = redondeo2Decimales(
@@ -1457,10 +1474,6 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                               iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
                             );
                           } else {
-                            // sumaTOTAL_IGV =
-                            //   sumaTOTAL_IGV +
-                            //   redondeo2Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
-                            // subTOTAL = redondeo2Decimales((sumaTOTAL_IGV * 100) / (100 + definicion_CTX_F_B_NC_ND.igv));
                             const vv = redondeo2Decimales(
                               iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
                             );
@@ -1468,17 +1481,17 @@ export default component$((props: { ancho: number; addPeriodo: any; igv: number 
                             t_igv = redondeo2Decimales(vv - t_bi);
                           }
                         }
-                        (t_isc = t_isc + 0), (t_icbp = t_icbp + 0), (t_otros = t_otros + 0);
-                        sumaTOTAL = sumaTOTAL + t_bi + t_igv + t_exo + t_ina + t_isc + t_icbp + t_otros;
-                        sumaTOTAL_BI = sumaTOTAL_BI + t_bi;
-                        sumaTOTAL_IGV = sumaTOTAL_IGV + t_igv;
-                        sumaTOTAL_EXO = sumaTOTAL_EXO + t_exo;
-                        sumaTOTAL_INAFEC = sumaTOTAL_INAFEC + t_ina;
-                        sumaTOTAL_ISC = sumaTOTAL_ISC + t_isc;
-                        sumaTOTAL_ICBP = sumaTOTAL_ICBP + t_icbp;
-                        sumaTOTAL_OTROS = sumaTOTAL_OTROS + t_otros;
                         // igvTOTAL = redondeo2Decimales(sumaTOTAL_IGV - subTOTAL);
                       }
+                      (t_isc = t_isc + 0), (t_icbp = t_icbp + 0), (t_otros = t_otros + 0);
+                      sumaTOTAL = sumaTOTAL + t_bi + t_igv + t_exo + t_ina + t_isc + t_icbp + t_otros;
+                      sumaTOTAL_BI = sumaTOTAL_BI + t_bi;
+                      sumaTOTAL_IGV = sumaTOTAL_IGV + t_igv;
+                      sumaTOTAL_EXO = sumaTOTAL_EXO + t_exo;
+                      sumaTOTAL_INAFEC = sumaTOTAL_INAFEC + t_ina;
+                      sumaTOTAL_ISC = sumaTOTAL_ISC + t_isc;
+                      sumaTOTAL_ICBP = sumaTOTAL_ICBP + t_icbp;
+                      sumaTOTAL_OTROS = sumaTOTAL_OTROS + t_otros;
                       console.log(
                         `valores ${index + 1} : `,
                         sumaTOTAL,
