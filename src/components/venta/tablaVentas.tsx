@@ -196,7 +196,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                               <input
                                 // id="in_BuscarDetraccion"
                                 type="image"
-                                src={images.os}
+                                src={images.pdf_os}
                                 title="Ver OS"
                                 hidden={!(typeof value.idOrdenServicio !== 'undefined' && value.idOrdenServicio !== '')}
                                 height={12}

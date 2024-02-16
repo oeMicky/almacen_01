@@ -39,7 +39,7 @@ import logout32 from '../images/logout32.svg';
 import mercaderia from '../images/mercaderia.svg';
 import menu from '../images/menu.svg';
 import moneyBag from '../images/moneyBag.svg';
-import os from '../images/os.svg';
+import pdf_os from '../images/pdf_os.svg';
 import pdf from '../images/pdf.svg';
 import pdf_2 from '../images/pdf_2.svg';
 import pencil from '../images/pencil.svg';
@@ -95,7 +95,7 @@ export default {
   mercaderia,
   menu,
   moneyBag,
-  os,
+  pdf_os,
   pdf,
   pdf_2,
   pencil,
