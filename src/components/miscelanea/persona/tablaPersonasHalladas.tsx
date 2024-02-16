@@ -2,7 +2,7 @@ import { component$, Resource, useContext, useResource$, useStylesScoped$ } from
 import { images } from '~/assets';
 // import ImgButton from '../../system/imgButton';
 import style from '../../tabla/tabla.css?inline';
-import { IPersona } from '~/interfaces/iPersona';
+import type { IPersona } from '~/interfaces/iPersona';
 import { CTX_CLIENTE_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_ADD_VENTA, CTX_CLIENTE_VENTA } from '~/components/venta/addVenta';
 import { CTX_BUSCAR_PERSONA } from './buscarPersona';
@@ -12,6 +12,7 @@ import { CTX_NEW_EDIT_COMPRA, CTX_PROVEEDOR } from '~/components/compra/newEditC
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
 import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { CTX_DESTINATARIO_GR, CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 
 //parametrosBusqueda: any;
 export default component$((props: { buscarPersona: number; soloPersonasNaturales: boolean; contexto: string; rol: string }) => {
@@ -70,6 +71,14 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
       // console.log('swicth.......useContext(CTX_NEW_EDIT_COMPRA)');
       if (props.rol === 'proveedor') {
         ctx_rol = useContext(CTX_PROVEEDOR);
+        // console.log('swicth.......useContext(CTX_PROVEEDOR)');
+      }
+      break;
+    case 'new_edit_guiaRemision':
+      ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
+      // console.log('swicth.......useContext(CTX_NEW_EDIT_COMPRA)');
+      if (props.rol === 'destinatario') {
+        ctx_rol = useContext(CTX_DESTINATARIO_GR);
         // console.log('swicth.......useContext(CTX_PROVEEDOR)');
       }
       break;
@@ -232,7 +241,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                                 if (props.contexto === 'new_out_almacen' && props.rol === 'cliente') {
                                   ctx_buscar_persona.pP = persoLocali;
                                   ctx.mostrarPanelVentasCliente = true;
-                                  console.log('TABLA_PERSONAS_HALLADAS: es verdadderoa.....');
+                                  // console.log('TABLA_PERSONAS_HALLADAS: es verdadderoa.....');
                                 } else {
                                   ctx_rol._id = _id;
                                   ctx_rol.codigoTipoDocumentoIdentidad = codigoTipoDocumentoIdentidad;

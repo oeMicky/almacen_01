@@ -1,7 +1,7 @@
 import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_VEHICULO } from './buscarVehiculo';
-import { IVehiculo } from '~/interfaces/iVehiculo';
+import type { IVehiculo } from '~/interfaces/iVehiculo';
 // import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO, CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
@@ -105,7 +105,7 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(vehiculos) => {
-        console.log('onResolved 🍓🍓🍓🍓', vehiculos);
+        console.log('onResolved 🍓🍓🍓🍓');
         const { data } = vehiculos; //{ status, data, message }
         const misVehiculos: IVehiculo[] = data;
         return (

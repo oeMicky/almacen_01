@@ -4,7 +4,7 @@ import { CTX_BUSCAR_TECNICO } from './buscarTecnico';
 import { parametrosGlobales } from '~/routes/login';
 // import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
-import { ITecnico } from '~/interfaces/iPersona';
+import type { ITecnico } from '~/interfaces/iPersona';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 
 export default component$((props: { buscarTecnico: number; contexto: string }) => {
@@ -81,7 +81,7 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(personas) => {
-        console.log('onResolved 🍓🍓🍓🍓', personas);
+        console.log('onResolved 🍓🍓🍓🍓');
         const { data } = personas; //{ status, data, message }
         const misPersonas: ITecnico[] = data;
         return (

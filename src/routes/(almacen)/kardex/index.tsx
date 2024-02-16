@@ -64,11 +64,12 @@ export default component$(() => {
       </h1> */}
       <div style={{ background: '#00778F' }}>
         <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
-          {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
+          {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
             'usuario'
-          )}`}
+          )}`} */}
+          {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
       <h4 style={{ margin: '8px 0 4px 2px' }}>

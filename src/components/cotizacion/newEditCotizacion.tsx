@@ -11,11 +11,11 @@ import {
 } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { cerosALaIzquierda, redondeo2Decimales, ultimoDiaDelPeriodoX } from '~/functions/comunes';
+import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo2Decimales } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_INDEX_COTIZACION } from '~/routes/(almacen)/cotizacion';
-import { IPersona } from '~/interfaces/iPersona';
-import { ICotizacion } from '~/interfaces/iCotizacion';
+import type { IPersona } from '~/interfaces/iPersona';
+import type { ICotizacion } from '~/interfaces/iCotizacion';
 import ElButton from '../system/elButton';
 import style from '../tabla/tabla.css?inline';
 import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
@@ -29,6 +29,7 @@ import {
   inUpCotizacion,
 } from '~/apis/cotizacion.api';
 import BorrarServicio from './borrarServicio';
+import BorrarRepuestoLubri from './borrarRepuestoLubri';
 
 export const CTX_COTIZACION = createContextId<ICotizacion>('cotizacion');
 
@@ -43,6 +44,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
   const definicion_CTX_NEW_EDIT_COTIZACION = useStore({
     // idSerieCotizacion: '',
     // serieCotizacion: '',
+    TOTAL_SERVICIOS: 0,
+    TOTAL_REPUESTOS: 0,
 
     rol_Persona: '',
     selecciono_Persona: false,
@@ -82,7 +85,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
       empresa: props.cotizacionSelecci.empresa ? props.cotizacionSelecci.empresa : parametrosGlobales.RazonSocial,
       direccion: props.cotizacionSelecci.direccion ? props.cotizacionSelecci.direccion : parametrosGlobales.Direccion,
 
-      fecha: props.cotizacionSelecci.fecha ? props.cotizacionSelecci.fecha.substring(0, 10) : '',
+      fecha: props.cotizacionSelecci.fecha ? props.cotizacionSelecci.fecha.substring(0, 10) : hoy(), // '',
 
       idSerieCotizacion: props.cotizacionSelecci.idSerieCotizacion ? props.cotizacionSelecci.idSerieCotizacion : '',
       serie: props.cotizacionSelecci.serie ? props.cotizacionSelecci.serie : '',
@@ -116,8 +119,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
       servicios: props.cotizacionSelecci.servicios ? props.cotizacionSelecci.servicios : [],
       repuestosLubri: props.cotizacionSelecci.repuestosLubri ? props.cotizacionSelecci.repuestosLubri : [],
 
-      montoSubTotalPEN: props.cotizacionSelecci.montoSubTotalPEN ? props.cotizacionSelecci.montoSubTotalPEN : 0,
-      montoIGVPEN: props.cotizacionSelecci.montoIGVPEN ? props.cotizacionSelecci.montoIGVPEN : 0,
+      // montoSubTotalPEN: props.cotizacionSelecci.montoSubTotalPEN ? props.cotizacionSelecci.montoSubTotalPEN : 0,
+      // montoIGVPEN: props.cotizacionSelecci.montoIGVPEN ? props.cotizacionSelecci.montoIGVPEN : 0,
       montoTotalPEN: props.cotizacionSelecci.montoTotalPEN ? props.cotizacionSelecci.montoTotalPEN : 0,
     },
     { deep: true }
@@ -142,11 +145,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
 
   //#region CONTEXTO
   const ctx_index_cotizacion = useContext(CTX_INDEX_COTIZACION);
-  // const ctx_docs_cotizacion = useContext(CTX_DOCS_COTIZACION);
   //#endregion CONTEXTO
 
   //#region INICIALIZACION
   const ini = useSignal(0);
+
   // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
   // const idSerieCotizacion = useSignal('');
   // const serieCotizacion = useSignal('');
@@ -159,6 +162,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
   let sumaTOTAL_REP_LUB = 0;
   let subTOTAL_REP_LUB = 0;
   let igvTOTAL_REP_LUB = 0;
+
+  // const grabo = useSignal(false);
 
   useTask$(async ({ track }) => {
     track(() => {
@@ -230,17 +235,17 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         // );
         await deRepuestosLubriCotizacion({
           idCotizacion: definicion_CTX_COTIZACION._id,
-          idServicio: definicion_CTX_NEW_EDIT_COTIZACION.borrarIdRepuestoLubri,
+          IdRepuestoLubri: definicion_CTX_NEW_EDIT_COTIZACION.borrarIdRepuestoLubri,
         });
       }
       //borrar en la App
-      const newItems: any = definicion_CTX_COTIZACION.servicios.filter(
+      const newItems: any = definicion_CTX_COTIZACION.repuestosLubri.filter(
         (KKK: any) => KKK.idAuxiliar !== definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarRepuestoLubri
       );
       console.log('newItems', newItems);
-      definicion_CTX_COTIZACION.servicios = newItems;
+      definicion_CTX_COTIZACION.repuestosLubri = newItems;
 
-      definicion_CTX_NEW_EDIT_COTIZACION.borrarIdServicio = '';
+      definicion_CTX_NEW_EDIT_COTIZACION.borrarIdRepuestoLubri = '';
       definicion_CTX_NEW_EDIT_COTIZACION.borrarIdAuxiliarRepuestoLubri = 0;
       definicion_CTX_NEW_EDIT_COTIZACION.borrarRepuestoLubri = [];
     }
@@ -268,6 +273,19 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     }
   });
   //#endregion CLIENTE
+
+  //#region FIJAR MONTO SERVICIOS
+  const fijarMontoSERVICIOS = $((e: any) => {
+    // TOTAL_SERVICIOS=;
+    definicion_CTX_NEW_EDIT_COTIZACION.TOTAL_SERVICIOS = e.sumaTOTAL_SERVI;
+  });
+  //#endregion FIJAR MONTO SERVICIOS
+
+  //#region FIJAR MONTO REPUESTOS
+  const fijarMontoREPUESTOS = $((e: any) => {
+    definicion_CTX_NEW_EDIT_COTIZACION.TOTAL_REPUESTOS = e.sumaTOTAL_REP_LUB;
+  });
+  //#endregion FIJAR MONTO REPUESTOS
 
   //#region REGISTRAR COTIZACION
   const registrarCotizacion = $(async () => {
@@ -314,8 +332,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
       return;
     }
     //
-    console.log('definicion_CTX_COTIZACION', definicion_CTX_COTIZACION);
-
+    // console.log('definicion_CTX_COTIZACION', definicion_CTX_COTIZACION);
+    ctx_index_cotizacion.mostrarSpinner = true;
     //enviar datos al SERVIDOR
     const coti = await inUpCotizacion({
       idCotizacion: definicion_CTX_COTIZACION._id,
@@ -355,9 +373,9 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
       servicios: definicion_CTX_COTIZACION.servicios,
       repuestosLubri: definicion_CTX_COTIZACION.repuestosLubri,
 
-      montoSubTotalPEN: definicion_CTX_COTIZACION.montoSubTotalPEN,
-      montoIGVPEN: definicion_CTX_COTIZACION.montoIGVPEN,
-      montoTotalPEN: definicion_CTX_COTIZACION.montoTotalPEN,
+      // montoSubTotalPEN: definicion_CTX_COTIZACION.montoSubTotalPEN,
+      // montoIGVPEN: definicion_CTX_COTIZACION.montoIGVPEN,
+      montoTotalPEN: definicion_CTX_NEW_EDIT_COTIZACION.TOTAL_SERVICIOS + definicion_CTX_NEW_EDIT_COTIZACION.TOTAL_REPUESTOS, // definicion_CTX_COTIZACION.montoTotalPEN,
 
       usuario: parametrosGlobales.usuario,
     });
@@ -365,6 +383,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     console.log('la coti', coti);
 
     if (coti.status === 400) {
+      ctx_index_cotizacion.mostrarSpinner = false;
       alert('Falla al registrar la cotizción. ' + coti.message);
       return;
     }
@@ -375,6 +394,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     definicion_CTX_COTIZACION._id = coti.data._id;
     definicion_CTX_COTIZACION.numero = coti.data.numero;
     //definicion_CTX_COTIZACION.correlativo = coti.data.correlativo;
+    ctx_index_cotizacion.mostrarSpinner = false;
+    alert('Registro satisfactorio');
   });
   //#endregion REGISTRAR COTIZACION
 
@@ -382,7 +403,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 600px)',
+        width: 'clamp(330px, 86%, 720px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -401,6 +422,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
+            // ctx_index_cotizacion.grabo_Cotizacion = grabo.value;
             ctx_index_cotizacion.mostrarPanelNewEditCotizacion = false;
           })}
         />
@@ -424,6 +446,16 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
             console.log('cotizacionSelecci', props.cotizacionSelecci);
           })}
         />
+        <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('definicion_CTX_NEW_EDIT_COTIZACION', definicion_CTX_NEW_EDIT_COTIZACION);
+          })}
+        />
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
@@ -439,6 +471,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 <input id="in_Periodo" style={{ width: '100%' }} type="text" disabled value={definicion_CTX_COTIZACION.periodo} />
               </div>
             </div>
+            <br></br>
             {/* Serie  key={ser._id} id={ser._id} value={ser.serie}*/}
             <div class="form-control">
               <label>Serie</label>
@@ -497,14 +530,17 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   id="in_Fecha"
                   type="date"
                   style={{ width: '100%' }}
-                  min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                  min={menosXdiasHoy(2)}
+                  max={hoy()}
+                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
                   value={definicion_CTX_COTIZACION.fecha}
                   onChange$={(e) => (definicion_CTX_COTIZACION.fecha = (e.target as HTMLInputElement).value)}
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL CLIENTE */}
@@ -531,7 +567,16 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   </option>
                 </select>
               </div>
-              <ImgButton
+              <input
+                type="image"
+                title="Buscar cliente"
+                alt="icono buscar"
+                height={16}
+                width={16}
+                src={images.searchPLUS}
+                onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true)}
+              />
+              {/* <ImgButton
                 id="img_buscarCliente"
                 src={images.searchPLUS}
                 alt="Icono de buscar cliente"
@@ -541,7 +586,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 onClick={$(() => {
                   definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true;
                 })}
-              />
+              /> */}
             </div>
             {/* numero identidad*/}
             <div class="form-control">
@@ -569,7 +614,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* {showSeleccionarPersona.value && ( */}
           {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona && (
@@ -588,16 +634,23 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   type="number"
                   id={'inputIGV'}
                   style={{ width: '100%' }}
+                  placeholder="IGV"
                   disabled
+                  // value={
+                  //   typeof definicion_CTX_COTIZACION.igv.$numberDecimal !== 'undefined'
+                  //     ? definicion_CTX_COTIZACION.igv.$numberDecimal
+                  //     : definicion_CTX_COTIZACION.igv
+                  // }
                   value={
                     definicion_CTX_COTIZACION.igv.$numberDecimal
                       ? definicion_CTX_COTIZACION.igv.$numberDecimal
-                      : definicion_CTX_COTIZACION.igv + ' %'
+                      : definicion_CTX_COTIZACION.igv
                   }
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
         </div>
@@ -615,7 +668,16 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 value={definicion_CTX_COTIZACION.placa}
                 placeholder="Add placa: AAA123, TRU789, XRW695"
               />
-              <ImgButton
+              <input
+                type="image"
+                title="Buscar vehículo"
+                alt="icono buscar"
+                height={16}
+                width={16}
+                src={images.searchPLUS}
+                onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo = true)}
+              />
+              {/* <ImgButton
                 id={'imgButtonSearchVehiculo'}
                 src={images.searchPLUS}
                 alt="Icono de buscar vehículo"
@@ -625,7 +687,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 onClick={$(() => {
                   definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo = true;
                 })}
-              />
+              /> */}
             </div>
           </div>
           {/* Marca */}
@@ -670,7 +732,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               />
             </div>
           </div>
-          <hr style={{ margin: '5px 0' }}></hr>
+          <br></br>
+          {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo && (
           <div class="modal">
@@ -749,15 +812,26 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                       igvTOTAL_SERVI,
                       sumaTOTAL_SERVI
                     );
-
+                    //SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
+                    if (index + 1 === definicion_CTX_COTIZACION.servicios.length) {
+                      // definicion_CTX_NEW_EDIT_COTIZACION.TOTAL_SERVICIOS = sumaTOTAL_SERVI;
+                      fijarMontoSERVICIOS({ sumaTOTAL_SERVI });
+                    }
                     return (
                       <tr key={iTCotiServi.idAuxiliar}>
-                        <td data-label="Ítem" key={iTCotiServi.idAuxiliar}>{`${cerosALaIzquierda(indexItemServi, 3)}`}</td>
-                        <td data-label="Kx"></td>
-                        <td data-label="Código">{iTCotiServi.codigo ? iTCotiServi.codigo : '_'}</td>
-                        <td data-label="Descripción">{iTCotiServi.descripcionEquivalencia}</td>
+                        <td data-label="Ítem" key={iTCotiServi.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(
+                          indexItemServi,
+                          3
+                        )}`}</td>
+                        <td data-label="Kx" class="comoCadena"></td>
+                        <td data-label="Código" class="comoCadena">
+                          {iTCotiServi.codigo ? iTCotiServi.codigo : '_'}
+                        </td>
+                        <td data-label="Descripción" class="comoCadena">
+                          {iTCotiServi.descripcionEquivalencia}
+                        </td>
                         {/* ----------------------------------------------------- */}
-                        <td data-label="Cantidad" style={{ textAlign: 'end' }}>
+                        <td data-label="Cantidad" class="comoNumero">
                           <input
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
@@ -775,9 +849,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                             }}
                           />
                         </td>
-                        <td data-label="Uni">{iTCotiServi.unidadEquivalencia ? iTCotiServi.unidadEquivalencia : '_'}</td>
+                        <td data-label="Uni" class="comoCadena">
+                          {iTCotiServi.unidadEquivalencia ? iTCotiServi.unidadEquivalencia : '_'}
+                        </td>
                         {/* ----------------------------------------------------- */}
-                        <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
+                        <td data-label="Precio Uni" class="comoNumero">
                           <input
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
@@ -803,11 +879,23 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                           />
                         </td>
                         {/* ----------------------------------------------------- */}
-                        <td data-label="Venta" style={{ textAlign: 'end' }}>
+                        <td data-label="Venta" class="comoNumero">
                           {iTCotiServi.ventaPEN.$numberDecimal ? iTCotiServi.ventaPEN.$numberDecimal : iTCotiServi.ventaPEN}
                         </td>
-                        <td data-label="Acciones" style={{ textAlign: 'center' }}>
-                          <ImgButton
+                        <td data-label="Acciones" class="acciones">
+                          <input
+                            type="image"
+                            title="Eliminar ítem"
+                            alt="icono de eliminar"
+                            height={14}
+                            width={14}
+                            src={images.trash}
+                            onClick$={() => {
+                              definicion_CTX_NEW_EDIT_COTIZACION.borrarServicio = iTCotiServi;
+                              definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelDeleteItemServicio = true;
+                            }}
+                          />
+                          {/* <ImgButton
                             src={images.trash}
                             alt="icono de eliminar"
                             height={12}
@@ -817,7 +905,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                               definicion_CTX_NEW_EDIT_COTIZACION.borrarServicio = iTCotiServi;
                               definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelDeleteItemServicio = true;
                             })}
-                          />
+                          /> */}
                         </td>
                       </tr>
                     );
@@ -872,7 +960,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
             )}
           </div>
           {/* ----------------------------------------------------- */}
-          <hr style={{ margin: '5px 0' }}></hr>
+          <br></br>
+          {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* BOTON REPUESTOS */}
         <div>
@@ -947,16 +1036,28 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                       igvTOTAL_REP_LUB,
                       definicion_CTX_COTIZACION.igv
                     );
-
+                    //SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
+                    if (index + 1 === definicion_CTX_COTIZACION.repuestosLubri.length) {
+                      fijarMontoREPUESTOS({ sumaTOTAL_REP_LUB });
+                    }
                     return (
                       <tr key={iTRepuLubri.idAuxiliar}>
-                        <td data-label="Ítem" key={iTRepuLubri.idAuxiliar}>{`${cerosALaIzquierda(indexItemRequi, 3)}`}</td>
-                        <td data-label="Kx">{iTRepuLubri.idKardex.substring(iTRepuLubri.idKardex.length - 6)}</td>
+                        <td data-label="Ítem" key={iTRepuLubri.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(
+                          indexItemRequi,
+                          3
+                        )}`}</td>
+                        <td data-label="Kx" class="comoCadena">
+                          {iTRepuLubri.idKardex.substring(iTRepuLubri.idKardex.length - 6)}
+                        </td>
 
-                        <td data-label="Código">{iTRepuLubri.codigo}</td>
-                        <td data-label="Descripción">{iTRepuLubri.descripcionEquivalencia}</td>
+                        <td data-label="Código" class="comoCadena">
+                          {iTRepuLubri.codigo}
+                        </td>
+                        <td data-label="Descripción" class="comoCadena">
+                          {iTRepuLubri.descripcionEquivalencia}
+                        </td>
                         {/* ----------------------------------------------------- */}
-                        <td data-label="Cantidad" style={{ textAlign: 'end' }}>
+                        <td data-label="Cantidad" class="comoNumero">
                           <input
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
@@ -978,9 +1079,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                             }}
                           />
                         </td>
-                        <td data-label="Uni">{iTRepuLubri.unidadEquivalencia}</td>
+                        <td data-label="Uni" class="comoCadena">
+                          {iTRepuLubri.unidadEquivalencia}
+                        </td>
                         {/* ----------------------------------------------------- */}
-                        <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
+                        <td data-label="Precio Uni" class="comoNumero">
                           <input
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
@@ -1014,11 +1117,23 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                           />
                         </td>
                         {/* ----------------------------------------------------- */}
-                        <td data-label="Venta" style={{ textAlign: 'end' }}>
+                        <td data-label="Venta" class="comoNumero">
                           {iTRepuLubri.ventaPEN.$numberDecimal ? iTRepuLubri.ventaPEN.$numberDecimal : iTRepuLubri.ventaPEN}
                         </td>
-                        <td data-label="Acciones" style={{ textAlign: 'right' }}>
-                          <ImgButton
+                        <td data-label="Acciones" class="acciones">
+                          <input
+                            type="image"
+                            title="Eliminar ítem"
+                            alt="icono de eliminar"
+                            height={14}
+                            width={14}
+                            src={images.trash}
+                            onClick$={() => {
+                              definicion_CTX_NEW_EDIT_COTIZACION.borrarRepuestoLubri = iTRepuLubri;
+                              definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelDeleteItemRepuestoLubri = true;
+                            }}
+                          />
+                          {/* <ImgButton
                             src={images.trash}
                             alt="icono de eliminar"
                             height={12}
@@ -1028,7 +1143,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                               definicion_CTX_NEW_EDIT_COTIZACION.borrarRepuestoLubri = iTRepuLubri;
                               definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelDeleteItemRepuestoLubri = true;
                             })}
-                          />
+                          /> */}
                         </td>
                       </tr>
                     );
@@ -1077,6 +1192,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               <i style={{ fontSize: '0.7rem' }}>No existen mercaderías</i>
             )}
           </div>
+          {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelDeleteItemRepuestoLubri && (
+            <div class="modal">
+              <BorrarRepuestoLubri />
+            </div>
+          )}
         </div>
         {/* GRABAR   onClick={(e) => onSubmit(e)}*/}
         <input

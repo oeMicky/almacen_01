@@ -4,7 +4,7 @@ import ImgButton from '~/components/system/imgButton';
 
 import ElSelect from '~/components/system/elSelect';
 import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { IMercaEquivalenciaOUT } from '~/interfaces/iMercaderia';
+import type { IMercaEquivalenciaOUT } from '~/interfaces/iMercaderia';
 import { CTX_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
 import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
@@ -128,8 +128,8 @@ export default component$(
         {/* FORMULARIO */}
         <div class="add-form">
           {/* MERCADERIA  fontWeight: 'lighter' */}
-          <div style={{ fontSize: 'small', background: 'pink' }}>
-            <div>Kardex ID:{` ${props.elKardex._id}`}</div>
+          <div style={{ fontSize: 'small' }}>
+            {/* <div>Kardex ID:{` ${props.elKardex._id}`}</div> */}
             <div>Código:{` ${props.mercaOUTSelecci.codigo}`}</div>
             <div>Descripción:{` ${props.mercaOUTSelecci.descripcion}`}</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
@@ -365,6 +365,7 @@ export default component$(
                     idEquivalencia: equivalencia._id,
                     idKardex: props.elKardex._id,
                     item: 0,
+                    tipo: 'MERCADERIA',
                     codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
                     descripcionEquivalencia: equivalencia.descripcionEquivalencia,
                     cantidadSacada: cantidadSacada.value,
@@ -380,6 +381,11 @@ export default component$(
                     tipoEquivalencia: equivalencia.tipoEquivalencia,
                     factor: equivalencia.factor,
                     laEquivalencia: equivalencia.laEquivalencia,
+
+                    exonerado: props.mercaOUTSelecci.exonerado,
+                    inafecto: props.mercaOUTSelecci.inafecto,
+                    sujetoAPercepcion: props.mercaOUTSelecci.sujetoAPercepcion,
+                    percepcion: props.mercaOUTSelecci.percepcion,
                   })
                 : documento.push({
                     idAuxiliar: parseInt(elIdAuxiliar()),
@@ -387,13 +393,16 @@ export default component$(
                     idEquivalencia: equivalencia._id,
                     idKardex: props.elKardex._id,
                     item: 0,
+                    tipo: 'MERCADERIA',
                     codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
                     descripcionEquivalencia: equivalencia.descripcionEquivalencia,
                     cantidad: cantidadSacada.value,
                     unidadEquivalencia: equivalencia.unidadEquivalencia,
                     costoUnitarioPEN:
                       // props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal,
-                      parseFloat(props.elKardex.costoUnitarioMovil) * parseFloat(equivalencia.laEquivalencia),
+                      // parseFloat(props.elKardex.costoUnitarioMovil) * parseFloat(equivalencia.laEquivalencia),
+                      parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) *
+                      parseFloat(equivalencia.laEquivalencia.$numberDecimal),
                     precioPEN: precioEquivalente.value,
                     ventaPEN: cantidadSacada.value * precioEquivalente.value,
                     precioUSD: 0,

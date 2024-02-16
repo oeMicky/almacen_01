@@ -4,9 +4,9 @@ import { CTX_INDEX_IN_ALMACEN } from '~/routes/(almacen)/inAlmacen';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
-import ImgButton from '../system/imgButton';
-import { images } from '~/assets';
+import type { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
+// import ImgButton from '../system/imgButton';
+// import { images } from '~/assets';
 
 export default component$((props: { buscarInAlmacen: number; porFechasT_porPeriodoF: boolean; parametrosBusqueda: any }) => {
   useStylesScoped$(style);
@@ -22,10 +22,10 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda', props.parametrosBusqueda);
+    //
 
     if (props.porFechasT_porPeriodoF) {
-      console.log('por Fechas IN');
+      //
       const res = await fetch(import.meta.env.VITE_URL + '/api/ingresosAAlmacen/obtenerIngresosAAlmacenEntreFechas', {
         method: 'POST',
         headers: {
@@ -36,7 +36,7 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
       });
       return res.json();
     } else {
-      console.log('por Periodo IN');
+      //
       const res = await fetch(import.meta.env.VITE_URL + '/api/ingresosAAlmacen/buscarIngresosAAlmacenPorPeriodo', {
         method: 'POST',
         headers: {
@@ -54,16 +54,13 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
     <Resource
       value={losInsAlmacen}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
         ctx_index_in_almacen.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ordenesServicio) => {
-        console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
         const { data } = ordenesServicio; //{ status, data, message }
         const misInsAlmacen: IIngresoAAlmacen[] = data;
         ctx_index_in_almacen.mostrarSpinner = false;
@@ -114,20 +111,8 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                             {razonSocialNombre ? razonSocialNombre : '_'}
                           </td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                          <td
-                            data-label="Acciones"
-                            class="acciones"
-                            // id="alCentro"
-                            // style={window.screen.width > 750 ? { textAlign: 'center' } : { textAlign: 'right' }}
-                            // style={window.screen.availWidth > 1500 ? { background: 'red' } : { background: 'blue' }}
-                            // style={
-                            //   window.matchMedia('(max-width: 700px)').matches
-                            //     ? { background: 'red', borderRadius: '16px' }
-                            //     : { background: 'pink', borderRadius: '6px' }
-                            // }
-                            // style={{ textAlign: 'right' }}
-                          >
-                            <ImgButton
+                          <td data-label="Acciones" class="acciones">
+                            {/* <ImgButton
                               src={images.see}
                               alt="icono de ver"
                               height={14}
@@ -137,7 +122,7 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                               //   ctx_index_in_almacen.ordSerSe = inAlmaLocali;
                               //   ctx_index_in_almacen.mostrarAddOrderServicio0 = true;
                               // })}
-                            />
+                            /> */}
                           </td>
                         </tr>
                       );

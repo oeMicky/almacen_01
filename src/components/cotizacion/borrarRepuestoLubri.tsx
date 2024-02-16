@@ -10,7 +10,7 @@ export default component$(() => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 600px)',
         //width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -63,7 +63,7 @@ export default component$(() => {
               }}
             >
               SI
-            </button>{' '}
+            </button>
             <button
               style={{ width: '60px' }}
               onClick$={() => {

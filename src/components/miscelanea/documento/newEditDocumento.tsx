@@ -6,7 +6,7 @@ import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/ne
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
 import { elIdAuxiliar } from '~/functions/comunes';
-import { IDocumento } from '~/interfaces/iDocumento';
+import type { IDocumento } from '~/interfaces/iDocumento';
 
 export default component$((props: { docSelecci: any; contexto: string }) => {
   //#region DEFINICION DOCUMENTO - NEW  /EDIT
@@ -165,10 +165,10 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
                 registroTEXT={'descripcion'}
                 seleccione={'-- Seleccione TCP --'}
                 onChange={$(() => {
-                  console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_tcpIN_DOCUMENTO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('?', elIdx, elSelec[elIdx].id);
+                  // console.log('?', elIdx, elSelec[elIdx].id);
                   documentoIN.codigoTCP = elSelec[elIdx].id;
                   if (documentoIN.codigoTCP === '') {
                     documentoIN.descripcionTCP = '';

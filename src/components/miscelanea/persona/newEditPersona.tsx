@@ -2,10 +2,11 @@ import { $, component$, useContext, useSignal, useStore, useTask$ } from '@build
 import { inUpPersona } from '~/apis/persona.api';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
-import { IPersona } from '~/interfaces/iPersona';
+import type { IPersona } from '~/interfaces/iPersona';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_PERSONA } from './buscarPersona';
 import { getDNI, getRUC } from '~/apis/apisExternas.api';
+import Spinner from '~/components/system/spinner';
 //
 //parametrosGlobales:any
 export const registrarPersona = $(async (persona: any) => {
@@ -57,6 +58,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
 
   //#region INICIALIZACION
   const condicion = useSignal('');
+  const mostrarSpinner = useSignal(false);
 
   useTask$(({ track }) => {
     track(() => {
@@ -94,6 +96,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       return;
     }
     condicion.value = '';
+    mostrarSpinner.value = true;
     if (persona.codigoTipoDocumentoIdentidad === '6') {
       const laIdentidad = await getRUC(persona.numeroIdentidad);
       console.log('laIdentidad - RUC:', laIdentidad);
@@ -111,6 +114,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
         // condicion.value = laData.condicion;
       }
     }
+    mostrarSpinner.value = false;
   });
   //#endregion BUSCAR_PERSONA_EN_API_EXTERNA
 
@@ -355,14 +359,18 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   (e.target as HTMLInputElement).select();
                 }}
               />
-              <ImgButton
+              <input
+                id="in_BuscarPersona_NEPersona"
+                type="image"
                 src={images.searchPLUS}
-                alt="Icono de buscar de mercadería"
                 height={16}
                 width={16}
-                title="Buscar datos de mercadería"
-                onClick={$(() => buscarPersonaEnAPIExterna())}
-                //   onClick={buscarLaIdentidadAPIEXterna}
+                title="Buscar datos de persona"
+                style={{ margin: '2px 2px' }}
+                // onFocusin$={() => console.log('🎁🎁🎁🎁🎁')}
+                // onClick$={() => localizarPersonas()}
+                onClick$={() => buscarPersonaEnAPIExterna()}
+                // onClick={$(() => )}
               />
             </div>
           </div>
@@ -402,7 +410,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   // }}
                   onFocusin$={(e) => {
                     // alert(`INGRESO... ${e}`);
-                    console.log('INGRESO', e);
+                    console.log('INGRESO-', e);
                     buscarPersonaEnAPIExterna();
                   }}
                 />
@@ -426,13 +434,18 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     onChange$={(e) => {
                       persona.nombre = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
-                    onKeyUp$={(e) => {
+                    onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
                         document.getElementById('in_apellidoPaterno_PERSONA')?.focus();
                       }
                       if (e.key === 'Escape') {
                         document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                       }
+                    }}
+                    onFocusin$={(e) => {
+                      // alert(`INGRESO... ${e}`);
+                      console.log('INGRESO-', e);
+                      buscarPersonaEnAPIExterna();
                     }}
                   />
                 </div>
@@ -450,7 +463,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     onChange$={(e) => {
                       persona.paterno = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
-                    onKeyUp$={(e) => {
+                    onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
                         document.getElementById('in_apellidoMaterno_PERSONA')?.focus();
                       }
@@ -474,7 +487,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     onChange$={(e) => {
                       persona.materno = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
-                    onKeyUp$={(e) => {
+                    onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
                         console.log('###############');
                         document.getElementById('btn_grabar_PERSONA')?.focus();
@@ -502,6 +515,12 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
         />
       </div>
       {/* </Form> */}
+      {/* MOSTRAR SPINNER */}
+      {mostrarSpinner.value && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 });

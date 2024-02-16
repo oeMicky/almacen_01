@@ -49,7 +49,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
   useTask$(({ track }) => {
     track(() => ini);
     localizar100Ventas();
-    console.log(' buscarVentas100.value.......................', buscarVentas100.value);
+    // console.log(' buscarVentas100.value.......................', buscarVentas100.value);
   });
   //#endregion BUSCAR VENTAS
 
@@ -73,7 +73,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelVentasCliente = false;
-            console.log('VENTAS_CLIENTE: es falso.....');
+            // console.log('VENTAS_CLIENTE: es falso.....');
           })}
         />
         <ImgButton

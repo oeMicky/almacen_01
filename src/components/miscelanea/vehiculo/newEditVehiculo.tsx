@@ -2,7 +2,7 @@ import { $, component$, createContextId, useContext, useContextProvider, useSign
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 import ElSelect from '~/components/system/elSelect';
-import { IMarcaVehicular, IModeloVehicular, IVehiculo } from '~/interfaces/iVehiculo';
+import type { IMarcaVehicular, IModeloVehicular, IVehiculo } from '~/interfaces/iVehiculo';
 import { CTX_BUSCAR_VEHICULO } from './buscarVehiculo';
 // import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 import { getMarcasVehiculares, getModelosVehiculares, inUpVehiculo } from '~/apis/vehiculo.api';
@@ -344,7 +344,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 registroTEXT={'vehiculoMarca'}
                 seleccione={'-- Seleccione marca --'}
                 onChange={$(() => {
-                  console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   vehiculo.idVehiculoMarca = elSelec[elIdx].id;

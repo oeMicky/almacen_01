@@ -178,7 +178,28 @@ export default component$((props: { contexto: string }) => {
                   (e.target as HTMLInputElement).select();
                 }}
               />
-              <ImgButton
+              <input
+                type="image"
+                title="Buscar vehículo"
+                alt="icono buscar"
+                height={16}
+                width={16}
+                src={images.searchPLUS}
+                onClick$={() => localizarVehiculos()}
+              />
+              <input
+                type="image"
+                title="Adicionar vehículo"
+                alt="icono adicionar"
+                height={16}
+                width={16}
+                src={images.add}
+                onClick$={() => {
+                  definicion_CTX_BUSCAR_VEHICULO.vV = [];
+                  definicion_CTX_BUSCAR_VEHICULO.mostrarPanelNewEditVehiculo = true;
+                }}
+              />
+              {/* <ImgButton
                 id="btnBuscarVehiculo0"
                 src={images.searchPLUS}
                 alt="Icono de buscar vehículo"
@@ -205,7 +226,7 @@ export default component$((props: { contexto: string }) => {
                   definicion_CTX_BUSCAR_VEHICULO.vV = [];
                   definicion_CTX_BUSCAR_VEHICULO.mostrarPanelNewEditVehiculo = true;
                 })}
-              />
+              /> */}
             </div>
           </div>
         </div>

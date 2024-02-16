@@ -40,11 +40,11 @@ export default component$(() => {
         {/* {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`} */}
         <div style={{ background: '#00778F' }}>
           <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem' }}>
-            {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
+            {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
               .getItem('empresa')
               ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
               'usuario'
-            )}`}
+            )}`} */}
           </label>
         </div>
 

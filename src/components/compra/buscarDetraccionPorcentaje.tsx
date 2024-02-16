@@ -15,7 +15,7 @@ import { images } from '~/assets';
 import NewEditDetraccionPorcentaje from './newEditDetraccionPorcentaje';
 import { CTX_COMPRA, CTX_NEW_EDIT_COMPRA } from './newEditCompra';
 import { parametrosGlobales } from '~/routes/login';
-import { IDetraccion } from '~/interfaces/iDetraccion';
+import type { IDetraccion } from '~/interfaces/iDetraccion';
 
 export const CTX_BUSCAR_DETRACCION_PORCENTAJE = createContextId<any>('buscar_detraccion_porcentaj');
 

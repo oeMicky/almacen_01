@@ -2,7 +2,7 @@ import { $, component$, useContext, useStore } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 import { CTX_NEW_EDIT_VEHICULO } from './newEditVehiculo';
-import { IModeloVehicular } from '~/interfaces/iVehiculo';
+import type { IModeloVehicular } from '~/interfaces/iVehiculo';
 import { inUpVehiculoMarcaModelo } from '~/apis/vehiculo.api';
 import { parametrosGlobales } from '~/routes/login';
 

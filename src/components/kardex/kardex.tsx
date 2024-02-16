@@ -3,7 +3,7 @@ import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_KARDEXS } from './kardexs';
 import { parametrosGlobales } from '~/routes/login';
-import { IMovimientoKARDEX } from '~/interfaces/iKardex';
+import type { IMovimientoKARDEX } from '~/interfaces/iKardex';
 import { formatear_4Decimales, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
 import styles from '../tabla/tabla.css?inline';
@@ -115,7 +115,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
             return <div>Fallo en la carga de datos</div>;
           }}
           onResolved={(ordenesServicio) => {
-            console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
+            console.log('onResolved 🍓🍓🍓🍓');
             const { data } = ordenesServicio; //{ status, data, message }
             const misMovimientos: IMovimientoKARDEX[] = data;
             return (

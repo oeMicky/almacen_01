@@ -2,7 +2,7 @@ import { $, component$, useContext, useStore } from '@builder.io/qwik';
 import { inUpServicio } from '~/apis/servicio.api';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
-import { IServicio } from '~/interfaces/iServicio';
+import type { IServicio } from '~/interfaces/iServicio';
 // import { CTX_INDEX_COTIZACION } from '~/routes/(almacen)/cotizacion';
 // import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
 // import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';

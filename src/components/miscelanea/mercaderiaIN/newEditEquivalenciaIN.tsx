@@ -4,7 +4,7 @@ import ImgButton from '~/components/system/imgButton';
 import { CTX_MERCADERIA_IN, CTX_NEW_EDIT_MERCADERIA_IN } from './newEditMercaderiaIN';
 import ElSelect from '~/components/system/elSelect';
 import NewEditUnidadEquivalenciaIN from './newEditUnidadEquivalenciaIN';
-import { IMercaEquivalenciaIN } from '~/interfaces/iMercaderia';
+import type { IMercaEquivalenciaIN } from '~/interfaces/iMercaderia';
 // import { getLineasTipos } from '~/apis/lineaTipo.api';
 import { elIdAuxiliar } from '~/functions/comunes';
 
@@ -258,7 +258,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; equiv
                 registroTEXT={'unidadEquivalencia'}
                 seleccione={'-- Seleccione unidad equivalencia --'}
                 onChange={$(() => {
-                  console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_unidadEquivalenciaIN_MICE') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   equivalenciaIN.idUnidadEquivalencia = elSelec[elIdx].id;

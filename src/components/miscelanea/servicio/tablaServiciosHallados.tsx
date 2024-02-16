@@ -8,7 +8,7 @@ import style from '../../tabla/tabla.css?inline';
 // import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 // import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
 import { CTX_BUSCAR_SERVICIO } from './buscarServicio';
-import { IServicio } from '~/interfaces/iServicio';
+import type { IServicio } from '~/interfaces/iServicio';
 
 export default component$((props: { buscarServicios: number; parametrosBusqueda: any; contexto: any }) => {
   useStylesScoped$(style);

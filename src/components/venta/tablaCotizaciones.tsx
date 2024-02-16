@@ -1,5 +1,5 @@
 import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
-import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 //------- import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
@@ -7,7 +7,8 @@ import { images } from '~/assets';
 import { CTX_ADD_VENTA, CTX_F_B_NC_ND } from './addVenta';
 // import style from '../../components/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
-import { ICotizacion } from '~/interfaces/iCotizacion';
+import type { ICotizacion } from '~/interfaces/iCotizacion';
+import pdfCotizacionMG from '~/reports/MG/pdfCotizacionMG';
 // import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 
 // export interface ICotizacion {
@@ -133,7 +134,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                       // const indexItem = index + 1;
                       return (
                         <tr key={value._id}>
-                          <td data-label="Cotización">{value.numero}</td>
+                          <td data-label="Cotización">{value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}</td>
                           <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
                           <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
                           <td data-label="Cliente">{value.razonSocialNombre}</td>
@@ -160,7 +161,12 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
                                     console.log('seleccionar cotizacion', value);
-                                    ctx_f_b_nc_nd.cotizacion = value.numero;
+                                    ctx_f_b_nc_nd.idCotizacion = value._id;
+                                    ctx_f_b_nc_nd.serieCotizacion = value.serie;
+                                    ctx_f_b_nc_nd.numeroCotizacion = value.numero;
+
+                                    ctx_f_b_nc_nd.observacion = value.serie + ' - ' + cerosALaIzquierda(value.numero, 8);
+
                                     ctx_f_b_nc_nd.idCliente = value.idCliente;
 
                                     ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
@@ -168,22 +174,25 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                     ctx_f_b_nc_nd.numeroIdentidad = value.numeroIdentidad;
                                     ctx_f_b_nc_nd.razonSocialNombre = value.razonSocialNombre;
                                     ctx_f_b_nc_nd.itemsVenta = [];
+                                    let newItem = 1;
                                     value.servicios.map((ser: any) => {
                                       console.log('ser', ser);
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
                                         idKardex: ser.idKardex,
-                                        item: 0,
-                                        codigo: ser.codigo,
+                                        item: newItem,
+                                        tipo: 'SERVICIO',
+                                        codigo: ser.codigo ? ser.codigo : '_',
                                         descripcionEquivalencia: ser.descripcionEquivalencia,
                                         cantidad: ser.cantidad.$numberDecimal,
                                         unidadEquivalencia: 'UNI',
-                                        costo: 0,
+                                        costoUnitarioPEN: 0,
                                         precioPEN: ser.precioPEN.$numberDecimal,
                                         ventaPEN: ser.cantidad.$numberDecimal * ser.precioPEN.$numberDecimal,
                                         precioUSD: 0,
                                         ventaUSD: 0,
                                       });
+                                      newItem++;
                                     });
                                     value.repuestosLubri.map((rep: any) => {
                                       ctx_f_b_nc_nd.itemsVenta.push({
@@ -191,20 +200,28 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         idMercaderia: rep.idMercaderia,
                                         idEquivalencia: rep.idEquivalencia,
                                         idKardex: rep.idKardex,
-                                        item: 0,
-                                        codigo: rep.codigo,
+                                        item: newItem,
+                                        tipo: 'MERCADERIA',
+                                        codigo: rep.codigo ? rep.codigo : '_',
                                         descripcionEquivalencia: rep.descripcionEquivalencia,
                                         cantidad: rep.cantidad.$numberDecimal,
                                         unidadEquivalencia: rep.unidadEquivalencia,
-                                        costo: 0,
+                                        costoUnitarioPEN: rep.costoUnitarioPEN.$numberDecimal,
                                         precioPEN: rep.precioPEN.$numberDecimal,
                                         ventaPEN: rep.cantidad.$numberDecimal * rep.precioPEN.$numberDecimal,
                                         precioUSD: 0,
                                         ventaUSD: 0,
+
                                         tipoEquivalencia: rep.tipoEquivalencia,
                                         factor: rep.factor,
                                         laEquivalencia: rep.laEquivalencia,
+
+                                        exonerado: rep.exonerado,
+                                        inafecto: rep.inafecto,
+                                        sujetoAPercepcion: rep.sujetoAPercepcion,
+                                        percepcion: rep.percepcion,
                                       });
+                                      newItem++;
                                     });
 
                                     ctx_add_venta.mostrarAdjuntarCotizacion = false;
@@ -235,8 +252,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               style={{ padding: '2px' }}
                               onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
-                                cotizacionSeleccionada.value = value;
-                                clickPDF.value++;
+                                pdfCotizacionMG(value);
+                                // cotizacionSeleccionada.value = value;
+                                // clickPDF.value++;
                               }}
                             />
                           </td>

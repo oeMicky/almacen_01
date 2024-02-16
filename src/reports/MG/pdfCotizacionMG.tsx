@@ -295,7 +295,7 @@ function pdfCotizacionMG(cotizacion: any) {
         columns: [
           {
             margin: [0, 5, 30, 0],
-            text: { text: 'TOTAL ' + formatearMonedaPEN(totalServicios + totalRepuestos), style: 'textoBold10' },
+            text: { text: 'TOTAL PEN ' + formatearMonedaPEN(totalServicios + totalRepuestos), style: 'textoBold10' },
             alignment: 'right',
           },
         ],

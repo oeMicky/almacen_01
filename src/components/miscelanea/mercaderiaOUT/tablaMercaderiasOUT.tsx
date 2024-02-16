@@ -1,7 +1,7 @@
 import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
-import { IMercaderiaOUT } from '~/interfaces/iMercaderia';
+import type { IMercaderiaOUT } from '~/interfaces/iMercaderia';
 // import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
 // import { exit } from 'process';
@@ -48,9 +48,10 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ordenesServicio) => {
-          console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
+          console.log('onResolved 🍓🍓🍓🍓');
           const { data } = ordenesServicio; //{ status, data, message }
           const misMercaderiasOUT: IMercaderiaOUT[] = data;
+          console.log('misMercaderiasOUT', misMercaderiasOUT);
           return (
             <>
               {misMercaderiasOUT.length > 0 ? (

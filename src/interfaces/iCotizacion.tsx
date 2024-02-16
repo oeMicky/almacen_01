@@ -45,7 +45,7 @@ export interface ICotizacion {
   //   requisiciones: any;
   //   repuestosDespachados: any;
 
-  montoSubTotalPEN: any;
-  montoIGVPEN: any;
+  // montoSubTotalPEN: any;
+  // montoIGVPEN: any;
   montoTotalPEN: any;
 }

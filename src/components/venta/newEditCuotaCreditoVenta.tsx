@@ -2,7 +2,7 @@ import { $, component$, useContext } from '@builder.io/qwik';
 import { images } from '~/assets';
 // import { , hoy } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
-import { ICuotaCreditoVenta } from '~/interfaces/iVenta';
+import type { ICuotaCreditoVenta } from '~/interfaces/iVenta';
 import { CTX_ADD_VENTA } from './addVenta';
 
 export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuotaCreditoVenta }) => {

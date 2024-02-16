@@ -4,7 +4,7 @@ import ImgButton from '~/components/system/imgButton';
 import { CTX_NEW_EDIT_VEHICULO } from './newEditVehiculo';
 import { inUpVehiculoMarca } from '~/apis/vehiculo.api';
 import { parametrosGlobales } from '~/routes/login';
-import { IMarcaVehicular } from '~/interfaces/iVehiculo';
+import type { IMarcaVehicular } from '~/interfaces/iVehiculo';
 
 export default component$((props: { marcaVehicularSelecci: any }) => {
   //#region DEFINICION MARCA VEHICULAR - NEW  /EDIT

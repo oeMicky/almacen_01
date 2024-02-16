@@ -1,6 +1,6 @@
 import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
-import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
+import type { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
@@ -59,7 +59,7 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ordenesServicio) => {
-          console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
+          console.log('onResolved 🍓🍓🍓🍓');
           const { data } = ordenesServicio; //{ status, data, message }
           const misOrdenesServicio: IOrdenServicio[] = data;
           return (

@@ -18,6 +18,7 @@ export default component$(() => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
+    idSucursal: parametrosGlobales.idSucursal,
     fechaInicio: fechas.desde,
     fechaFinal: fechas.hasta,
   });
@@ -102,31 +103,50 @@ export default component$(() => {
           style={numeroOFecha.value === 'Entre fechas' ? { visibility: 'visible' } : { visibility: 'collapse' }}
         >
           {/*  style={{ width: '210px', display: 'flex', justifyContent: 'space-between' }} */}
-          <label class="fechas">
-            Desde:{'     '}
-            <input
-              type="date"
-              id="fechaDesdeBusqueda"
-              value={fechas.desde}
-              onInput$={(e) => {
-                fechas.desde = (e.target as HTMLInputElement).value;
-              }}
-            />
-          </label>
+          <label class="fechas">Desde</label>
+          <input
+            type="date"
+            id="fechaDesdeBusqueda"
+            value={fechas.desde}
+            style={{ marginLeft: '2px' }}
+            onInput$={(e) => {
+              fechas.desde = (e.target as HTMLInputElement).value;
+            }}
+          />
           {/*  style={{ width: '174px', display: 'flex', justifyContent: 'space-between', marginLeft: '10px' }}*/}
-          <label class="fechas">
-            Hasta:
-            <input
-              type="date"
-              id="fechaHastaBusqueda"
-              value={fechas.hasta}
-              onInput$={(e) => {
-                fechas.hasta = (e.target as HTMLInputElement).value;
-              }}
-            />
+          <label class="fechas" style={{ marginLeft: '4px' }}>
+            Hasta
           </label>
-          <div class="intervalo-fechas__botonBuscar">
-            <ImgButton
+          <input
+            type="date"
+            id="fechaHastaBusqueda"
+            value={fechas.hasta}
+            style={{ marginLeft: '2px' }}
+            onInput$={(e) => {
+              fechas.hasta = (e.target as HTMLInputElement).value;
+            }}
+          />
+          {/* <div class="intervalo-fechas__botonBuscar"> */}
+          <input
+            type="image"
+            title="Buscar por fechas"
+            alt="icono buscar"
+            height={16}
+            width={16}
+            src={images.searchPLUS}
+            style={{ marginLeft: '2px' }}
+            onClick$={() => {
+              if (fechas.desde > fechas.hasta) {
+                alert('Verifique las fechas de busqueda');
+                document.getElementById('fechaDesdeBusqueda')?.focus();
+                return;
+              }
+              // console.log('click en lupa: parameBusqueda ', parameBusqueda);
+
+              buscarCotizaciones.value++;
+            }}
+          />
+          {/* <ImgButton
               src={images.searchPLUS}
               alt="Icono de busqueda por fechas"
               height={16}
@@ -143,8 +163,8 @@ export default component$(() => {
                 buscarCotizaciones.value++;
               })}
               // onClick={buscarCotizacionesEntreFechas}
-            />
-          </div>
+            /> */}
+          {/* </div> */}
         </div>
         {/* TABLA COTIZACIONES */}
         <div style={{ marginTop: '15px' }}>

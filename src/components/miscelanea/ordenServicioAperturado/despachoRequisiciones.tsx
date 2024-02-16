@@ -149,7 +149,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(ordenesServicio) => {
-              console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
+              console.log('onResolved 🍓🍓🍓🍓');
               const { data } = ordenesServicio; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misDespachos.value = data;
@@ -193,11 +193,19 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                             const indexItem = index + 1; //, index
                             return (
                               <tr key={despachoLocali._id}>
-                                <td data-label="Ítem">{indexItem}</td>
-                                <td data-label="Kx">{despachoLocali.idKardex.substring(despachoLocali.idKardex.length - 6)}</td>
-                                <td data-label="Código">{despachoLocali.codigo}</td>
-                                <td data-label="Descripción">{despachoLocali.descripcionEquivalencia}</td>
-                                <td data-label="Stock">
+                                <td data-label="Ítem" class="comoCadena">
+                                  {indexItem}
+                                </td>
+                                <td data-label="Kx" class="comoCadena">
+                                  {despachoLocali.idKardex.substring(despachoLocali.idKardex.length - 6)}
+                                </td>
+                                <td data-label="Código" class="comoCadena">
+                                  {despachoLocali.codigo}
+                                </td>
+                                <td data-label="Descripción" class="comoCadena">
+                                  {despachoLocali.descripcionEquivalencia}
+                                </td>
+                                <td data-label="Stock" class="comoNumero">
                                   {despachoLocali.tipoEquivalencia
                                     ? despachoLocali.stock.$numberDecimal
                                       ? despachoLocali.stock.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal
@@ -206,18 +214,20 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                                     ? despachoLocali.stock.$numberDecimal / despachoLocali.laEquivalencia.$numberDecimal
                                     : despachoLocali.stock / despachoLocali.laEquivalencia.$numberDecimal}
                                 </td>
-                                <td data-label="Uni">{despachoLocali.unidadEquivalencia}</td>
-                                <td data-label="Cantidad">
+                                <td data-label="Uni" class="comoCadena">
+                                  {despachoLocali.unidadEquivalencia}
+                                </td>
+                                <td data-label="Cantidad" class="comoNumero">
                                   {despachoLocali.cantidad.$numberDecimal
                                     ? despachoLocali.cantidad.$numberDecimal
                                     : despachoLocali.cantidad}
                                 </td>
-                                <td data-label="Cant.Despachada">
+                                <td data-label="Cant.Despachada" class="comoNumero">
                                   {despachoLocali.cantidadDespachada.$numberDecimal
                                     ? despachoLocali.cantidadDespachada.$numberDecimal
                                     : despachoLocali.cantidadDespachada}
                                 </td>
-                                <td data-label="Cant.A Despachar" style={{ textAlign: 'end' }}>
+                                <td data-label="Cant.A Despachar" class="comoNumero">
                                   <input
                                     style={{ width: '60px', textAlign: 'end' }}
                                     value={despachoLocali.aDespachar}

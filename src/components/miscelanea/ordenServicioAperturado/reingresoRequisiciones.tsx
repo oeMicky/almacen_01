@@ -115,7 +115,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(ordenesServicio) => {
-              console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
+              console.log('onResolved 🍓🍓🍓🍓');
               const { data } = ordenesServicio; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misReingresos.value = data;

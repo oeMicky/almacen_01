@@ -4,11 +4,20 @@ import { Link, useNavigate } from '@builder.io/qwik-city';
 import style from './headerAlmacen.css?inline';
 import { images } from '~/assets';
 import { parametrosGlobales } from '~/routes/login';
+// import Spinner from '../system/spinner';
 
-// export const CTX_APP_ALMACEN = createContextId<any>('app.almacen');
+// export const CTX_HEADER_ALMACEN = createContextId<any>('__header_almacen');
 
 export default component$(() => {
   useStylesScoped$(style);
+
+  //#region HEADER ALMACEN
+  // const definicion_CTX_HEADER_ALMACEN = useStore({
+  //   mostrarSpinner: false,
+  //   // mostrarSpinner: parametrosGlobales.mostrarSpinner, //false,
+  // });
+  // useContextProvider(CTX_HEADER_ALMACEN, definicion_CTX_HEADER_ALMACEN);
+  //#endregion HEADER ALMACEN
 
   const navegarA = useNavigate();
 
@@ -19,6 +28,11 @@ export default component$(() => {
   // });
   // useContextProvider(CTX_APP_ALMACEN, definicion_CTX_APP_ALMACEN);
   //#endregion DEFINICION CTX_APP_ALMACEN
+
+  // useTask$(({ track }) => {
+  //   track(() => definicion_CTX_HEADER_ALMACEN.mostrarSpinner);
+  //   console.log('definicion_CTX_HEADER_ALMACEN.mostrarSpinner', definicion_CTX_HEADER_ALMACEN.mostrarSpinner);
+  // });
 
   return (
     <header>
@@ -44,9 +58,21 @@ export default component$(() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
               }}
             >
-              <Link href="/venta/">
+              <input
+                type="image"
+                title="Ir a ventas"
+                alt="Boton venta"
+                width={30}
+                height={30}
+                src={images.Fac}
+                onClick$={() => {
+                  navegarA('/venta/');
+                  // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
+                }}
+              />
+              {/* <Link href="/venta/">
                 <img src={images.Fac} style={{ width: '30px' }} />
-              </Link>
+              </Link> */}
             </li>
             <li
               class="main-menu__item"
@@ -54,9 +80,43 @@ export default component$(() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
               }}
             >
-              <Link href="/compra/">
+              <input
+                type="image"
+                title="Ir a reporte ventas"
+                alt="Boton reporte venta"
+                width={30}
+                height={30}
+                src={images.Rp}
+                onClick$={() => {
+                  navegarA('/reporteVenta/');
+                  // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
+                }}
+              />
+              {/* <Link href="/reporteVenta/">
+                <img src={images.Rp} style={{ width: '30px' }} />
+              </Link> */}
+            </li>
+            <li
+              class="main-menu__item"
+              onClick$={() => {
+                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+              }}
+            >
+              <input
+                type="image"
+                title="Ir a compras"
+                alt="Boton venta"
+                width={30}
+                height={30}
+                src={images.Cp}
+                onClick$={() => {
+                  navegarA('/compra/');
+                  // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
+                }}
+              />
+              {/* <Link href="/compra/">
                 <img src={images.Cp} style={{ width: '30px' }} />
-              </Link>
+              </Link> */}
             </li>
             <li
               class="main-menu__item"
@@ -78,6 +138,16 @@ export default component$(() => {
                 <img src={images.Os} style={{ width: '30px' }} />
               </Link>
             </li>
+            {/* <li
+              class="main-menu__item"
+              onClick$={() => {
+                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+              }}
+            >
+              <Link href="/guiaRemision/">
+                <img src={images.Gr128} style={{ width: '30px' }} />
+              </Link>
+            </li> */}
             <li
               hidden={!parametrosGlobales.almacenActivo}
               class="main-menu__item"
@@ -157,6 +227,12 @@ export default component$(() => {
           </ul>
         </nav>
       </div>
+      {/* MOSTRAR SPINNER */}
+      {/* {definicion_CTX_HEADER_ALMACEN.mostrarSpinner && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </div>
+      )} */}
     </header>
   );
 });

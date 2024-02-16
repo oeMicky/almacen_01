@@ -2,7 +2,7 @@ import { $, Resource, component$, useContext, useResource$, useStyles$ } from '@
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
-import { ICompra } from '~/interfaces/iCompra';
+import type { ICompra } from '~/interfaces/iCompra';
 import style from '../tabla/tabla.css?inline';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
@@ -99,7 +99,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                               {formatoDDMMYYYY_PEN(compra.fecha)}
                             </td>
                             <td data-label="Ser-Nro" class="comoCadena">
-                              {compra.serie + '-' + compra.numero}
+                              {compra.serie + ' - ' + compra.numero}
                             </td>
                             <td
                               data-label="Importe"

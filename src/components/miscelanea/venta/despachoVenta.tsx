@@ -2,7 +2,7 @@ import { $, Resource, component$, useContext, useResource$, useSignal } from '@b
 import { images } from '~/assets';
 import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
-import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 
 export default component$((props: { contexto: string; ventaSeleccionada: any }) => {
   //#region CONTEXTO
@@ -33,11 +33,11 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
   const losDespachos = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // track(() => props.buscarOrdenesServicio.valueOf());
     track(() => ini.value);
-    console.log('parametrosBusqueda losDespachos ini.value', ini.value);
+    // console.log('parametrosBusqueda losDespachos ini.value', ini.value);
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda losDespachos', props.ventaSeleccionada._id);
+    // console.log('parametrosBusqueda losDespachos', props.ventaSeleccionada._id);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/venta/obtenerDespachoVenta', {
       method: 'POST',
@@ -100,12 +100,16 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
         <h3>Despacho de requisiciones</h3>
         {/* CLIENTE */}
         <div style={{ fontSize: '0.8em' }}>
-          <div style={{ margin: '5px 0' }}>ID:{` ${props.ventaSeleccionada._id} `}</div>
+          {/* <div style={{ margin: '5px 0' }}>ID:{` ${props.ventaSeleccionada._id} `}</div> */}
           <div style={{ margin: '5px 0' }}>
-            Serie-Nro:{` ${props.ventaSeleccionada.serie + '-' + props.ventaSeleccionada.numero} `}
+            Serie-Nro:<b>{` ${props.ventaSeleccionada.serie + ' - ' + cerosALaIzquierda(props.ventaSeleccionada.numero, 8)} `}</b>
           </div>
-          <div style={{ margin: '5px 0' }}>Cliente:{` ${props.ventaSeleccionada.razonSocialNombre}`}</div>
-          <div style={{ margin: '5px 0' }}>Fecha:{` ${formatoDDMMYYYY_PEN(props.ventaSeleccionada.fecha)} `}</div>
+          <div style={{ margin: '5px 0' }}>
+            Cliente:<b>{` ${props.ventaSeleccionada.razonSocialNombre}`}</b>
+          </div>
+          <div style={{ margin: '5px 0' }}>
+            Fecha:<b>{` ${formatoDDMMYYYY_PEN(props.ventaSeleccionada.fecha)} `}</b>
+          </div>
         </div>
         {/* TABLA DE REQUISICIONES */}
         <div class="form-control">
@@ -120,7 +124,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(itemsVenta) => {
-              console.log('onResolved 🍓🍓🍓🍓', itemsVenta);
+              console.log('onResolved 🍓🍓🍓🍓');
               const { data } = itemsVenta; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misDespachos.value = data;

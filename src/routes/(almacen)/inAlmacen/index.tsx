@@ -87,11 +87,12 @@ export default component$(() => {
       </h1> */}
       <div style={{ background: '#00778F' }}>
         <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
-          {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
+          {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
             'usuario'
-          )}`}
+          )}`} */}
+          {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
       <h4 style={{ margin: '8px 0 0 2px' }}>
@@ -185,13 +186,13 @@ export default component$(() => {
               idEmpresa: parametrosGlobales.idEmpresa,
             });
             elIgv = elIgv.data;
-            console.log('elIgv', elIgv);
+            // console.log('elIgv', elIgv);
             losIgvsCompra.value = elIgv;
             const tre = elIgv.filter((docs: any) => docs.default === true);
-            console.log('tre', tre);
-            (igvCompraPorDefault.idElIgv = tre[0]._id),
-              (igvCompraPorDefault.elIgv = tre[0].igv),
-              console.log('igvCompraPorDefault', igvCompraPorDefault);
+            // console.log('tre', tre);
+            igvCompraPorDefault.idElIgv = tre[0]._id;
+            igvCompraPorDefault.elIgv = tre[0].igv;
+            // console.log('igvCompraPorDefault', igvCompraPorDefault);
             //
             // let elIgv = await getIgvVenta(parametrosGlobales);
             // elIgv = elIgv.data;
@@ -204,7 +205,7 @@ export default component$(() => {
           })}
         />
         <ElSelect
-          id={'se_periodo'}
+          id={'se_periodo_IN_ALMACEN'}
           // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
           estilos={{ width: '168px', marginLeft: '5px' }}
           registros={losPeriodosCargados.value}
@@ -212,10 +213,10 @@ export default component$(() => {
           registroTEXT={'periodo'}
           seleccione={'-- Seleccione periodo --'}
           onChange={$(() => {
-            console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-            const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
+            // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+            const elSelec = document.getElementById('se_periodo_IN_ALMACEN') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
-            console.log('?', elIdx, elSelec[elIdx].id);
+            // console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
             if (periodo.idPeriodo === '') {
               periodo.periodo = '';
@@ -238,7 +239,25 @@ export default component$(() => {
             }
           })}
         />
+        <input
+          type="image"
+          title="Buscar ingresos"
+          alt="icono buscar"
+          height={16}
+          width={16}
+          src={images.searchPLUS}
+          style={{ marginLeft: '2px' }}
+          onClick$={() => {
+            if (parametrosBusqueda.idPeriodo === '') {
+              alert('Debe seleccionar el periodo');
+              document.getElementById('se_periodo_IN_ALMACEN')?.focus();
+              return;
+            }
+            buscarInAlmacen.value++;
 
+            definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = true;
+          }}
+        />
         {definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen && (
           <div class="modal">
             <NewInAlmacen

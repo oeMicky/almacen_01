@@ -9,44 +9,9 @@ import NewEditCotizacion from '~/components/cotizacion/newEditCotizacion';
 import { getIgvVenta } from '~/apis/venta.api';
 import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
+import { images } from '~/assets';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 // import TablaCotizaciones from '~/components/venta/tablaCotizaciones';
-
-// export interface ICotizacion {
-//   _id: string;
-//   idGrupoEmpresarial: string;
-//   idEmpresa: string;
-
-//   correlativo: number;
-//   fecha: any;
-
-//   idCliente: string;
-//   codigoTipoDocumentoIdentidad: string;
-//   tipoDocumentoIdentidad: string;
-//   numeroIdentidad: string;
-//   razonSocialNombreCliente: string;
-//   // email: { type: String },
-//   idVehiculo: string;
-//   placa: string;
-//   idVehiculoMarca: string;
-//   vehiculoMarca: string;
-//   idVehiculoModelo: string;
-//   vehiculoModelo: string;
-//   vin: string;
-
-//   igv: number;
-
-//   vendedor: string;
-
-//   servicios: any;
-//   repuestosLubri: any;
-
-//   montoSubTotalPEN: any;
-//   montoIGVPEN: any;
-//   montoTotalPEN: any;
-// }
-
-// export const CTX_DOCS_COTIZACION = createContextId<any>('docs_cotizacion');
 
 export const CTX_INDEX_COTIZACION = createContextId<any>('index_cotizacion__');
 
@@ -80,6 +45,7 @@ export default component$(() => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
+    idSucursal: parametrosGlobales.idSucursal,
     idPeriodo: '',
     // fechaInicio: fechas.desde,
     // fechaFinal: fechas.hasta,
@@ -94,11 +60,12 @@ export default component$(() => {
 
   //#region ACTUALIZAR TABLA COTIZACIONES
   useTask$(({ track }) => {
-    track(() => definicion_CTX_INDEX_COTIZACION.grabo_Cotizacion);
+    track(() => definicion_CTX_INDEX_COTIZACION.mostrarPanelNewEditCotizacion);
     if (definicion_CTX_INDEX_COTIZACION.grabo_Cotizacion) {
       //actualizar TABLA ORDENES SERVICIO
       // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
       buscarCotizaciones.value++;
+      definicion_CTX_INDEX_COTIZACION.mostrarSpinner = true;
       definicion_CTX_INDEX_COTIZACION.grabo_Cotizacion = false;
     }
   });
@@ -133,11 +100,12 @@ export default component$(() => {
         </h1> */}
         <div style={{ background: '#00778F' }}>
           <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
-            {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
+            {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
               .getItem('empresa')
               ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
               'usuario'
-            )}`}
+            )}`} */}
+            {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
           </label>
         </div>
         <h4 style={{ margin: '8px 0 4px 2px' }}>
@@ -222,10 +190,10 @@ export default component$(() => {
             registroTEXT={'periodo'}
             seleccione={'-- Seleccione periodo --'}
             onChange={$(() => {
-              console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+              // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
               const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
               const elIdx = elSelec.selectedIndex;
-              console.log('?', elIdx, elSelec[elIdx].id);
+              // console.log('?', elIdx, elSelec[elIdx].id);
               periodo.idPeriodo = elSelec[elIdx].id;
               if (periodo.idPeriodo === '') {
                 periodo.periodo = '';
@@ -245,6 +213,24 @@ export default component$(() => {
                 (document.getElementById('in_Fecha_MICE') as HTMLSelectElement)?.focus();
               }
             })}
+          />
+          <input
+            type="image"
+            title="Buscar cotizaciones"
+            alt="icono buscar"
+            height={16}
+            width={16}
+            style={{ marginLeft: '2px' }}
+            src={images.searchPLUS}
+            onClick$={() => {
+              if (periodo.idPeriodo === '') {
+                alert('Seleccione un periodo');
+                document.getElementById('se_periodo')?.focus();
+                return;
+              }
+              buscarCotizaciones.value++;
+              definicion_CTX_INDEX_COTIZACION.mostrarSpinner = true;
+            }}
           />
           {/* <button
             onClick$={() => {

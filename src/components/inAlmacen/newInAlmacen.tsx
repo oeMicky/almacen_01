@@ -12,7 +12,7 @@ import {
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_INDEX_IN_ALMACEN } from '~/routes/(almacen)/inAlmacen';
-import { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
+import type { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
 import ElButton from '../system/elButton';
 import NewEditDocumento from '../miscelanea/documento/newEditDocumento';
 import BuscarMercaderiaIN from '../miscelanea/mercaderiaIN/buscarMercaderiaIN';
@@ -31,7 +31,7 @@ import style from '../tabla/tabla.css?inline';
 import BorrarItemMercaderiaIN from './borrarItemMercaderiaIN';
 import BorrarDocumentoIN from './borrarDocumentoIN';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
-import { IPersona } from '~/interfaces/iPersona';
+import type { IPersona } from '~/interfaces/iPersona';
 import { inIngresoAAlmacen, loadMotivosIngresoAAlmacen } from '~/apis/ingresosAAlmacen.api';
 import { parametrosGlobales } from '~/routes/login';
 import ElSelect from '../system/elSelect';

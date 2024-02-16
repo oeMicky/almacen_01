@@ -6,7 +6,6 @@ import {
   // useResource$,
   useSignal,
   useStore,
-  useStylesScoped$,
   useTask$,
   // useTask$,
 } from '@builder.io/qwik';
@@ -18,12 +17,13 @@ import TablaVentas from '~/components/venta/tablaVentas';
 // import Modal from '~/components/system/elModal';
 import AddVenta from '~/components/venta/addVenta';
 import { getIgvVenta } from '~/apis/venta.api';
-import style from './index.css?inline';
+// import style from './index.css?inline';
 import { parametrosGlobales } from '../../login/index';
 import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+// import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 
 // import { CTX_DOCS_ORDEN_SERVICIO } from '../ordenServicio';
@@ -52,7 +52,7 @@ import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 export const CTX_INDEX_VENTA = createContextId<any>('index_venta');
 
 export default component$(() => {
-  useStylesScoped$(style);
+  // useStylesScoped$(style);
   //
 
   //#region DEFINICION CTX_INDEX_VENTA
@@ -63,13 +63,14 @@ export default component$(() => {
     grabo_Venta: false,
 
     mostrarSpinner: false,
+    // mostrarSpinner: parametrosGlobales.mostrarSpinner, //false,
   });
   useContextProvider(CTX_INDEX_VENTA, definicion_CTX_INDEX_VENTA);
   //#endregion DEFINICION CTX_INDEX_VENTA
 
-  //#region CONTEXTOS
-  // const ctx_docs_orden_servicio = useContext(CTX_DOCS_ORDEN_SERVICIO);
-  //#endregion CONTEXTOS
+  //#region CONTEXTO
+  // const ctx_header_almacen = useContext(CTX_HEADER_ALMACEN);
+  //#endregion CONTEXTO
 
   //#region INICIALIZACION
   const ini = useSignal(0);
@@ -77,7 +78,11 @@ export default component$(() => {
   const igv = useSignal(0);
   // const xmlDoc = useSignal<any>();
 
+  // const RRR = localStorage.getItem('periodos') ? localStorage.getItem('periodos') : [];
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
+  // const losPeriodosCargados = useSignal<any>(localStorage.getItem('periodos'));
+  // const losPeriodosCargados = useSignal(JSON.parse(localStorage.getItem('periodos') || '[]'));
+  // const losPeriodosCargados = useSignal<any>([]);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
 
   // const ventas = useStore([]);
@@ -93,6 +98,13 @@ export default component$(() => {
     // fechaInicio: fechas.desde,
     // fechaFinal: fechas.hasta,
   });
+
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
+
+  //   parametrosGlobales.mostrarSpinner = false;
+  //   console.log('ini venta parametrosGlobales.mostrarSpinner ', parametrosGlobales.mostrarSpinner);
+  // });
 
   // useTask$(({ track }) => {
   //   const fI = track(() => fechas.desde);
@@ -153,11 +165,14 @@ export default component$(() => {
   //#region REFRESCAR REGISTROS
   useTask$(({ track }) => {
     track(() => definicion_CTX_INDEX_VENTA.grabo_Venta);
+    // console.log('0 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
+    // const BO = definicion_CTX_INDEX_VENTA.grabo_Venta;
     if (definicion_CTX_INDEX_VENTA.grabo_Venta) {
       buscarVentas.value++;
-
+      // console.log('1 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
       definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
       definicion_CTX_INDEX_VENTA.grabo_Venta = false;
+      // console.log('2 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
     }
   });
   //#endregion REFRESCAR REGISTROS
@@ -189,27 +204,28 @@ export default component$(() => {
   //#endregion CREAR Y DOWNLOAD TXT
 
   return (
-    <main>
-      <div class="container">
-        {/*  IDENTIFICACION  */}
-        {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem' }}>
+    // <main>
+    <div class="container">
+      {/*  IDENTIFICACION  style={{ border: '3px pink solid' }}*/}
+      {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem' }}>
           {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
-        </h1> */}
-        <div style={{ background: '#00778F' }}>
-          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
-            {` ${localStorage.getItem('numeroIdentidad')} - ${localStorage
+        </h1>                , border: '1px green solid'       */}
+      <div style={{ background: '#00778F' }}>
+        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
+          {/* {` ${localStorage.getItem('numeroIdentidad')} - ${localStorage
               .getItem('empresa')
               ?.toLocaleUpperCase()} - Sucursal: ${localStorage.getItem('sucursal')} - Usuario: ${localStorage.getItem(
               'usuario'
-            )}`}
-          </label>
-        </div>
-        <h4 style={{ margin: '8px 0 4px 2px' }}>
-          <u>Facturación</u>
-        </h4>
-        {/*  INTERVALOS DE FECHAS  style={{ display: 'flex', margin: '10px 0' }}*/}
-        {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
-        {/* <div class="intervalo-fechas">
+            )}`} */}
+          {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
+        </label>
+      </div>
+      <h4 style={{ margin: '8px 0 4px 2px' }}>
+        <u>Facturación</u>
+      </h4>
+      {/*  INTERVALOS DE FECHAS  border: '1px pink solid' style={{ display: 'flex', margin: '10px 0' }}*/}
+      {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
+      {/* <div class="intervalo-fechas">
           <label class="fechas">
             Desde:{' '}
             <input
@@ -253,206 +269,216 @@ export default component$(() => {
             />
           </div>
         </div> */}
-        {/*  BOTONES   className="btn"  onClick={mostrarPanelVenta}  border: ' 1px solid blue',*/}
-        <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
-          {/* <button
+      {/*  BOTONES   */}
+      <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
+        {/* <button
             onClick$={() => {
               
             }}
           >
             compañia
           </button> */}
-          <Button
-            name="ADD VENTA"
-            title="Add venta"
-            onClick={$(async () => {
-              //validar PERIODO
-              if (periodo.idPeriodo === '') {
-                alert('Seleccione el periodo.');
-                document.getElementById('se_periodo')?.focus();
-                ini.value++;
-                return;
-              }
-              //
-              // let elIgv = await getIgvVenta(parametrosGlobales);
-              let elIgv = await getIgvVenta({
-                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                idEmpresa: parametrosGlobales.idEmpresa,
-              });
-              elIgv = elIgv.data;
-              //
-              igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-              //
-              definicion_CTX_INDEX_VENTA.mostrarPanelVenta = true;
-            })}
-          />
-          <ElSelect
-            id={'se_periodo_VENTA'}
-            // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
-            estilos={{ width: '114px', marginLeft: '5px' }}
-            registros={losPeriodosCargados.value}
-            registroID={'_id'}
-            registroTEXT={'periodo'}
-            seleccione={'-- Selecc. periodo --'}
-            onChange={$(() => {
-              const elSelec = document.getElementById('se_periodo_VENTA') as HTMLSelectElement;
-              const elIdx = elSelec.selectedIndex;
+        <Button
+          name="ADD VENTA"
+          title="Add venta"
+          onClick={$(async () => {
+            //validar PERIODO
+            if (periodo.idPeriodo === '') {
+              alert('Seleccione el periodo.');
+              document.getElementById('se_periodo')?.focus();
+              ini.value++;
+              return;
+            }
+            //
+            // let elIgv = await getIgvVenta(parametrosGlobales);
+            let elIgv = await getIgvVenta({
+              idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+              idEmpresa: parametrosGlobales.idEmpresa,
+            });
+            elIgv = elIgv.data;
+            //
+            igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
+            //
+            definicion_CTX_INDEX_VENTA.mostrarPanelVenta = true;
+          })}
+        />
+        <ElSelect
+          id="se_periodo_VENTA"
+          // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
+          estilos={{ width: '114px', marginLeft: '5px' }}
+          registros={losPeriodosCargados.value}
+          registroID={'_id'}
+          registroTEXT={'periodo'}
+          seleccione={'-- Selecc. periodo --'}
+          onChange={$(() => {
+            const elSelec = document.getElementById('se_periodo_VENTA') as HTMLSelectElement;
+            const elIdx = elSelec.selectedIndex;
 
-              periodo.idPeriodo = elSelec[elIdx].id;
-              if (periodo.idPeriodo === '') {
-                periodo.periodo = '';
-              } else {
-                periodo.periodo = elSelec.value;
-                // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
-                parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-                //
-                //
-                buscarVentas.value++;
-
-                definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
-              }
-            })}
-            onKeyPress={$((e: any) => {
-              if (e.key === 'Enter') {
-                (document.getElementById('in_Fecha_MICE') as HTMLSelectElement)?.focus();
-              }
-            })}
-          />
-          <input
-            // id="in_BuscarDetraccion"
-            type="image"
-            src={images.searchPLUS}
-            title="Refrescar ventas"
-            height={16}
-            width={16}
-            style={{ marginLeft: '2px' }}
-            // onFocusin$={() => console.log('☪☪☪☪☪☪')}
-            onClick$={() => {
-              if (parametrosBusqueda.idPeriodo === '') {
-                alert('Debe seleccionar el periodo');
-                document.getElementById('se_periodo_VENTA')?.focus();
-                return;
-              }
+            periodo.idPeriodo = elSelec[elIdx].id;
+            if (periodo.idPeriodo === '') {
+              periodo.periodo = '';
+            } else {
+              periodo.periodo = elSelec.value;
+              // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+              parametrosBusqueda.idPeriodo = periodo.idPeriodo;
+              //
+              //
               buscarVentas.value++;
 
               definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
-            }}
-          />
-          <input
-            // id="in_BuscarDetraccion"
-            type="button"
-            // src={images.searchPLUS}
-            value="PLE"
-            title="PLE de ventas"
-            // height={16}
-            // width={16}
-            style={{ marginLeft: '16px' }}
-            // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+            }
+          })}
+          onKeyPress={$((e: any) => {
+            if (e.key === 'Enter') {
+              (document.getElementById('in_Fecha_MICE') as HTMLSelectElement)?.focus();
+            }
+          })}
+        />
+        <input
+          // id="in_BuscarDetraccion"
+          type="image"
+          src={images.searchPLUS}
+          title="Refrescar ventas"
+          height={16}
+          width={16}
+          style={{ marginLeft: '2px' }}
+          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+          onClick$={() => {
+            if (parametrosBusqueda.idPeriodo === '') {
+              alert('Debe seleccionar el periodo');
+              document.getElementById('se_periodo_VENTA')?.focus();
+              return;
+            }
+            buscarVentas.value++;
+
+            definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
+          }}
+        />
+        <input
+          // id="in_BuscarDetraccion"
+          type="button"
+          // src={images.searchPLUS}
+          value="pre PLE"
+          title="PLE de ventas"
+          // height={16}
+          // width={16}
+          style={{ marginLeft: '16px' }}
+          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+          onClick$={() => {
+            if (parametrosBusqueda.idPeriodo === '') {
+              alert('Debe seleccionar el periodo');
+              document.getElementById('se_periodo_VENTA')?.focus();
+              return;
+            }
+            if (definicion_CTX_INDEX_VENTA.miscVts.length === 0) {
+              alert('El PLE del presente periodo no presenta datos para exportar.');
+              document.getElementById('se_periodo_VENTA')?.focus();
+              // ini.value++;
+              return;
+            }
+            let aExportar = '';
+            definicion_CTX_INDEX_VENTA.miscVts.map((com: any) => {
+              const {
+                codigoTipoDocumentoIdentidad,
+                tipoDocumentoIdentidad,
+                numeroIdentidad,
+                razonSocialNombre,
+                codigoTipoComprobantePago,
+                tipoComprobantePago,
+                fecha,
+                serie,
+                numero,
+
+                baseImponiblePEN,
+                exoneradoPEN,
+                inafectoPEN,
+                iscPEN,
+                icbpPEN,
+                otrosPEN,
+                igvPEN,
+                totalPEN,
+
+                referenciaFecha,
+                referenciaTipo,
+                referenciaSerie,
+                referenciaNumero,
+              } = com;
+
+              const bI = typeof baseImponiblePEN === 'undefined' ? '' : baseImponiblePEN.$numberDecimal;
+              const iGV = typeof igvPEN === 'undefined' ? '' : igvPEN.$numberDecimal;
+              const exo = typeof exoneradoPEN === 'undefined' ? '' : exoneradoPEN.$numberDecimal;
+              const ina = typeof inafectoPEN === 'undefined' ? '' : inafectoPEN.$numberDecimal;
+              const isc = typeof iscPEN === 'undefined' ? '' : iscPEN.$numberDecimal;
+              const icbp = typeof icbpPEN === 'undefined' ? '' : icbpPEN.$numberDecimal;
+              const otros = typeof otrosPEN === 'undefined' ? '' : otrosPEN.$numberDecimal;
+              const total = typeof totalPEN === 'undefined' ? '' : totalPEN.$numberDecimal;
+              const refeFe = typeof referenciaFecha === 'undefined' ? '' : referenciaFecha;
+              const refeTipo = typeof referenciaTipo === 'undefined' ? '' : referenciaTipo;
+              const refeSerie = typeof referenciaSerie === 'undefined' ? '' : referenciaSerie;
+              const refeNumero = typeof referenciaNumero === 'undefined' ? '' : referenciaNumero;
+
+              aExportar =
+                aExportar +
+                formatoDDMMYYYY_PEN(fecha) +
+                '|' +
+                codigoTipoComprobantePago +
+                '|' +
+                tipoComprobantePago +
+                '|' +
+                serie +
+                '|' +
+                numero +
+                '|' +
+                codigoTipoDocumentoIdentidad +
+                '|' +
+                tipoDocumentoIdentidad +
+                '|' +
+                numeroIdentidad +
+                '|' +
+                razonSocialNombre +
+                '|' +
+                bI +
+                '|' +
+                iGV +
+                '|' +
+                exo +
+                '|' +
+                ina +
+                '|' +
+                isc +
+                '|' +
+                icbp +
+                '|' +
+                otros +
+                '|' +
+                total +
+                '|' +
+                formatoDDMMYYYY_PEN(refeFe) +
+                '|' +
+                refeTipo +
+                '|' +
+                refeSerie +
+                '|' +
+                refeNumero +
+                '|' +
+                '\n';
+            });
+            // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
+            createAndDownloadFile('elPLE_VENTA_' + periodo.periodo, aExportar);
+          }}
+        />
+
+        {/* <button onClick$={() => console.log('definicion_CTX_INDEX_VENTA', definicion_CTX_INDEX_VENTA)}>ver</button> */}
+        {/* <button
             onClick$={() => {
-              if (parametrosBusqueda.idPeriodo === '') {
-                alert('Debe seleccionar el periodo');
-                document.getElementById('se_periodo_VENTA')?.focus();
-                return;
-              }
-              if (definicion_CTX_INDEX_VENTA.miscVts.length === 0) {
-                alert('El PLE del presente periodo no presenta datos para exportar.');
-                document.getElementById('se_periodo_VENTA')?.focus();
-                // ini.value++;
-                return;
-              }
-              let aExportar = '';
-              definicion_CTX_INDEX_VENTA.miscVts.map((com: any) => {
-                const {
-                  codigoTipoDocumentoIdentidad,
-                  tipoDocumentoIdentidad,
-                  numeroIdentidad,
-                  razonSocialNombre,
-                  codigoTipoComprobantePago,
-                  tipoComprobantePago,
-                  fecha,
-                  serie,
-                  numero,
-
-                  baseImponiblePEN,
-                  exoneradoPEN,
-                  inafectoPEN,
-                  iscPEN,
-                  icbpPEN,
-                  otrosPEN,
-                  igvPEN,
-                  totalPEN,
-
-                  referenciaFecha,
-                  referenciaTipo,
-                  referenciaSerie,
-                  referenciaNumero,
-                } = com;
-
-                const bI = typeof baseImponiblePEN === 'undefined' ? '' : baseImponiblePEN.$numberDecimal;
-                const iGV = typeof igvPEN === 'undefined' ? '' : igvPEN.$numberDecimal;
-                const exo = typeof exoneradoPEN === 'undefined' ? '' : exoneradoPEN.$numberDecimal;
-                const ina = typeof inafectoPEN === 'undefined' ? '' : inafectoPEN.$numberDecimal;
-                const isc = typeof iscPEN === 'undefined' ? '' : iscPEN.$numberDecimal;
-                const icbp = typeof icbpPEN === 'undefined' ? '' : icbpPEN.$numberDecimal;
-                const otros = typeof otrosPEN === 'undefined' ? '' : otrosPEN.$numberDecimal;
-                const total = typeof totalPEN === 'undefined' ? '' : totalPEN.$numberDecimal;
-                const refeFe = typeof referenciaFecha === 'undefined' ? '' : referenciaFecha;
-                const refeTipo = typeof referenciaTipo === 'undefined' ? '' : referenciaTipo;
-                const refeSerie = typeof referenciaSerie === 'undefined' ? '' : referenciaSerie;
-                const refeNumero = typeof referenciaNumero === 'undefined' ? '' : referenciaNumero;
-
-                aExportar =
-                  aExportar +
-                  formatoDDMMYYYY_PEN(fecha) +
-                  '|' +
-                  codigoTipoComprobantePago +
-                  '|' +
-                  tipoComprobantePago +
-                  '|' +
-                  serie +
-                  '|' +
-                  numero +
-                  '|' +
-                  codigoTipoDocumentoIdentidad +
-                  '|' +
-                  tipoDocumentoIdentidad +
-                  '|' +
-                  numeroIdentidad +
-                  '|' +
-                  razonSocialNombre +
-                  '|' +
-                  bI +
-                  '|' +
-                  iGV +
-                  '|' +
-                  exo +
-                  '|' +
-                  ina +
-                  '|' +
-                  isc +
-                  '|' +
-                  icbp +
-                  '|' +
-                  otros +
-                  '|' +
-                  total +
-                  '|' +
-                  formatoDDMMYYYY_PEN(refeFe) +
-                  '|' +
-                  refeTipo +
-                  '|' +
-                  refeSerie +
-                  '|' +
-                  refeNumero +
-                  '|' +
-                  '\n';
-              });
-              // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
-              createAndDownloadFile('elPLE_VENTA_' + periodo.periodo, aExportar);
+              // const TTT = JSON.parse(localStorage.getItem('periodos') || '[]');
+              console.log('localStorage JSON.parse(', JSON.parse(localStorage.getItem('periodos') || '[]'));
             }}
-          />
-          {/* <textarea id="source" value={'holas'}></textarea> */}
-          {/* <button
+          >
+            ver 2
+          </button> */}
+        {/* <textarea id="source" value={'holas'}></textarea> */}
+        {/* <button
             type="button"
             id="save"
             title="Save as text file"
@@ -468,8 +494,7 @@ export default component$(() => {
           >
             Save
           </button> */}
-
-          {/* <button
+        {/* <button
             title="xml 2"
             onClick$={() => {
               var xmlString = '<root><estrecho>Miguel</estrecho></root>';
@@ -480,35 +505,28 @@ export default component$(() => {
           >
             xml 22
           </button> */}
-
-          {/* <button onClick$={() => createAndOpenFile()}>ver xml 22</button> */}
-
-          {/* <a href="#" onClick$={() => createAndOpenFile()} download="file.xml">
+        {/* <button onClick$={() => createAndOpenFile()}>ver xml 22</button> */}
+        {/* <a href="#" onClick$={() => createAndOpenFile()} download="file.xml">
             Download
           </a> */}
-
-          {definicion_CTX_INDEX_VENTA.mostrarPanelVenta && (
-            <div class="modal">
-              <AddVenta ancho={600} addPeriodo={periodo} igv={igv.value} />
-            </div>
-          )}
-        </div>
-        {/* TABLA VENTAS */}
-        <div id="ventassss" style={{ margin: '10px 0' }}>
-          {buscarVentas.value > 0 ? (
-            <TablaVentas buscarVentas={buscarVentas.value} parametrosBusqueda={parametrosBusqueda} />
-          ) : (
-            ''
-          )}
-        </div>
-        {/* MOSTRAR SPINNER */}
-        {definicion_CTX_INDEX_VENTA.mostrarSpinner && (
-          <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Spinner />
+        {definicion_CTX_INDEX_VENTA.mostrarPanelVenta && (
+          <div class="modal">
+            <AddVenta ancho={600} addPeriodo={periodo} igv={igv.value} />
           </div>
         )}
       </div>
-    </main>
+      {/* TABLA VENTAS */}
+      <div id="ventassss" style={{ margin: '10px 0' }}>
+        {buscarVentas.value > 0 ? <TablaVentas buscarVentas={buscarVentas.value} parametrosBusqueda={parametrosBusqueda} /> : ''}
+      </div>
+      {/* MOSTRAR SPINNER */}
+      {definicion_CTX_INDEX_VENTA.mostrarSpinner && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </div>
+      )}
+    </div>
+    // </main>
   );
 });
 

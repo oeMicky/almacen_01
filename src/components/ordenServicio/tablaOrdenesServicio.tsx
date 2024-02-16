@@ -2,7 +2,7 @@ import { $, Resource, component$, useContext, useResource$, useSignal, useStyles
 // import style from '../tabla.css?inline';
 // import style from '../../components/tabla/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
-import { IOrdenServicio } from '~/interfaces/iOrdenServicio';
+import type { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 // import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
@@ -28,7 +28,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda', props.parametrosBusqueda);
+    // console.log('parametrosBusqueda', props.parametrosBusqueda);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicioPorPeriodo', {
       // const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicioEntreFechas', {
@@ -73,7 +73,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ordenesServicio) => {
-        console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
+        console.log('onResolved 🍓🍓🍓🍓');
         const { data } = ordenesServicio; //{ status, data, message }
         const misOrdenesServicio: IOrdenServicio[] = data;
         ctx_index_orden_servicio.mostrarSpinner = false;
@@ -126,6 +126,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                               type="image"
                               src={images.edit}
                               title="Editar servicio"
+                              disabled={estado === 'FACTURADO'}
                               height={14}
                               width={14}
                               style={{ padding: '2px' }}

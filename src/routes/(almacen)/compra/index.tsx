@@ -5,6 +5,7 @@ import { images } from '~/assets';
 // import { images } from '~/assets';
 import NewEditCompra from '~/components/compra/newEditCompra';
 import TablaCompras from '~/components/compra/tablaCompras';
+// import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 // import ImgButton from '~/components/system/imgButton';
@@ -29,6 +30,10 @@ export default component$(() => {
   useContextProvider(CTX_INDEX_COMPRA, definicion_CTX_INDEX_COMPRA);
   //#endregion DEFINICION CTX_INDEX_COMPRA
 
+  //#region CONTEXTO
+  // const ctx_header_almacen = useContext(CTX_HEADER_ALMACEN);
+  //#endregion CONTEXTO
+
   //#region INICIALIZACION
   // const ini = useSignal(0);
   const buscarCompras = useSignal(0);
@@ -46,6 +51,17 @@ export default component$(() => {
     // fechaInicio: primeroDelMes(), //
     // fechaFinal: hoy(), // ultimoDelMes(),
   });
+
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
+  //   definicion_CTX_INDEX_COMPRA.mostrarSpinner = false;
+  // });
+
+  // useBrowserVisibleTask$(({ track }) => {
+  //   track(() => ini.value);
+  //   parametrosGlobales.mostrarSpinner = false;
+  //   // definicion_CTX_INDEX_COMPRA.mostrarSpinner = false;
+  // });
   //#endregion INICIALIZACION
 
   //#region ACTUALIZAR TABLA COMPRAS
@@ -115,11 +131,12 @@ export default component$(() => {
       </h1> */}
       <div style={{ background: '#00778F' }}>
         <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
-          {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
+          {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
             'usuario'
-          )}`}
+          )}`} */}
+          {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
       <h4 style={{ margin: '8px 0 4px 2px' }}>
@@ -183,7 +200,7 @@ export default component$(() => {
             //validar PERIODO
             if (periodo.idPeriodo === '') {
               alert('Seleccione el periodo.');
-              document.getElementById('se_periodo')?.focus();
+              document.getElementById('se_periodo_COMPRA')?.focus();
               // ini.value++;
               return;
             }
@@ -201,10 +218,10 @@ export default component$(() => {
           registroTEXT={'periodo'}
           seleccione={'-- Selecc. periodo --'}
           onChange={$(() => {
-            console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+            // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
             const elSelec = document.getElementById('se_periodo_COMPRA') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
-            console.log('?', elIdx, elSelec[elIdx].id);
+            // console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
             if (periodo.idPeriodo === '') {
               periodo.periodo = '';
@@ -221,12 +238,12 @@ export default component$(() => {
           })}
           onKeyPress={$((e: any) => {
             if (e.key === 'Enter') {
-              (document.getElementById('in_Fecha_MICE') as HTMLSelectElement)?.focus();
+              (document.getElementById('in_BuscarCompras_EnPeriodo') as HTMLSelectElement)?.focus();
             }
           })}
         />
         <input
-          // id="in_BuscarDetraccion"
+          id="in_BuscarCompras_EnPeriodo"
           type="image"
           src={images.searchPLUS}
           title="Refrescar ventas"
@@ -249,7 +266,7 @@ export default component$(() => {
           // id="in_BuscarDetraccion"
           type="button"
           // src={images.searchPLUS}
-          value="PLE"
+          value="pre PLE"
           title="PLE de compras"
           style={{ marginLeft: '16px' }}
           // onFocusin$={() => console.log('☪☪☪☪☪☪')}

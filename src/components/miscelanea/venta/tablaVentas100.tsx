@@ -2,8 +2,8 @@ import { Resource, component$, useContext, useResource$ } from '@builder.io/qwik
 import { images } from '~/assets';
 import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 // import ImgButton from '~/components/system/imgButton';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { IVenta } from '~/interfaces/iVenta';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import type { IVenta } from '~/interfaces/iVenta';
 import { CTX_VENTAS_CLIENTE } from './ventasCliente';
 
 export default component$((props: { buscarVentas100: number; parametrosBusqueda: any; contexto: string; esAlmacen: boolean }) => {
@@ -28,7 +28,7 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda', props.parametrosBusqueda);
+    // console.log('parametrosBusqueda', props.parametrosBusqueda);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/venta/obtener100VentasCliente', {
       // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
@@ -54,7 +54,7 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ventas100) => {
-        console.log('onResolved 🍓🍓🍓🍓', ventas100);
+        console.log('onResolved 🍓🍓🍓🍓');
         const { data } = ventas100; //{ status, data, message }
         const misVentas100: IVenta[] = data;
         return (
@@ -100,7 +100,7 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                             {formatoDDMMYYYY_PEN(fecha)}
                           </td>
                           <td data-label="Serie-Nro" class="comoCadena">
-                            {serie + ' - ' + numero}
+                            {serie + ' - ' + cerosALaIzquierda(numero, 8)}
                           </td>
                           <td data-label="Moneda" class="acciones">
                             {moneda}
@@ -124,7 +124,7 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                           <td data-label="O.S." class="comoCadena">
                             {(serieOrdenServicio ? serieOrdenServicio : '') +
                               ' - ' +
-                              (numeroOrdenServicio ? numeroOrdenServicio : '')}
+                              (numeroOrdenServicio ? cerosALaIzquierda(numeroOrdenServicio, 8) : '')}
                           </td>
                           <td data-label="Acciones" class="acciones">
                             <input
@@ -132,13 +132,18 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                               type="image"
                               src={images.check32}
                               title="Seleccionar venta"
-                              height={14}
-                              width={14}
-                              style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              height={12}
+                              width={12}
+                              // style={{ padding: '2px' }}
+                              style={{ margin: '2px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 if (typeof idOrdenServicio !== 'undefined' && idOrdenServicio !== '') {
-                                  alert(`La venta presenta adjunto orden de servicio ${idOrdenServicio}.`);
+                                  alert(
+                                    `La venta presenta adjunto una orden de servicio ${serieOrdenServicio} - ${
+                                      numeroOrdenServicio ? cerosALaIzquierda(numeroOrdenServicio, 8) : ''
+                                    }.`
+                                  );
                                   return;
                                 }
                                 ctx_ventas_cliente.vV = venta100Locali;

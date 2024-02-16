@@ -16,7 +16,11 @@ import Cat from '../images/Cat.webp';
 import Os from '../images/Os.webp';
 import Pm from '../images/Pm.webp';
 import Cp from '../images/Cp.webp';
+import Gr from '../images/Gr.webp';
+import Gr256 from '../images/Gr256.webp';
+import Gr128 from '../images/Gr128.webp';
 import Logout from '../images/Logout.webp';
+import Rp from '../images/Rp.webp';
 
 import caoSLinealDark from '../images/CAO-S-Lineal-dark.svg';
 import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
@@ -35,6 +39,7 @@ import logout32 from '../images/logout32.svg';
 import mercaderia from '../images/mercaderia.svg';
 import menu from '../images/menu.svg';
 import moneyBag from '../images/moneyBag.svg';
+import os from '../images/os.svg';
 import pdf from '../images/pdf.svg';
 import pdf_2 from '../images/pdf_2.svg';
 import pencil from '../images/pencil.svg';
@@ -67,7 +72,11 @@ export default {
   Os,
   Pm,
   Cp,
+  Gr,
+  Gr256,
+  Gr128,
   Logout,
+  Rp,
 
   caoSLinealDark,
   caoSLinealLight,
@@ -86,6 +95,7 @@ export default {
   mercaderia,
   menu,
   moneyBag,
+  os,
   pdf,
   pdf_2,
   pencil,

@@ -127,7 +127,7 @@ function pdfFactura98(venta) {
               { text: venta.descripcionTCP + '\n', style: 'texto' },
               { text: 'Serie y correlativo: ', style: 'textoBold' },
               {
-                text: venta.serie + '-' + cerosALaIzquierda(venta.numero, 8) + '\n',
+                text: venta.serie + ' - ' + cerosALaIzquierda(venta.numero, 8) + '\n',
                 style: 'texto',
               },
               { text: 'Fecha: ', style: 'textoBold' },

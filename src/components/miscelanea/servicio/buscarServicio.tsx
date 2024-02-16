@@ -80,19 +80,19 @@ export default component$((props: { contexto: any }) => {
 
   return (
     <div
+      class="container-modal"
       style={{
         width: 'clamp(330px, 86%, 680px)',
         // width: 'auto',
         padding: '2px',
       }}
-      class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
       <div
         style={{
           display: 'flex',
           justifyContent: 'end',
-          marginTop: '16px',
+          // marginTop: '16px',
         }}
       >
         <ImgButton
@@ -151,7 +151,28 @@ export default component$((props: { contexto: any }) => {
                   (e.target as HTMLInputElement).select();
                 }}
               />
-              <ImgButton
+              <input
+                type="image"
+                title="Buscar servicio"
+                alt="icon buscar"
+                height={16}
+                width={16}
+                src={images.searchPLUS}
+                onClick$={() => localizarServicios()}
+              />
+              <input
+                type="image"
+                title="Adicionar servicio"
+                alt="icon adicionar"
+                height={16}
+                width={16}
+                src={images.add}
+                onClick$={() => {
+                  definicion_CTX_BUSCAR_SERVICIO.sS = [];
+                  definicion_CTX_BUSCAR_SERVICIO.mostrarPanelNewEditServicio = true;
+                }}
+              />
+              {/* <ImgButton
                 src={images.searchPLUS}
                 alt="Icono de buscar persona"
                 height={16}
@@ -172,7 +193,7 @@ export default component$((props: { contexto: any }) => {
                   definicion_CTX_BUSCAR_SERVICIO.sS = [];
                   definicion_CTX_BUSCAR_SERVICIO.mostrarPanelNewEditServicio = true;
                 })}
-              />
+              /> */}
             </div>
           </div>
         </div>

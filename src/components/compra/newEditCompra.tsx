@@ -3,9 +3,9 @@ import { CTX_INDEX_COMPRA } from '~/routes/(almacen)/compra';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import ElSelect from '../system/elSelect';
-import { ICompra } from '~/interfaces/iCompra';
+import type { ICompra } from '~/interfaces/iCompra';
 import { loadTiposComprobantePago } from '~/apis/sunat.api';
-import { IPersona } from '~/interfaces/iPersona';
+import type { IPersona } from '~/interfaces/iPersona';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 // import { getTipoCambio } from '~/apis/apisExternas.api';
 import { ultimoDiaDelPeriodoX } from '~/functions/comunes';
@@ -645,6 +645,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
     } else {
       definicion_CTX_COMPRA.retencionPorcentaje = '';
     }
+    //NOATT DE CREDITO / NOTA DE DEBITO
     if (definicion_CTX_COMPRA.codigoTCP === '07' || definicion_CTX_COMPRA.codigoTCP === '08') {
       if (definicion_CTX_COMPRA.referenciaFecha === '') {
         alert('Ingrese la fecha de referencia de NC/ND');
@@ -841,7 +842,7 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_index_compra.grabo_Compra = grabo;
+            ctx_index_compra.grabo_Compra = grabo.value;
             ctx_index_compra.mostrarPanelCompra = false;
           })}
         />
@@ -918,10 +919,10 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                   registroTEXT={'descripcion'}
                   seleccione={'-- Seleccione TCP --'}
                   onChange={$(() => {
-                    console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢 ElSelect se_tcp');
+                    // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢 ElSelect se_tcp');
                     const elSelec = document.getElementById('se_tcp') as HTMLSelectElement;
                     const elIdx = elSelec.selectedIndex;
-                    console.log('?', elIdx, elSelec[elIdx].id);
+                    // console.log('?', elIdx, elSelec[elIdx].id);
                     definicion_CTX_COMPRA.codigoTCP = elSelec[elIdx].id;
                     if (definicion_CTX_COMPRA.codigoTCP === '') {
                       definicion_CTX_COMPRA.descripcionTCP = '';
@@ -938,7 +939,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>{' '}
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL PROVEEDOR */}
@@ -1036,7 +1038,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
             {/* ----------------------------------------------------- */}
             {/* ***NC -- ND -- */}
             <div
@@ -1130,10 +1133,11 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                 </div>
               </div>
             </div>
-            <hr
+            <br hidden={definicion_CTX_COMPRA.codigoTCP === '07' || definicion_CTX_COMPRA.codigoTCP === '08' ? false : true}></br>
+            {/* <hr
               style={{ margin: '5px 0' }}
               hidden={definicion_CTX_COMPRA.codigoTCP === '07' || definicion_CTX_COMPRA.codigoTCP === '08' ? false : true}
-            ></hr>
+            ></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
           <div>
@@ -1338,7 +1342,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
           {/* -----------------------TC---------------------------- */}
@@ -1394,7 +1399,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
         </div>
         <div>
@@ -1482,10 +1488,10 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                   textoAdicional=" %"
                   seleccione={'-- Seleccione igv --'}
                   onChange={$(() => {
-                    console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢 change select');
+                    // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢 change select');
                     const elSelec = document.getElementById('se_igv') as HTMLSelectElement;
                     const elIdx = elSelec.selectedIndex;
-                    console.log('?', elIdx, elSelec[elIdx].id);
+                    // console.log('?', elIdx, elSelec[elIdx].id);
                     definicion_CTX_COMPRA.idElIgv = elSelec[elIdx].id;
                     if (definicion_CTX_COMPRA.idElIgv === '') {
                       definicion_CTX_COMPRA.elIgv = ''; // parseInt('');
@@ -1630,8 +1636,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                 />
               </div>
             </div>
-
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
           {/* DETRACCION */}
@@ -1757,7 +1763,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                 </div>
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarDetraccionPorcentaje && (
             <div class="modal">
@@ -1804,7 +1811,8 @@ export default component$((props: { addPeriodo: any; compraSeleccionada: any; ag
                 </div>
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
         </div>
         {/* GRABAR   onClick={(e) => onSubmit(e)}*/}

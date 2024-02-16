@@ -29,20 +29,24 @@ export interface IVenta {
   moneda: string;
   tipoCambio: number;
 
-  // idOrdenServicio: string;
-  // serieOrdenServicio: string;
-  // numeroOrdenServicio: number;
-
   vendedor: string;
   metodoPago: string;
+
+  todoEnEfectivo: boolean;
+  unaParteEnEfectivo: boolean;
+  montoEnEfectivo: any;
+  otroMedioPago: string;
+  montoOtroMedioPago: any;
+
   verCuotasCredito: boolean;
   cuotasCredito: any;
   // cuotasCredito: [ICuotaCreditoVenta];
   importeTotalCuotasCredito: number;
 
-  cotizacion: number;
+  idCotizacion: string;
+  serieCotizacion: string;
+  numeroCotizacion: number;
 
-  // ordenServicio: number;
   idOrdenServicio: string;
   serieOrdenServicio: string;
   numeroOrdenServicio: number;
@@ -87,4 +91,21 @@ export interface ICuotaCreditoVenta {
   idAuxiliar: number;
   fechaCuota: string;
   importeCuotaPEN: number;
+}
+
+export interface IReporteVenta {
+  _id: string;
+
+  codigoTipoDocumentoIdentidad: string;
+  tipoDocumentoIdentidad: string;
+  numeroIdentidad: string;
+  razonSocialNombre: string;
+
+  serie: string;
+  numero: number;
+
+  fecha: string;
+  totalPEN: any;
+
+  ganancias: any;
 }

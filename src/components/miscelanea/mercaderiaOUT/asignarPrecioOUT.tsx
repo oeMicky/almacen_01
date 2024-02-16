@@ -39,7 +39,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 600px)',
+        width: 'clamp(330px, 86%, 500px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -95,14 +95,28 @@ export default component$((props: { mercaOUTSelecci: any }) => {
           <div class="form-control">
             <label>Costo</label>
             <div class="form-control form-agrupado">
-              <input id="inputCosto_MICE" style={{ width: '100%' }} type="number" disabled placeholder="Costo" />
+              <input
+                id="inputCosto_MICE"
+                style={{ width: '100%', textAlign: 'right' }}
+                type="number"
+                disabled
+                placeholder="Costo"
+                value={props.mercaOUTSelecci.promedioCostoUnitarioMovil.$numberDecimal}
+              />
             </div>
           </div>
           {/* Utilidad */}
           <div class="form-control">
             <label>Utilidad</label>
             <div class="form-control form-agrupado">
-              <input id="inputUtilidad_MICE" style={{ width: '100%' }} type="number" disabled placeholder="Utilidad" />
+              <input
+                id="inputUtilidad_MICE"
+                style={{ width: '100%', textAlign: 'right' }}
+                type="number"
+                disabled
+                placeholder="Utilidad"
+                value={precio.value - props.mercaOUTSelecci.promedioCostoUnitarioMovil.$numberDecimal}
+              />
             </div>
           </div>
           {/* Precio */}

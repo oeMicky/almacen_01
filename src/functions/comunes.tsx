@@ -4,6 +4,14 @@ export const hoy = () => {
   return al;
 };
 
+export const menosXdiasHoy = (xDias: number) => {
+  const hoy = new Date();
+  const montoXDias = 1000 * 60 * 60 * 24 * xDias;
+  const elDia = new Date(hoy.getTime() - montoXDias);
+  const al = elDia.getFullYear() + '-' + ('0' + (elDia.getMonth() + 1)).slice(-2) + '-' + ('0' + elDia.getDate()).slice(-2);
+  return al;
+};
+
 export const primeroDelMes = () => {
   const hoy = new Date();
   const al = hoy.getFullYear() + '-' + ('0' + (hoy.getMonth() + 1)).slice(-2) + '-01';

@@ -38,6 +38,7 @@ export default component$((props: { contexto: string }) => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
+    idSucursal: parametrosGlobales.idSucursal,
     fechaInicio: primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
     fechaFinal: hoy(), //cadena.value,
   });
@@ -86,7 +87,7 @@ export default component$((props: { contexto: string }) => {
           // style={numeroOFecha.value === 'Entre fechas' ? { visibility: 'visible' } : { visibility: 'collapse' }}
         >
           <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
-            Desde:
+            Desde
           </label>
           <input
             type="date"
@@ -97,7 +98,7 @@ export default component$((props: { contexto: string }) => {
             }}
           />
           <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
-            Hasta:
+            Hasta
           </label>
           <input
             type="date"
@@ -108,8 +109,25 @@ export default component$((props: { contexto: string }) => {
             }}
           />
 
-          <div class="intervalo-fechas__botonBuscar">
-            <ImgButton
+          {/* <div class="intervalo-fechas__botonBuscar"> */}
+          <input
+            type="image"
+            title="Buscar por fechas"
+            alt="icono buscar"
+            height={16}
+            width={16}
+            src={images.searchPLUS}
+            style={{ marginLeft: '4px' }}
+            onClick$={() => {
+              if (parametrosBusqueda.fechaInicio > parametrosBusqueda.fechaFinal) {
+                alert('Verifique las fechas de busqueda');
+                document.getElementById('fechaDesdeBusqueda')?.focus();
+                return;
+              }
+              buscarOrdenesServicio.value++;
+            }}
+          />
+          {/* <ImgButton
               src={images.searchPLUS}
               alt="Icono de busqueda por fechas"
               height={16}
@@ -123,8 +141,8 @@ export default component$((props: { contexto: string }) => {
                 }
                 buscarOrdenesServicio.value++;
               })}
-            />
-          </div>
+            /> */}
+          {/* </div> */}
         </div>
         {/* TABLA Ordenes Servicio */}
         <div style={{ marginTop: '15px' }}>

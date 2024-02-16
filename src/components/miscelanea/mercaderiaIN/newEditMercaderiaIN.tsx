@@ -11,7 +11,7 @@ import {
 } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
-import { IMercaderiaIN } from '~/interfaces/iMercaderia';
+import type { IMercaderiaIN } from '~/interfaces/iMercaderia';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 // import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 import ElButton from '~/components/system/elButton';
@@ -525,10 +525,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
               registroTEXT={'lineaTipoMercaderia'}
               seleccione={'-- Seleccione linea / tipo --'}
               onChange={$(() => {
-                console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                 const elSelec = document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement;
                 const elIdx = elSelec.selectedIndex;
-                console.log('?', elIdx, elSelec[elIdx].id);
+                // console.log('?', elIdx, elSelec[elIdx].id);
                 definicion_CTX_MERCADERIA_IN.idLineaTipo = elSelec[elIdx].id;
                 if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
                   definicion_CTX_MERCADERIA_IN.lineaTipo = '';
@@ -597,10 +597,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
               registroTEXT={'marca'}
               seleccione={'-- Seleccione marca --'}
               onChange={$(() => {
-                console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                 const elSelec = document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement;
                 const elIdx = elSelec.selectedIndex;
-                console.log('?', elIdx, elSelec[elIdx].id);
+                // console.log('?', elIdx, elSelec[elIdx].id);
                 definicion_CTX_MERCADERIA_IN.idMarca = elSelec[elIdx].id;
                 if (definicion_CTX_MERCADERIA_IN.idMarca === '') {
                   definicion_CTX_MERCADERIA_IN.marca = '';
@@ -682,7 +682,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
               registroTEXT={'unidad'}
               seleccione={'-- Seleccione unidad --'}
               onChange={$(() => {
-                console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                 const elSelec = document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement;
                 const elIdx = elSelec.selectedIndex;
                 definicion_CTX_MERCADERIA_IN.idUnidad = elSelec[elIdx].id;

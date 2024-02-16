@@ -7,7 +7,7 @@ import style from '../tabla/tabla.css?inline';
 // import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
 // import pdfVentaMG from '~/reports/pdfVentaMG';
 import pdfVentaMG from '~/reports/MG/pdfVentaMG';
-import { IVenta } from '~/interfaces/iVenta';
+import type { IVenta } from '~/interfaces/iVenta';
 import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
 
 // interface IEstructura {
@@ -114,7 +114,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ventas) => {
-          console.log('onResolved 🍓🍓🍓🍓');
+          console.log('onResolved 🍓🍓🍓🍓', ventas);
           const { data } = ventas; //{ status, data, message }
           const misVentas: IVenta[] = data;
           ctx_index_venta.miscVts = misVentas;
@@ -131,8 +131,8 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                         <th>Item</th>
                         <th>Nro. Doc</th>
                         <th>Cliente</th>
-                        <th>Ser-Nro</th>
                         <th>Fecha</th>
+                        <th>Ser-Nro</th>
                         <th>Importe</th>
                         <th>Mon</th>
                         <th>Pago</th>
@@ -153,11 +153,11 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                             <td data-label="Cliente" class="comoCadena">
                               {value.razonSocialNombre}
                             </td>
-                            <td data-label="Ser-Nro" class="comoCadena">
-                              {value.serie + '-' + cerosALaIzquierda(value.numero, 8)}
-                            </td>
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(value.fecha)}
+                            </td>
+                            <td data-label="Ser-Nro" class="comoCadena">
+                              {value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}
                             </td>
                             <td data-label="Importe" class="comoNumero">
                               {value.moneda === 'PEN'
@@ -196,6 +196,21 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                               <input
                                 // id="in_BuscarDetraccion"
                                 type="image"
+                                src={images.os}
+                                title="Ver OS"
+                                hidden={!(typeof value.idOrdenServicio !== 'undefined' && value.idOrdenServicio !== '')}
+                                height={12}
+                                width={12}
+                                style={{ margin: '2px' }}
+                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                // onClick$={() => {
+                                //   ventaSeleccionada.value = value;
+                                //   clickPDF.value++;
+                                // }}
+                              />
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
                                 src={images.xml}
                                 title="Ver xml"
                                 height={12}
@@ -204,7 +219,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   ventaSeleccionada.value = value;
-                                  createAndDownloadFile(value.serie + '-' + value.numero);
+                                  createAndDownloadFile(value.serie + ' - ' + value.numero);
                                   console.log('xml', ventaSeleccionada.value);
                                 }}
                               />
@@ -218,13 +233,6 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
               ) : (
                 <div>
                   <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
-                  {/* <button
-                    onClick$={() => {
-                      props.buscarVentas = false;
-                    }}
-                  >
-                    al falso
-                  </button> */}
                 </div>
               )}
             </>
@@ -233,77 +241,4 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
       />
     </>
   );
-
-  // const lasVentas = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-  //   track(() => props.buscarVentas.valueOf());
-  //   const abortController = new AbortController();
-  //   cleanup(() => abortController.abort('cleanup'));
-  //   console.log('FETCH->: ', `http://localhost:4000/api/venta/ventas`);
-  //   const res = await fetch(`http://localhost:4000/api/venta/ventas`, {
-  //     signal: abortController.signal,
-  //   });
-  //   return res.json();
-  // });
-
-  // return (
-  //   <>
-  //     {/* {props.buscarVentas && ( */}
-  //     <Resource
-  //       value={lasVentas}
-  //       onPending={() => <div>Cargando...</div>}
-  //       onRejected={() => <div>Fallo en la carga de datos</div>}
-  //       onResolved={(ventas) => {
-  //         const { status, data, message } = ventas;
-  //         const misVentas: IEstructura[] = data;
-  //         // return <div id="especies">{props.buscarVentas.valueOf() && <>a {misVentas[0].especie} domingos</>}</div>;
-  //         return (
-  //           <div id="especies">
-  //             {props.buscarVentas.valueOf() && (
-  //               <>
-  //                 a{' '}
-  //                 {misVentas.map((value, index) => {
-  //                   return (
-  //                     <>
-  //                       <div>{index + 1}</div>
-  //                       <div>{value._id}</div>
-  //                       <div>{value.especie}</div>
-  //                       <div>{value.numero}</div>
-  //                     </>
-  //                   );
-  //                 })}{' '}
-  //                 domingos
-  //               </>
-  //             )}
-  //           </div>
-  //         );
-  //       }}
-  //     />
-  //     {/* )} */}
-  //   </>
-  // );
 });
-
-// <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
-//   <thead>
-//     <tr>
-//       <th>Item</th>
-//       <th>Cliente</th>
-//     </tr>
-//   </thead>
-//   <tbody>
-//     <tr>
-//       <td>11</td>
-//       <td>aa</td>
-//     </tr>
-// {ventas.map((ven: any, index: number) => {
-//       const { razonSocialNombre } = ven;
-//       const indexItem = index + 1;
-//       return (
-//         <tr key={indexItem}>
-//           <td key={indexItem}>{indexItem}</td>
-//           <td>{razonSocialNombre}</td>
-//         </tr>
-//       );
-//     })}
-//   {/* </tbody>
-// </table> */}

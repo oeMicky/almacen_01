@@ -6,7 +6,7 @@ import style from '../tabla/tabla.css?inline';
 import { images } from '~/assets';
 // import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 // import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
-import { ICotizacion } from '~/interfaces/iCotizacion';
+import type { ICotizacion } from '~/interfaces/iCotizacion';
 import { CTX_INDEX_COTIZACION } from '~/routes/(almacen)/cotizacion';
 import pdfCotizacionMG from '~/reports/MG/pdfCotizacionMG';
 
@@ -44,7 +44,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
 
   //#region VISUZALIZAR PDF
   const verPDF = $((cotizacion: any) => {
-    console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
+    // console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
     if (typeof cotizacion !== 'undefined') {
       console.log('imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion);
       // pdfCotizacion98(cotizacion);
@@ -54,8 +54,10 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
 
   useTask$(async ({ track }) => {
     track(() => clickPDF.value);
-    console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
-    await verPDF(cotizacionSeleccionada.value);
+    // console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
+    if (typeof cotizacionSeleccionada.value !== 'undefined') {
+      await verPDF(cotizacionSeleccionada.value);
+    }
   });
   //#endregion VISUZALIZAR PDF
 
