@@ -1,10 +1,10 @@
-import { $, Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useStyles$, useTask$ } from '@builder.io/qwik';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
-import type { ICompra } from '~/interfaces/iCompra';
+// import type { ICompra } from '~/interfaces/iCompra';
 import style from '../tabla/tabla.css?inline';
-import ImgButton from '../system/imgButton';
+// import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_INDEX_COMPRA } from '~/routes/(almacen)/compra';
 
@@ -17,10 +17,11 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
 
   //#region BUSCANDO REGISTROS
   const lasCompras = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    console.log('tablaCompras ->->-> parameBusqueda', props.parametrosBusqueda);
+    // ctx_index_compra.miscCs = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
+    // console.log('tablaCompras ->->-> parameBusqueda', props.parametrosBusqueda);
     track(() => props.buscarCompras.valueOf());
 
-    console.log('props.buscarCompras.valueOf', props.buscarCompras.valueOf());
+    // console.log('props.buscarCompras.valueOf', props.buscarCompras.valueOf());
     // if (props.buscarVentas.valueOf()) {
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
@@ -38,6 +39,12 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
     return res.json();
   });
   //#endregion BUSCANDO REGISTROS
+
+  //#region ACTUALZIAR TABLA COMPRAS
+  useTask$(({ track }) => {
+    track(() => ctx_index_compra.miscCs);
+  });
+  //#endregion ACTUALZIAR TABLA COMPRAS
 
   return (
     <>
@@ -57,16 +64,16 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
         onResolved={(compras: any) => {
           console.log('onResolved 🍓🍓🍓🍓');
           const { data } = compras; //{ status, data, message }
-          const misCompras: ICompra[] = data;
-          ctx_index_compra.miscCs = misCompras;
+          // const misCompras: ICompra[] = data;
+          ctx_index_compra.miscCs = data;
           // props.buscarVentas = false;
           ctx_index_compra.mostrarSpinner = false;
-          console.log('misCompras', misCompras);
+          // console.log('misCompras', misCompras);
           return (
             <>
-              {misCompras.length > 0 ? (
+              {ctx_index_compra.miscCs.length > 0 ? (
                 <>
-                  <table class="tabla-venta" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
+                  <table class="tabla-compra" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -82,7 +89,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                       </tr>
                     </thead>
                     <tbody>
-                      {misCompras.map((compra, index) => {
+                      {ctx_index_compra.miscCs.map((compra: any, index: number) => {
                         const indexItem = index + 1;
                         return (
                           <tr key={compra._id}>
@@ -94,7 +101,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                             </td>
                             <td data-label="Proveedor" class="comoCadena">
                               {compra.razonSocialNombre}
-                            </td>{' '}
+                            </td>
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(compra.fecha)}
                             </td>
@@ -125,7 +132,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                       minimumFractionDigits: 2,
                                     })
                                 : '_'}
-                            </td>{' '}
+                            </td>
                             <td data-label="Mon" class="acciones" style={'tipoCompra' in compra ? {} : { background: '#FFD700' }}>
                               {'moneda' in compra ? compra.moneda : '_'}
                             </td>
@@ -136,25 +143,28 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                               {compra.retencion ? 'Si' : '-'}
                             </td>
                             <td data-label="Acciones" class="acciones">
-                              <ImgButton
+                              <input
+                                type="image"
                                 src={images.edit}
-                                alt="icono de editar"
-                                height={14}
-                                width={14}
                                 title={`Editar documento`}
-                                onClick={$(() => {
+                                alt="icono de editar"
+                                height={12}
+                                width={12}
+                                onClick$={() => {
                                   ctx_index_compra.cC = compra;
+                                  // ctx_index_compra.inddd = index;
                                   ctx_index_compra.mostrarPanelCompra = true;
-                                })}
+                                }}
                               />
-                              <ImgButton
+                              <input
+                                type="image"
                                 src={images.mercaderia}
+                                title={`Ver mercaderías`}
                                 alt="icono de mercaderías"
                                 hidden={compra.idIngresoAAlmacen ? false : true}
-                                height={14}
-                                width={14}
-                                title={`Ver mercaderías`}
-                                onClick={$(() => {
+                                height={12}
+                                width={12}
+                                onClick$={() => {
                                   if (compra.idIngresoAAlmacen) {
                                     alert(compra.idIngresoAAlmacen);
                                   } else {
@@ -163,8 +173,23 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
 
                                   // ctx_index_compra.cC = compra;
                                   // ctx_index_compra.mostrarPanelCompra = true;
-                                })}
+                                }}
                               />
+                              {/* <input
+                                type="image"
+                                src={images.see}
+                                title={`Ver mercaderías`}
+                                alt="icono de mercaderías"
+                                // hidden={compra.idIngresoAAlmacen ? false : true}
+                                height={12}
+                                width={12}
+                                onClick$={() => {
+                                  console.log('ctx_index_compra.miscCs:::', ctx_index_compra.miscCs);
+
+                                  // ctx_index_compra.cC = compra;
+                                  // ctx_index_compra.mostrarPanelCompra = true;
+                                }}
+                              /> */}
                               {/*  <ImgButton
                                 src={images.xml}
                                 alt="icono de xml"

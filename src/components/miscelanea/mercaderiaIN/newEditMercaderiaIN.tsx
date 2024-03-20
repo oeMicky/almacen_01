@@ -18,13 +18,14 @@ import ElButton from '~/components/system/elButton';
 import NewEditEquivalenciaIN from './newEditEquivalenciaIN';
 import ElSelect from '~/components/system/elSelect';
 import NewEditLineaTipoIN from './newEditLineaTipoIN';
-import NewEditUnidadIN from './newEditUnidadIN';
+// import NewEditUnidadIN from './newEditUnidadIN';
 import { getLineasTipos } from '~/apis/lineaTipo.api';
 import { parametrosGlobales } from '~/routes/login';
 import style from '../../tabla/tabla.css?inline';
 import { inUpMercaderia } from '~/apis/mercaderia.api';
 import NewEditMarcaIN from './newEditMarcaIN';
 import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
+import BuscarUnidadSUNAT from './buscarUnidadSUNAT';
 
 export const CTX_NEW_EDIT_MERCADERIA_IN = createContextId<any>('new_edit_mercaderia_IN');
 
@@ -33,7 +34,7 @@ export const CTX_MERCADERIA_IN = createContextId<IMercaderiaIN>('mercaderia_IN')
 export default component$((props: { mercaSeleccio: any; contexto: string }) => {
   useStyles$(style);
 
-  //#region DEFINICION CTX_NEW_IN_ALMACEN
+  //#region DEFINICION CTX_NEW_EDIT_MERCADERIA_IN
   const definicion_CTX_NEW_EDIT_MERCADERIA_IN = useStore({
     mostrarPanelNewEditLineaTipoIN: false,
     grabo_lineaTipo: false,
@@ -47,9 +48,19 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     mostrarPanelNewEditEquivalenciaIN: false,
     lasUE: [],
     laLineaTipo: [], //aux
+
+    idLT: '',
+    mostrarPanelBuscarUnidadSUNAT: false,
+    laUNInewedit: { _id: '', unidad: '', descripcion: '' },
+    grabo_unidadSUNAT: false,
+
+    mostrarPanelBuscarUnidadEquivalenciaSUNAT: false,
+    laUNIEQUInewedit: { _id: '', unidadEquivalencia: '', descripcion: '' },
+    grabo_unidadEquivalenciaSUNAT: false,
+    actualizarLasUE: false,
   });
   useContextProvider(CTX_NEW_EDIT_MERCADERIA_IN, definicion_CTX_NEW_EDIT_MERCADERIA_IN);
-  //#endregion DEFINICION CTX_NEW_EDIT_COTIZACION
+  //#endregion DEFINICION CTX_NEW_EDIT_MERCADERIA_IN
 
   //#region DEFINICION MERCADERIA
   const definicion_CTX_MERCADERIA_IN = useStore<IMercaderiaIN>({
@@ -71,6 +82,12 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     marca: props.mercaSeleccio.marca ? props.mercaSeleccio.marca : '',
     idUnidad: props.mercaSeleccio.idUnidad ? props.mercaSeleccio.idUnidad : '',
     unidad: props.mercaSeleccio.unidad ? props.mercaSeleccio.unidad : '',
+
+    tipoImpuesto: props.mercaSeleccio.tipoImpuesto ? props.mercaSeleccio.tipoImpuesto : 'IGV',
+    tipoAfectacionDelImpuesto: props.mercaSeleccio.tipoAfectacionDelImpuesto
+      ? props.mercaSeleccio.tipoAfectacionDelImpuesto
+      : '10',
+    porcentaje: props.mercaSeleccio.porcentaje ? props.mercaSeleccio.porcentaje : '18',
 
     kardex: props.mercaSeleccio.kardex ? props.mercaSeleccio.kardex : '',
     KARDEXS: props.mercaSeleccio.kardexs ? props.mercaSeleccio.kardexs : '',
@@ -297,6 +314,87 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
   });
   //#endregion ACTUALIZAR UNIDAD
 
+  //#region ACTUALIZAR UNIDAD SUNAT
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadSUNAT);
+    console.log('definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit', definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit);
+    if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadSUNAT) {
+      console.log('first');
+      const LINE: any = lasLineasTipos.value.filter((LT: any) => LT._id === definicion_CTX_NEW_EDIT_MERCADERIA_IN.idLT);
+      console.log('second LINE', LINE, definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit.unidad);
+      const laUNIDAD = LINE[0].unidades.filter(
+        (lasUNIS: any) => lasUNIS.unidad === definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit.unidad
+      );
+      console.log('tree laUNIDAD', laUNIDAD);
+      if (laUNIDAD.length === 0) {
+        LINE[0].unidades.push(definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit);
+        LINE[0].unidades.sort((a: any, b: any) => {
+          const uniA = a.unidad.toUpperCase(); // ignore upper and lowercase
+          const uniB = b.unidad.toUpperCase(); // ignore upper and lowercase
+          if (uniA < uniB) {
+            return -1;
+          }
+          if (uniA > uniB) {
+            return 1;
+          }
+          // names must be equal
+          return 0;
+        });
+        console.log('ford LINE[0]', LINE[0]);
+      }
+      if (laUNIDAD.length === 1) {
+        laUNIDAD[0]._id = definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit._id;
+        laUNIDAD[0].unidad = definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit.unidad;
+        laUNIDAD[0].descripcion = definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit.descripcion;
+      }
+
+      definicion_CTX_NEW_EDIT_MERCADERIA_IN.idLT = '';
+      definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit = { _id: '', unidad: '', descripcion: '' };
+
+      definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadSUNAT = false;
+    }
+  });
+  //#endregion ACTUALIZAR UNIDAD SUNAT
+
+  //#region ACTUALIZAR UNIDAD EQUIVALENCIA SUNAT
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadEquivalenciaSUNAT);
+
+    console.log('definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit', definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit);
+    if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadEquivalenciaSUNAT) {
+      console.log('firstEQ');
+      const LINE: any = lasLineasTipos.value.filter((LT: any) => LT._id === definicion_CTX_NEW_EDIT_MERCADERIA_IN.idLT);
+      console.log('secondEQ LINE', LINE, definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit.unidadEquivalencia);
+      const laUNIDADEQUI = LINE[0].unidadesEquivalencias.filter(
+        (lasUNIS: any) => lasUNIS.unidadEquivalencia === definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit.unidadEquivalencia
+      );
+      if (laUNIDADEQUI.length === 0) {
+        LINE[0].unidadesEquivalencias.push(definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit);
+        LINE[0].unidadesEquivalencias.sort((a: any, b: any) => {
+          const uniA = a.unidadEquivalencia.toUpperCase(); // ignore upper and lowercase
+          const uniB = b.unidadEquivalencia.toUpperCase(); // ignore upper and lowercase
+          if (uniA < uniB) {
+            return -1;
+          }
+          if (uniA > uniB) {
+            return 1;
+          }
+          // names must be equal
+          return 0;
+        });
+        definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE = LINE[0].unidadesEquivalencias;
+        definicion_CTX_NEW_EDIT_MERCADERIA_IN.actualizarLasUE = true;
+        console.log('treeEQ definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE', definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE);
+        console.log('fordEQ LINE[0]', LINE[0]);
+      }
+      // console.log('treeEQ laUNIDADEQUI', laUNIDADEQUI);
+      definicion_CTX_NEW_EDIT_MERCADERIA_IN.idLT = '';
+      definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit = { _id: '', unidadEquivalencia: '', descripcion: '' };
+      definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadEquivalenciaSUNAT = false;
+    }
+  });
+  //#endregion ACTUALIZAR UNIDAD EQUIVALENCIA SUNAT
+
   useTask$(({ track }) => {
     track(() => ini.value);
     console.log('entro a useTask');
@@ -308,11 +406,11 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
 
   //#region REGISTRAR MERCADERIA
   const registrarMercaderia = $(async () => {
-    if (definicion_CTX_MERCADERIA_IN.codigo === '') {
-      alert('Ingrese el código');
-      document.getElementById('se_codigo_MERCADERIA_IN')?.focus();
-      return;
-    }
+    // if (definicion_CTX_MERCADERIA_IN.codigo === '') {
+    //   alert('Ingrese el código');
+    //   document.getElementById('se_codigo_MERCADERIA_IN')?.focus();
+    //   return;
+    // }
     if (definicion_CTX_MERCADERIA_IN.descripcion === '') {
       alert('Ingrese la descripción');
       document.getElementById('se_descripcion_MERCADERIA_IN')?.focus();
@@ -339,6 +437,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
       return;
     }
 
+    ctx.mostrarSpinner = true;
     const merca = await inUpMercaderia({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
@@ -359,6 +458,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
       unidad: definicion_CTX_MERCADERIA_IN.unidad,
       // kardex: props.mercaSeleccio.kardex ? props.mercaSeleccio.kardex : '',
       // kardexs: props.mercaSeleccio.kardexs ? props.mercaSeleccio.kardexs : '',
+      tipoImpuesto: definicion_CTX_MERCADERIA_IN.tipoImpuesto,
+      tipoAfectacionDelImpuesto: definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto,
 
       inafecto: definicion_CTX_MERCADERIA_IN.inafecto,
       exonerado: definicion_CTX_MERCADERIA_IN.exonerado,
@@ -374,6 +475,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
 
     console.log('merca', merca);
 
+    ctx.abuscar = merca.data.descripcion;
     ctx.grabo_mercaderiaIN = true;
     ctx.mostrarPanelNewEditMercaderiaIN = false;
   });
@@ -382,9 +484,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 560px)',
         // width: 'auto',
-        padding: '1px',
+        border: '1px solid red',
+        padding: '2px',
       }}
       class="container-modal"
     >
@@ -417,452 +520,494 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
           width={16}
           title="Ver persona"
           onClick={$(() => {
-            console.log('props.mercaSeleccio', props.mercaSeleccio);
+            console.log('lasLineasTipos.value', lasLineasTipos.value);
           })}
         />
       </div>
       {/* TITULO */}
-      <h3>Registro de mercadería</h3>
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Registro de mercadería</h3>
       {/* FORMULARIO */}
       {/* ENCABEZADO */}
-      <div>
-        {/* Código */}
-        <div class="form-control">
-          <label>Código</label>
-          <div class="form-control form-agrupado">
-            <input
-              id="se_codigo_MERCADERIA_IN"
-              style={{ width: '100%' }}
-              autoFocus
-              maxLength={13}
-              type="text"
-              placeholder="Código"
-              value={definicion_CTX_MERCADERIA_IN.codigo}
-              onChange$={(e) => {
-                definicion_CTX_MERCADERIA_IN.codigo = (e.target as HTMLInputElement).value.trim().toUpperCase();
-              }}
-              //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
-              onKeyPress$={(e) => {
-                if (e.key === 'Enter') {
-                  document.getElementById('se_descripcion_MERCADERIA_IN')?.focus();
-                }
-                // if (e.key === 'Escape') {
-                //   document.getElementById('tipoDocumentoIdentidad')?.focus();
-                // }
-              }}
-              onFocusin$={(e) => {
-                (e.target as HTMLInputElement).select();
-              }}
-            />
-          </div>
-        </div>
-        {/* Descripción */}
-        <div class="form-control">
-          <label>Descripción</label>
-          <div class="form-control form-agrupado">
-            <input
-              id="se_descripcion_MERCADERIA_IN"
-              style={{ width: '100%' }}
-              type="text"
-              placeholder="Descripción"
-              value={definicion_CTX_MERCADERIA_IN.descripcion}
-              onChange$={(e) => {
-                definicion_CTX_MERCADERIA_IN.descripcion = (e.target as HTMLInputElement).value.trim().toUpperCase();
-              }}
-              //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
-              onKeyPress$={(e) => {
-                if (e.key === 'Enter') {
-                  document.getElementById('se_UNSPSC_MERCADERIA_IN')?.focus();
-                }
-                // if (e.key === 'Escape') {
-                //   document.getElementById('tipoDocumentoIdentidad')?.focus();
-                // }
-              }}
-              onFocusin$={(e) => {
-                (e.target as HTMLInputElement).select();
-              }}
-            />
-          </div>
-        </div>
-        {/* UNSPSC */}
-        <div class="form-control">
-          <label>UNSPSC</label>
-          <div class="form-control form-agrupado">
-            <input
-              id="se_UNSPSC_MERCADERIA_IN"
-              style={{ width: '100%' }}
-              type="text"
-              placeholder="UNSPSC"
-              value={definicion_CTX_MERCADERIA_IN.UNSPSC}
-              onChange$={(e) => {
-                definicion_CTX_MERCADERIA_IN.UNSPSC = (e.target as HTMLInputElement).value.trim().toUpperCase();
-              }}
-              //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
-              onKeyPress$={(e) => {
-                if (e.key === 'Enter') {
-                  document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
-                }
-                // if (e.key === 'Escape') {
-                //   document.getElementById('tipoDocumentoIdentidad')?.focus();
-                // }
-              }}
-              onFocusin$={(e) => {
-                (e.target as HTMLInputElement).select();
-              }}
-            />
-          </div>
-        </div>
-        {/* Linea / Tipo */}
-        <div class="form-control">
-          <label>Linea / Tipo</label>
-          <div class="form-control form-agrupado">
-            <ElSelect
-              // estilos={{ width: '100%' }}
-              id={'se_lineaTipo_MERCADERIA_IN'}
-              valorSeleccionado={definicion_CTX_MERCADERIA_IN.lineaTipo}
-              registros={lasLineasTipos.value}
-              registroID={'_id'}
-              registroTEXT={'lineaTipoMercaderia'}
-              seleccione={'-- Seleccione linea / tipo --'}
-              onChange={$(() => {
-                // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-                const elSelec = document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement;
-                const elIdx = elSelec.selectedIndex;
-                // console.log('?', elIdx, elSelec[elIdx].id);
-                definicion_CTX_MERCADERIA_IN.idLineaTipo = elSelec[elIdx].id;
-                if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
-                  definicion_CTX_MERCADERIA_IN.lineaTipo = '';
-                } else {
-                  definicion_CTX_MERCADERIA_IN.lineaTipo = elSelec.value;
-                  obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
-                  obtenerMarcas(definicion_CTX_MERCADERIA_IN.idLineaTipo);
-                }
-              })}
-              onKeyPress={$((e: any) => {
-                if (e.key === 'Enter') {
-                  (document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement)?.focus();
-                }
-              })}
-            />
-            <ImgButton
-              src={images.add}
-              alt="Icono de adicionar lote / tipo"
-              height={16}
-              width={16}
-              title="Adicionar el lote / tipo"
-              onClick={$(() => {
-                lTSelecionado.id = '';
-                lTSelecionado.lt = '';
-                definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN = true;
-              })}
-            />
-            <ImgButton
-              src={images.edit}
-              alt="Icono de edición linea / tipo"
-              height={16}
-              width={16}
-              title="Editar linea / tipo"
-              onClick={$(() => {
-                const elSelec = document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement;
-                const elIdx = elSelec.selectedIndex;
-                console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                console.log('elSelec.value', elSelec.value);
-                if (elSelec[elIdx].id === '') {
-                  alert('Selecione una linea / tipo');
-                  elSelec.focus();
-                  return;
-                }
-                lTSelecionado.id = elSelec[elIdx].id;
-                lTSelecionado.lt = elSelec.value;
-                definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN = true;
-              })} //unidadIN={mercaderiaIN.unidad} equivaSelecci={[]}
-            />
-          </div>
-          {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN && (
-            <div class="modal">
-              <NewEditLineaTipoIN idLineaTipo={lTSelecionado.id} lineaTipo={lTSelecionado.lt} />
-            </div>
-          )}
-        </div>
-        {/* Marca */}
-        <div class="form-control">
-          <label>Marca</label>
-          <div class="form-control form-agrupado">
-            <ElSelect
-              // estilos={{ width: '100%' }}
-              id={'se_marca_MERCADERIA_IN'}
-              valorSeleccionado={definicion_CTX_MERCADERIA_IN.marca}
-              registros={lasMarcas.value}
-              registroID={'_id'}
-              registroTEXT={'marca'}
-              seleccione={'-- Seleccione marca --'}
-              onChange={$(() => {
-                // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-                const elSelec = document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement;
-                const elIdx = elSelec.selectedIndex;
-                // console.log('?', elIdx, elSelec[elIdx].id);
-                definicion_CTX_MERCADERIA_IN.idMarca = elSelec[elIdx].id;
-                if (definicion_CTX_MERCADERIA_IN.idMarca === '') {
-                  definicion_CTX_MERCADERIA_IN.marca = '';
-                } else {
-                  definicion_CTX_MERCADERIA_IN.marca = elSelec.value;
-                  //obtenerModelosVehiculares();
-                }
-              })}
-              onKeyPress={$((e: any) => {
-                if (e.key === 'Enter') {
-                  (document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement)?.focus();
-                }
-              })}
-            />
-            <ImgButton
-              src={images.add}
-              alt="Icono de adicionar marca"
-              height={16}
-              width={16}
-              title="Adicionar la marca"
-              onClick={$(() => {
-                if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
-                  alert('Seleccione la linea / tipo');
-                  document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
-                  return;
-                }
-                marSelecionado.id = '';
-                marSelecionado.mar = '';
-                definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditMarcaIN = true;
-              })}
-            />
-            <ImgButton
-              src={images.edit}
-              alt="Icono de edición marca"
-              height={16}
-              width={16}
-              title="Editar marca"
-              onClick={$(() => {
-                const elSelec = document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement;
-                const elIdx = elSelec.selectedIndex;
-                console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                console.log('elSelec.value', elSelec.value);
-                if (elSelec[elIdx].id === '') {
-                  alert('Seleccione la marca.');
-                  elSelec.focus();
-                  return;
-                }
-                if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
-                  alert('Seleccione la linea / tipo');
-                  document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
-                  return;
-                }
-                marSelecionado.id = elSelec[elIdx].id;
-                marSelecionado.mar = elSelec.value;
-                definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditMarcaIN = true;
-              })}
-            />
-          </div>
-          {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditMarcaIN && (
-            <div class="modal">
-              <NewEditMarcaIN
-                idLineaTipo={definicion_CTX_MERCADERIA_IN.idLineaTipo}
-                idMarca={marSelecionado.id}
-                marca={marSelecionado.mar}
-              />
-            </div>
-          )}
-        </div>
-        {/* Unidad */}
-        <div class="form-control">
-          <label>Unidad</label>
-          <div class="form-control form-agrupado">
-            <ElSelect
-              // estilos={{ width: '100%' }}
-              id={'se_unidad_MERCADERIA_IN'}
-              valorSeleccionado={definicion_CTX_MERCADERIA_IN.unidad}
-              registros={lasUnidades.value}
-              registroID={'_id'}
-              registroTEXT={'unidad'}
-              seleccione={'-- Seleccione unidad --'}
-              onChange={$(() => {
-                // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-                const elSelec = document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement;
-                const elIdx = elSelec.selectedIndex;
-                definicion_CTX_MERCADERIA_IN.idUnidad = elSelec[elIdx].id;
-                if (definicion_CTX_MERCADERIA_IN.idUnidad === '') {
-                  definicion_CTX_MERCADERIA_IN.unidad = '';
-                } else {
-                  definicion_CTX_MERCADERIA_IN.unidad = elSelec.value;
-                  //obtenerModelosVehiculares();
-                }
-              })}
-              onKeyPress={$((e: any) => {
-                if (e.key === 'Enter') {
-                  (document.getElementById('in_conFechaVencimientoLote_MERCADERIA_IN') as HTMLSelectElement)?.focus();
-                }
-              })}
-            />
-            <ImgButton
-              src={images.add}
-              alt="Icono de adicionar unidad"
-              height={16}
-              width={16}
-              title="Adicionar la unidad"
-              onClick={$(() => {
-                if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
-                  alert('Seleccione la linea / tipo');
-                  document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
-                  return;
-                }
-                uniSelecionado.id = '';
-                uniSelecionado.uni = '';
-                definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditUnidadIN = true;
-              })}
-            />
-            <ImgButton
-              src={images.edit}
-              alt="Icono de edición unidad"
-              height={16}
-              width={16}
-              title="Editar unidad"
-              onClick={$(() => {
-                const elSelec = document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement;
-                const elIdx = elSelec.selectedIndex;
-                console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                console.log('elSelec.value', elSelec.value);
-                if (elSelec[elIdx].id === '') {
-                  alert('Seleccione la unidad.');
-                  elSelec.focus();
-                  return;
-                }
-                if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
-                  alert('Seleccione la linea / tipo');
-                  document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
-                  return;
-                }
-                uniSelecionado.id = elSelec[elIdx].id;
-                uniSelecionado.uni = elSelec.value;
-                definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditUnidadIN = true;
-              })}
-            />
-          </div>
-          {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditUnidadIN && (
-            <div class="modal">
-              <NewEditUnidadIN
-                idLineaTipo={definicion_CTX_MERCADERIA_IN.idLineaTipo}
-                idUnidad={uniSelecionado.id}
-                unidad={uniSelecionado.uni}
-              />
-            </div>
-          )}
-        </div>
-        {/* con Fecha Vencimiento / Lote - Inafecto - Exonerado - Sujeto a percepción */}
-        <fieldset>
-          {/* con Fecha Vencimiento / Lote */}
+
+      <div class="add-form">
+        <div>
+          {/* Código */}
           <div class="form-control">
-            <label>con Fecha Vencimiento / Lote</label>
-            <div class="form-control ">
+            <label>Código</label>
+            <div class="form-control form-agrupado">
               <input
-                id="in_conFechaVencimientoLote_MERCADERIA_IN"
-                // style={{ width: '100%' }}
-                type="checkbox"
-                placeholder="con Fecha Vencimiento / Lote"
-                checked={definicion_CTX_MERCADERIA_IN.conFechaVencimientoLote}
+                id="se_codigo_MERCADERIA_IN"
+                style={{ width: '100%' }}
+                disabled
+                maxLength={13}
+                type="text"
+                placeholder="Código"
+                value={definicion_CTX_MERCADERIA_IN.codigo}
                 onChange$={(e) => {
-                  definicion_CTX_MERCADERIA_IN.conFechaVencimientoLote = (e.target as HTMLInputElement).checked;
+                  definicion_CTX_MERCADERIA_IN.codigo = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
+                //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    document.getElementById('in_inafecto_MERCADERIA_IN')?.focus();
+                    document.getElementById('se_descripcion_MERCADERIA_IN')?.focus();
                   }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('tipoDocumentoIdentidad')?.focus();
+                  // }
                 }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
                 }}
               />
-              con Fecha Vencimiento / Lote
             </div>
           </div>
-          {/* Inafecto */}
+          {/* Descripción */}
           <div class="form-control">
-            <label>Inafecto</label>
-            <div class="form-control ">
+            <label>Descripción</label>
+            <div class="form-control form-agrupado">
               <input
-                id="in_inafecto_MERCADERIA_IN"
-                // style={{ width: '100%' }}
-                type="checkbox"
-                placeholder="Inafecto"
-                checked={definicion_CTX_MERCADERIA_IN.inafecto}
+                id="se_descripcion_MERCADERIA_IN"
+                style={{ width: '100%' }}
+                type="text"
+                placeholder="Descripción"
+                value={definicion_CTX_MERCADERIA_IN.descripcion}
                 onChange$={(e) => {
-                  definicion_CTX_MERCADERIA_IN.inafecto = (e.target as HTMLInputElement).checked;
-                  if (definicion_CTX_MERCADERIA_IN.inafecto) {
-                    definicion_CTX_MERCADERIA_IN.exonerado = false;
-                  }
+                  definicion_CTX_MERCADERIA_IN.descripcion = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
+                //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    document.getElementById('in_exonerado_MERCADERIA_IN')?.focus();
+                    document.getElementById('se_UNSPSC_MERCADERIA_IN')?.focus();
                   }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('tipoDocumentoIdentidad')?.focus();
+                  // }
                 }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
                 }}
               />
-              Inafecto
             </div>
           </div>
-          {/* Exonerado */}
+          {/* UNSPSC */}
           <div class="form-control">
-            <label>Exonerado</label>
-            <div class="form-control ">
+            <label>UNSPSC</label>
+            <div class="form-control form-agrupado">
               <input
-                id="in_exonerado_MERCADERIA_IN"
-                // style={{ width: '100%' }}
-                type="checkbox"
-                placeholder="Exonerado"
-                checked={definicion_CTX_MERCADERIA_IN.exonerado}
-                value="Exonerado"
+                id="se_UNSPSC_MERCADERIA_IN"
+                style={{ width: '100%' }}
+                type="text"
+                placeholder="UNSPSC"
+                value={definicion_CTX_MERCADERIA_IN.UNSPSC}
                 onChange$={(e) => {
-                  definicion_CTX_MERCADERIA_IN.exonerado = (e.target as HTMLInputElement).checked;
-                  if (definicion_CTX_MERCADERIA_IN.exonerado) {
-                    definicion_CTX_MERCADERIA_IN.inafecto = false;
-                  }
+                  definicion_CTX_MERCADERIA_IN.UNSPSC = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
+                //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    document.getElementById('in_sujetoAPercepcion_MERCADERIA_IN')?.focus();
+                    document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
                   }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('tipoDocumentoIdentidad')?.focus();
+                  // }
                 }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
                 }}
               />
-              Exonerado
             </div>
           </div>
-          {/* Sujeto a percepción */}
+          {/* Linea / Tipo */}
           <div class="form-control">
-            <label>Sujeto a percepción</label>
-            <div style={{ width: '100%' }}>
-              <input
-                id="in_sujetoAPercepcion_MERCADERIA_IN"
-                // style={{ width: '100%' }}
-                type="checkbox"
-                placeholder="sujetoAPercepcion"
-                checked={definicion_CTX_MERCADERIA_IN.sujetoAPercepcion}
-                // value="sujetoAPercepcion"
-                name="sujetoAPercepcion"
-                onChange$={(e) => {
-                  definicion_CTX_MERCADERIA_IN.sujetoAPercepcion = (e.target as HTMLInputElement).checked;
-                }}
-                onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    document.getElementById('btn_add_equivalencia_MERCADERIA_IN')?.focus();
+            <label>Linea / Tipo</label>
+            <div class="form-control form-agrupado">
+              <ElSelect
+                // estilos={{ width: '100%' }}
+                id={'se_lineaTipo_MERCADERIA_IN'}
+                valorSeleccionado={definicion_CTX_MERCADERIA_IN.lineaTipo}
+                registros={lasLineasTipos.value}
+                registroID={'_id'}
+                registroTEXT={'lineaTipoMercaderia'}
+                seleccione={'-- Seleccione linea / tipo --'}
+                onChange={$(() => {
+                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  const elSelec = document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement;
+                  const elIdx = elSelec.selectedIndex;
+                  // console.log('?', elIdx, elSelec[elIdx].id);
+                  definicion_CTX_MERCADERIA_IN.idLineaTipo = elSelec[elIdx].id;
+                  if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
+                    definicion_CTX_MERCADERIA_IN.lineaTipo = '';
+                  } else {
+                    definicion_CTX_MERCADERIA_IN.lineaTipo = elSelec.value;
+                    obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                    obtenerMarcas(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                   }
-                }}
-                onFocusin$={(e) => {
-                  (e.target as HTMLInputElement).select();
+                })}
+                onKeyPress={$((e: any) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement)?.focus();
+                  }
+                })}
+              />
+              <input
+                type="image"
+                src={images.add}
+                disabled
+                alt="Icono de adicionar lote / tipo"
+                height={16}
+                width={16}
+                title="Adicionar el lote / tipo"
+                style={{ margin: '0 2px' }}
+                onClick$={() => {
+                  lTSelecionado.id = '';
+                  lTSelecionado.lt = '';
+                  definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN = true;
                 }}
               />
-              Sujeto a percepción
+              <input
+                type="image"
+                src={images.edit}
+                disabled
+                alt="Icono de edición linea / tipo"
+                height={16}
+                width={16}
+                title="Editar linea / tipo"
+                onClick$={() => {
+                  const elSelec = document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement;
+                  const elIdx = elSelec.selectedIndex;
+                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  console.log('elSelec.value', elSelec.value);
+                  if (elSelec[elIdx].id === '') {
+                    alert('Selecione una linea / tipo');
+                    elSelec.focus();
+                    return;
+                  }
+                  lTSelecionado.id = elSelec[elIdx].id;
+                  lTSelecionado.lt = elSelec.value;
+                  definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN = true;
+                }} //unidadIN={mercaderiaIN.unidad} equivaSelecci={[]}
+              />
+            </div>
+            {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN && (
+              <div class="modal">
+                {/* <NewEditLineaTipoIN idLineaTipo={lTSelecionado.id} lineaTipo={lTSelecionado.lt} /> */}
+                <NewEditLineaTipoIN lineaTipoSelecc={{ idLineaTipo: lTSelecionado.id, lineaTipo: lTSelecionado.lt }} />
+              </div>
+            )}
+          </div>
+          {/* Marca */}
+          <div class="form-control">
+            <label>Marca</label>
+            <div class="form-control form-agrupado">
+              <ElSelect
+                // estilos={{ width: '100%' }}
+                id={'se_marca_MERCADERIA_IN'}
+                valorSeleccionado={definicion_CTX_MERCADERIA_IN.marca}
+                registros={lasMarcas.value}
+                registroID={'_id'}
+                registroTEXT={'marca'}
+                seleccione={'-- Seleccione marca --'}
+                onChange={$(() => {
+                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  const elSelec = document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement;
+                  const elIdx = elSelec.selectedIndex;
+                  // console.log('?', elIdx, elSelec[elIdx].id);
+                  definicion_CTX_MERCADERIA_IN.idMarca = elSelec[elIdx].id;
+                  if (definicion_CTX_MERCADERIA_IN.idMarca === '') {
+                    definicion_CTX_MERCADERIA_IN.marca = '';
+                  } else {
+                    definicion_CTX_MERCADERIA_IN.marca = elSelec.value;
+                    //obtenerModelosVehiculares();
+                  }
+                })}
+                onKeyPress={$((e: any) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement)?.focus();
+                  }
+                })}
+              />
+              <input
+                type="image"
+                src={images.add}
+                alt="Icono de adicionar marca"
+                height={16}
+                width={16}
+                title="Adicionar la marca"
+                style={{ margin: '0 2px' }}
+                onClick$={() => {
+                  if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
+                    alert('Seleccione la linea / tipo');
+                    document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
+                    return;
+                  }
+                  marSelecionado.id = '';
+                  marSelecionado.mar = '';
+                  definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditMarcaIN = true;
+                }}
+              />
+              <input
+                type="image"
+                src={images.edit}
+                alt="Icono de edición marca"
+                height={16}
+                width={16}
+                title="Editar marca"
+                onClick$={() => {
+                  const elSelec = document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement;
+                  const elIdx = elSelec.selectedIndex;
+                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  console.log('elSelec.value', elSelec.value);
+                  if (elSelec[elIdx].id === '') {
+                    alert('Seleccione la marca.');
+                    elSelec.focus();
+                    return;
+                  }
+                  if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
+                    alert('Seleccione la linea / tipo');
+                    document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
+                    return;
+                  }
+                  marSelecionado.id = elSelec[elIdx].id;
+                  marSelecionado.mar = elSelec.value;
+                  definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditMarcaIN = true;
+                }}
+              />
+            </div>
+            {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditMarcaIN && (
+              <div class="modal">
+                <NewEditMarcaIN
+                  idLineaTipo={definicion_CTX_MERCADERIA_IN.idLineaTipo}
+                  lineaTipo={definicion_CTX_MERCADERIA_IN.lineaTipo}
+                  idMarca={marSelecionado.id}
+                  marca={marSelecionado.mar}
+                />
+              </div>
+            )}
+          </div>
+          {/* Unidad */}
+          <div class="form-control">
+            <label>Unidad</label>
+            <div class="form-control form-agrupado">
+              <ElSelect
+                // estilos={{ width: '100%' }}
+                id={'se_unidad_MERCADERIA_IN'}
+                valorSeleccionado={definicion_CTX_MERCADERIA_IN.unidad}
+                registros={lasUnidades.value}
+                registroID={'_id'}
+                registroTEXT={'unidad'}
+                seleccione={'-- Seleccione unidad --'}
+                onChange={$(() => {
+                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  const elSelec = document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement;
+                  const elIdx = elSelec.selectedIndex;
+                  definicion_CTX_MERCADERIA_IN.idUnidad = elSelec[elIdx].id;
+                  if (definicion_CTX_MERCADERIA_IN.idUnidad === '') {
+                    definicion_CTX_MERCADERIA_IN.unidad = '';
+                  } else {
+                    definicion_CTX_MERCADERIA_IN.unidad = elSelec.value;
+                    //obtenerModelosVehiculares();
+                  }
+                })}
+                onKeyPress={$((e: any) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_conFechaVencimientoLote_MERCADERIA_IN') as HTMLSelectElement)?.focus();
+                  }
+                })}
+              />
+              <input
+                type="image"
+                src={images.searchPLUS}
+                alt="Icono de buscar unidad"
+                height={16}
+                width={16}
+                title="Buscar unidad"
+                style={{ margin: '0 18px 0 2px' }}
+                onClick$={() => {
+                  if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
+                    alert('Seleccione la linea / tipo');
+                    document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
+                    return;
+                  }
+                  uniSelecionado.id = '';
+                  uniSelecionado.uni = '';
+                  definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelBuscarUnidadSUNAT = true;
+                }}
+              />
               {/* <input
+                type="image"
+                src={images.add}
+                alt="Icono de adicionar unidad"
+                height={16}
+                width={16}
+                title="Adicionar la unidad"
+                style={{ margin: '0 2px' }}
+                onClick$={() => {
+                  if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
+                    alert('Seleccione la linea / tipo');
+                    document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
+                    return;
+                  }
+                  uniSelecionado.id = '';
+                  uniSelecionado.uni = '';
+                  definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditUnidadIN = true;
+                }}
+              />
+              <input
+                type="image"
+                src={images.edit}
+                alt="Icono de edición unidad"
+                height={16}
+                width={16}
+                title="Editar unidad"
+                onClick$={() => {
+                  const elSelec = document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement;
+                  const elIdx = elSelec.selectedIndex;
+                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  console.log('elSelec.value', elSelec.value);
+                  if (elSelec[elIdx].id === '') {
+                    alert('Seleccione la unidad.');
+                    elSelec.focus();
+                    return;
+                  }
+                  if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
+                    alert('Seleccione la linea / tipo');
+                    document.getElementById('se_lineaTipo_MERCADERIA_IN')?.focus();
+                    return;
+                  }
+                  uniSelecionado.id = elSelec[elIdx].id;
+                  uniSelecionado.uni = elSelec.value;
+                  definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditUnidadIN = true;
+                }}
+              /> */}
+            </div>
+            {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelBuscarUnidadSUNAT && (
+              <div class="modal">
+                <BuscarUnidadSUNAT
+                  idLineaTipo={definicion_CTX_MERCADERIA_IN.idLineaTipo}
+                  lineaTipo={definicion_CTX_MERCADERIA_IN.lineaTipo}
+                />
+              </div>
+            )}
+            {/* {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditUnidadIN && (
+              <div class="modal">
+                <NewEditUnidadIN
+                  idLineaTipo={definicion_CTX_MERCADERIA_IN.idLineaTipo}
+                  idUnidad={uniSelecionado.id}
+                  unidad={uniSelecionado.uni}
+                />
+              </div>
+            )} */}
+          </div>
+          {/* con Fecha Vencimiento / Lote - Inafecto - Exonerado - Sujeto a percepción */}
+          <fieldset>
+            {/* con Fecha Vencimiento / Lote */}
+            <div class="form-control">
+              <label>con Fecha Vencimiento / Lote</label>
+              <div class="form-control ">
+                <input
+                  id="in_conFechaVencimientoLote_MERCADERIA_IN"
+                  // style={{ width: '100%' }}
+                  type="checkbox"
+                  placeholder="con Fecha Vencimiento / Lote"
+                  checked={definicion_CTX_MERCADERIA_IN.conFechaVencimientoLote}
+                  onChange$={(e) => {
+                    definicion_CTX_MERCADERIA_IN.conFechaVencimientoLote = (e.target as HTMLInputElement).checked;
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('in_inafecto_MERCADERIA_IN')?.focus();
+                    }
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                />
+                con Fecha Vencimiento / Lote
+              </div>
+            </div>
+            {/* Inafecto */}
+            <div class="form-control">
+              <label>Inafecto</label>
+              <div class="form-control ">
+                <input
+                  id="in_inafecto_MERCADERIA_IN"
+                  // style={{ width: '100%' }}
+                  type="checkbox"
+                  placeholder="Inafecto"
+                  checked={definicion_CTX_MERCADERIA_IN.inafecto}
+                  onChange$={(e) => {
+                    definicion_CTX_MERCADERIA_IN.inafecto = (e.target as HTMLInputElement).checked;
+                    if (definicion_CTX_MERCADERIA_IN.inafecto) {
+                      definicion_CTX_MERCADERIA_IN.exonerado = false;
+                    }
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('in_exonerado_MERCADERIA_IN')?.focus();
+                    }
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                />
+                Inafecto
+              </div>
+            </div>
+            {/* Exonerado */}
+            <div class="form-control">
+              <label>Exonerado</label>
+              <div class="form-control ">
+                <input
+                  id="in_exonerado_MERCADERIA_IN"
+                  // style={{ width: '100%' }}
+                  type="checkbox"
+                  placeholder="Exonerado"
+                  checked={definicion_CTX_MERCADERIA_IN.exonerado}
+                  value="Exonerado"
+                  onChange$={(e) => {
+                    definicion_CTX_MERCADERIA_IN.exonerado = (e.target as HTMLInputElement).checked;
+                    if (definicion_CTX_MERCADERIA_IN.exonerado) {
+                      definicion_CTX_MERCADERIA_IN.inafecto = false;
+                    }
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('in_sujetoAPercepcion_MERCADERIA_IN')?.focus();
+                    }
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                />
+                Exonerado
+              </div>
+            </div>
+            {/* Sujeto a percepción */}
+            <div class="form-control">
+              <label>Sujeto a percepción</label>
+              <div style={{ width: '100%' }}>
+                <input
+                  id="in_sujetoAPercepcion_MERCADERIA_IN"
+                  // style={{ width: '100%' }}
+                  type="checkbox"
+                  placeholder="sujetoAPercepcion"
+                  checked={definicion_CTX_MERCADERIA_IN.sujetoAPercepcion}
+                  // value="sujetoAPercepcion"
+                  name="sujetoAPercepcion"
+                  onChange$={(e) => {
+                    definicion_CTX_MERCADERIA_IN.sujetoAPercepcion = (e.target as HTMLInputElement).checked;
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('btn_add_equivalencia_MERCADERIA_IN')?.focus();
+                    }
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                />
+                Sujeto a percepción
+                {/* <input
                   id="percepcionIN_MICE"
                   style={{ width: '100%' }}
                   type="text"
@@ -885,113 +1030,234 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
                   }}
                 />
                 % */}
+              </div>
             </div>
-          </div>
-        </fieldset>
-        {/* EQUIVALENCIAS */}
-        <div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              margin: '5px 0',
-            }}
-          >
-            <div style={{ marginBottom: '5px' }}>
-              <ElButton
-                id="btn_add_equivalencia_MERCADERIA_IN"
-                class="btn"
-                name="Add equivalencia"
-                title="Add equivalencia"
-                onClick={$(() => {
-                  if (definicion_CTX_MERCADERIA_IN.idUnidad === '') {
-                    alert('Seleccione la unidad.');
-                    return;
-                  }
-                  insertarEquivalencia.value = true;
-                  laEquivalencia.value = [];
-                  definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditEquivalenciaIN = true;
-                })}
-              />
+          </fieldset>
+          {/* para la VENTA */}
+          <fieldset>
+            {/* TIPO IMPUESTO */}
+            <div class="form-control">
+              <label>Tipo de impuesto</label>
+              <div class="form-control ">
+                <select
+                  id="se_tipoImpuesto_MERCADERIA_IN"
+                  style={{ width: '288px' }}
+                  onChange$={(e) => {
+                    definicion_CTX_MERCADERIA_IN.tipoImpuesto = (e.target as HTMLSelectElement).value;
+                  }}
+                >
+                  <option value="IGV" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'IGV'}>
+                    IGV
+                  </option>
+                  <option value="ISC" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'ISC'}>
+                    ISC
+                  </option>
+                  <option value="IVAP" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'IVAP'}>
+                    IVAP
+                  </option>
+                  <option value="exoneradas" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'exoneradas'}>
+                    exoneradas
+                  </option>
+                  <option value="exportación" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'exportación'}>
+                    exportación
+                  </option>
+                  <option value="gratuitas" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'gratuitas'}>
+                    gratuitas
+                  </option>
+                  <option value="inafecta" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'inafecta'}>
+                    inafecta
+                  </option>
+                  <option value="otrosTributos" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'otrosTributos'}>
+                    otrosTributos
+                  </option>
+                </select>
+              </div>
             </div>
-            {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditEquivalenciaIN && (
-              <div class="modal">
-                <NewEditEquivalenciaIN
-                  unidadIN={definicion_CTX_MERCADERIA_IN.unidad}
-                  idLineaTipo={definicion_CTX_MERCADERIA_IN.idLineaTipo}
-                  equivaSelecci={laEquivalencia.value}
-                  // equivaSelecci={[]}
-                  insertar={insertarEquivalencia.value}
+            {/* TIPO DE AFECTACION DEL IMPUESTO */}
+            <div class="form-control">
+              <label>Inafecto</label>
+              <div class="form-control ">
+                <select
+                  id="se_tipoAfectacionDelImpuesto_MERCADERIA_IN"
+                  style={{ width: '288px' }}
+                  onChange$={(e) => {
+                    definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto = (e.target as HTMLSelectElement).value;
+                  }}
+                >
+                  <option value="10" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '10'}>
+                    Gravado - Operación Onerosa
+                  </option>
+                  <option value="11" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '11'}>
+                    Gravado - Retiro por premio
+                  </option>
+                  <option value="12" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '12'}>
+                    Gravado - Retiro por donación
+                  </option>
+                  <option value="13" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '13'}>
+                    Gravado - Retiro
+                  </option>
+                  <option value="14" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '14'}>
+                    Gravado - Retiro por publicidad
+                  </option>
+                  <option value="15" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '15'}>
+                    Gravado - Bonificaciones
+                  </option>
+                  <option value="16" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '16'}>
+                    Gravado - Retiro por entrega a trabajadores
+                  </option>
+                  <option value="17" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '17'}>
+                    Gravado - IVAP
+                  </option>
+                  <option value="20" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '20'}>
+                    Exonerado - Operación Onerosa
+                  </option>
+                  <option value="21" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '21'}>
+                    Exonerado - Transferencia gratuita
+                  </option>
+                  <option value="30" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '30'}>
+                    Inafecto - Operación Onerosa
+                  </option>
+                  <option value="31" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '31'}>
+                    Inafecto - Retiro por Bonificación
+                  </option>
+                  <option value="32" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '32'}>
+                    Inafecto - Retiro
+                  </option>
+                  <option value="33" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '33'}>
+                    Inafecto - Retiro por Muestras Médicas
+                  </option>
+                  <option value="34" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '34'}>
+                    Inafecto - Retiro por Convenio Colectivo
+                  </option>
+                  <option value="35" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '35'}>
+                    Inafecto - Retiro por premio
+                  </option>
+                  <option value="36" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '36'}>
+                    Inafecto - Retiro por publicidad
+                  </option>
+                  <option value="37" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '37'}>
+                    Inafecto - Transferencia gratuita
+                  </option>
+                  <option value="40" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '40'}>
+                    Exportación de Bienes o Servicios
+                  </option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+          {/* EQUIVALENCIAS */}
+          <div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                margin: '5px 0',
+              }}
+            >
+              <div style={{ marginBottom: '5px' }}>
+                <ElButton
+                  id="btn_add_equivalencia_MERCADERIA_IN"
+                  class="btn"
+                  name="Add equivalencia"
+                  title="Add equivalencia"
+                  onClick={$(() => {
+                    if (definicion_CTX_MERCADERIA_IN.idUnidad === '') {
+                      alert('Seleccione la unidad.');
+                      return;
+                    }
+                    insertarEquivalencia.value = true;
+                    laEquivalencia.value = [];
+                    definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditEquivalenciaIN = true;
+                  })}
                 />
               </div>
-            )}
-            {/* TABLA EQUIVALENCIAS IN  */}
-            {definicion_CTX_MERCADERIA_IN.equivalencias.length > 0 ? (
-              <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
-                <thead>
-                  <tr>
-                    <th>Descripción Equivalencia</th>
-                    {/* <th>Tipo Equivalencia</th> */}
-                    <th>Uni Eq</th>
-                    <th>=</th>
-                    <th>Factor</th>
-                    <th>Uni</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {definicion_CTX_MERCADERIA_IN.equivalencias.map((iTEqui: any) => {
-                    // const indexItem = index + 1;
+              {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditEquivalenciaIN && (
+                <div class="modal">
+                  <NewEditEquivalenciaIN
+                    unidadIN={definicion_CTX_MERCADERIA_IN.unidad}
+                    idLineaTipo={definicion_CTX_MERCADERIA_IN.idLineaTipo}
+                    lineaTipo={definicion_CTX_MERCADERIA_IN.lineaTipo}
+                    equivaSelecci={laEquivalencia.value}
+                    // equivaSelecci={[]}
+                    insertar={insertarEquivalencia.value}
+                  />
+                </div>
+              )}
+              {/* TABLA EQUIVALENCIAS IN  */}
+              {definicion_CTX_MERCADERIA_IN.equivalencias.length > 0 ? (
+                <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
+                  <thead>
+                    <tr>
+                      <th>Descripción Equivalencia</th>
+                      {/* <th>Tipo Equivalencia</th> */}
+                      <th>Uni Eq</th>
+                      <th>=</th>
+                      <th>Factor</th>
+                      <th>Uni</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {definicion_CTX_MERCADERIA_IN.equivalencias.map((iTEqui: any) => {
+                      // const indexItem = index + 1;
 
-                    return (
-                      <tr key={iTEqui.idAuxiliar}>
-                        {/* <td data-label="Ítem" key={iTSer.idAuxili ar}>{`${cerosALaIzquierda(indexItemServi, 3)}`}</td> */}
-                        <td data-label="Descripción Equivalencia">{iTEqui.descripcionEquivalencia}</td>
-                        {/* <td data-label="Tipo Equivalencia">{iTEqui.tipoEquivalencia ? 'T' : 'F'}</td> */}
+                      return (
+                        <tr key={iTEqui.idAuxiliar}>
+                          {/* <td data-label="Ítem" key={iTSer.idAuxili ar}>{`${cerosALaIzquierda(indexItemServi, 3)}`}</td> */}
+                          <td data-label="Descripción Equivalencia">{iTEqui.descripcionEquivalencia}</td>
+                          {/* <td data-label="Tipo Equivalencia">{iTEqui.tipoEquivalencia ? 'T' : 'F'}</td> */}
 
-                        <td data-label="Uni Eq" class="comoNumero">
-                          {iTEqui.unidadEquivalencia}
-                        </td>
-                        <td data-label="=" class="acciones">
-                          =
-                        </td>
-                        <td data-label="Factor" class="acciones">
-                          {iTEqui.tipoEquivalencia ? iTEqui.factor : '1/' + iTEqui.factor}
-                        </td>
-                        <td data-label="Uni" class="comoCadena">
-                          {definicion_CTX_MERCADERIA_IN.unidad}
-                        </td>
-                        <td data-label="Acciones" class="acciones">
-                          <ImgButton
-                            src={images.edit}
-                            alt="icono de editar"
-                            height={16}
-                            width={16}
-                            title="Editar ítem"
-                            onClick={$(() => {
-                              insertarEquivalencia.value = false;
-                              laEquivalencia.value = iTEqui;
-                              definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditEquivalenciaIN = true;
-                            })}
-                          />
-                          <ImgButton src={images.trash} alt="icono de eliminar" height={16} width={16} title="Eliminar ítem" />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            ) : (
-              <i style={{ fontSize: '0.7rem' }}>No existen equivalencias</i>
-            )}
-            {/*    {showPanelDeleteItemTablaServicios && (
+                          <td data-label="Uni Eq" class="comoNumero">
+                            {iTEqui.unidadEquivalencia}
+                          </td>
+                          <td data-label="=" class="acciones">
+                            =
+                          </td>
+                          <td data-label="Factor" class="acciones">
+                            {iTEqui.tipoEquivalencia ? iTEqui.factor : '1/' + iTEqui.factor}
+                          </td>
+                          <td data-label="Uni" class="comoCadena">
+                            {definicion_CTX_MERCADERIA_IN.unidad}
+                          </td>
+                          <td data-label="Acciones" class="acciones">
+                            <input
+                              type="image"
+                              src={images.edit}
+                              alt="icono de editar"
+                              height={12}
+                              width={12}
+                              title="Editar ítem"
+                              onClick$={() => {
+                                insertarEquivalencia.value = false;
+                                laEquivalencia.value = iTEqui;
+                                definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditEquivalenciaIN = true;
+                              }}
+                            />
+                            <input
+                              type="image"
+                              src={images.trash}
+                              alt="icono de eliminar"
+                              height={12}
+                              width={12}
+                              title="Eliminar ítem"
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              ) : (
+                <i style={{ fontSize: '0.7rem' }}>No existen equivalencias</i>
+              )}
+              {/*    {showPanelDeleteItemTablaServicios && (
               <Modal componente={<PanelMensajeSiNo ancho={'500px'} onCerrar={cerrarPanelDeleteItemTablaServicios} />} />
             )}*/}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="add-form">
+
         {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción*/}
         <input
           id="btn_registrar_mercaderia_MERCADERIA_IN"

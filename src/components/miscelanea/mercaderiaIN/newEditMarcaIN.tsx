@@ -5,7 +5,7 @@ import { CTX_NEW_EDIT_MERCADERIA_IN } from './newEditMercaderiaIN';
 import { parametrosGlobales } from '~/routes/login';
 import { inUpMarca } from '~/apis/lineaTipo.api';
 
-export default component$((props: { idLineaTipo: string; idMarca: string; marca: string }) => {
+export default component$((props: { idLineaTipo: string; lineaTipo: string; idMarca: string; marca: string }) => {
   //#region DEFINICON UNIDAD
   const marca = useStore({
     id: props.idMarca ? props.idMarca : '',
@@ -44,10 +44,10 @@ export default component$((props: { idLineaTipo: string; idMarca: string; marca:
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 390px)',
         // width: 'auto',
-        padding: '1px',
-        background: '#c0c0c0',
+        padding: '2px',
+        // background: '#c0c0c0',
       }}
       class="container-modal"
     >
@@ -65,7 +65,7 @@ export default component$((props: { idLineaTipo: string; idMarca: string; marca:
         />
       </div>
       {/* TITULO */}
-      <h3>Registro de marca</h3>
+      <h3>Registro de marca - {props.lineaTipo}</h3>
       {/* FORMULARIO */}
 
       <div class="add-form">

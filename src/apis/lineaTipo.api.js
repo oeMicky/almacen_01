@@ -78,3 +78,29 @@ export const getLineaTipo = async (parametros) => {
   });
   return res.json();
 };
+
+export const inUpUnidadDeSUNAT = async (parametros) => {
+  // console.log('//////api////////////******************inser/update en inUpUnidad');
+  // console.log('parametros inUpUnidad->', parametros);
+  const res = await fetch(API + '/inUpUnidadDeSUNAT', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
+export const inUpUnidadEquivalenciaDeSUNAT = async (parametros) => {
+  // console.log('//////api////////////******************inser/update en inUpUnidad');
+  // console.log('parametros inUpUnidad->', parametros);
+  const res = await fetch(API + '/inUpUnidadEquivalenciaDeSUNAT', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

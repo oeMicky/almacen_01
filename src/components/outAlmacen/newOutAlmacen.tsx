@@ -800,7 +800,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
             </div>
             {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarMercaderiaOUT && (
               <div class="modal">
-                <BuscarMercaderiaOUT contexto="new_out_almacen" esAlmacen={true} />
+                <BuscarMercaderiaOUT contexto="new_out_almacen" esAlmacen={true} porcentaje={definicion_CTX_OUT_ALMACEN.igv} />
               </div>
             )}
             {/* TABLA MERCADERIA IN: REPUESTOS -- LUBRICANTES -- ETC */}

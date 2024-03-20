@@ -14,7 +14,7 @@ import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditO
 
 export const CTX_BUSCAR_SERVICIO = createContextId<any>('servicio__');
 
-export default component$((props: { contexto: any }) => {
+export default component$((props: { contexto: string; porcentaje: any }) => {
   //#region DEFINICION CTX_BUSCAR_SERVICIO - para eDITAR - para sELECCIONAR
   const definicion_CTX_BUSCAR_SERVICIO = useStore({
     sS: [],
@@ -157,6 +157,7 @@ export default component$((props: { contexto: any }) => {
                 alt="icon buscar"
                 height={16}
                 width={16}
+                style={{ margin: '0 2px' }}
                 src={images.searchPLUS}
                 onClick$={() => localizarServicios()}
               />
@@ -172,28 +173,6 @@ export default component$((props: { contexto: any }) => {
                   definicion_CTX_BUSCAR_SERVICIO.mostrarPanelNewEditServicio = true;
                 }}
               />
-              {/* <ImgButton
-                src={images.searchPLUS}
-                alt="Icono de buscar persona"
-                height={16}
-                width={16}
-                title="Buscar persona"
-                // onClick={localizarServicios}
-                onClick={$(() => {
-                  localizarServicios();
-                })}
-              />
-              <ImgButton
-                src={images.add}
-                alt="Icono de adicionar servicio"
-                height={16}
-                width={16}
-                title="Adicionar servicio"
-                onClick={$(() => {
-                  definicion_CTX_BUSCAR_SERVICIO.sS = [];
-                  definicion_CTX_BUSCAR_SERVICIO.mostrarPanelNewEditServicio = true;
-                })}
-              /> */}
             </div>
           </div>
         </div>
@@ -216,7 +195,11 @@ export default component$((props: { contexto: any }) => {
           )}
           {definicion_CTX_BUSCAR_SERVICIO.mostrarPanelServicioSeleccionado && (
             <div class="modal">
-              <ServicioSeleccionado serviSelecci={definicion_CTX_BUSCAR_SERVICIO.sS} contexto={props.contexto} />
+              <ServicioSeleccionado
+                serviSelecci={definicion_CTX_BUSCAR_SERVICIO.sS}
+                contexto={props.contexto}
+                porcentaje={props.porcentaje}
+              />
             </div>
           )}
         </div>

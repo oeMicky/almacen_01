@@ -4,4 +4,8 @@ export interface IServicio {
   codigo: string;
   descripcion: string;
   precioPEN: any;
+  tipoImpuesto: string;
+  tipoAfectacionDelImpuesto: string;
+  codigoContableVenta: string;
+  descripcionContableVenta: string;
 }

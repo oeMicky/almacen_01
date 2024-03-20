@@ -69,6 +69,13 @@ export interface ICompra {
   referenciaSerie: string;
   referenciaNumero: number;
 
+  contabilizarOperaciones: boolean;
+  asientoContable: any;
+  totalDebePEN: any;
+  totalHaberPEN: any;
+  totalDebeUSD: any;
+  totalHaberUSD: any;
+
   usuarioCrea: string;
   usuarioModifica: string;
 }

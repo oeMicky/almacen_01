@@ -198,7 +198,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 500px)',
         // width: 'auto',
         padding: '1px',
       }}

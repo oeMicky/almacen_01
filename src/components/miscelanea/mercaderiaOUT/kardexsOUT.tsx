@@ -8,7 +8,7 @@ import style from '../../tabla/tabla.css?inline';
 
 export const CTX_KARDEXS_OUT = createContextId<any>('kardexs_out__');
 
-export default component$((props: { mercaOUTSelecci: any; esAlmacen: boolean; contexto: string }) => {
+export default component$((props: { mercaOUTSelecci: any; esAlmacen: boolean; contexto: string; porcentaje: any }) => {
   useStylesScoped$(style);
 
   //#region DEFINICION CTX_KARDEXS_OUT
@@ -151,6 +151,7 @@ export default component$((props: { mercaOUTSelecci: any; esAlmacen: boolean; co
             // esAlmacen={false}
             contexto={'kardexs_out'}
             contextoParaDocumento={props.contexto}
+            porcentaje={props.porcentaje}
           />
         </div>
       )}

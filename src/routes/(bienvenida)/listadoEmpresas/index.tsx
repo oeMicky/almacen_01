@@ -120,7 +120,21 @@ export default component$(() => {
 
                           parametrosGlobales.idSucursal = empre.sucursales[0].idSucursal;
                           parametrosGlobales.sucursal = empre.sucursales[0].sucursal;
+                          parametrosGlobales.idAlmacen = empre.sucursales[0].idSucursal; //********* */
                           parametrosGlobales.almacenActivo = activo[0].almacenActivo;
+                          parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
+                          parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+                          parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+                          parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+                          parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+                          parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+                          parametrosGlobales.facturaXML = activo[0].facturaXML;
+                          parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+                          parametrosGlobales.planesContables = activo[0].planesContables;
+                          parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+                          parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+                          parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+                          parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
                           //PAGINA DE INICIO
                           if (parametrosGlobales.almacenActivo) {
                             navegarA(parametrosGlobales.paginaInicioDelSistema);

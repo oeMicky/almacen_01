@@ -16,6 +16,8 @@ import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
 import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import VentasCliente from '../venta/ventasCliente';
 import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
+import EditarPersona from './editarPersona';
+import type { IPersonaEdit } from '~/interfaces/iPersona';
 
 export const CTX_BUSCAR_PERSONA = createContextId<any>('buscar_persona');
 
@@ -23,11 +25,15 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
   //#region DEFINICION CTX_BUSCAR_PERSONA - para eDITAR
   const definicion_CTX_BUSCAR_PERSONA = useStore({
     pP: [],
+    misPersonas: [],
     grabo_Persona: false,
     buscarPor: 'DNI / RUC',
     conceptoABuscar: '',
 
     mostrarPanelNewEditPersona: false,
+
+    mostrarPanelEditPersona: false,
+    personaEDITADA: { _id: '', razonSocialNombre: '', email: '', telefono: '', cuentasCorrientes: [] },
   });
   useContextProvider(CTX_BUSCAR_PERSONA, definicion_CTX_BUSCAR_PERSONA);
   //#endregion DEFINICION CTX_BUSCAR_PERSONA
@@ -100,7 +106,15 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
     if (definicion_CTX_BUSCAR_PERSONA.grabo_Persona) {
       // (definicion_CTX_BUSCAR_PERSONA.buscarPor = 'DNI / RUC'),
       //   (definicion_CTX_BUSCAR_PERSONA.cadenaABuscar = definicion_CTX_BUSCAR_PERSONA.conceptoABuscar),
-      buscarPersona.value++;
+      console.log('BBPP: definicion_CTX_BUSCAR_PERSONA.personaEDITADA', definicion_CTX_BUSCAR_PERSONA.personaEDITADA);
+      // buscarPersona.value++;
+      const KKK: IPersonaEdit[] = definicion_CTX_BUSCAR_PERSONA.misPersonas.filter(
+        (pers: any) => pers._id === definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id
+      );
+      KKK[0].razonSocialNombre = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.razonSocialNombre;
+      KKK[0].email = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.email;
+      KKK[0].telefono = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.telefono;
+      KKK[0].cuentasCorrientes = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.cuentasCorrientes;
       definicion_CTX_BUSCAR_PERSONA.grabo_Persona = false;
     }
   });
@@ -110,7 +124,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
     <div
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(330px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 600px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -207,10 +221,13 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 type={definicion_CTX_BUSCAR_PERSONA.buscarPor === 'DNI / RUC' ? 'number' : 'text'}
                 value={definicion_CTX_BUSCAR_PERSONA.conceptoABuscar}
                 // onFocusout$={() => localizarPersonas()}
-                onChange$={(e) => {
+                onInput$={(e) => {
                   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
-                  // console.log('onChange---', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 }}
+                // onChange$={(e) => {
+                //   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
+                //   // console.log('onChange---', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                // }}
                 onKeyDown$={(e) => {
                   // console.log('🚐🚐🚐🚐🚌🚐🚐🚌🚌🚐🚐🚐🚐🚌🚐🚐first', e);
 
@@ -265,10 +282,20 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
             </div>
           </div>
         </div>
-        {/* NEW - EDIT PERSONA*/}
+        {/* NEW - PERSONA*/}
         {definicion_CTX_BUSCAR_PERSONA.mostrarPanelNewEditPersona && (
           <div class="modal">
             <NewEditPersona
+              soloPersonaNatural={props.soloPersonasNaturales}
+              personaSeleccio={definicion_CTX_BUSCAR_PERSONA.pP}
+              contexto={props.contexto}
+            />
+          </div>
+        )}
+        {/* EDIT - PERSONA*/}
+        {definicion_CTX_BUSCAR_PERSONA.mostrarPanelEditPersona && (
+          <div class="modal">
+            <EditarPersona
               soloPersonaNatural={props.soloPersonasNaturales}
               personaSeleccio={definicion_CTX_BUSCAR_PERSONA.pP}
               contexto={props.contexto}
@@ -284,6 +311,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
               // parametrosBusqueda={parametrosBusqueda}
               contexto={props.contexto}
               rol={props.rol}
+              personaEDITADA={definicion_CTX_BUSCAR_PERSONA.personaEDITADA}
             />
           ) : (
             ''

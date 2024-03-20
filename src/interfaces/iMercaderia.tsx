@@ -12,6 +12,10 @@ export interface IMercaderiaOUT {
   KARDEXS: any;
 
   lineaTipo: string;
+  codigoContableVenta: string;
+  descripcionContableVenta: string;
+  tipoContableVenta: boolean;
+
   marca: string;
   totalCantidadSaldo: any;
   promedioCostoUnitarioMovil: any;
@@ -59,6 +63,10 @@ export interface IMercaderiaIN {
   marca: string;
   idUnidad: string;
   unidad: string;
+
+  tipoImpuesto: string;
+  tipoAfectacionDelImpuesto: string;
+  porcentaje: any;
 
   kardex: any;
   KARDEXS: any;

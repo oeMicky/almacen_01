@@ -35,7 +35,9 @@ export default component$(() => {
   // });
 
   return (
-    <header>
+    <header
+      style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}
+    >
       <div class="container-header">
         <div class="main-logo">
           <Link href="/">
@@ -51,7 +53,12 @@ export default component$(() => {
           </div>
           <input type="checkbox" class="toggle-menu__checkbox" id="toggle-menu-checkbox" />
           {/* <li style={{ cursor: 'pointer', margin: '0px 5px', padding: '10px 10px', borderRadius: '5px' }}> */}
-          <ul class="main-menu">
+          <ul
+            class="main-menu"
+            style={
+              parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''
+            }
+          >
             <li
               class="main-menu__item"
               onClick$={() => {
@@ -197,6 +204,7 @@ export default component$(() => {
                 sessionStorage.removeItem('numeroIdentidad');
                 sessionStorage.removeItem('idSucursal');
                 sessionStorage.removeItem('sucursal');
+                sessionStorage.removeItem('idAlmacen');
                 sessionStorage.removeItem('almacenActivo');
                 // sessionStorage.clear;
                 navegarA('/');

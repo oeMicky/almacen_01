@@ -13,10 +13,18 @@ import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
 import { CTX_KARDEXS_OUT } from './kardexsOUT';
 
 export default component$(
-  (props: { mercaOUTSelecci: any; elKardex: any; esAlmacen: boolean; contexto: string; contextoParaDocumento: string }) => {
+  (props: {
+    mercaOUTSelecci: any;
+    elKardex: any;
+    esAlmacen: boolean;
+    contexto: string;
+    contextoParaDocumento: string;
+    porcentaje: any;
+  }) => {
     //#region CONTEXTOS
     let ctx: any = [];
     let documento: any = [];
+    // let asiVen: any = [];
 
     switch (props.contextoParaDocumento) {
       case 'orden servicio':
@@ -26,6 +34,7 @@ export default component$(
       case 'new_venta':
         console.log('contextoParaDocumento::: new_venta');
         documento = useContext(CTX_F_B_NC_ND).itemsVenta;
+        // asiVen = useContext(CTX_F_B_NC_ND).asientoContable;
         break;
       case 'new_edit_cotizacion':
         console.log('contextoParaDocumento::: new_edit_cotizacion');
@@ -94,13 +103,13 @@ export default component$(
             })}
           />
           <ImgButton
-            src={images.print}
+            src={images.see}
             alt="Icono de cerrar"
             height={14}
             width={14}
-            title="Cerrar el formulario"
+            title="Cerrar el  props.mercaOUTSelecci"
             onClick={$(() => {
-              console.log('mercaOUTSelecci', props.mercaOUTSelecci);
+              console.log(' props.mercaOUTSelecci', props.mercaOUTSelecci);
               console.log('elKardex', props.elKardex);
             })}
           />
@@ -353,14 +362,19 @@ export default component$(
             value="Grabar"
             class="btn-centro"
             onClick$={() => {
+              // const tipoImpuesto = ['IGV', 'ISC', 'IVAP', 'exoneradas', 'exportación', 'gratuitas', 'inafecta', 'otrosTributos'];
+              // let tipoImpuesto = 'IGV';
+              // props.mercaOUTSelecci.exonerado === true ? (tipoImpuesto = 'exoneradas') : '';
+              // props.mercaOUTSelecci.inafecto === true ? (tipoImpuesto = 'inafecta') : '';
               if (equivalencia.idUnidadEquivalencia === '') {
                 alert('Seleccionar una equivalencia');
                 document.getElementById('selectUniEquivalencia_MICE')?.focus();
                 return;
               }
+              const unicoAux = parseInt(elIdAuxiliar());
               props.esAlmacen
                 ? documento.push({
-                    idAuxiliar: parseInt(elIdAuxiliar()),
+                    idAuxiliar: unicoAux,
                     idMercaderia: props.mercaOUTSelecci._id,
                     idEquivalencia: equivalencia._id,
                     idKardex: props.elKardex._id,
@@ -388,12 +402,17 @@ export default component$(
                     percepcion: props.mercaOUTSelecci.percepcion,
                   })
                 : documento.push({
-                    idAuxiliar: parseInt(elIdAuxiliar()),
+                    idAuxiliar: unicoAux,
                     idMercaderia: props.mercaOUTSelecci._id,
                     idEquivalencia: equivalencia._id,
                     idKardex: props.elKardex._id,
                     item: 0,
                     tipo: 'MERCADERIA',
+
+                    tipoImpuesto: props.mercaOUTSelecci.tipoImpuesto,
+                    tipoAfectacionDelImpuesto: props.mercaOUTSelecci.tipoAfectacionDelImpuesto,
+                    porcentaje: props.porcentaje,
+
                     codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
                     descripcionEquivalencia: equivalencia.descripcionEquivalencia,
                     cantidad: cantidadSacada.value,
@@ -415,6 +434,10 @@ export default component$(
                     inafecto: props.mercaOUTSelecci.inafecto,
                     sujetoAPercepcion: props.mercaOUTSelecci.sujetoAPercepcion,
                     percepcion: props.mercaOUTSelecci.percepcion,
+
+                    codigoContableVenta: props.mercaOUTSelecci.codigoContableVenta,
+                    descripcionContableVenta: props.mercaOUTSelecci.descripcionContableVenta,
+                    tipoContableVenta: props.mercaOUTSelecci.tipoContableVenta,
                   });
               // ctx.mostrarPanelMercaderiaOUTSeleccionada = false;
               if (props.contexto === 'buscar_mercaderia_out') {

@@ -289,7 +289,7 @@ export default component$(() => {
               ini.value++;
               return;
             }
-            //
+            definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
             // let elIgv = await getIgvVenta(parametrosGlobales);
             let elIgv = await getIgvVenta({
               idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -299,6 +299,7 @@ export default component$(() => {
             //
             igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
             //
+
             definicion_CTX_INDEX_VENTA.mostrarPanelVenta = true;
           })}
         />
@@ -511,13 +512,21 @@ export default component$(() => {
           </a> */}
         {definicion_CTX_INDEX_VENTA.mostrarPanelVenta && (
           <div class="modal">
-            <AddVenta ancho={600} addPeriodo={periodo} igv={igv.value} />
+            <AddVenta addPeriodo={periodo} igv={igv.value} />
           </div>
         )}
       </div>
       {/* TABLA VENTAS */}
       <div id="ventassss" style={{ margin: '10px 0' }}>
-        {buscarVentas.value > 0 ? <TablaVentas buscarVentas={buscarVentas.value} parametrosBusqueda={parametrosBusqueda} /> : ''}
+        {buscarVentas.value > 0 ? (
+          <TablaVentas
+            buscarVentas={buscarVentas.value}
+            parametrosBusqueda={parametrosBusqueda}
+            facturacionElectronica={parametrosGlobales.facturacionElectronica}
+          />
+        ) : (
+          ''
+        )}
       </div>
       {/* MOSTRAR SPINNER */}
       {definicion_CTX_INDEX_VENTA.mostrarSpinner && (

@@ -104,3 +104,16 @@ export const getVentasPorFechas = async (parametros) => {
   });
   return res.json();
 };
+
+export const getAsientoVenta = async (parametros) => {
+  // console.log('//////api////////////******************obtener a getIgvsCompra');
+  // console.log('parametros getIgvsCompra', parametros);
+  const res = await fetch(API + '/obtenerAsientoVenta', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

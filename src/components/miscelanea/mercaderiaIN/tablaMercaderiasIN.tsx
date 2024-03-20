@@ -44,12 +44,14 @@ export default component$(
         }}
         onRejected={() => {
           console.log('onRejected 🍍🍍🍍🍍');
+          ctx_buscar_mercaderia_in.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ordenesServicio) => {
           console.log('onResolved 🍓🍓🍓🍓');
           const { data } = ordenesServicio; //{ status, data, message }
           const misMercaderiasIN: IMercaderiaIN[] = data;
+          ctx_buscar_mercaderia_in.mostrarSpinner = false;
           return (
             <>
               {misMercaderiasIN.length > 0 ? (

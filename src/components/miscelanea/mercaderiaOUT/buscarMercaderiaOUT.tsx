@@ -13,7 +13,7 @@ import KardexsOUT from './kardexsOUT';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
 
-export default component$((props: { contexto: string; esAlmacen: boolean }) => {
+export default component$((props: { contexto: string; esAlmacen: boolean; porcentaje: any }) => {
   //#region DEFINICION CTX_BUSCAR_MERCADERIA_OUT - para eDITAR - para BUSCAR
   const definicion_CTX_BUSCAR_MERCADERIA_OUT = useStore({
     mM: [],
@@ -174,6 +174,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean }) => {
                 // esAlmacen={false}
                 contexto={'buscar_mercaderia_out'}
                 contextoParaDocumento={props.contexto}
+                porcentaje={props.porcentaje}
               />
             </div>
           )}
@@ -188,6 +189,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean }) => {
                 mercaOUTSelecci={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM}
                 esAlmacen={props.esAlmacen}
                 contexto={props.contexto}
+                porcentaje={props.porcentaje}
               />
             </div>
           )}

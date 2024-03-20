@@ -18,11 +18,14 @@ export interface IVenta {
 
   fecha: string;
 
+  clienteVentasVarias: boolean;
   idCliente: string;
   codigoTipoDocumentoIdentidad: string;
   tipoDocumentoIdentidad: string;
   numeroIdentidad: string;
   razonSocialNombre: string;
+  email: string;
+  actualizarEmailCliente: boolean;
 
   igv: number;
   enDolares: boolean;
@@ -60,7 +63,7 @@ export interface IVenta {
   exoneradoPEN: any;
   inafectoPEN: any;
   iscPEN: any;
-  icbpPEN: any;
+  exportPEN: any;
   otrosPEN: any;
   totalPEN: any;
 
@@ -69,7 +72,7 @@ export interface IVenta {
   exoneradoUSD: any;
   inafectoUSD: any;
   iscUSD: any;
-  icbpUSD: any;
+  exportUSD: any;
   otrosUSD: any;
   totalUSD: any;
 
@@ -85,6 +88,16 @@ export interface IVenta {
   referenciaTipo: string;
   referenciaSerie: string;
   referenciaNumero: number;
+
+  facturacionElectronica: boolean;
+  facturacionElectronicaAutomatica: boolean;
+
+  contabilizarOperaciones: boolean;
+  asientoContable: any;
+  totalDebePEN: any;
+  totalHaberPEN: any;
+  totalDebeUSD: any;
+  totalHaberUSD: any;
 }
 
 export interface ICuotaCreditoVenta {

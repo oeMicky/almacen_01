@@ -25,3 +25,16 @@ export const inUpCompra = async (parametros) => {
   });
   return res.json();
 };
+
+export const getAsientoCompra = async (parametros) => {
+  // console.log('//////api////////////******************obtener a getIgvsCompra');
+  // console.log('parametros getIgvsCompra', parametros);
+  const res = await fetch(API + '/obtenerAsientoCompra', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

@@ -44,6 +44,28 @@ export const formatoDDMMYYYY_PEN = (fecha: any) => {
   return fechaSalida;
 };
 
+export const formatoYYYY_MM_DD_PEN = (fecha: any) => {
+  //
+  let fechaSalida = '';
+  if (!isNaN(Date.parse(fecha))) {
+    //
+    fechaSalida = fecha.substr(0, 4) + '-' + fecha.substr(5, 2) + '-' + fecha.substr(8, 2);
+    //
+  }
+  return fechaSalida;
+};
+
+export const formatoHH_MM_SS_PEN = (fecha: any) => {
+  //
+  let fechaSalida = '';
+  if (!isNaN(Date.parse(fecha))) {
+    //
+    fechaSalida = fecha.substr(11, 2) + ':' + fecha.substr(14, 2) + ':' + fecha.substr(17, 2);
+    //
+  }
+  return fechaSalida;
+};
+
 export const redondeo_0_Decimales = (num: any) => {
   //
   const m = Number((Math.abs(num) * 1).toPrecision(15));
@@ -63,6 +85,12 @@ export const redondeo4Decimales = (num: any) => {
   //
   const m = Number((Math.abs(num) * 10000).toPrecision(15));
   return (Math.round(m) / 10000) * Math.sign(num);
+};
+
+export const redondeo6Decimales = (num: any) => {
+  //
+  const m = Number((Math.abs(num) * 1000000).toPrecision(15));
+  return (Math.round(m) / 1000000) * Math.sign(num);
 };
 
 export const cerosALaIzquierda = (num: any, size: number) => {

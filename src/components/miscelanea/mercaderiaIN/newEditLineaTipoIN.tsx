@@ -5,11 +5,22 @@ import { CTX_NEW_EDIT_MERCADERIA_IN } from './newEditMercaderiaIN';
 import { inUpLineaTipoMercaderia } from '~/apis/lineaTipo.api';
 import { parametrosGlobales } from '~/routes/login';
 
-export default component$((props: { idLineaTipo: string; lineaTipo: string }) => {
+// export default component$((props: { idLineaTipo: string; lineaTipo: string }) => {
+export default component$((props: { lineaTipoSelecc: any }) => {
   //#region LINEA TIPO
-  const lineaTipo = useStore({
-    id: props.idLineaTipo ? props.idLineaTipo : '',
-    lineaTi: props.lineaTipo ? props.lineaTipo : '',
+  const definicion_CTX_LINEA_TIPO = useStore({
+    id: props.lineaTipoSelecc.idLineaTipo ? props.lineaTipoSelecc.idLineaTipo : '',
+    lineaTipo: props.lineaTipoSelecc.lineaTipo ? props.lineaTipoSelecc.lineaTipo : '',
+    contabilizarOperaciones:
+      typeof props.lineaTipoSelecc.contabilizarOperaciones !== 'undefined'
+        ? props.lineaTipoSelecc.contabilizarOperaciones
+        : parametrosGlobales.contabilizarOperaciones,
+    codigoContableVenta: props.lineaTipoSelecc.codigoContableVenta ? props.lineaTipoSelecc.codigoContableVenta : '',
+    descripcionContableVenta: props.lineaTipoSelecc.descripcionContableVenta
+      ? props.lineaTipoSelecc.descripcionContableVenta
+      : '',
+    tipoContableVenta:
+      typeof props.lineaTipoSelecc.tipoContableVenta !== 'undefined' ? props.lineaTipoSelecc.tipoContableVenta : false,
   });
   //#endregion LINEA TIPO
 
@@ -19,7 +30,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
 
   //#region REGISTRAR LNEA TIPO
   const registrarLineaTipo = $(async () => {
-    if (lineaTipo.lineaTi === '') {
+    if (definicion_CTX_LINEA_TIPO.lineaTipo === '') {
       alert('Ingresar la linea / tipo');
       document.getElementById('in_loteTipoIN_MICE')?.focus();
       return;
@@ -28,8 +39,8 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
     const lT = await inUpLineaTipoMercaderia({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
-      idLineaTipoMercaderia: lineaTipo.id,
-      lineaTipoMercaderia: lineaTipo.lineaTi,
+      idLineaTipoMercaderia: definicion_CTX_LINEA_TIPO.id,
+      lineaTipoMercaderia: definicion_CTX_LINEA_TIPO.lineaTipo,
     });
 
     console.log('lT.data', lT.data);
@@ -42,10 +53,10 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
   return (
     <div
       style={{
-        width: 'clamp(min(386px, 86%, 700px)',
+        width: 'clamp(386px, 86%, 390px)',
         // width: 'auto',
-        padding: '1px',
-        background: '#c0c0c0',
+        padding: '2px',
+        // background: '#c0c0c0',
       }}
       class="container-modal"
     >
@@ -77,9 +88,9 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
               autoFocus
               type="text"
               placeholder="Lote / Tipo"
-              value={lineaTipo.lineaTi}
+              value={definicion_CTX_LINEA_TIPO.lineaTipo}
               onChange$={(e) => {
-                lineaTipo.lineaTi = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                definicion_CTX_LINEA_TIPO.lineaTipo = (e.target as HTMLInputElement).value.trim().toUpperCase();
               }}
               onKeyUp$={(e) => {
                 if (e.key === 'Enter') {

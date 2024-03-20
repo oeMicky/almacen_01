@@ -7,6 +7,7 @@ import TablaMercaderiasIN from './tablaMercaderiasIN';
 import MercaderiaINSeleccionada from './mercaderiaINSeleccionada';
 import NewEditMercaderiaIN from './newEditMercaderiaIN';
 import KardexsIN from './kardexsIN';
+import Spinner from '~/components/system/spinner';
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
 
@@ -17,12 +18,14 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
     kK: [],
 
     mostrarPanelNewEditMercaderiaIN: false,
+    abuscar: '',
     grabo_mercaderiaIN: false,
 
     mostrarPanelKardexsIN: false,
 
     mostrarPanelMercaderiaINSeleccionada: false,
     // mostrarPanelAsignarPrecio: false,
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_BUSCAR_MERCADERIA_IN, definicion_CTX_BUSCAR_MERCADERIA_IN);
   //#endregion DEFINICION CTX_BUSCAR_MERCADERIA_IN - para eDITAR - para sELECCIONAR
@@ -61,7 +64,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
       document.getElementById('in_codigoDescripcion_BUSCAR_MERCADERIA_IN')?.focus();
       return;
     }
+
     buscarMercaderiasIN.value++;
+    definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarSpinner = true;
   });
   //#endregion BUSCAR MERCADERIAS IN
 
@@ -71,6 +76,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
       definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_mercaderiaIN;
     });
     if (definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_mercaderiaIN) {
+      parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
       buscarMercaderiasIN.value++;
       definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_mercaderiaIN = false;
     }
@@ -87,7 +93,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 720px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -120,7 +126,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
               <input
                 id="in_codigoDescripcion_BUSCAR_MERCADERIA_IN"
                 autoFocus
-                style={{ width: '100%' }}
+                style={{ width: '100%', marginRight: '4px' }}
                 type="text"
                 placeholder="Ingrese la mercadería a buscar"
                 value={parametrosBusqueda.cadenaABuscar}
@@ -136,7 +142,30 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                   }
                 }}
               />
-              <ImgButton
+              <input
+                type="image"
+                title="Buscar datos de mercadería"
+                alt="icono buscar"
+                height={16}
+                width={16}
+                style={{ marginRight: '2px' }}
+                src={images.searchPLUS}
+                onClick$={() => {
+                  localizarMercaderiasIN();
+                }}
+              />
+              <input
+                type="image"
+                title="Registar nueva mercadería"
+                alt="icono add"
+                height={16}
+                width={16}
+                src={images.add}
+                onClick$={() => {
+                  adicionarMercaderiasIN();
+                }}
+              />
+              {/* <ImgButton
                 src={images.searchPLUS}
                 alt="Icono de buscar de mercadería"
                 height={16}
@@ -155,7 +184,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 onClick={$(() => {
                   adicionarMercaderiasIN();
                 })}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -199,6 +228,12 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
           {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelNewEditMercaderiaIN && (
             <div class="modal">
               <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_BUSCAR_MERCADERIA_IN.mM} contexto={props.contexto} />
+            </div>
+          )}
+          {/* MOSTRAR SPINNER */}
+          {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarSpinner && (
+            <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Spinner />
             </div>
           )}
         </div>

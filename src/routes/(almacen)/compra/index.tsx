@@ -21,9 +21,12 @@ export default component$(() => {
   const definicion_CTX_INDEX_COMPRA = useStore({
     cC: [],
     miscCs: [],
+    // inddd: 0,
 
     mostrarPanelCompra: false,
     grabo_Compra: false,
+    // insert_Compra: false,
+    // update_Compra: false,
 
     mostrarSpinner: false,
   });
@@ -35,12 +38,14 @@ export default component$(() => {
   //#endregion CONTEXTO
 
   //#region INICIALIZACION
-  // const ini = useSignal(0);
   const buscarCompras = useSignal(0);
   // const losPeriodos = useStore({ idPeriodo: '', periodo: '' });
   // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
+  const elEjercicio = useSignal(0);
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
+
+  const elAsientoCompra = Object.freeze(parametrosGlobales.asientoCompra);
   // const losIgvsCompra = useSignal([]);
   // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
 
@@ -52,29 +57,47 @@ export default component$(() => {
     // fechaFinal: hoy(), // ultimoDelMes(),
   });
 
-  // useTask$(({ track }) => {
-  //   track(() => ini.value);
-  //   definicion_CTX_INDEX_COMPRA.mostrarSpinner = false;
-  // });
-
-  // useBrowserVisibleTask$(({ track }) => {
-  //   track(() => ini.value);
-  //   parametrosGlobales.mostrarSpinner = false;
-  //   // definicion_CTX_INDEX_COMPRA.mostrarSpinner = false;
-  // });
   //#endregion INICIALIZACION
 
   //#region ACTUALIZAR TABLA COMPRAS
   useTask$(({ track }) => {
     track(() => definicion_CTX_INDEX_COMPRA.grabo_Compra);
+    console.log('GRABO COMPRA');
     if (definicion_CTX_INDEX_COMPRA.grabo_Compra) {
       //actualizar TABLA ORDENES SERVICIO
       // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
       buscarCompras.value++;
       definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
+      console.log('GRABO COMPRA in');
       definicion_CTX_INDEX_COMPRA.grabo_Compra = false;
     }
   });
+
+  // useTask$(({ track }) => {
+  //   track(() => definicion_CTX_INDEX_COMPRA.insert_Compra);
+  //   console.log('INSERT COMPRA');
+  //   if (definicion_CTX_INDEX_COMPRA.insert_Compra) {
+  //     //actualizar TABLA ORDENES SERVICIO
+  //     // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
+  //     // buscarCompras.value++;
+  //     // definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
+  //     console.log('INSERT COMPRA in');
+  //     definicion_CTX_INDEX_COMPRA.insert_Compra = false;
+  //   }
+  // });
+
+  // useTask$(({ track }) => {
+  //   track(() => definicion_CTX_INDEX_COMPRA.update_Compra);
+  //   console.log('UPDATE COMPRA');
+  //   if (definicion_CTX_INDEX_COMPRA.update_Compra) {
+  //     //actualizar TABLA ORDENES SERVICIO
+  //     // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
+  //     // buscarCompras.value++;
+  //     definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
+  //     console.log('UPDATE COMPRA in');
+  //     definicion_CTX_INDEX_COMPRA.update_Compra = false;
+  //   }
+  // });
   //#endregion ACTUALIZAR TABLA COMPRAS
 
   //#region OBTENER PERIODOS
@@ -143,54 +166,6 @@ export default component$(() => {
         <u>Compras</u>
       </h4>
 
-      {/*  INTERVALOS DE FECHAS  style={{ display: 'flex', margin: '10px 0' }}*/}
-      {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
-      {/* <div class="intervalo-fechas">
-        <label class="fechas">
-          Desde:{' '}
-          <input
-            id="in_fechaDesde"
-            type="date"
-            value={parametrosBusqueda.fechaInicio}
-            onInput$={(e) => {
-              parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
-            }}
-          />
-        </label>
-        <label class="fechas">
-          Hasta:{' '}
-          <input
-            id="in_fechaHasta"
-            type="date"
-            value={parametrosBusqueda.fechaFinal}
-            onInput$={(e) => {
-              parametrosBusqueda.fechaFinal = (e.target as HTMLInputElement).value;
-            }}
-          />
-        </label>
-        <div class="intervalo-fechas__botonBuscar">
-          <ImgButton
-            id="busquedaVentas"
-            src={images.searchPLUS}
-            alt="Icono de busqueda"
-            height={16}
-            width={16}
-            title="Buscar ventas"
-            onClick={$(async () => {
-              if (parametrosBusqueda.fechaInicio > parametrosBusqueda.fechaFinal) {
-                alert('Verifique las fechas de busqueda');
-                document.getElementById('in_fechaDesde')?.focus();
-                return;
-              }
-              console.log('click en lupa: parametrosBusqueda ', parametrosBusqueda);
-
-              buscarCompras.value++;
-
-              definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
-            })}
-          />
-        </div>
-      </div> */}
       {/*  BOTONES   className="btn"  onClick={mostrarPanelVenta}  border: ' 1px solid blue',*/}
       <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
         <ElButton
@@ -225,8 +200,10 @@ export default component$(() => {
             periodo.idPeriodo = elSelec[elIdx].id;
             if (periodo.idPeriodo === '') {
               periodo.periodo = '';
+              elEjercicio.value = 0;
             } else {
               periodo.periodo = elSelec.value;
+              elEjercicio.value = parseInt(elSelec.value.substring(0, 4));
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
               // console.log('💨💨💨💨💨💨first', periodo);
@@ -262,6 +239,9 @@ export default component$(() => {
             definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
           }}
         />
+        <button type="button" onClick$={() => console.log('miscCs', definicion_CTX_INDEX_COMPRA.miscCs)}>
+          miscCs
+        </button>
         <input
           // id="in_BuscarDetraccion"
           type="button"
@@ -379,7 +359,10 @@ export default component$(() => {
             <NewEditCompra
               addPeriodo={periodo}
               compraSeleccionada={definicion_CTX_INDEX_COMPRA.cC}
+              // compraSeleccionada={definicion_CTX_INDEX_COMPRA.miscCs[definicion_CTX_INDEX_COMPRA.inddd]}
               agenteRetencion={parametrosGlobales.agenteRetencion}
+              ejercicio={elEjercicio.value}
+              asientoC={elAsientoCompra}
               // losIgvsCompra={losIgvsCompra.value}
               // igvPorDefault={igvPorDefault}
               //  ancho={600} parametrosGlobales={parametrosGlobales}
@@ -404,3 +387,58 @@ export default component$(() => {
     </div>
   );
 });
+
+{
+  /*  INTERVALOS DE FECHAS  style={{ display: 'flex', margin: '10px 0' }}*/
+}
+{
+  /*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/
+}
+{
+  /* <div class="intervalo-fechas">
+        <label class="fechas">
+          Desde:{' '}
+          <input
+            id="in_fechaDesde"
+            type="date"
+            value={parametrosBusqueda.fechaInicio}
+            onInput$={(e) => {
+              parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
+            }}
+          />
+        </label>
+        <label class="fechas">
+          Hasta:{' '}
+          <input
+            id="in_fechaHasta"
+            type="date"
+            value={parametrosBusqueda.fechaFinal}
+            onInput$={(e) => {
+              parametrosBusqueda.fechaFinal = (e.target as HTMLInputElement).value;
+            }}
+          />
+        </label>
+        <div class="intervalo-fechas__botonBuscar">
+          <ImgButton
+            id="busquedaVentas"
+            src={images.searchPLUS}
+            alt="Icono de busqueda"
+            height={16}
+            width={16}
+            title="Buscar ventas"
+            onClick={$(async () => {
+              if (parametrosBusqueda.fechaInicio > parametrosBusqueda.fechaFinal) {
+                alert('Verifique las fechas de busqueda');
+                document.getElementById('in_fechaDesde')?.focus();
+                return;
+              }
+              console.log('click en lupa: parametrosBusqueda ', parametrosBusqueda);
+
+              buscarCompras.value++;
+
+              definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
+            })}
+          />
+        </div>
+      </div> */
+}

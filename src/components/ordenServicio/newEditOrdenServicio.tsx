@@ -1195,6 +1195,7 @@ OBSERVACIÓN(ES):
               <div class="modal">
                 <BuscarServicio
                   contexto="orden servicio"
+                  porcentaje={definicion_CTX_O_S.igv}
                   // ancho={'500px'}
                   // seleccionar={'servicio'}
                   // // inicializacion={inicializarItemVenta}
@@ -1423,7 +1424,7 @@ OBSERVACIÓN(ES):
 
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarMercaderiaOUT && (
               <div class="modal">
-                <BuscarMercaderiaOUT contexto="orden servicio" esAlmacen={false} />
+                <BuscarMercaderiaOUT contexto="orden servicio" esAlmacen={false} porcentaje={definicion_CTX_O_S.igv} />
               </div>
             )}
             {/* TABLA REQUISICIONES */}

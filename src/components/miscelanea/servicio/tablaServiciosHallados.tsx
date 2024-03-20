@@ -66,7 +66,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(servicios) => {
-        console.log('onResolved 🍓🍓🍓🍓');
+        console.log('onResolved 🍓🍓🍓🍓', servicios);
         const { data } = servicios; //{ status, data, message }
         const misServicios: IServicio[] = data;
         return (

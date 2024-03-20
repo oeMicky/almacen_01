@@ -8,10 +8,10 @@ import Spinner from '~/components/system/spinner';
 
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
-  // paginaInicioDelSistema: '/cotizacion',
+  paginaInicioDelSistema: '/cotizacion',
   // paginaInicioDelSistema: '/compra',
   // paginaInicioDelSistema: '/reporteVenta',
-  paginaInicioDelSistema: '/venta',
+  // paginaInicioDelSistema: '/venta',
   // paginaInicioDelSistema: '/guiaRemision',
   // paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
@@ -24,6 +24,7 @@ export const parametrosGlobales = {
   //Empresa
   idEmpresa: '', //'60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
   RazonSocial: '', //'CORPORACION ACME I',
+  colorHeaderEmpresarial: '',
   Direccion: '', //'ARKANZAS NRO 354',
   RUC: '', //'99999999999',
   agenteRetencion: false,
@@ -35,7 +36,7 @@ export const parametrosGlobales = {
   // parameRUC: 'chamo', // '99999999999',
   //Almacén
   almacenActivo: false,
-  idAlmacen: '60f3e61a41a71c1148bc4e29', //'608321ef5d922737c40831b1',
+  idAlmacen: '', //'60f3e61a41a71c1148bc4e29', //la SUCURSAL otorgara su ID al ALMACÉN
   nombreAlmacen: 'Praga',
   //Usuario
   usuario: '', // 'octubre',
@@ -43,6 +44,17 @@ export const parametrosGlobales = {
   ingreso: false,
   periodos: [],
   // mostrarSpinner: false,
+  idEjercicio: '',
+  facturacionElectronica: false,
+  facturacionElectronicaAutomatica: false,
+  facturaJSON: false,
+  facturaXML: false,
+  contabilizarOperaciones: false,
+  planesContables: [],
+  asientoCompra: [],
+  asientoVenta: [],
+  codigoContableVentaServicio: '',
+  descripcionContableVentaServicio: '',
 };
 
 //--nombre: 'GRUPO MERMA';
@@ -108,6 +120,7 @@ export default component$(() => {
   //#region ANALISIS DEL LOGEO
   const analisisDeLogeo = $(async (logeo: any) => {
     // localStorage.setItem('ID', logeo._id);
+    console.log('***-->logeo', logeo);
     if (typeof logeo.sucursalesAdjuntas === 'undefined' || logeo.sucursalesAdjuntas.length === 0) {
       navegarA('/ningunaEmpresa');
     } else {
@@ -159,17 +172,30 @@ export default component$(() => {
               // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
               // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
               // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
+              console.log('**PAPASECA**');
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
               parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+              parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
               parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
               parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+              parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+              parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+              parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+              parametrosGlobales.facturaXML = activo[0].facturaXML;
+              parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+              parametrosGlobales.planesContables = activo[0].planesContables;
+              parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+              parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+              parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+              parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
+              parametrosGlobales.idAlmacen = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal; //******* */
               parametrosGlobales.almacenActivo = activo[0].almacenActivo;
               const losPeri = await getPeriodos({
                 idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -193,6 +219,8 @@ export default component$(() => {
                   navegarA(parametrosGlobales.paginaInicioDelSistema);
                 }
               }
+
+              Object.freeze(parametrosGlobales);
             } else {
               //VARIAS SUCURSALES
               let activo = await getActivoGEEMP({
@@ -220,17 +248,30 @@ export default component$(() => {
               // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
               // localStorage.setItem('usuario', logeo.usuario);
               // localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
+              console.log('**MONDONGO**');
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
               parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+              parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
               parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
               parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+              parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+              parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+              parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+              parametrosGlobales.facturaXML = activo[0].facturaXML;
+              parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+              parametrosGlobales.planesContables = activo[0].planesContables;
+              parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+              parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+              parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+              parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
               parametrosGlobales.usuario = logeo.usuario;
               //  parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               //  parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
+              Object.freeze(parametrosGlobales);
               navegarA('/listadoSucursales');
             }
           }
@@ -279,17 +320,30 @@ export default component$(() => {
               // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
               // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
               // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
+              console.log('**AJI**');
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
               parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+              parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
               parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
               parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+              parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+              parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+              parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+              parametrosGlobales.facturaXML = activo[0].facturaXML;
+              parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+              parametrosGlobales.planesContables = activo[0].planesContables;
+              parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+              parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+              parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+              parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
+              parametrosGlobales.idAlmacen = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal; //******* */
               parametrosGlobales.almacenActivo = activo[0].almacenActivo;
               const losPeri = await getPeriodos({
                 idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -313,6 +367,7 @@ export default component$(() => {
                   navegarA(parametrosGlobales.paginaInicioDelSistema);
                 }
               }
+              Object.freeze(parametrosGlobales);
             } else {
               //VARIAS SUCURSALES
               let activo = await getActivoGEEMP({
@@ -339,17 +394,29 @@ export default component$(() => {
               // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
               // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
               // localStorage.setItem('usuario', logeo.usuario);
+              console.log('**CHILE**');
               parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
               parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+              parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
               parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
               parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+              parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+              parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+              parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+              parametrosGlobales.facturaXML = activo[0].facturaXML;
+              parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+              parametrosGlobales.planesContables = activo[0].planesContables;
+              parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+              parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+              parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+              parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
               parametrosGlobales.usuario = logeo.usuario;
               // localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
-
+              // Object.freeze(parametrosGlobales);
               navegarA('/listadoSucursales');
             }
           }

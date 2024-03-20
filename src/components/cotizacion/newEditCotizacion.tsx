@@ -773,7 +773,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
             </div>
             {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarServicio && (
               <div class="modal">
-                <BuscarServicio contexto="new_edit_cotizacion" />
+                <BuscarServicio contexto="new_edit_cotizacion" porcentaje={definicion_CTX_COTIZACION.igv} />
               </div>
             )}
             {/* TABLA SERVICIOS  */}
@@ -996,7 +996,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
 
             {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarMercaderiaOUT && (
               <div class="modal">
-                <BuscarMercaderiaOUT contexto="new_edit_cotizacion" esAlmacen={false} />
+                <BuscarMercaderiaOUT
+                  contexto="new_edit_cotizacion"
+                  esAlmacen={false}
+                  porcentaje={definicion_CTX_COTIZACION.igv}
+                />
               </div>
             )}
             {/* TABLA REPUESTOS -- LUBRICANTES */}

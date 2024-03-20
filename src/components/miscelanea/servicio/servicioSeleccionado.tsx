@@ -11,7 +11,7 @@ import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
 import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 
-export default component$((props: { serviSelecci: any; contexto: any }) => {
+export default component$((props: { serviSelecci: any; contexto: string; porcentaje: any }) => {
   //#region CONTEXTOS
   // let ctx: any = [];
   let documento: any = [];
@@ -67,6 +67,16 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_buscar_servicio.mostrarPanelServicioSeleccionado = false;
+          })}
+        />
+        <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('serviSelecci', props.serviSelecci);
           })}
         />
       </div>
@@ -130,21 +140,28 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
           value="Grabar "
           class="btn-centro"
           onClick$={() => {
+            // console.log('props.serviSelecci', props.serviSelecci, props.porcentaje, precio.value);
+            // let tipoImpuesto = 'IGV';
             // documento.itemsVenta.push({
             documento.push({
               idAuxiliar: parseInt(elIdAuxiliar()),
               idKardex: null,
               item: 0,
               tipo: 'SERVICIO',
+              tipoImpuesto: props.serviSelecci.tipoImpuesto,
+              tipoAfectacionDelImpuesto: props.serviSelecci.tipoAfectacionDelImpuesto,
+              porcentaje: props.porcentaje,
               codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '_',
-              descripcionEquivalencia: props.serviSelecci.descripcion, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
+              descripcionEquivalencia: props.serviSelecci.descripcion,
               cantidad: cantidad.value,
-              unidadEquivalencia: '_',
+              unidadEquivalencia: 'NIU',
               costoUnitarioPEN: 0,
               precioPEN: precio.value,
               ventaPEN: cantidad.value * precio.value,
               precioUSD: 0,
               ventaUSD: 0,
+              codigoContableVenta: props.serviSelecci.codigoContableVenta,
+              descripcionContableVenta: props.serviSelecci.descripcionContableVenta,
             });
             ctx_buscar_servicio.mostrarPanelServicioSeleccionado = false;
             // console.log('🚕🚕🚕🚕 ctx_f_b_nc_nd', ctx_f_b_nc_nd.itemsVenta);

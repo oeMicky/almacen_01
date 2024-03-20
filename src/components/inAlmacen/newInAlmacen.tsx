@@ -291,6 +291,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       return;
     }
 
+    ctx_index_in_almacen.mostrarSpinner = true;
+
     const inAlma = await inIngresoAAlmacen({
       idIngresoAAlmacen: definicion_CTX_IN_ALMACEN._id,
       idGrupoEmpresarial: definicion_CTX_IN_ALMACEN.idGrupoEmpresarial,
@@ -674,8 +676,37 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         <td data-label="Fecha">{formatoDDMMYYYY_PEN(iTDocAdj.fecha)}</td>
                         <td data-label="Serie">{iTDocAdj.serie}</td>
                         <td data-label="Número">{cerosALaIzquierda(iTDocAdj.numero, 8)}</td>
-                        <td data-label="Acc" style={{ textAlign: 'center' }}>
-                          <ImgButton
+                        <td data-label="Acc" class="accionesLeft">
+                          <input
+                            type="image"
+                            title="Editar ítem"
+                            alt="icono de editar"
+                            height={12}
+                            width={12}
+                            src={images.edit}
+                            onClick$={() => {
+                              elDocSelecionado.value = iTDocAdj;
+                              definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
+                            }}
+                          />
+                          <input
+                            type="image"
+                            title="Eliminar ítem"
+                            alt="icono de eliminar"
+                            height={12}
+                            width={12}
+                            src={images.trash}
+                            onClick$={() => {
+                              borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
+                              borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
+                              borrarDocumento.descripcionTCP = iTDocAdj.descripcionTCP;
+                              borrarDocumento.fecha = iTDocAdj.fecha;
+                              borrarDocumento.serie = iTDocAdj.serie;
+                              borrarDocumento.numero = iTDocAdj.numero;
+                              definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN = true;
+                            }}
+                          />
+                          {/* <ImgButton
                             src={images.edit}
                             alt="icono de editar"
                             height={16}
@@ -703,7 +734,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                               borrarDocumento.numero = iTDocAdj.numero;
                               definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN = true;
                             })}
-                          />
+                          /> */}
                         </td>
                       </tr>
                     );
@@ -970,20 +1001,21 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             : formatear_6Decimales(iTMercaIN.totPENEquivalencia)}
                         </td>
                         <td data-label="Acc" class="acciones">
-                          <ImgButton
+                          <input
+                            type="image"
                             src={images.trash}
                             alt="icono de eliminar"
                             height={16}
                             width={16}
                             title="Eliminar ítem"
-                            onClick={$(() => {
+                            onClick$={() => {
                               // definicion_CTX_IN_ALMACEN.itemsMercaderias.shift();
                               borrarItemMerca.idAuxiliar = iTMercaIN.idAuxiliar;
                               borrarItemMerca.item = indexItemServi;
                               borrarItemMerca.codigo = iTMercaIN.codigo;
                               borrarItemMerca.descripcion = iTMercaIN.descripcion;
                               definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteItemMercaderiaIN = true;
-                            })}
+                            }}
                           />
                         </td>
                       </tr>

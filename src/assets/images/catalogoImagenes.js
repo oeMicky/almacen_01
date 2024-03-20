@@ -9,6 +9,7 @@ import mgBnWB from '../images/MG-bn-wb.webp';
 import Ctz from '../images/Ctz.webp';
 import Fac from '../images/Fac.webp';
 import Inv from '../images/Inv.webp';
+import Imp from '../images/IMP.webp';
 import Kx from '../images/Kx.webp';
 import almacenIn from '../images/almacenIn.webp';
 import almacenOut from '../images/almacenOut.webp';
@@ -26,9 +27,12 @@ import caoSLinealDark from '../images/CAO-S-Lineal-dark.svg';
 import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
 
 import add from '../images/add.svg';
+import arrowUp from '../images/arrow-up.svg';
+import arrowDown from '../images/arrow-down.svg';
 import basedatos from '../images/basedatos.svg';
 import check from '../images/check.svg';
 import check32 from '../images/check32.svg';
+import copy from '../images/copy.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
 import equal from '../images/equal.svg';
@@ -39,6 +43,7 @@ import logout32 from '../images/logout32.svg';
 import mercaderia from '../images/mercaderia.svg';
 import menu from '../images/menu.svg';
 import moneyBag from '../images/moneyBag.svg';
+import pdf_json from '../images/pdf_json.svg';
 import pdf_os from '../images/pdf_os.svg';
 import pdf from '../images/pdf.svg';
 import pdf_2 from '../images/pdf_2.svg';
@@ -65,6 +70,7 @@ export default {
   Ctz,
   Fac,
   Inv,
+  Imp,
   Kx,
   almacenIn,
   almacenOut,
@@ -82,9 +88,12 @@ export default {
   caoSLinealLight,
 
   add,
+  arrowUp,
+  arrowDown,
   basedatos,
   check,
   check32,
+  copy,
   download,
   edit,
   equal,
@@ -95,6 +104,7 @@ export default {
   mercaderia,
   menu,
   moneyBag,
+  pdf_json,
   pdf_os,
   pdf,
   pdf_2,

@@ -47,9 +47,9 @@ export default component$(
           console.log('onRejected 🍍🍍🍍🍍');
           return <div>Fallo en la carga de datos</div>;
         }}
-        onResolved={(ordenesServicio) => {
-          console.log('onResolved 🍓🍓🍓🍓');
-          const { data } = ordenesServicio; //{ status, data, message }
+        onResolved={(mercasOUT) => {
+          console.log('onResolved 🍓🍓🍓🍓', mercasOUT);
+          const { data } = mercasOUT; //{ status, data, message }
           const misMercaderiasOUT: IMercaderiaOUT[] = data;
           console.log('misMercaderiasOUT', misMercaderiasOUT);
           return (
@@ -183,27 +183,6 @@ export default component$(
                                   ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = true;
                                 }}
                               />
-
-                              {/* <ImgButton
-                                src={images.see}
-                                alt="icono de asignar precio"
-                                height={12}
-                                width={12}
-                                title="Asignar precio"
-                                onClick={$(() => {
-                                  console.log('totalCantidadSaldo.$numberDecimal', totalCantidadSaldo.$numberDecimal);
-                                })}
-                              />
-                              <ImgButton
-                                src={images.see}
-                                alt="icono de asignar precio"
-                                height={12}
-                                width={12}
-                                title="Asignar precio"
-                                onClick={$(() => {
-                                  console.log('totalCantidadSaldo', totalCantidadSaldo);
-                                })}
-                              /> */}
                             </td>
                           </tr>
                         );
