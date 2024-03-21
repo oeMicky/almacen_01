@@ -109,7 +109,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(cotizaciones) => {
-        console.log('onResolved 🍓🍓🍓🍓');
+        console.log('onResolved 🍓🍓🍓🍓', cotizaciones);
         const { data } = cotizaciones; //{ status, data, message }
         const misCotizaciones: ICotizacion[] = data;
         // props.buscarVentas = false;
@@ -182,7 +182,12 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         idKardex: ser.idKardex,
                                         item: newItem,
                                         tipo: 'SERVICIO',
-                                        tipoImpuesto: 'IGV',
+
+                                        // tipoImpuesto: 'IGV',
+                                        tipoImpuesto: ser.tipoImpuesto,
+                                        tipoAfectacionDelImpuesto: ser.tipoAfectacionDelImpuesto,
+                                        porcentaje: ser.porcentaje.$numberDecimal,
+
                                         codigo: ser.codigo ? ser.codigo : '_',
                                         descripcionEquivalencia: ser.descripcionEquivalencia,
                                         cantidad: ser.cantidad.$numberDecimal,
@@ -192,6 +197,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         ventaPEN: ser.cantidad.$numberDecimal * ser.precioPEN.$numberDecimal,
                                         precioUSD: 0,
                                         ventaUSD: 0,
+
+                                        codigoContableVenta: ser.codigoContableVenta,
+                                        descripcionContableVenta: ser.descripcionContableVenta,
                                       });
                                       newItem++;
                                     });
@@ -203,7 +211,12 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         idKardex: rep.idKardex,
                                         item: newItem,
                                         tipo: 'MERCADERIA',
-                                        tipoImpuesto: 'IGV',
+
+                                        // tipoImpuesto: 'IGV',
+                                        tipoImpuesto: rep.tipoImpuesto,
+                                        tipoAfectacionDelImpuesto: rep.tipoAfectacionDelImpuesto,
+                                        porcentaje: rep.porcentaje.$numberDecimal,
+
                                         codigo: rep.codigo ? rep.codigo : '_',
                                         descripcionEquivalencia: rep.descripcionEquivalencia,
                                         cantidad: rep.cantidad.$numberDecimal,
@@ -222,6 +235,10 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         inafecto: rep.inafecto,
                                         sujetoAPercepcion: rep.sujetoAPercepcion,
                                         percepcion: rep.percepcion,
+
+                                        codigoContableVenta: rep.codigoContableVenta,
+                                        descripcionContableVenta: rep.descripcionContableVenta,
+                                        // tipoContableVenta: props.mercaOUTSelecci.tipoContableVenta,
                                       });
                                       newItem++;
                                     });

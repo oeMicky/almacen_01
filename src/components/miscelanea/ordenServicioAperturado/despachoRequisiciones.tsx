@@ -127,7 +127,12 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
           </div>
           <div style={{ margin: '5px 0' }}>
-            Cliente:<b>{` ${props.osSeleccionada.razonSocialNombreCliente}`}</b>
+            Cliente:
+            <b>
+              {props.osSeleccionada.clienteVentasVarias
+                ? ' Cliente ventas varias'
+                : ` ${props.osSeleccionada.razonSocialNombreCliente}`}
+            </b>
           </div>
           <div style={{ margin: '5px 0' }}>
             Placa:<b>{` ${props.osSeleccionada.placa} `}</b>

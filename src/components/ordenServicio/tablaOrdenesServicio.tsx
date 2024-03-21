@@ -108,7 +108,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                             {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}
                           </td>
                           <td data-label="Cliente" class="comoCadena">
-                            {razonSocialNombreCliente}
+                            {ordServiLocali.clienteVentasVarias ? 'Cliente ventas varias' : razonSocialNombreCliente}
                           </td>
                           <td data-label="Placa" class="comoCadena">
                             {placa}

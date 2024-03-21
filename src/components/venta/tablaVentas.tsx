@@ -343,7 +343,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                               {venta.tipoDocumentoIdentidad + ': ' + venta.numeroIdentidad}
                             </td>
                             <td data-label="Cliente" class="comoCadena">
-                              {venta.razonSocialNombre}
+                              {venta.clienteVentasVarias ? 'Cliente ventas varias' : venta.razonSocialNombre}
                             </td>
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(venta.fecha)}

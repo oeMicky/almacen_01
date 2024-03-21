@@ -68,7 +68,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
   useContextProvider(CTX_NEW_EDIT_COTIZACION, definicion_CTX_NEW_EDIT_COTIZACION);
   //#endregion DEFINICION CTX_NEW_EDIT_COTIZACION
 
-  //#region DEFINICION CTX_COTIZACION - NEW / EDIT
+  //#region DEFINICION CTX_COTIZACION
   const definicion_CTX_COTIZACION = useStore<ICotizacion>(
     {
       _id: props.cotizacionSelecci._id ? props.cotizacionSelecci._id : '',
@@ -126,7 +126,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     { deep: true }
   );
   useContextProvider(CTX_COTIZACION, definicion_CTX_COTIZACION);
-  //#endregion DEFINICION CTX_COTIZACION - NEW / EDIT
+  //#endregion DEFINICION CTX_COTIZACION
 
   //#region DEFINICION CTX_CLIENTE_SELECCIONADO
   const defini_CTX_CLIENTE_COTIZACION = useStore<IPersona>({
@@ -403,7 +403,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 720px)',
+        width: 'clamp(330px, 86%, 800px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -457,6 +457,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           })}
         />
       </div>
+      {/* TITULO */}
+      <h3 style={{ fontSize: '0.8rem', marginLeft: '2px' }}>Cotización</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* GENERALES */}

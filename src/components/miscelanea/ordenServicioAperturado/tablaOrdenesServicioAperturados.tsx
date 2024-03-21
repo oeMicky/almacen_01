@@ -79,7 +79,16 @@ export default component$(
                     </thead>
                     <tbody>
                       {misOrdenesServicio.map((ordServiLocali) => {
-                        const { _id, fechaInicio, serie, numero, razonSocialNombreCliente, requisiciones, tipo } = ordServiLocali;
+                        const {
+                          _id,
+                          fechaInicio,
+                          serie,
+                          numero,
+                          razonSocialNombreCliente,
+                          requisiciones,
+                          tipo,
+                          clienteVentasVarias,
+                        } = ordServiLocali;
                         // const indexItem = index + 1; , index
                         return (
                           <tr key={_id}>
@@ -90,8 +99,8 @@ export default component$(
                             <td data-label="Fecha" class="comoCadena">
                               {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}
                             </td>
-                            <td data-label="Estado" class="comoCadena">
-                              {razonSocialNombreCliente ? razonSocialNombreCliente : '_'}
+                            <td data-label="Cliente" class="comoCadena">
+                              {clienteVentasVarias ? 'Cliente ventas varias' : razonSocialNombreCliente}
                             </td>
                             <td data-label="Tipo" class="comoCadena">
                               {tipo ? tipo : '_'}

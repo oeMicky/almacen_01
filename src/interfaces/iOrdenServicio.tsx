@@ -22,6 +22,7 @@ export interface IOrdenServicio {
   idTecnico: string;
   razonSocialNombreTecnico: string;
 
+  clienteVentasVarias: boolean;
   idCliente: string;
   codigoTipoDocumentoIdentidad: string;
   tipoDocumentoIdentidad: string;

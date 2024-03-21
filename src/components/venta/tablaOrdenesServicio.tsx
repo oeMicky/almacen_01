@@ -82,7 +82,9 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                           <td data-label="O.S.">{value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}</td>
                           <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fechaInicio)}</td>
                           <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                          <td data-label="Cliente">{value.razonSocialNombreCliente}</td>
+                          <td data-label="Cliente">
+                            {value.clienteVentasVarias ? 'Cliente ventas varias' : value.razonSocialNombreCliente}
+                          </td>
                           <td data-label="Importe PEN" class="comoNumero">
                             {/* {value.montoTotalPEN
                               ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
@@ -113,6 +115,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
 
                                     ctx_f_b_nc_nd.observacion = value.serie + ' - ' + cerosALaIzquierda(value.numero, 8);
 
+                                    ctx_f_b_nc_nd.clienteVentasVarias = value.clienteVentasVarias;
                                     ctx_f_b_nc_nd.idCliente = value.idCliente;
 
                                     ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
@@ -128,7 +131,12 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                         idKardex: null,
                                         item: nuevoITEM,
                                         tipo: 'SERVICIO',
-                                        tipoImpuesto: 'IGV',
+
+                                        // tipoImpuesto: 'IGV',
+                                        tipoImpuesto: ser.tipoImpuesto,
+                                        tipoAfectacionDelImpuesto: ser.tipoAfectacionDelImpuesto,
+                                        porcentaje: ser.porcentaje.$numberDecimal,
+
                                         codigo: ser.codigo ? ser.codigo : '_',
                                         descripcionEquivalencia: ser.descripcionEquivalencia, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
                                         cantidad: ser.cantidad.$numberDecimal,
@@ -138,6 +146,9 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                         ventaPEN: ser.cantidad.$numberDecimal * ser.precioPEN.$numberDecimal,
                                         precioUSD: 0,
                                         ventaUSD: 0,
+
+                                        codigoContableVenta: ser.codigoContableVenta,
+                                        descripcionContableVenta: ser.descripcionContableVenta,
                                         // idAuxiliar: parseInt(elIdAuxiliar()),
                                         // item: nuevoITEM,
                                         // tipo: 'SERVICIO',
@@ -164,7 +175,12 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                           idKardex: requi.idKardex,
                                           item: nuevoITEM,
                                           tipo: 'MERCADERIA',
-                                          tipoImpuesto: 'IGV',
+
+                                          // tipoImpuesto: 'IGV',
+                                          tipoImpuesto: requi.tipoImpuesto,
+                                          tipoAfectacionDelImpuesto: requi.tipoAfectacionDelImpuesto,
+                                          porcentaje: requi.porcentaje.$numberDecimal,
+
                                           codigo: requi.codigo ? requi.codigo : '_',
                                           descripcionEquivalencia: requi.descripcionEquivalencia,
                                           cantidad: requi.cantidadDespachada.$numberDecimal,
@@ -183,6 +199,9 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                           inafecto: requi.inafecto,
                                           sujetoAPercepcion: requi.sujetoAPercepcion,
                                           percepcion: requi.percepcion,
+
+                                          codigoContableVenta: requi.codigoContableVenta,
+                                          descripcionContableVenta: requi.descripcionContableVenta,
 
                                           // _id: requi._id,
                                           // idAuxiliar: requi.idAuxiliar,

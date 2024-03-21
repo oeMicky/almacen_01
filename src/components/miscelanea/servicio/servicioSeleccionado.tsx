@@ -148,9 +148,11 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
               idKardex: null,
               item: 0,
               tipo: 'SERVICIO',
+
               tipoImpuesto: props.serviSelecci.tipoImpuesto,
               tipoAfectacionDelImpuesto: props.serviSelecci.tipoAfectacionDelImpuesto,
               porcentaje: props.porcentaje,
+
               codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '_',
               descripcionEquivalencia: props.serviSelecci.descripcion,
               cantidad: cantidad.value,
@@ -160,6 +162,7 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
               ventaPEN: cantidad.value * precio.value,
               precioUSD: 0,
               ventaUSD: 0,
+
               codigoContableVenta: props.serviSelecci.codigoContableVenta,
               descripcionContableVenta: props.serviSelecci.descripcionContableVenta,
             });

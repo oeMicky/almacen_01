@@ -71,7 +71,7 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: number
   useContextProvider(CTX_NEW_EDIT_ORDEN_SERVICIO, definicion_CTX_NEW_EDIT_ORDEN_SERVICIO);
   //#endregion DEFINICION CTX_NEW_EDIT_ORDEN_SERVICIO
 
-  //#region DEFINICION CTX_O_S - NEW / EDIT
+  //#region DEFINICION CTX_O_S
   const definicion_CTX_O_S = useStore<IOrdenServicio>(
     {
       _id: props.oSSelecci._id ? props.oSSelecci._id : '',
@@ -102,7 +102,9 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: number
       idTecnico: props.oSSelecci.idTecnico ? props.oSSelecci.idTecnico : '',
       razonSocialNombreTecnico: props.oSSelecci.razonSocialNombreTecnico ? props.oSSelecci.razonSocialNombreTecnico : '',
 
-      idCliente: props.oSSelecci.idCliente ? props.oSSelecci.idCliente : '',
+      clienteVentasVarias:
+        typeof props.oSSelecci.clienteVentasVarias !== 'undefined' ? props.oSSelecci.clienteVentasVarias : false,
+      idCliente: props.oSSelecci.idCliente ? props.oSSelecci.idCliente : null,
       codigoTipoDocumentoIdentidad: props.oSSelecci.codigoTipoDocumentoIdentidad
         ? props.oSSelecci.codigoTipoDocumentoIdentidad
         : '6',
@@ -143,7 +145,7 @@ OBSERVACIÓN(ES):
     { deep: true }
   );
   useContextProvider(CTX_O_S, definicion_CTX_O_S);
-  //#endregion DEFINICION CTX_O_S - NEW / EDIT
+  //#endregion DEFINICION CTX_O_S
 
   //#region DEFINICION CTX_CLIENTE_OS
   const defini_CTX_CLIENTE_OS = useStore<IPersona>({
@@ -467,21 +469,24 @@ OBSERVACIÓN(ES):
       document.getElementById('selectTecnico')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.idCliente === '') {
-      alert('Seleccione al cliente.');
-      document.getElementById('selectTipoDocumentoLiteral')?.focus();
-      return;
+    if (!definicion_CTX_O_S.clienteVentasVarias) {
+      if (definicion_CTX_O_S.idCliente === '') {
+        alert('Seleccione al cliente.');
+        document.getElementById('selectTipoDocumentoLiteral')?.focus();
+        return;
+      }
+      if (definicion_CTX_O_S.numeroIdentidad === '') {
+        alert('Seleccione al cliente.');
+        document.getElementById('selectTipoDocumentoLiteral')?.focus();
+        return;
+      }
+      if (definicion_CTX_O_S.razonSocialNombreCliente === '') {
+        alert('Seleccione al cliente.');
+        document.getElementById('selectTipoDocumentoLiteral')?.focus();
+        return;
+      }
     }
-    if (definicion_CTX_O_S.numeroIdentidad === '') {
-      alert('Seleccione al cliente.');
-      document.getElementById('selectTipoDocumentoLiteral')?.focus();
-      return;
-    }
-    if (definicion_CTX_O_S.razonSocialNombreCliente === '') {
-      alert('Seleccione al cliente.');
-      document.getElementById('selectTipoDocumentoLiteral')?.focus();
-      return;
-    }
+
     if (definicion_CTX_O_S.idVehiculo === '') {
       alert('Seleccione el vehículo.');
       document.getElementById('inputPlaca')?.focus();
@@ -527,6 +532,7 @@ OBSERVACIÓN(ES):
       idTecnico: definicion_CTX_O_S.idTecnico,
       razonSocialNombreTecnico: definicion_CTX_O_S.razonSocialNombreTecnico,
 
+      clienteVentasVarias: definicion_CTX_O_S.clienteVentasVarias,
       idCliente: definicion_CTX_O_S.idCliente,
       codigoTipoDocumentoIdentidad: definicion_CTX_O_S.codigoTipoDocumentoIdentidad,
       tipoDocumentoIdentidad: definicion_CTX_O_S.tipoDocumentoIdentidad,
@@ -853,6 +859,33 @@ OBSERVACIÓN(ES):
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL CLIENTE */}
           <div>
+            {/* cliente VENTAS VARIAS*/}
+            <div>
+              {/* <label>Cliente Ventas Varias</label> */}
+              <div>
+                <input
+                  id="chk_clienteVentasVarias_VENTA"
+                  type="checkbox"
+                  title="Cliente Ventas Varias"
+                  style={{ margin: '2px' }}
+                  checked={definicion_CTX_O_S.clienteVentasVarias}
+                  onChange$={(e) => {
+                    definicion_CTX_O_S.clienteVentasVarias = (e.target as HTMLInputElement).checked;
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('btn_PlanContableOrigen_GRUPO_EMPRESARIAL')?.focus();
+                    }
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                />
+                <label for="chk_clienteVentasVarias_VENTA" style={{ marginLeft: '2px' }}>
+                  Cliente Ventas Varias (Boletas)
+                </label>
+              </div>
+            </div>
             {/* tipo de documento identidad*/}
             <div class="form-control">
               <label>Tipo documento</label>

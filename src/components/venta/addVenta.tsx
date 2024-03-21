@@ -619,15 +619,24 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
       document.getElementById('in_Fecha')?.focus();
       return;
     }
-    if (definicion_CTX_F_B_NC_ND.numeroIdentidad === '') {
-      alert('Seleccione el número de identidad.');
-      document.getElementById('inputNumeroDocumentoIdentidad')?.focus();
-      return;
-    }
-    if (definicion_CTX_F_B_NC_ND.razonSocialNombre === '') {
-      alert('Seleccione la razón social / nombre.');
-      document.getElementById('inputNombreCliente')?.focus();
-      return;
+    //CLIENTE
+    if (definicion_CTX_F_B_NC_ND.clienteVentasVarias) {
+      if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago !== '03') {
+        alert('La venta para CLIENTES VENTA VARIAS debe ser una BOLETA.');
+        document.getElementById('selectDocumentoVenta')?.focus();
+        return;
+      }
+    } else {
+      if (definicion_CTX_F_B_NC_ND.numeroIdentidad === '') {
+        alert('Seleccione el número de identidad.');
+        document.getElementById('inputNumeroDocumentoIdentidad')?.focus();
+        return;
+      }
+      if (definicion_CTX_F_B_NC_ND.razonSocialNombre === '') {
+        alert('Seleccione la razón social / nombre.');
+        document.getElementById('inputNombreCliente')?.focus();
+        return;
+      }
     }
     //FACTURA
     console.log(
@@ -637,7 +646,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
     );
     if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '01') {
       if (definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad !== '6') {
-        alert('Ingrese el RUC.');
+        alert('La factura requiere el RUC del cliente.');
         document.getElementById('ima_BuscarCliente_VENTA')?.focus();
         return;
       }
@@ -646,12 +655,12 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
     if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '03') {
       if (definicion_CTX_F_B_NC_ND.totalPEN > 700) {
         if (definicion_CTX_F_B_NC_ND.clienteVentasVarias) {
-          alert('SUNAT no permite boletas con ventas mayores a 700 soles sin que se identifique al cliente');
+          alert('SUNAT no permite boletas con ventas mayores a S/ 700 soles sin que se identifique al cliente');
           document.getElementById('ima_BuscarCliente_VENTA')?.focus();
           return;
         }
       }
-      if (definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad === '6') {
+      if (!definicion_CTX_F_B_NC_ND.clienteVentasVarias && definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad === '6') {
         alert('Verifique, ha ingresado un RUC.');
         document.getElementById('ima_BuscarCliente_VENTA')?.focus();
         return;
@@ -1197,9 +1206,9 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
           {/* GENERALES DEL CLIENTE */}
           <div>
             {/* cliente VENTAS VARIAS*/}
-            <div class="form-control">
-              <label>Cliente Ventas Varias</label>
-              <div class="form-control form-agrupado">
+            <div>
+              {/* <label>Cliente Ventas Varias</label> */}
+              <div>
                 <input
                   id="chk_clienteVentasVarias_VENTA"
                   type="checkbox"
@@ -1218,7 +1227,9 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                     (e.target as HTMLInputElement).select();
                   }}
                 />
-                <label for="chk_clienteVentasVarias_VENTA">Cliente Ventas Varias (Boletas)</label>
+                <label for="chk_clienteVentasVarias_VENTA" style={{ marginLeft: '2px' }}>
+                  Cliente Ventas Varias (Boletas)
+                </label>
               </div>
             </div>
             {/* tipo de documento identidad*/}

@@ -8,14 +8,14 @@ import Spinner from '~/components/system/spinner';
 
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
-  paginaInicioDelSistema: '/cotizacion',
+  // paginaInicioDelSistema: '/cotizacion',
   // paginaInicioDelSistema: '/compra',
   // paginaInicioDelSistema: '/reporteVenta',
   // paginaInicioDelSistema: '/venta',
   // paginaInicioDelSistema: '/guiaRemision',
   // paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
-  // paginaInicioDelSistema: '/ordenServicio',
+  paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',
   paginaInicioDefault: '/venta',
   //Grupo Empresarial
