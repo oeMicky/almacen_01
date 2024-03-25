@@ -1,4 +1,4 @@
-import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 
@@ -24,7 +24,6 @@ export default component$(
     //#region CONTEXTOS
     let ctx: any = [];
     let documento: any = [];
-    // let asiVen: any = [];
 
     switch (props.contextoParaDocumento) {
       case 'orden servicio':
@@ -59,8 +58,10 @@ export default component$(
     //#endregion CONTEXTOS
 
     //#region INICIALIZANDO
+    const ini = useSignal(0);
     const cantidadSacada = useSignal(1);
     const precioEquivalente = useSignal(0);
+
     const equivalencia = useStore<IMercaEquivalenciaOUT>({
       _id: '',
       idAuxiliar: 0,
@@ -71,6 +72,44 @@ export default component$(
       pesoKg: 0,
       factor: 0,
       tipoEquivalencia: false,
+    });
+
+    useTask$(({ track }) => {
+      track(() => ini.value);
+
+      if (ini.value === 0) {
+        if (props.mercaOUTSelecci.equivalencias.length === 1) {
+          console.log('first 1111111111111111111111');
+          //  const lencias = props.mercaOUTSelecci.equivalencias;
+          const laEqui = props.mercaOUTSelecci.equivalencias[0];
+          console.log('laEqui', laEqui);
+          equivalencia._id = laEqui._id;
+          equivalencia.descripcionEquivalencia = laEqui.descripcionEquivalencia;
+          equivalencia.laEquivalencia = laEqui.laEquivalencia;
+          equivalencia.idUnidadEquivalencia = laEqui.idUnidadEquivalencia;
+          equivalencia.unidadEquivalencia = laEqui.unidadEquivalencia;
+          equivalencia.pesoKg = laEqui.pesoKg;
+          equivalencia.factor = laEqui.factor;
+          equivalencia.tipoEquivalencia = laEqui.tipoEquivalencia;
+          if (typeof props.mercaOUTSelecci.precioPEN !== 'undefined') {
+            console.log(
+              'laEquivalencia - factor - tipoEqui',
+              parseFloat(laEqui.laEquivalencia.$numberDecimal),
+              equivalencia.laEquivalencia,
+              equivalencia.factor,
+              equivalencia.tipoEquivalencia
+            );
+            precioEquivalente.value =
+              // parseFloat(props.mercaOUTSelecci.precioPEN.$numberDecimal) *
+              parseFloat(
+                props.mercaOUTSelecci.precioPEN.$numberDecimal
+                  ? props.mercaOUTSelecci.precioPEN.$numberDecimal
+                  : props.mercaOUTSelecci.precioPEN
+              ) * parseFloat(laEqui.laEquivalencia.$numberDecimal);
+          }
+          (document.getElementById('in_Cantidad_mercaderiaOUTSeleccionada') as HTMLInputElement)?.focus();
+        }
+      }
     });
     //#endregion INICIALIZACION
 
@@ -151,8 +190,8 @@ export default component$(
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
               <div>
-                Stock:{' '}
-                <strong style={{ color: 'green' }}>
+                Stock:
+                <strong style={{ marginLeft: '2px', color: 'green' }}>
                   {props.elKardex.cantidadSaldo !== null
                     ? ` ${
                         props.elKardex.cantidadSaldo.$numberDecimal
@@ -165,8 +204,8 @@ export default component$(
               </div>
               {props.esAlmacen ? (
                 <div>
-                  Costo Unit.(PEN):{' '}
-                  <b>
+                  Costo Unit.(PEN):
+                  <b style={{ marginLeft: '2px' }}>
                     {
                       //props.mercaderiaSeleccionadaOUT.costoUnitarioMovil !== null
                       typeof props.elKardex.costoUnitarioMovil !== 'undefined'
@@ -179,8 +218,8 @@ export default component$(
                 </div>
               ) : (
                 <div>
-                  Precio (PEN):{' '}
-                  <b>
+                  Precio (PEN):
+                  <b style={{ marginLeft: '2px' }}>
                     {props.mercaOUTSelecci.precioPEN !== null
                       ? //typeof props.mercaOUTSelecci.precioPEN !== 'undefined'
                         props.mercaOUTSelecci.precioPEN.$numberDecimal
@@ -239,6 +278,7 @@ export default component$(
                 <ElSelect
                   id={'selectUniEquivalencia_MICE'}
                   registros={props.mercaOUTSelecci.equivalencias}
+                  valorSeleccionado={equivalencia.unidadEquivalencia}
                   registroID={'idUnidadEquivalencia'}
                   registroTEXT={'unidadEquivalencia'}
                   seleccione="-- Seleccione equivalencia --"
@@ -304,8 +344,8 @@ export default component$(
             {equivalencia.laEquivalencia !== null ? (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '10px 0' }}>
                 <div>
-                  Stock equivalente:{' '}
-                  <strong style={{ color: 'green' }}>
+                  Stock equivalente:
+                  <strong style={{ marginLeft: '2px', color: 'green' }}>
                     {/* {equivalencia.tipoEquivalencia ? ():()} */}
                     {equivalencia.laEquivalencia.$numberDecimal === 0
                       ? ''
@@ -318,8 +358,8 @@ export default component$(
                 {/* {props.mercaOUTSelecci.costoUnitarioMovil.$numberDecimal} */}
                 {props.esAlmacen ? (
                   <div>
-                    Costo equiv. (PEN):{' '}
-                    <strong style={{ color: 'green' }}>
+                    Costo equiv. (PEN):
+                    <strong style={{ marginLeft: '2px', color: 'green' }}>
                       {/* {equivalencia.tipoEquivalencia ? ():()} */}
                       {equivalencia.laEquivalencia.$numberDecimal === 0
                         ? ''
@@ -330,11 +370,11 @@ export default component$(
                   </div>
                 ) : (
                   <div>
-                    Precio equiv. (PEN):{' '}
+                    Precio equiv. (PEN):
                     <input
                       id="in_PrecioEquivalente_mercaderiaOUTSeleccionada"
                       type="number"
-                      style={{ width: '80px', textAlign: 'end', background: '#ffff80' }}
+                      style={{ marginLeft: '2px', width: '80px', textAlign: 'end', background: '#ffff80' }}
                       value={precioEquivalente.value}
                       onChange$={(e) => {
                         precioEquivalente.value = parseFloat((e.target as HTMLInputElement).value);

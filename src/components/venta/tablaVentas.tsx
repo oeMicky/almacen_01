@@ -66,8 +66,8 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorPeriodo`, {
-      // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
+    // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorPeriodo`, {
+    const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
       // const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
       method: 'POST',
       headers: {

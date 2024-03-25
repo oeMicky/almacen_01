@@ -29,7 +29,7 @@ export default component$(() => {
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
-    buscarPor: 'PERIODO',
+    buscarPor: 'FECHAS',
     fechaInicio: hoy(),
     fechaFinal: hoy(),
     idPeriodo: '',

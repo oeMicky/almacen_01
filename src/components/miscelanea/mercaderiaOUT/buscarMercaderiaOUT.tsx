@@ -87,7 +87,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 1112px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -118,7 +118,6 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
             <div class="form-control form-agrupado">
               <input
                 id="codigoDescripcion_MICE"
-                autoFocus
                 style={{ width: '100%' }}
                 type="text"
                 placeholder="Ingrese la mercadería a buscar"
@@ -140,14 +139,44 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
                 type="image"
                 src={images.searchPLUS}
                 title="Buscar datos de mercadería"
-                height={12}
-                width={12}
-                style={{ margin: '2px' }}
-                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                height={16}
+                width={16}
+                style={{ marginLeft: '2px' }}
                 onClick$={() => {
                   localizarMercaderiasOUT();
                 }}
               />
+            </div>
+          </div>
+          {/* Buscar por: Aplicacion */}
+          {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
+          <div>
+            <div style={{ margin: '0 auto' }}>
+              <input
+                id="in_Aplicacion_MICE"
+                type="checkbox"
+                placeholder="Buscar por aplicación"
+                onChange$={(e) => {
+                  if ((e.target as HTMLInputElement).checked) {
+                    parametrosBusqueda.buscarPor = 'Aplicación';
+                  } else {
+                    parametrosBusqueda.buscarPor = 'Descripción';
+                  }
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+                // onInput$={(e) => {
+                //   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+                // }}
+                // onFocusin$={(e) => {
+                //   (e.target as HTMLInputElement).select();
+                // }}
+                // onKeyPress$={(e) => {
+                //   if (e.key === 'Enter') {
+                //     localizarMercaderiasOUT();
+                //   }
+                // }}
+              />
+              <label for="in_Aplicacion_MICE">Aplicación</label>
             </div>
           </div>
         </div>

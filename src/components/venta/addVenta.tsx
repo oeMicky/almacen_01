@@ -32,7 +32,7 @@ import {
 // import SeleccionarPersona from '../miscelanea/persona/seleccionarPersona';
 import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
 import { getTipoCambio } from '~/apis/apisExternas.api';
-// import { inVenta } from '~/apis/venta.api';
+import { inVenta } from '~/apis/venta.api';
 import NewEditCuotaCreditoVenta from './newEditCuotaCreditoVenta';
 // import BusquedaMercaderiaOUT from '../outAlmacen/busquedaMercaderiaOUT';
 import AdjuntarCotizacion from './adjuntarCotizacion';
@@ -87,7 +87,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
   useContextProvider(CTX_ADD_VENTA, definicion_CTX_ADD_VENTA);
   //#endregion DEFINICION CTX_ADD_VENTA
 
-  //#region DEFINICION CTX_F_B_NC_ND - NEW / EDIT
+  //#region DEFINICION CTX_F_B_NC_ND
   const definicion_CTX_F_B_NC_ND = useStore<IVenta>(
     {
       _id: '',
@@ -183,7 +183,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
     { deep: true }
   );
   useContextProvider(CTX_F_B_NC_ND, definicion_CTX_F_B_NC_ND);
-  //#endregion DEFINICION CTX_F_B_NC_ND - NEW / EDIT
+  //#endregion DEFINICION CTX_F_B_NC_ND
 
   //#region DEFINICION CTX_CLIENTE_VENTA
   const defini_CTX_CLIENTE_VENTA = useStore<IPersonaVenta>({
@@ -208,7 +208,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
 
   //#region INICIALIZACION
   const ini = useSignal(0);
-  const tipoDocumento = useSignal('01'); //FACTURA
+  const tipoDocumento = useSignal('01'); //01-FACTURA  //03-BOLETA
   const idSerieDocumento = useSignal('');
   const serieDocumento = useSignal('');
   const botonGrabar = useSignal('');
@@ -217,6 +217,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
   const pasoProcesoGrabacion = useSignal(false);
   const grabo = useSignal(false);
   const montoCONTADO_DOS_PARTES = useSignal(0);
+  const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
 
   const TOTAL: any = parametrosGlobales.asientoVenta.filter((ele: any) => ele.total12_impuesto40 === true);
   const IMPUESTO: any = parametrosGlobales.asientoVenta.filter((ele: any) => ele.total12_impuesto40 === false);
@@ -300,6 +301,19 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
     if (ini.value === 0) {
       ctx_index_venta.mostrarSpinner = false;
 
+      // //validar PERIODO
+      // const anio = definicion_CTX_F_B_NC_ND.fecha;
+      // const mes = definicion_CTX_F_B_NC_ND.fecha;
+      // // console.log('la fechitaaaa', anio + mes);
+      // const mas = anio + mes;
+      // const PPP = losPeriodosCargados.value;
+      // // console.log('mas', mas);
+      // // console.log('PPP', PPP);
+      // const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(mas));
+      // // console.log('elPeriodo', elPeriodo);
+      // definicion_CTX_F_B_NC_ND.idPeriodo = elPeriodo._id;
+      // definicion_CTX_F_B_NC_ND.periodo = elPeriodo.periodo;
+
       //obtener ASIENTO VENTA
       // if (definicion_CTX_F_B_NC_ND.contabilizarOperaciones && definicion_CTX_F_B_NC_ND.asientoContable.length === 0) {
       //   let lasCuentas: any = await getAsientoVenta({
@@ -335,6 +349,13 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         //
         dataSerie.value = laSerie.data;
+        if (dataSerie.value.length === 1) {
+          const SSS: any = dataSerie.value;
+          // console.log('SSS', SSS);
+          definicion_CTX_F_B_NC_ND.idSerieVenta = SSS[0]._id;
+          definicion_CTX_F_B_NC_ND.serie = SSS[0].serie;
+          serieDocumento.value = SSS[0].serie;
+        }
 
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '01';
         definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'FACTURA';
@@ -349,9 +370,18 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
         serieDocumento.value = '';
         // alert(`tretre a useTask BOLETA`);
         // laSerie = await getSeriesBoletaActivas(parametros);
+        console.log('SSS 03-BOLETA03-BOLETA03-BOLETA03-BOLETA03-BOLETA');
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
+        if (dataSerie.value.length === 1) {
+          const SSS: any = dataSerie.value;
+          console.log('SSS', SSS);
+          definicion_CTX_F_B_NC_ND.idSerieVenta = SSS[0]._id;
+          definicion_CTX_F_B_NC_ND.serie = SSS[0].serie;
+          serieDocumento.value = SSS[0].serie;
+          console.log('SSS', definicion_CTX_F_B_NC_ND.idSerieVenta, definicion_CTX_F_B_NC_ND.serie);
+        }
 
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '03';
         definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'BOLETA';
@@ -366,6 +396,13 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
+        if (dataSerie.value.length === 1) {
+          const SSS: any = dataSerie.value;
+          // console.log('SSS', SSS);
+          definicion_CTX_F_B_NC_ND.idSerieVenta = SSS[0]._id;
+          definicion_CTX_F_B_NC_ND.serie = SSS[0].serie;
+          serieDocumento.value = SSS[0].serie;
+        }
 
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '07';
         definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'NOTA DE CRÉDITO';
@@ -380,6 +417,13 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
+        if (dataSerie.value.length === 1) {
+          const SSS: any = dataSerie.value;
+          // console.log('SSS', SSS);
+          definicion_CTX_F_B_NC_ND.idSerieVenta = SSS[0]._id;
+          definicion_CTX_F_B_NC_ND.serie = SSS[0].serie;
+          serieDocumento.value = SSS[0].serie;
+        }
 
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '08';
         definicion_CTX_F_B_NC_ND.tipoComprobantePago = 'NOTA DE DÉBITO';
@@ -401,29 +445,29 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
   //#endregion INICIALIZACION - TIPO DE DOCUMENTO F B NC ND
 
   //#region GENERALES
-  useTask$(async ({ track }) => {
-    track(() => serieDocumento.value);
-    // const tre: HTMLSelectElement = document.getElementById('selectSerieVenta');
-    // const elID = tre.current[2].value;
-    if (serieDocumento.value === '') {
-      // if (serieDocumento.value === '--Seleccione una opción--') {
+  // useTask$(async ({ track }) => {
+  //   track(() => serieDocumento.value);
+  //   // const tre: HTMLSelectElement = document.getElementById('selectSerieVenta');
+  //   // const elID = tre.current[2].value;
+  //   if (serieDocumento.value === '') {
+  //     // if (serieDocumento.value === '--Seleccione una opción--') {
 
-      // setIdTipoDocumento('');
-      definicion_CTX_F_B_NC_ND.serie = '';
-      definicion_CTX_F_B_NC_ND.numero = 0;
-    } else {
-      //
-      //
-      //
+  //     // setIdTipoDocumento('');
+  //     definicion_CTX_F_B_NC_ND.serie = '';
+  //     definicion_CTX_F_B_NC_ND.numero = 0;
+  //   } else {
+  //     //
+  //     //
+  //     //
 
-      definicion_CTX_F_B_NC_ND.serie = serieDocumento.value;
+  //     definicion_CTX_F_B_NC_ND.serie = serieDocumento.value;
 
-      const corr = dataSerie.value.filter((ser: any) => ser._id === idSerieDocumento.value);
-      const elCorre: { _id: string; codigo: string; serie: string; correlativo: number } = corr[0];
+  //     const corr = dataSerie.value.filter((ser: any) => ser._id === idSerieDocumento.value);
+  //     const elCorre: { _id: string; codigo: string; serie: string; correlativo: number } = corr[0];
 
-      definicion_CTX_F_B_NC_ND.numero = elCorre.correlativo + 1;
-    }
-  });
+  //     definicion_CTX_F_B_NC_ND.numero = elCorre.correlativo + 1;
+  //   }
+  // });
   //#endregion GENERALES
 
   //#region CLIENTE
@@ -910,185 +954,185 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
 
     ctx_index_venta.mostrarSpinner = true;
     // const aGrabar =
-    // const ventaGRABADA = await inVenta({
-    //   idGrupoEmpresarial: definicion_CTX_F_B_NC_ND.idGrupoEmpresarial,
-    //   idEmpresa: definicion_CTX_F_B_NC_ND.idEmpresa,
-    //   idSucursal: definicion_CTX_F_B_NC_ND.idSucursal,
-    //   idPeriodo: definicion_CTX_F_B_NC_ND.idPeriodo,
-    //   periodo: definicion_CTX_F_B_NC_ND.periodo,
+    const ventaGRABADA = await inVenta({
+      idGrupoEmpresarial: definicion_CTX_F_B_NC_ND.idGrupoEmpresarial,
+      idEmpresa: definicion_CTX_F_B_NC_ND.idEmpresa,
+      idSucursal: definicion_CTX_F_B_NC_ND.idSucursal,
+      idPeriodo: definicion_CTX_F_B_NC_ND.idPeriodo,
+      periodo: definicion_CTX_F_B_NC_ND.periodo,
 
-    //   ruc: definicion_CTX_F_B_NC_ND.ruc,
-    //   empresa: definicion_CTX_F_B_NC_ND.empresa,
-    //   direccion: definicion_CTX_F_B_NC_ND.direccion,
+      ruc: definicion_CTX_F_B_NC_ND.ruc,
+      empresa: definicion_CTX_F_B_NC_ND.empresa,
+      direccion: definicion_CTX_F_B_NC_ND.direccion,
 
-    //   codigoTipoComprobantePago: definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago,
-    //   tipoComprobantePago: definicion_CTX_F_B_NC_ND.tipoComprobantePago,
-    //   idSerieVenta: definicion_CTX_F_B_NC_ND.idSerieVenta,
-    //   serie: definicion_CTX_F_B_NC_ND.serie,
-    //   numero: definicion_CTX_F_B_NC_ND.numero,
-    //   fecha: definicion_CTX_F_B_NC_ND.fecha,
+      codigoTipoComprobantePago: definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago,
+      tipoComprobantePago: definicion_CTX_F_B_NC_ND.tipoComprobantePago,
+      idSerieVenta: definicion_CTX_F_B_NC_ND.idSerieVenta,
+      serie: definicion_CTX_F_B_NC_ND.serie,
+      numero: definicion_CTX_F_B_NC_ND.numero,
+      fecha: definicion_CTX_F_B_NC_ND.fecha,
 
-    //   clienteVentasVarias: definicion_CTX_F_B_NC_ND.clienteVentasVarias,
-    //   idCliente: definicion_CTX_F_B_NC_ND.idCliente,
-    //   codigoTipoDocumentoIdentidad: definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad,
-    //   tipoDocumentoIdentidad: definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad,
-    //   numeroIdentidad: definicion_CTX_F_B_NC_ND.numeroIdentidad,
-    //   razonSocialNombre: definicion_CTX_F_B_NC_ND.razonSocialNombre,
-    //   email: definicion_CTX_F_B_NC_ND.email,
-    //   actualizarEmailCliente: definicion_CTX_F_B_NC_ND.actualizarEmailCliente,
+      clienteVentasVarias: definicion_CTX_F_B_NC_ND.clienteVentasVarias,
+      idCliente: definicion_CTX_F_B_NC_ND.idCliente,
+      codigoTipoDocumentoIdentidad: definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad,
+      tipoDocumentoIdentidad: definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad,
+      numeroIdentidad: definicion_CTX_F_B_NC_ND.numeroIdentidad,
+      razonSocialNombre: definicion_CTX_F_B_NC_ND.razonSocialNombre,
+      email: definicion_CTX_F_B_NC_ND.email,
+      actualizarEmailCliente: definicion_CTX_F_B_NC_ND.actualizarEmailCliente,
 
-    //   igv: definicion_CTX_F_B_NC_ND.igv,
-    //   moneda: definicion_CTX_F_B_NC_ND.moneda,
-    //   tipoCambio: definicion_CTX_F_B_NC_ND.tipoCambio,
+      igv: definicion_CTX_F_B_NC_ND.igv,
+      moneda: definicion_CTX_F_B_NC_ND.moneda,
+      tipoCambio: definicion_CTX_F_B_NC_ND.tipoCambio,
 
-    //   vendedor: definicion_CTX_F_B_NC_ND.vendedor,
-    //   metodoPago: definicion_CTX_F_B_NC_ND.metodoPago,
+      vendedor: definicion_CTX_F_B_NC_ND.vendedor,
+      metodoPago: definicion_CTX_F_B_NC_ND.metodoPago,
 
-    //   todoEnEfectivo: definicion_CTX_F_B_NC_ND.todoEnEfectivo,
-    //   unaParteEnEfectivo: definicion_CTX_F_B_NC_ND.unaParteEnEfectivo,
-    //   montoEnEfectivo: definicion_CTX_F_B_NC_ND.montoEnEfectivo.trim() === '' ? 0 : definicion_CTX_F_B_NC_ND.montoEnEfectivo,
-    //   otroMedioPago: definicion_CTX_F_B_NC_ND.otroMedioPago,
-    //   montoOtroMedioPago:
-    //     definicion_CTX_F_B_NC_ND.montoOtroMedioPago.trim() === '' ? 0 : definicion_CTX_F_B_NC_ND.montoOtroMedioPago,
+      todoEnEfectivo: definicion_CTX_F_B_NC_ND.todoEnEfectivo,
+      unaParteEnEfectivo: definicion_CTX_F_B_NC_ND.unaParteEnEfectivo,
+      montoEnEfectivo: definicion_CTX_F_B_NC_ND.montoEnEfectivo.trim() === '' ? 0 : definicion_CTX_F_B_NC_ND.montoEnEfectivo,
+      otroMedioPago: definicion_CTX_F_B_NC_ND.otroMedioPago,
+      montoOtroMedioPago:
+        definicion_CTX_F_B_NC_ND.montoOtroMedioPago.trim() === '' ? 0 : definicion_CTX_F_B_NC_ND.montoOtroMedioPago,
 
-    //   cuotasPago: definicion_CTX_F_B_NC_ND.cuotasCredito,
-    //   importeTotalCuotasCredito: definicion_CTX_F_B_NC_ND.importeTotalCuotasCredito,
+      cuotasPago: definicion_CTX_F_B_NC_ND.cuotasCredito,
+      importeTotalCuotasCredito: definicion_CTX_F_B_NC_ND.importeTotalCuotasCredito,
 
-    //   idCotizacion: definicion_CTX_F_B_NC_ND.idCotizacion,
-    //   serieCotizacion: definicion_CTX_F_B_NC_ND.serieCotizacion,
-    //   numeroCotizacion: definicion_CTX_F_B_NC_ND.numeroCotizacion,
+      idCotizacion: definicion_CTX_F_B_NC_ND.idCotizacion,
+      serieCotizacion: definicion_CTX_F_B_NC_ND.serieCotizacion,
+      numeroCotizacion: definicion_CTX_F_B_NC_ND.numeroCotizacion,
 
-    //   idOrdenServicio: definicion_CTX_F_B_NC_ND.idOrdenServicio,
-    //   serieOrdenServicio: definicion_CTX_F_B_NC_ND.serieOrdenServicio,
-    //   numeroOrdenServicio: definicion_CTX_F_B_NC_ND.numeroOrdenServicio,
+      idOrdenServicio: definicion_CTX_F_B_NC_ND.idOrdenServicio,
+      serieOrdenServicio: definicion_CTX_F_B_NC_ND.serieOrdenServicio,
+      numeroOrdenServicio: definicion_CTX_F_B_NC_ND.numeroOrdenServicio,
 
-    //   observacion: definicion_CTX_F_B_NC_ND.observacion.toUpperCase(),
+      observacion: definicion_CTX_F_B_NC_ND.observacion.toUpperCase(),
 
-    //   itemsVenta: definicion_CTX_F_B_NC_ND.itemsVenta,
+      itemsVenta: definicion_CTX_F_B_NC_ND.itemsVenta,
 
-    //   baseImponiblePEN: definicion_CTX_F_B_NC_ND.baseImponiblePEN,
-    //   exoneradoPEN: definicion_CTX_F_B_NC_ND.exoneradoPEN,
-    //   inafectoPEN: definicion_CTX_F_B_NC_ND.inafectoPEN,
-    //   iscPEN: definicion_CTX_F_B_NC_ND.iscPEN,
-    //   exportPEN: definicion_CTX_F_B_NC_ND.exportPEN,
-    //   otrosPEN: definicion_CTX_F_B_NC_ND.otrosPEN,
-    //   igvPEN: definicion_CTX_F_B_NC_ND.igvPEN,
-    //   totalPEN: definicion_CTX_F_B_NC_ND.totalPEN,
+      baseImponiblePEN: definicion_CTX_F_B_NC_ND.baseImponiblePEN,
+      exoneradoPEN: definicion_CTX_F_B_NC_ND.exoneradoPEN,
+      inafectoPEN: definicion_CTX_F_B_NC_ND.inafectoPEN,
+      iscPEN: definicion_CTX_F_B_NC_ND.iscPEN,
+      exportPEN: definicion_CTX_F_B_NC_ND.exportPEN,
+      otrosPEN: definicion_CTX_F_B_NC_ND.otrosPEN,
+      igvPEN: definicion_CTX_F_B_NC_ND.igvPEN,
+      totalPEN: definicion_CTX_F_B_NC_ND.totalPEN,
 
-    //   baseImponibleUSD: definicion_CTX_F_B_NC_ND.baseImponibleUSD,
-    //   exoneradoUSD: definicion_CTX_F_B_NC_ND.exoneradoUSD,
-    //   inafectoUSD: definicion_CTX_F_B_NC_ND.inafectoUSD,
-    //   iscUSD: definicion_CTX_F_B_NC_ND.iscUSD,
-    //   exportUSD: definicion_CTX_F_B_NC_ND.exportUSD,
-    //   otrosUSD: definicion_CTX_F_B_NC_ND.otrosUSD,
-    //   igvUSD: definicion_CTX_F_B_NC_ND.igvUSD,
-    //   totalUSD: definicion_CTX_F_B_NC_ND.totalUSD,
+      baseImponibleUSD: definicion_CTX_F_B_NC_ND.baseImponibleUSD,
+      exoneradoUSD: definicion_CTX_F_B_NC_ND.exoneradoUSD,
+      inafectoUSD: definicion_CTX_F_B_NC_ND.inafectoUSD,
+      iscUSD: definicion_CTX_F_B_NC_ND.iscUSD,
+      exportUSD: definicion_CTX_F_B_NC_ND.exportUSD,
+      otrosUSD: definicion_CTX_F_B_NC_ND.otrosUSD,
+      igvUSD: definicion_CTX_F_B_NC_ND.igvUSD,
+      totalUSD: definicion_CTX_F_B_NC_ND.totalUSD,
 
-    //   referenciaFecha: definicion_CTX_F_B_NC_ND.referenciaFecha,
-    //   referenciaTipo: definicion_CTX_F_B_NC_ND.referenciaTipo,
-    //   referenciaSerie: definicion_CTX_F_B_NC_ND.referenciaSerie,
-    //   referenciaNumero: definicion_CTX_F_B_NC_ND.referenciaNumero,
+      referenciaFecha: definicion_CTX_F_B_NC_ND.referenciaFecha,
+      referenciaTipo: definicion_CTX_F_B_NC_ND.referenciaTipo,
+      referenciaSerie: definicion_CTX_F_B_NC_ND.referenciaSerie,
+      referenciaNumero: definicion_CTX_F_B_NC_ND.referenciaNumero,
 
-    //   facturacionElectronica: definicion_CTX_F_B_NC_ND.facturacionElectronica,
-    //   facturacionElectronicaAutomatica: definicion_CTX_F_B_NC_ND.facturacionElectronicaAutomatica,
+      facturacionElectronica: definicion_CTX_F_B_NC_ND.facturacionElectronica,
+      facturacionElectronicaAutomatica: definicion_CTX_F_B_NC_ND.facturacionElectronicaAutomatica,
 
-    //   contabilizarOperaciones: definicion_CTX_F_B_NC_ND.contabilizarOperaciones,
-    //   asientoContable: definicion_CTX_F_B_NC_ND.asientoContable,
-    //   totalDebePEN: definicion_CTX_F_B_NC_ND.totalDebePEN,
-    //   totalHaberPEN: definicion_CTX_F_B_NC_ND.totalHaberPEN,
-    //   totalDebeUSD: definicion_CTX_F_B_NC_ND.totalDebeUSD,
-    //   totalHaberUSD: definicion_CTX_F_B_NC_ND.totalHaberUSD,
+      contabilizarOperaciones: definicion_CTX_F_B_NC_ND.contabilizarOperaciones,
+      asientoContable: definicion_CTX_F_B_NC_ND.asientoContable,
+      totalDebePEN: definicion_CTX_F_B_NC_ND.totalDebePEN,
+      totalHaberPEN: definicion_CTX_F_B_NC_ND.totalHaberPEN,
+      totalDebeUSD: definicion_CTX_F_B_NC_ND.totalDebeUSD,
+      totalHaberUSD: definicion_CTX_F_B_NC_ND.totalHaberUSD,
 
-    //   usuario: parametrosGlobales.usuario,
-    // });
+      usuario: parametrosGlobales.usuario,
+    });
 
-    // if (ventaGRABADA.status === 400) {
-    //   alert('Falla al registrar la venta. ' + ventaGRABADA.message);
-    //   ctx_index_venta.mostrarSpinner = false;
-    //   return;
-    // }
+    if (ventaGRABADA.status === 400) {
+      alert('Falla al registrar la venta. ' + ventaGRABADA.message);
+      ctx_index_venta.mostrarSpinner = false;
+      return;
+    }
 
-    // pasoProcesoGrabacion.value = true;
-    // if (ventaGRABADA) {
-    //   grabo.value = true;
-    //   //=> INICIALIZAR PARA LA SIGUIENTE VENTA
-    //   definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '';
-    //   definicion_CTX_F_B_NC_ND.tipoComprobantePago = '';
-    //   definicion_CTX_F_B_NC_ND.idSerieVenta = '';
-    //   definicion_CTX_F_B_NC_ND.serie = '';
-    //   definicion_CTX_F_B_NC_ND.numero = 0;
-    //   definicion_CTX_F_B_NC_ND.fecha = hoy();
+    pasoProcesoGrabacion.value = true;
+    if (ventaGRABADA) {
+      grabo.value = true;
+      //=> INICIALIZAR PARA LA SIGUIENTE VENTA
+      // definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '';
+      // definicion_CTX_F_B_NC_ND.tipoComprobantePago = '';
+      // definicion_CTX_F_B_NC_ND.idSerieVenta = '';
+      // definicion_CTX_F_B_NC_ND.serie = '';
+      // definicion_CTX_F_B_NC_ND.numero = 0;
+      definicion_CTX_F_B_NC_ND.fecha = hoy();
 
-    //   definicion_CTX_F_B_NC_ND.clienteVentasVarias = false;
-    //   definicion_CTX_F_B_NC_ND.idCliente = '';
-    //   definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = '6';
-    //   definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = 'RUC';
-    //   definicion_CTX_F_B_NC_ND.numeroIdentidad = '';
-    //   definicion_CTX_F_B_NC_ND.razonSocialNombre = '';
+      definicion_CTX_F_B_NC_ND.clienteVentasVarias = false;
+      definicion_CTX_F_B_NC_ND.idCliente = '';
+      definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = '6';
+      definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = 'RUC';
+      definicion_CTX_F_B_NC_ND.numeroIdentidad = '';
+      definicion_CTX_F_B_NC_ND.razonSocialNombre = '';
 
-    //   // definicion_CTX_F_B_NC_ND.igv = 0;
-    //   definicion_CTX_F_B_NC_ND.enDolares = false;
-    //   definicion_CTX_F_B_NC_ND.moneda = 'PEN';
-    //   definicion_CTX_F_B_NC_ND.tipoCambio = 0;
+      // definicion_CTX_F_B_NC_ND.igv = 0;
+      definicion_CTX_F_B_NC_ND.enDolares = false;
+      definicion_CTX_F_B_NC_ND.moneda = 'PEN';
+      definicion_CTX_F_B_NC_ND.tipoCambio = 0;
 
-    //   definicion_CTX_F_B_NC_ND.vendedor = '';
-    //   definicion_CTX_F_B_NC_ND.metodoPago = 'CONTADO';
+      definicion_CTX_F_B_NC_ND.vendedor = '';
+      definicion_CTX_F_B_NC_ND.metodoPago = 'CONTADO';
 
-    //   definicion_CTX_F_B_NC_ND.todoEnEfectivo = true;
-    //   definicion_CTX_F_B_NC_ND.unaParteEnEfectivo = false;
-    //   definicion_CTX_F_B_NC_ND.montoEnEfectivo = '';
-    //   definicion_CTX_F_B_NC_ND.otroMedioPago = 'TRANSFERENCIA DE FONDOS';
-    //   definicion_CTX_F_B_NC_ND.montoOtroMedioPago = '';
+      definicion_CTX_F_B_NC_ND.todoEnEfectivo = true;
+      definicion_CTX_F_B_NC_ND.unaParteEnEfectivo = false;
+      definicion_CTX_F_B_NC_ND.montoEnEfectivo = '';
+      definicion_CTX_F_B_NC_ND.otroMedioPago = 'TRANSFERENCIA DE FONDOS';
+      definicion_CTX_F_B_NC_ND.montoOtroMedioPago = '';
 
-    //   definicion_CTX_F_B_NC_ND.verCuotasCredito = false;
-    //   definicion_CTX_F_B_NC_ND.cuotasCredito = [];
-    //   definicion_CTX_F_B_NC_ND.importeTotalCuotasCredito = 0;
+      definicion_CTX_F_B_NC_ND.verCuotasCredito = false;
+      definicion_CTX_F_B_NC_ND.cuotasCredito = [];
+      definicion_CTX_F_B_NC_ND.importeTotalCuotasCredito = 0;
 
-    //   definicion_CTX_F_B_NC_ND.idCotizacion = '';
-    //   definicion_CTX_F_B_NC_ND.serieCotizacion = '';
-    //   definicion_CTX_F_B_NC_ND.numeroCotizacion = 0;
+      definicion_CTX_F_B_NC_ND.idCotizacion = '';
+      definicion_CTX_F_B_NC_ND.serieCotizacion = '';
+      definicion_CTX_F_B_NC_ND.numeroCotizacion = 0;
 
-    //   definicion_CTX_F_B_NC_ND.idOrdenServicio = '';
-    //   definicion_CTX_F_B_NC_ND.serieOrdenServicio = '';
-    //   definicion_CTX_F_B_NC_ND.numeroOrdenServicio = 0;
+      definicion_CTX_F_B_NC_ND.idOrdenServicio = '';
+      definicion_CTX_F_B_NC_ND.serieOrdenServicio = '';
+      definicion_CTX_F_B_NC_ND.numeroOrdenServicio = 0;
 
-    //   definicion_CTX_F_B_NC_ND.observacion = '';
+      definicion_CTX_F_B_NC_ND.observacion = '';
 
-    //   definicion_CTX_F_B_NC_ND.itemsVenta = [];
+      definicion_CTX_F_B_NC_ND.itemsVenta = [];
 
-    //   definicion_CTX_F_B_NC_ND.baseImponiblePEN = 0;
-    //   definicion_CTX_F_B_NC_ND.igvPEN = 0;
-    //   definicion_CTX_F_B_NC_ND.exoneradoPEN = 0;
-    //   definicion_CTX_F_B_NC_ND.inafectoPEN = 0;
-    //   definicion_CTX_F_B_NC_ND.iscPEN = 0;
-    //   definicion_CTX_F_B_NC_ND.exportPEN = 0;
-    //   definicion_CTX_F_B_NC_ND.otrosPEN = 0;
-    //   definicion_CTX_F_B_NC_ND.totalPEN = 0;
+      definicion_CTX_F_B_NC_ND.baseImponiblePEN = 0;
+      definicion_CTX_F_B_NC_ND.igvPEN = 0;
+      definicion_CTX_F_B_NC_ND.exoneradoPEN = 0;
+      definicion_CTX_F_B_NC_ND.inafectoPEN = 0;
+      definicion_CTX_F_B_NC_ND.iscPEN = 0;
+      definicion_CTX_F_B_NC_ND.exportPEN = 0;
+      definicion_CTX_F_B_NC_ND.otrosPEN = 0;
+      definicion_CTX_F_B_NC_ND.totalPEN = 0;
 
-    //   definicion_CTX_F_B_NC_ND.baseImponibleUSD = 0;
-    //   definicion_CTX_F_B_NC_ND.igvUSD = 0;
-    //   definicion_CTX_F_B_NC_ND.exoneradoUSD = 0;
-    //   definicion_CTX_F_B_NC_ND.inafectoUSD = 0;
-    //   definicion_CTX_F_B_NC_ND.iscUSD = 0;
-    //   definicion_CTX_F_B_NC_ND.exportUSD = 0;
-    //   definicion_CTX_F_B_NC_ND.otrosUSD = 0;
-    //   definicion_CTX_F_B_NC_ND.totalUSD = 0;
+      definicion_CTX_F_B_NC_ND.baseImponibleUSD = 0;
+      definicion_CTX_F_B_NC_ND.igvUSD = 0;
+      definicion_CTX_F_B_NC_ND.exoneradoUSD = 0;
+      definicion_CTX_F_B_NC_ND.inafectoUSD = 0;
+      definicion_CTX_F_B_NC_ND.iscUSD = 0;
+      definicion_CTX_F_B_NC_ND.exportUSD = 0;
+      definicion_CTX_F_B_NC_ND.otrosUSD = 0;
+      definicion_CTX_F_B_NC_ND.totalUSD = 0;
 
-    //   definicion_CTX_F_B_NC_ND.referenciaFecha = '';
-    //   definicion_CTX_F_B_NC_ND.referenciaTipo = '';
-    //   definicion_CTX_F_B_NC_ND.referenciaSerie = '';
-    //   definicion_CTX_F_B_NC_ND.referenciaNumero = 0;
+      definicion_CTX_F_B_NC_ND.referenciaFecha = '';
+      definicion_CTX_F_B_NC_ND.referenciaTipo = '';
+      definicion_CTX_F_B_NC_ND.referenciaSerie = '';
+      definicion_CTX_F_B_NC_ND.referenciaNumero = 0;
 
-    //   definicion_CTX_F_B_NC_ND.facturacionElectronica = parametrosGlobales.facturacionElectronica;
-    //   definicion_CTX_F_B_NC_ND.facturacionElectronicaAutomatica = parametrosGlobales.facturacionElectronicaAutomatica;
+      definicion_CTX_F_B_NC_ND.facturacionElectronica = parametrosGlobales.facturacionElectronica;
+      definicion_CTX_F_B_NC_ND.facturacionElectronicaAutomatica = parametrosGlobales.facturacionElectronicaAutomatica;
 
-    //   definicion_CTX_F_B_NC_ND.contabilizarOperaciones = parametrosGlobales.contabilizarOperaciones;
-    //   definicion_CTX_F_B_NC_ND.asientoContable = [];
-    //   definicion_CTX_F_B_NC_ND.totalDebePEN = 0;
-    //   definicion_CTX_F_B_NC_ND.totalHaberPEN = 0;
-    //   definicion_CTX_F_B_NC_ND.totalDebeUSD = 0;
-    //   definicion_CTX_F_B_NC_ND.totalHaberUSD = 0;
-    // }
+      definicion_CTX_F_B_NC_ND.contabilizarOperaciones = parametrosGlobales.contabilizarOperaciones;
+      definicion_CTX_F_B_NC_ND.asientoContable = [];
+      definicion_CTX_F_B_NC_ND.totalDebePEN = 0;
+      definicion_CTX_F_B_NC_ND.totalHaberPEN = 0;
+      definicion_CTX_F_B_NC_ND.totalDebeUSD = 0;
+      definicion_CTX_F_B_NC_ND.totalHaberUSD = 0;
+    }
 
     definicion_CTX_ADD_VENTA.desabilitarAlmacenServicios = false;
     ctx_index_venta.mostrarSpinner = false;
@@ -1166,16 +1210,28 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
             // console.log('ctx_index_venta', ctx_index_venta);
           })}
         />
+        <ImgButton
+          src={images.see}
+          alt="Icono de ver"
+          height={16}
+          width={16}
+          title="props.addPeriodo"
+          onClick={$(() => {
+            console.log('props.addPeriodo', props.addPeriodo);
+            // console.log('grabo', grabo.value);
+            // console.log('ctx_index_venta', ctx_index_venta);
+          })}
+        />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: '0.8rem', marginLeft: '2px' }}>Venta</h3>
+      <h3 style={{ fontSize: '0.9rem', marginLeft: '2px' }}>Venta</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* GENERALES style={{ fontSize: '0.6rem' }} */}
         <div>
           {/* ----------------------------------------------------- */}
           {/* PERIODO */}
-          <div>
+          <div style={{ display: 'none' }}>
             {/* PERIODO */}
             <div class="form-control">
               <label>Periodo</label>
@@ -1415,6 +1471,18 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                   value={definicion_CTX_F_B_NC_ND.fecha}
                   onChange$={(e) => {
                     definicion_CTX_F_B_NC_ND.fecha = (e.target as HTMLInputElement).value;
+                    //validar PERIODO
+                    const anio = definicion_CTX_F_B_NC_ND.fecha;
+                    const mes = definicion_CTX_F_B_NC_ND.fecha;
+                    // console.log('la fechitaaaa', anio + mes);
+                    const mas = anio + mes;
+                    const PPP = losPeriodosCargados.value;
+                    // console.log('mas', mas);
+                    // console.log('PPP', PPP);
+                    const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(mas));
+                    // console.log('elPeriodo', elPeriodo);
+                    definicion_CTX_F_B_NC_ND.idPeriodo = elPeriodo._id;
+                    definicion_CTX_F_B_NC_ND.periodo = elPeriodo.periodo;
                   }}
                   style={{ width: '100%' }}
                 />

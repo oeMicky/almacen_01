@@ -36,6 +36,7 @@ import copy from '../images/copy.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
 import equal from '../images/equal.svg';
+import information from '../images/information.svg';
 import list from '../images/list.svg';
 import logout from '../images/logout.svg';
 import logout24 from '../images/logout24.svg';
@@ -97,6 +98,7 @@ export default {
   download,
   edit,
   equal,
+  information,
   list,
   logout,
   logout24,

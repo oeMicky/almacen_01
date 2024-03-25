@@ -22,7 +22,7 @@ import { parametrosGlobales } from '../../login/index';
 import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { formatoDDMMYYYY_PEN, hoy } from '~/functions/comunes';
 // import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 
@@ -94,9 +94,9 @@ export default component$(() => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    idPeriodo: '',
-    // fechaInicio: fechas.desde,
-    // fechaFinal: fechas.hasta,
+    // idPeriodo: '',
+    fechaInicio: hoy(), // fechas.desde,
+    fechaFinal: hoy(), //fechas.hasta,
   });
 
   // useTask$(({ track }) => {
@@ -271,14 +271,44 @@ export default component$(() => {
         </div> */}
       {/*  BOTONES   */}
       <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
-        {/* <button
-            onClick$={() => {
-              
-            }}
-          >
-            compañia
-          </button> */}
-        <Button
+        <button
+          title="Adiciona venta"
+          onClick$={async () => {
+            //validar PERIODO
+            const anio = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(0, 4);
+            const mes = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(5, 7);
+            // console.log('la fechitaaaa', anio + mes);
+            const mas = anio + mes;
+            const PPP = losPeriodosCargados.value;
+            // console.log('mas', mas);
+            // console.log('PPP', PPP);
+            const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(mas));
+            console.log('elPeriodo', elPeriodo);
+            periodo.idPeriodo = elPeriodo._id;
+            periodo.periodo = elPeriodo.periodo;
+
+            if (periodo.idPeriodo === '') {
+              alert('Seleccione el periodo.');
+              document.getElementById('se_periodo')?.focus();
+              ini.value++;
+              return;
+            }
+            definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
+
+            let elIgv = await getIgvVenta({
+              idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+              idEmpresa: parametrosGlobales.idEmpresa,
+            });
+            elIgv = elIgv.data;
+            //
+            igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
+
+            definicion_CTX_INDEX_VENTA.mostrarPanelVenta = true;
+          }}
+        >
+          ADD VENTA
+        </button>
+        {/* <Button
           name="ADD VENTA"
           title="Add venta"
           onClick={$(async () => {
@@ -290,7 +320,7 @@ export default component$(() => {
               return;
             }
             definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
-            // let elIgv = await getIgvVenta(parametrosGlobales);
+
             let elIgv = await getIgvVenta({
               idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
               idEmpresa: parametrosGlobales.idEmpresa,
@@ -302,10 +332,22 @@ export default component$(() => {
 
             definicion_CTX_INDEX_VENTA.mostrarPanelVenta = true;
           })}
+        /> */}
+        <input id="in_laFechaHoyVenta" type="date" disabled value={hoy()} style={{ marginLeft: '4px' }} />
+        <input
+          type="image"
+          height={16}
+          width={16}
+          src={images.searchPLUS}
+          style={{ marginLeft: '2px' }}
+          onClick$={() => {
+            buscarVentas.value++;
+
+            definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
+          }}
         />
-        <ElSelect
+        {/* <ElSelect
           id="se_periodo_VENTA"
-          // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
           estilos={{ width: '114px', marginLeft: '5px' }}
           registros={losPeriodosCargados.value}
           registroID={'_id'}
@@ -320,10 +362,9 @@ export default component$(() => {
               periodo.periodo = '';
             } else {
               periodo.periodo = elSelec.value;
-              // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-              //
-              //
+
               buscarVentas.value++;
 
               definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
@@ -334,16 +375,14 @@ export default component$(() => {
               (document.getElementById('in_Fecha_MICE') as HTMLSelectElement)?.focus();
             }
           })}
-        />
-        <input
-          // id="in_BuscarDetraccion"
+        /> */}
+        {/*   <input
           type="image"
           src={images.searchPLUS}
           title="Refrescar ventas"
           height={16}
           width={16}
           style={{ marginLeft: '2px' }}
-          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
           onClick$={() => {
             if (parametrosBusqueda.idPeriodo === '') {
               alert('Debe seleccionar el periodo');
@@ -356,15 +395,10 @@ export default component$(() => {
           }}
         />
         <input
-          // id="in_BuscarDetraccion"
           type="button"
-          // src={images.searchPLUS}
           value="pre PLE"
           title="PLE de ventas"
-          // height={16}
-          // width={16}
           style={{ marginLeft: '16px' }}
-          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
           onClick$={() => {
             if (parametrosBusqueda.idPeriodo === '') {
               alert('Debe seleccionar el periodo');
@@ -374,7 +408,7 @@ export default component$(() => {
             if (definicion_CTX_INDEX_VENTA.miscVts.length === 0) {
               alert('El PLE del presente periodo no presenta datos para exportar.');
               document.getElementById('se_periodo_VENTA')?.focus();
-              // ini.value++;
+
               return;
             }
             let aExportar = '';
@@ -467,49 +501,7 @@ export default component$(() => {
             // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
             createAndDownloadFile('elPLE_VENTA_' + periodo.periodo, aExportar);
           }}
-        />
-
-        {/* <button onClick$={() => console.log('definicion_CTX_INDEX_VENTA', definicion_CTX_INDEX_VENTA)}>ver</button> */}
-        {/* <button
-            onClick$={() => {
-              // const TTT = JSON.parse(localStorage.getItem('periodos') || '[]');
-              console.log('localStorage JSON.parse(', JSON.parse(localStorage.getItem('periodos') || '[]'));
-            }}
-          >
-            ver 2
-          </button> */}
-        {/* <textarea id="source" value={'holas'}></textarea> */}
-        {/* <button
-            type="button"
-            id="save"
-            title="Save as text file"
-            onClick$={() => {
-              // when clicked the button
-              const content = (document.getElementById('source') as HTMLTextAreaElement).value;
-
-              // a [save as] dialog will be shown
-              window.open('data:application/txt,' + encodeURIComponent(content));
-              // window.open('data:application/txt,' + encodeURIComponent(content), '_self');
-              // window.open('data:application/xml,' + content, '_self');
-            }}
-          >
-            Save
-          </button> */}
-        {/* <button
-            title="xml 2"
-            onClick$={() => {
-              var xmlString = '<root><estrecho>Miguel</estrecho></root>';
-              var parser = new DOMParser();
-              // xmlDoc.value = parser.parseFromString(xmlString, 'text/xml');
-              xmlDoc.value = parser.parseFromString(xmlString, 'application/xml');
-            }}
-          >
-            xml 22
-          </button> */}
-        {/* <button onClick$={() => createAndOpenFile()}>ver xml 22</button> */}
-        {/* <a href="#" onClick$={() => createAndOpenFile()} download="file.xml">
-            Download
-          </a> */}
+        /> */}
         {definicion_CTX_INDEX_VENTA.mostrarPanelVenta && (
           <div class="modal">
             <AddVenta addPeriodo={periodo} igv={igv.value} />
@@ -538,12 +530,3 @@ export default component$(() => {
     // </main>
   );
 });
-
-// export const AddVenta = component$(() => {
-//   const panelVenta = useContext(CTX);
-//   return (
-//     <>
-//       <div>el modal su contexto: {!panelVenta.mostrarPanelVentas ? 'A' : 'B'}</div>
-//     </>
-//   );
-// });

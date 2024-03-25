@@ -3,6 +3,7 @@ export interface IMercaderiaOUT {
   codigo: string;
   conFechaVencimientoLote: boolean;
   descripcion: string;
+  aplicacion: string;
   equivalencias: any;
   // costoUnitarioMovil: any;
   idLineaTipo: string;
@@ -48,6 +49,7 @@ export interface IMercaderiaIN {
   activo: boolean;
   codigo: string;
   descripcion: string;
+  aplicacion: string;
 
   UNSPSC: string;
   conFechaVencimientoLote: boolean;

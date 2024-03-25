@@ -69,6 +69,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     activo: props.mercaSeleccio.activo ? props.mercaSeleccio.activo : true,
     codigo: props.mercaSeleccio.codigo ? props.mercaSeleccio.codigo : '',
     descripcion: props.mercaSeleccio.descripcion ? props.mercaSeleccio.descripcion : '',
+    aplicacion: props.mercaSeleccio.aplicacion ? props.mercaSeleccio.aplicacion : '',
     UNSPSC: props.mercaSeleccio.UNSPSC ? props.mercaSeleccio.UNSPSC : '',
     conFechaVencimientoLote: props.mercaSeleccio.conFechaVencimientoLote ? props.mercaSeleccio.conFechaVencimientoLote : false,
 
@@ -447,6 +448,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
       activo: definicion_CTX_MERCADERIA_IN.activo,
       codigo: definicion_CTX_MERCADERIA_IN.codigo,
       descripcion: definicion_CTX_MERCADERIA_IN.descripcion,
+      aplicacion: definicion_CTX_MERCADERIA_IN.aplicacion,
       UNSPSC: definicion_CTX_MERCADERIA_IN.UNSPSC,
       conFechaVencimientoLote: definicion_CTX_MERCADERIA_IN.conFechaVencimientoLote,
 
@@ -573,6 +575,34 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
                 value={definicion_CTX_MERCADERIA_IN.descripcion}
                 onChange$={(e) => {
                   definicion_CTX_MERCADERIA_IN.descripcion = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                }}
+                //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('se_aplicacion_MERCADERIA_IN')?.focus();
+                  }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('tipoDocumentoIdentidad')?.focus();
+                  // }
+                }}
+                onFocusin$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
+              />
+            </div>
+          </div>
+          {/* Aplicación */}
+          <div class="form-control">
+            <label>Aplicación</label>
+            <div class="form-control form-agrupado">
+              <input
+                id="se_aplicacion_MERCADERIA_IN"
+                style={{ width: '100%' }}
+                type="text"
+                placeholder="Aplicación  (para que se usa o en donde se usa)"
+                value={definicion_CTX_MERCADERIA_IN.aplicacion}
+                onChange$={(e) => {
+                  definicion_CTX_MERCADERIA_IN.aplicacion = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e) => {
