@@ -1,5 +1,4 @@
 import {
-  $,
   component$,
   createContextId,
   useContextProvider,
@@ -10,7 +9,7 @@ import {
   // useTask$,
 } from '@builder.io/qwik';
 // import ImgButton from '../../../components/system/imgButton';
-import Button from '~/components/system/elButton';
+// import Button from '~/components/system/elButton';
 // import { images } from '~/assets';
 // import { hoy } from '~/functions/comunes';
 import TablaVentas from '~/components/venta/tablaVentas';
@@ -19,10 +18,10 @@ import AddVenta from '~/components/venta/addVenta';
 import { getIgvVenta } from '~/apis/venta.api';
 // import style from './index.css?inline';
 import { parametrosGlobales } from '../../login/index';
-import ElSelect from '~/components/system/elSelect';
+// import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
-import { formatoDDMMYYYY_PEN, hoy } from '~/functions/comunes';
+import { hoy } from '~/functions/comunes';
 // import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 
@@ -178,29 +177,29 @@ export default component$(() => {
   //#endregion REFRESCAR REGISTROS
 
   //#region CREAR Y DOWNLOAD TXT
-  const createAndDownloadFile = $((nameFile: string, texto: string) => {
-    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
-    // const texto = 'hOLA A TODOS';
+  // const createAndDownloadFile = $((nameFile: string, texto: string) => {
+  //   // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+  //   // const texto = 'hOLA A TODOS';
 
-    const filename = nameFile; ///'file.xml';
-    const pom = document.createElement('a');
-    const bb = new Blob([texto], { type: 'text/plain' });
+  //   const filename = nameFile; ///'file.xml';
+  //   const pom = document.createElement('a');
+  //   const bb = new Blob([texto], { type: 'text/plain' });
 
-    pom.setAttribute('href', window.URL.createObjectURL(bb));
-    // pom.setAttribute('download', filename);
-    pom.setAttribute('download', filename + '.txt');
+  //   pom.setAttribute('href', window.URL.createObjectURL(bb));
+  //   // pom.setAttribute('download', filename);
+  //   pom.setAttribute('download', filename + '.txt');
 
-    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
-    pom.draggable = true;
-    pom.classList.add('dragout');
+  //   pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+  //   pom.draggable = true;
+  //   pom.classList.add('dragout');
 
-    pom.click();
+  //   pom.click();
 
-    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
-    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
-    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-    console.log('first txt');
-  });
+  //   // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+  //   // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+  //   // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+  //   console.log('first txt');
+  // });
   //#endregion CREAR Y DOWNLOAD TXT
 
   return (

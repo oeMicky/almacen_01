@@ -209,7 +209,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
   //#region INICIALIZACION
   const ini = useSignal(0);
   const tipoDocumento = useSignal('01'); //01-FACTURA  //03-BOLETA
-  const idSerieDocumento = useSignal('');
+  // const idSerieDocumento = useSignal('');
   const serieDocumento = useSignal('');
   const botonGrabar = useSignal('');
   const dataSerie = useSignal([]);
