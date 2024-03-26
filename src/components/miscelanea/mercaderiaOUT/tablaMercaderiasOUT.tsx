@@ -191,7 +191,7 @@ export default component$(
                                     console.log('la mercade seleccionada OUT -INDIRECTA', ctx_buscar_mercaderia_out.mM);
                                   }
                                 }}
-                              />{' '}
+                              />
                               {typeof aplicacion !== 'undefined' && (
                                 <input
                                   // id="in_BuscarDetraccion"

@@ -93,7 +93,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 720px)',
+        width: 'clamp(330px, 86%,1112px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -185,6 +185,36 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                   adicionarMercaderiasIN();
                 })}
               /> */}
+            </div>
+          </div>
+          {/* Buscar por: Aplicacion */}
+          <div>
+            <div style={{ margin: '0 auto' }}>
+              <input
+                id="in_Aplicacion_BUSCAR_MERCADERIA_IN"
+                type="checkbox"
+                placeholder="Buscar por aplicación"
+                onChange$={(e) => {
+                  if ((e.target as HTMLInputElement).checked) {
+                    parametrosBusqueda.buscarPor = 'Aplicación';
+                  } else {
+                    parametrosBusqueda.buscarPor = 'Descripción';
+                  }
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+                // onInput$={(e) => {
+                //   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+                // }}
+                // onFocusin$={(e) => {
+                //   (e.target as HTMLInputElement).select();
+                // }}
+                // onKeyPress$={(e) => {
+                //   if (e.key === 'Enter') {
+                //     localizarMercaderiasOUT();
+                //   }
+                // }}
+              />
+              <label for="in_Aplicacion_BUSCAR_MERCADERIA_IN">Aplicación</label>
             </div>
           </div>
         </div>

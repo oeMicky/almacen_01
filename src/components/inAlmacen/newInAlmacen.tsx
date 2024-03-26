@@ -488,7 +488,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
+            <br></br>
           </div>
           {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado && (
             <div class="modal">
@@ -599,7 +600,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
+            <br></br>
           </div>
           {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
@@ -622,7 +624,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
+            <br></br>
           </div>
           {/* ----------------------------------------------------- */}
         </div>
@@ -750,7 +753,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               </div>
             )}
           </div>
-          <hr style={{ margin: '5px 0' }}></hr>
+          {/* <hr style={{ margin: '5px 0' }}></hr> */}
+          <br></br>
         </div>
         {/* ----------------------------------------------------- */}
         {/* BOTON  MERCADERIAS  IN */}
@@ -1070,7 +1074,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               </div>
             )}
           </div>
+          <br></br>
         </div>
+
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}
         <input type="button" value="Grabar" class="btn-centro" onClick$={() => registrarIngreso()} />

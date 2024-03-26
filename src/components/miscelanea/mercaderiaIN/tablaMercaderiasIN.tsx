@@ -22,16 +22,30 @@ export default component$(
 
       console.log('parametrosBusqueda', props.parametrosBusqueda);
 
-      const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
-        // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(props.parametrosBusqueda),
-        signal: abortController.signal,
-      });
-      return res.json();
+      if (props.parametrosBusqueda.buscarPor === 'Descripción') {
+        const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
+          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(props.parametrosBusqueda),
+          signal: abortController.signal,
+        });
+        return res.json();
+      }
+      if (props.parametrosBusqueda.buscarPor === 'Aplicación') {
+        const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorAplicacion', {
+          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(props.parametrosBusqueda),
+          signal: abortController.signal,
+        });
+        return res.json();
+      }
     });
     //#endregion BUSCANDO REGISTROS
 
@@ -48,7 +62,7 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ordenesServicio) => {
-          console.log('onResolved 🍓🍓🍓🍓');
+          console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
           const { data } = ordenesServicio; //{ status, data, message }
           const misMercaderiasIN: IMercaderiaIN[] = data;
           ctx_buscar_mercaderia_in.mostrarSpinner = false;
@@ -56,7 +70,8 @@ export default component$(
             <>
               {misMercaderiasIN.length > 0 ? (
                 <>
-                  <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}>
+                  {/* <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}> */}
+                  <table>
                     <thead>
                       <tr>
                         <th>Descripción</th>
@@ -74,6 +89,7 @@ export default component$(
                         const {
                           _id,
                           descripcion,
+                          aplicacion,
                           lineaTipo,
                           marca,
                           totalCantidadSaldo,
@@ -127,9 +143,9 @@ export default component$(
                                 type="image"
                                 src={images.check32}
                                 title="Seleccionar mercadería"
-                                height={14}
-                                width={14}
-                                style={{ padding: '2px', marginRight: '2px' }}
+                                height={12}
+                                width={12}
+                                style={{ marginRight: '6px' }}
                                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   console.log('mercaINLocali', mercaINLocali);
@@ -151,14 +167,30 @@ export default component$(
                                   }
                                 }}
                               />
+                              {typeof aplicacion !== 'undefined' && (
+                                <input
+                                  // id="in_BuscarDetraccion"
+                                  type="image"
+                                  src={images.information}
+                                  title={aplicacion}
+                                  height={12}
+                                  width={12}
+                                  style={{ marginRight: '6px' }}
+                                  onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                  // onClick$={() => {
+                                  //   ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                  //   ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = true;
+                                  // }}
+                                />
+                              )}
                               <input
                                 // id="in_BuscarDetraccion"
                                 type="image"
                                 src={images.edit}
                                 title="Editar mercadería"
-                                height={14}
-                                width={14}
-                                style={{ padding: '2px ', marginRight: '2px' }}
+                                height={12}
+                                width={12}
+                                style={{ marginRight: '2px' }}
                                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   ctx_buscar_mercaderia_in.mM = mercaINLocali;
