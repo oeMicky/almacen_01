@@ -105,7 +105,8 @@ export default component$(
       const abortController = new AbortController();
       cleanup(() => abortController.abort('cleanup'));
 
-      // console.log('ctx_buscar_persona:::...', ctx_buscar_persona);
+      console.log('props.soloPersonasNaturales:::...', props.soloPersonasNaturales);
+      console.log('ctx_buscar_persona:::...', ctx_buscar_persona);
 
       if (props.soloPersonasNaturales) {
         if (ctx_buscar_persona.buscarPor === 'Nombre / Razón social') {
@@ -254,6 +255,7 @@ export default component$(
                           numeroIdentidad,
                           razonSocialNombre,
                           email,
+                          telefono,
                         } = persoLocali;
                         const indexItem = index + 1;
                         return (
@@ -273,6 +275,7 @@ export default component$(
                                 style={{ marginRight: '2px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
+                                  console.log('persoLocali', persoLocali);
                                   if (props.contexto === 'new_out_almacen' && props.rol === 'cliente') {
                                     ctx_buscar_persona.pP = persoLocali;
                                     ctx.mostrarPanelVentasCliente = true;
@@ -284,6 +287,8 @@ export default component$(
                                     ctx_rol.numeroIdentidad = numeroIdentidad;
                                     ctx_rol.razonSocialNombre = razonSocialNombre;
                                     ctx_rol.email = email;
+                                    ctx_rol.telefono = telefono;
+                                    console.log('ctx_rol', ctx_rol);
 
                                     ctx.mostrarPanelBuscarPersona = false;
                                     ctx.idPersona = _id;

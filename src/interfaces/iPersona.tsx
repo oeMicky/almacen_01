@@ -39,6 +39,7 @@ export interface IPersonaVenta {
   materno: string;
   activo: boolean;
   email: string;
+  telefono: string;
 }
 
 export interface ITecnico {

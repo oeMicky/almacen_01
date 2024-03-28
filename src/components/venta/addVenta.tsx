@@ -28,6 +28,7 @@ import {
   redondeo2Decimales,
   formatoDDMMYYYY_PEN,
   menosXdiasHoy,
+  redondeo6Decimales,
 } from '~/functions/comunes';
 // import SeleccionarPersona from '../miscelanea/persona/seleccionarPersona';
 import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
@@ -41,14 +42,14 @@ import styleTabla from '../tabla/tabla.css?inline';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
 import AdjuntarOrdenServicio from './adjuntarOrdenServicio';
-import type { IPersona, IPersonaVenta } from '~/interfaces/iPersona';
+import type { IPersonaVenta } from '~/interfaces/iPersona';
 import type { ICuotaCreditoVenta, IVenta } from '~/interfaces/iVenta';
 import { parametrosGlobales } from '~/routes/login';
 import BuscarServicio from '../miscelanea/servicio/buscarServicio';
 import BorrarItemVenta from './borrarItemVenta';
 import EditarImpuesto from './editarImpuesto';
 
-export const CTX_CLIENTE_VENTA = createContextId<IPersona>('cliente');
+export const CTX_CLIENTE_VENTA = createContextId<IPersonaVenta>('cliente');
 export const CTX_F_B_NC_ND = createContextId<IVenta>('addVenta');
 export const CTX_ADD_VENTA = createContextId<any>('add_venta');
 
@@ -115,6 +116,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
       numeroIdentidad: '',
       razonSocialNombre: '',
       email: '',
+      telefono: '',
       actualizarEmailCliente: false,
 
       igv: props.igv.valueOf(),
@@ -197,6 +199,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
     materno: '',
     activo: true,
     email: '',
+    telefono: '',
   });
   useContextProvider(CTX_CLIENTE_VENTA, defini_CTX_CLIENTE_VENTA);
   //#endregion DEFINICION CTX_CLIENTE_VENTA
@@ -243,6 +246,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
   // });
 
   const emailOrigen = useSignal('');
+  const telefonoOrigen = useSignal('');
 
   let sumaCuotas = 0;
 
@@ -481,8 +485,10 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
       definicion_CTX_F_B_NC_ND.numeroIdentidad = defini_CTX_CLIENTE_VENTA.numeroIdentidad;
       definicion_CTX_F_B_NC_ND.razonSocialNombre = defini_CTX_CLIENTE_VENTA.razonSocialNombre;
       definicion_CTX_F_B_NC_ND.email = defini_CTX_CLIENTE_VENTA.email;
+      definicion_CTX_F_B_NC_ND.telefono = defini_CTX_CLIENTE_VENTA.telefono;
 
       emailOrigen.value = defini_CTX_CLIENTE_VENTA.email;
+      telefonoOrigen.value = defini_CTX_CLIENTE_VENTA.telefono;
 
       definicion_CTX_ADD_VENTA.rol_Persona = '';
       definicion_CTX_ADD_VENTA.selecciono_Persona = false;
@@ -873,25 +879,33 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
         definicion_CTX_F_B_NC_ND.actualizarEmailCliente = true;
       }
     }
+    //ACTUALIZAR TELEFONO ???
+    if (definicion_CTX_F_B_NC_ND.telefono !== '') {
+      if (telefonoOrigen.value !== definicion_CTX_F_B_NC_ND.telefono) {
+        definicion_CTX_F_B_NC_ND.actualizarEmailCliente = true;
+      }
+    }
     //CONTABIIZAR
     if (definicion_CTX_F_B_NC_ND.contabilizarOperaciones) {
-      let total12 = 0;
-      let impuesto40 = 0;
-      let producto70 = 0;
+      let total12: number = 0;
+      let impuesto40: number = 0;
+      let producto70: number = 0;
+      definicion_CTX_F_B_NC_ND.asientoContable = [];
 
-      definicion_CTX_F_B_NC_ND.itemsVenta.forEach((merca: any) => {
-        if (merca.codigoContableVenta !== '') {
+      for (let index = 0; index < definicion_CTX_F_B_NC_ND.itemsVenta.length; index++) {
+        const merca = definicion_CTX_F_B_NC_ND.itemsVenta[index];
+        if (merca.codigoContableVenta !== '' && typeof merca.codigoContableVenta !== 'undefined') {
           console.log('merca.ventaPEN merca.porcentaje', merca.ventaPEN, merca.porcentaje, 1 + merca.porcentaje / 100);
-          let pro = 0;
-          total12 = total12 + merca.ventaPEN;
+          let prod = 0;
+          total12 = total12 + parseFloat(merca.ventaPEN);
           if (merca.porcentaje === 0) {
-            pro = merca.ventaPEN;
+            prod = parseFloat(merca.ventaPEN);
           } else {
-            pro = merca.ventaPEN / (1 + merca.porcentaje / 100);
+            prod = merca.ventaPEN / (1 + merca.porcentaje / 100);
           }
-          producto70 = producto70 + pro;
-          impuesto40 = impuesto40 + (merca.ventaPEN - pro);
-          console.log('pro impu', pro, merca.ventaPEN - pro);
+          producto70 = producto70 + prod;
+          impuesto40 = impuesto40 + (merca.ventaPEN - prod);
+          console.log('pro impu', prod, merca.ventaPEN - prod);
           //construyendo el asiento
           definicion_CTX_F_B_NC_ND.asientoContable.push({
             idAuxiliar: parseInt(elIdAuxiliar()),
@@ -899,10 +913,10 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
             codigo: merca.codigoContableVenta,
             descripcion: merca.descripcionContableVenta,
             tipo: false,
-            importe: pro,
+            importe: prod,
           });
         }
-      });
+      }
       //insertando IMPUESTO
       if (impuesto40 !== 0) {
         if (IMPUESTO.length > 0) {
@@ -928,6 +942,13 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
         });
       }
 
+      console.log(
+        'total12 !== definicion_CTX_F_B_NC_ND.totalPEN',
+        total12,
+        definicion_CTX_F_B_NC_ND.totalPEN,
+        impuesto40,
+        producto70
+      );
       //VACIAR ASIENTO CONTABLE si no hay PARTIDA DOBLE
       if (total12 !== definicion_CTX_F_B_NC_ND.totalPEN) {
         definicion_CTX_F_B_NC_ND.asientoContable = [];
@@ -949,12 +970,17 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
           tipo: true,
           importe: -1,
         });
+      } else {
+        definicion_CTX_F_B_NC_ND.totalDebePEN = total12;
+        definicion_CTX_F_B_NC_ND.totalHaberPEN = total12;
       }
     }
-
+    console.log('definicion_CTX_F_B_NC_ND... despues del CALC A.C', definicion_CTX_F_B_NC_ND);
     ctx_index_venta.mostrarSpinner = true;
     // const aGrabar =
     const ventaGRABADA = await inVenta({
+      idLibroDiario: parametrosGlobales.idLibroDiario,
+
       idGrupoEmpresarial: definicion_CTX_F_B_NC_ND.idGrupoEmpresarial,
       idEmpresa: definicion_CTX_F_B_NC_ND.idEmpresa,
       idSucursal: definicion_CTX_F_B_NC_ND.idSucursal,
@@ -979,6 +1005,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
       numeroIdentidad: definicion_CTX_F_B_NC_ND.numeroIdentidad,
       razonSocialNombre: definicion_CTX_F_B_NC_ND.razonSocialNombre,
       email: definicion_CTX_F_B_NC_ND.email,
+      telefono: definicion_CTX_F_B_NC_ND.telefono,
       actualizarEmailCliente: definicion_CTX_F_B_NC_ND.actualizarEmailCliente,
 
       igv: definicion_CTX_F_B_NC_ND.igv,
@@ -1069,6 +1096,8 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
       definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = 'RUC';
       definicion_CTX_F_B_NC_ND.numeroIdentidad = '';
       definicion_CTX_F_B_NC_ND.razonSocialNombre = '';
+      definicion_CTX_F_B_NC_ND.email = '';
+      definicion_CTX_F_B_NC_ND.telefono = '';
 
       // definicion_CTX_F_B_NC_ND.igv = 0;
       definicion_CTX_F_B_NC_ND.enDolares = false;
@@ -1224,7 +1253,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: '0.9rem', marginLeft: '2px' }}>Venta</h3>
+      <h3 style={{ fontSize: '0.9rem', marginLeft: '2px' }}>Venta - {parametrosGlobales.RazonSocial}</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* GENERALES style={{ fontSize: '0.6rem' }} */}
@@ -1371,28 +1400,29 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
               </div>
             </div>
             {/* Email */}
-            <div class="form-control">
-              <label>Email</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputEmail"
-                  style={{ width: '100%' }}
-                  type="email"
-                  placeholder="Email"
-                  value={definicion_CTX_F_B_NC_ND.email}
-                  onChange$={(e) => {
-                    definicion_CTX_F_B_NC_ND.email = (e.target as HTMLInputElement).value;
-                  }}
-                  // onChange={(e) => setEmail(e.target.value)}
-                />
-                {/* <ImgButton
-                  src={icons.searchPLUS.default}
-                  alt="Icono de buscar identidad"
-                  height={16}
-                  width={16}
-                  title="Buscar datos de identidad"
-                /> */}
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+              <input
+                id="inputEmail"
+                style={{ width: '100%' }}
+                type="email"
+                placeholder="Email"
+                value={definicion_CTX_F_B_NC_ND.email}
+                onChange$={(e) => {
+                  definicion_CTX_F_B_NC_ND.email = (e.target as HTMLInputElement).value;
+                }}
+                // onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                id="inputTelefono"
+                style={{ width: '100%' }}
+                type="tel"
+                placeholder="Telefono"
+                value={definicion_CTX_F_B_NC_ND.telefono}
+                onChange$={(e) => {
+                  definicion_CTX_F_B_NC_ND.telefono = (e.target as HTMLInputElement).value;
+                }}
+                // onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <br></br>
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
@@ -2001,38 +2031,38 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                       //IGV, ISC, IVAP, exoneradas, exportación, gratuitas, inafecta, otrosTributos
                       if (definicion_CTX_F_B_NC_ND.enDolares) {
                         if (iTVen.tipoImpuesto === 'IGV') {
-                          const vv = redondeo2Decimales(
+                          const vv = redondeo6Decimales(
                             iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
                           );
-                          t_bi = redondeo2Decimales((vv * 100) / (100 + iTVen.porcentaje));
-                          t_igv = redondeo2Decimales(vv - t_bi);
+                          t_bi = redondeo6Decimales((vv * 100) / (100 + iTVen.porcentaje));
+                          t_igv = redondeo6Decimales(vv - t_bi);
                         }
                         // if (iTVen.tipoImpuesto === 'ISC') {
                         // }
                         // if (iTVen.tipoImpuesto === 'IVAP') {
                         // }
                         if (iTVen.tipoImpuesto === 'exoneradas') {
-                          t_exo = redondeo2Decimales(
+                          t_exo = redondeo6Decimales(
                             iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
                           );
                         }
                         if (iTVen.tipoImpuesto === 'exportación') {
-                          t_export = redondeo2Decimales(
+                          t_export = redondeo6Decimales(
                             iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
                           );
                         }
                         if (iTVen.tipoImpuesto === 'gratuitas') {
-                          t_otros = redondeo2Decimales(
+                          t_otros = redondeo6Decimales(
                             iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
                           );
                         }
                         if (iTVen.tipoImpuesto === 'inafecta') {
-                          t_ina = redondeo2Decimales(
+                          t_ina = redondeo6Decimales(
                             iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
                           );
                         }
                         if (iTVen.tipoImpuesto === 'otrosTributos') {
-                          t_otros = redondeo2Decimales(
+                          t_otros = redondeo6Decimales(
                             iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD
                           );
                         }
@@ -2055,38 +2085,42 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                         // }
                       } else {
                         if (iTVen.tipoImpuesto === 'IGV') {
-                          const vv = redondeo2Decimales(
+                          const vv = redondeo6Decimales(
                             iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
                           );
-                          t_bi = redondeo2Decimales((vv * 100) / (100 + iTVen.porcentaje));
-                          t_igv = redondeo2Decimales(vv - t_bi);
+                          // console.log('vv', vv);
+                          // console.log('iTVen.porcentaje', iTVen.porcentaje);
+                          t_bi = redondeo6Decimales((vv * 100) / (100 + iTVen.porcentaje));
+                          t_igv = redondeo6Decimales(vv - t_bi);
+                          // console.log('t_bi -*', t_bi);
+                          // console.log('t_igv -*', t_igv);
                         }
                         // if (iTVen.tipoImpuesto === 'ISC') {
                         // }
                         // if (iTVen.tipoImpuesto === 'IVAP') {
                         // }
                         if (iTVen.tipoImpuesto === 'exoneradas') {
-                          t_exo = redondeo2Decimales(
+                          t_exo = redondeo6Decimales(
                             iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
                           );
                         }
                         if (iTVen.tipoImpuesto === 'exportación') {
-                          t_export = redondeo2Decimales(
+                          t_export = redondeo6Decimales(
                             iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
                           );
                         }
                         if (iTVen.tipoImpuesto === 'gratuitas') {
-                          t_otros = redondeo2Decimales(
+                          t_otros = redondeo6Decimales(
                             iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
                           );
                         }
                         if (iTVen.tipoImpuesto === 'inafecta') {
-                          t_ina = redondeo2Decimales(
+                          t_ina = redondeo6Decimales(
                             iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
                           );
                         }
                         if (iTVen.tipoImpuesto === 'otrosTributos') {
-                          t_otros = redondeo2Decimales(
+                          t_otros = redondeo6Decimales(
                             iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
                           );
                         }

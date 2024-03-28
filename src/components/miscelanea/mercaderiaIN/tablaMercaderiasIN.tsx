@@ -6,7 +6,13 @@ import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 
 export default component$(
-  (props: { buscarMercaderiasIN: number; parametrosBusqueda: any; contexto: string; esAlmacen: boolean }) => {
+  (props: {
+    buscarMercaderiasIN: number;
+    parametrosBusqueda: any;
+    contexto: string;
+    esAlmacen: boolean;
+    verLineaMarca: boolean;
+  }) => {
     useStylesScoped$(style);
 
     //#region CONTEXTOS
@@ -75,8 +81,8 @@ export default component$(
                     <thead>
                       <tr>
                         <th>Descripción</th>
-                        <th>Linea/Tipo</th>
-                        <th>Marca</th>
+                        <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
+                        <th style={props.verLineaMarca ? '' : { display: 'none' }}>Marca</th>
                         <th>Stock</th>
                         <th>Uni</th>
                         {props.esAlmacen ? <th>Costo Promd. Uni PEN</th> : <th>Precio Uni PEN</th>}
@@ -111,8 +117,12 @@ export default component$(
                             }
                           >
                             <td data-label="Descripción">{descripcion}</td>
-                            <td data-label="Linea/Tipo">{lineaTipo}</td>
-                            <td data-label="Marca">{marca}</td>
+                            <td data-label="Linea/Tipo" style={props.verLineaMarca ? '' : { display: 'none' }}>
+                              {lineaTipo}
+                            </td>
+                            <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
+                              {marca}
+                            </td>
                             <td data-label="Stock">
                               {totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}
                             </td>
@@ -177,10 +187,9 @@ export default component$(
                                   width={12}
                                   style={{ marginRight: '6px' }}
                                   onFocusin$={() => console.log('☪☪☪☪☪☪')}
-                                  // onClick$={() => {
-                                  //   ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
-                                  //   ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = true;
-                                  // }}
+                                  onClick$={() => {
+                                    alert(aplicacion);
+                                  }}
                                 />
                               )}
                               <input

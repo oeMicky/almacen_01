@@ -7,7 +7,13 @@ import { images } from '~/assets';
 // import { exit } from 'process';
 
 export default component$(
-  (props: { buscarMercaderiasOUT: number; parametrosBusqueda: any; contexto: string; esAlmacen: boolean }) => {
+  (props: {
+    buscarMercaderiasOUT: number;
+    parametrosBusqueda: any;
+    contexto: string;
+    esAlmacen: boolean;
+    verLineaMarca: boolean;
+  }) => {
     useStylesScoped$(style);
 
     //#region CONTEXTOS
@@ -76,8 +82,8 @@ export default component$(
                     <thead>
                       <tr>
                         <th>Descripción</th>
-                        <th>Linea/Tipo</th>
-                        <th>Marca</th>
+                        <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
+                        <th style={props.verLineaMarca ? '' : { display: 'none' }}>Marca</th>
                         <th>Stock</th>
                         <th>Uni</th>
                         {props.esAlmacen ? <th>Costo Promd.PEN</th> : <th>Precio PEN</th>}
@@ -116,10 +122,10 @@ export default component$(
                             <td data-label="Descripción" class="comoCadena">
                               {descripcion}
                             </td>
-                            <td data-label="Linea/Tipo" class="comoCadena">
+                            <td data-label="Linea/Tipo" class="comoCadena" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {lineaTipo}
                             </td>
-                            <td data-label="Marca" class="comoCadena">
+                            <td data-label="Marca" class="comoCadena" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {marca}
                             </td>
                             <td data-label="Stock" class="comoNumero">
@@ -201,11 +207,10 @@ export default component$(
                                   height={12}
                                   width={12}
                                   style={{ marginRight: '6px' }}
-                                  onFocusin$={() => console.log('☪☪☪☪☪☪')}
-                                  // onClick$={() => {
-                                  //   ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
-                                  //   ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = true;
-                                  // }}
+                                  onFocusin$={() => console.log('☪☪☪☪☪☪!!!')}
+                                  onClick$={() => {
+                                    alert(aplicacion);
+                                  }}
                                 />
                               )}
                               <input
@@ -216,10 +221,11 @@ export default component$(
                                 height={12}
                                 width={12}
                                 // style={typeof aplicacion !== 'undefined' ? { marginRight: '6px' } : ''}
-                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onFocusin$={() => console.log('☪☪☪☪☪☪°°°')}
                                 onClick$={() => {
                                   ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
                                   ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = true;
+                                  console.log('mercaOUTLocali', mercaOUTLocali);
                                 }}
                               />
                             </td>

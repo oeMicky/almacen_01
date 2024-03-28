@@ -24,7 +24,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
       idMercaderia: props.mercaOUTSelecci._id,
-      usuario: 'quedate', //parametrosGlobales.usuario,
+      usuario: parametrosGlobales.usuario,
 
       precioPEN: precio.value,
       //   precio: parseFloat((document.getElementById('inputPrecio_MICE') as HTMLInputElement)?.value.trim()),
@@ -92,7 +92,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
             </strong>
           </div>
           {/* Costo */}
-          <div class="form-control">
+          {/* <div class="form-control">
             <label>Costo</label>
             <div class="form-control form-agrupado">
               <input
@@ -104,9 +104,9 @@ export default component$((props: { mercaOUTSelecci: any }) => {
                 value={props.mercaOUTSelecci.promedioCostoUnitarioMovil.$numberDecimal}
               />
             </div>
-          </div>
+          </div> */}
           {/* Utilidad */}
-          <div class="form-control">
+          {/* <div class="form-control">
             <label>Utilidad</label>
             <div class="form-control form-agrupado">
               <input
@@ -118,7 +118,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
                 value={precio.value - props.mercaOUTSelecci.promedioCostoUnitarioMovil.$numberDecimal}
               />
             </div>
-          </div>
+          </div> */}
           {/* Precio */}
           <div class="form-control">
             |<label>Precio</label>
@@ -129,8 +129,6 @@ export default component$((props: { mercaOUTSelecci: any }) => {
                 style={{ width: '100%', textAlign: 'end', marginRight: '2px' }}
                 type="number"
                 placeholder="Adicionar Precio"
-                // value={props.mercaOUTSelecci.precio.$numberDecimal}
-                // value={props.mercaOUTSelecci.precio ? props.mercaOUTSelecci.precio.$numberDecimal : 0}
                 value={precio.value}
                 onChange$={(e) => {
                   precio.value = (e.target as HTMLInputElement).value;

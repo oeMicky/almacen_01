@@ -48,6 +48,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   }
   //#endregion CONTEXTOS
 
+  //#region INICIALIZACION
+  const verLineaMarca = useSignal(false);
   const buscarMercaderiasIN = useSignal(0);
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -56,6 +58,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
     buscarPor: 'Descripción', //por.value,
     cadenaABuscar: '', // 'acce 5', //cadena.value,
   });
+  //#endregion INICIALIZACION
 
   //#region BUSCAR MERCADERIAS IN
   const localizarMercaderiasIN = $(() => {
@@ -92,12 +95,21 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
 
   return (
     <div
-      style={{
-        width: 'clamp(330px, 86%,1112px)',
-        // width: 'auto',
-        border: '1px solid red',
-        padding: '2px',
-      }}
+      style={
+        verLineaMarca.value
+          ? {
+              width: 'clamp(330px, 86%, 1112px)',
+              // width: 'auto',
+              border: '1px solid red',
+              padding: '2px',
+            }
+          : {
+              width: 'clamp(330px, 86%, 800px)',
+              // width: 'auto',
+              border: '1px solid red',
+              padding: '2px',
+            }
+      }
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
@@ -226,6 +238,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
               parametrosBusqueda={parametrosBusqueda}
               contexto={props.contexto}
               esAlmacen={props.esAlmacen}
+              verLineaMarca={verLineaMarca.value}
               //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
               //   parametrosBusqueda={parametrosBusqueda}
             />

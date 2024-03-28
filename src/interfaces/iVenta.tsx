@@ -25,6 +25,7 @@ export interface IVenta {
   numeroIdentidad: string;
   razonSocialNombre: string;
   email: string;
+  telefono: string;
   actualizarEmailCliente: boolean;
 
   igv: number;

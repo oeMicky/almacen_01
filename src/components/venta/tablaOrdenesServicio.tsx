@@ -62,7 +62,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
           <>
             {misOrdenesServicio.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.9em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Cotización</th>
@@ -74,16 +74,16 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                     </tr>
                   </thead>
                   <tbody>
-                    {misOrdenesServicio.map((value) => {
+                    {misOrdenesServicio.map((OS) => {
                       //, index
                       // const indexItem = index + 1;
                       return (
-                        <tr key={value._id}>
-                          <td data-label="O.S.">{value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}</td>
-                          <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fechaInicio)}</td>
-                          <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
+                        <tr key={OS._id}>
+                          <td data-label="O.S.">{OS.serie + ' - ' + cerosALaIzquierda(OS.numero, 8)}</td>
+                          <td data-label="Fecha">{formatoDDMMYYYY_PEN(OS.fechaInicio)}</td>
+                          <td data-label="Nro. Doc">{OS.tipoDocumentoIdentidad + ': ' + OS.numeroIdentidad}</td>
                           <td data-label="Cliente">
-                            {value.clienteVentasVarias ? 'Cliente ventas varias' : value.razonSocialNombreCliente}
+                            {OS.clienteVentasVarias ? 'Cliente ventas varias' : OS.razonSocialNombreCliente}
                           </td>
                           <td data-label="Importe PEN" class="comoNumero">
                             {/* {value.montoTotalPEN
@@ -102,29 +102,29 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                   type="image"
                                   src={images.check32}
                                   title="Seleccionar cotización"
-                                  height={14}
-                                  width={14}
-                                  style={{ padding: '2px' }}
+                                  height={12}
+                                  width={12}
+                                  style={{ marginRight: '6px' }}
                                   onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
-                                    console.log('seleccionar cotizacion', value);
+                                    console.log('seleccionar O.S.:', OS);
 
-                                    ctx_f_b_nc_nd.idOrdenServicio = value._id;
-                                    ctx_f_b_nc_nd.serieOrdenServicio = value.serie;
-                                    ctx_f_b_nc_nd.numeroOrdenServicio = value.numero;
+                                    ctx_f_b_nc_nd.idOrdenServicio = OS._id;
+                                    ctx_f_b_nc_nd.serieOrdenServicio = OS.serie;
+                                    ctx_f_b_nc_nd.numeroOrdenServicio = OS.numero;
 
-                                    ctx_f_b_nc_nd.observacion = value.serie + ' - ' + cerosALaIzquierda(value.numero, 8);
+                                    ctx_f_b_nc_nd.observacion = OS.serie + ' - ' + cerosALaIzquierda(OS.numero, 8);
 
-                                    ctx_f_b_nc_nd.clienteVentasVarias = value.clienteVentasVarias;
-                                    ctx_f_b_nc_nd.idCliente = value.idCliente;
+                                    ctx_f_b_nc_nd.clienteVentasVarias = OS.clienteVentasVarias;
+                                    ctx_f_b_nc_nd.idCliente = OS.idCliente;
 
-                                    ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
-                                    ctx_f_b_nc_nd.tipoDocumentoIdentidad = value.tipoDocumentoIdentidad;
-                                    ctx_f_b_nc_nd.numeroIdentidad = value.numeroIdentidad;
-                                    ctx_f_b_nc_nd.razonSocialNombre = value.razonSocialNombreCliente;
+                                    ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = OS.codigoTipoDocumentoIdentidad;
+                                    ctx_f_b_nc_nd.tipoDocumentoIdentidad = OS.tipoDocumentoIdentidad;
+                                    ctx_f_b_nc_nd.numeroIdentidad = OS.numeroIdentidad;
+                                    ctx_f_b_nc_nd.razonSocialNombre = OS.razonSocialNombreCliente;
                                     ctx_f_b_nc_nd.itemsVenta = [];
                                     let nuevoITEM = 1;
-                                    value.servicios.map((ser: any) => {
+                                    OS.servicios.map((ser: any) => {
                                       console.log('ser', ser);
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
@@ -135,7 +135,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                         // tipoImpuesto: 'IGV',
                                         tipoImpuesto: ser.tipoImpuesto,
                                         tipoAfectacionDelImpuesto: ser.tipoAfectacionDelImpuesto,
-                                        porcentaje: ser.porcentaje.$numberDecimal,
+                                        porcentaje: parseFloat(ser.porcentaje.$numberDecimal),
 
                                         codigo: ser.codigo ? ser.codigo : '_',
                                         descripcionEquivalencia: ser.descripcionEquivalencia, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
@@ -166,7 +166,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                     });
 
                                     // let cuantosDespachados = 0;
-                                    for (const requi of value.requisiciones) {
+                                    for (const requi of OS.requisiciones) {
                                       if (requi.cantidadDespachada.$numberDecimal > 0) {
                                         ctx_f_b_nc_nd.itemsVenta.push({
                                           idAuxiliar: parseInt(elIdAuxiliar()),
@@ -179,7 +179,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                           // tipoImpuesto: 'IGV',
                                           tipoImpuesto: requi.tipoImpuesto,
                                           tipoAfectacionDelImpuesto: requi.tipoAfectacionDelImpuesto,
-                                          porcentaje: requi.porcentaje.$numberDecimal,
+                                          porcentaje: parseFloat(requi.porcentaje.$numberDecimal),
 
                                           codigo: requi.codigo ? requi.codigo : '_',
                                           descripcionEquivalencia: requi.descripcionEquivalencia,
@@ -253,9 +253,9 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                 type="image"
                                 src={images.edit}
                                 title="Editar venta"
-                                height={14}
-                                width={14}
-                                style={{ padding: '2px' }}
+                                height={12}
+                                width={12}
+                                style={{ marginRight: '6px' }}
                                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 // onClick$={() => {
 
@@ -267,12 +267,12 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                               type="image"
                               src={images.pdf}
                               title="Ver pdf"
-                              height={14}
-                              width={14}
-                              style={{ padding: '2px' }}
+                              height={12}
+                              width={12}
+                              // style={{ marginRight: '2px' }}
                               onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
-                                osSeleccionada.value = value;
+                                osSeleccionada.value = OS;
                                 clickPDF.value++;
                               }}
                             />

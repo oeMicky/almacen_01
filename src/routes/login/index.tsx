@@ -55,6 +55,7 @@ export const parametrosGlobales = {
   asientoVenta: [],
   codigoContableVentaServicio: '',
   descripcionContableVentaServicio: '',
+  idLibroDiario: '6604c567242e40cf619c834f',
 };
 
 //--nombre: 'GRUPO MERMA';

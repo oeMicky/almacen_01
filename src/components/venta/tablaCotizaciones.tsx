@@ -129,18 +129,18 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                     </tr>
                   </thead>
                   <tbody>
-                    {misCotizaciones.map((value) => {
+                    {misCotizaciones.map((COT) => {
                       //, index
                       // const indexItem = index + 1;
                       return (
-                        <tr key={value._id}>
-                          <td data-label="Cotización">{value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}</td>
-                          <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fecha)}</td>
-                          <td data-label="Nro. Doc">{value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}</td>
-                          <td data-label="Cliente">{value.razonSocialNombre}</td>
+                        <tr key={COT._id}>
+                          <td data-label="Cotización">{COT.serie + ' - ' + cerosALaIzquierda(COT.numero, 8)}</td>
+                          <td data-label="Fecha">{formatoDDMMYYYY_PEN(COT.fecha)}</td>
+                          <td data-label="Nro. Doc">{COT.tipoDocumentoIdentidad + ': ' + COT.numeroIdentidad}</td>
+                          <td data-label="Cliente">{COT.razonSocialNombre}</td>
                           <td data-label="Importe PEN" class="comoNumero">
-                            {value.montoTotalPEN
-                              ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
+                            {COT.montoTotalPEN
+                              ? parseFloat(COT.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
                                   currency: 'PEN',
                                   minimumFractionDigits: 2,
@@ -155,27 +155,27 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   type="image"
                                   src={images.check32}
                                   title="Selecionar cotización"
-                                  height={14}
-                                  width={14}
-                                  style={{ padding: '2px' }}
+                                  height={12}
+                                  width={12}
+                                  style={{ marginRight: '6px' }}
                                   onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
-                                    console.log('seleccionar cotizacion', value);
-                                    ctx_f_b_nc_nd.idCotizacion = value._id;
-                                    ctx_f_b_nc_nd.serieCotizacion = value.serie;
-                                    ctx_f_b_nc_nd.numeroCotizacion = value.numero;
+                                    console.log('seleccionar cotizacion', COT);
+                                    ctx_f_b_nc_nd.idCotizacion = COT._id;
+                                    ctx_f_b_nc_nd.serieCotizacion = COT.serie;
+                                    ctx_f_b_nc_nd.numeroCotizacion = COT.numero;
 
-                                    ctx_f_b_nc_nd.observacion = value.serie + ' - ' + cerosALaIzquierda(value.numero, 8);
+                                    ctx_f_b_nc_nd.observacion = COT.serie + ' - ' + cerosALaIzquierda(COT.numero, 8);
 
-                                    ctx_f_b_nc_nd.idCliente = value.idCliente;
+                                    ctx_f_b_nc_nd.idCliente = COT.idCliente;
 
-                                    ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = value.codigoTipoDocumentoIdentidad;
-                                    ctx_f_b_nc_nd.tipoDocumentoIdentidad = value.tipoDocumentoIdentidad;
-                                    ctx_f_b_nc_nd.numeroIdentidad = value.numeroIdentidad;
-                                    ctx_f_b_nc_nd.razonSocialNombre = value.razonSocialNombre;
+                                    ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = COT.codigoTipoDocumentoIdentidad;
+                                    ctx_f_b_nc_nd.tipoDocumentoIdentidad = COT.tipoDocumentoIdentidad;
+                                    ctx_f_b_nc_nd.numeroIdentidad = COT.numeroIdentidad;
+                                    ctx_f_b_nc_nd.razonSocialNombre = COT.razonSocialNombre;
                                     ctx_f_b_nc_nd.itemsVenta = [];
                                     let newItem = 1;
-                                    value.servicios.map((ser: any) => {
+                                    COT.servicios.map((ser: any) => {
                                       console.log('ser', ser);
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
@@ -186,7 +186,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         // tipoImpuesto: 'IGV',
                                         tipoImpuesto: ser.tipoImpuesto,
                                         tipoAfectacionDelImpuesto: ser.tipoAfectacionDelImpuesto,
-                                        porcentaje: ser.porcentaje.$numberDecimal,
+                                        porcentaje: parseFloat(ser.porcentaje.$numberDecimal),
 
                                         codigo: ser.codigo ? ser.codigo : '_',
                                         descripcionEquivalencia: ser.descripcionEquivalencia,
@@ -203,7 +203,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                       });
                                       newItem++;
                                     });
-                                    value.repuestosLubri.map((rep: any) => {
+                                    COT.repuestosLubri.map((rep: any) => {
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
                                         idMercaderia: rep.idMercaderia,
@@ -215,7 +215,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         // tipoImpuesto: 'IGV',
                                         tipoImpuesto: rep.tipoImpuesto,
                                         tipoAfectacionDelImpuesto: rep.tipoAfectacionDelImpuesto,
-                                        porcentaje: rep.porcentaje.$numberDecimal,
+                                        porcentaje: parseFloat(rep.porcentaje.$numberDecimal),
 
                                         codigo: rep.codigo ? rep.codigo : '_',
                                         descripcionEquivalencia: rep.descripcionEquivalencia,
@@ -253,9 +253,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 type="image"
                                 src={images.edit}
                                 title="Editar venta"
-                                height={14}
-                                width={14}
-                                style={{ padding: '2px' }}
+                                height={12}
+                                width={12}
+                                style={{ marginRight: '6px' }}
                                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 // onClick$={() => {
                                 // }}
@@ -266,12 +266,12 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               type="image"
                               src={images.pdf}
                               title="Ver pdf"
-                              height={14}
-                              width={14}
-                              style={{ padding: '2px' }}
+                              height={12}
+                              width={12}
+                              // style={{ padding: '2px' }}
                               onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
-                                pdfCotizacionMG(value);
+                                pdfCotizacionMG(COT);
                                 // cotizacionSeleccionada.value = value;
                                 // clickPDF.value++;
                               }}

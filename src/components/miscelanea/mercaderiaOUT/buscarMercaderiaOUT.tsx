@@ -51,6 +51,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
   }
   //#endregion CONTEXTOS
 
+  //#region INICIALIZACION
+  const verLineaMarca = useSignal(false);
   const buscarMercaderiasOUT = useSignal(0);
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -59,6 +61,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
     buscarPor: 'Descripción', //por.value,
     cadenaABuscar: '', // 'acce 5', //cadena.value,
   });
+  //#endregion INICIALIZACION
 
   //#region BUSCAR MERCADERIAS OUT
   const localizarMercaderiasOUT = $(() => {
@@ -86,12 +89,21 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
   return (
     <div
       class="container-modal"
-      style={{
-        width: 'clamp(330px, 86%, 1112px)',
-        // width: 'auto',
-        border: '1px solid red',
-        padding: '2px',
-      }}
+      style={
+        verLineaMarca.value
+          ? {
+              width: 'clamp(330px, 86%, 1112px)',
+              // width: 'auto',
+              border: '1px solid red',
+              padding: '2px',
+            }
+          : {
+              width: 'clamp(330px, 86%, 800px)',
+              // width: 'auto',
+              border: '1px solid red',
+              padding: '2px',
+            }
+      }
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -113,7 +125,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
         {/* ENCABEZADO */}
         <div style={{ marginBottom: '10px' }}>
           {/* Buscar por */}
-          <div class="form-control">
+          <div class="form-control" style={{ marginBottom: '4px' }}>
             <label style={{ marginRight: '10px' }}></label>
             <div class="form-control form-agrupado">
               <input
@@ -150,8 +162,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
           </div>
           {/* Buscar por: Aplicacion */}
           {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-          <div>
-            <div style={{ margin: '0 auto' }}>
+          <div style={{ display: 'flex' }}>
+            <div style={{ marginRight: '12px' }}>
               <input
                 id="in_Aplicacion_MICE"
                 type="checkbox"
@@ -178,6 +190,29 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
               />
               <label for="in_Aplicacion_MICE">Aplicación</label>
             </div>
+            <div>
+              <input
+                id="in_VerLineaMarca_MICE"
+                type="checkbox"
+                placeholder="Ver linea y marca"
+                onChange$={(e) => {
+                  verLineaMarca.value = (e.target as HTMLInputElement).checked;
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+                // onInput$={(e) => {
+                //   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+                // }}
+                // onFocusin$={(e) => {
+                //   (e.target as HTMLInputElement).select();
+                // }}
+                // onKeyPress$={(e) => {
+                //   if (e.key === 'Enter') {
+                //     localizarMercaderiasOUT();
+                //   }
+                // }}
+              />
+              <label for="in_VerLineaMarca_MICE">Ver linea / marca</label>
+            </div>
           </div>
         </div>
         {/*  tabla LOCALIZADOS ITEMS MERCADERIAS  */}
@@ -188,6 +223,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
               parametrosBusqueda={parametrosBusqueda}
               contexto={props.contexto}
               esAlmacen={props.esAlmacen}
+              verLineaMarca={verLineaMarca.value}
               //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
               //   parametrosBusqueda={parametrosBusqueda}
             />

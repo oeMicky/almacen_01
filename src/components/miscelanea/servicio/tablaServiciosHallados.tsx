@@ -112,9 +112,9 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                               type="image"
                               src={images.check32}
                               title="Seleccionar servicio"
-                              height={14}
-                              width={14}
-                              style={{ padding: '2px' }}
+                              height={12}
+                              width={12}
+                              style={{ marginRight: '6px' }}
                               onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_servicio.sS = serviLocali;
@@ -126,9 +126,9 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                               type="image"
                               src={images.edit}
                               title="Editar servicio"
-                              height={14}
-                              width={14}
-                              style={{ padding: '2px' }}
+                              height={12}
+                              width={12}
+                              // style={{ padding: '2px' }}
                               onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_servicio.sS = serviLocali;
