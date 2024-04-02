@@ -135,6 +135,9 @@ export default component$(() => {
                           parametrosGlobales.asientoVenta = activo[0].asientoVenta;
                           parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
                           parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+                          parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+                          parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+                          parametrosGlobales.ejercicio = activo[0].ejercicio;
                           //PAGINA DE INICIO
                           if (parametrosGlobales.almacenActivo) {
                             navegarA(parametrosGlobales.paginaInicioDelSistema);

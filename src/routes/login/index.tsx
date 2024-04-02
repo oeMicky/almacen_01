@@ -11,9 +11,9 @@ export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
   // paginaInicioDelSistema: '/compra',
   // paginaInicioDelSistema: '/reporteVenta',
-  paginaInicioDelSistema: '/venta',
+  // paginaInicioDelSistema: '/venta',
   // paginaInicioDelSistema: '/guiaRemision',
-  // paginaInicioDelSistema: '/inAlmacen',
+  paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',
@@ -44,7 +44,6 @@ export const parametrosGlobales = {
   ingreso: false,
   periodos: [],
   // mostrarSpinner: false,
-  idEjercicio: '',
   facturacionElectronica: false,
   facturacionElectronicaAutomatica: false,
   facturaJSON: false,
@@ -55,7 +54,10 @@ export const parametrosGlobales = {
   asientoVenta: [],
   codigoContableVentaServicio: '',
   descripcionContableVentaServicio: '',
-  idLibroDiario: '6604c567242e40cf619c834f',
+  // idLibroDiario: '6604c567242e40cf619c834f',
+  idLibroDiario: '',
+  idEjercicio: '',
+  ejercicio: 0,
 };
 
 //--nombre: 'GRUPO MERMA';
@@ -129,6 +131,7 @@ export default component$(() => {
         //UNA EMPRESA
 
         if (logeo.sucursalesAdjuntas[0].todasLasSucursales === true) {
+          console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === true');
           if (
             typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
             logeo.sucursalesAdjuntas[0].sucursales.length === 0
@@ -193,6 +196,9 @@ export default component$(() => {
               parametrosGlobales.asientoVenta = activo[0].asientoVenta;
               parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
               parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+              parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+              parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+              parametrosGlobales.ejercicio = activo[0].ejercicio;
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -269,6 +275,9 @@ export default component$(() => {
               parametrosGlobales.asientoVenta = activo[0].asientoVenta;
               parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
               parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+              parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+              parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+              parametrosGlobales.ejercicio = activo[0].ejercicio;
               parametrosGlobales.usuario = logeo.usuario;
               //  parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               //  parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -277,6 +286,7 @@ export default component$(() => {
             }
           }
         } else {
+          console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === false');
           if (
             typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
             logeo.sucursalesAdjuntas[0].sucursales.length === 0
@@ -284,6 +294,7 @@ export default component$(() => {
             navegarA('/ningunaSucursal');
           } else {
             if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
+              console.log('logeo.sucursalesAdjuntas[0].sucursales.length === 1');
               //UNA SUCURSAL
               let activo = await getActivoGEEMPSUCUR({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -341,6 +352,9 @@ export default component$(() => {
               parametrosGlobales.asientoVenta = activo[0].asientoVenta;
               parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
               parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+              parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+              parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+              parametrosGlobales.ejercicio = activo[0].ejercicio;
               parametrosGlobales.usuario = logeo.usuario;
               parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
@@ -370,6 +384,7 @@ export default component$(() => {
               }
               Object.freeze(parametrosGlobales);
             } else {
+              console.log('logeo.sucursalesAdjuntas[0].sucursales.length !== 1');
               //VARIAS SUCURSALES
               let activo = await getActivoGEEMP({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -415,6 +430,9 @@ export default component$(() => {
               parametrosGlobales.asientoVenta = activo[0].asientoVenta;
               parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
               parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+              parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+              parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+              parametrosGlobales.ejercicio = activo[0].ejercicio;
               parametrosGlobales.usuario = logeo.usuario;
               // localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
               // Object.freeze(parametrosGlobales);

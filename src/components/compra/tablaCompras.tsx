@@ -13,7 +13,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
 
   //#region CONTEXTO
   const ctx_index_compra = useContext(CTX_INDEX_COMPRA);
-  //#region CONTEXTO
+  //#endregion CONTEXTO
 
   //#region BUSCANDO REGISTROS
   const lasCompras = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
@@ -73,7 +73,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
             <>
               {ctx_index_compra.miscCs.length > 0 ? (
                 <>
-                  <table class="tabla-compra" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
+                  <table class="tabla-compra" style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -150,6 +150,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                 alt="icono de editar"
                                 height={12}
                                 width={12}
+                                style={{ marginRight: '6px' }}
                                 onClick$={() => {
                                   ctx_index_compra.cC = compra;
                                   // ctx_index_compra.inddd = index;

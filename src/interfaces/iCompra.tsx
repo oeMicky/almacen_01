@@ -70,6 +70,7 @@ export interface ICompra {
   referenciaNumero: number;
 
   contabilizarOperaciones: boolean;
+  asientoContableObligatorio: boolean;
   asientoContable: any;
   totalDebePEN: any;
   totalHaberPEN: any;

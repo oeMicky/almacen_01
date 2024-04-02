@@ -15,6 +15,7 @@ import { getTipoCambio } from '~/apis/apisExternas.api';
 import BuscarDetraccionPorcentaje from './buscarDetraccionPorcentaje';
 import BuscarCuentaContable from '../asientoContable/buscarCuentaContable';
 import BorrarCuentaContable from './borrarCuentaContable';
+import ErrorDiferenciaPartidaDoble from './errorDiferenciaPartidaDoble';
 // import { isKeyObject } from 'util/types';
 
 export const CTX_NEW_EDIT_COMPRA = createContextId<any>('new_editCompra');
@@ -37,6 +38,9 @@ export default component$(
 
       mostrarPanelBorrarCuentaContable: false,
       borrar_idAuxiliarCuentaContable: 0,
+
+      mostrarPanelErrorDiferenciaPartidaDoble: false,
+      continuarConRegistroCompra: '',
     });
     useContextProvider(CTX_NEW_EDIT_COMPRA, definicion_CTX_NEW_EDIT_COMPRA);
     //#endregion DEFINICION CTX_NEW_EDIT_COMPRA
@@ -152,6 +156,10 @@ export default component$(
           typeof props.compraSeleccionada.contabilizarOperaciones !== 'undefined'
             ? props.compraSeleccionada.contabilizarOperaciones
             : parametrosGlobales.contabilizarOperaciones,
+        asientoContableObligatorio:
+          typeof props.compraSeleccionada.asientoContableObligatorio === 'undefined'
+            ? true
+            : props.compraSeleccionada.asientoContableObligatorio,
         asientoContable: props.compraSeleccionada.asientoContable ? props.compraSeleccionada.asientoContable : [],
         totalDebePEN: props.compraSeleccionada.totalDebePEN ? props.compraSeleccionada.totalDebePEN : -1,
         totalHaberPEN: props.compraSeleccionada.totalHaberPEN ? props.compraSeleccionada.totalHaberPEN : 0,
@@ -627,6 +635,15 @@ export default component$(
     });
     //#endregion FIJAR MONTOS CUENTA CONTABLE
 
+    // const respuestaErrorPARTIDADOBLE = new Promise(function (myResolve, myReject) {
+    //   let x = false;
+    //   if (x) {
+    //     myResolve('true rosas');
+    //   } else {
+    //     myReject('false clavel');
+    //   }
+    // });
+
     //#region REGISTRAR COMPRA
     const registrarCompra = $(async () => {
       if (definicion_CTX_COMPRA.periodo.toString() === '') {
@@ -635,8 +652,23 @@ export default component$(
         return;
       }
       if (definicion_CTX_COMPRA.codigoTCP === '') {
-        alert('Ingrese el TCP');
+        alert('Seleccione el Tipo de Comprobante de Pago');
         document.getElementById('se_tcp')?.focus();
+        return;
+      }
+      if (definicion_CTX_COMPRA.codigoTipoDocumentoIdentidad === '') {
+        alert('Identifique al proveedor :|');
+        document.getElementById('in_NumeroDocumentoIdentidad')?.focus();
+        return;
+      }
+      if (definicion_CTX_COMPRA.numeroIdentidad === '') {
+        alert('Identifique al proveedor');
+        document.getElementById('img_buscarProveedor')?.focus();
+        return;
+      }
+      if (definicion_CTX_COMPRA.razonSocialNombre === '') {
+        alert('Identifique al proveedor (R.S.)');
+        document.getElementById('img_buscarProveedor')?.focus();
         return;
       }
       if (definicion_CTX_COMPRA.fecha === '') {
@@ -667,21 +699,6 @@ export default component$(
         return;
       } else {
         console.log('nume', parseInt(definicion_CTX_COMPRA.numero.toString()));
-      }
-      if (definicion_CTX_COMPRA.codigoTipoDocumentoIdentidad === '') {
-        alert('Identifique al proveedor :|');
-        document.getElementById('in_NumeroDocumentoIdentidad')?.focus();
-        return;
-      }
-      if (definicion_CTX_COMPRA.numeroIdentidad === '') {
-        alert('Identifique al proveedor (N.I.)');
-        document.getElementById('img_buscarProveedor')?.focus();
-        return;
-      }
-      if (definicion_CTX_COMPRA.razonSocialNombre === '') {
-        alert('Identifique al proveedor (R.S.)');
-        document.getElementById('img_buscarProveedor')?.focus();
-        return;
       }
       if (definicion_CTX_COMPRA.enDolares) {
         if (definicion_CTX_COMPRA.tipoCambio === '') {
@@ -736,7 +753,7 @@ export default component$(
       } else {
         definicion_CTX_COMPRA.retencionPorcentaje = '';
       }
-      //NOATT DE CREDITO / NOTA DE DEBITO
+      //NOTA DE CREDITO / NOTA DE DEBITO
       if (definicion_CTX_COMPRA.codigoTCP === '07' || definicion_CTX_COMPRA.codigoTCP === '08') {
         if (definicion_CTX_COMPRA.referenciaFecha === '') {
           alert('Ingrese la fecha de referencia de NC/ND');
@@ -814,8 +831,8 @@ export default component$(
         definicion_CTX_COMPRA.referenciaSerie = '';
         definicion_CTX_COMPRA.referenciaNumero = 0;
       }
-      // CONTABILIZAR OPERACIONES
-      if (definicion_CTX_COMPRA.contabilizarOperaciones) {
+      // CONTABILIZAR
+      if (definicion_CTX_COMPRA.contabilizarOperaciones && definicion_CTX_COMPRA.asientoContableObligatorio) {
         if (definicion_CTX_COMPRA.totalDebePEN !== definicion_CTX_COMPRA.totalHaberPEN) {
           alert('No se cumple la partida doble, verifique.');
           document.getElementById('btn_AddCuentaContable_COMPRA')?.focus();
@@ -825,7 +842,25 @@ export default component$(
           alert('Existe diferencia entre el monto total y la partida doble, verifique.');
           document.getElementById('btn_AddCuentaContable_COMPRA')?.focus();
           return;
+          // console.log('antes del analisis PD 0', !definicion_CTX_NEW_EDIT_COMPRA.continuarConRegistroCompra);
+          // definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelErrorDiferenciaPartidaDoble = true;
+          // respuestaErrorPARTIDADOBLE.then((value) => console.log(`${value}`)).catch((reason) => console.log(`${reason}`));
+          // // const TTT = respuestaErrorPARTIDADOBLE;
+          // // console.log(
+          // //   'TTT',
+          // //   TTT.then((value) => console.log(`${value}`)).catch((reason) => console.log(`${reason}`))
+          // // );
+          // // break;
+          // console.log('antes del analisis PD 1', !definicion_CTX_NEW_EDIT_COMPRA.continuarConRegistroCompra);
+          // if (!definicion_CTX_NEW_EDIT_COMPRA.continuarConRegistroCompra) {
+          //   console.log('dentro del if ERROR');
+          //   document.getElementById('btn_AddCuentaContable_COMPRA')?.focus();
+          //   return;
+          // }
+          // console.log('sali del if ERROR');
         }
+      } else {
+        definicion_CTX_COMPRA.asientoContable = [];
       }
       //
       console.log('definicion_CTX_COMPRA', definicion_CTX_COMPRA);
@@ -833,6 +868,8 @@ export default component$(
       ctx_index_compra.mostrarSpinner = true;
       //enviar datos al SERVIDOR
       const compraGRABADA = await inUpCompra({
+        idLibroDiario: parametrosGlobales.idLibroDiario,
+
         idCompra: definicion_CTX_COMPRA._id,
         idGrupoEmpresarial: definicion_CTX_COMPRA.idGrupoEmpresarial,
         idEmpresa: definicion_CTX_COMPRA.idEmpresa,
@@ -912,6 +949,7 @@ export default component$(
         //********************************************** */
         //***********ASIENTO CONTABLE********* */
         contabilizarOperaciones: definicion_CTX_COMPRA.contabilizarOperaciones,
+        asientoContableObligatorio: definicion_CTX_COMPRA.asientoContableObligatorio,
         asientoContable: definicion_CTX_COMPRA.asientoContable,
         totalDebePEN: definicion_CTX_COMPRA.totalDebePEN,
         totalHaberPEN: definicion_CTX_COMPRA.totalHaberPEN,
@@ -928,14 +966,6 @@ export default component$(
 
       const compraData = compraGRABADA.data;
       console.log('la comp', compraData[0]);
-
-      // if (definicion_CTX_COMPRA._id === '') {
-      //   ctx_index_compra.miscCs.push(comp[0]);
-      //   console.log('first INSER tandooooooo');
-      //   ctx_index_compra.insert_Compra = true;
-      // } else {
-      //   ctx_index_compra.update_Compra = true;
-      // }
 
       ctx_index_compra.mostrarSpinner = false;
 
@@ -1009,6 +1039,7 @@ export default component$(
         //********************************************** */
         //***********ASIENTO CONTABLE********* */
         //  definicion_CTX_COMPRA.contabilizarOperaciones;
+        definicion_CTX_COMPRA.asientoContableObligatorio = true;
         definicion_CTX_COMPRA.asientoContable = [];
         definicion_CTX_COMPRA.totalDebePEN = 0;
         definicion_CTX_COMPRA.totalHaberPEN = 0;
@@ -1025,7 +1056,7 @@ export default component$(
         }
 
         //----------
-        alert('Registro de compra satisfactorio!!!');
+        alert('✅ Registro de compra satisfactorio!!!');
       }
     });
     //#endregion REGISTRAR COMPRA
@@ -1057,6 +1088,16 @@ export default component$(
             })}
           />
           <ImgButton
+            src={images.see}
+            alt="Icono de cerrar"
+            height={16}
+            width={16}
+            title="parametrosGlobales"
+            onClick={$(() => {
+              console.log('parametrosGlobales', parametrosGlobales);
+            })}
+          />
+          {/* <ImgButton
             src={images.see}
             alt="Icono de cerrar"
             height={16}
@@ -1101,10 +1142,10 @@ export default component$(
             onClick={$(() => {
               console.log('IMPUESTO,TOTAL', IMPUESTO, TOTAL);
             })}
-          />
+          /> */}
         </div>
         {/* TITULO */}
-        <h3 style={{ fontSize: '0.8rem' }}>Compra</h3>
+        <h3 style={{ fontSize: '0.8rem' }}>Compra - {parametrosGlobales.RazonSocial}</h3>
         {/* FORMULARIO */}
         <div class="add-form">
           {/* GENERALES */}
@@ -1214,7 +1255,7 @@ export default component$(
                     src={images.searchPLUS}
                     height={16}
                     width={16}
-                    style={{ padding: '2px' }}
+                    style={{ marginLeft: '2px' }}
                     // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                     onClick$={() => (definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona = true)}
                   />
@@ -1475,6 +1516,7 @@ export default component$(
                     id="in_Serie"
                     style={{ width: '100%' }}
                     type="text"
+                    maxLength={4}
                     autoFocus
                     placeholder="Add serie"
                     value={definicion_CTX_COMPRA.serie}
@@ -1497,6 +1539,7 @@ export default component$(
                     id="in_Numero"
                     style={{ width: '100%' }}
                     type="number"
+                    maxLength={8}
                     // pattern="[0-9]*"
                     // pattern="[0-9]{1,25}"
                     // required
@@ -2053,6 +2096,33 @@ export default component$(
             {/* OPERACION CONTABLE */}
             {definicion_CTX_COMPRA.contabilizarOperaciones && (
               <div>
+                {/* Asiento contable OBLIGATORIO*/}
+                <div>
+                  <div style={{ marginBottom: '4px' }}>
+                    <input
+                      id="chk_asientoContableObligatorio_COMPRA"
+                      type="checkbox"
+                      title="Asiento contable obligatorio"
+                      style={{ margin: '2px' }}
+                      checked={definicion_CTX_COMPRA.asientoContableObligatorio}
+                      onChange$={(e) => {
+                        definicion_CTX_COMPRA.asientoContableObligatorio = (e.target as HTMLInputElement).checked;
+                      }}
+                      onKeyPress$={(e) => {
+                        if (e.key === 'Enter') {
+                          document.getElementById('btn_AddCuentaContable_COMPRA')?.focus();
+                        }
+                      }}
+                      onFocusin$={(e) => {
+                        (e.target as HTMLInputElement).select();
+                      }}
+                    />
+                    <label for="chk_asientoContableObligatorio_COMPRA" style={{ marginLeft: '2px' }}>
+                      Asiento contable obligatorio
+                    </label>
+                  </div>
+                </div>
+
                 <div class="form-control">
                   <button
                     id="btn_AddCuentaContable_COMPRA"
@@ -2078,7 +2148,7 @@ export default component$(
                 </div>
                 <div class="form-control">
                   {definicion_CTX_COMPRA.asientoContable.length > 0 ? (
-                    <table style={{ fontSize: '0.7em', fontWeight: 'lighter', margin: '5px 0' }}>
+                    <table style={{ fontSize: '0.8em', fontWeight: 'lighter', margin: '5px 0' }}>
                       <thead>
                         <tr>
                           <th>Ítem</th>
@@ -2242,7 +2312,7 @@ export default component$(
                       </tfoot>
                     </table>
                   ) : definicion_CTX_COMPRA.contabilizarOperaciones ? (
-                    <i style={{ fontSize: '0.7rem' }}>No existen cuentas contables</i>
+                    <i style={{ fontSize: '0.9rem' }}>No existen cuentas contables</i>
                   ) : (
                     ''
                   )}
@@ -2261,6 +2331,15 @@ export default component$(
                     <BorrarCuentaContable borrarCuentaContable={borrarCuentaContable} />
                   </div>
                 )}
+              </div>
+            )}
+            {definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelErrorDiferenciaPartidaDoble && (
+              <div class="modal">
+                <ErrorDiferenciaPartidaDoble
+                // ejercicio={props.ejercicio}
+                // idPlanContable={idPlanContable.value}
+                // tipoDefault={definicion_CTX_COMPRA.codigoTCP === '07' ? false : true}
+                />
               </div>
             )}
           </div>
