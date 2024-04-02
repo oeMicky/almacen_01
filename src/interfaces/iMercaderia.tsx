@@ -85,6 +85,7 @@ export interface IMercaderiaIN {
 
   costoPEN: any;
 
+  costoDeInicioPEN: any;
   precioPEN: any;
 }
 

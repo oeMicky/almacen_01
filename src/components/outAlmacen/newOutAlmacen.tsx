@@ -347,7 +347,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 96%, 1096px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -382,7 +382,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3 style={{ fontSize: '0.8rem' }}>Out almacén</h3>
+        <h3 style={{ fontSize: '0.8rem' }}>Out almacén - {parametrosGlobales.RazonSocial}</h3>
         {/* ----------------------------------------------------- */}
         {/* GENERALES */}
         <div>
@@ -490,7 +490,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
           </div>
           {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado && (
             <div class="modal">
@@ -610,7 +610,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
           </div>
           {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
@@ -633,7 +633,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 />
               </div>
             </div>
-            <hr style={{ margin: '5px 0' }}></hr>
+            <br></br>
           </div>
           {/* ----------------------------------------------------- */}
         </div>
@@ -769,7 +769,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               </div>
             )}
           </div>
-          <hr style={{ margin: '5px 0' }}></hr>
+          <br></br>
         </div>
         {/* ----------------------------------------------------- */}
         {/* BOTON  MERCADERIAS  OUT */}

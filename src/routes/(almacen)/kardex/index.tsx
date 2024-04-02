@@ -4,7 +4,7 @@ import Kardex from '~/components/kardex/kardex';
 import Kardexs from '~/components/kardex/kardexs';
 import TablaMercaderiasKardex from '~/components/kardex/tablaMercaderiasKardex';
 import NewEditMercaderiaIN from '~/components/miscelanea/mercaderiaIN/newEditMercaderiaIN';
-import ImgButton from '~/components/system/imgButton';
+// import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_INDEX_KARDEX = createContextId<any>('ctx_index_kardex__');
@@ -31,7 +31,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: 'fre', //cadena.value,
+    cadenaABuscar: '', //cadena.value,
   });
   //#endregion INICIALIZANDO
 
@@ -81,7 +81,7 @@ export default component$(() => {
         <label style={{ marginRight: '10px' }}>Buscar </label>
         <input
           id="in_CodigoDescripcion_KARDEX"
-          style={{ width: '157px', marginLeft: '5px' }}
+          style={{ width: '157px', marginLeft: '4px', marginRight: '4px' }}
           type="text"
           placeholder="Descripción"
           value={parametrosBusqueda.cadenaABuscar}
@@ -97,15 +97,16 @@ export default component$(() => {
             }
           }}
         />
-        <ImgButton
+        <input
+          type="image"
           src={images.searchPLUS}
           alt="Icono de buscar de mercadería"
           height={16}
           width={16}
           title="Buscar datos de mercadería"
-          onClick={$(() => {
+          onClick$={() => {
             localizarMercaderiasKARDEX();
-          })}
+          }}
         />
         <div style={{ margin: '0 5px' }}>
           {/* <ImgButton

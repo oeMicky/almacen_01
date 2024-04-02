@@ -11,7 +11,7 @@ import Spinner from '~/components/system/spinner';
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
 
-export default component$((props: { contexto: string; esAlmacen: boolean; igv: number }) => {
+export default component$((props: { contexto: string; esAlmacen: boolean; igv: number; motivo?: string }) => {
   //#region DEFINICION CTX_BUSCAR_MERCADERIA_IN - para eDITAR - para sELECCIONAR
   const definicion_CTX_BUSCAR_MERCADERIA_IN = useStore({
     mM: [],
@@ -49,6 +49,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
+  const verAplicacion = useSignal(false);
   const verLineaMarca = useSignal(false);
   const buscarMercaderiasIN = useSignal(0);
   const parametrosBusqueda = useStore({
@@ -96,7 +97,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   return (
     <div
       style={
-        verLineaMarca.value
+        verLineaMarca.value || verAplicacion.value
           ? {
               width: 'clamp(330px, 86%, 1112px)',
               // width: 'auto',
@@ -177,35 +178,18 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                   adicionarMercaderiasIN();
                 }}
               />
-              {/* <ImgButton
-                src={images.searchPLUS}
-                alt="Icono de buscar de mercadería"
-                height={16}
-                width={16}
-                title="Buscar datos de mercadería"
-                onClick={$(() => {
-                  localizarMercaderiasIN();
-                })}
-              />
-              <ImgButton
-                src={images.add}
-                alt="Icono de add mercadería"
-                height={16}
-                width={16}
-                title="Registar nueva mercadería"
-                onClick={$(() => {
-                  adicionarMercaderiasIN();
-                })}
-              /> */}
             </div>
           </div>
           {/* Buscar por: Aplicacion */}
-          <div>
-            <div style={{ margin: '0 auto' }}>
+          <div style={{ display: 'flex' }}>
+            {/* <div style={{ margin: '0 auto' }}> */}
+            <div>
               <input
                 id="in_Aplicacion_BUSCAR_MERCADERIA_IN"
                 type="checkbox"
                 placeholder="Buscar por aplicación"
+                // checked={props.motiSelec.activo}
+
                 onChange$={(e) => {
                   if ((e.target as HTMLInputElement).checked) {
                     parametrosBusqueda.buscarPor = 'Aplicación';
@@ -226,7 +210,59 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 //   }
                 // }}
               />
-              <label for="in_Aplicacion_BUSCAR_MERCADERIA_IN">Aplicación</label>
+              <label for="in_Aplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: '16px' }}>
+                Aplicación
+              </label>
+            </div>
+            <div>
+              <input
+                id="in_verAplicacion_BUSCAR_MERCADERIA_IN"
+                type="checkbox"
+                placeholder="Buscar por aplicación"
+                checked={verAplicacion.value}
+                onChange$={(e) => {
+                  verAplicacion.value = (e.target as HTMLInputElement).checked;
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+                // onInput$={(e) => {
+                //   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+                // }}
+                // onFocusin$={(e) => {
+                //   (e.target as HTMLInputElement).select();
+                // }}
+                // onKeyPress$={(e) => {
+                //   if (e.key === 'Enter') {
+                //     localizarMercaderiasOUT();
+                //   }
+                // }}
+              />
+              <label for="in_verAplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: '16px' }}>
+                Ver Aplicacion
+              </label>
+            </div>
+            <div>
+              <input
+                id="in_verLineaMarca_BUSCAR_MERCADERIA_IN"
+                type="checkbox"
+                placeholder="Buscar por aplicación"
+                checked={verLineaMarca.value}
+                onChange$={(e) => {
+                  verLineaMarca.value = (e.target as HTMLInputElement).checked;
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+                // onInput$={(e) => {
+                //   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+                // }}
+                // onFocusin$={(e) => {
+                //   (e.target as HTMLInputElement).select();
+                // }}
+                // onKeyPress$={(e) => {
+                //   if (e.key === 'Enter') {
+                //     localizarMercaderiasOUT();
+                //   }
+                // }}
+              />
+              <label for="in_verLineaMarca_BUSCAR_MERCADERIA_IN">Ver Linea / Marca</label>
             </div>
           </div>
         </div>
@@ -238,7 +274,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
               parametrosBusqueda={parametrosBusqueda}
               contexto={props.contexto}
               esAlmacen={props.esAlmacen}
+              verAplicacion={verAplicacion.value}
               verLineaMarca={verLineaMarca.value}
+              motivo={props.motivo}
               //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
               //   parametrosBusqueda={parametrosBusqueda}
             />
@@ -254,6 +292,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 contexto={'buscar_mercaderia_in'}
                 contextoParaDocumento={props.contexto}
                 igv={props.igv}
+                motivo={props.motivo}
               />
             </div>
           )}

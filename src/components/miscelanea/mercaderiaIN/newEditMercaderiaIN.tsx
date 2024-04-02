@@ -104,7 +104,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     promedioCostoUnitarioMovil: props.mercaSeleccio.promedioCostoUnitarioMovil
       ? props.mercaSeleccio.promedioCostoUnitarioMovil
       : '',
+
+    costoDeInicioPEN: props.mercaSeleccio.costoDeInicioPEN ? props.mercaSeleccio.costoDeInicioPEN : 0,
     costoPEN: props.mercaSeleccio.costoPEN ? props.mercaSeleccio.costoPEN : 0,
+
     precioPEN: props.mercaSeleccio.precioPEN ? props.mercaSeleccio.precioPEN : 0,
   });
   useContextProvider(CTX_MERCADERIA_IN, definicion_CTX_MERCADERIA_IN);
@@ -470,6 +473,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
 
       equivalencias: definicion_CTX_MERCADERIA_IN.equivalencias,
 
+      costoDeInicioPEN: definicion_CTX_MERCADERIA_IN.costoDeInicioPEN,
       // totalCantidadSaldo: props.mercaSeleccio.totalCantidadSaldo ? props.mercaSeleccio.totalCantidadSaldo : '',
       // costoPEN: props.mercaSeleccio.costoPEN ? props.mercaSeleccio.costoPEN : 0,
       // precioPEN: props.mercaSeleccio.precioPEN ? props.mercaSeleccio.precioPEN : 0,

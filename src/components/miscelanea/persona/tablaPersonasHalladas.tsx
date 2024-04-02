@@ -236,7 +236,7 @@ export default component$(
             <>
               {ctx_buscar_persona.misPersonas.length > 0 ? (
                 <>
-                  <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                  <table style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Ítem</th>
@@ -272,7 +272,7 @@ export default component$(
                                 title="Seleccionar persona"
                                 height={12}
                                 width={12}
-                                style={{ marginRight: '2px' }}
+                                style={{ marginRight: '4px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   console.log('persoLocali', persoLocali);
@@ -338,7 +338,7 @@ export default component$(
                 </>
               ) : (
                 <div>
-                  <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                  <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                 </div>
               )}
             </>

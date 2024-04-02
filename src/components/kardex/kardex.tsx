@@ -57,7 +57,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 900px)',
+        width: 'clamp(330px, 96%, 1112px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -95,7 +95,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
         {/* ENCABEZADO */}
         <div style={{ marginBottom: '10px' }}>
           {/* MERCADERIA */}
-          <div style={{ fontSize: '0.8em' }}>
+          <div>
             <div style={{ margin: '5px 0' }}>Código:{` ${props.mercaSelecci.codigo} `}</div>
             <div style={{ margin: '5px 0' }}>Descripción:{` ${props.mercaSelecci.descripcion}`}</div>
             <div style={{ margin: '5px 0' }}>Linea/Tipo:{` ${props.mercaSelecci.lineaTipo}`}</div>
@@ -122,7 +122,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
               <>
                 {misMovimientos.length > 0 ? (
                   <>
-                    <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}>
+                    <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
                       <thead>
                         <tr>
                           <th>FISMA</th>

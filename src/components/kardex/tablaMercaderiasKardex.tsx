@@ -1,5 +1,5 @@
-import { $, Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
-import ImgButton from '../system/imgButton';
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
+// import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import type { IMercaderiaIN } from '~/interfaces/iMercaderia';
 import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
@@ -53,7 +53,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
           <>
             {misMercaderiasKARDEX.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.6em', fontWeight: 'lighter ' }}>
+                <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
                       <th>Descripción</th>
@@ -118,13 +118,15 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                             {KARDEXS.length === 0 ? 'No' : 'Si'}
                           </td>
                           <td data-label="Acciones" class="acciones">
-                            <ImgButton
+                            <input
+                              type="image"
                               src={images.see}
                               alt="icono de adicionar"
                               height={14}
                               width={14}
                               title="Ver kardex/s"
-                              onClick={$(() => {
+                              style={{ marginRight: '8px' }}
+                              onClick$={() => {
                                 console.log('mercaINLocali', mercaINLocali);
                                 if (mercaINLocali.KARDEXS.length === 0) {
                                   alert('No se localizan kardex/s');
@@ -144,21 +146,22 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                   ctx_index_kardex.mostrarPanelKARDEXS = true;
                                   console.log('la mercaSeleccionada KARDEXS', ctx_index_kardex.mM);
                                 }
-                              })}
+                              }}
                             />
-                            <ImgButton
+                            <input
+                              type="image"
                               src={images.edit}
                               alt="icono de editar"
                               height={14}
                               width={14}
                               title="Editar mercadería"
-                              onClick={$(() => {
+                              onClick$={() => {
                                 ctx_index_kardex.mM = mercaINLocali;
                                 ctx_index_kardex.mostrarPanelNewEditMercaderiaIN = true;
                                 //   ctx_buscar_mercaderia_in.mM = mercaINLocali;
                                 //   ctx_buscar_mercaderia_in.mostrarPanelNewEditMercaderiaIN = true;
                                 console.log('la merca A Editar IN-->', ctx_index_kardex.mM);
-                              })}
+                              }}
                             />
                           </td>
                         </tr>

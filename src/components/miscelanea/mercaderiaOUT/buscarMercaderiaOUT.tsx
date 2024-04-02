@@ -52,6 +52,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
+  const verAplicacion = useSignal(false);
   const verLineaMarca = useSignal(false);
   const buscarMercaderiasOUT = useSignal(0);
   const parametrosBusqueda = useStore({
@@ -90,7 +91,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
     <div
       class="container-modal"
       style={
-        verLineaMarca.value
+        verLineaMarca.value || verAplicacion.value
           ? {
               width: 'clamp(330px, 86%, 1112px)',
               // width: 'auto',
@@ -190,6 +191,29 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
               />
               <label for="in_Aplicacion_MICE">Aplicación</label>
             </div>
+            <div style={{ marginRight: '12px' }}>
+              <input
+                id="in_VerAplicacion_MICE"
+                type="checkbox"
+                placeholder="Ver aplicación"
+                onChange$={(e) => {
+                  verAplicacion.value = (e.target as HTMLInputElement).checked;
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+                // onInput$={(e) => {
+                //   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+                // }}
+                // onFocusin$={(e) => {
+                //   (e.target as HTMLInputElement).select();
+                // }}
+                // onKeyPress$={(e) => {
+                //   if (e.key === 'Enter') {
+                //     localizarMercaderiasOUT();
+                //   }
+                // }}
+              />
+              <label for="in_VerAplicacion_MICE">Ver aplicación</label>
+            </div>
             <div>
               <input
                 id="in_VerLineaMarca_MICE"
@@ -223,6 +247,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
               parametrosBusqueda={parametrosBusqueda}
               contexto={props.contexto}
               esAlmacen={props.esAlmacen}
+              verAplicacion={verAplicacion.value}
               verLineaMarca={verLineaMarca.value}
               //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
               //   parametrosBusqueda={parametrosBusqueda}

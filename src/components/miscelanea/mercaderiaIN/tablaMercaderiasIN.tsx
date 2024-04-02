@@ -4,6 +4,7 @@ import { images } from '~/assets';
 import type { IMercaderiaIN } from '~/interfaces/iMercaderia';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
+import { formatear_6Decimales } from '~/functions/comunes';
 
 export default component$(
   (props: {
@@ -11,7 +12,9 @@ export default component$(
     parametrosBusqueda: any;
     contexto: string;
     esAlmacen: boolean;
+    verAplicacion: boolean;
     verLineaMarca: boolean;
+    motivo?: string;
   }) => {
     useStylesScoped$(style);
 
@@ -81,11 +84,20 @@ export default component$(
                     <thead>
                       <tr>
                         <th>Descripción</th>
+                        <th style={props.verAplicacion ? '' : { display: 'none' }}>Aplicación</th>
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Marca</th>
                         <th>Stock</th>
                         <th>Uni</th>
-                        {props.esAlmacen ? <th>Costo Promd. Uni PEN</th> : <th>Precio Uni PEN</th>}
+                        {props.esAlmacen ? (
+                          props.motivo === 'APERTURA DE INVENTARIO' ? (
+                            <th>Costo Inicio PEN</th>
+                          ) : (
+                            <th>Costo Promd PEN</th>
+                          )
+                        ) : (
+                          <th>Precio Uni PEN</th>
+                        )}
                         <th>Kx</th>
                         <th>Acciones</th>
                       </tr>
@@ -100,6 +112,7 @@ export default component$(
                           marca,
                           totalCantidadSaldo,
                           unidad,
+                          costoDeInicioPEN,
                           precioPEN,
                           promedioCostoUnitarioMovil,
                           KARDEXS,
@@ -117,6 +130,9 @@ export default component$(
                             }
                           >
                             <td data-label="Descripción">{descripcion}</td>
+                            <td data-label="Aplicación" style={props.verAplicacion ? '' : { display: 'none' }}>
+                              {aplicacion}
+                            </td>
                             <td data-label="Linea/Tipo" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {lineaTipo}
                             </td>
@@ -128,18 +144,28 @@ export default component$(
                             </td>
                             <td data-label="Uni">{unidad}</td>
                             {props.esAlmacen ? (
-                              <td data-label="Promd.Costo PEN">
-                                {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
-                                  ? promedioCostoUnitarioMovil.$numberDecimal
+                              props.motivo === 'APERTURA DE INVENTARIO' ? (
+                                <td data-label="Costo Inicio PEN" class="comoNumero">
+                                  {typeof costoDeInicioPEN !== 'undefined' && costoDeInicioPEN !== null
+                                    ? costoDeInicioPEN.$numberDecimal
+                                      ? formatear_6Decimales(costoDeInicioPEN.$numberDecimal)
+                                      : costoDeInicioPEN
+                                    : '_'}
+                                </td>
+                              ) : (
+                                <td data-label="Costo Promd PEN" class="comoNumero">
+                                  {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
                                     ? promedioCostoUnitarioMovil.$numberDecimal
-                                    : promedioCostoUnitarioMovil
-                                  : '_'}
-                              </td>
+                                      ? formatear_6Decimales(promedioCostoUnitarioMovil.$numberDecimal)
+                                      : promedioCostoUnitarioMovil
+                                    : '_'}
+                                </td>
+                              )
                             ) : (
-                              <td data-label="Precio PEN">
+                              <td data-label="Precio PEN" class="comoNumero">
                                 {typeof precioPEN !== 'undefined' && precioPEN !== null
                                   ? precioPEN.$numberDecimal
-                                    ? precioPEN.$numberDecimal
+                                    ? formatear_6Decimales(precioPEN.$numberDecimal)
                                     : precioPEN
                                   : '_'}
                               </td>

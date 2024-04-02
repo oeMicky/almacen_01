@@ -61,7 +61,7 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
           <>
             {misVentas100.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}>
+                <table style={{ fontSize: '0.9em', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -135,7 +135,7 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                               height={12}
                               width={12}
                               // style={{ padding: '2px' }}
-                              style={{ margin: '2px' }}
+                              // style={{ margin: '2px' }}
                               // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 if (typeof idOrdenServicio !== 'undefined' && idOrdenServicio !== '') {

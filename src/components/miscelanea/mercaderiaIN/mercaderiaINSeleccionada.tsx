@@ -14,6 +14,7 @@ export default component$(
     contexto: string;
     contextoParaDocumento: string;
     igv: number;
+    motivo?: string;
   }) => {
     //#region CONTEXTOS
     let documento: any = [];
@@ -47,6 +48,7 @@ export default component$(
 
     useTask$(({ track }) => {
       track(() => ini.value);
+
       if (props.mercaINSelecci.inafecto || props.mercaINSelecci.exonerado) {
         // props.igv = 0;
         elIGV.value = 0;
@@ -54,6 +56,20 @@ export default component$(
       } else {
         elIGV.value = props.igv;
         IGVCalculado.value = 1 + props.igv / 100;
+      }
+
+      if (ini.value === 0) {
+        console.log('💫💫💫💫💫💫💫💫');
+        if (props.motivo === 'APERTURA DE INVENTARIO') {
+          costo.value = props.mercaINSelecci.costoDeInicioPEN.$numberDecimal;
+          if (elIGV.value === 0) {
+            precio.value = costo.value;
+          } else {
+            precio.value = costo.value * IGVCalculado.value;
+          }
+        }
+        costo.value;
+        ini.value++;
       }
     });
     //#endregion INICIALIZACION
@@ -107,14 +123,14 @@ export default component$(
               // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = false;
             })}
           />
-          {/* <ImgButton
+          <ImgButton
             src={images.see}
             alt="Icono de cerrar"
             height={16}
             width={16}
-            title="Cerrar el formulario"
-            onClick={$(() => }
-          /> */}
+            title="Ver props.mercaINSelecci"
+            onClick={$(() => console.log('props.mercaINSelecci', props.mercaINSelecci))}
+          />
         </div>
         {/* FORMULARIO */}
         <div class="add-form">

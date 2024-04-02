@@ -78,7 +78,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 984px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -121,7 +121,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
       <div class="add-form">
         <h3>Despacho de requisiciones</h3>
         {/* CLIENTE */}
-        <div style={{ fontSize: '0.8em' }}>
+        <div>
           <div style={{ margin: '5px 0' }}>ID:{` ${props.osSeleccionada._id} `}</div>
           <div style={{ margin: '5px 0' }}>
             OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>

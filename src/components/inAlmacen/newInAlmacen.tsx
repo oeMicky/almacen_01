@@ -280,10 +280,12 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       document.getElementById('in_IGV')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length < 1) {
-      alert('Agregue al menos un documento');
-      document.getElementById('bu_Add_Documento')?.focus();
-      return;
+    if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'APERTURA DE INVENTARIO') {
+      if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length < 1) {
+        alert('Agregue al menos un documento');
+        document.getElementById('bu_Add_Documento')?.focus();
+        return;
+      }
     }
     if (definicion_CTX_IN_ALMACEN.itemsMercaderias.length < 1) {
       alert('Agregue al menos una mercadería');
@@ -348,7 +350,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 96%,1000px)',
+        width: 'clamp(330px, 96%, 1112px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -381,7 +383,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3 style={{ fontSize: '0.8rem' }}>In almacén</h3>
+        <h3 style={{ fontSize: '0.8rem' }}>In almacén - {parametrosGlobales.RazonSocial}</h3>
         {/* ----------------------------------------------------- */}
         {/* GENERALES */}
         <div>
@@ -470,10 +472,15 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                           // alert('Elegio os');
                           definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado = true;
                           break;
-                        // case 'VENTA':
-                        //   //alert('Elegio venta');
-                        //   definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
-                        //   break;
+                        case 'APERTURA DE INVENTARIO':
+                          //alert('Elegio venta');
+                          // definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
+                          definicion_CTX_IN_ALMACEN.idRemitente = parametrosGlobales.idEmpresa;
+                          definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad = '6';
+                          definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad = 'RUC';
+                          definicion_CTX_IN_ALMACEN.numeroIdentidad = parametrosGlobales.RUC;
+                          definicion_CTX_IN_ALMACEN.razonSocialNombre = parametrosGlobales.RazonSocial;
+                          break;
 
                         default:
                           break;
@@ -631,7 +638,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
         </div>
         {/* ----------------------------------------------------- */}
         {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS */}
-        <div>
+        <div style={definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen === 'APERTURA DE INVENTARIO' ? { display: 'none' } : ''}>
           <div
             style={{
               display: 'flex',
@@ -757,7 +764,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           <br></br>
         </div>
         {/* ----------------------------------------------------- */}
-        {/* BOTON  MERCADERIAS  IN */}
+        {/* BOTON / TABLA -  MERCADERIAS  IN */}
         <div>
           <div
             style={{
@@ -786,12 +793,17 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
             </div>
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarMercaderiaIN && (
               <div class="modal">
-                <BuscarMercaderiaIN contexto="new_in_almacen" esAlmacen={true} igv={definicion_CTX_IN_ALMACEN.elIgv} />
+                <BuscarMercaderiaIN
+                  contexto="new_in_almacen"
+                  esAlmacen={true}
+                  igv={definicion_CTX_IN_ALMACEN.elIgv}
+                  motivo={definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen}
+                />
               </div>
             )}
             {/* TABLA MERCADERIA IN: REPUESTOS -- LUBRICANTES -- ETC */}
             {definicion_CTX_IN_ALMACEN.itemsMercaderias.length > 0 ? (
-              <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -839,7 +851,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                           <input
                             type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso}
-                            style={{ width: '60px', textAlign: 'end' }}
+                            style={{ width: '90px', textAlign: 'end' }}
                             value={
                               !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.cantidadIngresada.$numberDecimal
@@ -883,7 +895,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                           <input
                             type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso}
-                            style={{ width: '60px', textAlign: 'end' }}
+                            style={{ width: '90px', textAlign: 'end' }}
                             value={
                               !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.costoUnitarioPEN.$numberDecimal
@@ -949,7 +961,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                           <input
                             type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso}
-                            style={{ width: '60px', textAlign: 'end' }}
+                            style={{ width: '90px', textAlign: 'end' }}
                             value={
                               !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.valorUnitarioPEN.$numberDecimal
@@ -1029,21 +1041,21 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 <tfoot>
                   <tr>
                     <td colSpan={8} style={{ textAlign: 'end' }}></td>
-                    <td colSpan={1} class="comoNumero">
+                    <td colSpan={1} class="comoNumero" style={{ color: '#FFDBAB' }}>
                       {`${suma_SubPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
-                    <td colSpan={1} class="comoNumero">
+                    <td colSpan={1} class="comoNumero" style={{ color: '#FFDBAB' }}>
                       {`${suma_IGVPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
-                    <td colSpan={1} class="comoNumero">
+                    <td colSpan={1} class="comoNumero" style={{ color: '#FFDBAB' }}>
                       {`${suma_TotPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',
@@ -1053,13 +1065,13 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   </tr>
                   <tr>
                     <td colSpan={8} style={{ textAlign: 'end' }}></td>
-                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                    <td colSpan={1} style={{ textAlign: 'end', color: '#FFDBAB' }}>
                       Sub Total
                     </td>
-                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                    <td colSpan={1} style={{ textAlign: 'end', color: '#FFDBAB' }}>
                       IGV
                     </td>
-                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                    <td colSpan={1} style={{ textAlign: 'end', color: '#FFDBAB' }}>
                       Total
                     </td>
                   </tr>
@@ -1079,7 +1091,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}
-        <input type="button" value="Grabar" class="btn-centro" onClick$={() => registrarIngreso()} />
+        <input type="button" value="Grabar INGRESO" class="btn-centro" onClick$={() => registrarIngreso()} />
       </div>
     </div>
   );
