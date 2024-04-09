@@ -85,7 +85,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
           <>
             {misCotizaciones.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Cotización</th>
@@ -132,9 +132,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   src={images.check32}
                                   height={14}
                                   width={14}
-                                  style={{ padding: '2px' }}
+                                  style={{ marginRight: '8px' }}
                                   title="Selecionar cotización"
-                                  onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                  // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                   //   onClick={$(() => {
                                   //     console.log('seleccionar cotiacion', value);
                                   //     ctx_add_venta.cotizacion = value.correlativo;
@@ -187,8 +187,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 title="Editar venta"
                                 height={14}
                                 width={14}
-                                style={{ padding: '2px' }}
-                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                style={{ marginRight: '8px' }}
+                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   console.log('cotizacion', value);
                                   ctx_index_cotizacion.cC = value;
@@ -203,8 +203,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               title="Editar pdf"
                               height={14}
                               width={14}
-                              style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // style={{ padding: '2px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 cotizacionSeleccionada.value = value;
                                 clickPDF.value++;

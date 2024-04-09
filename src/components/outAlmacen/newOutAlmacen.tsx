@@ -17,11 +17,13 @@ import type { IPersona } from '~/interfaces/iPersona';
 import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(almacen)/outAlmacen';
 import {
   cerosALaIzquierda,
+  // elIdAuxiliar,
   formatear_6Decimales,
   formatoDDMMYYYY_PEN,
   hoy,
+  menosXdiasHoy,
   // redondeo2Decimales,
-  ultimoDiaDelPeriodoX,
+  // ultimoDiaDelPeriodoX,
 } from '~/functions/comunes';
 import ElSelect from '../system/elSelect';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
@@ -156,7 +158,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   // let suma_IGVPEN = 0;
   // let suma_TotPEN = 0;
 
-  const elDocSelecionado = useSignal([]);
+  const elDocSelecionado: any = useSignal([]);
   const losMotivosCargados = useSignal([]);
 
   const borrarDocumento = useStore({
@@ -374,7 +376,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           alt="Icono de cerrar"
           height={16}
           width={16}
-          title="Cerrar el formulario"
+          title="definicion_CTX_OUT_ALMACEN"
           onClick={$(() => {
             console.log('definicion_CTX_OUT_ALMACEN', definicion_CTX_OUT_ALMACEN);
           })}
@@ -382,7 +384,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3 style={{ fontSize: '0.8rem' }}>Out almacén - {parametrosGlobales.RazonSocial}</h3>
+        <h3 style={{ fontSize: '0.8rem' }}>
+          Out almacén - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+        </h3>
         {/* ----------------------------------------------------- */}
         {/* GENERALES */}
         <div>
@@ -431,12 +435,14 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 <input
                   id="in_FISMA"
                   type="date"
+                  min={menosXdiasHoy(2)}
+                  max={hoy()}
                   // disabled
                   style={{ width: '100%' }}
                   // min={primeroDelMes()}
-                  min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  // max={ultimoDelMes()}
-                  max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                  // // max={ultimoDelMes()}
+                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
                   value={definicion_CTX_OUT_ALMACEN.FISMA}
                   onChange$={(e) => {
                     definicion_CTX_OUT_ALMACEN.FISMA = (e.target as HTMLInputElement).value;
@@ -468,6 +474,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                       definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen = elSelec.value;
                       // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                       switch (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen) {
+                        case 'NOTA DE SALIDA':
+                          elDocSelecionado.value = {
+                            codigoTCP: '00',
+                            descripcionTCP: 'Otros',
+                            serie: 'NS',
+                            fecha: definicion_CTX_OUT_ALMACEN.FISMA,
+                          };
+                          definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelAdjuntarDocumento = true;
+                          break;
                         case 'ORDEN DE SERVICIO':
                           // alert('Elegio os');
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado = true;
@@ -541,24 +556,23 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 </select>
                 <input
                   type="image"
+                  src={images.searchPLUS}
                   title="Buscar datos de identidad"
                   alt="icono buscar"
                   height={16}
                   width={16}
-                  src={images.searchPLUS}
+                  style={{ marginLeft: '4px' }}
                   onClick$={() => (definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona = true)}
                 />
-                {/* <ImgButton
-                  id="img_buscarDESTINATARIO"
-                  src={images.searchPLUS}
-                  alt="Icono de buscar identidad"
+                {/* <input
+                  type="image"
+                  src={images.adjunto}
+                  title="Buscar datos de identidad"
+                  alt="icono buscar"
                   height={16}
                   width={16}
-                  title="Buscar datos de identidad"
-                  // onClick={buscarCliente}
-                  onClick={$(() => {
-                    definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona = true;
-                  })}
+                  style={{ marginLeft: '4px' }}
+                  onClick$={() => (definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona = true)}
                 /> */}
               </div>
             </div>
@@ -674,7 +688,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     <th>Fecha</th>
                     <th>Serie</th>
                     <th>Número</th>
-                    <th>Acc</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -698,11 +712,12 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                         <td data-label="Acc" class="acciones">
                           <input
                             type="image"
+                            src={images.edit}
                             title="Editar ítem"
                             alt="icono editar"
                             height={14}
                             width={14}
-                            src={images.edit}
+                            style={{ marginRight: '8px' }}
                             onClick$={() => {
                               elDocSelecionado.value = iTDocAdj;
                               definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelAdjuntarDocumento = true;
@@ -710,11 +725,11 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           />
                           <input
                             type="image"
+                            src={images.trash}
                             title="Eliminar ítem"
                             alt="icono eliminar"
                             height={14}
                             width={14}
-                            src={images.trash}
                             onClick$={() => {
                               borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
                               borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
@@ -725,35 +740,6 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                               definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteDocumentoOUT = true;
                             }}
                           />
-                          {/* <ImgButton
-                            src={images.edit}
-                            alt="icono de editar"
-                            height={16}
-                            width={16}
-                            title="Editar ítem"
-                            onClick={$(() => {
-                              // insertarEquivalencia.value = false;
-                              elDocSelecionado.value = iTDocAdj;
-                              definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelAdjuntarDocumento = true;
-                            })}
-                          /> */}
-                          {/* <ImgButton
-                            src={images.trash}
-                            alt="icono de eliminar"
-                            height={16}
-                            width={16}
-                            title="Eliminar ítem"
-                            onClick={$(() => {
-                              // definicion_CTX_IN_ALMACEN.itemsMercaderias.shift();
-                              borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
-                              borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
-                              borrarDocumento.descripcionTCP = iTDocAdj.descripcionTCP;
-                              borrarDocumento.fecha = iTDocAdj.fecha;
-                              borrarDocumento.serie = iTDocAdj.serie;
-                              borrarDocumento.numero = iTDocAdj.numero;
-                              definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteDocumentoOUT = true;
-                            })}
-                          /> */}
                         </td>
                       </tr>
                     );
@@ -772,17 +758,17 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           <br></br>
         </div>
         {/* ----------------------------------------------------- */}
-        {/* BOTON  MERCADERIAS  OUT */}
+        {/* BOTON / TABLA  MERCADERIAS  OUT */}
         <div>
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              margin: '5px 0',
+              margin: '4px 0',
             }}
           >
-            <div style={{ marginBottom: '5px' }}>
+            <div style={{ marginBottom: '8px' }}>
               <ElButton
                 id="btn_Add_Mercaderia"
                 class="btn"
@@ -813,24 +799,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     <th>Descripción</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
-                    <th>CostoPEN</th>
-                    <th>SubTotalPEN</th>
-                    <th>Acc</th>
+                    <th>Costo PEN</th>
+                    <th>Sub Total PEN</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {definicion_CTX_OUT_ALMACEN.itemsMercaderias.map((iTMercaIN: any, index: any) => {
                     const indexItemMerca = index + 1;
 
-                    // suma_SubPEN =
-                    //   suma_SubPEN +
-                    //   redondeo2Decimales(iTMercaIN.subPEN.$numberDecimal ? iTMercaIN.subPEN.$numberDecimal : iTMercaIN.subPEN);
-
-                    // suma_TotPEN =
-                    //   suma_TotPEN +
-                    //   redondeo2Decimales(iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN);
-
-                    // suma_IGVPEN = suma_TotPEN - suma_SubPEN;
                     return (
                       <tr key={iTMercaIN.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(
@@ -847,7 +824,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                         <td data-label="Cantidad" class="comoNumero">
                           <input
                             type="number"
-                            style={{ width: '60px', textAlign: 'end' }}
+                            style={{ width: '96px', textAlign: 'end' }}
                             disabled
                             value={
                               iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
@@ -872,20 +849,20 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                         <td data-label="Uni" class="comoCadena">
                           {iTMercaIN.unidadEquivalencia}
                         </td>
-                        <td data-label="costoUnitarioPEN" class="comoNumero">
+                        <td data-label="Costo Unit PEN" class="comoNumero">
                           <input
                             type="number"
-                            style={{ width: '60px', textAlign: 'end' }}
+                            style={{ width: '96px', textAlign: 'end' }}
                             disabled
                             value={
-                              iTMercaIN.costoUnitarioPEN.$numberDecimal
-                                ? iTMercaIN.costoUnitarioPEN.$numberDecimal
-                                : iTMercaIN.costoUnitarioPEN
+                              iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                ? iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                : iTMercaIN.costoUnitarioEquivalenciaPEN
                             }
                             onChange$={(e) => {
                               const costo = parseFloat((e.target as HTMLInputElement).value);
                               console.log('el costo modificado', costo);
-                              iTMercaIN.costoUnitarioPEN = costo;
+                              iTMercaIN.costoUnitarioEquivalenciaPEN = costo;
                               // let IGVCalculado;
                               // let precio;
                               // if (iTMercaIN.IGV === 0) {
@@ -898,48 +875,79 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                               // iTMercaIN.precioPEN = formatear_6Decimales(precio);
                               console.log(
                                 'el costo modificado, cant',
-                                iTMercaIN.costoUnitarioPEN,
+                                iTMercaIN.costoUnitarioEquivalenciaPEN,
                                 iTMercaIN.cantidadSacadaEquivalencia
                               );
                               iTMercaIN.subTotalPEN =
                                 (iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
                                   ? iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
                                   : iTMercaIN.cantidadSacadaEquivalencia) *
-                                (iTMercaIN.costoUnitarioPEN.$numberDecimal
-                                  ? iTMercaIN.costoUnitarioPEN.$numberDecimal
-                                  : iTMercaIN.costoUnitarioPEN);
+                                (iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                  ? iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                  : iTMercaIN.costoUnitarioEquivalenciaPEN);
                             }}
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
                             }}
                           />
                         </td>
-                        <td data-label="SubTotalPEN" style={{ textAlign: 'end' }}>
-                          {iTMercaIN.subPEN.$numberDecimal
-                            ? formatear_6Decimales(iTMercaIN.subPEN.$numberDecimal)
-                            : formatear_6Decimales(iTMercaIN.subPEN)}
+                        <td data-label="SubTotal PEN" style={{ textAlign: 'end' }}>
+                          {iTMercaIN.subEquivalenciaPEN.$numberDecimal
+                            ? formatear_6Decimales(iTMercaIN.subEquivalenciaPEN.$numberDecimal)
+                            : formatear_6Decimales(iTMercaIN.subEquivalenciaPEN)}
                         </td>
                         <td data-label="Acc" class="acciones">
-                          {/* <ImgButton
+                          <input
+                            type="image"
                             src={images.trash}
                             alt="icono de eliminar"
-                            height={16}
-                            width={16}
+                            height={12}
+                            width={12}
                             title="Eliminar ítem"
-                            onClick={$(() => {
-                              // borrarItemMerca.idAuxiliar = iTMercaIN.idAuxiliar;
-                              // borrarItemMerca.item = indexItemServi;
-                              // borrarItemMerca.codigo = iTMercaIN.codigo;
-                              // borrarItemMerca.descripcion = iTMercaIN.descripcion;
-                              // definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT = true;
-                            })}
-                          /> */}
+                            onClick$={() => {
+                              borrarItemMerca.idAuxiliar = iTMercaIN.idAuxiliar;
+                              borrarItemMerca.item = indexItemMerca;
+                              borrarItemMerca.codigo = iTMercaIN.codigo;
+                              borrarItemMerca.descripcion = iTMercaIN.descripcionEquivalencia;
+                              definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT = true;
+                            }}
+                          />
                         </td>
                       </tr>
                     );
                   })}
                 </tbody>
-                {/* <tfoot>
+              </table>
+            ) : (
+              <i style={{ fontSize: '0.7rem' }}>No existen mercaderías registradas</i>
+            )}
+            {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT && (
+              <div class="modal">
+                <BorrarItemMercaderiaOUT borrarItemMerca={borrarItemMerca} />
+              </div>
+            )}
+          </div>
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* GRABAR */}
+        <input type="button" value="Grabar" class="btn-centro" onClick$={() => registrarEgreso()} />
+      </div>
+    </div>
+  );
+});
+
+// suma_SubPEN =
+//   suma_SubPEN +
+//   redondeo2Decimales(iTMercaIN.subPEN.$numberDecimal ? iTMercaIN.subPEN.$numberDecimal : iTMercaIN.subPEN);
+
+// suma_TotPEN =
+//   suma_TotPEN +
+//   redondeo2Decimales(iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN);
+
+// suma_IGVPEN = suma_TotPEN - suma_SubPEN;
+
+{
+  /* <tfoot>
                   <tr>
                     <td colSpan={7} style={{ textAlign: 'end' }}></td>
                     <td colSpan={1} style={{ textAlign: 'end' }}>
@@ -976,22 +984,5 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                       Total
                     </td>
                   </tr>
-                </tfoot> */}
-              </table>
-            ) : (
-              <i style={{ fontSize: '0.7rem' }}>No existen mercaderías registradas</i>
-            )}
-            {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT && (
-              <div class="modal">
-                <BorrarItemMercaderiaOUT borrarItemMerca={borrarItemMerca} />
-              </div>
-            )}
-          </div>
-        </div>
-        {/* ----------------------------------------------------- */}
-        {/* GRABAR */}
-        <input type="button" value="Grabar" class="btn-centro" onClick$={() => registrarEgreso()} />
-      </div>
-    </div>
-  );
-});
+                </tfoot> */
+}

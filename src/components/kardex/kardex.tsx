@@ -96,11 +96,21 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
         <div style={{ marginBottom: '10px' }}>
           {/* MERCADERIA */}
           <div>
-            <div style={{ margin: '5px 0' }}>Código:{` ${props.mercaSelecci.codigo} `}</div>
-            <div style={{ margin: '5px 0' }}>Descripción:{` ${props.mercaSelecci.descripcion}`}</div>
-            <div style={{ margin: '5px 0' }}>Linea/Tipo:{` ${props.mercaSelecci.lineaTipo}`}</div>
-            <div style={{ margin: '5px 0' }}>Marca:{` ${props.mercaSelecci.marca}`}</div>
-            <div style={{ margin: '5px 0' }}>Unidad:{` ${props.mercaSelecci.unidad}`}</div>
+            <div style={{ margin: '5px 0', color: '#61605c' }}>
+              Código:<strong>{` ${props.mercaSelecci.codigo} `}</strong>
+            </div>
+            <div style={{ margin: '5px 0', color: '#61605c' }}>
+              Descripción:<strong> {` ${props.mercaSelecci.descripcion}`}</strong>
+            </div>
+            <div style={{ margin: '5px 0', color: '#61605c' }}>
+              Linea/Tipo:<strong> {` ${props.mercaSelecci.lineaTipo}`}</strong>
+            </div>
+            <div style={{ margin: '5px 0', color: '#61605c' }}>
+              Marca:<strong>{` ${props.mercaSelecci.marca}`}</strong>
+            </div>
+            <div style={{ margin: '5px 0', color: '#61605c' }}>
+              Unidad:<strong> {` ${props.mercaSelecci.unidad}`}</strong>
+            </div>
           </div>
         </div>
         {/*  tabla KARDEXS  */}
@@ -114,9 +124,9 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
             console.log('onRejected 🍍🍍🍍🍍');
             return <div>Fallo en la carga de datos</div>;
           }}
-          onResolved={(ordenesServicio) => {
-            console.log('onResolved 🍓🍓🍓🍓');
-            const { data } = ordenesServicio; //{ status, data, message }
+          onResolved={(kardexs) => {
+            console.log('onResolved 🍓🍓🍓🍓', kardexs);
+            const { data } = kardexs; //{ status, data, message }
             const misMovimientos: IMovimientoKARDEX[] = data;
             return (
               <>
@@ -135,7 +145,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                           <th>Costo Entrada PEN</th>
                           <th>Costo Salida PEN</th>
                           <th>Costo Saldo PEN</th>
-                          {/* <th>Acciones</th> */}
+                          {/* <th>Acc</th> */}
                         </tr>
                       </thead>
                       <tbody>
@@ -156,7 +166,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                             costoIngreso,
                             costoSalida,
                             costoSaldo,
-                            cantidadOrigen,
+                            cantidadOrigenEquivalencia,
                             unidadEquivalencia,
                           } = movimiento;
 
@@ -167,7 +177,13 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                               </td>
                               <td
                                 data-label="Cnt.Entrada"
-                                title={IS ? (cantidadOrigen ? cantidadOrigen.$numberDecimal + ' ' + unidadEquivalencia : '') : ''}
+                                title={
+                                  IS
+                                    ? cantidadOrigenEquivalencia
+                                      ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia
+                                      : ''
+                                    : ''
+                                }
                                 class="comoNumero"
                               >
                                 {cantidadIngresada.$numberDecimal
@@ -176,7 +192,13 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                               </td>
                               <td
                                 data-label="Cnt.Salida"
-                                title={IS ? '' : cantidadOrigen ? cantidadOrigen.$numberDecimal + ' ' + unidadEquivalencia : ''}
+                                title={
+                                  IS
+                                    ? ''
+                                    : cantidadOrigenEquivalencia
+                                    ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia
+                                    : ''
+                                }
                                 class="comoNumero"
                               >
                                 {cantidadSacada.$numberDecimal
@@ -213,44 +235,15 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                                   : formatear_6Decimales(costoSaldo)}
                               </td>
 
-                              {/* <td data-label="Acciones" style={{ textAlign: 'right' }}>
-                                <ImgButton
-                                  src={images.check}
+                              {/* <td data-label="Acciones" class="acciones">
+                                <input
+                                  type="image"
+                                  src={images.see}
+                                  disabled
                                   alt="icono de adicionar"
                                   height={12}
                                   width={12}
-                                  title="Seleccionar mercadería"
-                                  // onClick={$(() => {
-                                  //   console.log('mercaINLocali', mercaINLocali);
-                                  //   if (mercaINLocali.KARDEXS.length === 0) {
-                                  //     ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                  //     ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                  //     console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
-                                  //   }
-                                  //   if (mercaINLocali.KARDEXS.length === 1) {
-                                  //     ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                  //     ctx_buscar_mercaderia_in.kK = mercaINLocali.KARDEXS[0];
-                                  //     ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                  //     console.log('la mercaSeleccionada IN DIRECTA', ctx_buscar_mercaderia_in.mM);
-                                  //   }
-                                  //   if (mercaINLocali.KARDEXS.length > 1) {
-                                  //     ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                  //     ctx_buscar_mercaderia_in.mostrarPanelKardexsIN = true;
-                                  //     console.log('la mercaSeleccionada IN INDIRECTA', ctx_buscar_mercaderia_in.mM);
-                                  //   }
-                                  // })}
-                                />
-                                <ImgButton
-                                  src={images.edit}
-                                  alt="icono de editar"
-                                  height={14}
-                                  width={14}
-                                  title="Editar mercadería"
-                                  // onClick={$(() => {
-                                  //   ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                  //   ctx_buscar_mercaderia_in.mostrarPanelNewEditMercaderiaIN = true;
-                                  //   console.log('la merca A Editar IN', ctx_buscar_mercaderia_in.mM);
-                                  // })}
+                                  title="Ver movimiento"
                                 />
                               </td> */}
                             </tr>

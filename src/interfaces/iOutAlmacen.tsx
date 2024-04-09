@@ -53,3 +53,19 @@ export interface IMercaEquivalenciaOUT {
   factor: number;
   tipoEquivalencia: boolean;
 }
+
+export interface INotaSalidaReingreso {
+  _id: string;
+  // idGrupoEmpresarial: string;
+  // idEmpresa: string;
+  // idSucursal: string;
+  // idAlmacen: string;
+  // idPeriodo: string;
+  // periodo: number;
+
+  FISMA: string;
+  razonSocialNombre: string;
+
+  serie: string;
+  numero: string;
+}

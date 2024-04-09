@@ -5,7 +5,7 @@ import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newIn
 import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ElSelect from '~/components/system/elSelect';
 import ImgButton from '~/components/system/imgButton';
-import { elIdAuxiliar } from '~/functions/comunes';
+import { elIdAuxiliar, hoy } from '~/functions/comunes';
 import type { IDocumento } from '~/interfaces/iDocumento';
 
 export default component$((props: { docSelecci: any; contexto: string }) => {
@@ -18,7 +18,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
     descripcionTCP: props.docSelecci.descripcionTCP ? props.docSelecci.descripcionTCP : '',
     serie: props.docSelecci.serie ? props.docSelecci.serie : '',
     numero: props.docSelecci.numero ? props.docSelecci.numero : '', //0,
-    fecha: props.docSelecci.fecha ? props.docSelecci.fecha : '',
+    fecha: props.docSelecci.fecha ? props.docSelecci.fecha : hoy(),
     lote: props.docSelecci.lote ? props.docSelecci.lote : '',
   });
   //#endregion DEFINICION DOCUMENTO

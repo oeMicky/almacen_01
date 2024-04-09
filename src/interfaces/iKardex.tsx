@@ -18,6 +18,6 @@ export interface IMovimientoKARDEX {
   costoSalida: any;
   costoSaldo: any;
 
-  cantidadOrigen: any;
+  cantidadOrigenEquivalencia: any;
   unidadEquivalencia: any;
 }

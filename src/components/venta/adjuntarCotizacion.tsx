@@ -32,7 +32,7 @@ export default component$(() => {
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 768px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -146,24 +146,7 @@ export default component$(() => {
               buscarCotizaciones.value++;
             }}
           />
-          {/* <ImgButton
-              src={images.searchPLUS}
-              alt="Icono de busqueda por fechas"
-              height={16}
-              width={16}
-              title="Buscar por fechas"
-              onClick={$(() => {
-                if (fechas.desde > fechas.hasta) {
-                  alert('Verifique las fechas de busqueda');
-                  document.getElementById('fechaDesdeBusqueda')?.focus();
-                  return;
-                }
-                // console.log('click en lupa: parameBusqueda ', parameBusqueda);
 
-                buscarCotizaciones.value++;
-              })}
-              // onClick={buscarCotizacionesEntreFechas}
-            /> */}
           {/* </div> */}
         </div>
         {/* TABLA COTIZACIONES */}

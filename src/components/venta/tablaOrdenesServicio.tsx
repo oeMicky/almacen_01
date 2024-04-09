@@ -113,6 +113,10 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                     ctx_f_b_nc_nd.serieOrdenServicio = OS.serie;
                                     ctx_f_b_nc_nd.numeroOrdenServicio = OS.numero;
 
+                                    ctx_f_b_nc_nd.idCotizacion = '';
+                                    ctx_f_b_nc_nd.serieCotizacion = '';
+                                    ctx_f_b_nc_nd.numeroCotizacion = 0;
+
                                     ctx_f_b_nc_nd.observacion = OS.serie + ' - ' + cerosALaIzquierda(OS.numero, 8);
 
                                     ctx_f_b_nc_nd.clienteVentasVarias = OS.clienteVentasVarias;
@@ -138,12 +142,23 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                         porcentaje: parseFloat(ser.porcentaje.$numberDecimal),
 
                                         codigo: ser.codigo ? ser.codigo : '_',
+
+                                        descripcion: ser.descripcion, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
                                         descripcionEquivalencia: ser.descripcionEquivalencia, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
+
                                         cantidad: ser.cantidad.$numberDecimal,
+                                        cantidadEquivalencia: ser.cantidadEquivalencia.$numberDecimal,
+
+                                        unidad: ser.unidad ? ser.unidad : '_',
                                         unidadEquivalencia: ser.unidadEquivalencia ? ser.unidadEquivalencia : '_',
-                                        costoUnitarioPEN: 0,
+
+                                        costoUnitarioPEN: ser.costoUnitarioPEN.$numberDecimal,
+                                        costoUnitarioEquivalenciaPEN: ser.costoUnitarioEquivalenciaPEN.$numberDecimal,
+
                                         precioPEN: ser.precioPEN.$numberDecimal,
-                                        ventaPEN: ser.cantidad.$numberDecimal * ser.precioPEN.$numberDecimal,
+
+                                        ventaPEN: ser.ventaPEN.$numberDecimal,
+
                                         precioUSD: 0,
                                         ventaUSD: 0,
 
@@ -164,10 +179,14 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                       });
                                       nuevoITEM++;
                                     });
-
+                                    console.log('PASO SERVICIOS!!!');
                                     // let cuantosDespachados = 0;
                                     for (const requi of OS.requisiciones) {
-                                      if (requi.cantidadDespachada.$numberDecimal > 0) {
+                                      console.log('el requi ANALIZADO:::', requi);
+                                      if (
+                                        requi.cantidadDespachada.$numberDecimal - requi.cantidadReingresada.$numberDecimal >
+                                        0
+                                      ) {
                                         ctx_f_b_nc_nd.itemsVenta.push({
                                           idAuxiliar: parseInt(elIdAuxiliar()),
                                           idMercaderia: requi.idMercaderia,
@@ -182,12 +201,24 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                           porcentaje: parseFloat(requi.porcentaje.$numberDecimal),
 
                                           codigo: requi.codigo ? requi.codigo : '_',
+
+                                          descripcion: requi.descripcion,
                                           descripcionEquivalencia: requi.descripcionEquivalencia,
-                                          cantidad: requi.cantidadDespachada.$numberDecimal,
+
+                                          cantidad: requi.cantidad.$numberDecimal,
+                                          cantidadEquivalencia:
+                                            requi.cantidadDespachada.$numberDecimal - requi.cantidadReingresada.$numberDecimal,
+
+                                          unidad: requi.unidad,
                                           unidadEquivalencia: requi.unidadEquivalencia,
+
                                           costoUnitarioPEN: requi.costoUnitarioPEN.$numberDecimal,
+                                          costoUnitarioEquivalenciaPEN: requi.costoUnitarioEquivalenciaPEN.$numberDecimal,
+
                                           precioPEN: requi.precioPEN.$numberDecimal,
+
                                           ventaPEN: requi.ventaPEN.$numberDecimal,
+
                                           precioUSD: 0,
                                           ventaUSD: 0,
 

@@ -31,7 +31,7 @@ export default component$((props: IImgButton) => {
         marginTop: '1px',
         cursor: 'pointer',
         // borderRadius: '50%',
-        padding: '2px 2px',
+        // padding: '2px 2px',
         // filter: 'invert(1)',
         // border: ' 1px solid red',
       }}

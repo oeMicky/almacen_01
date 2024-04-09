@@ -117,3 +117,16 @@ export const getAsientoVenta = async (parametros) => {
   });
   return res.json();
 };
+
+export const sendJSONVenta = async (parametros) => {
+  console.log('//////api////////////******************sendJSONVenta');
+  console.log('parametros sendJSONVenta', parametros);
+  const res = await fetch('http://demoint.thefactoryhka.com.pe/Clients/ServiceClients.svc/Enviar', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

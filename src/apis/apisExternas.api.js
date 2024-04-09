@@ -31,3 +31,12 @@ export const getDNI = async (parametros) => {
   const elJSON = await res.json();
   return elJSON;
 };
+
+// export const sendVENTA = async (parametros) => {
+//   // console.log('//////api////////////******************ingreso a getDNI');
+//   // console.log('parametros', parametros);
+//   // console.log('first', API + '/DNI/');
+//   const res = await fetch(API + '/DNI/' + parametros);
+//   const elJSON = await res.json();
+//   return elJSON;
+// };

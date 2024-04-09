@@ -60,7 +60,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: '', // 'acce 5', //cadena.value,
+    cadenaABuscar: 'h7', // 'acce 5', //cadena.value,
   });
   //#endregion INICIALIZACION
 
@@ -154,7 +154,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
                 title="Buscar datos de mercadería"
                 height={16}
                 width={16}
-                style={{ marginLeft: '2px' }}
+                style={{ marginLeft: '4px' }}
                 onClick$={() => {
                   localizarMercaderiasOUT();
                 }}

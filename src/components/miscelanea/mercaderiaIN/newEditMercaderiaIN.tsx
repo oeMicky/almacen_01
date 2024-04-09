@@ -1262,6 +1262,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
                               height={12}
                               width={12}
                               title="Editar ítem"
+                              style={{ marginRight: '8px' }}
                               onClick$={() => {
                                 insertarEquivalencia.value = false;
                                 laEquivalencia.value = iTEqui;

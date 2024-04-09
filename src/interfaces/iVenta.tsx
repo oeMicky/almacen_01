@@ -28,7 +28,7 @@ export interface IVenta {
   telefono: string;
   actualizarEmailCliente: boolean;
 
-  igv: number;
+  igv: any;
   enDolares: boolean;
   moneda: string;
   tipoCambio: number;
@@ -92,6 +92,8 @@ export interface IVenta {
 
   facturacionElectronica: boolean;
   facturacionElectronicaAutomatica: boolean;
+
+  json: string;
 
   contabilizarOperaciones: boolean;
   asientoContable: any;

@@ -114,7 +114,7 @@ export default component$(
                                 title="Seleccionar servicio"
                                 height={14}
                                 width={14}
-                                style={{ padding: '2px' }}
+                                // style={{ padding: '2px' }}
                                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   console.log('first', requisiciones);
@@ -136,18 +136,6 @@ export default component$(
                                   }
                                 }}
                               />
-
-                              {/*   <ImgButton
-                              src={images.pdf}
-                              alt="icono de pdf"
-                              height={14}
-                              width={14}
-                              title={`Ver pdf ${ordServiLocali._id}`}
-                              onClick={$(() => {
-                                osSeleccionada.value = ordServiLocali;
-                                clickPDF.value++;
-                              })}
-                            /> */}
                             </td>
                           </tr>
                         );

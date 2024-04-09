@@ -58,10 +58,14 @@ export const formatoYYYY_MM_DD_PEN = (fecha: any) => {
 export const formatoHH_MM_SS_PEN = (fecha: any) => {
   //
   let fechaSalida = '';
-  if (!isNaN(Date.parse(fecha))) {
-    //
-    fechaSalida = fecha.substr(11, 2) + ':' + fecha.substr(14, 2) + ':' + fecha.substr(17, 2);
-    //
+  if (fecha === '') {
+    fechaSalida = '00:00:00';
+  } else {
+    if (!isNaN(Date.parse(fecha))) {
+      //
+      fechaSalida = fecha.substr(11, 2) + ':' + fecha.substr(14, 2) + ':' + fecha.substr(17, 2);
+      //
+    }
   }
   return fechaSalida;
 };

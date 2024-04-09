@@ -22,7 +22,7 @@ import type { IPersonaEdit } from '~/interfaces/iPersona';
 export const CTX_BUSCAR_PERSONA = createContextId<any>('buscar_persona');
 
 export default component$((props: { seleccionar?: string; soloPersonasNaturales: boolean; contexto?: any; rol: string }) => {
-  //#region DEFINICION CTX_BUSCAR_PERSONA - para eDITAR
+  //#region DEFINICION CTX_BUSCAR_PERSONA
   const definicion_CTX_BUSCAR_PERSONA = useStore({
     pP: [],
     misPersonas: [],
@@ -183,9 +183,9 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
       {/* FORMULARIO */}
       <div class="add-form">
         {/* TITULO */}
-        <h3 style={{ marginBottom: '10px' }}>Buscar {props.seleccionar}</h3>
+        <h3 style={{ marginBottom: '12px' }}>Buscar {props.seleccionar}</h3>
         {/* ZONA DE BUSQUEDA */}
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: '8px' }}>
           {/* Buscar por : DNI RUC */}
           <div class="form-control">
             <label>Buscar por</label>

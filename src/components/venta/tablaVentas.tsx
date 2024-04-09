@@ -17,6 +17,7 @@ import pdfVentaMG from '~/reports/MG/pdfVentaMG';
 import type { IVenta } from '~/interfaces/iVenta';
 import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
 import { parametrosGlobales } from '~/routes/login';
+import { sendJSONVenta } from '~/apis/venta.api';
 
 // interface IEstructura {
 //   _id: string;
@@ -171,10 +172,13 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
     // const xmltext = '<sometag><someothertag></someothertag></sometag>';
     // const jsonText = 'hOLA A TODOS';
 
-    const a = archivo.igvPEN.$numberDecimal > 0 ? '"totalIGV": "' + archivo.igvPEN.$numberDecimal + '",' : '';
-    const b = archivo.iscPEN.$numberDecimal > 0 ? '"totalISC": "' + archivo.iscPEN.$numberDecimal + '",' : '';
+    const a = archivo.igvPEN.$numberDecimal > 0 ? '"totalIGV": "' + redondeo2Decimales(archivo.igvPEN.$numberDecimal) + '",' : '';
+    const b = archivo.iscPEN.$numberDecimal > 0 ? '"totalISC": "' + redondeo2Decimales(archivo.iscPEN.$numberDecimal) + '",' : '';
     // const c = archivo.exportPEN.$numberDecimal > 0 ? '"totalIVAP": "' + archivo.exportPEN.$numberDecimal + '",' : '';
-    const d = archivo.otrosPEN.$numberDecimal > 0 ? '"totalOtrostributos": "' + archivo.otrosPEN.$numberDecimal + '",' : '';
+    const d =
+      archivo.otrosPEN.$numberDecimal > 0
+        ? '"totalOtrostributos": "' + redondeo2Decimales(archivo.otrosPEN.$numberDecimal) + '",'
+        : '';
     const totalesIMPUESTOS = a.trim() + b.trim() + d.trim(); //+ c.trim()
     // ultimoCaracter = totalesIMPUESTOS.substring(totalesIMPUESTOS.length - 1, totalesIMPUESTOS.length);
     // if (ultimoCaracter === ',') {
@@ -195,7 +199,8 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
 			"tipoDocumento": "${archivo.codigoTipoDocumentoIdentidad}",
 			"numDocumento": "${archivo.numeroIdentidad}",
 			"razonSocial": "${archivo.razonSocialNombre}",
-      "email": "mvizconde@msn.com"
+			"notificar": "${typeof archivo.notificar === 'undefined' ? 'NO' : archivo.notificar ? 'SI' : 'NO'}",
+      "email": "${archivo.email}"
 		},
 		"facturaNegociable": {
 			"modoPago": "${archivo.metodoPago}",
@@ -236,11 +241,11 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
         return `{ "numeroOrden": "${index + 1}",
 				"unidadMedida": "${it.unidadEquivalencia}",
 				"descripcion": "${it.descripcionEquivalencia}",
-				"cantidad": "${it.cantidad.$numberDecimal}",				
+				"cantidad": "${it.cantidadEquivalencia.$numberDecimal}",				
 				"precioVentaUnitarioItem": "${it.precioPEN.$numberDecimal}",
 				"valorUnitarioBI": "${redondeo6Decimales(it.precioPEN.$numberDecimal / (1 + porcentaje / 100))}",
 				"valorVentaItemQxBI": "${redondeo2Decimales(
-          it.cantidad.$numberDecimal * redondeo6Decimales(it.precioPEN.$numberDecimal / (1 + porcentaje / 100))
+          it.cantidadEquivalencia.$numberDecimal * redondeo6Decimales(it.precioPEN.$numberDecimal / (1 + porcentaje / 100))
         )}",
 				"montoTotalImpuestoItem": "${redondeo2Decimales(monto)}"${cadenaAddIMPUESTO}		
         \t}`;
@@ -248,7 +253,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
 		],
 		"totales": {
 			${totalesIMPUESTOS}    
-			"subtotalValorVenta": "${archivo.baseImponiblePEN.$numberDecimal}",
+			"subtotalValorVenta": "${redondeo2Decimales(archivo.baseImponiblePEN.$numberDecimal)}",
 			"montoTotalImpuestos": "${redondeo2Decimales(
         parseFloat(archivo.igvPEN.$numberDecimal) +
           parseFloat(archivo.iscPEN.$numberDecimal) +
@@ -317,7 +322,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
             <>
               {misVentas.length > 0 ? (
                 <>
-                  <table class="tabla-venta" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
+                  <table class="tabla-venta" style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -340,7 +345,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                               {indexItem}
                             </td>
                             <td data-label="Nro. Doc" class="comoCadena">
-                              {venta.tipoDocumentoIdentidad + ': ' + venta.numeroIdentidad}
+                              {venta.clienteVentasVarias ? '-' : venta.tipoDocumentoIdentidad + ': ' + venta.numeroIdentidad}
                             </td>
                             <td data-label="Cliente" class="comoCadena">
                               {venta.clienteVentasVarias ? 'Cliente ventas varias' : venta.razonSocialNombre}
@@ -378,7 +383,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                 title="Ver pdf"
                                 height={12}
                                 width={12}
-                                style={{ margin: '2px' }}
+                                style={{ marginRight: '4px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   ventaSeleccionada.value = venta;
@@ -393,7 +398,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                   title="Ver JSON"
                                   height={12}
                                   width={12}
-                                  style={{ margin: '2px' }}
+                                  style={{ marginRight: '4px' }}
                                   onClick$={() => {
                                     createAndDownloadFileJSON(venta.serie + ' - ' + venta.numero, venta);
                                   }}
@@ -412,7 +417,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                 hidden={!(typeof venta.idOrdenServicio !== 'undefined' && venta.idOrdenServicio !== '')}
                                 height={12}
                                 width={12}
-                                style={{ margin: '2px' }}
+                                style={{ marginRight: '4px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 // onClick$={() => {
                                 //   ventaSeleccionada.value = value;
@@ -427,7 +432,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                   title="Ver xml"
                                   height={12}
                                   width={12}
-                                  style={{ margin: '2px' }}
+                                  style={{ marginRight: '4px' }}
                                   // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
                                     ventaSeleccionada.value = venta;
@@ -436,6 +441,22 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                   }}
                                 />
                               )}
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
+                                src={images.send}
+                                title="Enviar JSON"
+                                height={12}
+                                width={12}
+                                style={{ marginRight: '4px' }}
+                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                onClick$={async () => {
+                                  const respuesta = await sendJSONVenta(venta.json);
+                                  console.log('respuesta:::--->>>', respuesta);
+                                  // ventaSeleccionada.value = value;
+                                  // clickPDF.value++;
+                                }}
+                              />
                             </td>
                           </tr>
                         );

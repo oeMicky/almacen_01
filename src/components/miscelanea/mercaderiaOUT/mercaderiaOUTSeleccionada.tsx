@@ -60,7 +60,7 @@ export default component$(
     //#region INICIALIZANDO
     const ini = useSignal(0);
     const cantidadSacada = useSignal(1);
-    const precioEquivalente = useSignal(0);
+    const precioEquivalencia = useSignal(0);
 
     const equivalencia = useStore<IMercaEquivalenciaOUT>({
       _id: '',
@@ -99,7 +99,7 @@ export default component$(
               equivalencia.factor,
               equivalencia.tipoEquivalencia
             );
-            precioEquivalente.value =
+            precioEquivalencia.value =
               // parseFloat(props.mercaOUTSelecci.precioPEN.$numberDecimal) *
               parseFloat(
                 props.mercaOUTSelecci.precioPEN.$numberDecimal
@@ -152,7 +152,7 @@ export default component$(
               console.log('elKardex', props.elKardex);
             })}
           />
-          <ImgButton
+          {/*   <ImgButton
             src={images.see}
             alt="Icono de cerrar"
             height={14}
@@ -162,16 +162,16 @@ export default component$(
               console.log('equivalencia', equivalencia);
             })}
           />
-          <ImgButton
+         <ImgButton
             src={images.see}
             alt="Icono de cerrar"
             height={14}
             width={14}
-            title="Cerrar el formulario"
+            title="precioEquivalencia.value"
             onClick={$(() => {
-              console.log('precioEquivalente.value', precioEquivalente.value);
+              console.log('precioEquivalencia.value', precioEquivalencia.value);
             })}
-          />
+          /> */}
         </div>
         {/* FORMULARIO */}
         <div class="add-form">
@@ -296,11 +296,12 @@ export default component$(
                       equivalencia.pesoKg = 0;
                       equivalencia.factor = 0;
                       equivalencia.tipoEquivalencia = false;
-                      precioEquivalente.value = 0;
+                      precioEquivalencia.value = 0;
                     } else {
                       const lencias = props.mercaOUTSelecci.equivalencias;
                       const laEqui = lencias.find(({ idUnidadEquivalencia }: any) => idUnidadEquivalencia === elSelec[elIdx].id);
                       console.log('laEqui', laEqui);
+                      console.log('props.mercaOUTSelecci', props.mercaOUTSelecci);
                       equivalencia._id = laEqui._id;
                       equivalencia.descripcionEquivalencia = laEqui.descripcionEquivalencia;
                       equivalencia.laEquivalencia = laEqui.laEquivalencia;
@@ -309,22 +310,34 @@ export default component$(
                       equivalencia.pesoKg = laEqui.pesoKg;
                       equivalencia.factor = laEqui.factor;
                       equivalencia.tipoEquivalencia = laEqui.tipoEquivalencia;
-                      if (typeof props.mercaOUTSelecci.precioPEN !== 'undefined') {
-                        console.log(
-                          'laEquivalencia - factor - tipoEqui',
-                          parseFloat(laEqui.laEquivalencia.$numberDecimal),
-                          equivalencia.laEquivalencia,
-                          equivalencia.factor,
-                          equivalencia.tipoEquivalencia
-                        );
-                        precioEquivalente.value =
-                          // parseFloat(props.mercaOUTSelecci.precioPEN.$numberDecimal) *
-                          parseFloat(
-                            props.mercaOUTSelecci.precioPEN.$numberDecimal
-                              ? props.mercaOUTSelecci.precioPEN.$numberDecimal
-                              : props.mercaOUTSelecci.precioPEN
-                          ) * parseFloat(laEqui.laEquivalencia.$numberDecimal);
+                      console.log(
+                        'laEquivalencia - factor - tipoEqui',
+                        parseFloat(laEqui.laEquivalencia.$numberDecimal),
+                        equivalencia.laEquivalencia,
+                        equivalencia.factor,
+                        equivalencia.tipoEquivalencia
+                      );
+                      if (props.esAlmacen) {
+                        //chequear COSTO
+                        // const pCUM =
+                        //   props.mercaOUTSelecci.promedioCostoUnitarioMovil.$numberDecimal *
+                        //   parseFloat(laEqui.laEquivalencia.$numberDecimal);
+                        const pCUM =
+                          props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal;
+                        console.log('pCUM', pCUM);
+                      } else {
+                        //chequear PRECIO
+                        if (typeof props.mercaOUTSelecci.precioPEN !== 'undefined') {
+                          precioEquivalencia.value =
+                            // parseFloat(props.mercaOUTSelecci.precioPEN.$numberDecimal) *
+                            parseFloat(
+                              props.mercaOUTSelecci.precioPEN.$numberDecimal
+                                ? props.mercaOUTSelecci.precioPEN.$numberDecimal
+                                : props.mercaOUTSelecci.precioPEN
+                            ) * parseFloat(laEqui.laEquivalencia.$numberDecimal);
+                        }
                       }
+
                       (document.getElementById('in_Cantidad_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
                     }
                   })}
@@ -375,9 +388,9 @@ export default component$(
                       id="in_PrecioEquivalente_mercaderiaOUTSeleccionada"
                       type="number"
                       style={{ marginLeft: '2px', width: '80px', textAlign: 'end', background: '#ffff80' }}
-                      value={precioEquivalente.value}
+                      value={precioEquivalencia.value}
                       onChange$={(e) => {
-                        precioEquivalente.value = parseFloat((e.target as HTMLInputElement).value);
+                        precioEquivalencia.value = parseFloat((e.target as HTMLInputElement).value);
                       }}
                       onFocusin$={(e) => {
                         (e.target as HTMLInputElement).select();
@@ -411,6 +424,7 @@ export default component$(
                 document.getElementById('selectUniEquivalencia_MICE')?.focus();
                 return;
               }
+              console.log(props.esAlmacen ? '💫💫💫💫💫' : '-----');
               const unicoAux = parseInt(elIdAuxiliar());
               props.esAlmacen
                 ? documento.push({
@@ -421,15 +435,27 @@ export default component$(
                     item: 0,
                     tipo: 'MERCADERIA',
                     codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
+
+                    descripcion: props.mercaOUTSelecci.descripcion,
                     descripcionEquivalencia: equivalencia.descripcionEquivalencia,
-                    cantidadSacada: cantidadSacada.value,
+
+                    cantidadSacada: cantidadSacada.value * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+                    cantidadSacadaEquivalencia: cantidadSacada.value,
+
+                    unidad: props.mercaOUTSelecci.unidad,
                     unidadEquivalencia: equivalencia.unidadEquivalencia,
-                    costoUnitarioPEN:
-                      props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal,
-                    subTotalPEN:
+
+                    costoUnitarioPEN: parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal),
+                    costoUnitarioEquivalenciaPEN:
+                      parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) *
+                      parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+
+                    subPEN: cantidadSacada.value * parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal),
+                    subEquivalenciaPEN:
                       cantidadSacada.value *
-                      props.elKardex.costoUnitarioMovil.$numberDecimal *
-                      equivalencia.laEquivalencia.$numberDecimal,
+                      parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) *
+                      parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+
                     precioUSD: 0,
                     ventaUSD: 0,
                     tipoEquivalencia: equivalencia.tipoEquivalencia,
@@ -454,16 +480,26 @@ export default component$(
                     porcentaje: props.porcentaje,
 
                     codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
+
+                    descripcion: props.mercaOUTSelecci.descripcion,
                     descripcionEquivalencia: equivalencia.descripcionEquivalencia,
-                    cantidad: cantidadSacada.value,
+
+                    cantidad: cantidadSacada.value * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+                    cantidadEquivalencia: cantidadSacada.value,
+
+                    unidad: props.mercaOUTSelecci.unidad,
                     unidadEquivalencia: equivalencia.unidadEquivalencia,
-                    costoUnitarioPEN:
-                      // props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal,
-                      // parseFloat(props.elKardex.costoUnitarioMovil) * parseFloat(equivalencia.laEquivalencia),
+
+                    costoUnitarioPEN: parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal),
+                    costoUnitarioEquivalenciaPEN:
                       parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) *
                       parseFloat(equivalencia.laEquivalencia.$numberDecimal),
-                    precioPEN: precioEquivalente.value,
-                    ventaPEN: cantidadSacada.value * precioEquivalente.value,
+
+                    //precio = c + IGV
+                    precioPEN: precioEquivalencia.value,
+                    //venta = k * precio
+                    ventaPEN: cantidadSacada.value * precioEquivalencia.value,
+
                     precioUSD: 0,
                     ventaUSD: 0,
                     tipoEquivalencia: equivalencia.tipoEquivalencia,

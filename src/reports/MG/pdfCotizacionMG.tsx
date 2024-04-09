@@ -27,7 +27,7 @@ function pdfCotizacionMG(cotizacion: any) {
   // const rodape = [];
 
   const losServicios = servicios.map((ser: any, index: number) => {
-    const { descripcionEquivalencia, cantidad, precioPEN, ventaPEN } = ser;
+    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
     totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
@@ -35,10 +35,10 @@ function pdfCotizacionMG(cotizacion: any) {
       // { text: codigo, style: 'tableBody' },
       { text: descripcionEquivalencia, style: 'tableBody' },
       {
-        text: formatear_4Decimales(cantidad.$numberDecimal),
+        text: formatear_4Decimales(cantidadEquivalencia.$numberDecimal),
         style: 'tableBody',
       },
-      { text: 'UNI', style: 'tableBody' },
+      { text: unidadEquivalencia, style: 'tableBody' },
       {
         text: formatearMonedaPEN(precioPEN.$numberDecimal),
         style: 'tableBody',
@@ -51,7 +51,7 @@ function pdfCotizacionMG(cotizacion: any) {
   });
 
   const losRepuestos = repuestosLubri.map((repu: any, index: number) => {
-    const { codigo, descripcionEquivalencia, cantidad, precioPEN, ventaPEN } = repu;
+    const { codigo, descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = repu;
     const indexItem = index + 1;
     totalRepuestos = totalRepuestos + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
@@ -59,10 +59,10 @@ function pdfCotizacionMG(cotizacion: any) {
       { text: codigo, style: 'tableBody' },
       { text: descripcionEquivalencia, style: 'tableBody' },
       {
-        text: formatear_4Decimales(cantidad.$numberDecimal),
+        text: formatear_4Decimales(cantidadEquivalencia.$numberDecimal),
         style: 'tableBody',
       },
-      { text: 'UNI', style: 'tableBody' },
+      { text: unidadEquivalencia, style: 'tableBody' },
       {
         text: formatearMonedaPEN(precioPEN.$numberDecimal),
         style: 'tableBody',

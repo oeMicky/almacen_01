@@ -11,7 +11,7 @@ import {
 } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo2Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo6Decimales } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_INDEX_COTIZACION } from '~/routes/(almacen)/cotizacion';
 import type { IPersona } from '~/interfaces/iPersona';
@@ -458,7 +458,9 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: '0.8rem', marginLeft: '2px' }}>Cotización</h3>
+      <h3 style={{ fontSize: '0.8rem', marginLeft: '2px' }}>
+        Cotización - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+      </h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* GENERALES */}
@@ -571,24 +573,14 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               </div>
               <input
                 type="image"
+                src={images.searchPLUS}
                 title="Buscar cliente"
                 alt="icono buscar"
                 height={16}
                 width={16}
-                src={images.searchPLUS}
+                style={{ marginLeft: '4px' }}
                 onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true)}
               />
-              {/* <ImgButton
-                id="img_buscarCliente"
-                src={images.searchPLUS}
-                alt="Icono de buscar cliente"
-                height={16}
-                width={16}
-                title="Buscar datos de cliente"
-                onClick={$(() => {
-                  definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true;
-                })}
-              /> */}
             </div>
             {/* numero identidad*/}
             <div class="form-control">
@@ -672,24 +664,14 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               />
               <input
                 type="image"
+                src={images.searchPLUS}
                 title="Buscar vehículo"
                 alt="icono buscar"
                 height={16}
                 width={16}
-                src={images.searchPLUS}
+                style={{ marginLeft: '4px' }}
                 onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo = true)}
               />
-              {/* <ImgButton
-                id={'imgButtonSearchVehiculo'}
-                src={images.searchPLUS}
-                alt="Icono de buscar vehículo"
-                height={16}
-                width={16}
-                title="Buscar vehículo"
-                onClick={$(() => {
-                  definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo = true;
-                })}
-              /> */}
             </div>
           </div>
           {/* Marca */}
@@ -753,7 +735,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               margin: '5px 0',
             }}
           >
-            <div style={{ marginBottom: '5px' }}>
+            <div style={{ marginBottom: '4px' }}>
               {definicion_CTX_COTIZACION._id === '' ? (
                 <ElButton
                   class="btn"
@@ -775,7 +757,14 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
             </div>
             {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarServicio && (
               <div class="modal">
-                <BuscarServicio contexto="new_edit_cotizacion" porcentaje={definicion_CTX_COTIZACION.igv} />
+                <BuscarServicio
+                  contexto="new_edit_cotizacion"
+                  porcentaje={
+                    definicion_CTX_COTIZACION.igv.$numberDecimal
+                      ? definicion_CTX_COTIZACION.igv.$numberDecimal
+                      : definicion_CTX_COTIZACION.igv
+                  }
+                />
               </div>
             )}
             {/* TABLA SERVICIOS  */}
@@ -795,25 +784,20 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   </tr>
                 </thead>
                 <tbody>
-                  {definicion_CTX_COTIZACION.servicios.map((iTCotiServi: any, index: any) => {
+                  {definicion_CTX_COTIZACION.servicios.map((iTCotiServi: any, index: number) => {
                     const indexItemServi = index + 1;
-
+                    const porc = iTCotiServi.porcentaje.$numberDecimal
+                      ? parseFloat(iTCotiServi.porcentaje.$numberDecimal)
+                      : parseFloat(iTCotiServi.porcentaje);
+                    console.log('first porc', indexItemServi, porc);
                     sumaTOTAL_SERVI =
                       sumaTOTAL_SERVI +
-                      redondeo2Decimales(
+                      redondeo6Decimales(
                         iTCotiServi.ventaPEN.$numberDecimal ? iTCotiServi.ventaPEN.$numberDecimal : iTCotiServi.ventaPEN
                       );
-                    subTOTAL_SERVI = redondeo2Decimales(
-                      (sumaTOTAL_SERVI * 100) / (100 + parseFloat(definicion_CTX_COTIZACION.igv.$numberDecimal))
-                    );
-                    igvTOTAL_SERVI = redondeo2Decimales(sumaTOTAL_SERVI - subTOTAL_SERVI);
-                    console.log(
-                      'firstfirstfirst _SERVI:::',
-                      definicion_CTX_COTIZACION.igv,
-                      subTOTAL_SERVI,
-                      igvTOTAL_SERVI,
-                      sumaTOTAL_SERVI
-                    );
+                    subTOTAL_SERVI = redondeo6Decimales((sumaTOTAL_SERVI * 100) / (100 + porc));
+                    igvTOTAL_SERVI = redondeo6Decimales(sumaTOTAL_SERVI - subTOTAL_SERVI);
+                    console.log('firstfirstfirst _SERVI:::', porc, subTOTAL_SERVI, igvTOTAL_SERVI, sumaTOTAL_SERVI);
                     //SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
                     if (index + 1 === definicion_CTX_COTIZACION.servicios.length) {
                       // definicion_CTX_NEW_EDIT_COTIZACION.TOTAL_SERVICIOS = sumaTOTAL_SERVI;
@@ -837,14 +821,20 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                           <input
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
-                              iTCotiServi.cantidad.$numberDecimal ? iTCotiServi.cantidad.$numberDecimal : iTCotiServi.cantidad
+                              iTCotiServi.cantidadEquivalencia.$numberDecimal
+                                ? iTCotiServi.cantidadEquivalencia.$numberDecimal
+                                : iTCotiServi.cantidadEquivalencia
                             }
                             onChange$={(e) => {
-                              iTCotiServi.cantidad = parseFloat((e.target as HTMLInputElement).value);
+                              iTCotiServi.cantidadEquivalencia = parseFloat((e.target as HTMLInputElement).value);
 
                               iTCotiServi.ventaPEN =
-                                (iTCotiServi.cantidad ? iTCotiServi.cantidad : iTCotiServi.cantidad.$numberDecimal) *
-                                (iTCotiServi.precioPEN ? iTCotiServi.precioPEN : iTCotiServi.precioPEN.$numberDecimal);
+                                (iTCotiServi.cantidadEquivalencia.$numberDecimal
+                                  ? iTCotiServi.cantidadEquivalencia.$numberDecimal
+                                  : iTCotiServi.cantidadEquivalencia) *
+                                (iTCotiServi.precioPEN.$numberDecimal
+                                  ? iTCotiServi.precioPEN.$numberDecimal
+                                  : iTCotiServi.precioPEN);
                             }}
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
@@ -866,11 +856,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                               console.log('el precio modificado', precio);
 
                               iTCotiServi.precioPEN = precio;
-                              console.log('el precio modificado, cant', iTCotiServi.precioPEN, iTCotiServi.cantidad);
+                              console.log('el precio modificado, cant', iTCotiServi.precioPEN, iTCotiServi.cantidadEquivalencia);
                               iTCotiServi.ventaPEN =
-                                (iTCotiServi.cantidad.$numberDecimal
-                                  ? iTCotiServi.cantidad.$numberDecimal
-                                  : iTCotiServi.cantidad) *
+                                (iTCotiServi.cantidadEquivalencia.$numberDecimal
+                                  ? iTCotiServi.cantidadEquivalencia.$numberDecimal
+                                  : iTCotiServi.cantidadEquivalencia) *
                                 (iTCotiServi.precioPEN.$numberDecimal
                                   ? iTCotiServi.precioPEN.$numberDecimal
                                   : iTCotiServi.precioPEN);
@@ -1001,7 +991,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 <BuscarMercaderiaOUT
                   contexto="new_edit_cotizacion"
                   esAlmacen={false}
-                  porcentaje={definicion_CTX_COTIZACION.igv}
+                  porcentaje={
+                    definicion_CTX_COTIZACION.igv.$numberDecimal
+                      ? definicion_CTX_COTIZACION.igv.$numberDecimal
+                      : definicion_CTX_COTIZACION.igv
+                  }
                 />
               </div>
             )}
@@ -1024,23 +1018,24 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 <tbody>
                   {definicion_CTX_COTIZACION.repuestosLubri.map((iTRepuLubri: any, index: any) => {
                     const indexItemRequi = index + 1;
+                    const porc = iTRepuLubri.porcentaje.$numberDecimal
+                      ? parseFloat(iTRepuLubri.porcentaje.$numberDecimal)
+                      : parseFloat(iTRepuLubri.porcentaje);
 
                     sumaTOTAL_REP_LUB =
                       sumaTOTAL_REP_LUB +
-                      redondeo2Decimales(
+                      redondeo6Decimales(
                         iTRepuLubri.ventaPEN.$numberDecimal ? iTRepuLubri.ventaPEN.$numberDecimal : iTRepuLubri.ventaPEN
                       );
-                    subTOTAL_REP_LUB = redondeo2Decimales(
-                      (sumaTOTAL_REP_LUB * 100) / (100 + parseFloat(definicion_CTX_COTIZACION.igv.$numberDecimal))
-                    );
-                    igvTOTAL_REP_LUB = redondeo2Decimales(sumaTOTAL_REP_LUB - subTOTAL_REP_LUB);
+                    subTOTAL_REP_LUB = redondeo6Decimales((sumaTOTAL_REP_LUB * 100) / (100 + porc));
+                    igvTOTAL_REP_LUB = redondeo6Decimales(sumaTOTAL_REP_LUB - subTOTAL_REP_LUB);
 
                     console.log(
-                      'BUCLE: sumaTOTAL_REP_LUB - subTOTAL_REP_LUB - igvTOTAL_REP_LUB - definicion_CTX_COTIZACION.igv',
+                      'BUCLE: sumaTOTAL_REP_LUB - subTOTAL_REP_LUB - igvTOTAL_REP_LUB - porc',
                       sumaTOTAL_REP_LUB,
                       subTOTAL_REP_LUB,
                       igvTOTAL_REP_LUB,
-                      definicion_CTX_COTIZACION.igv
+                      porc
                     );
                     //SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
                     if (index + 1 === definicion_CTX_COTIZACION.repuestosLubri.length) {
@@ -1067,17 +1062,21 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                           <input
                             style={{ width: '60px', textAlign: 'end' }}
                             value={
-                              iTRepuLubri.cantidad.$numberDecimal ? iTRepuLubri.cantidad.$numberDecimal : iTRepuLubri.cantidad
+                              iTRepuLubri.cantidadEquivalencia.$numberDecimal
+                                ? iTRepuLubri.cantidadEquivalencia.$numberDecimal
+                                : iTRepuLubri.cantidadEquivalencia
                             }
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
                             }}
                             onChange$={(e) => {
-                              iTRepuLubri.cantidad = parseFloat((e.target as HTMLInputElement).value);
-                              console.log('iTRepuLubri.cantidad', iTRepuLubri.cantidad);
+                              iTRepuLubri.cantidadEquivalencia = parseFloat((e.target as HTMLInputElement).value);
+                              console.log('iTRepuLubri.cantidadEquivalencia', iTRepuLubri.cantidadEquivalencia);
                               console.log('iTRepuLubri.precioPEN', iTRepuLubri.precioPEN);
                               iTRepuLubri.ventaPEN =
-                                (iTRepuLubri.cantidad ? iTRepuLubri.cantidad : iTRepuLubri.cantidad.$numberDecimal) *
+                                (iTRepuLubri.cantidadEquivalencia.$numberDecimal
+                                  ? iTRepuLubri.cantidadEquivalencia.$numberDecimal
+                                  : iTRepuLubri.cantidadEquivalencia) *
                                 (iTRepuLubri.precioPEN.$numberDecimal
                                   ? iTRepuLubri.precioPEN.$numberDecimal
                                   : iTRepuLubri.precioPEN);
@@ -1106,16 +1105,18 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                               console.log(
                                 'el precio modificado, cant',
                                 iTRepuLubri.precioPEN,
-                                iTRepuLubri.cantidad ? iTRepuLubri.cantidad : iTRepuLubri.cantidad.$numberDecimal
+                                iTRepuLubri.cantidadEquivalencia.$numberDecimal
+                                  ? iTRepuLubri.cantidadEquivalencia.$numberDecimal
+                                  : iTRepuLubri.cantidadEquivalencia
                               );
-                              console.log('cantidad', iTRepuLubri.cantidad);
-                              console.log('cantidad.$numberDecimal', iTRepuLubri.cantidad.$numberDecimal);
+                              console.log('cantidadEquivalencia', iTRepuLubri.cantidadEquivalencia);
+                              console.log('cantidadEquivalencia.$numberDecimal', iTRepuLubri.cantidadEquivalencia.$numberDecimal);
                               console.log('precioPEN', iTRepuLubri.precioPEN);
                               console.log('precioPEN.$numberDecimal', iTRepuLubri.precioPEN.$numberDecimal);
                               iTRepuLubri.ventaPEN =
-                                (iTRepuLubri.cantidad.$numberDecimal
-                                  ? iTRepuLubri.cantidad.$numberDecimal
-                                  : iTRepuLubri.cantidad) *
+                                (iTRepuLubri.cantidadEquivalencia.$numberDecimal
+                                  ? iTRepuLubri.cantidadEquivalencia.$numberDecimal
+                                  : iTRepuLubri.cantidadEquivalencia) *
                                 (iTRepuLubri.precioPEN.$numberDecimal
                                   ? iTRepuLubri.precioPEN.$numberDecimal
                                   : iTRepuLubri.precioPEN);

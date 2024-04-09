@@ -21,11 +21,12 @@ import {
   formatear_6Decimales,
   formatoDDMMYYYY_PEN,
   hoy,
+  menosXdiasHoy,
   // hoy,
   // primeroDelMes,
   redondeo2Decimales,
   // ultimoDelMes,
-  ultimoDiaDelPeriodoX,
+  // ultimoDiaDelPeriodoX,
 } from '~/functions/comunes';
 import style from '../tabla/tabla.css?inline';
 import BorrarItemMercaderiaIN from './borrarItemMercaderiaIN';
@@ -36,6 +37,8 @@ import { inIngresoAAlmacen, loadMotivosIngresoAAlmacen } from '~/apis/ingresosAA
 import { parametrosGlobales } from '~/routes/login';
 import ElSelect from '../system/elSelect';
 import BuscarOrdenServicioAperturado from '../miscelanea/ordenServicioAperturado/buscarOrdenServicioAperturado';
+import BuscarNotaDeSalidaReingreso from './buscarNotaDeSalidaReingreso';
+import BuscarVentaDespachadaReingreso from './buscarVentaDespachadaReingreso';
 
 export const CTX_NEW_IN_ALMACEN = createContextId<any>('new_in_almacen');
 
@@ -61,6 +64,10 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
     mostrarPanelBuscarOrdenServicioAperturado: false,
     mostrarPanelReingresoRequisiciones: false,
+
+    mostrarPanelBuscarNotaDeSalidaReingreso: false,
+
+    mostrarPanelBuscarVentaDespachadaReingreso: false,
   });
   useContextProvider(CTX_NEW_IN_ALMACEN, definicion_CTX_NEW_IN_ALMACEN);
   //#endregion DEFINICION CTX_NEW_IN_ALMACEN
@@ -378,12 +385,16 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           height={16}
           width={16}
           title="Cerrar el formulario"
-          onClick={$(() => {})}
+          onClick={$(() => {
+            console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
+          })}
         />
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3 style={{ fontSize: '0.8rem' }}>In almacén - {parametrosGlobales.RazonSocial}</h3>
+        <h3 style={{ fontSize: '0.8rem' }}>
+          In almacén - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+        </h3>
         {/* ----------------------------------------------------- */}
         {/* GENERALES */}
         <div>
@@ -435,9 +446,11 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   // disabled
                   style={{ width: '100%' }}
                   // min={primeroDelMes()}
-                  min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  // max={ultimoDelMes()}
-                  max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                  min={menosXdiasHoy(2)}
+                  max={hoy()}
+                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                  // // max={ultimoDelMes()}
+                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
                   value={definicion_CTX_IN_ALMACEN.FISMA}
                   onChange$={(e) => {
                     definicion_CTX_IN_ALMACEN.FISMA = (e.target as HTMLInputElement).value;
@@ -468,9 +481,17 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                       definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen = elSelec.value;
                       // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                       switch (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen) {
-                        case 'ORDEN DE SERVICIO':
+                        case 'ORDEN DE SERVICIO (R)':
                           // alert('Elegio os');
                           definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado = true;
+                          break;
+                        case 'NOTA DE SALIDA (R)':
+                          // alert('Elegio os');
+                          definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarNotaDeSalidaReingreso = true;
+                          break;
+                        case 'VENTA (R)':
+                          // alert('Elegio os');
+                          definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarVentaDespachadaReingreso = true;
                           break;
                         case 'APERTURA DE INVENTARIO':
                           //alert('Elegio venta');
@@ -501,6 +522,16 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado && (
             <div class="modal">
               <BuscarOrdenServicioAperturado contexto="ingreso_a_almacen" />
+            </div>
+          )}
+          {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarNotaDeSalidaReingreso && (
+            <div class="modal">
+              <BuscarNotaDeSalidaReingreso />
+            </div>
+          )}
+          {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarVentaDespachadaReingreso && (
+            <div class="modal">
+              <BuscarVentaDespachadaReingreso />
             </div>
           )}
           {/* ----------------------------------------------------- */}
@@ -550,18 +581,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   // onFocusin$={() => }
                   onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true)}
                 />
-                {/* <ImgButton
-                  id="img_buscarREMITENTE"
-                  src={images.searchPLUS}
-                  alt="Icono de buscar identidad"
-                  height={16}
-                  width={16}
-                  title="Buscar datos de identidad"
-                  // onClick={buscarCliente}
-                  onClick={$(() => {
-                    definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true;
-                  })}
-                /> */}
               </div>
             </div>
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona && (
@@ -689,11 +708,12 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         <td data-label="Acc" class="accionesLeft">
                           <input
                             type="image"
+                            src={images.edit}
                             title="Editar ítem"
                             alt="icono de editar"
                             height={12}
                             width={12}
-                            src={images.edit}
+                            style={{ marginRight: '8px' }}
                             onClick$={() => {
                               elDocSelecionado.value = iTDocAdj;
                               definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
@@ -701,11 +721,11 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                           />
                           <input
                             type="image"
+                            src={images.trash}
                             title="Eliminar ítem"
                             alt="icono de eliminar"
                             height={12}
                             width={12}
-                            src={images.trash}
                             onClick$={() => {
                               borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
                               borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
@@ -901,9 +921,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 ? iTMercaIN.costoUnitarioPEN.$numberDecimal
                                   ? iTMercaIN.costoUnitarioPEN.$numberDecimal
                                   : iTMercaIN.costoUnitarioPEN
-                                : iTMercaIN.costoUnitarioPENEquivalencia.$numberDecimal
-                                ? iTMercaIN.costoUnitarioPENEquivalencia.$numberDecimal
-                                : iTMercaIN.costoUnitarioPENEquivalencia
+                                : iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                ? iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                : iTMercaIN.costoUnitarioEquivalenciaPEN
                             }
                             onChange$={(e) => {
                               const costo = parseFloat((e.target as HTMLInputElement).value);
@@ -953,9 +973,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             ? iTMercaIN.subPEN.$numberDecimal
                               ? formatear_6Decimales(iTMercaIN.subPEN.$numberDecimal)
                               : formatear_6Decimales(iTMercaIN.subPEN)
-                            : iTMercaIN.subPENEquivalencia.$numberDecimal
-                            ? formatear_6Decimales(iTMercaIN.subPENEquivalencia.$numberDecimal)
-                            : formatear_6Decimales(iTMercaIN.subPENEquivalencia)}
+                            : iTMercaIN.subEquivalenciaPEN.$numberDecimal
+                            ? formatear_6Decimales(iTMercaIN.subEquivalenciaPEN.$numberDecimal)
+                            : formatear_6Decimales(iTMercaIN.subEquivalenciaPEN)}
                         </td>
                         <td data-label="valorUnitarioPEN" class="comoNumero">
                           <input
@@ -967,9 +987,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 ? iTMercaIN.valorUnitarioPEN.$numberDecimal
                                   ? iTMercaIN.valorUnitarioPEN.$numberDecimal
                                   : iTMercaIN.valorUnitarioPEN
-                                : iTMercaIN.valorUnitarioPENEquivalencia.$numberDecimal
-                                ? iTMercaIN.valorUnitarioPENEquivalencia.$numberDecimal
-                                : iTMercaIN.valorUnitarioPENEquivalencia
+                                : iTMercaIN.valorUnitarioEquivalenciaPEN.$numberDecimal
+                                ? iTMercaIN.valorUnitarioEquivalenciaPEN.$numberDecimal
+                                : iTMercaIN.valorUnitarioEquivalenciaPEN
                             }
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
@@ -1012,9 +1032,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             ? iTMercaIN.totPEN.$numberDecimal
                               ? formatear_6Decimales(iTMercaIN.totPEN.$numberDecimal)
                               : formatear_6Decimales(iTMercaIN.totPEN)
-                            : iTMercaIN.totPENEquivalencia.$numberDecimal
-                            ? formatear_6Decimales(iTMercaIN.totPENEquivalencia.$numberDecimal)
-                            : formatear_6Decimales(iTMercaIN.totPENEquivalencia)}
+                            : iTMercaIN.totEquivalenciaPEN.$numberDecimal
+                            ? formatear_6Decimales(iTMercaIN.totEquivalenciaPEN.$numberDecimal)
+                            : formatear_6Decimales(iTMercaIN.totEquivalenciaPEN)}
                         </td>
                         <td data-label="Acc" class="acciones">
                           <input
@@ -1025,7 +1045,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             width={16}
                             title="Eliminar ítem"
                             onClick$={() => {
-                              // definicion_CTX_IN_ALMACEN.itemsMercaderias.shift();
                               borrarItemMerca.idAuxiliar = iTMercaIN.idAuxiliar;
                               borrarItemMerca.item = indexItemServi;
                               borrarItemMerca.codigo = iTMercaIN.codigo;
@@ -1041,21 +1060,21 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 <tfoot>
                   <tr>
                     <td colSpan={8} style={{ textAlign: 'end' }}></td>
-                    <td colSpan={1} class="comoNumero" style={{ color: '#FFDBAB' }}>
+                    <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                       {`${suma_SubPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
-                    <td colSpan={1} class="comoNumero" style={{ color: '#FFDBAB' }}>
+                    <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                       {`${suma_IGVPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
-                    <td colSpan={1} class="comoNumero" style={{ color: '#FFDBAB' }}>
+                    <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                       {`${suma_TotPEN.toLocaleString('en-PE', {
                         style: 'currency',
                         currency: 'PEN',
@@ -1065,13 +1084,13 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   </tr>
                   <tr>
                     <td colSpan={8} style={{ textAlign: 'end' }}></td>
-                    <td colSpan={1} style={{ textAlign: 'end', color: '#FFDBAB' }}>
+                    <td colSpan={1} style={{ textAlign: 'end', color: '#2E1800' }}>
                       Sub Total
                     </td>
-                    <td colSpan={1} style={{ textAlign: 'end', color: '#FFDBAB' }}>
+                    <td colSpan={1} style={{ textAlign: 'end', color: '#2E1800' }}>
                       IGV
                     </td>
-                    <td colSpan={1} style={{ textAlign: 'end', color: '#FFDBAB' }}>
+                    <td colSpan={1} style={{ textAlign: 'end', color: '#2E1800' }}>
                       Total
                     </td>
                   </tr>

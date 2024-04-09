@@ -81,7 +81,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
           <>
             {misOrdenesServicio.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}
@@ -129,8 +129,8 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                               disabled={estado === 'FACTURADO'}
                               height={14}
                               width={14}
-                              style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              style={{ marginRight: '8px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_index_orden_servicio.oO = ordServiLocali;
                                 ctx_index_orden_servicio.mostrarPanelNewEditOrdenServicio = true;
@@ -143,8 +143,8 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                               title="Ver pdf "
                               height={14}
                               width={14}
-                              style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // style={{ padding: '2px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 osSeleccionada.value = ordServiLocali;
                                 clickPDF.value++;

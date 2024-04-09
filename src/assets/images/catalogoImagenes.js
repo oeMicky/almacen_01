@@ -27,6 +27,7 @@ import caoSLinealDark from '../images/CAO-S-Lineal-dark.svg';
 import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
 
 import add from '../images/add.svg';
+import adjunto from '../images/adjunto.svg';
 import arrowUp from '../images/arrow-up.svg';
 import arrowDown from '../images/arrow-down.svg';
 import basedatos from '../images/basedatos.svg';
@@ -53,6 +54,7 @@ import print from '../images/print.svg';
 import searchPLUS from '../images/searchPLUS.svg';
 // import searchW from '../images/searchW.svg';
 import see from '../images/see.svg';
+import send from '../images/send.svg';
 import three_dots from '../images/three-dots.svg';
 import three_dots2 from '../images/three-dots2.svg';
 import trash from '../images/trash.svg';
@@ -89,6 +91,7 @@ export default {
   caoSLinealLight,
 
   add,
+  adjunto,
   arrowUp,
   arrowDown,
   basedatos,
@@ -115,6 +118,7 @@ export default {
   searchPLUS,
   // searchW from '../images/searchW.svg';
   see,
+  send,
   three_dots,
   three_dots2,
   trash,

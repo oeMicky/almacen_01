@@ -16,12 +16,21 @@ function pdfVentaMG(venta: any) {
   console.log('venta PDF', venta);
   const items = venta.itemsVenta;
   const losItems = items.map((it: any) => {
-    const { codigo, descripcionEquivalencia, cantidad, unidadEquivalencia, precioPEN, ventaPEN, precioUSD, ventaUSD } = it;
+    const {
+      codigo,
+      descripcionEquivalencia,
+      cantidadEquivalencia,
+      unidadEquivalencia,
+      precioPEN,
+      ventaPEN,
+      precioUSD,
+      ventaUSD,
+    } = it;
     return [
       { text: codigo, style: 'tableBody' },
       { text: descripcionEquivalencia, style: 'tableBody' },
       {
-        text: formatear_4Decimales(cantidad.$numberDecimal),
+        text: formatear_4Decimales(cantidadEquivalencia.$numberDecimal),
         style: 'tableBody',
         // border: [false, false, false, true],
       },

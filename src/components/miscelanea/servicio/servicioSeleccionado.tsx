@@ -154,12 +154,23 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
               porcentaje: props.porcentaje,
 
               codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '_',
+
+              descripcion: props.serviSelecci.descripcion,
               descripcionEquivalencia: props.serviSelecci.descripcion,
+
               cantidad: cantidad.value,
-              unidadEquivalencia: 'NIU',
-              costoUnitarioPEN: 0,
+              cantidadEquivalencia: cantidad.value,
+
+              unidad: 'ZZ',
+              unidadEquivalencia: 'ZZ',
+
+              costoUnitarioPEN: precio.value,
+              costoUnitarioEquivalenciaPEN: precio.value,
+
               precioPEN: precio.value,
+
               ventaPEN: cantidad.value * precio.value,
+
               precioUSD: 0,
               ventaUSD: 0,
 

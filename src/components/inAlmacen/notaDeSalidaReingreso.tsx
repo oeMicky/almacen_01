@@ -1,11 +1,13 @@
 import { $, Resource, component$, useContext, useResource$, useSignal } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
-import ImgButton from '~/components/system/imgButton';
-import { cerosALaIzquierda, elIdAuxiliar } from '~/functions/comunes';
+import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from './newInAlmacen';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { CTX_BUSCAR_NOTA_SALIDA_REINGRESO } from './buscarNotaDeSalidaReingreso';
 
-export default component$((props: { contexto: string; osSeleccionada: any }) => {
+export default component$((props: { nsSeleccionada: any }) => {
   //#region CONTEXTO
+  const ctx_buscar_nota_salida_reingreso = useContext(CTX_BUSCAR_NOTA_SALIDA_REINGRESO);
   const ctx = useContext(CTX_NEW_IN_ALMACEN);
   const documento = useContext(CTX_IN_ALMACEN);
   //#endregion CONTEXTO
@@ -25,15 +27,15 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda losReingresos', props.osSeleccionada._id);
+    console.log('parametrosBusqueda losReingresos', props.nsSeleccionada._id);
 
-    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getReingresoRequisiciones', {
+    const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getItemsMercaderias', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       // body: JSON.stringify(props.parametrosBusqueda),
-      body: JSON.stringify({ idOs: props.osSeleccionada._id }),
+      body: JSON.stringify({ idEgresoDeAlmacen: props.nsSeleccionada._id }),
       signal: abortController.signal,
     });
     return res.json();
@@ -59,30 +61,28 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx.mostrarPanelReingresoRequisiciones = false;
+            ctx_buscar_nota_salida_reingreso.mostrarPanelNotaDeSalidaReingreso = false;
           })}
         />
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3>Reingreso de requisiciones</h3>
+        <h3>Reingreso de nota de salida</h3>
         {/* CLIENTE */}
         <div style={{ fontSize: '0.8em' }}>
-          <div style={{ margin: '5px 0' }}>ID:{` ${props.osSeleccionada._id} `}</div>
+          <div style={{ margin: '5px 0' }}>ID:{` ${props.nsSeleccionada._id} `}</div>
           <div style={{ margin: '5px 0' }}>
-            OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
+            NOTA SALIDA:
+            <b>{` ${props.nsSeleccionada.serie + ' - ' + cerosALaIzquierda(props.nsSeleccionada.numero, 8)} `}</b>
           </div>
           <div style={{ margin: '5px 0' }}>
-            Cliente:<b>{` ${props.osSeleccionada.razonSocialNombreCliente}`}</b>
+            Destinatario:<b>{` ${props.nsSeleccionada.razonSocialNombre}`}</b>
           </div>
           <div style={{ margin: '5px 0' }}>
-            Placa:<b>{` ${props.osSeleccionada.placa} `}</b>
-          </div>
-          <div style={{ margin: '5px 0' }}>
-            Kilometraje:<b>{` ${props.osSeleccionada.kilometraje}`}</b>
+            FISMA:<b>{` ${formatoDDMMYYYY_PEN(props.nsSeleccionada.FISMA)} `}</b>
           </div>
         </div>
-        {/* TABLA DE REQUISICIONES */}
+        {/* TABLA DE ITEMS - MERCADERIAS */}
         <div class="form-control">
           <Resource
             value={losReingresos}
@@ -94,9 +94,9 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               console.log('onRejected 🍍🍍🍍🍍');
               return <div>Fallo en la carga de datos</div>;
             }}
-            onResolved={(ordenesServicio) => {
-              console.log('onResolved 🍓🍓🍓🍓');
-              const { data } = ordenesServicio; //{ status, data, message }
+            onResolved={(notasSalida) => {
+              console.log('onResolved 🍓🍓🍓🍓', notasSalida);
+              const { data } = notasSalida; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misReingresos.value = data;
               return (
@@ -107,7 +107,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                         <thead>
                           <tr>
                             <th>Ítem</th>
-                            <th>Kx</th>
+                            {/* <th>Kx</th> */}
                             <th>Código</th>
                             <th>Descripción Equi</th>
                             {/*  <th>Stock Equi</th>*/}
@@ -124,28 +124,16 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                             return (
                               <tr key={reingresoLocali._id}>
                                 <td data-label="Ítem">{indexItem}</td>
-                                <td data-label="Kx">{reingresoLocali.idKardex.substring(reingresoLocali.idKardex.length - 6)}</td>
+                                {/* <td data-label="Kx">{reingresoLocali.idKardex.substring(reingresoLocali.idKardex.length - 6)}</td> */}
                                 <td data-label="Código">{reingresoLocali.codigo}</td>
                                 <td data-label="Descripción Equi">{reingresoLocali.descripcionEquivalencia}</td>
-                                {/*   <td data-label="Stock">
-                                  {reingresoLocali.tipoEquivalencia
-                                    ? reingresoLocali.stock.$numberDecimal
-                                      ? reingresoLocali.stock.$numberDecimal * reingresoLocali.laEquivalencia.$numberDecimal
-                                      : reingresoLocali.stock * reingresoLocali.laEquivalencia.$numberDecimal
-                                    : reingresoLocali.stock.$numberDecimal
-                                    ? reingresoLocali.stock.$numberDecimal / reingresoLocali.laEquivalencia.$numberDecimal
-                                    : reingresoLocali.stock / reingresoLocali.laEquivalencia.$numberDecimal}
-                                  </td>*/}
+
                                 <td data-label="Uni">{reingresoLocali.unidadEquivalencia}</td>
-                                {/* <td data-label="Cantidad">
-                                  {reingresoLocali.cantidad.$numberDecimal
-                                    ? reingresoLocali.cantidad.$numberDecimal
-                                    : reingresoLocali.cantidad}
-                                </td> */}
+
                                 <td data-label="Cant Despachada">
-                                  {reingresoLocali.cantidadDespachada.$numberDecimal
-                                    ? reingresoLocali.cantidadDespachada.$numberDecimal
-                                    : reingresoLocali.cantidadDespachada}
+                                  {reingresoLocali.cantidadSacadaEquivalencia.$numberDecimal
+                                    ? reingresoLocali.cantidadSacadaEquivalencia.$numberDecimal
+                                    : reingresoLocali.cantidadSacadaEquivalencia}
                                 </td>
                                 <td data-label="Cant Reingresada">
                                   {reingresoLocali.cantidadReingresada.$numberDecimal
@@ -182,7 +170,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             }}
           />
         </div>
-        {/* DESPACHAR */}
+        {/*  ----- REINGRESAR ----- */}
         <input
           id="btn_reingresarRequisiciones_ORDEN_SERVICIO_APERTURADO"
           type="button"
@@ -216,39 +204,27 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               i++;
 
               const despa = parseFloat(
-                reingresoLocali.cantidadDespachada.$numberDecimal
-                  ? reingresoLocali.cantidadDespachada.$numberDecimal
-                  : reingresoLocali.cantidadDespachada
+                reingresoLocali.cantidadSacadaEquivalencia.$numberDecimal
+                  ? reingresoLocali.cantidadSacadaEquivalencia.$numberDecimal
+                  : reingresoLocali.cantidadSacadaEquivalencia
               );
 
-              const reingre = parseFloat(
+              const Reingresada = parseFloat(
+                reingresoLocali.cantidadReingresada.$numberDecimal
+                  ? reingresoLocali.cantidadReingresada.$numberDecimal
+                  : reingresoLocali.cantidadReingresada
+              );
+
+              const aReingre = parseFloat(
                 reingresoLocali.aReingresar.$numberDecimal
                   ? reingresoLocali.aReingresar.$numberDecimal
                   : reingresoLocali.aReingresar
               );
 
-              // let stockEQUIVALENTE = 0;
-              // if (reingresoLocali.tipoEquivalencia) {
-              //   stockEQUIVALENTE =
-              //     parseFloat(reingresoLocali.stock.$numberDecimal) * parseFloat(reingresoLocali.laEquivalencia.$numberDecimal);
-              // } else {
-              //   stockEQUIVALENTE =
-              //     parseFloat(reingresoLocali.stock.$numberDecimal) / parseFloat(reingresoLocali.laEquivalencia.$numberDecimal);
-              // }
-
-              // console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, rein);
-              // if (rein > stockEQUIVALENTE) {
-              //   alert(
-              //     `ATENCIÓN: Desea despachar mayor cantidad ( ${rein} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`
-              //   );
-              //   todoCorrecto = false;
-              //   break;
-              // }
-
-              console.log('despa - reingre', despa, reingre);
-              if (reingre > despa) {
+              console.log('despa <=> reingre + Reingresada', despa, aReingre, Reingresada);
+              if (aReingre + Reingresada > despa) {
                 alert(
-                  `ATENCIÓN: Se intenta reingresar una cantidad mayor a la despachada. La cantidad despachada ( ${despa} ) es menor a la cantidad a reingresar ( ${reingre} ), y se encuetra en la posición # ${i}`
+                  `ATENCIÓN: Se intenta reingresar una cantidad mayor a la despachada. La cantidad despachada ( ${despa} ) es menor a la cantidad a reingresar ( ${aReingre} ) más la ya reingresada ( ${Reingresada} ), y se encuetra en la posición # ${i}`
                 );
                 todoCorrecto = false;
                 break;
@@ -261,86 +237,93 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             console.log('paso VERIFICACION de CANTIDADES A REINGRESAR');
             ////// copiar los datos al panel de EGRESO
 
-            //ID DE LA ORDEN SERVICIO
-            documento.idDocumento = props.osSeleccionada._id;
+            //ID DE LA NOTA DE SALIDA
+            documento.idDocumento = props.nsSeleccionada._id;
 
             //DESTINATARIO
-            documento.idRemitente = props.osSeleccionada.idCliente;
-            documento.codigoTipoDocumentoIdentidad = props.osSeleccionada.codigoTipoDocumentoIdentidad;
-            documento.tipoDocumentoIdentidad = props.osSeleccionada.tipoDocumentoIdentidad;
-            documento.numeroIdentidad = props.osSeleccionada.numeroIdentidad;
-            documento.razonSocialNombre = props.osSeleccionada.razonSocialNombreCliente;
+            documento.idRemitente = props.nsSeleccionada.idDestinatario;
+            documento.codigoTipoDocumentoIdentidad = props.nsSeleccionada.codigoTipoDocumentoIdentidad;
+            documento.tipoDocumentoIdentidad = props.nsSeleccionada.tipoDocumentoIdentidad;
+            documento.numeroIdentidad = props.nsSeleccionada.numeroIdentidad;
+            documento.razonSocialNombre = props.nsSeleccionada.razonSocialNombre;
 
-            //TIPO DE DOCUMENTO -> ORDEN DE SERVICIO
+            //TIPO DE DOCUMENTO -> NOTA DE SALIDA
             const numeroDocumentos = documento.documentosAdjuntos.length;
             //borra todos los elementos del array
             documento.documentosAdjuntos.splice(0, numeroDocumentos);
             //inserta el elemento / documento en el array
             documento.documentosAdjuntos.push({
-              codigoTCP: '00',
-              descripcionTCP: 'Otros',
-              fecha: props.osSeleccionada.fechaInicio,
-              idAuxiliar: elIdAuxiliar(),
-              numero: props.osSeleccionada.numero,
-              serie: props.osSeleccionada.serie,
+              codigoTCP: props.nsSeleccionada.codigoTCP,
+              descripcionTCP: props.nsSeleccionada.descripcionTCP,
+              fecha: props.nsSeleccionada.fecha.substring(0, 10),
+              idAuxiliar: props.nsSeleccionada.idAuxiliar,
+              numero: props.nsSeleccionada.numero,
+              serie: props.nsSeleccionada.serie,
             });
 
-            //INSERTAR MERCADERIA
+            // //INSERTAR MERCADERIA
             const numeroMercaderias = documento.itemsMercaderias.length;
             //borra todos los elementos del array
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
             for (const reingresoLocali of misReingresos.value) {
-              const rein = reingresoLocali.aReingresar.$numberDecimal
+              const aRein = reingresoLocali.aReingresar.$numberDecimal
                 ? reingresoLocali.aReingresar.$numberDecimal
                 : reingresoLocali.aReingresar;
 
-              console.log('rein', rein);
-              if (rein > 0) {
-                let IGVCalculado = 0;
-                if (reingresoLocali.igv === 0) {
-                  IGVCalculado = 0;
-                } else {
-                  IGVCalculado = 1 + reingresoLocali.igv / 100;
-                }
-                let costo = 0;
-                if (reingresoLocali.tipoEquivalencia) {
-                  costo = reingresoLocali.costoUnitarioPEN.$numberDecimal / reingresoLocali.factor;
-                } else {
-                  costo = reingresoLocali.costoUnitarioPEN.$numberDecimal * reingresoLocali.factor;
-                }
+              console.log('aRein', aRein);
+              if (aRein > 0) {
+                const Reingresada = reingresoLocali.cantidadReingresada.$numberDecimal
+                  ? reingresoLocali.cantidadReingresada.$numberDecimal
+                  : reingresoLocali.cantidadReingresada;
+                console.log('Reingresada', Reingresada);
+
+                // let IGVCalculado = 0;
+                const IGVCalculado = 0;
+                // if (reingresoLocali.igv === 0) {
+                //   IGVCalculado = 0;
+                // } else {
+                //   IGVCalculado = 1 + reingresoLocali.igv / 100;
+                // }
+                // let costo = 0;
+                // if (reingresoLocali.tipoEquivalencia) {
+                //   costo = reingresoLocali.costoUnitarioPEN.$numberDecimal / reingresoLocali.factor;
+                // } else {
+                //   costo = reingresoLocali.costoUnitarioPEN.$numberDecimal * reingresoLocali.factor;
+                // }
+                console.log('pre push reingresoLocali', reingresoLocali);
                 documento.itemsMercaderias.push({
                   idAuxiliar: reingresoLocali.idAuxiliar, //parseInt(elIdAuxiliar()),
                   idMercaderia: reingresoLocali.idMercaderia,
                   idEquivalencia: reingresoLocali.idEquivalencia,
                   idKardex: reingresoLocali.idKardex,
-                  idItem: reingresoLocali._id,
+                  idItem: reingresoLocali.idItem,
                   item: 0,
 
-                  IGV: reingresoLocali.igv,
+                  IGV: IGVCalculado, //reingresoLocali.igv,
 
                   codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '_',
 
                   descripcion: reingresoLocali.descripcion,
                   descripcionEquivalencia: reingresoLocali.descripcionEquivalencia,
 
-                  cantidadIngresada: rein * reingresoLocali.laEquivalencia.$numberDecimal,
-                  cantidadIngresadaEquivalencia: rein,
+                  cantidadIngresada: aRein * reingresoLocali.laEquivalencia.$numberDecimal,
+                  cantidadIngresadaEquivalencia: aRein,
 
                   unidad: reingresoLocali.unidad,
                   unidadEquivalencia: reingresoLocali.unidadEquivalencia,
                   ////////////////////////////////////////////////////////////////////////////
-                  costoUnitarioPEN: costo,
-                  costoUnitarioEquivalenciaPEN: reingresoLocali.costoUnitarioPEN,
+                  costoUnitarioPEN: reingresoLocali.costoUnitarioPEN.$numberDecimal,
+                  costoUnitarioEquivalenciaPEN: reingresoLocali.costoUnitarioEquivalenciaPEN.$numberDecimal,
                   //sub = k * c
-                  subPEN: rein * reingresoLocali.laEquivalencia.$numberDecimal * costo,
-                  subEquivalenciaPEN: rein * reingresoLocali.costoUnitarioPEN.$numberDecimal,
-                  //valor = c + IGV
-                  valorUnitarioPEN: costo * IGVCalculado,
-                  valorUnitarioEquivalenciaPEN: reingresoLocali.costoUnitarioPEN.$numberDecimal * IGVCalculado,
+                  subPEN: aRein * reingresoLocali.laEquivalencia.$numberDecimal * reingresoLocali.costoUnitarioPEN.$numberDecimal,
+                  subEquivalenciaPEN: aRein * reingresoLocali.costoUnitarioEquivalenciaPEN.$numberDecimal,
+                  //valor = c + IGV = c
+                  valorUnitarioPEN: reingresoLocali.costoUnitarioPEN.$numberDecimal,
+                  valorUnitarioEquivalenciaPEN: reingresoLocali.costoUnitarioEquivalenciaPEN.$numberDecimal,
                   //tot = k * valor
-                  totPEN: rein * reingresoLocali.laEquivalencia.$numberDecimal * costo * IGVCalculado,
-                  totEquivalenciaPEN: rein * reingresoLocali.costoUnitarioPEN.$numberDecimal * IGVCalculado,
+                  totPEN: aRein * reingresoLocali.laEquivalencia.$numberDecimal * reingresoLocali.costoUnitarioPEN.$numberDecimal,
+                  totEquivalenciaPEN: aRein * reingresoLocali.costoUnitarioEquivalenciaPEN.$numberDecimal,
 
                   tipoEquivalencia: reingresoLocali.tipoEquivalencia,
                   factor: reingresoLocali.factor,
@@ -351,8 +334,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
 
             documento.reingreso = true;
 
-            ctx.mostrarPanelReingresoRequisiciones = false;
-            ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
+            // ctx.mostrarPanelReingresoRequisiciones = false;
+            // ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
+
+            ctx_buscar_nota_salida_reingreso.mostrarPanelNotaDeSalidaReingreso = false;
+            ctx.mostrarPanelBuscarNotaDeSalidaReingreso = false;
           }}
         />
       </div>

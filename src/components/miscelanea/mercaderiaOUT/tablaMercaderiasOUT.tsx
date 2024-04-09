@@ -139,7 +139,9 @@ export default component$(
                               {marca}
                             </td>
                             <td data-label="Stock" class="comoNumero">
-                              {totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}
+                              {totalCantidadSaldo.$numberDecimal
+                                ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
+                                : formatear_6Decimales(totalCantidadSaldo)}
                             </td>
                             <td data-label="Uni" class="acciones">
                               {unidad}

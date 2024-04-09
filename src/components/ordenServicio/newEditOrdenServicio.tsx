@@ -12,7 +12,7 @@ import {
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
-import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo2Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo2Decimales, redondeo6Decimales } from '~/functions/comunes';
 import ElSelect from '../system/elSelect';
 import { getTecnico, getTecnicosActivos } from '~/apis/tecnico.api';
 import { parametrosGlobales } from '~/routes/login';
@@ -42,7 +42,7 @@ export const CTX_CLIENTE_OS = createContextId<IPersona>('os__cliente');
 export const CTX_VEHICULO_OS = createContextId<IVehiculo>('os__vehiculo');
 export const CTX_NEW_EDIT_ORDEN_SERVICIO = createContextId<any>('new_edit_orden_servicio');
 
-export default component$((props: { addPeriodo: any; oSSelecci: any; igv: number }) => {
+export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any }) => {
   useStylesScoped$(style);
 
   //#region DEFINICION CTX_NEW_EDIT_ORDEN_SERVICIO
@@ -246,7 +246,7 @@ OBSERVACIÓN(ES):
     //
     // let cuantosDespachados = 0;
     for (const requi of requisici) {
-      if (requi.cantidadDespachada.$numberDecimal > 0) {
+      if (requi.cantidadDespachada.$numberDecimal - requi.cantidadReingresada.$numberDecimal > 0) {
         repuestosDespachados.value.push({
           _id: requi._id,
           idAuxiliar: requi.idAuxiliar,
@@ -263,7 +263,7 @@ OBSERVACIÓN(ES):
           tipoEquivalencia: requi.tipoEquivalencia,
           factor: requi.factor,
           laEquivalencia: requi.laEquivalencia,
-          cantidadDespachada: requi.cantidadDespachada,
+          cantidadDespachada: requi.cantidadDespachada.$numberDecimal - requi.cantidadReingresada.$numberDecimal,
           costoUnitarioPEN: requi.costoUnitarioPEN,
         });
         // cuantosDespachados++;
@@ -322,6 +322,8 @@ OBSERVACIÓN(ES):
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.selecciono_Persona &&
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.rol_Persona === 'cliente'
     ) {
+      definicion_CTX_O_S.clienteVentasVarias = false;
+
       definicion_CTX_O_S.idCliente = defini_CTX_CLIENTE_OS._id;
       definicion_CTX_O_S.codigoTipoDocumentoIdentidad = defini_CTX_CLIENTE_OS.codigoTipoDocumentoIdentidad;
       definicion_CTX_O_S.tipoDocumentoIdentidad = defini_CTX_CLIENTE_OS.tipoDocumentoIdentidad;
@@ -593,7 +595,7 @@ OBSERVACIÓN(ES):
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 682px)',
+        width: 'clamp(330px, 86%, 782px)',
         // width: 'auto',
         padding: '1px',
         // border: '3px dashed yellow',
@@ -659,7 +661,9 @@ OBSERVACIÓN(ES):
         /> */}
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: '0.8rem' }}>Orden de servicio</h3>
+      <h3 style={{ fontSize: '0.8rem' }}>
+        Orden de servicio - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+      </h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* GENERALES */}
@@ -821,26 +825,14 @@ OBSERVACIÓN(ES):
                     />
                     <input
                       type="image"
+                      src={images.three_dots2}
                       title="Buscar técnico"
                       alt="icono buscar"
                       height={16}
                       width={16}
-                      src={images.three_dots2}
+                      style={{ marginLeft: '4px' }}
                       onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarTecnico = true)}
                     />
-                    {/* <ImgButton
-                      src={images.three_dots2}
-                      alt="imagen de buscar técnico"
-                      height={16}
-                      width={16}
-                      title="Buscar datos de técnico"
-                      // onClick={buscarTecnico}
-                      onClick={$(() => {
-                        // ctx_PanelVenta.mostrarPanelVenta = false;
-                        // ctx_docs_orden_servicio.mostrarPanelSeleccionarPersonaTecnico0 = true;
-                        definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarTecnico = true;
-                      })}
-                    /> */}
                   </>
                 ) : (
                   <input type="text" value={definicion_CTX_O_S.razonSocialNombreTecnico} disabled style={{ width: '100%' }} />
@@ -911,11 +903,12 @@ OBSERVACIÓN(ES):
                 </select>
                 <input
                   type="image"
+                  src={images.searchPLUS}
                   title="Buscar cliente"
                   alt="icono buscar"
                   height={16}
                   width={16}
-                  src={images.searchPLUS}
+                  style={{ marginLeft: '4px' }}
                   onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarPersona = true)}
                 />
                 {/* <ImgButton
@@ -1014,24 +1007,14 @@ OBSERVACIÓN(ES):
                 />
                 <input
                   type="image"
+                  src={images.searchPLUS}
                   title="Buscar vehículo"
                   alt="icono buscar"
                   height={16}
                   width={16}
-                  src={images.searchPLUS}
+                  style={{ marginLeft: '4px' }}
                   onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarVehiculo = true)}
                 />
-                {/* <ImgButton
-                  id={'imgButtonSearchVehiculo'}
-                  src={images.searchPLUS}
-                  alt="Imagen de buscar vehículo"
-                  height={16}
-                  width={16}
-                  title="Buscar vehículo"
-                  onClick={$(() => {
-                    definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarVehiculo = true;
-                  })}
-                /> */}
               </div>
             </div>
             {/* Marca */}
@@ -1228,7 +1211,9 @@ OBSERVACIÓN(ES):
               <div class="modal">
                 <BuscarServicio
                   contexto="orden servicio"
-                  porcentaje={definicion_CTX_O_S.igv}
+                  porcentaje={
+                    definicion_CTX_O_S.igv.$numberDecimal ? definicion_CTX_O_S.igv.$numberDecimal : definicion_CTX_O_S.igv
+                  }
                   // ancho={'500px'}
                   // seleccionar={'servicio'}
                   // // inicializacion={inicializarItemVenta}
@@ -1256,12 +1241,22 @@ OBSERVACIÓN(ES):
                 <tbody>
                   {definicion_CTX_O_S.servicios.map((iTSer: any, index: any) => {
                     const indexItemServi = index + 1;
+                    const porc = iTSer.porcentaje.$numberDecimal
+                      ? parseFloat(iTSer.porcentaje.$numberDecimal)
+                      : parseFloat(iTSer.porcentaje);
+                    const vent = iTSer.ventaPEN.$numberDecimal
+                      ? parseFloat(iTSer.ventaPEN.$numberDecimal)
+                      : parseFloat(iTSer.ventaPEN);
+                    // console.log('OS SERVI: indexItemServi  porc  vent', indexItemServi, porc, vent);
 
-                    sumaTOTAL_servicios =
-                      sumaTOTAL_servicios +
-                      redondeo2Decimales(iTSer.ventaPEN.$numberDecimal ? iTSer.ventaPEN.$numberDecimal : iTSer.ventaPEN);
-                    subTOTAL_servicios = redondeo2Decimales((sumaTOTAL_servicios * 100) / (100 + definicion_CTX_O_S.igv));
-                    igvTOTAL_servicios = redondeo2Decimales(sumaTOTAL_servicios - subTOTAL_servicios);
+                    sumaTOTAL_servicios = sumaTOTAL_servicios + redondeo6Decimales(vent);
+                    // console.log('OS SERVI: sumaTOTAL_servicios', sumaTOTAL_servicios);
+
+                    subTOTAL_servicios = redondeo6Decimales((sumaTOTAL_servicios * 100) / (100 + porc));
+                    // console.log('OS SERVI: subTOTAL_servicios', subTOTAL_servicios);
+
+                    igvTOTAL_servicios = redondeo6Decimales(sumaTOTAL_servicios - subTOTAL_servicios);
+                    // console.log('OS SERVI: igvTOTAL_servicios', igvTOTAL_servicios);
 
                     // if (index + 1 === definicion_CTX_O_S.servicios.length) {
                     //
@@ -1286,14 +1281,20 @@ OBSERVACIÓN(ES):
                             type="number"
                             disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             style={{ width: '60px', textAlign: 'end' }}
-                            value={iTSer.cantidad.$numberDecimal ? iTSer.cantidad.$numberDecimal : iTSer.cantidad}
+                            value={
+                              iTSer.cantidadEquivalencia.$numberDecimal
+                                ? iTSer.cantidadEquivalencia.$numberDecimal
+                                : iTSer.cantidadEquivalencia
+                            }
                             onChange$={(e) => {
                               // const iv = itemsVentaK[index];
-                              iTSer.cantidad = parseFloat((e.target as HTMLInputElement).value);
+                              iTSer.cantidadEquivalencia = parseFloat((e.target as HTMLInputElement).value);
 
                               iTSer.ventaPEN =
-                                (iTSer.cantidad ? iTSer.cantidad : iTSer.cantidad.$numberDecimal) *
-                                (iTSer.precioPEN ? iTSer.precioPEN : iTSer.precioPEN.$numberDecimal);
+                                (iTSer.cantidadEquivalencia.$numberDecimal
+                                  ? iTSer.cantidadEquivalencia.$numberDecimal
+                                  : iTSer.cantidadEquivalencia) *
+                                (iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN);
                             }}
                           />
                         </td>
@@ -1308,12 +1309,15 @@ OBSERVACIÓN(ES):
                             value={iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN}
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
-
+                              console.log('.........precio', precio);
                               iTSer.precioPEN = precio;
-
+                              console.log('.........iTSer.precioPEN ', iTSer.precioPEN, iTSer.cantidadEquivalencia);
+                              const K = iTSer.cantidadEquivalencia.$numberDecimal
+                                ? parseFloat(iTSer.cantidadEquivalencia.$numberDecimal)
+                                : parseFloat(iTSer.cantidadEquivalencia);
+                              console.log('K', K);
                               iTSer.ventaPEN =
-                                (iTSer.cantidad ? iTSer.cantidad : iTSer.cantidad.$numberDecimal) *
-                                (iTSer.precioPEN ? iTSer.precioPEN : iTSer.precioPEN.$numberDecimal);
+                                K * (iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN);
                             }}
                           />
                         </td>
@@ -1457,7 +1461,13 @@ OBSERVACIÓN(ES):
 
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarMercaderiaOUT && (
               <div class="modal">
-                <BuscarMercaderiaOUT contexto="orden servicio" esAlmacen={false} porcentaje={definicion_CTX_O_S.igv} />
+                <BuscarMercaderiaOUT
+                  contexto="orden servicio"
+                  esAlmacen={false}
+                  porcentaje={
+                    definicion_CTX_O_S.igv.$numberDecimal ? definicion_CTX_O_S.igv.$numberDecimal : definicion_CTX_O_S.igv
+                  }
+                />
               </div>
             )}
             {/* TABLA REQUISICIONES */}
@@ -1479,12 +1489,21 @@ OBSERVACIÓN(ES):
                 <tbody>
                   {definicion_CTX_O_S.requisiciones.map((iTRequi: any, index: any) => {
                     const indexItemRequi = index + 1;
+                    const porc = iTRequi.porcentaje.$numberDecimal
+                      ? parseFloat(iTRequi.porcentaje.$numberDecimal)
+                      : parseFloat(iTRequi.porcentaje);
+                    // console.log('OS REQUI: indexItemRequi  porc', indexItemRequi, porc);
 
                     sumaTOTAL_requisiciones =
                       sumaTOTAL_requisiciones +
-                      redondeo2Decimales(iTRequi.ventaPEN.$numberDecimal ? iTRequi.ventaPEN.$numberDecimal : iTRequi.ventaPEN);
-                    subTOTAL_requisiciones = redondeo2Decimales((sumaTOTAL_requisiciones * 100) / (100 + definicion_CTX_O_S.igv));
-                    igvTOTAL_requisiciones = redondeo2Decimales(sumaTOTAL_requisiciones - subTOTAL_requisiciones);
+                      redondeo6Decimales(iTRequi.ventaPEN.$numberDecimal ? iTRequi.ventaPEN.$numberDecimal : iTRequi.ventaPEN);
+                    // console.log('OS REQUI: sumaTOTAL_requisiciones', sumaTOTAL_requisiciones);
+
+                    subTOTAL_requisiciones = redondeo6Decimales((sumaTOTAL_requisiciones * 100) / (100 + porc));
+                    // console.log('OS REQUI: subTOTAL_requisiciones', subTOTAL_requisiciones);
+
+                    igvTOTAL_requisiciones = redondeo6Decimales(sumaTOTAL_requisiciones - subTOTAL_requisiciones);
+                    // console.log('OS REQUI: igvTOTAL_requisiciones', igvTOTAL_requisiciones);
 
                     return (
                       <tr key={iTRequi.idAuxiliar}>
@@ -1508,13 +1527,35 @@ OBSERVACIÓN(ES):
                             type="number"
                             disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             style={{ width: '60px', textAlign: 'end' }}
-                            value={iTRequi.cantidad.$numberDecimal ? iTRequi.cantidad.$numberDecimal : iTRequi.cantidad}
+                            value={
+                              iTRequi.cantidadEquivalencia.$numberDecimal
+                                ? iTRequi.cantidadEquivalencia.$numberDecimal
+                                : iTRequi.cantidadEquivalencia
+                            }
+                            // onInput$={(e) => {
+                            //   console.log('.......firts...onInput....');
+                            //   if (
+                            //     parseFloat((e.target as HTMLInputElement).value) <
+                            //     iTRequi.cantidadDespachada.$numberDecimal - iTRequi.cantidadReingresada.$numberDecimal
+                            //   ) {
+                            //     alert(
+                            //       `La cantidad ingresada es menor a la cantidad ya DESPACHADA (${
+                            //         iTRequi.cantidadDespachada.$numberDecimal - iTRequi.cantidadReingresada.$numberDecimal
+                            //       })`
+                            //     );
+                            //     return;
+                            //   }
+                            // }}
                             onChange$={(e) => {
-                              iTRequi.cantidad = parseFloat((e.target as HTMLInputElement).value);
+                              // console.log('.......firts...onChange....');
+
+                              iTRequi.cantidadEquivalencia = parseFloat((e.target as HTMLInputElement).value);
 
                               iTRequi.ventaPEN =
-                                (iTRequi.cantidad ? iTRequi.cantidad : iTRequi.cantidad.$numberDecimal) *
-                                (iTRequi.precioPEN ? iTRequi.precioPEN : iTRequi.precioPEN.$numberDecimal);
+                                (iTRequi.cantidadEquivalencia.$numberDecimal
+                                  ? iTRequi.cantidadEquivalencia.$numberDecimal
+                                  : iTRequi.cantidadEquivalencia) *
+                                (iTRequi.precioPEN.$numberDecimal ? iTRequi.precioPEN.$numberDecimal : iTRequi.precioPEN);
                             }}
                           />
                         </td>
@@ -1533,8 +1574,10 @@ OBSERVACIÓN(ES):
                               iTRequi.precioPEN = precio;
 
                               iTRequi.ventaPEN =
-                                (iTRequi.cantidad ? iTRequi.cantidad : iTRequi.cantidad.$numberDecimal) *
-                                (iTRequi.precioPEN ? iTRequi.precioPEN : iTRequi.precioPEN.$numberDecimal);
+                                (iTRequi.cantidadEquivalencia.$numberDecimal
+                                  ? iTRequi.cantidadEquivalencia.$numberDecimal
+                                  : iTRequi.cantidadEquivalencia) *
+                                (iTRequi.precioPEN.$numberDecimal ? iTRequi.precioPEN.$numberDecimal : iTRequi.precioPEN);
                             }}
                           />
                         </td>
@@ -1665,7 +1708,7 @@ OBSERVACIÓN(ES):
                     </tr>
                   </thead>
                   <tbody>
-                    {repuestosDespachados.value.map((iTRepuDespachado: any, index: any) => {
+                    {repuestosDespachados.value.map((iTRepuDespachado: any, index: number) => {
                       const indexItemRequiDespachados = index + 1;
 
                       sumaTOTAL_repuestosDespachados =

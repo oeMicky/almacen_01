@@ -4,7 +4,7 @@ import ImgButton from '~/components/system/imgButton';
 // import { CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO } from './buscarOrdenServicioAperturado';
 // import { IOrdenServicio_DespachoRequisicion } from '~/interfaces/iOrdenServicio';
 import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
-import { cerosALaIzquierda, elIdAuxiliar } from '~/functions/comunes';
+import { cerosALaIzquierda, elIdAuxiliar, formatear_6Decimales } from '~/functions/comunes';
 
 export default component$((props: { contexto: string; osSeleccionada: any }) => {
   //#region OS_SELECCINADA
@@ -119,7 +119,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3>Despacho de requisiciones</h3>
+        <h3>Despacho de requisiciones B</h3>
         {/* CLIENTE */}
         <div>
           <div style={{ margin: '5px 0' }}>ID:{` ${props.osSeleccionada._id} `}</div>
@@ -172,8 +172,9 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                             <th>Stock Equi</th>
                             <th>Uni</th>
                             <th>Cant.</th>
-                            <th>Cant.Despachada</th>
-                            <th>Cant.A Despachar</th>
+                            <th>Cant Despachada</th>
+                            <th>Cant Reingresada</th>
+                            <th>Cant A Despachar</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -207,32 +208,41 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                                 <td data-label="Código" class="comoCadena">
                                   {despachoLocali.codigo}
                                 </td>
-                                <td data-label="Descripción" class="comoCadena">
+                                <td data-label="Descripción Equi" class="comoCadena">
                                   {despachoLocali.descripcionEquivalencia}
                                 </td>
-                                <td data-label="Stock" class="comoNumero">
+                                <td data-label="Stock Equi" class="comoNumero">
                                   {despachoLocali.tipoEquivalencia
                                     ? despachoLocali.stock.$numberDecimal
-                                      ? despachoLocali.stock.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal
-                                      : despachoLocali.stock * despachoLocali.laEquivalencia.$numberDecimal
+                                      ? formatear_6Decimales(
+                                          despachoLocali.stock.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal
+                                        )
+                                      : formatear_6Decimales(despachoLocali.stock * despachoLocali.laEquivalencia.$numberDecimal)
                                     : despachoLocali.stock.$numberDecimal
-                                    ? despachoLocali.stock.$numberDecimal / despachoLocali.laEquivalencia.$numberDecimal
-                                    : despachoLocali.stock / despachoLocali.laEquivalencia.$numberDecimal}
+                                    ? formatear_6Decimales(
+                                        despachoLocali.stock.$numberDecimal / despachoLocali.laEquivalencia.$numberDecimal
+                                      )
+                                    : formatear_6Decimales(despachoLocali.stock / despachoLocali.laEquivalencia.$numberDecimal)}
                                 </td>
                                 <td data-label="Uni" class="comoCadena">
                                   {despachoLocali.unidadEquivalencia}
                                 </td>
                                 <td data-label="Cantidad" class="comoNumero">
-                                  {despachoLocali.cantidad.$numberDecimal
-                                    ? despachoLocali.cantidad.$numberDecimal
-                                    : despachoLocali.cantidad}
+                                  {despachoLocali.cantidadEquivalencia.$numberDecimal
+                                    ? despachoLocali.cantidadEquivalencia.$numberDecimal
+                                    : despachoLocali.cantidadEquivalencia}
                                 </td>
-                                <td data-label="Cant.Despachada" class="comoNumero">
+                                <td data-label="Cant Despachada" class="comoNumero">
                                   {despachoLocali.cantidadDespachada.$numberDecimal
                                     ? despachoLocali.cantidadDespachada.$numberDecimal
                                     : despachoLocali.cantidadDespachada}
                                 </td>
-                                <td data-label="Cant.A Despachar" class="comoNumero">
+                                <td data-label="Cant Reingresada" class="comoNumero">
+                                  {despachoLocali.cantidadReingresada.$numberDecimal
+                                    ? despachoLocali.cantidadReingresada.$numberDecimal
+                                    : despachoLocali.cantidadReingresada}
+                                </td>
+                                <td data-label="Cant A Despachar" class="comoNumero">
                                   <input
                                     style={{ width: '60px', textAlign: 'end' }}
                                     value={despachoLocali.aDespachar}
@@ -271,6 +281,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           onClick$={() => {
             console.log('losDespachos', losDespachos);
             console.log('mis despachos', misDespachos.value);
+            console.log('props.osSeleccionadas', props.osSeleccionada);
 
             //VERIFICAR montos a DESPACHAR
             let todoCorrecto = true;
@@ -295,16 +306,23 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             for (const despachoLocali of misDespachos.value) {
               i++;
               const canti = parseFloat(
-                despachoLocali.cantidad.$numberDecimal ? despachoLocali.cantidad.$numberDecimal : despachoLocali.cantidad
+                despachoLocali.cantidadEquivalencia.$numberDecimal
+                  ? despachoLocali.cantidadEquivalencia.$numberDecimal
+                  : despachoLocali.cantidadEquivalencia
               );
 
-              const adas = parseFloat(
+              const despachado = parseFloat(
                 despachoLocali.cantidadDespachada.$numberDecimal
                   ? despachoLocali.cantidadDespachada.$numberDecimal
                   : despachoLocali.cantidadDespachada
               );
+              const reing = parseFloat(
+                despachoLocali.cantidadReingresada.$numberDecimal
+                  ? despachoLocali.cantidadReingresada.$numberDecimal
+                  : despachoLocali.cantidadReingresada
+              );
 
-              const despa = parseFloat(
+              const aDespa = parseFloat(
                 despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar
               );
 
@@ -317,25 +335,26 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                   parseFloat(despachoLocali.stock.$numberDecimal) / parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
               }
 
-              console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, despa);
-              if (despa > stockEQUIVALENTE) {
+              console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
+              if (aDespa > stockEQUIVALENTE) {
                 alert(
-                  `ATENCIÓN: Desea despachar mayor cantidad ( ${despa} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`
+                  `ATENCIÓN: Desea despachar mayor cantidad ( ${aDespa} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`
                 );
                 todoCorrecto = false;
                 break;
               }
 
-              console.log('canti - adas - por despa', canti, adas, despa);
-              if (adas + despa > canti) {
+              console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
+              if (despachado - reing + aDespa > canti) {
                 alert(
-                  `ATENCIÓN: Se intenta despachar una cantidad mayor a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( ${adas} ) más lo que se desea despachar ahora ( ${despa} ), y se encuetra en la posición # ${i}`
+                  `ATENCIÓN: Se intenta despachar una cantidad mayor a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( Despachado-Reingresada = ${
+                    despachado - reing
+                  } ) más lo que se desea despachar ahora ( ${aDespa} ), y se encuetra en la posición # ${i}`
                 );
                 todoCorrecto = false;
                 break;
               }
             }
-
             if (!todoCorrecto) {
               return;
             }
@@ -377,6 +396,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 ? despachoLocali.aDespachar.$numberDecimal
                 : despachoLocali.aDespachar;
               console.log('🚍🚍🚍🚍🚍despaEquiva', despaEquiva);
+              console.log('despachoLocali', despachoLocali);
               if (despaEquiva > 0) {
                 // let despa = 0;
 
@@ -385,23 +405,28 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                   idMercaderia: despachoLocali.idMercaderia,
                   idEquivalencia: despachoLocali.idEquivalencia,
                   idKardex: despachoLocali.idKardex,
+                  idItem: despachoLocali._id,
                   item: 0,
 
                   codigo: despachoLocali.codigo ? despachoLocali.codigo : '_',
+
                   descripcion: despachoLocali.descripcion,
-                  cantidadSacada: despaEquiva * despachoLocali.laEquivalencia.$numberDecimal,
-                  unidad: despachoLocali.unidad,
-
                   descripcionEquivalencia: despachoLocali.descripcionEquivalencia,
-                  cantidadSacadaEquivalencia: despaEquiva,
-                  unidadEquivalencia: despachoLocali.unidadEquivalencia,
 
-                  costoUnitarioPEN:
+                  cantidadSacada: despaEquiva * despachoLocali.laEquivalencia.$numberDecimal,
+                  cantidadSacadaEquivalencia: despaEquiva,
+
+                  unidad: despachoLocali.unidad,
+                  unidadEquivalencia: despachoLocali.unidadEquivalencia,
+                  /////////////////////////////////////////////////////////////////////
+                  costoUnitarioPEN: despachoLocali.costoUnitarioMovil.$numberDecimal,
+                  costoUnitarioEquivalenciaPEN:
                     despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
-                  subPEN:
+                  //sub = K * c
+                  subPEN: despaEquiva * despachoLocali.costoUnitarioMovil.$numberDecimal,
+                  subEquivalenciaPEN:
                     despaEquiva * despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
-                  // costoUnitarioPEN: 66,
-                  // subTotalPEN: despa * 66,
+
                   precioUSD: 0,
                   ventaUSD: 0,
 

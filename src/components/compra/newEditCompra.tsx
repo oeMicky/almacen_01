@@ -1145,7 +1145,9 @@ export default component$(
           /> */}
         </div>
         {/* TITULO */}
-        <h3 style={{ fontSize: '0.8rem' }}>Compra - {parametrosGlobales.RazonSocial}</h3>
+        <h3 style={{ fontSize: '0.8rem' }}>
+          Compra - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+        </h3>
         {/* FORMULARIO */}
         <div class="add-form">
           {/* GENERALES */}

@@ -153,21 +153,21 @@ export default component$((props: { contexto: string; porcentaje: any }) => {
               />
               <input
                 type="image"
+                src={images.searchPLUS}
                 title="Buscar servicio"
                 alt="icon buscar"
                 height={16}
                 width={16}
                 style={{ margin: '0 2px' }}
-                src={images.searchPLUS}
                 onClick$={() => localizarServicios()}
               />
               <input
                 type="image"
+                src={images.add}
                 title="Adicionar servicio"
                 alt="icon adicionar"
                 height={16}
                 width={16}
-                src={images.add}
                 onClick$={() => {
                   definicion_CTX_BUSCAR_SERVICIO.sS = [];
                   definicion_CTX_BUSCAR_SERVICIO.mostrarPanelNewEditServicio = true;

@@ -147,7 +147,9 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
         /> */}
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: '0.8rem' }}>Guía de remisión</h3>
+      <h3 style={{ fontSize: '0.8rem' }}>
+        Guía de remisión - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+      </h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* GENERALES */}

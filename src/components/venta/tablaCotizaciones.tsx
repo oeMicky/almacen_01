@@ -117,7 +117,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
           <>
             {misCotizaciones.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.9em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Cotización</th>
@@ -165,8 +165,13 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                     ctx_f_b_nc_nd.serieCotizacion = COT.serie;
                                     ctx_f_b_nc_nd.numeroCotizacion = COT.numero;
 
+                                    ctx_f_b_nc_nd.idOrdenServicio = '';
+                                    ctx_f_b_nc_nd.serieOrdenServicio = '';
+                                    ctx_f_b_nc_nd.numeroOrdenServicio = 0;
+
                                     ctx_f_b_nc_nd.observacion = COT.serie + ' - ' + cerosALaIzquierda(COT.numero, 8);
 
+                                    ctx_f_b_nc_nd.clienteVentasVarias = false;
                                     ctx_f_b_nc_nd.idCliente = COT.idCliente;
 
                                     ctx_f_b_nc_nd.codigoTipoDocumentoIdentidad = COT.codigoTipoDocumentoIdentidad;
@@ -189,12 +194,23 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         porcentaje: parseFloat(ser.porcentaje.$numberDecimal),
 
                                         codigo: ser.codigo ? ser.codigo : '_',
+
+                                        descripcion: ser.descripcion,
                                         descripcionEquivalencia: ser.descripcionEquivalencia,
+
                                         cantidad: ser.cantidad.$numberDecimal,
-                                        unidadEquivalencia: 'UNI',
-                                        costoUnitarioPEN: 0,
+                                        cantidadEquivalencia: ser.cantidadEquivalencia.$numberDecimal,
+
+                                        unidad: ser.unidad,
+                                        unidadEquivalencia: ser.unidadEquivalencia,
+
+                                        costoUnitarioPEN: ser.costoUnitarioPEN.$numberDecimal,
+                                        costoUnitarioEquivalenciaPEN: ser.costoUnitarioEquivalenciaPEN.$numberDecimal,
+
                                         precioPEN: ser.precioPEN.$numberDecimal,
-                                        ventaPEN: ser.cantidad.$numberDecimal * ser.precioPEN.$numberDecimal,
+
+                                        ventaPEN: ser.ventaPEN.$numberDecimal,
+
                                         precioUSD: 0,
                                         ventaUSD: 0,
 
@@ -218,12 +234,23 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         porcentaje: parseFloat(rep.porcentaje.$numberDecimal),
 
                                         codigo: rep.codigo ? rep.codigo : '_',
+
+                                        descripcion: rep.descripcion,
                                         descripcionEquivalencia: rep.descripcionEquivalencia,
+
                                         cantidad: rep.cantidad.$numberDecimal,
+                                        cantidadEquivalencia: rep.cantidadEquivalencia.$numberDecimal,
+
+                                        unidad: rep.unidad,
                                         unidadEquivalencia: rep.unidadEquivalencia,
+
                                         costoUnitarioPEN: rep.costoUnitarioPEN.$numberDecimal,
+                                        costoUnitarioEquivalenciaPEN: rep.costoUnitarioEquivalenciaPEN.$numberDecimal,
+
                                         precioPEN: rep.precioPEN.$numberDecimal,
-                                        ventaPEN: rep.cantidad.$numberDecimal * rep.precioPEN.$numberDecimal,
+
+                                        ventaPEN: rep.ventaPEN.$numberDecimal,
+
                                         precioUSD: 0,
                                         ventaUSD: 0,
 
@@ -249,7 +276,6 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               </>
                             ) : (
                               <input
-                                // id="in_BuscarDetraccion"
                                 type="image"
                                 src={images.edit}
                                 title="Editar venta"
@@ -257,8 +283,6 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 width={12}
                                 style={{ marginRight: '6px' }}
                                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
-                                // onClick$={() => {
-                                // }}
                               />
                             )}
                             <input
@@ -268,12 +292,21 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               title="Ver pdf"
                               height={12}
                               width={12}
-                              // style={{ padding: '2px' }}
                               onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 pdfCotizacionMG(COT);
-                                // cotizacionSeleccionada.value = value;
-                                // clickPDF.value++;
+                              }}
+                            />
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
+                              src={images.see}
+                              title="Ver COT "
+                              height={12}
+                              width={12}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
+                                console.log('COT', COT);
                               }}
                             />
                           </td>
