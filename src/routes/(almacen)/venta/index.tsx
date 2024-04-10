@@ -1,4 +1,5 @@
 import {
+  $,
   component$,
   createContextId,
   useContextProvider,
@@ -21,7 +22,7 @@ import { parametrosGlobales } from '../../login/index';
 // import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
-import { hoy } from '~/functions/comunes';
+import { formatoDDMMYYYY_PEN, hoy } from '~/functions/comunes';
 // import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 
@@ -177,29 +178,29 @@ export default component$(() => {
   //#endregion REFRESCAR REGISTROS
 
   //#region CREAR Y DOWNLOAD TXT
-  // const createAndDownloadFile = $((nameFile: string, texto: string) => {
-  //   // const xmltext = '<sometag><someothertag></someothertag></sometag>';
-  //   // const texto = 'hOLA A TODOS';
+  const createAndDownloadFile = $((nameFile: string, texto: string) => {
+    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    // const texto = 'hOLA A TODOS';
 
-  //   const filename = nameFile; ///'file.xml';
-  //   const pom = document.createElement('a');
-  //   const bb = new Blob([texto], { type: 'text/plain' });
+    const filename = nameFile; ///'file.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([texto], { type: 'text/plain' });
 
-  //   pom.setAttribute('href', window.URL.createObjectURL(bb));
-  //   // pom.setAttribute('download', filename);
-  //   pom.setAttribute('download', filename + '.txt');
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    // pom.setAttribute('download', filename);
+    pom.setAttribute('download', filename + '.txt');
 
-  //   pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
-  //   pom.draggable = true;
-  //   pom.classList.add('dragout');
+    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
 
-  //   pom.click();
+    pom.click();
 
-  //   // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
-  //   // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
-  //   // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-  //   console.log('first txt');
-  // });
+    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+    console.log('first txt');
+  });
   //#endregion CREAR Y DOWNLOAD TXT
 
   return (
@@ -392,18 +393,18 @@ export default component$(() => {
 
             definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
           }}
-        />
+        />*/}
         <input
           type="button"
           value="pre PLE"
           title="PLE de ventas"
           style={{ marginLeft: '16px' }}
           onClick$={() => {
-            if (parametrosBusqueda.idPeriodo === '') {
-              alert('Debe seleccionar el periodo');
-              document.getElementById('se_periodo_VENTA')?.focus();
-              return;
-            }
+            // if (parametrosBusqueda.idPeriodo === '') {
+            //   alert('Debe seleccionar el periodo');
+            //   document.getElementById('se_periodo_VENTA')?.focus();
+            //   return;
+            // }
             if (definicion_CTX_INDEX_VENTA.miscVts.length === 0) {
               alert('El PLE del presente periodo no presenta datos para exportar.');
               document.getElementById('se_periodo_VENTA')?.focus();
@@ -500,7 +501,7 @@ export default component$(() => {
             // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
             createAndDownloadFile('elPLE_VENTA_' + periodo.periodo, aExportar);
           }}
-        /> */}
+        />
         {definicion_CTX_INDEX_VENTA.mostrarPanelVenta && (
           <div class="modal">
             <AddVenta addPeriodo={periodo} igv={igv.value} />

@@ -17,7 +17,7 @@ import pdfVentaMG from '~/reports/MG/pdfVentaMG';
 import type { IVenta } from '~/interfaces/iVenta';
 import { CTX_INDEX_VENTA } from '~/routes/(almacen)/venta';
 import { parametrosGlobales } from '~/routes/login';
-import { sendJSONVenta } from '~/apis/venta.api';
+import { descargaArchivoVenta, sendJSONVenta } from '~/apis/venta.api';
 
 // interface IEstructura {
 //   _id: string;
@@ -385,9 +385,24 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                 width={12}
                                 style={{ marginRight: '4px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
-                                onClick$={() => {
-                                  ventaSeleccionada.value = venta;
-                                  clickPDF.value++;
+                                onClick$={async () => {
+                                  // ventaSeleccionada.value = venta;
+                                  // clickPDF.value++;
+                                  const DescarArchi = await descargaArchivoVenta({
+                                    idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                    idEmpresa: parametrosGlobales.idEmpresa,
+                                    idVenta: venta._id,
+                                    tipo: 'PDF',
+                                  });
+                                  console.log('DescarArchi', DescarArchi);
+                                  console.log('DescarArchi.data.archivo', DescarArchi.data.archivo);
+
+                                  const linkSource = `data:application/pdf;base64,${DescarArchi.data.archivo}`;
+                                  const downloadLink = document.createElement('a');
+                                  const fileName = 'abc.pdf';
+                                  downloadLink.href = linkSource;
+                                  downloadLink.download = fileName;
+                                  downloadLink.click();
                                 }}
                               />
                               {parametrosGlobales.facturacionElectronica && parametrosGlobales.facturaJSON && (
@@ -451,7 +466,11 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                 style={{ marginRight: '4px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={async () => {
-                                  const respuesta = await sendJSONVenta(venta.json);
+                                  const respuesta = await sendJSONVenta({
+                                    idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                    idEmpresa: parametrosGlobales.idEmpresa,
+                                    idVenta: venta._id,
+                                  });
                                   console.log('respuesta:::--->>>', respuesta);
                                   // ventaSeleccionada.value = value;
                                   // clickPDF.value++;

@@ -121,7 +121,7 @@ export const getAsientoVenta = async (parametros) => {
 export const sendJSONVenta = async (parametros) => {
   console.log('//////api////////////******************sendJSONVenta');
   console.log('parametros sendJSONVenta', parametros);
-  const res = await fetch('http://demoint.thefactoryhka.com.pe/Clients/ServiceClients.svc/Enviar', {
+  const res = await fetch(API + '/enviarJSONTheH', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -129,4 +129,39 @@ export const sendJSONVenta = async (parametros) => {
     body: JSON.stringify(parametros),
   });
   return res.json();
+  // console.log('//////api////////////******************sendJSONVenta');
+  // console.log('parametros sendJSONVenta', parametros);
+  // const res = await fetch('http://demoint.thefactoryhka.com.pe/Clients/ServiceClients.svc/Enviar', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(parametros),
+  // });
+  // console.log('res sendJSONVenta', res);
+  // return res.json();
+};
+
+export const descargaArchivoVenta = async (parametros) => {
+  console.log('//////api////////////******************descargaArchivoVenta');
+  console.log('parametros descargaArchivoVenta', parametros);
+  const res = await fetch(API + '/descargaArchivoTheH', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+  // console.log('//////api////////////******************sendJSONVenta');
+  // console.log('parametros sendJSONVenta', parametros);
+  // const res = await fetch('http://demoint.thefactoryhka.com.pe/Clients/ServiceClients.svc/Enviar', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(parametros),
+  // });
+  // console.log('res sendJSONVenta', res);
+  // return res.json();
 };

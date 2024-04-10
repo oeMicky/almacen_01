@@ -73,7 +73,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
             <>
               {ctx_index_compra.miscCs.length > 0 ? (
                 <>
-                  <table class="tabla-compra" style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                  <table class="tabla-compra" style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
