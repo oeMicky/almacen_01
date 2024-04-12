@@ -1097,7 +1097,7 @@ export default component$(
               console.log('parametrosGlobales', parametrosGlobales);
             })}
           />
-          {/* <ImgButton
+          <ImgButton
             src={images.see}
             alt="Icono de cerrar"
             height={16}
@@ -1113,7 +1113,7 @@ export default component$(
               // console.log('props.igvPorDefault', props.igvPorDefault);
             })}
           />
-          <ImgButton
+          {/*  <ImgButton
             src={images.see}
             alt="Icono de cerrar"
             height={16}
@@ -1444,9 +1444,8 @@ export default component$(
                 </div>
               </div>
               {/* Fecha de VENCIMIENTO*/}
-              <div class="form-control">
-                <label>Fecha de vencimiento</label>
-                <div class="form-control form-agrupado">
+              <div>
+                <div style={{ display: 'flex' }}>
                   <input
                     id="chbx_fechaVencimiento"
                     // style={{ width: '100%' }}
@@ -1469,6 +1468,9 @@ export default component$(
                       (e.target as HTMLInputElement).select();
                     }}
                   />
+                  <label for="chbx_fechaVencimiento" style={{ marginRight: '4px' }}>
+                    F.VENC.
+                  </label>
                   <input
                     id="in_FechaVencimiento"
                     style={{ width: '100%' }}
@@ -1923,15 +1925,16 @@ export default component$(
             {/* ----------------------------------------------------- */}
             {/* DETRACCION */}
             <div>
-              <div class="form-control">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
+              <div>
+                <div style={{ display: 'flex' }}>
                   <input
                     type="checkbox"
                     id="chbx_Detraccion"
                     checked={definicion_CTX_COMPRA.detraccion}
                     onChange$={(e) => (definicion_CTX_COMPRA.detraccion = (e.target as HTMLInputElement).checked)}
                   />
-                  <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>Detracción</strong>
+                  <label for="chbx_Detraccion">Detracción</label>
+                  {/* <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>Detracción</strong> */}
                 </div>
               </div>
               <div id="zona_Detraccion" hidden={!definicion_CTX_COMPRA.detraccion}>
@@ -2053,17 +2056,18 @@ export default component$(
               </div>
             )}
             {/* ----------------------------------------------------- */}
-            {/* RETENCION */}
+            {/* RETENCION   alignItems: 'center',  justifyContent: 'center', marginRight: '3px'   */}
             <div id="zona_Retencion_Primaria" hidden={!definicion_CTX_COMPRA.agenteRetencion}>
-              <div class="form-control">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
+              <div>
+                <div style={{ display: 'flex' }}>
                   <input
                     type="checkbox"
                     id="chbx_Retencion"
                     checked={definicion_CTX_COMPRA.retencion}
                     onChange$={(e) => (definicion_CTX_COMPRA.retencion = (e.target as HTMLInputElement).checked)}
                   />
-                  <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>Retención</strong>
+                  <label for="chbx_Retencion">Retención</label>
+                  {/* <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>Retención</strong> */}
                 </div>
               </div>
               <div id="zona_Retencion_Secundaria" hidden={!definicion_CTX_COMPRA.retencion}>
@@ -2150,7 +2154,7 @@ export default component$(
                 </div>
                 <div class="form-control">
                   {definicion_CTX_COMPRA.asientoContable.length > 0 ? (
-                    <table style={{ fontSize: '0.8em', fontWeight: 'lighter', margin: '5px 0' }}>
+                    <table style={{ fontSize: '0.9em', fontWeight: 'lighter', margin: '5px 0' }}>
                       <thead>
                         <tr>
                           <th>Ítem</th>

@@ -214,7 +214,7 @@ export default component$(() => {
                 <>
                   {misDetracciones.length > 0 ? (
                     <>
-                      <table class="tabla-venta" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
+                      <table class="tabla-venta" style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
                         <thead>
                           <tr>
                             <th>Item</th>
@@ -245,7 +245,7 @@ export default component$(() => {
                                     src={images.check32}
                                     height={14}
                                     width={14}
-                                    style={{ padding: '2px' }}
+                                    style={{ marginRight: '8px' }}
                                     onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                     onClick$={() => {
                                       ctx_compra.detraccionPorcentaje = detraccion.porcentaje;
@@ -261,7 +261,7 @@ export default component$(() => {
                                     src={images.edit}
                                     height={14}
                                     width={14}
-                                    style={{ padding: '2px' }}
+                                    // style={{ padding: '2px' }}
                                     onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                     onClick$={() => {
                                       definicion_CTX_BUSCAR_DETRACCION_PORCENTAJE.pP = detraccion;

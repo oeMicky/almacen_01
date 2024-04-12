@@ -183,6 +183,8 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
       totalHaberPEN: 0,
       totalDebeUSD: -1,
       totalHaberUSD: 0,
+
+      ganancias: 0,
     },
     { deep: true }
   );

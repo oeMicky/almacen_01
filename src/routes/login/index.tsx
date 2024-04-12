@@ -6,6 +6,8 @@ import styles from './login.css?inline';
 import { getActivoGEEMP, getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
 import Spinner from '~/components/system/spinner';
 
+// export const CTX_CONFIGURACION = createContextId<any>('__configuracion');
+
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
@@ -79,6 +81,51 @@ export default component$(() => {
   useStylesScoped$(styles);
 
   const navegarA = useNavigate();
+
+  // const definicion_CTX_CONFIGURACION = useStore<any>({
+  //   paginaInicioDelSistema: '/venta',
+  //   paginaInicioDefault: '/venta',
+  //   //Grupo Empresarial
+  //   idGrupoEmpresarial: '', //'60f097ca53621708ecc4e781',
+  //   nombreGrupoEmpresarial: '', //'El Grupo Empresarial',
+  //   //Empresa
+  //   idEmpresa: '', //'60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
+  //   RazonSocial: '', //'CORPORACION ACME I',
+  //   colorHeaderEmpresarial: '',
+  //   Direccion: '', //'ARKANZAS NRO 354',
+  //   RUC: '', //'99999999999',
+  //   agenteRetencion: false,
+  //   agentePercepcion: false,
+  //   //Sucursal
+  //   idSucursal: '', //'651ad18424595a30fe7926d2',
+  //   sucursal: '', //'Pardo',
+  //   sucursalDireccion: 'Av. Pardo 9999',
+  //   // parameRUC: 'chamo', // '99999999999',
+  //   //Almacén
+  //   almacenActivo: false,
+  //   idAlmacen: '', //'60f3e61a41a71c1148bc4e29', //la SUCURSAL otorgara su ID al ALMACÉN
+  //   nombreAlmacen: 'Praga',
+  //   //Usuario
+  //   usuario: '', // 'octubre',
+  //   //
+  //   ingreso: false,
+  //   periodos: [],
+  //   // mostrarSpinner: false,
+  //   facturacionElectronica: false,
+  //   facturacionElectronicaAutomatica: false,
+  //   facturaJSON: false,
+  //   facturaXML: false,
+  //   contabilizarOperaciones: false,
+  //   planesContables: [],
+  //   asientoCompra: [],
+  //   asientoVenta: [],
+  //   codigoContableVentaServicio: '',
+  //   descripcionContableVentaServicio: '',
+  //   // idLibroDiario: '6604c567242e40cf619c834f',
+  //   idLibroDiario: '',
+  //   idEjercicio: '',
+  //   ejercicio: 0,
+  // });
 
   const definicion_CTX_LOGEO = useStore({
     mostrarSpinner: false,
@@ -227,7 +274,7 @@ export default component$(() => {
                 }
               }
 
-              Object.freeze(parametrosGlobales);
+              // Object.freeze(parametrosGlobales);
             } else {
               //VARIAS SUCURSALES
               let activo = await getActivoGEEMP({
@@ -281,7 +328,7 @@ export default component$(() => {
               parametrosGlobales.usuario = logeo.usuario;
               //  parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
               //  parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
-              Object.freeze(parametrosGlobales);
+              // Object.freeze(parametrosGlobales);
               navegarA('/listadoSucursales');
             }
           }
@@ -332,9 +379,16 @@ export default component$(() => {
               // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
               // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
               // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
-              console.log('**AJI**');
-              parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
+              console.log(
+                '**AJI**',
+                logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
+                logeo.sucursalesAdjuntas[0].grupoEmpresarial
+              );
+              // parametrosGlobales={};
+
               parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
+              parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
+
               parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
               parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
               parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
@@ -382,7 +436,7 @@ export default component$(() => {
                   navegarA(parametrosGlobales.paginaInicioDelSistema);
                 }
               }
-              Object.freeze(parametrosGlobales);
+              // Object.freeze(parametrosGlobales);
             } else {
               console.log('logeo.sucursalesAdjuntas[0].sucursales.length !== 1');
               //VARIAS SUCURSALES

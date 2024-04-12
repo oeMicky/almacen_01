@@ -207,6 +207,8 @@ export default component$(() => {
                 sessionStorage.removeItem('idAlmacen');
                 sessionStorage.removeItem('almacenActivo');
                 // sessionStorage.clear;
+                parametrosGlobales.idGrupoEmpresarial = '';
+                parametrosGlobales.nombreGrupoEmpresarial = '';
                 navegarA('/');
               }}
             >

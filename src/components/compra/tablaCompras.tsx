@@ -15,6 +15,12 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
   const ctx_index_compra = useContext(CTX_INDEX_COMPRA);
   //#endregion CONTEXTO
 
+  //#region INICIALIZACION
+  let suma_BASE_PEN = 0;
+  let suma_IGV_PEN = 0;
+  let suma_TOTAL_PEN = 0;
+  //#endregion INICIALIZACION
+
   //#region BUSCANDO REGISTROS
   const lasCompras = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // ctx_index_compra.miscCs = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
@@ -62,7 +68,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(compras: any) => {
-          console.log('onResolved 🍓🍓🍓🍓');
+          console.log('onResolved 🍓🍓🍓🍓', compras);
           const { data } = compras; //{ status, data, message }
           // const misCompras: ICompra[] = data;
           ctx_index_compra.miscCs = data;
@@ -81,7 +87,9 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                         <th>Proveedor</th>
                         <th>Fecha</th>
                         <th>Ser-Nro</th>
-                        <th>Importe</th>
+                        <th>Base Imp PEN</th>
+                        <th>IGV PEN</th>
+                        <th>Importe PEN</th>
                         <th>Mon</th>
                         <th>Dt</th>
                         <th>Rt</th>
@@ -91,6 +99,11 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                     <tbody>
                       {ctx_index_compra.miscCs.map((compra: any, index: number) => {
                         const indexItem = index + 1;
+
+                        suma_BASE_PEN = suma_BASE_PEN + Number(compra.baseImponiblePEN.$numberDecimal);
+                        suma_IGV_PEN = suma_IGV_PEN + Number(compra.igvPEN.$numberDecimal);
+                        suma_TOTAL_PEN = suma_TOTAL_PEN + Number(compra.totalPEN.$numberDecimal);
+
                         return (
                           <tr key={compra._id}>
                             <td data-label="Item" class="comoCadena">
@@ -109,7 +122,45 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                               {compra.serie + ' - ' + compra.numero}
                             </td>
                             <td
-                              data-label="Importe"
+                              data-label="Base Imp PEN"
+                              class="comoNumero"
+                              // style={'tipoCompra' in compra ? {} : { background:'#8A2BE2'  }}
+                            >
+                              {/* {compra.totalPEN.$numberDecimal} */}
+                              {/* {typeof compra.totalPEN !== 'undefined'  style={compra.moneda === '' ? { background: 'red' } : ''}
+                                ? compra.moneda === 'PEN'
+                                  ? compra.totalPEN.$numberDecimal
+                                  : compra.totalUSD.$numberDecimal
+                                : ''} */}
+                              {typeof compra.baseImponiblePEN !== 'undefined'
+                                ? parseFloat(compra.baseImponiblePEN.$numberDecimal).toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })
+                                : '_'}
+                            </td>
+                            <td
+                              data-label="IGV PEN"
+                              class="comoNumero"
+                              // style={'tipoCompra' in compra ? {} : { background:'#8A2BE2'  }}
+                            >
+                              {/* {compra.totalPEN.$numberDecimal} */}
+                              {/* {typeof compra.totalPEN !== 'undefined'  style={compra.moneda === '' ? { background: 'red' } : ''}
+                                ? compra.moneda === 'PEN'
+                                  ? compra.totalPEN.$numberDecimal
+                                  : compra.totalUSD.$numberDecimal
+                                : ''} */}
+                              {typeof compra.igvPEN !== 'undefined'
+                                ? parseFloat(compra.igvPEN.$numberDecimal).toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })
+                                : '_'}
+                            </td>
+                            <td
+                              data-label="Importe PEN"
                               class="comoNumero"
                               // style={'tipoCompra' in compra ? {} : { background:'#8A2BE2'  }}
                             >
@@ -120,17 +171,11 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                   : compra.totalUSD.$numberDecimal
                                 : ''} */}
                               {typeof compra.totalPEN !== 'undefined'
-                                ? compra.moneda === 'PEN'
-                                  ? parseFloat(compra.totalPEN.$numberDecimal).toLocaleString('en-PE', {
-                                      // style: 'currency',
-                                      currency: 'PEN',
-                                      minimumFractionDigits: 2,
-                                    })
-                                  : parseFloat(compra.totalUSD.$numberDecimal).toLocaleString('en-US', {
-                                      // style: 'currency',
-                                      currency: 'PEN',
-                                      minimumFractionDigits: 2,
-                                    })
+                                ? parseFloat(compra.totalPEN.$numberDecimal).toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })
                                 : '_'}
                             </td>
                             <td data-label="Mon" class="acciones" style={'tipoCompra' in compra ? {} : { background: '#FFD700' }}>
@@ -208,6 +253,35 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                         );
                       })}
                     </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan={5} class="comoNumero" style={{ color: 'black' }}>
+                          TOTALES PEN
+                        </td>
+                        <td class="comoNumero" style={{ color: 'black' }}>
+                          {`${suma_BASE_PEN.toLocaleString('en-PE', {
+                            // style: 'currency',
+                            currency: 'PEN',
+                            minimumFractionDigits: 2,
+                          })}`}
+                        </td>
+                        <td class="comoNumero" style={{ color: 'black' }}>
+                          {`${suma_IGV_PEN.toLocaleString('en-PE', {
+                            // style: 'currency',
+                            currency: 'PEN',
+                            minimumFractionDigits: 2,
+                          })}`}
+                        </td>
+                        <td class="comoNumero" style={{ color: 'black' }}>
+                          {`${suma_TOTAL_PEN.toLocaleString('en-PE', {
+                            // style: 'currency',
+                            currency: 'PEN',
+                            minimumFractionDigits: 2,
+                          })}`}
+                        </td>
+                        <td colSpan={4} class="comoNumero" style={{ color: 'black' }}></td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </>
               ) : (

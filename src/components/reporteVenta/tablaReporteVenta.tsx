@@ -1,6 +1,6 @@
 import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 import { cerosALaIzquierda, formatearMonedaPEN, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import type { IReporteVenta } from '~/interfaces/iVenta';
+import type { IVenta } from '~/interfaces/iVenta';
 import { CTX_INDEX_REPORTE_VENTA } from '~/routes/(almacen)/reporteVenta';
 import style from '../tabla/tabla.css?inline';
 
@@ -11,8 +11,8 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
   //#region CONTEXTO
 
   //#region INICIALIZAR
-  let suma_GAxM = 0;
-  let suma_GAxS = 0;
+  let suma_BASE = 0;
+  let suma_IGV = 0;
   let suma_TOTAL = 0;
   //#endregion INICIALIZAR
 
@@ -26,8 +26,8 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
       const abortController = new AbortController();
       cleanup(() => abortController.abort('cleanup'));
       // console.log('first FECHASSSSSSSSSSSSSSSSSSSSSSS');
-      const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/reporteVentasPorFechas`, {
-        // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
+      // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/reporteVentasPorFechas`, {
+      const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
         // const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
         method: 'POST',
         headers: {
@@ -42,8 +42,8 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
       const abortController = new AbortController();
       cleanup(() => abortController.abort('cleanup'));
       // console.log('first PERIODOSSSSSSSSSSSSSSSSSSSSSSS');
-      const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/reporteVentasPorPeriodo`, {
-        // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
+      // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/reporteVentasPorPeriodo`, {
+      const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorPeriodo`, {
         // const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
         method: 'POST',
         headers: {
@@ -72,9 +72,9 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ventas) => {
-          console.log('onResolved 🍓🍓🍓🍓');
+          console.log('onResolved 🍓🍓🍓🍓', ventas);
           const { data } = ventas; //{ status, data, message }
-          const misVentas: IReporteVenta[] = data;
+          const misVentas: IVenta[] = data;
           ctx_index_reporteventa.misRepoVts = misVentas;
           ctx_index_reporteventa.mostrarSpinner = false;
 
@@ -82,7 +82,7 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
             <>
               {misVentas.length > 0 ? (
                 <>
-                  <table class="tabla-venta" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
+                  <table class="tabla-venta" style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -90,8 +90,8 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
                         <th>Cliente</th>
                         <th>Fecha</th>
                         <th>Ser-Nro</th>
-                        <th>GAxM</th>
-                        <th>GAxS</th>
+                        <th>Base Imp</th>
+                        <th>IGV</th>
                         <th>Importe</th>
                         {/* <th>Mon</th> */}
                         {/* <th>Pago</th> */}
@@ -100,23 +100,17 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
                     <tbody>
                       {misVentas.map((value, index) => {
                         const indexItem = index + 1;
-                        let mer = 0;
-                        let ser = 0;
+                        let bas = 0;
+                        let ig = 0;
                         let tot = 0;
+                        bas = value.baseImponiblePEN.$numberDecimal
+                          ? value.baseImponiblePEN.$numberDecimal
+                          : value.baseImponiblePEN;
+                        ig = value.igvPEN.$numberDecimal ? value.igvPEN.$numberDecimal : value.igvPEN;
                         tot = value.totalPEN.$numberDecimal ? value.totalPEN.$numberDecimal : value.totalPEN;
 
-                        const aMod: any = value.ganancias.find((element: any) => element.tipo === 'MERCADERIA');
-                        // console.log('aMod', aMod);
-                        if (typeof aMod !== 'undefined') {
-                          mer = aMod.gan.$numberDecimal ? aMod.gan.$numberDecimal : aMod.gan;
-                        }
-                        const aSod: any = value.ganancias.find((element: any) => element.tipo === 'SERVICIO');
-                        // console.log('aSod', aSod);
-                        if (typeof aSod !== 'undefined') {
-                          ser = aSod.gan.$numberDecimal ? aSod.gan.$numberDecimal : aSod.gan;
-                        }
-                        suma_GAxM = suma_GAxM + Number(mer);
-                        suma_GAxS = suma_GAxS + Number(ser);
+                        suma_BASE = suma_BASE + Number(bas);
+                        suma_IGV = suma_IGV + Number(ig);
                         suma_TOTAL = suma_TOTAL + Number(tot);
                         return (
                           <tr key={value._id}>
@@ -135,8 +129,8 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
                             <td data-label="Ser-Nro" class="comoCadena">
                               {value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}
                             </td>
-                            <td data-label="GAxM" class="comoNumero">
-                              {formatearMonedaPEN(mer)}
+                            <td data-label="Base Imp" class="comoNumero">
+                              {formatearMonedaPEN(value.baseImponiblePEN.$numberDecimal)}
                               {/* {formatear_2Decimales(mer)} */}
                               {/* {`${mer.toLocaleString('en-PE', {
                                 // style: 'currency',
@@ -144,8 +138,8 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
                                 minimumFractionDigits: 2,
                               })}`} */}
                             </td>
-                            <td data-label="GAxS" class="comoNumero">
-                              {formatearMonedaPEN(ser)}
+                            <td data-label="IGV" class="comoNumero">
+                              {formatearMonedaPEN(value.igvPEN.$numberDecimal)}
                               {/* {`${ser.toLocaleString('en-PE', {
                                 // style: 'currency',
                                 currency: 'PEN',
@@ -160,51 +154,32 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
                                 minimumFractionDigits: 2,
                               })}`}
                             </td>
-                            {/* <td data-label="Importe" class="comoNumero">
-                              {value.moneda === 'PEN'
-                                ? parseFloat(value.totalPEN.$numberDecimal).toLocaleString('en-PE', {
-                                    // style: 'currency',
-                                    currency: 'PEN',
-                                    minimumFractionDigits: 2,
-                                  })
-                                : parseFloat(value.totalUSD.$numberDecimal).toLocaleString('en-US', {
-                                    // style: 'currency',
-                                    currency: 'PEN',
-                                    minimumFractionDigits: 2,
-                                  })}
-                            </td> */}
-                            {/* <td data-label="Mon" class="acciones">
-                              {value.moneda}
-                            </td> */}
-                            {/* <td data-label="Pago" class="comoCadena">
-                              {value.metodoPago}
-                            </td> */}
                           </tr>
                         );
                       })}
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colSpan={5} class="comoNumero">
-                          TOTALES
+                        <td colSpan={5} class="comoNumero" style={{ color: 'black' }}>
+                          TOTALES PEN
                         </td>
-                        <td class="comoNumero">
-                          {`${suma_GAxM.toLocaleString('en-PE', {
-                            style: 'currency',
+                        <td class="comoNumero" style={{ color: 'black' }}>
+                          {`${suma_BASE.toLocaleString('en-PE', {
+                            // style: 'currency',
                             currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td class="comoNumero">
-                          {`${suma_GAxS.toLocaleString('en-PE', {
-                            style: 'currency',
+                        <td class="comoNumero" style={{ color: 'black' }}>
+                          {`${suma_IGV.toLocaleString('en-PE', {
+                            // style: 'currency',
                             currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td class="comoNumero">
+                        <td class="comoNumero" style={{ color: 'black' }}>
                           {`${suma_TOTAL.toLocaleString('en-PE', {
-                            style: 'currency',
+                            // style: 'currency',
                             currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}

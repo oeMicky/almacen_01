@@ -99,7 +99,7 @@ export default component$((props: { buscarCuentaContable: number; parametrosBusq
                               style={{ margin: '2px' }}
                               onClick$={() => {
                                 ctx_compra_asiento.unshift({
-                                  idAuxiliar: elIdAuxiliar(),
+                                  idAuxiliar: parseInt(elIdAuxiliar()),
                                   item: 0,
                                   codigo: codigo,
                                   descripcion: descripcion,

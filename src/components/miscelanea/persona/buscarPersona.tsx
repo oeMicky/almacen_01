@@ -103,18 +103,21 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
   //#region REFRESCAR TABLA PERSONAS
   useTask$(({ track }) => {
     track(() => definicion_CTX_BUSCAR_PERSONA.grabo_Persona);
+
     if (definicion_CTX_BUSCAR_PERSONA.grabo_Persona) {
       // (definicion_CTX_BUSCAR_PERSONA.buscarPor = 'DNI / RUC'),
       //   (definicion_CTX_BUSCAR_PERSONA.cadenaABuscar = definicion_CTX_BUSCAR_PERSONA.conceptoABuscar),
       console.log('BBPP: definicion_CTX_BUSCAR_PERSONA.personaEDITADA', definicion_CTX_BUSCAR_PERSONA.personaEDITADA);
       // buscarPersona.value++;
-      const KKK: IPersonaEdit[] = definicion_CTX_BUSCAR_PERSONA.misPersonas.filter(
-        (pers: any) => pers._id === definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id
-      );
-      KKK[0].razonSocialNombre = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.razonSocialNombre;
-      KKK[0].email = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.email;
-      KKK[0].telefono = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.telefono;
-      KKK[0].cuentasCorrientes = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.cuentasCorrientes;
+      if (definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id !== '') {
+        const KKK: IPersonaEdit[] = definicion_CTX_BUSCAR_PERSONA.misPersonas.filter(
+          (pers: any) => pers._id === definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id
+        );
+        KKK[0].razonSocialNombre = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.razonSocialNombre;
+        KKK[0].email = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.email;
+        KKK[0].telefono = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.telefono;
+        KKK[0].cuentasCorrientes = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.cuentasCorrientes;
+      }
       definicion_CTX_BUSCAR_PERSONA.grabo_Persona = false;
     }
   });

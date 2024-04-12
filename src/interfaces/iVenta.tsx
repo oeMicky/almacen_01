@@ -101,6 +101,8 @@ export interface IVenta {
   totalHaberPEN: any;
   totalDebeUSD: any;
   totalHaberUSD: any;
+
+  ganancias: any;
 }
 
 export interface ICuotaCreditoVenta {
@@ -112,6 +114,7 @@ export interface ICuotaCreditoVenta {
 export interface IReporteVenta {
   _id: string;
 
+  clienteVentasVarias: boolean;
   codigoTipoDocumentoIdentidad: string;
   tipoDocumentoIdentidad: string;
   numeroIdentidad: string;
@@ -121,7 +124,23 @@ export interface IReporteVenta {
   numero: number;
 
   fecha: string;
+
+  todoEnEfectivo: boolean;
+  unaParteEnEfectivo: boolean;
+  montoEnEfectivo: any;
+  otroMedioPago: string;
+  montoOtroMedioPago: any;
+
   totalPEN: any;
+
+  totalUSD: any;
+
+  vendedor: string;
+  metodoPago: string;
+
+  enDolares: boolean;
+  moneda: string;
+  tipoCambio: number;
 
   ganancias: any;
 }

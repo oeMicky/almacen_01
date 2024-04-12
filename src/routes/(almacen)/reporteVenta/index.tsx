@@ -6,7 +6,7 @@ import TablaReporteVenta from '~/components/reporteVenta/tablaReporteVenta';
 import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 import { hoy } from '~/functions/comunes';
-import pdfReporteVenta from '~/reports/MG/pdfReporteVenta';
+// import pdfReporteVenta from '~/reports/MG/pdfReporteVenta';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_INDEX_REPORTE_VENTA = createContextId<any>('__index_reporte_venta');
@@ -93,26 +93,6 @@ export default component$(() => {
             PERIODO
           </option>
         </select>
-        <input
-          type="image"
-          title="Ver reporte"
-          alt="icono pdf"
-          height={16}
-          width={16}
-          src={images.pdf}
-          style={{ marginLeft: '12px' }}
-          onClick$={() => {
-            console.log('ver reporte');
-            // verReporte.value++;
-            if (definicion_CTX_INDEX_REPORTE_VENTA.misRepoVts.length === 0) {
-              alert('No existen datos para el reporte');
-            } else {
-              // alert('SIIIIIII existen datos para el reporte');
-              // verReporte(definicion_CTX_INDEX_REPORTE_VENTA.misRepoVts);
-              pdfReporteVenta(definicion_CTX_INDEX_REPORTE_VENTA.misRepoVts);
-            }
-          }}
-        />
       </div>
       <div>
         {parametrosBusqueda.buscarPor === 'FECHAS' && (
