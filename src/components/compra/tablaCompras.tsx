@@ -255,31 +255,31 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colSpan={5} class="comoNumero" style={{ color: 'black' }}>
+                        <td colSpan={5} class="comoNumero" style={{ color: '#2E1800' }}>
                           TOTALES PEN
                         </td>
-                        <td class="comoNumero" style={{ color: 'black' }}>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {`${suma_BASE_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
                             currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td class="comoNumero" style={{ color: 'black' }}>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {`${suma_IGV_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
                             currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td class="comoNumero" style={{ color: 'black' }}>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {`${suma_TOTAL_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
                             currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td colSpan={4} class="comoNumero" style={{ color: 'black' }}></td>
+                        <td colSpan={4} class="comoNumero" style={{ color: '#2E1800' }}></td>
                       </tr>
                     </tfoot>
                   </table>

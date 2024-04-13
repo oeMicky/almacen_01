@@ -3,6 +3,7 @@ import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import style from '../tabla/tabla.css?inline';
 import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(almacen)/outAlmacen';
 import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
+import { images } from '~/assets';
 
 export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeriodoF: boolean; parametrosBusqueda: any }) => {
   useStylesScoped$(style);
@@ -110,18 +111,19 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                             {razonSocialNombre ? razonSocialNombre : '_'}
                           </td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                          <td data-label="Acc" class="accciones">
-                            {/* <ImgButton
-                              src={images.edit}
-                              alt="icono de editar"
+                          <td data-label="Acciones" class="acciones">
+                            <input
+                              type="image"
+                              src={images.see}
+                              alt="icono de ver"
                               height={12}
                               width={12}
-                              title="Editar servicio"
-                              onClick={$(() => {
-                                ctx_index_in_almacen.ordSerSe = inAlmaLocali;
-                                ctx_index_in_almacen.mostrarAddOrderServicio0 = true;
-                              })}
-                            /> */}
+                              title="Ver egreso"
+                              onClick$={() => {
+                                ctx_index_out_almacen.oNS = outAlmaLocali;
+                                ctx_index_out_almacen.mostrarPanelNewOutAlmacen = true;
+                              }}
+                            />
                           </td>
                         </tr>
                       );

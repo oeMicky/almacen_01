@@ -29,7 +29,7 @@ import {
   // ultimoDiaDelPeriodoX,
 } from '~/functions/comunes';
 import style from '../tabla/tabla.css?inline';
-import BorrarItemMercaderiaIN from './borrarItemMercaderiaIN';
+// import BorrarItemMercaderiaIN from './borrarItemMercaderiaIN';
 import BorrarDocumentoIN from './borrarDocumentoIN';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import type { IPersona } from '~/interfaces/iPersona';
@@ -443,7 +443,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 <input
                   id="in_FISMA"
                   type="date"
-                  // disabled
+                  disabled={definicion_CTX_IN_ALMACEN._id !== ''}
                   style={{ width: '100%' }}
                   // min={primeroDelMes()}
                   min={menosXdiasHoy(2)}
@@ -543,7 +543,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               <div class="form-control form-agrupado">
                 <select
                   id="se_TipoDocumentoLiteral_REMITENTE"
-                  // value={6}
+                  disabled={definicion_CTX_IN_ALMACEN._id !== ''}
                   value={definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad}
                   // onChange={cambioTipoDocumento}
                   onChange$={(e) => {
@@ -570,17 +570,21 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     C.EXT
                   </option>
                 </select>
-                <input
-                  id="in_BuscarREMITENTE"
-                  type="image"
-                  src={images.searchPLUS}
-                  title="Buscar datos de identidad"
-                  height={16}
-                  width={16}
-                  style={{ margin: '2px 2px' }}
-                  // onFocusin$={() => }
-                  onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true)}
-                />
+                {definicion_CTX_IN_ALMACEN._id === '' ? (
+                  <input
+                    id="in_BuscarREMITENTE"
+                    type="image"
+                    src={images.searchPLUS}
+                    title="Buscar datos de identidad"
+                    height={16}
+                    width={16}
+                    style={{ margin: '2px 2px' }}
+                    // onFocusin$={() => }
+                    onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true)}
+                  />
+                ) : (
+                  ''
+                )}
               </div>
             </div>
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona && (
@@ -596,6 +600,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   id="in_NumeroDocumentoIdentidad_REMITENTE"
                   style={{ width: '100%' }}
                   type="text"
+                  disabled={definicion_CTX_IN_ALMACEN._id !== ''}
                   placeholder="Add número identidad remitente"
                   value={definicion_CTX_IN_ALMACEN.numeroIdentidad}
                   onChange$={(e) => (definicion_CTX_IN_ALMACEN.numeroIdentidad = (e.target as HTMLInputElement).value)}
@@ -616,6 +621,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   id="in_Nombre_REMITENTE"
                   style={{ width: '100%' }}
                   type="text"
+                  disabled={definicion_CTX_IN_ALMACEN._id !== ''}
                   placeholder="Razón social / Nombre - remitente"
                   value={definicion_CTX_IN_ALMACEN.razonSocialNombre}
                   onKeyPress$={$((e: any) => {
@@ -666,18 +672,22 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               margin: '5px 0',
             }}
           >
-            <div style={{ marginBottom: '5px' }}>
-              <ElButton
-                id="bu_Add_Documento"
-                class="btn"
-                name="Add documento"
-                title="Add documento"
-                onClick={$(() => {
-                  elDocSelecionado.value = [];
-                  definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
-                })}
-              />
-            </div>
+            {definicion_CTX_IN_ALMACEN._id === '' ? (
+              <div style={{ marginBottom: '4px' }}>
+                <ElButton
+                  id="bu_Add_Documento"
+                  class="btn"
+                  name="Add documento"
+                  title="Add documento"
+                  onClick={$(() => {
+                    elDocSelecionado.value = [];
+                    definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
+                  })}
+                />
+              </div>
+            ) : (
+              ''
+            )}
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento && (
               <div class="modal">
                 <NewEditDocumento docSelecci={elDocSelecionado.value} contexto="new_in_almacen" />
@@ -692,7 +702,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     <th>Fecha</th>
                     <th>Serie</th>
                     <th>Número</th>
-                    <th>Acc</th>
+                    {definicion_CTX_IN_ALMACEN._id === '' ? <th>Acc</th> : ''}
                   </tr>
                 </thead>
                 <tbody>
@@ -705,67 +715,42 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         <td data-label="Fecha">{formatoDDMMYYYY_PEN(iTDocAdj.fecha)}</td>
                         <td data-label="Serie">{iTDocAdj.serie}</td>
                         <td data-label="Número">{cerosALaIzquierda(iTDocAdj.numero, 8)}</td>
-                        <td data-label="Acc" class="accionesLeft">
-                          <input
-                            type="image"
-                            src={images.edit}
-                            title="Editar ítem"
-                            alt="icono de editar"
-                            height={12}
-                            width={12}
-                            style={{ marginRight: '8px' }}
-                            onClick$={() => {
-                              elDocSelecionado.value = iTDocAdj;
-                              definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
-                            }}
-                          />
-                          <input
-                            type="image"
-                            src={images.trash}
-                            title="Eliminar ítem"
-                            alt="icono de eliminar"
-                            height={12}
-                            width={12}
-                            onClick$={() => {
-                              borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
-                              borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
-                              borrarDocumento.descripcionTCP = iTDocAdj.descripcionTCP;
-                              borrarDocumento.fecha = iTDocAdj.fecha;
-                              borrarDocumento.serie = iTDocAdj.serie;
-                              borrarDocumento.numero = iTDocAdj.numero;
-                              definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN = true;
-                            }}
-                          />
-                          {/* <ImgButton
-                            src={images.edit}
-                            alt="icono de editar"
-                            height={16}
-                            width={16}
-                            title="Editar ítem"
-                            onClick={$(() => {
-                              // insertarEquivalencia.value = false;
-                              elDocSelecionado.value = iTDocAdj;
-                              definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
-                            })}
-                          />
-                          <ImgButton
-                            src={images.trash}
-                            alt="icono de eliminar"
-                            height={16}
-                            width={16}
-                            title="Eliminar ítem"
-                            onClick={$(() => {
-                              // definicion_CTX_IN_ALMACEN.itemsMercaderias.shift();
-                              borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
-                              borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
-                              borrarDocumento.descripcionTCP = iTDocAdj.descripcionTCP;
-                              borrarDocumento.fecha = iTDocAdj.fecha;
-                              borrarDocumento.serie = iTDocAdj.serie;
-                              borrarDocumento.numero = iTDocAdj.numero;
-                              definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN = true;
-                            })}
-                          /> */}
-                        </td>
+                        {definicion_CTX_IN_ALMACEN._id === '' ? (
+                          <td data-label="Acc" class="accionesLeft">
+                            <input
+                              type="image"
+                              src={images.edit}
+                              title="Editar ítem"
+                              alt="icono de editar"
+                              height={12}
+                              width={12}
+                              style={{ marginRight: '8px' }}
+                              onClick$={() => {
+                                elDocSelecionado.value = iTDocAdj;
+                                definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
+                              }}
+                            />
+                            <input
+                              type="image"
+                              src={images.trash}
+                              title="Eliminar ítem"
+                              alt="icono de eliminar"
+                              height={12}
+                              width={12}
+                              onClick$={() => {
+                                borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
+                                borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
+                                borrarDocumento.descripcionTCP = iTDocAdj.descripcionTCP;
+                                borrarDocumento.fecha = iTDocAdj.fecha;
+                                borrarDocumento.serie = iTDocAdj.serie;
+                                borrarDocumento.numero = iTDocAdj.numero;
+                                definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN = true;
+                              }}
+                            />
+                          </td>
+                        ) : (
+                          ''
+                        )}
                       </tr>
                     );
                   })}
@@ -794,23 +779,27 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               margin: '5px 0',
             }}
           >
-            <div style={{ marginBottom: '5px' }}>
-              <ElButton
-                id="btn_Add_Mercaderia"
-                class="btn"
-                name="Add mercadería"
-                title="Add mercadería"
-                disabled={definicion_CTX_IN_ALMACEN.reingreso}
-                onClick={$(() => {
-                  if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '') {
-                    alert('Seleccione el motivo de ingreso');
-                    document.getElementById('se_motivoIngreso')?.focus();
-                    return;
-                  }
-                  definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarMercaderiaIN = true;
-                })}
-              />
-            </div>
+            {definicion_CTX_IN_ALMACEN._id === '' ? (
+              <div style={{ marginBottom: '5px' }}>
+                <ElButton
+                  id="btn_Add_Mercaderia"
+                  class="btn"
+                  name="Add mercadería"
+                  title="Add mercadería"
+                  disabled={definicion_CTX_IN_ALMACEN.reingreso}
+                  onClick={$(() => {
+                    if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '') {
+                      alert('Seleccione el motivo de ingreso');
+                      document.getElementById('se_motivoIngreso')?.focus();
+                      return;
+                    }
+                    definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarMercaderiaIN = true;
+                  })}
+                />
+              </div>
+            ) : (
+              ''
+            )}
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarMercaderiaIN && (
               <div class="modal">
                 <BuscarMercaderiaIN
@@ -837,7 +826,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     <th>SubPEN</th>
                     <th>PrecioUniPEN</th>
                     <th>TotPEN</th>
-                    <th>Acc</th>
+                    {definicion_CTX_IN_ALMACEN._id === '' ? <th>Acc</th> : ''}
                   </tr>
                 </thead>
                 <tbody>
@@ -866,11 +855,11 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         <td data-label="Descripción">
                           {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}
                         </td>
-                        <td data-label="IGV">{iTMercaIN.IGV} %</td>
+                        <td data-label="IGV">{iTMercaIN.IGV.$numberDecimal ? iTMercaIN.IGV.$numberDecimal : iTMercaIN.IGV} %</td>
                         <td data-label="Cantidad" class="comoNumero">
                           <input
                             type="number"
-                            disabled={definicion_CTX_IN_ALMACEN.reingreso}
+                            disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
                             style={{ width: '90px', textAlign: 'end' }}
                             value={
                               !definicion_CTX_IN_ALMACEN.reingreso
@@ -914,7 +903,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         <td data-label="costoUnitarioPEN" class="comoNumero">
                           <input
                             type="number"
-                            disabled={definicion_CTX_IN_ALMACEN.reingreso}
+                            disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
                             style={{ width: '90px', textAlign: 'end' }}
                             value={
                               !definicion_CTX_IN_ALMACEN.reingreso
@@ -980,7 +969,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                         <td data-label="valorUnitarioPEN" class="comoNumero">
                           <input
                             type="number"
-                            disabled={definicion_CTX_IN_ALMACEN.reingreso}
+                            disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
                             style={{ width: '90px', textAlign: 'end' }}
                             value={
                               !definicion_CTX_IN_ALMACEN.reingreso
@@ -1036,23 +1025,27 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             ? formatear_6Decimales(iTMercaIN.totEquivalenciaPEN.$numberDecimal)
                             : formatear_6Decimales(iTMercaIN.totEquivalenciaPEN)}
                         </td>
-                        <td data-label="Acc" class="acciones">
-                          <input
-                            type="image"
-                            src={images.trash}
-                            alt="icono de eliminar"
-                            height={16}
-                            width={16}
-                            title="Eliminar ítem"
-                            onClick$={() => {
-                              borrarItemMerca.idAuxiliar = iTMercaIN.idAuxiliar;
-                              borrarItemMerca.item = indexItemServi;
-                              borrarItemMerca.codigo = iTMercaIN.codigo;
-                              borrarItemMerca.descripcion = iTMercaIN.descripcion;
-                              definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteItemMercaderiaIN = true;
-                            }}
-                          />
-                        </td>
+                        {definicion_CTX_IN_ALMACEN._id === '' ? (
+                          <td data-label="Acc" class="acciones">
+                            <input
+                              type="image"
+                              src={images.trash}
+                              alt="icono de eliminar"
+                              height={16}
+                              width={16}
+                              title="Eliminar ítem"
+                              onClick$={() => {
+                                borrarItemMerca.idAuxiliar = iTMercaIN.idAuxiliar;
+                                borrarItemMerca.item = indexItemServi;
+                                borrarItemMerca.codigo = iTMercaIN.codigo;
+                                borrarItemMerca.descripcion = iTMercaIN.descripcion;
+                                definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteItemMercaderiaIN = true;
+                              }}
+                            />
+                          </td>
+                        ) : (
+                          ''
+                        )}
                       </tr>
                     );
                   })}
@@ -1099,18 +1092,22 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
             ) : (
               <i style={{ fontSize: '0.7rem' }}>No existen mercaderías registradas</i>
             )}
-            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteItemMercaderiaIN && (
+            {/* {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteItemMercaderiaIN && (
               <div class="modal">
                 <BorrarItemMercaderiaIN borrarItemMerca={borrarItemMerca} />
               </div>
-            )}
+            )} */}
           </div>
           <br></br>
         </div>
 
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}
-        <input type="button" value="Grabar INGRESO" class="btn-centro" onClick$={() => registrarIngreso()} />
+        {definicion_CTX_IN_ALMACEN._id === '' ? (
+          <input type="button" value="Grabar INGRESO" class="btn-centro" onClick$={() => registrarIngreso()} />
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );

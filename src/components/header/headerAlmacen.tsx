@@ -209,7 +209,7 @@ export default component$(() => {
                 // sessionStorage.clear;
                 parametrosGlobales.idGrupoEmpresarial = '';
                 parametrosGlobales.nombreGrupoEmpresarial = '';
-                navegarA('/');
+                navegarA('/login');
               }}
             >
               <img src={images.Logout} style={{ width: '32px' }} />

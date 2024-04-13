@@ -5,6 +5,7 @@ import { CTX_INDEX_IN_ALMACEN } from '~/routes/(almacen)/inAlmacen';
 // import { images } from '~/assets';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import type { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
+import { images } from '~/assets';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
 
@@ -68,7 +69,7 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
           <>
             {misInsAlmacen.length > 0 ? (
               <>
-                <table id="tablaInsAlmacen" style={{ fontSize: '0.6em', fontWeight: 'lighter' }}>
+                <table id="tablaInsAlmacen" style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}
@@ -112,17 +113,18 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                           </td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
                           <td data-label="Acciones" class="acciones">
-                            {/* <ImgButton
+                            <input
+                              type="image"
                               src={images.see}
                               alt="icono de ver"
                               height={14}
                               width={14}
                               title="Ver ingreso a almacén"
-                              // onClick={$(() => {
-                              //   ctx_index_in_almacen.ordSerSe = inAlmaLocali;
-                              //   ctx_index_in_almacen.mostrarAddOrderServicio0 = true;
-                              // })}
-                            /> */}
+                              onClick$={() => {
+                                ctx_index_in_almacen.iNS = inAlmaLocali;
+                                ctx_index_in_almacen.mostrarPanelNewInAlmacen = true;
+                              }}
+                            />
                           </td>
                         </tr>
                       );

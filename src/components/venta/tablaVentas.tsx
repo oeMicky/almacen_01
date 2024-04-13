@@ -506,12 +506,12 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                         );
                       })}
                     </tbody>
-                    <tfoot style={{ color: 'blue' }}>
+                    <tfoot>
                       <tr>
-                        <td colSpan={5} class="comoNumero" style={{ color: 'black' }}>
+                        <td colSpan={5} class="comoNumero" style={{ color: '#2E1800' }}>
                           TOTALES PEN
                         </td>
-                        <td class="comoNumero" style={{ color: 'black' }}>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {/* {suma_TOTAL_IMPORTE_PEN} */}
                           {`${suma_TOTAL_IMPORTE_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
@@ -519,8 +519,8 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td colSpan={2} class="comoCadena" style={{ color: 'black' }}></td>
-                        <td class="comoNumero" style={{ color: 'black' }}>
+                        <td colSpan={2} class="comoCadena" style={{ color: '#2E1800' }}></td>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {`${suma_TOTAL_EFECTIVO_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
                             currency: 'PEN',
@@ -528,7 +528,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                           })}`}
                         </td>
                         <td class="comoNumero"></td>
-                        <td class="comoNumero" style={{ color: 'black' }}>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {`${suma_TOTAL_OTROMONTO_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
                             currency: 'PEN',
