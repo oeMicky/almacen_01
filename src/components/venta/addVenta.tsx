@@ -2249,14 +2249,14 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                           </td>
                           {/* ----------------------------------------------------- */}
                           <td data-label="Venta" class="comoNumero">
-                            {iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN}
-                            {/* {definicion_CTX_F_B_NC_ND.enDolares
-                              ? iTVen.ventaUSD
-                                ? redondeo2Decimales(iTVen.ventaUSD)
-                                : redondeo2Decimales(iTVen.ventaUSD.$numberDecimal)
-                              : iTVen.ventaPEN
-                              ? redondeo2Decimales(iTVen.ventaPEN)
-                              : redondeo2Decimales(iTVen.ventaPEN.$numberDecimal)} */}
+                            {/* {iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN} */}
+                            {definicion_CTX_F_B_NC_ND.enDolares
+                              ? iTVen.ventaUSD.$numberDecimal
+                                ? redondeo6Decimales(iTVen.ventaUSD.$numberDecimal)
+                                : redondeo6Decimales(iTVen.ventaUSD)
+                              : iTVen.ventaPEN.$numberDecimal
+                              ? redondeo2Decimales(iTVen.ventaPEN.$numberDecimal)
+                              : redondeo2Decimales(iTVen.ventaPEN)}
                           </td>
                           <td data-label="%" class="acciones">
                             {iTVen.porcentaje}
@@ -2314,11 +2314,11 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                   <tfoot>
                     <tr>
                       <td colSpan={6} class="comoNumero" style={{ color: '#2E1800' }}>
-                        Base Imponible
+                        {definicion_CTX_F_B_NC_ND.enDolares ? 'Base Imponible USD' : 'Base Imponible PEN'}
                       </td>
                       <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                         {`${sumaTOTAL_BI.toLocaleString('en-PE', {
-                          style: 'currency',
+                          // style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
@@ -2327,11 +2327,11 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                     </tr>
                     <tr>
                       <td colSpan={6} class="comoNumero" style={{ color: '#2E1800' }}>
-                        Exonerado
+                        {definicion_CTX_F_B_NC_ND.enDolares ? 'Exonerado USD' : 'Exonerado PEN'}
                       </td>
                       <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                         {`${sumaTOTAL_EXO.toLocaleString('en-PE', {
-                          style: 'currency',
+                          // style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
@@ -2340,11 +2340,11 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                     </tr>
                     <tr>
                       <td colSpan={6} class="comoNumero" style={{ color: '#2E1800' }}>
-                        Inafecto
+                        {definicion_CTX_F_B_NC_ND.enDolares ? 'Inafecto USD' : 'Inafecto PEN'}
                       </td>
                       <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                         {`${sumaTOTAL_INAFEC.toLocaleString('en-PE', {
-                          style: 'currency',
+                          // style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
@@ -2353,11 +2353,11 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                     </tr>
                     <tr>
                       <td colSpan={6} class="comoNumero" style={{ color: '#2E1800' }}>
-                        Exportación
+                        {definicion_CTX_F_B_NC_ND.enDolares ? 'Exportación USD' : 'Exportación PEN'}
                       </td>
                       <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                         {`${sumaTOTAL_EXPORT.toLocaleString('en-PE', {
-                          style: 'currency',
+                          // style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
@@ -2366,11 +2366,11 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                     </tr>
                     <tr>
                       <td colSpan={6} class="comoNumero" style={{ color: '#2E1800' }}>
-                        Otros
+                        {definicion_CTX_F_B_NC_ND.enDolares ? 'Otros USD' : 'Otros PEN'}
                       </td>
                       <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                         {`${sumaTOTAL_OTROS.toLocaleString('en-PE', {
-                          style: 'currency',
+                          // style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
@@ -2379,11 +2379,11 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                     </tr>
                     <tr>
                       <td colSpan={6} class="comoNumero" style={{ color: '#2E1800' }}>
-                        IGV
+                        {definicion_CTX_F_B_NC_ND.enDolares ? 'IGV USD' : 'IGV PEN'}
                       </td>
                       <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                         {`${sumaTOTAL_IGV.toLocaleString('en-PE', {
-                          style: 'currency',
+                          // style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
@@ -2392,11 +2392,11 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                     </tr>
                     <tr>
                       <td colSpan={6} class="comoNumero" style={{ color: '#2E1800' }}>
-                        Total
+                        {definicion_CTX_F_B_NC_ND.enDolares ? 'Total USD' : 'Total PEN'}
                       </td>
                       <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                         {`${sumaTOTAL.toLocaleString('en-PE', {
-                          style: 'currency',
+                          // style: 'currency',
                           currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}

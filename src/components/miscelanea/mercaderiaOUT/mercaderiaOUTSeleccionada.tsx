@@ -3,7 +3,7 @@ import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 
 import ElSelect from '~/components/system/elSelect';
-import { elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { elIdAuxiliar, formatoDDMMYYYY_PEN, redondeo6Decimales } from '~/functions/comunes';
 import type { IMercaEquivalenciaOUT } from '~/interfaces/iMercaderia';
 import { CTX_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
@@ -195,10 +195,10 @@ export default component$(
                   {props.elKardex.cantidadSaldo !== null
                     ? ` ${
                         props.elKardex.cantidadSaldo.$numberDecimal
-                          ? props.elKardex.cantidadSaldo.$numberDecimal
-                          : props.elKardex.cantidadSaldo
+                          ? redondeo6Decimales(props.elKardex.cantidadSaldo.$numberDecimal)
+                          : redondeo6Decimales(props.elKardex.cantidadSaldo)
                       }`
-                    : ``}{' '}
+                    : ``}
                   {props.mercaOUTSelecci.unidad !== null ? ` ${props.mercaOUTSelecci.unidad}` : ``}
                 </strong>
               </div>
@@ -363,7 +363,9 @@ export default component$(
                     {equivalencia.laEquivalencia.$numberDecimal === 0
                       ? ''
                       : equivalencia.idUnidadEquivalencia !== ''
-                      ? props.elKardex.cantidadSaldo.$numberDecimal / equivalencia.laEquivalencia.$numberDecimal
+                      ? redondeo6Decimales(
+                          props.elKardex.cantidadSaldo.$numberDecimal / equivalencia.laEquivalencia.$numberDecimal
+                        )
                       : ''}
                     {equivalencia.unidadEquivalencia !== null ? ` ${equivalencia.unidadEquivalencia}` : ``}
                   </strong>
@@ -377,7 +379,9 @@ export default component$(
                       {equivalencia.laEquivalencia.$numberDecimal === 0
                         ? ''
                         : equivalencia.idUnidadEquivalencia !== ''
-                        ? props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal
+                        ? redondeo6Decimales(
+                            props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal
+                          )
                         : ''}
                     </strong>
                   </div>

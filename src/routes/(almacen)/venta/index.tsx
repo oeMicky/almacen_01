@@ -22,7 +22,7 @@ import { parametrosGlobales } from '../../login/index';
 // import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { formatoDDMMYYYY_PEN, hoy } from '~/functions/comunes';
 // import pdfReporteVenta from '~/reports/MG/pdfReporteVenta';
 
 // import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
@@ -98,8 +98,8 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
     // idPeriodo: '',
-    fechaInicio: '2024-04-09', // hoy(), // fechas.desde,
-    fechaFinal: '2024-04-09', //hoy(), //fechas.hasta,
+    fechaInicio: hoy(), // fechas.desde,
+    fechaFinal: hoy(), //fechas.hasta,
   });
 
   // useTask$(({ track }) => {
@@ -336,8 +336,8 @@ export default component$(() => {
             definicion_CTX_INDEX_VENTA.mostrarPanelVenta = true;
           })}
         /> */}
-        {/* <input id="in_laFechaHoyVenta" type="date" disabled value={hoy()} style={{ marginLeft: '4px' }} /> */}
-        <input id="in_laFechaHoyVenta" type="date" disabled value={'2024-04-09'} style={{ marginLeft: '4px' }} />
+        <input id="in_laFechaHoyVenta" type="date" disabled value={hoy()} style={{ marginLeft: '4px' }} />
+        {/*   <input id="in_laFechaHoyVenta" type="date" disabled value={'2024-04-09'} style={{ marginLeft: '4px' }} />*/}
         <input
           type="image"
           height={16}
