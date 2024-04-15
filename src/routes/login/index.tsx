@@ -11,12 +11,12 @@ import Spinner from '~/components/system/spinner';
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
-  // paginaInicioDelSistema: '/compra',
+  paginaInicioDelSistema: '/compra',
   // paginaInicioDelSistema: '/reporteVenta',
   // paginaInicioDelSistema: '/venta',
   // paginaInicioDelSistema: '/guiaRemision',
   // paginaInicioDelSistema: '/inAlmacen',
-  paginaInicioDelSistema: '/outAlmacen',
+  // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',
   paginaInicioDefault: '/venta',
@@ -32,6 +32,7 @@ export const parametrosGlobales = {
   agenteRetencion: false,
   agentePercepcion: false,
   //Sucursal
+  sucursalesAdjuntas: [],
   idSucursal: '', //'651ad18424595a30fe7926d2',
   sucursal: '', //'Pardo',
   sucursalDireccion: 'Av. Pardo 9999',
@@ -133,7 +134,7 @@ export default component$(() => {
     // email: 'carlos@merma.com',
     // email: 'paolo@cao.com',
     // email: 'joseluis@cao.com',
-    email: 'bugsbunny@cao.com',
+    email: 'bugsbunny4@cao.com',
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
@@ -176,7 +177,7 @@ export default component$(() => {
     } else {
       if (logeo.sucursalesAdjuntas.length === 1) {
         //UNA EMPRESA
-
+        console.log('UNA EMPRESA*');
         if (logeo.sucursalesAdjuntas[0].todasLasSucursales === true) {
           console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === true');
           if (
@@ -186,6 +187,7 @@ export default component$(() => {
             navegarA('/ningunaSucursal');
           } else {
             if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
+              console.log('UNA EMPRESA --> UNA SUCURSAL');
               //UNA SUCURSAL
               let activo = await getActivoGEEMPSUCUR({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -276,6 +278,7 @@ export default component$(() => {
 
               // Object.freeze(parametrosGlobales);
             } else {
+              console.log('UNA EMPRESA --> VARIAS SUCURSALES');
               //VARIAS SUCURSALES
               let activo = await getActivoGEEMP({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -346,7 +349,7 @@ export default component$(() => {
               let activo = await getActivoGEEMPSUCUR({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
                 idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
-                idSucursal: logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal,
+                idSucursal: logeo.sucursalesAdjuntas[0].sucursales[0]._id,
               });
               activo = activo.data;
 
@@ -496,9 +499,11 @@ export default component$(() => {
         }
       } else {
         //VARIAS EMPRESA
+        console.log('VARIAS EMPRESA');
 
         // localStorage.setItem('usuario', logeo.usuario);
         parametrosGlobales.usuario = logeo.usuario;
+        parametrosGlobales.sucursalesAdjuntas = logeo.sucursalesAdjuntas;
         // localStorage.setItem('SUCURSALES_ADJUNTAS', JSON.stringify(logeo.sucursalesAdjuntas));
         navegarA('/listadoEmpresas');
       }
@@ -527,7 +532,7 @@ export default component$(() => {
       clave: definicion_CTX_LOGEO.contrasena.trim(),
     });
     elLogeo = elLogeo.data;
-
+    console.log('********--elLogeo--******', elLogeo);
     if (elLogeo.length === 1) {
       if (elLogeo[0].activo) {
         analisisDeLogeo(elLogeo[0]);

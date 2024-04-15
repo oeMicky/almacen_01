@@ -133,7 +133,7 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.87rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

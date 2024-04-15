@@ -5,7 +5,7 @@ import { cerosALaIzquierda } from '~/functions/comunes';
 import styles from '../../../components/tabla/tabla.css?inline';
 import ListadoSucursalesModal from '~/components/miscelanea/sucursal/listadoSucursalesModal';
 import { useNavigate } from '@builder.io/qwik-city';
-import { getActivoGEEMP, getActivoGEEMPSUCUR } from '~/apis/grupoEmpresarial.api';
+import { getActivoGEEMP, getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
 import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_LISTADO_EMPRESAS = createContextId<any>('listado_empresas');
@@ -29,8 +29,10 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     track(() => ini.value);
+    console.log('LISTADO EMPRESAS');
     // console.log('ingreso a INI', sessionStorage.getItem('SUCURSALES'));
-    lasEmpresas.value = JSON.parse(sessionStorage.SUCURSALES_ADJUNTAS);
+    // lasEmpresas.value = JSON.parse(sessionStorage.SUCURSALES_ADJUNTAS);
+    lasEmpresas.value = parametrosGlobales.sucursalesAdjuntas;
     console.log('first lasEmpresas.value ', lasEmpresas.value);
   });
   //#endregion INICIAIZACION
@@ -47,13 +49,13 @@ export default component$(() => {
             <ListadoSucursalesModal />
           </div>
         )}
-        <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
+        <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
           <thead>
             <tr>
               <th>Ítem</th>
               <th>Grupo empresarial</th>
               <th>Empresa</th>
-              <th>Acciones</th>
+              <th>Acciones EEE</th>
             </tr>
           </thead>
           <tbody>
@@ -73,15 +75,21 @@ export default component$(() => {
                       title="Seleccionar empresa"
                       height={14}
                       width={14}
-                      style={{ padding: '2px' }}
-                      onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                      // style={{ padding: '2px' }}
+                      // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                       onClick$={async () => {
                         if (empre.sucursales.length === 1) {
+                          console.log(
+                            'UNA UNICA SUCURSAL empre.sucursales.length === 1',
+                            empre.idGrupoEmpresarial,
+                            empre.idEmpresa,
+                            empre.sucursales[0]._id
+                          );
                           //UNA UNICA SUCURSAL
                           let activo = await getActivoGEEMPSUCUR({
                             idGrupoEmpresarial: empre.idGrupoEmpresarial,
                             idEmpresa: empre.idEmpresa,
-                            idSucursal: empre.sucursales[0].idSucursal,
+                            idSucursal: empre.sucursales[0]._id,
                           });
                           activo = activo.data;
                           console.log('activo', activo);
@@ -102,15 +110,15 @@ export default component$(() => {
                             return;
                           }
                           console.log('empre', empre);
-                          sessionStorage.setItem('idGrupoEmpresarial', empre.idGrupoEmpresarial);
-                          sessionStorage.setItem('grupoEmpresarial', empre.grupoEmpresarial);
-                          sessionStorage.setItem('idEmpresa', empre.idEmpresa);
-                          sessionStorage.setItem('empresa', empre.empresa);
-                          sessionStorage.setItem('numeroIdentidad', empre.numeroIdentidad);
+                          // sessionStorage.setItem('idGrupoEmpresarial', empre.idGrupoEmpresarial);
+                          // sessionStorage.setItem('grupoEmpresarial', empre.grupoEmpresarial);
+                          // sessionStorage.setItem('idEmpresa', empre.idEmpresa);
+                          // sessionStorage.setItem('empresa', empre.empresa);
+                          // sessionStorage.setItem('numeroIdentidad', empre.numeroIdentidad);
 
-                          sessionStorage.setItem('idSucursal', empre.sucursales[0].idSucursal);
-                          sessionStorage.setItem('sucursal', empre.sucursales[0].sucursal);
-                          sessionStorage.setItem('almacenActivo', empre.sucursales[0].almacenActivo);
+                          // sessionStorage.setItem('idSucursal', empre.sucursales[0].idSucursal);
+                          // sessionStorage.setItem('sucursal', empre.sucursales[0].sucursal);
+                          // sessionStorage.setItem('almacenActivo', empre.sucursales[0].almacenActivo);
                           parametrosGlobales.idGrupoEmpresarial = empre.idGrupoEmpresarial;
                           parametrosGlobales.nombreGrupoEmpresarial = empre.grupoEmpresarial;
                           parametrosGlobales.idEmpresa = empre.idEmpresa;
@@ -138,6 +146,12 @@ export default component$(() => {
                           parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
                           parametrosGlobales.idEjercicio = activo[0].idEjercicio;
                           parametrosGlobales.ejercicio = activo[0].ejercicio;
+                          const losPeri = await getPeriodos({
+                            idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                            idEmpresa: parametrosGlobales.idEmpresa,
+                            bandera: '',
+                          });
+                          parametrosGlobales.periodos = losPeri.data;
                           //PAGINA DE INICIO
                           if (parametrosGlobales.almacenActivo) {
                             navegarA(parametrosGlobales.paginaInicioDelSistema);
@@ -153,6 +167,12 @@ export default component$(() => {
                             }
                           }
                         } else {
+                          console.log(
+                            'VARIAS SUCURSALES',
+                            empre.idGrupoEmpresarial,
+                            empre.idEmpresa
+                            // empre.sucursales[0].idSucursal
+                          );
                           //VARIAS SUCURSALES
                           let activo = await getActivoGEEMP({
                             idGrupoEmpresarial: empre.idGrupoEmpresarial,

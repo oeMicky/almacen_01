@@ -62,7 +62,7 @@ export default component$(() => {
   //#region ACTUALIZAR TABLA COMPRAS
   useTask$(({ track }) => {
     track(() => definicion_CTX_INDEX_COMPRA.grabo_Compra);
-    console.log('GRABO COMPRA');
+    // console.log('GRABO COMPRA');
     if (definicion_CTX_INDEX_COMPRA.grabo_Compra) {
       //actualizar TABLA ORDENES SERVICIO
       // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
@@ -370,7 +370,7 @@ export default component$(() => {
           </div>
         )}
       </div>
-      {/* TABLA VENTAS */}
+      {/* TABLA COMPRAS */}
       <div id="ventassss" style={{ margin: '10px 0' }}>
         {buscarCompras.value > 0 ? (
           <TablaCompras buscarCompras={buscarCompras.value} parametrosBusqueda={parametrosBusqueda} />

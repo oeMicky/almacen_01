@@ -223,6 +223,13 @@ export default component$(() => {
           {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
+      <button
+        onClick$={() => {
+          console.log('PARAMETROS GLOABLES', parametrosGlobales);
+        }}
+      >
+        parametros
+      </button>
       <h4 style={{ margin: '8px 0 4px 2px' }}>
         <u>Facturación</u>
       </h4>

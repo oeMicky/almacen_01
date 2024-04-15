@@ -122,8 +122,8 @@ export default component$(
         icbpUSD: props.compraSeleccionada.icbpUSD ? props.compraSeleccionada.icbpUSD.$numberDecimal : '',
         otrosUSD: props.compraSeleccionada.otrosUSD ? props.compraSeleccionada.otrosUSD.$numberDecimal : '',
         totalUSD: props.compraSeleccionada.totalUSD ? props.compraSeleccionada.totalUSD.$numberDecimal : '',
-        //****************************************** */
-        //***************DETRACCION***************** */
+        // //****************************************** */
+        // //***************DETRACCION***************** */
         detraccion: typeof props.compraSeleccionada.detraccion !== 'undefined' ? props.compraSeleccionada.detraccion : false,
         detraccionPorcentaje: props.compraSeleccionada.detraccionPorcentaje
           ? props.compraSeleccionada.detraccionPorcentaje.$numberDecimal
@@ -135,8 +135,8 @@ export default component$(
         detraccionFecha: props.compraSeleccionada.detraccionFecha
           ? props.compraSeleccionada.detraccionFecha.substring(0, 10)
           : '',
-        //****************************************** */
-        //***************RETENCION****************** */
+        // //****************************************** */
+        // //***************RETENCION****************** */
         agenteRetencion: props.compraSeleccionada.retencion
           ? props.compraSeleccionada.retencion
           : props.agenteRetencion.valueOf(),
@@ -635,15 +635,6 @@ export default component$(
     });
     //#endregion FIJAR MONTOS CUENTA CONTABLE
 
-    // const respuestaErrorPARTIDADOBLE = new Promise(function (myResolve, myReject) {
-    //   let x = false;
-    //   if (x) {
-    //     myResolve('true rosas');
-    //   } else {
-    //     myReject('false clavel');
-    //   }
-    // });
-
     //#region REGISTRAR COMPRA
     const registrarCompra = $(async () => {
       if (definicion_CTX_COMPRA.periodo.toString() === '') {
@@ -1070,7 +1061,7 @@ export default component$(
           width: 'clamp(330px, 86%, 800px)',
           // width: 'auto',
           padding: '2px',
-          background: `${definicion_CTX_COMPRA.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : ''}`,
+          // background: `${definicion_CTX_COMPRA.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : ''}`,
         }}
         class="container-modal"
       >
@@ -1083,8 +1074,8 @@ export default component$(
             width={16}
             title="Cerrar el formulario"
             onClick={$(() => {
-              ctx_index_compra.grabo_Compra = grabo.value;
-              ctx_index_compra.mostrarPanelCompra = false;
+              // ctx_index_compra.grabo_Compra = grabo.value;
+              // ctx_index_compra.mostrarPanelCompra = false;
             })}
           />
           <ImgButton
@@ -1105,44 +1096,14 @@ export default component$(
             title="Cerrar el definicion_CTX_COMPRA"
             onClick={$(() => {
               console.log(
-                'definicion_CTX_COMPRA',
-                definicion_CTX_COMPRA
+                'definicion_CTX_COMPRA'
+                // definicion_CTX_COMPRA
                 // props.losIgvsCompra,
                 // props.igvPorDefault
               );
               // console.log('props.igvPorDefault', props.igvPorDefault);
             })}
           />
-          {/*  <ImgButton
-            src={images.see}
-            alt="Icono de cerrar"
-            height={16}
-            width={16}
-            title="Cerrar el props.compraSeleccionada"
-            onClick={$(() => {
-              console.log('props.compraSeleccionada', props.compraSeleccionada);
-            })}
-          />
-          <ImgButton
-            src={images.see}
-            alt="Icono de cerrar"
-            height={16}
-            width={16}
-            title="Cerrar el props.ejercicio"
-            onClick={$(() => {
-              console.log('props.ejercicio', props.ejercicio);
-            })}
-          />
-          <ImgButton
-            src={images.see}
-            alt="Icono de cerrar"
-            height={16}
-            width={16}
-            title="IMPUESTO,TOTAL"
-            onClick={$(() => {
-              console.log('IMPUESTO,TOTAL', IMPUESTO, TOTAL);
-            })}
-          /> */}
         </div>
         {/* TITULO */}
         <h3 style={{ fontSize: '0.8rem' }}>
@@ -1934,7 +1895,6 @@ export default component$(
                     onChange$={(e) => (definicion_CTX_COMPRA.detraccion = (e.target as HTMLInputElement).checked)}
                   />
                   <label for="chbx_Detraccion">Detracción</label>
-                  {/* <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>Detracción</strong> */}
                 </div>
               </div>
               <div id="zona_Detraccion" hidden={!definicion_CTX_COMPRA.detraccion}>
@@ -2048,7 +2008,6 @@ export default component$(
                 </div>
               </div>
               <br></br>
-              {/* <hr style={{ margin: '5px 0' }}></hr> */}
             </div>
             {definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarDetraccionPorcentaje && (
               <div class="modal">
@@ -2067,7 +2026,6 @@ export default component$(
                     onChange$={(e) => (definicion_CTX_COMPRA.retencion = (e.target as HTMLInputElement).checked)}
                   />
                   <label for="chbx_Retencion">Retención</label>
-                  {/* <strong style={{ fontSize: '0.9rem', fontWeight: '400' }}>Retención</strong> */}
                 </div>
               </div>
               <div id="zona_Retencion_Secundaria" hidden={!definicion_CTX_COMPRA.retencion}>
@@ -2097,7 +2055,6 @@ export default component$(
                 </div>
               </div>
               <br></br>
-              {/* <hr style={{ margin: '5px 0' }}></hr> */}
             </div>
             {/* OPERACION CONTABLE */}
             {definicion_CTX_COMPRA.contabilizarOperaciones && (
@@ -2128,7 +2085,6 @@ export default component$(
                     </label>
                   </div>
                 </div>
-
                 <div class="form-control">
                   <button
                     id="btn_AddCuentaContable_COMPRA"
@@ -2213,7 +2169,6 @@ export default component$(
                                   }}
                                   // onChange$={(e) => (cuenta.tipo = !(e.target as HTMLInputElement).value)}
                                 />
-                                {/* {cuenta.tipo} */}
                               </td>
                               <td data-label="Importe" class="acciones">
                                 <input
@@ -2229,13 +2184,7 @@ export default component$(
                                   }}
                                 />
                               </td>
-                              {/* <td data-label="Importe" class="comoNumero">
-                              {`${cuenta.importeCuentaPEN.toLocaleString('en-PE', {
-                                // style: 'currency',
-                                currency: 'PEN',
-                                minimumFractionDigits: 2,
-                              })}`}
-                            </td> */}
+
                               <td data-label="Acciones" class="acciones">
                                 <input
                                   type="image"
@@ -2305,14 +2254,7 @@ export default component$(
                           <th colSpan={4} class="comoNumero">
                             Partida doble
                           </th>
-                          <th colSpan={1}>
-                            {sumaTOTAL_DEBER - sumaTOTAL_HABER}
-                            {/* {`${sumaCuotas.toLocaleString('en-PE', {
-                            style: 'currency',
-                            currency: 'PEN',
-                            minimumFractionDigits: 2,
-                          })}`} */}
-                          </th>
+                          <th colSpan={1}>{sumaTOTAL_DEBER - sumaTOTAL_HABER}</th>
                           <th></th>
                         </tr>
                       </tfoot>
