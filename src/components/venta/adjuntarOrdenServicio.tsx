@@ -63,7 +63,7 @@ export default component$(() => {
           style={numeroOFecha.value === 'Número' ? { visibility: 'visible', display: 'flex' } : { visibility: 'collapse' }}
         >
           <input type="number" id="inputNumeroCotizacion" style={{ marginLeft: '91px', top: '0px', width: '95px' }}></input>
-          <ImgButton src={images.searchPLUS} alt="Icono de busqueda" height={16} width={16} title="Buscar por número" />
+          <input type="image" src={images.searchPLUS} alt="Icono de busqueda" height={16} width={16} title="Buscar por número" />
         </div>
         {/* por Fechas */}
         <div

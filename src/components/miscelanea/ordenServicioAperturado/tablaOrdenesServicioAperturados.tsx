@@ -59,14 +59,14 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ordenesServicio) => {
-          console.log('onResolved 🍓🍓🍓🍓');
+          console.log('onResolved 🍓🍓🍓🍓', ordenesServicio);
           const { data } = ordenesServicio; //{ status, data, message }
           const misOrdenesServicio: IOrdenServicio[] = data;
           return (
             <>
               {misOrdenesServicio.length > 0 ? (
                 <>
-                  <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
+                  <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                     <thead>
                       <tr>
                         {/* <th>Ítem</th> */}
@@ -85,7 +85,7 @@ export default component$(
                           serie,
                           numero,
                           razonSocialNombreCliente,
-                          requisiciones,
+                          // requisiciones,
                           tipo,
                           clienteVentasVarias,
                         } = ordServiLocali;
@@ -115,17 +115,17 @@ export default component$(
                                 height={14}
                                 width={14}
                                 // style={{ padding: '2px' }}
-                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
-                                  console.log('first', requisiciones);
-                                  if (requisiciones.length === 0) {
-                                    alert(
-                                      `La orden de servicio # ${
-                                        serie + ' - ' + cerosALaIzquierda(numero, 8)
-                                      } no presenta requisiciones.`
-                                    );
-                                    return;
-                                  }
+                                  // console.log('first', requisiciones);
+                                  // if (requisiciones.length === 0) {
+                                  //   alert(
+                                  //     `La orden de servicio # ${
+                                  //       serie + ' - ' + cerosALaIzquierda(numero, 8)
+                                  //     } no presenta requisiciones.`
+                                  //   );
+                                  //   return;
+                                  // }
                                   console.log('second');
                                   ctx_buscar_orden_servicio_aperturado.oO = ordServiLocali;
                                   if (props.contexto === 'egreso_de_almacen') {
@@ -145,7 +145,7 @@ export default component$(
                 </>
               ) : (
                 <div>
-                  <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                  <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                 </div>
               )}
             </>

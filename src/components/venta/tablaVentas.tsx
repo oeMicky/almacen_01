@@ -327,7 +327,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
             <>
               {misVentas.length > 0 ? (
                 <>
-                  <table class="tabla-venta" style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                  <table class="tabla-venta" style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -542,7 +542,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                 </>
               ) : (
                 <div>
-                  <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                  <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                 </div>
               )}
             </>

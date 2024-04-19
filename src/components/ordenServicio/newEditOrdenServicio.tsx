@@ -446,60 +446,63 @@ OBSERVACIÓN(ES):
 
   //#region ON SUBMIT
   const grabarOS = $(async () => {
-    if (definicion_CTX_O_S.fechaInicio === '') {
+    if (definicion_CTX_O_S.fechaInicio === '' || typeof definicion_CTX_O_S.fechaInicio === 'undefined') {
       alert('Seleccione la fecha.');
       document.getElementById('inputFecha')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.idSerieOrdenServicio === '') {
+    if (definicion_CTX_O_S.idSerieOrdenServicio === '' || typeof definicion_CTX_O_S.idSerieOrdenServicio === 'undefined') {
       alert('Ingrese la serie');
       document.getElementById('selectSerieOrdenServicio')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.estado === '') {
+    if (definicion_CTX_O_S.estado === '' || typeof definicion_CTX_O_S.estado === 'undefined') {
       alert('Seleccione el estado.');
       document.getElementById('selectEstado')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.tipo === '') {
+    if (definicion_CTX_O_S.tipo === '' || typeof definicion_CTX_O_S.tipo === 'undefined') {
       alert('Seleccione el tipo de orden de servicio.');
       document.getElementById('selectTipo')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.idTecnico === '') {
+    if (definicion_CTX_O_S.idTecnico === '' || typeof definicion_CTX_O_S.idTecnico === 'undefined') {
       alert('Seleccione al técnico.');
       document.getElementById('selectTecnico')?.focus();
       return;
     }
     if (!definicion_CTX_O_S.clienteVentasVarias) {
-      if (definicion_CTX_O_S.idCliente === '') {
+      if (definicion_CTX_O_S.idCliente === '' || typeof definicion_CTX_O_S.idCliente === 'undefined') {
         alert('Seleccione al cliente.');
         document.getElementById('selectTipoDocumentoLiteral')?.focus();
         return;
       }
-      if (definicion_CTX_O_S.numeroIdentidad === '') {
+      if (definicion_CTX_O_S.numeroIdentidad === '' || typeof definicion_CTX_O_S.numeroIdentidad === 'undefined') {
         alert('Seleccione al cliente.');
         document.getElementById('selectTipoDocumentoLiteral')?.focus();
         return;
       }
-      if (definicion_CTX_O_S.razonSocialNombreCliente === '') {
+      if (
+        definicion_CTX_O_S.razonSocialNombreCliente === '' ||
+        typeof definicion_CTX_O_S.razonSocialNombreCliente === 'undefined'
+      ) {
         alert('Seleccione al cliente.');
         document.getElementById('selectTipoDocumentoLiteral')?.focus();
         return;
       }
     }
 
-    if (definicion_CTX_O_S.idVehiculo === '') {
+    if (definicion_CTX_O_S.idVehiculo === '' || typeof definicion_CTX_O_S.idVehiculo === 'undefined') {
       alert('Seleccione el vehículo.');
       document.getElementById('inputPlaca')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.vehiculoMarca === '') {
+    if (definicion_CTX_O_S.vehiculoMarca === '' || typeof definicion_CTX_O_S.vehiculoMarca === 'undefined') {
       alert('Seleccione el vehículo.');
       document.getElementById('inputPlaca')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.kilometraje.toString().trim() === '') {
+    if (definicion_CTX_O_S.kilometraje.toString().trim() === '' || typeof definicion_CTX_O_S.kilometraje === 'undefined') {
       //const kilo = parseFloat(oS.kilometraje);
       alert('Seleccione el kilometraje.');
       document.getElementById('inputKilometraje')?.focus();
@@ -561,7 +564,7 @@ OBSERVACIÓN(ES):
 
     if (ordenS.status === 400) {
       ctx_index_orden_servicio.mostrarSpinner = false;
-      alert('Falla al registrar la orden de servicio. ' + ordenS.message);
+      alert('🛑 Falla al registrar la orden de servicio. ' + ordenS.message);
       return;
     }
 
@@ -588,7 +591,7 @@ OBSERVACIÓN(ES):
     definicion_CTX_O_S.servicios = ordenS.data.servicios;
     definicion_CTX_O_S.requisiciones = ordenS.data.requisiciones;
     ctx_index_orden_servicio.mostrarSpinner = false;
-    alert('Registro satisfactorio');
+    alert('✅ Registro satisfactorio');
   });
   //#endregion ON SUBMIT
 
@@ -975,7 +978,13 @@ OBSERVACIÓN(ES):
             <div class="form-control">
               <label>IGV (%)</label>
               <div class="form-control form-agrupado">
-                <input type="number" id="inputIGV" disabled value={definicion_CTX_O_S.igv} style={{ width: '100%' }} />
+                <input
+                  type="number"
+                  id="inputIGV"
+                  disabled
+                  value={definicion_CTX_O_S.igv.$numberDecimal}
+                  style={{ width: '100%' }}
+                />
               </div>
             </div>
           </div>
@@ -1060,7 +1069,7 @@ OBSERVACIÓN(ES):
               </div>
             </div>
             {/* Kilometraje */}
-            <div class="form-control">
+            <div>
               <label>Kilometraje</label>
               <div class="form-control form-agrupado">
                 <input
@@ -1111,7 +1120,7 @@ OBSERVACIÓN(ES):
                 />
               </div>
             </div>
-            <br></br>
+            <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarVehiculo && (

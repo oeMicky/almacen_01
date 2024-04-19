@@ -59,7 +59,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda losDespachos', props.osSeleccionada._id);
+    console.log('parametrosBusqueda losDespachos requisiones', props.osSeleccionada._id);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getDespachoRequisiciones', {
       method: 'POST',
@@ -78,7 +78,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 984px)',
+        width: 'clamp(330px, 86%, 1016px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -122,11 +122,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
         <h3>Despacho de requisiciones B</h3>
         {/* CLIENTE */}
         <div>
-          <div style={{ margin: '5px 0' }}>ID:{` ${props.osSeleccionada._id} `}</div>
-          <div style={{ margin: '5px 0' }}>
+          <div style={{ margin: '4px 0' }}>ID:{` ${props.osSeleccionada._id} `}</div>
+          <div style={{ margin: '4px 0' }}>
             OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
           </div>
-          <div style={{ margin: '5px 0' }}>
+          <div style={{ margin: '4px 0' }}>
             Cliente:
             <b>
               {props.osSeleccionada.clienteVentasVarias
@@ -134,10 +134,10 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 : ` ${props.osSeleccionada.razonSocialNombreCliente}`}
             </b>
           </div>
-          <div style={{ margin: '5px 0' }}>
+          <div style={{ margin: '4px 0' }}>
             Placa:<b>{` ${props.osSeleccionada.placa} `}</b>
           </div>
-          <div style={{ margin: '5px 0' }}>
+          <div style={{ margin: '4px 0' }}>
             Kilometraje:<b>{` ${props.osSeleccionada.kilometraje}`}</b>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(ordenesServicio) => {
-              console.log('onResolved 🍓🍓🍓🍓');
+              console.log('onResolved ordenesServicio 🍓🍓🍓🍓', ordenesServicio);
               const { data } = ordenesServicio; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misDespachos.value = data;
@@ -162,7 +162,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 <>
                   {misDespachos.value.length > 0 ? (
                     <>
-                      <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
+                      <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                         <thead>
                           <tr>
                             <th>Ítem</th>
@@ -244,16 +244,16 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                                 </td>
                                 <td data-label="Cant A Despachar" class="comoNumero">
                                   <input
-                                    style={{ width: '60px', textAlign: 'end' }}
+                                    style={{ width: '80px', textAlign: 'end' }}
                                     value={despachoLocali.aDespachar}
                                     onChange$={(e) => {
                                       const a_Despachar = parseFloat((e.target as HTMLInputElement).value);
                                       console.log('a_Despachar', a_Despachar);
                                       despachoLocali.aDespachar = a_Despachar;
                                     }}
-                                    onFocusin$={(e) => {
-                                      (e.target as HTMLInputElement).select();
-                                    }}
+                                    // onFocusin$={(e) => {
+                                    //   (e.target as HTMLInputElement).select();
+                                    // }}
                                   />
                                 </td>
                               </tr>
@@ -264,7 +264,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                     </>
                   ) : (
                     <div>
-                      <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                      <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                     </div>
                   )}
                 </>
@@ -364,12 +364,14 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             //ID DE LA ORDEN SERVICIO
             documento.idDocumento = props.osSeleccionada._id;
 
-            //DESTINATARIO
-            documento.idDestinatario = props.osSeleccionada.idCliente;
-            documento.codigoTipoDocumentoIdentidad = props.osSeleccionada.codigoTipoDocumentoIdentidad;
-            documento.tipoDocumentoIdentidad = props.osSeleccionada.tipoDocumentoIdentidad;
-            documento.numeroIdentidad = props.osSeleccionada.numeroIdentidad;
-            documento.razonSocialNombre = props.osSeleccionada.razonSocialNombreCliente;
+            if (!props.osSeleccionada.clienteVentasVarias) {
+              //DESTINATARIO
+              documento.idDestinatario = props.osSeleccionada.idCliente;
+              documento.codigoTipoDocumentoIdentidad = props.osSeleccionada.codigoTipoDocumentoIdentidad;
+              documento.tipoDocumentoIdentidad = props.osSeleccionada.tipoDocumentoIdentidad;
+              documento.numeroIdentidad = props.osSeleccionada.numeroIdentidad;
+              documento.razonSocialNombre = props.osSeleccionada.razonSocialNombreCliente;
+            }
 
             //TIPO DE DOCUMENTO -> ORDEN DE SERVICIO
             const numeroDocumentos = documento.documentosAdjuntos.length;

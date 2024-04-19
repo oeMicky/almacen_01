@@ -157,23 +157,23 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
               />
               <input
                 type="image"
+                src={images.searchPLUS}
                 title="Buscar datos de mercadería"
                 alt="icono buscar"
                 height={16}
                 width={16}
                 style={{ marginRight: '2px' }}
-                src={images.searchPLUS}
                 onClick$={() => {
                   localizarMercaderiasIN();
                 }}
               />
               <input
                 type="image"
+                src={images.add}
                 title="Registar nueva mercadería"
                 alt="icono add"
                 height={16}
                 width={16}
-                src={images.add}
                 onClick$={() => {
                   adicionarMercaderiasIN();
                 }}

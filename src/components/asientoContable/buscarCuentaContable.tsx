@@ -31,6 +31,7 @@ export default component$((props: { ejercicio: number; idPlanContable: string; t
     buscarCuentaContable.value++;
   });
   //#endregion BUSCAR CUENTA CONTABLES
+
   return (
     <div
       class="container-modal"

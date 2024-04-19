@@ -5,7 +5,7 @@ import { images } from '~/assets';
 import TablaReporteVenta from '~/components/reporteVenta/tablaReporteVenta';
 import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
-import { hoy } from '~/functions/comunes';
+import { hoy, menosXdiasHoy } from '~/functions/comunes';
 // import pdfReporteVenta from '~/reports/MG/pdfReporteVenta';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -30,7 +30,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
     buscarPor: 'FECHAS',
-    fechaInicio: hoy(),
+    fechaInicio: menosXdiasHoy(5), //hoy(),
     fechaFinal: hoy(),
     idPeriodo: '',
   });

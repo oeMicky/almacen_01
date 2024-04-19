@@ -65,6 +65,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     borrarIdAuxiliarDoc: 0,
     borrarIdAuxiliar: 0,
     mostrarPanelDeleteDocumentoOUT: false,
+
+    mostrarPanelVentasClienteVentasVarias: false,
   });
   useContextProvider(CTX_NEW_OUT_ALMACEN, definicion_CTX_NEW_OUT_ALMACEN);
   //#endregion DEFINICION CTX_NEW_OUT_ALMACEN
@@ -244,37 +246,55 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
   //#region REGISTRAR_EGRESO
   const registrarEgreso = $(async () => {
-    if (definicion_CTX_OUT_ALMACEN.idAlmacen === '') {
+    //periodo FISMA idMotivoEgresoAlmacen
+    console.log(' //periodo FISMA idMotivoEgresoAlmacen');
+    if (definicion_CTX_OUT_ALMACEN.idAlmacen === '' || typeof definicion_CTX_OUT_ALMACEN.idAlmacen === 'undefined') {
       alert('No se identificado el almacén, por favor verifique.');
       // document.getElementById('se_motivoIngreso')?.focus();
       return;
     }
-    if (definicion_CTX_OUT_ALMACEN.periodo.toString() === '') {
+    if (definicion_CTX_OUT_ALMACEN.periodo.toString() === '' || typeof definicion_CTX_OUT_ALMACEN.periodo === 'undefined') {
       alert('Ingrese el periodo');
       document.getElementById('in_Periodo')?.focus();
       return;
     }
-    if (definicion_CTX_OUT_ALMACEN.FISMA === '') {
+    if (definicion_CTX_OUT_ALMACEN.FISMA === '' || typeof definicion_CTX_OUT_ALMACEN.FISMA === 'undefined') {
       alert('Ingrese la fecha FISMA');
       document.getElementById('in_FISMA')?.focus();
       return;
     }
-    if (definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === '') {
+    if (
+      definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === '' ||
+      typeof definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === 'undefined'
+    ) {
       alert('Seleccione el motivo de egreso');
       document.getElementById('se_motivoIngreso')?.focus();
       return;
     }
-    if (definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === '') {
+    //DESTINATARIO
+    console.log(
+      ' //DESTINATARIO',
+      definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
+      definicion_CTX_OUT_ALMACEN.numeroIdentidad,
+      definicion_CTX_OUT_ALMACEN.razonSocialNombre
+    );
+    if (
+      definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === '' ||
+      typeof definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === 'undefined'
+    ) {
       alert('Identifique al destinatario');
       document.getElementById('img_buscarDESTINATARIO')?.focus();
       return;
     }
-    if (definicion_CTX_OUT_ALMACEN.numeroIdentidad === '') {
+    if (definicion_CTX_OUT_ALMACEN.numeroIdentidad === '' || typeof definicion_CTX_OUT_ALMACEN.numeroIdentidad === 'undefined') {
       alert('Identifique al destinatario');
       document.getElementById('img_buscarDESTINATARIO')?.focus();
       return;
     }
-    if (definicion_CTX_OUT_ALMACEN.razonSocialNombre === '') {
+    if (
+      definicion_CTX_OUT_ALMACEN.razonSocialNombre === '' ||
+      typeof definicion_CTX_OUT_ALMACEN.razonSocialNombre === 'undefined'
+    ) {
       alert('Identifique al destinatario');
       document.getElementById('img_buscarDESTINATARIO')?.focus();
       return;
@@ -284,11 +304,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     //   document.getElementById('in_IGV')?.focus();
     //   return;
     // }
+    //documentosAdjuntos
+    console.log(' //documentosAdjuntos');
     if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
       alert('Agregue al menos un documento');
       document.getElementById('btn_Add_Documento')?.focus();
       return;
     }
+    //itemsMercaderias
+    console.log(' //itemsMercaderias');
     if (definicion_CTX_OUT_ALMACEN.itemsMercaderias.length < 1) {
       alert('Agregue al menos una mercadería');
       document.getElementById('btn_Add_Mercaderia')?.focus();
@@ -515,7 +539,13 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           )}
           {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona_Venta && (
             <div class="modal">
-              <BuscarPersona seleccionar="cliente" soloPersonasNaturales={false} contexto={'new_out_almacen'} rol="cliente" />
+              <BuscarPersona
+                seleccionar="cliente"
+                soloPersonasNaturales={false}
+                contexto={'new_out_almacen'}
+                rol="cliente"
+                motivo={true}
+              />
               {/* <BuscarVenta contexto="egreso_de_almacen" /> */}
             </div>
           )}
@@ -635,7 +665,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   id={'in_IGV'}
                   style={{ width: '100%' }}
                   disabled
-                  value={definicion_CTX_OUT_ALMACEN.igv + ' %'}
+                  value={definicion_CTX_OUT_ALMACEN.igv.$numberDecimal + ' %'}
                   onKeyPress$={$((e: any) => {
                     if (e.key === 'Enter') {
                       (document.getElementById('bu_Add_Documento') as HTMLButtonElement)?.focus();
@@ -656,7 +686,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              margin: '5px 0',
+              margin: '4px 0',
             }}
           >
             {definicion_CTX_OUT_ALMACEN._id === '' ? (
@@ -683,7 +713,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
             )}
             {/* TABLA DOCUMENTOS ADJUNTOS   */}
             {definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length > 0 ? (
-              <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
                     <th>TCP</th>
@@ -720,7 +750,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                               alt="icono editar"
                               height={14}
                               width={14}
-                              style={{ marginRight: '8px' }}
+                              style={{ marginRight: '4px' }}
                               onClick$={() => {
                                 elDocSelecionado.value = iTDocAdj;
                                 definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelAdjuntarDocumento = true;
@@ -753,7 +783,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 </tbody>
               </table>
             ) : (
-              <i style={{ fontSize: '0.7rem' }}>No existen documentos adjuntos</i>
+              <i style={{ fontSize: '0.8rem' }}>No existen documentos adjuntos</i>
             )}
             {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteDocumentoOUT && (
               <div class="modal">
@@ -801,7 +831,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
             )}
             {/* TABLA MERCADERIA IN: REPUESTOS -- LUBRICANTES -- ETC */}
             {definicion_CTX_OUT_ALMACEN.itemsMercaderias.length > 0 ? (
-              <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -815,49 +845,49 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   </tr>
                 </thead>
                 <tbody>
-                  {definicion_CTX_OUT_ALMACEN.itemsMercaderias.map((iTMercaIN: any, index: any) => {
+                  {definicion_CTX_OUT_ALMACEN.itemsMercaderias.map((iTMercaOUT: any, index: any) => {
                     const indexItemMerca = index + 1;
 
                     return (
-                      <tr key={iTMercaIN.idAuxiliar}>
-                        <td data-label="Ítem" key={iTMercaIN.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(
+                      <tr key={iTMercaOUT.idAuxiliar}>
+                        <td data-label="Ítem" key={iTMercaOUT.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(
                           indexItemMerca,
                           3
                         )}`}</td>
                         <td data-label="Código" class="comoCadena">
-                          {iTMercaIN.codigo}
+                          {iTMercaOUT.codigo}
                         </td>
                         <td data-label="Descripción" class="comoCadena">
-                          {iTMercaIN.descripcionEquivalencia}
+                          {iTMercaOUT.descripcionEquivalencia}
                         </td>
-                        {/* <td data-label="IGV">{iTMercaIN.IGV} %</td> */}
                         <td data-label="Cantidad" class="comoNumero">
                           <input
                             type="number"
                             style={{ width: '96px', textAlign: 'end' }}
                             disabled
                             value={
-                              iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
-                                ? iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
-                                : iTMercaIN.cantidadSacadaEquivalencia
+                              iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                                ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                                : iTMercaOUT.cantidadSacadaEquivalencia
                             }
+                            // value={iTMercaOUT.cantidadSacadaEquivalencia}
                             onChange$={(e) => {
-                              iTMercaIN.cantidadSacadaEquivalencia = parseFloat((e.target as HTMLInputElement).value);
-                              iTMercaIN.subTotalPEN =
-                                (iTMercaIN.cantidadSacadaEquivalencia
-                                  ? iTMercaIN.cantidadSacadaEquivalencia
-                                  : iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal) *
-                                (iTMercaIN.costoUnitarioPEN
-                                  ? iTMercaIN.costoUnitarioPEN
-                                  : iTMercaIN.costoUnitarioPEN.$numberDecimal);
+                              iTMercaOUT.cantidadSacadaEquivalencia = parseFloat((e.target as HTMLInputElement).value);
+                              iTMercaOUT.subTotalPEN =
+                                (iTMercaOUT.cantidadSacadaEquivalencia
+                                  ? iTMercaOUT.cantidadSacadaEquivalencia
+                                  : iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal) *
+                                (iTMercaOUT.costoUnitarioPEN
+                                  ? iTMercaOUT.costoUnitarioPEN
+                                  : iTMercaOUT.costoUnitarioPEN.$numberDecimal);
                             }}
-                            onFocusin$={(e) => {
-                              (e.target as HTMLInputElement).select();
-                            }}
+                            // onFocusin$={(e) => {
+                            //   (e.target as HTMLInputElement).select();
+                            // }}
                           />
                         </td>
                         <td data-label="Uni" class="comoCadena">
-                          {iTMercaIN.unidadEquivalencia}
+                          {iTMercaOUT.unidadEquivalencia}
                         </td>
                         <td data-label="Costo Unit PEN" class="comoNumero">
                           <input
@@ -865,61 +895,52 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                             style={{ width: '96px', textAlign: 'end' }}
                             disabled
                             value={
-                              iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
-                                ? iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
-                                : iTMercaIN.costoUnitarioEquivalenciaPEN
+                              iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                ? iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                : iTMercaOUT.costoUnitarioEquivalenciaPEN
                             }
                             onChange$={(e) => {
                               const costo = parseFloat((e.target as HTMLInputElement).value);
                               console.log('el costo modificado', costo);
-                              iTMercaIN.costoUnitarioEquivalenciaPEN = costo;
-                              // let IGVCalculado;
-                              // let precio;
-                              // if (iTMercaIN.IGV === 0) {
-                              //   IGVCalculado = 0;
-                              //   precio = costo;
-                              // } else {
-                              //   IGVCalculado = 1 + iTMercaIN.IGV / 100;
-                              //   precio = costo * IGVCalculado;
-                              // }
-                              // iTMercaIN.precioPEN = formatear_6Decimales(precio);
+                              iTMercaOUT.costoUnitarioEquivalenciaPEN = costo;
+
                               console.log(
                                 'el costo modificado, cant',
-                                iTMercaIN.costoUnitarioEquivalenciaPEN,
-                                iTMercaIN.cantidadSacadaEquivalencia
+                                iTMercaOUT.costoUnitarioEquivalenciaPEN,
+                                iTMercaOUT.cantidadSacadaEquivalencia
                               );
-                              iTMercaIN.subTotalPEN =
-                                (iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
-                                  ? iTMercaIN.cantidadSacadaEquivalencia.$numberDecimal
-                                  : iTMercaIN.cantidadSacadaEquivalencia) *
-                                (iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
-                                  ? iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
-                                  : iTMercaIN.costoUnitarioEquivalenciaPEN);
+                              iTMercaOUT.subTotalPEN =
+                                (iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                                  ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                                  : iTMercaOUT.cantidadSacadaEquivalencia) *
+                                (iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                  ? iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                  : iTMercaOUT.costoUnitarioEquivalenciaPEN);
                             }}
-                            onFocusin$={(e) => {
-                              (e.target as HTMLInputElement).select();
-                            }}
+                            // onFocusin$={(e) => {
+                            //   (e.target as HTMLInputElement).select();
+                            // }}
                           />
                         </td>
                         <td data-label="SubTotal PEN" style={{ textAlign: 'end' }}>
-                          {iTMercaIN.subEquivalenciaPEN.$numberDecimal
-                            ? formatear_6Decimales(iTMercaIN.subEquivalenciaPEN.$numberDecimal)
-                            : formatear_6Decimales(iTMercaIN.subEquivalenciaPEN)}
+                          {iTMercaOUT.subEquivalenciaPEN.$numberDecimal
+                            ? formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN.$numberDecimal)
+                            : formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN)}
                         </td>
                         {definicion_CTX_OUT_ALMACEN._id === '' ? (
                           <td data-label="Acc" class="acciones">
                             <input
                               type="image"
                               src={images.trash}
-                              alt="icono de eliminar"
-                              height={12}
-                              width={12}
                               title="Eliminar ítem"
+                              alt="icono de eliminar"
+                              height={14}
+                              width={14}
                               onClick$={() => {
-                                borrarItemMerca.idAuxiliar = iTMercaIN.idAuxiliar;
+                                borrarItemMerca.idAuxiliar = iTMercaOUT.idAuxiliar;
                                 borrarItemMerca.item = indexItemMerca;
-                                borrarItemMerca.codigo = iTMercaIN.codigo;
-                                borrarItemMerca.descripcion = iTMercaIN.descripcionEquivalencia;
+                                borrarItemMerca.codigo = iTMercaOUT.codigo;
+                                borrarItemMerca.descripcion = iTMercaOUT.descripcionEquivalencia;
                                 definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT = true;
                               }}
                             />
@@ -933,7 +954,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 </tbody>
               </table>
             ) : (
-              <i style={{ fontSize: '0.7rem' }}>No existen mercaderías registradas</i>
+              <i style={{ fontSize: '0.8rem' }}>No existen mercaderías registradas</i>
             )}
             {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT && (
               <div class="modal">

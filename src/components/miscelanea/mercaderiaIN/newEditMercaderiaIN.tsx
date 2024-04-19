@@ -589,9 +589,9 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
                   //   document.getElementById('tipoDocumentoIdentidad')?.focus();
                   // }
                 }}
-                onFocusin$={(e) => {
-                  (e.target as HTMLInputElement).select();
-                }}
+                // onFocusin$={(e) => {
+                //   (e.target as HTMLInputElement).select();
+                // }}
               />
             </div>
           </div>
@@ -617,9 +617,9 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
                   //   document.getElementById('tipoDocumentoIdentidad')?.focus();
                   // }
                 }}
-                onFocusin$={(e) => {
-                  (e.target as HTMLInputElement).select();
-                }}
+                // onFocusin$={(e) => {
+                //   (e.target as HTMLInputElement).select();
+                // }}
               />
             </div>
           </div>
@@ -683,7 +683,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
                   }
                 })}
               />
-              <input
+              {/* <input
                 type="image"
                 src={images.add}
                 disabled
@@ -719,8 +719,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
                   lTSelecionado.id = elSelec[elIdx].id;
                   lTSelecionado.lt = elSelec.value;
                   definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN = true;
-                }} //unidadIN={mercaderiaIN.unidad} equivaSelecci={[]}
-              />
+                }} 
+              /> */}
             </div>
             {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN && (
               <div class="modal">

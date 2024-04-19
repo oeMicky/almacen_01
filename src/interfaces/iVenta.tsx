@@ -144,3 +144,43 @@ export interface IReporteVenta {
 
   ganancias: any;
 }
+
+export interface IVentaCLienteVentasVarias {
+  _id: string;
+
+  clienteVentasVarias: boolean;
+  codigoTipoDocumentoIdentidad: string;
+  tipoDocumentoIdentidad: string;
+  numeroIdentidad: string;
+  razonSocialNombre: string;
+
+  serie: string;
+  numero: number;
+
+  fecha: string;
+
+  idOrdenServicio: string;
+  serieOrdenServicio: string;
+  numeroOrdenServicio: number;
+
+  itemsVenta: any;
+
+  todoEnEfectivo: boolean;
+  unaParteEnEfectivo: boolean;
+  montoEnEfectivo: any;
+  otroMedioPago: string;
+  montoOtroMedioPago: any;
+
+  totalPEN: any;
+
+  totalUSD: any;
+
+  vendedor: string;
+  metodoPago: string;
+
+  enDolares: boolean;
+  moneda: string;
+  tipoCambio: number;
+
+  ganancias: any;
+}

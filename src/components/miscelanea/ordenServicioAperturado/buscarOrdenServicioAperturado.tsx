@@ -4,7 +4,7 @@ import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import TablaOrdenesServicio from './tablaOrdenesServicioAperturados';
 import { parametrosGlobales } from '~/routes/login';
-import { hoy, primeroDelMes } from '~/functions/comunes';
+import { hoy, menosXdiasHoy } from '~/functions/comunes';
 import DespachoRequisiciones from './despachoRequisiciones';
 import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 import ReingresoRequisiciones from './reingresoRequisiciones';
@@ -39,7 +39,7 @@ export default component$((props: { contexto: string }) => {
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
-    fechaInicio: primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
+    fechaInicio: menosXdiasHoy(5), //primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
     fechaFinal: hoy(), //cadena.value,
   });
   //#endregion INICIALIZACION

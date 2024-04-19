@@ -1,9 +1,11 @@
 import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { CTX_NEW_IN_ALMACEN } from './newInAlmacen';
 import { parametrosGlobales } from '~/routes/login';
-import { hoy } from '~/functions/comunes';
+import { hoy, menosXdiasHoy } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
+import TablaVentaDespachadaReingreso from './tablaVentaDespachadaReingreso';
+import ReingresoVenta from './reingresoVenta';
 
 export const CTX_BUSCAR_VENTA_DESPACHADA_REINGRESO = createContextId<any>('buscar_venta_despachada_reingreso');
 
@@ -29,11 +31,12 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
     idAlmacen: parametrosGlobales.idAlmacen,
-    PorDestinatario_EntreFechas: 'Entre fechas', //'Por cliente',
+    PorDestinatario_EntreFechas: 'Por cliente / destinatario', //'Entre fechas', //'Por cliente',
     PorNombre_RUCDNI: 'Nombre / Razón social', //'Por cliente',
-    fechaInicio: hoy(), // primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
+    fechaInicio: menosXdiasHoy(5), //hoy(), // primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
     fechaFinal: hoy(), //cadena.value,
-    nombreRUCDNI: '',
+    // nombreRUCDNI: '',
+    cadenaABuscar: '',
   });
   //#endregion INICIALIZACION
 
@@ -69,7 +72,7 @@ export default component$(() => {
             <select
               onChange$={(e) => {
                 parametrosBusqueda.PorDestinatario_EntreFechas = (e.target as HTMLSelectElement).value;
-                if (parametrosBusqueda.PorDestinatario_EntreFechas === 'Por destinatario') {
+                if (parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario') {
                   document.getElementById('in_fechaDesde_IN_NS_REINGRESO')?.focus();
                 }
                 if (parametrosBusqueda.PorDestinatario_EntreFechas === 'Entre fechas') {
@@ -77,8 +80,11 @@ export default component$(() => {
                 }
               }}
             >
-              <option value="Por destinatario" selected={parametrosBusqueda.PorDestinatario_EntreFechas === 'Por destinatario'}>
-                Por destinatario
+              <option
+                value="Por cliente / destinatario"
+                selected={parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario'}
+              >
+                Por cliente / destinatario
               </option>
               <option value="Entre fechas" selected={parametrosBusqueda.PorDestinatario_EntreFechas === 'Entre fechas'}>
                 Entre fechas
@@ -86,11 +92,11 @@ export default component$(() => {
             </select>
           </div>
         </div>
-        {/* por Destinatario */}
+        {/* por Cliente - Destinatario */}
         <div
           id="porDestinatario"
           style={
-            parametrosBusqueda.PorDestinatario_EntreFechas === 'Por destinatario'
+            parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario'
               ? { visibility: 'visible' }
               : { visibility: 'collapse' }
           }
@@ -112,26 +118,33 @@ export default component$(() => {
               </option>
             </select>
           </div>
-          <div>
+          <div class="form-control form-agrupado">
             <input
               type={parametrosBusqueda.PorNombre_RUCDNI === 'DNI / RUC' ? 'number' : 'text'}
               id="in_NombreRUCDNI_IN_VENTA_REINGRESO"
-              value={parametrosBusqueda.nombreRUCDNI}
-              style={{ width: '200px' }}
+              value={parametrosBusqueda.cadenaABuscar}
+              style={{ width: '100%' }}
               onInput$={(e) => {
-                parametrosBusqueda.nombreRUCDNI = (e.target as HTMLInputElement).value;
+                parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+              }}
+              onKeyPress$={(e) => {
+                if (e.key === 'Enter') {
+                  if (parametrosBusqueda.cadenaABuscar.trim() !== '') {
+                    buscarVentaDespachadaReingreso.value++;
+                  }
+                }
               }}
             />
             <input
               type="image"
+              src={images.searchPLUS}
               title="Buscar por número"
               alt="icono buscar"
               height={16}
               width={16}
-              src={images.searchPLUS}
-              style={{ marginLeft: '4px' }}
+              style={{ margin: '2px 4px' }}
               onClick$={() => {
-                if (parametrosBusqueda.nombreRUCDNI.trim() === '') {
+                if (parametrosBusqueda.cadenaABuscar.trim() === '') {
                   alert('Ingrese el nombre / RUC DNI');
                   document.getElementById('in_NombreRUCDNI_IN_NS_REINGRESO')?.focus();
                   return;
@@ -193,11 +206,11 @@ export default component$(() => {
         </div>
 
         {/* TABLA Ventas despachadas A REINGRESAR */}
-        {/* <div style={{ marginTop: '15px' }}>
-          {buscarNotaDeSalidaReingreso.value > 0 ? (
-            <TablaNotaDeSalidaReingreso
+        <div style={{ marginTop: '15px' }}>
+          {buscarVentaDespachadaReingreso.value > 0 ? (
+            <TablaVentaDespachadaReingreso
               // contexto={props.contexto}
-              buscarNotasDeSalidaReingreso={buscarNotaDeSalidaReingreso.value}
+              buscarVentaDespachadaReingreso={buscarVentaDespachadaReingreso.value}
               // modoSeleccion={true}
               parametrosBusqueda={parametrosBusqueda}
             />
@@ -205,7 +218,15 @@ export default component$(() => {
             ''
           )}
         </div>
-        {definicion_CTX_BUSCAR_NOTA_SALIDA_REINGRESO.mostrarPanelNotaDeSalidaReingreso && (
+        {definicion_CTX_BUSCAR_VENTA_DESPACHADA_REINGRESO.mostrarPanelVentaDespachadaReingreso && (
+          <div class="modal">
+            <ReingresoVenta
+              contexto="ingreso_a_almacen"
+              ventaSeleccionada={definicion_CTX_BUSCAR_VENTA_DESPACHADA_REINGRESO.vV}
+            />
+          </div>
+        )}
+        {/* {definicion_CTX_BUSCAR_NOTA_SALIDA_REINGRESO.mostrarPanelNotaDeSalidaReingreso && (
           <div class="modal">
             <NotaDeSalidaReingreso nsSeleccionada={definicion_CTX_BUSCAR_NOTA_SALIDA_REINGRESO.nS} />
           </div>

@@ -46,7 +46,7 @@ export default component$((props: { nsSeleccionada: any }) => {
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 1000px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -69,18 +69,21 @@ export default component$((props: { nsSeleccionada: any }) => {
       <div class="add-form">
         <h3>Reingreso de nota de salida</h3>
         {/* CLIENTE */}
-        <div style={{ fontSize: '0.8em' }}>
-          <div style={{ margin: '5px 0' }}>ID:{` ${props.nsSeleccionada._id} `}</div>
-          <div style={{ margin: '5px 0' }}>
+        <div style={{ fontSize: '0.8rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '96px 1fr', margin: '4px 0' }}>
+            ID:<b>{` ${props.nsSeleccionada._id} `}</b>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '96px 1fr', margin: '4px 0' }}>
             NOTA SALIDA:
             <b>{` ${props.nsSeleccionada.serie + ' - ' + cerosALaIzquierda(props.nsSeleccionada.numero, 8)} `}</b>
           </div>
-          <div style={{ margin: '5px 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '96px 1fr', margin: '4px 0' }}>
             Destinatario:<b>{` ${props.nsSeleccionada.razonSocialNombre}`}</b>
           </div>
-          <div style={{ margin: '5px 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '96px 1fr', margin: '4px 0' }}>
             FISMA:<b>{` ${formatoDDMMYYYY_PEN(props.nsSeleccionada.FISMA)} `}</b>
           </div>
+          <br />
         </div>
         {/* TABLA DE ITEMS - MERCADERIAS */}
         <div class="form-control">
@@ -103,7 +106,7 @@ export default component$((props: { nsSeleccionada: any }) => {
                 <>
                   {misReingresos.value.length > 0 ? (
                     <>
-                      <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
+                      <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                         <thead>
                           <tr>
                             <th>Ítem</th>
@@ -162,7 +165,7 @@ export default component$((props: { nsSeleccionada: any }) => {
                     </>
                   ) : (
                     <div>
-                      <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                      <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                     </div>
                   )}
                 </>

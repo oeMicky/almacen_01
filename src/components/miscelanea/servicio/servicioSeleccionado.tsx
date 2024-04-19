@@ -132,7 +132,9 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
               />
             </div>
           </div>
+          <br />
         </div>
+
         {/* GRABAR  onClick={(e) => onSubmit(e)}*/}
         <input
           id="btnGrabarServicio"
@@ -140,18 +142,25 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
           value="Grabar "
           class="btn-centro"
           onClick$={() => {
-            // console.log('props.serviSelecci', props.serviSelecci, props.porcentaje, precio.value);
+            console.log(
+              'props.serviSelecci - props.porcentaje.$numberDecimal -  precio.value',
+              props.serviSelecci,
+              parseFloat(props.porcentaje),
+              precio.value
+            );
             // let tipoImpuesto = 'IGV';
             // documento.itemsVenta.push({
             documento.push({
               idAuxiliar: parseInt(elIdAuxiliar()),
+              idMercaderia: null,
+              idEquivalencia: null,
               idKardex: null,
               item: 0,
               tipo: 'SERVICIO',
 
               tipoImpuesto: props.serviSelecci.tipoImpuesto,
               tipoAfectacionDelImpuesto: props.serviSelecci.tipoAfectacionDelImpuesto,
-              porcentaje: props.porcentaje,
+              porcentaje: parseFloat(props.porcentaje),
 
               codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '_',
 

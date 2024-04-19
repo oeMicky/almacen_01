@@ -11,11 +11,11 @@ import Spinner from '~/components/system/spinner';
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
-  paginaInicioDelSistema: '/compra',
+  // paginaInicioDelSistema: '/compra',
   // paginaInicioDelSistema: '/reporteVenta',
   // paginaInicioDelSistema: '/venta',
   // paginaInicioDelSistema: '/guiaRemision',
-  // paginaInicioDelSistema: '/inAlmacen',
+  paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',
@@ -344,7 +344,7 @@ export default component$(() => {
             navegarA('/ningunaSucursal');
           } else {
             if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
-              console.log('logeo.sucursalesAdjuntas[0].sucursales.length === 1');
+              console.log('logeo.sucursalesAdjuntas[0].sucursales.length === 1 -->> va por: getActivoGEEMPSUCUR');
               //UNA SUCURSAL
               let activo = await getActivoGEEMPSUCUR({
                 idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -413,9 +413,9 @@ export default component$(() => {
               parametrosGlobales.idEjercicio = activo[0].idEjercicio;
               parametrosGlobales.ejercicio = activo[0].ejercicio;
               parametrosGlobales.usuario = logeo.usuario;
-              parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
+              parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0]._id;
               parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
-              parametrosGlobales.idAlmacen = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal; //******* */
+              parametrosGlobales.idAlmacen = logeo.sucursalesAdjuntas[0].sucursales[0]._id; //******* */
               parametrosGlobales.almacenActivo = activo[0].almacenActivo;
               const losPeri = await getPeriodos({
                 idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,

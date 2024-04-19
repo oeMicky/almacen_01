@@ -9,7 +9,7 @@ import type { IPersona } from '~/interfaces/iPersona';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 // import { getTipoCambio } from '~/apis/apisExternas.api';
 import { cerosALaIzquierda, elIdAuxiliar, ultimoDiaDelPeriodoX } from '~/functions/comunes';
-import { getAsientoCompra, getIgvsCompra, inUpCompra } from '~/apis/compra.api';
+import { getIgvsCompra, inUpCompra } from '~/apis/compra.api';
 import { parametrosGlobales } from '~/routes/login';
 import { getTipoCambio } from '~/apis/apisExternas.api';
 import BuscarDetraccionPorcentaje from './buscarDetraccionPorcentaje';
@@ -25,7 +25,14 @@ export const CTX_PROVEEDOR = createContextId<IPersona>('proveedor');
 export const CTX_COMPRA = createContextId<ICompra>('compra');
 
 export default component$(
-  (props: { addPeriodo: any; compraSeleccionada: any; agenteRetencion: boolean; ejercicio: number; asientoC: any }) => {
+  (props: {
+    addPeriodo: any;
+    compraSeleccionada: any;
+    agenteRetencion: boolean;
+    ejercicio: number;
+    asientoC: any;
+    idLD?: string;
+  }) => {
     //#region DEFINICION CTX_NEW_EDIT_COMPRA
     const definicion_CTX_NEW_EDIT_COMPRA = useStore({
       mostrarPanelBuscarPersona: false,
@@ -196,23 +203,16 @@ export default component$(
     //#region INICIALIZACION
     const ini = useSignal(0);
     const grabo = useSignal(false);
-    // const insert = useSignal(false);
-    // const update = useSignal(false);
+
     const LosTCPcargados = useSignal([]);
     const LosIGVscargados = useSignal([]);
-    // const esNumero = useSignal(false);
+
     const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
 
     const IMPUESTO: any = parametrosGlobales.asientoCompra.filter((ele: any) => ele.impuesto40_Total42 === true);
     const TOTAL: any = parametrosGlobales.asientoCompra.filter((ele: any) => ele.impuesto40_Total42 === false);
 
-    // const immutableObject = (parametrosGlobales) =>
-    //   typeof parametrosGlobales === 'object'
-    //     ? Object.values(parametrosGlobales).forEach(immutableObject) || Object.freeze(parametrosGlobales)
-    //     : parametrosGlobales;
-    // // Object.freeze(parametrosGlobales);
-    // const immutableObject = (obj) =>
-    //   typeof obj === 'object' ? Object.values(obj).forEach(immutableObject) || Object.freeze(obj) : obj;
+    // const ID_LIBRO_DIARIO = useSignal('');
 
     const idPlanContable = useSignal('');
 
@@ -276,17 +276,17 @@ export default component$(
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
       });
-      // console.log('LosIGVs', LosIGVs);
+      console.log('LosIGVs', LosIGVs);
       LosIGVscargados.value = LosIGVs.data;
       // console.log(' LosIGVscargados.value', LosIGVscargados.value);
       if (definicion_CTX_COMPRA._id === '') {
         const tre: any = LosIGVscargados.value.filter((docs: any) => docs.default === true);
-        // console.log('tretretretretretretretretre', tre);
+        console.log('tretretretretretretretretre', tre);
         igvPorDefault.idElIgv = tre[0]._id;
-        igvPorDefault.elIgv = tre[0].igv;
+        igvPorDefault.elIgv = tre[0].igv.$numberDecimal;
         definicion_CTX_COMPRA.idElIgv = tre[0]._id;
-        definicion_CTX_COMPRA.elIgv = tre[0].igv;
-        // console.log('definicion_CTX_COMPRA.elIgv..........', definicion_CTX_COMPRA.elIgv);
+        definicion_CTX_COMPRA.elIgv = tre[0].igv.$numberDecimal;
+        console.log('definicion_CTX_COMPRA.elIgv..........', definicion_CTX_COMPRA.elIgv);
       }
     });
 
@@ -608,8 +608,6 @@ export default component$(
     });
     //#endregion RESUMEN DE MONTOS DOLARES
 
-    //#endregion VALIDAR NUMERO
-
     //#region ELIMINAR CUENTA CONTABLE
     useTask$(({ track }) => {
       track(() => definicion_CTX_NEW_EDIT_COMPRA.borrar_idAuxiliarCuentaContable);
@@ -859,7 +857,7 @@ export default component$(
       ctx_index_compra.mostrarSpinner = true;
       //enviar datos al SERVIDOR
       const compraGRABADA = await inUpCompra({
-        idLibroDiario: parametrosGlobales.idLibroDiario,
+        idLibroDiario: props.idLD,
 
         idCompra: definicion_CTX_COMPRA._id,
         idGrupoEmpresarial: definicion_CTX_COMPRA.idGrupoEmpresarial,
@@ -951,7 +949,7 @@ export default component$(
       });
 
       if (compraGRABADA.status === 400) {
-        alert('Falla al registrar la compra.' + compraGRABADA.message);
+        alert('🛑 Falla al registrar la compra.' + compraGRABADA.message);
         return;
       }
 
@@ -1038,12 +1036,26 @@ export default component$(
         definicion_CTX_COMPRA.totalHaberUSD = 0;
         //---------
         if (definicion_CTX_COMPRA.contabilizarOperaciones) {
-          let lasCuentas: any = await getAsientoCompra({
-            idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-            idEmpresa: parametrosGlobales.idEmpresa,
+          // let lasCuentas: any = await getAsientoCompra({
+          //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+          //   idEmpresa: parametrosGlobales.idEmpresa,
+          // });
+          // lasCuentas = lasCuentas.data;
+          // console.log('lasCuentas', lasCuentas);
+          // definicion_CTX_COMPRA.asientoContable = lasCuentas;
+          // definicion_CTX_COMPRA.asientoContable = props.asientoC;
+          // definicion_CTX_COMPRA.asientoContable = [];
+          // definicion_CTX_COMPRA.asientoContable = parametrosGlobales.asientoCompra;
+          props.asientoC.map((cuenta: any) => {
+            definicion_CTX_COMPRA.asientoContable.push({
+              idAuxiliar: parseInt(elIdAuxiliar()),
+              item: 0,
+              codigo: cuenta.codigo,
+              descripcion: cuenta.descripcion,
+              tipo: cuenta.tipo,
+              importe: 0,
+            });
           });
-          lasCuentas = lasCuentas.data;
-          definicion_CTX_COMPRA.asientoContable = lasCuentas;
         }
 
         //----------
@@ -1074,8 +1086,8 @@ export default component$(
             width={16}
             title="Cerrar el formulario"
             onClick={$(() => {
-              // ctx_index_compra.grabo_Compra = grabo.value;
-              // ctx_index_compra.mostrarPanelCompra = false;
+              ctx_index_compra.grabo_Compra = grabo.value;
+              ctx_index_compra.mostrarPanelCompra = false;
             })}
           />
           <ImgButton
@@ -1096,11 +1108,22 @@ export default component$(
             title="Cerrar el definicion_CTX_COMPRA"
             onClick={$(() => {
               console.log(
-                'definicion_CTX_COMPRA'
-                // definicion_CTX_COMPRA
+                'definicion_CTX_COMPRA',
+                definicion_CTX_COMPRA
                 // props.losIgvsCompra,
                 // props.igvPorDefault
               );
+              // console.log('props.igvPorDefault', props.igvPorDefault);
+            })}
+          />
+          <ImgButton
+            src={images.see}
+            alt="Icono de cerrar"
+            height={16}
+            width={16}
+            title="Cerrar el props.asientoC"
+            onClick={$(() => {
+              console.log('props.asientoC', props.asientoC);
               // console.log('props.igvPorDefault', props.igvPorDefault);
             })}
           />
@@ -1218,7 +1241,7 @@ export default component$(
                     src={images.searchPLUS}
                     height={16}
                     width={16}
-                    style={{ marginLeft: '2px' }}
+                    style={{ marginLeft: '4px' }}
                     // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                     onClick$={() => (definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona = true)}
                   />
@@ -1580,7 +1603,7 @@ export default component$(
                       //   keypress = true;
                       // }
                       if (e.key === 'Enter') {
-                        (document.getElementById('se_TipoDocumentoLiteral') as HTMLInputElement)?.focus();
+                        (document.getElementById('chbx_TipoCambio_Para_Compra') as HTMLInputElement)?.focus();
                       }
                     }}
                   />
@@ -1607,6 +1630,11 @@ export default component$(
                         return;
                       }
                       obtenerTipoCambio(e.target as HTMLInputElement);
+                    }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        (document.getElementById('se_TipoCompra') as HTMLInputElement)?.focus();
+                      }
                     }}
                   />
                   <strong
@@ -1661,6 +1689,11 @@ export default component$(
                     onChange$={(e) => {
                       definicion_CTX_COMPRA.tipoCompra = (e.target as HTMLSelectElement).value;
                     }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        (document.getElementById('in_BaseImponible_COMPRA') as HTMLInputElement)?.focus();
+                      }
+                    }}
                   >
                     <option value={'A'} selected={definicion_CTX_COMPRA.tipoCompra === 'A'}>
                       Exclusivamente a operaciones gravadas y/o de exportación. (Derecho a crédito fiscal)
@@ -1681,7 +1714,7 @@ export default component$(
                   <input
                     type="number"
                     style={{ width: '100%' }}
-                    id="in_BaseImponible"
+                    id="in_BaseImponible_COMPRA"
                     placeholder={!definicion_CTX_COMPRA.enDolares ? 'Base imponible PEN' : 'Base imponible USD'}
                     value={
                       definicion_CTX_COMPRA.enDolares
@@ -1694,14 +1727,19 @@ export default component$(
                         : (definicion_CTX_COMPRA.baseImponiblePEN = (e.target as HTMLInputElement).value.trim().toUpperCase());
                       console.log('onChange..bI', definicion_CTX_COMPRA.baseImponiblePEN);
                     }}
-                    onKeyUp$={(e) => {
+                    onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        document.getElementById('in_descripcionIN_MICE')?.focus();
+                        (document.getElementById('in_IGV_COMPRA') as HTMLInputElement)?.focus();
                       }
                     }}
-                    onFocusin$={(e) => {
-                      (e.target as HTMLInputElement).select();
-                    }}
+                    // onKeyUp$={(e) => {
+                    //   if (e.key === 'Enter') {
+                    //     document.getElementById('in_descripcionIN_MICE')?.focus();
+                    //   }
+                    // }}
+                    // onFocusin$={(e) => {
+                    //   (e.target as HTMLInputElement).select();
+                    // }}
                   />
                 </div>
               </div>
@@ -1711,24 +1749,59 @@ export default component$(
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
-                    id="in_IGV"
+                    id="in_IGV_COMPRA"
                     style={{ width: '100%' }}
                     disabled
                     placeholder={!definicion_CTX_COMPRA.enDolares ? 'IGV PEN' : 'IGV USD'}
                     value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.igvUSD : definicion_CTX_COMPRA.igvPEN}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        (document.getElementById('in_AdquisicionesNoGravadas_COMPRA') as HTMLInputElement)?.focus();
+                      }
+                    }}
                   />
-                  <ElSelect
+                  <select
+                    id="se_igv"
+                    onChange$={() => {
+                      // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢 change select');
+                      const elSelec = document.getElementById('se_igv') as HTMLSelectElement;
+                      const elIdx = elSelec.selectedIndex;
+                      // console.log('?', elIdx, elSelec[elIdx].id);
+                      definicion_CTX_COMPRA.idElIgv = elSelec[elIdx].id;
+                      if (definicion_CTX_COMPRA.idElIgv === '') {
+                        definicion_CTX_COMPRA.elIgv = ''; // parseInt('');
+                      } else {
+                        definicion_CTX_COMPRA.elIgv = elSelec.value; /// parseInt(elSelec.value);
+                        // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                      }
+                    }}
+                  >
+                    <option value="">-- Seleccione igv --</option>
+                    {LosIGVscargados.value.map((itemIGV: any) => {
+                      return (
+                        <option
+                          id={itemIGV._id}
+                          value={itemIGV.igv.$numberDecimal}
+                          selected={definicion_CTX_COMPRA.elIgv === itemIGV.igv.$numberDecimal}
+                        >
+                          {itemIGV.igv.$numberDecimal + ' %'}
+                        </option>
+                      );
+                      // return <option>itemIGV.igv.$numberDecimal </option>;
+                    })}
+                  </select>
+                  {/* <ElSelect
                     id={'se_igv'}
                     // valorSeleccionado={definicion_CTX_COMPRA.elIgv}
                     valorSeleccionado={
-                      parseFloat(definicion_CTX_COMPRA.elIgv)
+                      parseFloat(definicion_CTX_COMPRA.elIgv.$numberDecimal)
                       // definicion_CTX_COMPRA._id === '' ? definicion_CTX_COMPRA.elIgv : parseFloat(definicion_CTX_COMPRA.elIgv)
                     }
                     // valorSeleccionado={18}
                     registros={LosIGVscargados.value}
                     // registros={props.losIgvsCompra}
                     registroID={'_id'}
-                    registroTEXT={'igv'}
+                    registroTEXT={'igv.$numberDecimal'}
                     textoAdicional=" %"
                     seleccione={'-- Seleccione igv --'}
                     onChange={$(() => {
@@ -1749,7 +1822,7 @@ export default component$(
                         (document.getElementById('in_IGV') as HTMLSelectElement)?.focus();
                       }
                     })}
-                  />
+                  /> */}
                 </div>
               </div>
               {/* Adquisiciones No Gravadas */}
@@ -1758,7 +1831,7 @@ export default component$(
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
-                    id="in_AdquisicionesNoGravadas"
+                    id="in_AdquisicionesNoGravadas_COMPRA"
                     style={{ width: '100%' }}
                     placeholder={
                       !definicion_CTX_COMPRA.enDolares ? 'Adquisiciones No Gravadas PEN' : 'Adquisiciones No Gravadas USD'
@@ -1877,6 +1950,11 @@ export default component$(
                     placeholder={!definicion_CTX_COMPRA.enDolares ? 'Total PEN' : 'Total USD'}
                     disabled
                     value={definicion_CTX_COMPRA.enDolares ? definicion_CTX_COMPRA.totalUSD : definicion_CTX_COMPRA.totalPEN}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        (document.getElementById('chbx_Detraccion') as HTMLInputElement)?.focus();
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -2110,7 +2188,7 @@ export default component$(
                 </div>
                 <div class="form-control">
                   {definicion_CTX_COMPRA.asientoContable.length > 0 ? (
-                    <table style={{ fontSize: '0.9em', fontWeight: 'lighter', margin: '5px 0' }}>
+                    <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', margin: '5px 0' }}>
                       <thead>
                         <tr>
                           <th>Ítem</th>
@@ -2129,16 +2207,16 @@ export default component$(
                             : parseFloat(cuenta.importe);
 
                           if (cuenta.tipo) {
-                            // console.log('first sumaTOTAL_DEBER', sumaTOTAL_DEBER, importesss);
+                            console.log('first sumaTOTAL_DEBER', sumaTOTAL_DEBER, importesss);
                             sumaTOTAL_DEBER = sumaTOTAL_DEBER + importesss;
                           }
                           if (!cuenta.tipo) {
-                            // console.log('first sumaTOTAL_HABER', sumaTOTAL_HABER, importesss);
+                            console.log('first sumaTOTAL_HABER', sumaTOTAL_HABER, importesss);
                             sumaTOTAL_HABER = sumaTOTAL_HABER + importesss;
                           }
                           // sumaCuotas = sumaCuotas + redondeo2Decimales(value.importeCuotaPEN);
                           if (index + 1 === definicion_CTX_COMPRA.asientoContable.length) {
-                            // console.log('antes de fijar', sumaTOTAL_DEBER, sumaTOTAL_HABER);
+                            console.log('antes de fijar', sumaTOTAL_DEBER, sumaTOTAL_HABER);
                             fijarMontos({
                               sumaTOTAL_DEBER,
                               sumaTOTAL_HABER,
@@ -2188,11 +2266,11 @@ export default component$(
                               <td data-label="Acciones" class="acciones">
                                 <input
                                   type="image"
+                                  src={images.arrowUp}
                                   title="Mover arriba"
                                   alt="icono de mover arriba"
-                                  height={12}
-                                  width={12}
-                                  src={images.arrowUp}
+                                  height={14}
+                                  width={14}
                                   onClick$={() => {
                                     if (index > 0) {
                                       // const car = definicion_CTX_COMPRA.asientoContable.splice(index, 1)[0];
@@ -2209,12 +2287,12 @@ export default component$(
                                 />
                                 <input
                                   type="image"
+                                  src={images.arrowDown}
                                   title="Mover abajo"
                                   alt="icono de mover abajo"
-                                  height={12}
-                                  width={12}
+                                  height={14}
+                                  width={14}
                                   style={{ margin: '0 2px' }}
-                                  src={images.arrowDown}
                                   onClick$={() => {
                                     if (index < definicion_CTX_COMPRA.asientoContable.length - 1) {
                                       //tomar el elemento
@@ -2231,11 +2309,11 @@ export default component$(
                                 />
                                 <input
                                   type="image"
+                                  src={images.trash}
                                   title="Eliminar ítem"
                                   alt="icono de eliminar"
-                                  height={12}
-                                  width={12}
-                                  src={images.trash}
+                                  height={14}
+                                  width={14}
                                   onClick$={() => {
                                     borrarCuentaContable.idAuxiliar = cuenta.idAuxiliar;
                                     borrarCuentaContable.codigo = cuenta.codigo;
@@ -2260,7 +2338,7 @@ export default component$(
                       </tfoot>
                     </table>
                   ) : definicion_CTX_COMPRA.contabilizarOperaciones ? (
-                    <i style={{ fontSize: '0.9rem' }}>No existen cuentas contables</i>
+                    <i style={{ fontSize: '0.8rem' }}>No existen cuentas contables</i>
                   ) : (
                     ''
                   )}

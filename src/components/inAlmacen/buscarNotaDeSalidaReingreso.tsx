@@ -3,7 +3,7 @@ import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_NEW_IN_ALMACEN } from './newInAlmacen';
 import { parametrosGlobales } from '~/routes/login';
-import { hoy } from '~/functions/comunes';
+import { hoy, menosXdiasHoy } from '~/functions/comunes';
 import TablaNotaDeSalidaReingreso from './tablaNotaDeSalidaReingreso';
 import NotaDeSalidaReingreso from './notaDeSalidaReingreso';
 
@@ -33,9 +33,9 @@ export default component$(() => {
     idAlmacen: parametrosGlobales.idAlmacen,
     BuscarPor: 'Por destinatario',
     PorNombre_RUCDNI: 'Nombre / Razón social',
-    fechaInicio: hoy(), // primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
+    fechaInicio: menosXdiasHoy(5), //hoy(), // primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
     fechaFinal: hoy(), //cadena.value,
-    cadenaABuscar: 'ser',
+    cadenaABuscar: '',
   });
   //#endregion INICIALIZACION
   return (
@@ -112,12 +112,12 @@ export default component$(() => {
               </option>
             </select>
           </div>
-          <div>
+          <div class="form-control form-agrupado">
             <input
               type={parametrosBusqueda.PorNombre_RUCDNI === 'DNI / RUC' ? 'number' : 'text'}
               id="in_NombreRUCDNI_IN_NS_REINGRESO"
               value={parametrosBusqueda.cadenaABuscar}
-              style={{ width: '200px' }}
+              style={{ width: '100%' }}
               onInput$={(e) => {
                 parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
               }}
@@ -134,12 +134,12 @@ export default component$(() => {
             <input
               id="btn_Buscar_Nombre_RUCDNI_NOTA_SALIDA_REINGRESO"
               type="image"
+              src={images.searchPLUS}
               title="Buscar por número"
               alt="icono buscar"
               height={16}
               width={16}
-              src={images.searchPLUS}
-              style={{ marginLeft: '4px' }}
+              style={{ margin: '2px 4px' }}
               onClick$={() => {
                 if (parametrosBusqueda.cadenaABuscar.trim() === '') {
                   alert('Ingrese el nombre / RUC DNI');
@@ -239,7 +239,7 @@ export default component$(() => {
           />
         </div>
         {/* TABLA Notas de Salida A REINGRESAR */}
-        <div style={{ marginTop: '15px' }}>
+        <div style={{ marginTop: '16px' }}>
           {buscarNotaDeSalidaReingreso.value > 0 ? (
             <TablaNotaDeSalidaReingreso
               // contexto={props.contexto}

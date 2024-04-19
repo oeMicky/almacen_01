@@ -2,7 +2,7 @@ import { $, Resource, component$, useContext, useResource$, useSignal } from '@b
 import { images } from '~/assets';
 import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
-import { cerosALaIzquierda, elIdAuxiliar, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, elIdAuxiliar, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 
 export default component$((props: { contexto: string; ventaSeleccionada: any }) => {
   //#region CONTEXTO
@@ -56,7 +56,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%,700px)',
+        width: 'clamp(330px, 92%, 1016px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -81,7 +81,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('osSeleccionada', props.ventaSeleccionada);
+            console.log('props.ventaSeleccionada', props.ventaSeleccionada);
           })}
         />
         <ImgButton
@@ -97,17 +97,21 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3>Despacho de requisiciones</h3>
+        <h3>Despacho de venta</h3>
         {/* CLIENTE */}
-        <div style={{ fontSize: '0.8em' }}>
+        <div style={{ fontSize: '0.8rem' }}>
           {/* <div style={{ margin: '5px 0' }}>ID:{` ${props.ventaSeleccionada._id} `}</div> */}
-          <div style={{ margin: '5px 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
             Serie-Nro:<b>{` ${props.ventaSeleccionada.serie + ' - ' + cerosALaIzquierda(props.ventaSeleccionada.numero, 8)} `}</b>
           </div>
-          <div style={{ margin: '5px 0' }}>
-            Cliente:<b>{` ${props.ventaSeleccionada.razonSocialNombre}`}</b>
+          <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
+            Cliente:
+            <b>{` ${
+              props.ventaSeleccionada.clienteVentasVarias ? 'Cliente ventas varias' : props.ventaSeleccionada.razonSocialNombre
+            }`}</b>
+            {/* {props.ventaSeleccionada.clienteVentasVarias?(Cliente:<b>{` ${props.ventaSeleccionada.razonSocialNombre}`}</b>):()} */}
           </div>
-          <div style={{ margin: '5px 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
             Fecha:<b>{` ${formatoDDMMYYYY_PEN(props.ventaSeleccionada.fecha)} `}</b>
           </div>
         </div>
@@ -124,7 +128,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(itemsVenta) => {
-              console.log('onResolved 🍓🍓🍓🍓');
+              console.log('onResolved itemsVenta🍓🍓🍓🍓🍓🍓🍓🍓', itemsVenta);
               const { data } = itemsVenta; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misDespachos.value = data;
@@ -132,7 +136,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
                 <>
                   {misDespachos.value.length > 0 ? (
                     <>
-                      <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
+                      <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                         <thead>
                           <tr>
                             <th>Ítem</th>
@@ -142,8 +146,9 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
                             <th>Stock Equi</th>
                             <th>Uni</th>
                             <th>Cant.</th>
-                            <th>Cant.Despachada</th>
-                            <th>Cant.A Despachar</th>
+                            <th>Cant. Despachada</th>
+                            <th>Cant. Reingresada</th>
+                            <th>Cant. A Despachar</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -168,52 +173,61 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
                             const indexItem = index + 1; //, index
                             return (
                               <tr key={despachoLocali._id}>
-                                <td data-label="Ítem">{indexItem}</td>
-                                <td data-label="Kx">{despachoLocali.idKardex.substring(despachoLocali.idKardex.length - 6)}</td>
-                                <td data-label="Código">{despachoLocali.codigo}</td>
-                                <td data-label="Descripción">{despachoLocali.descripcionEquivalencia}</td>
-                                <td data-label="Stock">
+                                <td data-label="Ítem" class="comoCadena">
+                                  {indexItem}
+                                </td>
+                                <td data-label="Kx" class="comoCadena">
+                                  {despachoLocali.idKardex.substring(despachoLocali.idKardex.length - 6)}
+                                </td>
+                                <td data-label="Código" class="comoCadena">
+                                  {despachoLocali.codigo}
+                                </td>
+                                <td data-label="Descripción" class="comoCadena">
+                                  {despachoLocali.descripcionEquivalencia}
+                                </td>
+                                <td data-label="Stock Equi" class="comoNumero">
                                   {despachoLocali.tipoEquivalencia
                                     ? despachoLocali.stock.$numberDecimal
-                                      ? despachoLocali.stock.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal
-                                      : despachoLocali.stock * despachoLocali.laEquivalencia.$numberDecimal
+                                      ? formatear_6Decimales(
+                                          despachoLocali.stock.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal
+                                        )
+                                      : formatear_6Decimales(despachoLocali.stock * despachoLocali.laEquivalencia.$numberDecimal)
                                     : despachoLocali.stock.$numberDecimal
-                                    ? despachoLocali.stock.$numberDecimal / despachoLocali.laEquivalencia.$numberDecimal
-                                    : despachoLocali.stock / despachoLocali.laEquivalencia.$numberDecimal}
+                                    ? formatear_6Decimales(
+                                        despachoLocali.stock.$numberDecimal / despachoLocali.laEquivalencia.$numberDecimal
+                                      )
+                                    : formatear_6Decimales(despachoLocali.stock / despachoLocali.laEquivalencia.$numberDecimal)}
                                 </td>
-                                <td data-label="Uni">{despachoLocali.unidadEquivalencia}</td>
-                                <td data-label="Cantidad">
-                                  {despachoLocali.cantidad.$numberDecimal
-                                    ? despachoLocali.cantidad.$numberDecimal
-                                    : despachoLocali.cantidad}
+                                <td data-label="Uni" class="comoCadena">
+                                  {despachoLocali.unidadEquivalencia}
                                 </td>
-                                <td data-label="Cant.Despachada">
+                                <td data-label="Cantidad" class="comoNumero">
+                                  {despachoLocali.cantidadEquivalencia.$numberDecimal
+                                    ? despachoLocali.cantidadEquivalencia.$numberDecimal
+                                    : despachoLocali.cantidadEquivalencia}
+                                </td>
+                                <td data-label="Cant.Despachada" class="comoNumero">
                                   {despachoLocali.cantidadDespachada.$numberDecimal
                                     ? despachoLocali.cantidadDespachada.$numberDecimal
                                     : despachoLocali.cantidadDespachada}
                                 </td>
-                                <td data-label="Cant.A Despachar" style={{ textAlign: 'end' }}>
-                                  <ImgButton
-                                    src={images.see}
-                                    alt="icono de editar"
-                                    height={14}
-                                    width={14}
-                                    title="Editar servicio"
-                                    onClick={$(() => {
-                                      console.log('despachoLocali', despachoLocali);
-                                    })}
-                                  />
+                                <td data-label="Cant Reingresada" class="comoNumero">
+                                  {despachoLocali.cantidadReingresada.$numberDecimal
+                                    ? despachoLocali.cantidadReingresada.$numberDecimal
+                                    : despachoLocali.cantidadReingresada}
+                                </td>
+                                <td data-label="Cant.A Despachar" class="comoNumero">
                                   <input
-                                    style={{ width: '60px', textAlign: 'end' }}
+                                    style={{ width: '80px', textAlign: 'end' }}
                                     value={despachoLocali.aDespachar}
                                     onChange$={(e) => {
                                       const a_Despachar = parseFloat((e.target as HTMLInputElement).value);
                                       console.log('a_Despachar', a_Despachar);
                                       despachoLocali.aDespachar = a_Despachar;
                                     }}
-                                    onFocusin$={(e) => {
-                                      (e.target as HTMLInputElement).select();
-                                    }}
+                                    // onFocusin$={(e) => {
+                                    //   (e.target as HTMLInputElement).select();
+                                    // }}
                                   />
                                 </td>
                               </tr>
@@ -224,7 +238,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
                     </>
                   ) : (
                     <div>
-                      <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                      <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                     </div>
                   )}
                 </>
@@ -241,6 +255,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           onClick$={() => {
             console.log('losDespachos', losDespachos);
             console.log('mis despachos', misDespachos.value);
+            console.log('props.ventaSeleccionada', props.ventaSeleccionada);
 
             //VERIFICAR montos a DESPACHAR
             let todoCorrecto = true;
@@ -265,23 +280,50 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             for (const despachoLocali of misDespachos.value) {
               i++;
               const canti = parseFloat(
-                despachoLocali.cantidad.$numberDecimal ? despachoLocali.cantidad.$numberDecimal : despachoLocali.cantidad
+                despachoLocali.cantidadEquivalencia.$numberDecimal
+                  ? despachoLocali.cantidadEquivalencia.$numberDecimal
+                  : despachoLocali.cantidadEquivalencia
               );
 
-              const adas = parseFloat(
+              const despachado = parseFloat(
                 despachoLocali.cantidadDespachada.$numberDecimal
                   ? despachoLocali.cantidadDespachada.$numberDecimal
                   : despachoLocali.cantidadDespachada
               );
+              const reing = parseFloat(
+                despachoLocali.cantidadReingresada.$numberDecimal
+                  ? despachoLocali.cantidadReingresada.$numberDecimal
+                  : despachoLocali.cantidadReingresada
+              );
 
-              const despa = parseFloat(
+              const aDespa = parseFloat(
                 despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar
               );
 
-              console.log('canti - adas - por despa', canti, adas, despa);
-              if (adas + despa > canti) {
+              let stockEQUIVALENTE = 0;
+              if (despachoLocali.tipoEquivalencia) {
+                stockEQUIVALENTE =
+                  parseFloat(despachoLocali.stock.$numberDecimal) * parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
+              } else {
+                stockEQUIVALENTE =
+                  parseFloat(despachoLocali.stock.$numberDecimal) / parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
+              }
+
+              console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
+              if (aDespa > stockEQUIVALENTE) {
                 alert(
-                  `ATENCIÓN: Se desea despachar mayor cantidad a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( ${adas} ) más lo que se desea despachar ahora ( ${despa} ), y se encuetra en la posición ${i}`
+                  `ATENCIÓN: Desea despachar mayor cantidad ( ${aDespa} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`
+                );
+                todoCorrecto = false;
+                break;
+              }
+
+              console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
+              if (despachado - reing + aDespa > canti) {
+                alert(
+                  `ATENCIÓN: Se intenta despachar una cantidad mayor a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( Despachado-Reingresada = ${
+                    despachado - reing
+                  } ) más lo que se desea despachar ahora ( ${aDespa} ), y se encuetra en la posición # ${i}`
                 );
                 todoCorrecto = false;
                 break;
@@ -294,15 +336,17 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             console.log('paso VERIFICACION de CANTIDADES A DESPACHAR');
             //** copiar los datos al panel de EGRESO */
 
-            //ID DE LA ORDEN SERVICIO
+            //ID DE LA VENTA
             documento.idDocumento = props.ventaSeleccionada._id;
 
-            //DESTINATARIO
-            documento.idDestinatario = props.ventaSeleccionada.idCliente;
-            documento.codigoTipoDocumentoIdentidad = props.ventaSeleccionada.codigoTipoDocumentoIdentidad;
-            documento.tipoDocumentoIdentidad = props.ventaSeleccionada.tipoDocumentoIdentidad;
-            documento.numeroIdentidad = props.ventaSeleccionada.numeroIdentidad;
-            documento.razonSocialNombre = props.ventaSeleccionada.razonSocialNombreCliente;
+            if (!props.ventaSeleccionada.clienteVentasVarias) {
+              //DESTINATARIO
+              documento.idDestinatario = props.ventaSeleccionada.idCliente;
+              documento.codigoTipoDocumentoIdentidad = props.ventaSeleccionada.codigoTipoDocumentoIdentidad;
+              documento.tipoDocumentoIdentidad = props.ventaSeleccionada.tipoDocumentoIdentidad;
+              documento.numeroIdentidad = props.ventaSeleccionada.numeroIdentidad;
+              documento.razonSocialNombre = props.ventaSeleccionada.razonSocialNombre;
+            }
 
             //TIPO DE DOCUMENTO -> ORDEN DE SERVICIO
             const numeroDocumentos = documento.documentosAdjuntos.length;
@@ -310,11 +354,13 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             documento.documentosAdjuntos.splice(0, numeroDocumentos);
             //inserta el elemento / documento en el array
             documento.documentosAdjuntos.push({
-              codigoTCP: '00',
-              descripcionTCP: 'Otros',
+              // codigoTCP: '00',
+              // descripcionTCP: 'Otros',
+              codigoTCP: props.ventaSeleccionada.codigoTipoComprobantePago,
+              descripcionTCP: props.ventaSeleccionada.tipoComprobantePago,
               fecha: props.ventaSeleccionada.fecha,
               idAuxiliar: elIdAuxiliar(),
-              numero: props.ventaSeleccionada.correlativo,
+              numero: props.ventaSeleccionada.numero,
               serie: props.ventaSeleccionada.serie,
             });
 
@@ -324,28 +370,47 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
             for (const despachoLocali of misDespachos.value) {
-              const despa = despachoLocali.aDespachar.$numberDecimal
+              const despaEquiva = despachoLocali.aDespachar.$numberDecimal
                 ? despachoLocali.aDespachar.$numberDecimal
                 : despachoLocali.aDespachar;
 
-              if (despa > 0) {
+              if (despaEquiva > 0) {
                 documento.itemsMercaderias.push({
                   idAuxiliar: parseInt(elIdAuxiliar()),
                   idMercaderia: despachoLocali.idMercaderia,
                   idEquivalencia: despachoLocali.idEquivalencia,
                   idKardex: despachoLocali.idKardex,
+                  idItem: despachoLocali._id,
                   item: 0,
+
                   codigo: despachoLocali.codigo ? despachoLocali.codigo : '_',
+
+                  descripcion: despachoLocali.descripcion,
                   descripcionEquivalencia: despachoLocali.descripcionEquivalencia,
-                  cantidadSacada: despa,
+
+                  cantidadSacada: despaEquiva * parseFloat(despachoLocali.laEquivalencia.$numberDecimal),
+                  cantidadSacadaEquivalencia: despaEquiva,
+
+                  unidad: despachoLocali.unidad,
                   unidadEquivalencia: despachoLocali.unidadEquivalencia,
-                  // costoPEN: props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
-                  // subTotalPEN:
-                  //   despa * props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
-                  costoUnitarioPEN: 66,
-                  subTotalPEN: despa * 66,
-                  precioUSD: 0,
-                  ventaUSD: 0,
+                  /////////////////////////////////////////////////////////////////////
+                  costoUnitarioPEN: despachoLocali.costoUnitarioMovil.$numberDecimal,
+                  costoUnitarioEquivalenciaPEN:
+                    despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
+
+                  subPEN: despaEquiva * parseFloat(despachoLocali.costoUnitarioMovil.$numberDecimal),
+                  subEquivalenciaPEN:
+                    despaEquiva *
+                    parseFloat(despachoLocali.costoUnitarioMovil.$numberDecimal) *
+                    parseFloat(despachoLocali.laEquivalencia.$numberDecimal),
+
+                  // // subTotalPEN:
+                  // //   despa * props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
+                  // costoUnitarioPEN: 66,
+                  // subTotalPEN: despa * 66,
+                  // precioUSD: 0,
+                  // ventaUSD: 0,
+
                   tipoEquivalencia: despachoLocali.tipoEquivalencia,
                   factor: despachoLocali.factor,
                   laEquivalencia: despachoLocali.laEquivalencia.$numberDecimal,
@@ -353,8 +418,12 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
               }
             }
 
-            ctx.mostrarPanelDespachoRequisiciones = false;
-            ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
+            // ctx.mostrarPanelDespachoRequisiciones = false;
+            // ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
+
+            ctx.mostrarPanelBuscarPersona_Venta = false;
+            ctx.mostrarPanelVentasClienteVentasVarias = false;
+            ctx.mostrarPanelDespachoVenta = false;
           }}
         />
       </div>

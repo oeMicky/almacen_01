@@ -21,7 +21,7 @@ import {
   formatear_6Decimales,
   formatoDDMMYYYY_PEN,
   hoy,
-  menosXdiasHoy,
+  // menosXdiasHoy,
   // hoy,
   // primeroDelMes,
   redondeo2Decimales,
@@ -101,7 +101,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       reingreso: props.inSelecci.reingreso ? props.inSelecci.reingreso : false,
 
       idElIgv: props.inSelecci.idElIgv ? props.inSelecci.idElIgv : props.igvCompraPorDefault.idElIgv,
-      elIgv: props.inSelecci.igv ? props.inSelecci.igv.$numberDecimal : props.igvCompraPorDefault.elIgv,
+      elIgv: props.inSelecci.igv ? props.inSelecci.igv.$numberDecimal : props.igvCompraPorDefault.elIgv.$numberDecimal,
 
       // correlativo: props.inSelecci.correlativo ? props.inSelecci.correlativo : 0,
 
@@ -247,42 +247,51 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
   //#region REGISTRAR_INGRESO
   const registrarIngreso = $(async () => {
-    if (definicion_CTX_IN_ALMACEN.idAlmacen === '') {
+    if (definicion_CTX_IN_ALMACEN.idAlmacen === '' || typeof definicion_CTX_IN_ALMACEN.idAlmacen === 'undefined') {
       alert('No se identificado el almacén, por favor verifique.');
       // document.getElementById('se_motivoIngreso')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.periodo.toString() === '') {
+    if (definicion_CTX_IN_ALMACEN.periodo.toString() === '' || typeof definicion_CTX_IN_ALMACEN.periodo === 'undefined') {
       alert('Ingrese el periodo');
       document.getElementById('in_Periodo')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.FISMA === '') {
+    if (definicion_CTX_IN_ALMACEN.FISMA === '' || typeof definicion_CTX_IN_ALMACEN.FISMA === 'undefined') {
       alert('Ingrese la fecha FISMA');
       document.getElementById('in_FISMA')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '') {
+    if (
+      definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '' ||
+      typeof definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === 'undefined'
+    ) {
       alert('Seleccione el motivo de ingreso');
       document.getElementById('se_motivoIngreso')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad === '') {
+    if (
+      definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad === '' ||
+      typeof definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad === 'undefined'
+    ) {
       alert('Identifique al remitente');
       document.getElementById('img_buscarREMITENTE')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.numeroIdentidad === '') {
+    if (definicion_CTX_IN_ALMACEN.numeroIdentidad === '' || typeof definicion_CTX_IN_ALMACEN.numeroIdentidad === 'undefined') {
       alert('Identifique al remitente');
       document.getElementById('img_buscarREMITENTE')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.razonSocialNombre === '') {
+    if (
+      definicion_CTX_IN_ALMACEN.razonSocialNombre === '' ||
+      typeof definicion_CTX_IN_ALMACEN.razonSocialNombre === 'undefined'
+    ) {
       alert('Identifique al remitente');
       document.getElementById('img_buscarREMITENTE')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.elIgv.toString() === '') {
+    if (definicion_CTX_IN_ALMACEN.elIgv.toString() === '' || typeof definicion_CTX_IN_ALMACEN.elIgv === 'undefined') {
       alert('Identifique el igv');
       document.getElementById('in_IGV')?.focus();
       return;
@@ -446,7 +455,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   disabled={definicion_CTX_IN_ALMACEN._id !== ''}
                   style={{ width: '100%' }}
                   // min={primeroDelMes()}
-                  min={menosXdiasHoy(2)}
+                  // min={menosXdiasHoy(2)}
                   max={hoy()}
                   // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
                   // // max={ultimoDelMes()}
@@ -578,7 +587,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     title="Buscar datos de identidad"
                     height={16}
                     width={16}
-                    style={{ margin: '2px 2px' }}
+                    style={{ margin: '2px 4px' }}
                     // onFocusin$={() => }
                     onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true)}
                   />
@@ -669,7 +678,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              margin: '5px 0',
+              margin: '4px 0',
             }}
           >
             {definicion_CTX_IN_ALMACEN._id === '' ? (
@@ -695,7 +704,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
             )}
             {/* TABLA DOCUMENTOS ADJUNTOS   */}
             {definicion_CTX_IN_ALMACEN.documentosAdjuntos.length > 0 ? (
-              <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
                     <th>TCP</th>
@@ -722,9 +731,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                               src={images.edit}
                               title="Editar ítem"
                               alt="icono de editar"
-                              height={12}
-                              width={12}
-                              style={{ marginRight: '8px' }}
+                              height={14}
+                              width={14}
+                              style={{ marginRight: '4px' }}
                               onClick$={() => {
                                 elDocSelecionado.value = iTDocAdj;
                                 definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
@@ -735,8 +744,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                               src={images.trash}
                               title="Eliminar ítem"
                               alt="icono de eliminar"
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               onClick$={() => {
                                 borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
                                 borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
@@ -757,7 +766,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 </tbody>
               </table>
             ) : (
-              <i style={{ fontSize: '0.7rem' }}>No existen documentos adjuntos</i>
+              <i style={{ fontSize: '0.8rem' }}>No existen documentos adjuntos</i>
             )}
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN && (
               <div class="modal">
@@ -776,11 +785,11 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              margin: '5px 0',
+              margin: '4px 0',
             }}
           >
             {definicion_CTX_IN_ALMACEN._id === '' ? (
-              <div style={{ marginBottom: '5px' }}>
+              <div style={{ marginBottom: '4px' }}>
                 <ElButton
                   id="btn_Add_Mercaderia"
                   class="btn"

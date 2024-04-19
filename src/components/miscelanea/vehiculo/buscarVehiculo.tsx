@@ -146,7 +146,7 @@ export default component$((props: { contexto: string }) => {
               </select>
             </div>
           </div>
-          {/* DNI RUC */}
+          {/* PLACA MARCA MODELO VIN */}
           <div class="form-control">
             <label></label>
             <div class="form-control form-agrupado">
@@ -180,11 +180,12 @@ export default component$((props: { contexto: string }) => {
               />
               <input
                 type="image"
+                src={images.searchPLUS}
                 title="Buscar vehículo"
                 alt="icono buscar"
                 height={16}
                 width={16}
-                src={images.searchPLUS}
+                style={{ marginLeft: '4px' }}
                 onClick$={() => localizarVehiculos()}
               />
               <input

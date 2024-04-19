@@ -62,7 +62,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
           <>
             {misOrdenesServicio.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.9em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Cotización</th>
@@ -102,8 +102,8 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                   type="image"
                                   src={images.check32}
                                   title="Seleccionar cotización"
-                                  height={12}
-                                  width={12}
+                                  height={14}
+                                  width={14}
                                   style={{ marginRight: '6px' }}
                                   onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
@@ -132,6 +132,8 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                       console.log('ser', ser);
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
+                                        idMercaderia: null,
+                                        idEquivalencia: null,
                                         idKardex: null,
                                         item: nuevoITEM,
                                         tipo: 'SERVICIO',
@@ -284,8 +286,8 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                 type="image"
                                 src={images.edit}
                                 title="Editar venta"
-                                height={12}
-                                width={12}
+                                height={14}
+                                width={14}
                                 style={{ marginRight: '6px' }}
                                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 // onClick$={() => {
@@ -298,8 +300,8 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                               type="image"
                               src={images.pdf}
                               title="Ver pdf"
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               // style={{ marginRight: '2px' }}
                               onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
@@ -316,7 +318,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

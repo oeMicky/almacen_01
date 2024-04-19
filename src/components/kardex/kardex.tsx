@@ -89,26 +89,26 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
         />
       </div>
       {/* TITULO */}
-      <h2 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Kardex</h2>
+      <h2 style={{ marginBottom: '8px', fontSize: '1rem' }}>Kardex</h2>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: '8px' }}>
           {/* MERCADERIA */}
           <div>
-            <div style={{ margin: '5px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
               Código:<strong>{` ${props.mercaSelecci.codigo} `}</strong>
             </div>
-            <div style={{ margin: '5px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
               Descripción:<strong> {` ${props.mercaSelecci.descripcion}`}</strong>
             </div>
-            <div style={{ margin: '5px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
               Linea/Tipo:<strong> {` ${props.mercaSelecci.lineaTipo}`}</strong>
             </div>
-            <div style={{ margin: '5px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
               Marca:<strong>{` ${props.mercaSelecci.marca}`}</strong>
             </div>
-            <div style={{ margin: '5px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
               Unidad:<strong> {` ${props.mercaSelecci.unidad}`}</strong>
             </div>
           </div>

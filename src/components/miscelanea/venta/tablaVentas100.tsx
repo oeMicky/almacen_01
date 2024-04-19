@@ -54,14 +54,14 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ventas100) => {
-        console.log('onResolved 🍓🍓🍓🍓');
+        console.log('onResolved 🍓🍓🍓🍓', ventas100);
         const { data } = ventas100; //{ status, data, message }
         const misVentas100: IVenta[] = data;
         return (
           <>
             {misVentas100.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.9em', fontWeight: 'lighter ' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -132,13 +132,17 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
                               type="image"
                               src={images.check32}
                               title="Seleccionar venta"
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               // style={{ padding: '2px' }}
                               // style={{ margin: '2px' }}
                               // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
-                                if (typeof idOrdenServicio !== 'undefined' && idOrdenServicio !== '') {
+                                if (
+                                  typeof idOrdenServicio !== 'undefined' &&
+                                  idOrdenServicio !== '' &&
+                                  idOrdenServicio !== null
+                                ) {
                                   alert(
                                     `La venta presenta adjunto una orden de servicio ${serieOrdenServicio} - ${
                                       numeroOrdenServicio ? cerosALaIzquierda(numeroOrdenServicio, 8) : ''
@@ -159,7 +163,7 @@ export default component$((props: { buscarVentas100: number; parametrosBusqueda:
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

@@ -18,7 +18,7 @@ export interface IEgresoDeAlmacen {
   // serie: string;
   // numero: number;
   FISMA: string;
-  igv: number;
+  igv: any;
 
   idDestinatario: string;
   codigoTipoDocumentoIdentidad: string;

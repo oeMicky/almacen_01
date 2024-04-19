@@ -19,6 +19,7 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
     console.log('parametrosBusqueda', props.parametrosBusqueda);
 
     if (props.parametrosBusqueda.PorDestinatario_EntreFechas === 'Entre fechas') {
+      console.log('Entre fechas');
       const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getVentaDespachadaReingresoEntreFechas', {
         method: 'POST',
         headers: {
@@ -29,8 +30,9 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
       });
       return res.json();
     }
-    if (props.parametrosBusqueda.PorDestinatario_EntreFechas === 'Por destinatario') {
+    if (props.parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario') {
       if (props.parametrosBusqueda.PorNombre_RUCDNI === 'DNI / RUC') {
+        console.log('DNI / RUC');
         const res = await fetch(
           import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getVentaDespachadaReingresoPorDestinatarioPorRUCDNI',
           {
@@ -45,6 +47,7 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
         return res.json();
       }
       if (props.parametrosBusqueda.PorNombre_RUCDNI === 'Nombre / Razón social') {
+        console.log('Nombre / Razón social');
         const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getVentaDespachadaReingresoPorDestinatario', {
           method: 'POST',
           headers: {
@@ -78,10 +81,10 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
           <>
             {misVentasDespachadas.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
-                      <th>Nota de salida</th>
+                      <th>Documento</th>
                       <th>Fecha salida</th>
                       <th>Destinatario</th>
                       <th>Acciones</th>
@@ -93,7 +96,7 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
                       const { _id, FISMA, razonSocialNombre, serie, numero } = venDespaLocali;
                       return (
                         <tr key={_id}>
-                          <td data-label="Nota de salida" class="comoCadena">
+                          <td data-label="Documento" class="comoCadena">
                             {serie + ' - ' + cerosALaIzquierda(numero, 8)}
                           </td>
                           <td data-label="Fecha salida" class="comoCadena">
@@ -124,7 +127,7 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

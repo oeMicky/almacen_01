@@ -462,6 +462,7 @@ export default component$(
 
                     precioUSD: 0,
                     ventaUSD: 0,
+
                     tipoEquivalencia: equivalencia.tipoEquivalencia,
                     factor: equivalencia.factor,
                     laEquivalencia: equivalencia.laEquivalencia,
@@ -481,7 +482,7 @@ export default component$(
 
                     tipoImpuesto: props.mercaOUTSelecci.tipoImpuesto,
                     tipoAfectacionDelImpuesto: props.mercaOUTSelecci.tipoAfectacionDelImpuesto,
-                    porcentaje: props.porcentaje,
+                    porcentaje: parseFloat(props.porcentaje),
 
                     codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
 

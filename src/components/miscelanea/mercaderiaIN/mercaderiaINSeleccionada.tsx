@@ -97,7 +97,7 @@ export default component$(
     return (
       <div
         style={{
-          width: 'clamp(330px, 86%, 640px)',
+          width: 'clamp(330px, 86%, 540px)',
           // width: 'auto',
           border: '1px solid red',
           padding: '2px',
@@ -135,18 +135,25 @@ export default component$(
         {/* FORMULARIO */}
         <div class="add-form">
           {/* MERCADERIA */}
-          <div style={{ fontSize: 'small' }}>
-            <div style={{ margin: '5px 0' }}>
-              Kardex:<b>{typeof props.elKardex._id !== 'undefined' ? ' ' + props.elKardex._id : ''}</b>
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
+              Kardex:
+              <b>{typeof props.elKardex._id !== 'undefined' ? ' ' + props.elKardex._id : ''}</b>
             </div>
-            <div style={{ margin: '5px 0' }}>Código:{` ${props.mercaINSelecci.codigo} `}</div>
-            <div style={{ margin: '5px 0' }}>Descripción:{` ${props.mercaINSelecci.descripcion}`}</div>
-            <div style={{ margin: '5px 0' }}>Linea/Tipo:{` ${props.mercaINSelecci.lineaTipo}`}</div>
-            <div style={{ margin: '5px 0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
+              Código:<b>{` ${props.mercaINSelecci.codigo} `}</b>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
+              Descripción:<b>{` ${props.mercaINSelecci.descripcion}`}</b>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
+              Linea/Tipo:<b>{` ${props.mercaINSelecci.lineaTipo}`}</b>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
               IGV:<u>{` ${elIGV.value} %`}</u>
             </div>
             {/* Stock: */}
-            <div style={{ margin: '5px 0' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
               Stock:
               <strong style={{ color: 'green' }}>
                 {typeof props.elKardex.cantidadSaldo !== 'undefined' && props.elKardex.cantidadSaldo !== null
@@ -163,7 +170,7 @@ export default component$(
               props.elKardex._id !== '' ? (
                 <>
                   {/* Lote: */}
-                  <div style={{ margin: '5px 0' }}>
+                  <div style={{ margin: '4px 0' }}>
                     Lote:{' '}
                     <input
                       id="in_Lote_MICE"
@@ -186,7 +193,7 @@ export default component$(
                     />
                   </div>
                   {/* Fecha Vencimiento: */}
-                  <div style={{ margin: '5px 0' }}>
+                  <div style={{ margin: '4px 0' }}>
                     Fecha Vencimiento:{' '}
                     <input
                       id="in_Fecha_Vencimiento_MICE"
@@ -212,7 +219,7 @@ export default component$(
               ) : (
                 <>
                   {/* Lote: */}
-                  <div style={{ margin: '5px 0' }}>
+                  <div style={{ margin: '4px 0' }}>
                     Lote:{' '}
                     <input
                       id="in_Lote_MICE"
@@ -234,7 +241,7 @@ export default component$(
                     />
                   </div>
                   {/* Fecha Vencimiento: */}
-                  <div style={{ margin: '5px 0' }}>
+                  <div style={{ margin: '4px 0' }}>
                     Fecha Vencimiento:{' '}
                     <input
                       id="in_Fecha_Vencimiento_MICE"
@@ -261,8 +268,8 @@ export default component$(
               ''
             )}
             {/* Cantidad: */}
-            <div style={{ margin: '5px 0' }}>
-              Cantidad:{' '}
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
+              Cantidad:
               <input
                 id="in_Cantidad_MICE"
                 style={{ width: '120px', textAlign: 'end' }}
@@ -284,8 +291,8 @@ export default component$(
               />
             </div>
             {/* Costo (PEN): */}
-            <div style={{ margin: '5px 0' }}>
-              Costo Uni (PEN):{' '}
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
+              Costo Uni (PEN):
               <input
                 id="in_CostoPEN_MICE"
                 style={{ width: '120px', textAlign: 'end' }}
@@ -307,8 +314,8 @@ export default component$(
               />
             </div>
             {/* Precio (PEN): */}
-            <div style={{ margin: '5px 0' }}>
-              Valor Uni (PEN):{' '}
+            <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', margin: '4px 0' }}>
+              Valor Uni (PEN):
               <input
                 id="in_PrecioPEN_MICE"
                 style={{ width: '120px', textAlign: 'end' }}
@@ -346,14 +353,19 @@ export default component$(
                 item: 0,
 
                 codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '_',
+
                 descripcion: props.mercaINSelecci.descripcion,
 
                 IGV: elIGV.value,
 
                 cantidadIngresada: cantidad.value,
+
                 unidad: props.mercaINSelecci.unidad,
+
                 costoUnitarioPEN: costo.value,
+
                 subPEN: cantidad.value * costo.value,
+
                 valorUnitarioPEN: precio.value,
                 totPEN: cantidad.value * precio.value,
               });

@@ -1,12 +1,14 @@
 import { $, Resource, component$, useContext, useResource$, useSignal } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
-import ImgButton from '~/components/system/imgButton';
-import { cerosALaIzquierda, elIdAuxiliar } from '~/functions/comunes';
+import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from './newInAlmacen';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { CTX_BUSCAR_VENTA_DESPACHADA_REINGRESO } from './buscarVentaDespachadaReingreso';
 
-export default component$((props: { contexto: string; osSeleccionada: any }) => {
+export default component$((props: { contexto: string; ventaSeleccionada: any }) => {
   //#region CONTEXTO
-  const ctx = useContext(CTX_NEW_IN_ALMACEN);
+  const ctx_principal = useContext(CTX_NEW_IN_ALMACEN);
+  const ctx_secundario = useContext(CTX_BUSCAR_VENTA_DESPACHADA_REINGRESO);
   const documento = useContext(CTX_IN_ALMACEN);
   //#endregion CONTEXTO
 
@@ -14,7 +16,6 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
   const ini = useSignal(0);
 
   const misReingresos = useSignal<any>();
-
   //#endregion INICIALIZACION
 
   //#region BUSCANDO REGISTROS
@@ -25,21 +26,20 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda losReingresos', props.osSeleccionada._id);
+    console.log('parametrosBusqueda losReingresos', props.ventaSeleccionada._id);
 
-    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getReingresoRequisiciones', {
+    const res = await fetch(import.meta.env.VITE_URL + '/api/venta/obtenerReingresoVentaItemsMercaderias', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       // body: JSON.stringify(props.parametrosBusqueda),
-      body: JSON.stringify({ idOs: props.osSeleccionada._id }),
+      body: JSON.stringify({ idVenta: props.ventaSeleccionada.idDocumento }),
       signal: abortController.signal,
     });
     return res.json();
   });
   //#endregion BUSCANDO REGISTROS
-
   return (
     <div
       class="container-modal"
@@ -59,38 +59,41 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx.mostrarPanelReingresoRequisiciones = false;
+            ctx_secundario.mostrarPanelVentaDespachadaReingreso = false;
+          })}
+        />
+        <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="props.ventaSeleccionada"
+          onClick={$(() => {
+            console.log('props.ventaSeleccionada', props.ventaSeleccionada);
           })}
         />
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3>Reingreso de requisiciones</h3>
+        <h3>Reingreso de venta</h3>
         {/* CLIENTE */}
         <div style={{ fontSize: '0.8rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
-            ID:<b>{` ${props.osSeleccionada._id} `}</b>
+          {/* <div style={{ margin: '5px 0' }}>ID:{` ${props.ventaSeleccionada._id} `}</div> */}
+          <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
+            Serie-Nro:<b>{` ${props.ventaSeleccionada.serie + ' - ' + cerosALaIzquierda(props.ventaSeleccionada.numero, 8)} `}</b>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
-            OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
             Cliente:
-            <b>
-              {props.osSeleccionada.clienteVentasVarias
-                ? 'Cliente ventas varias'
-                : ` ${props.osSeleccionada.razonSocialNombreCliente}`}
-            </b>
+            <b>{` ${
+              props.ventaSeleccionada.clienteVentasVarias ? 'Cliente ventas varias' : props.ventaSeleccionada.razonSocialNombre
+            }`}</b>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
-            Placa:<b>{` ${props.osSeleccionada.placa} `}</b>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
-            Kilometraje:<b>{` ${props.osSeleccionada.kilometraje}`}</b>
+          <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
+            Fecha:<b>{` ${formatoDDMMYYYY_PEN(props.ventaSeleccionada.fecha)} `}</b>
           </div>
           <br />
         </div>
-        {/* TABLA DE REQUISICIONES */}
+        {/* TABLA DE ITEMS-MERCADERIA DESPACHADOS */}
         <div class="form-control">
           <Resource
             value={losReingresos}
@@ -102,9 +105,9 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               console.log('onRejected 🍍🍍🍍🍍');
               return <div>Fallo en la carga de datos</div>;
             }}
-            onResolved={(requisiciones) => {
-              console.log('onResolved 🍓🍓🍓🍓', requisiciones);
-              const { data } = requisiciones; //{ status, data, message }
+            onResolved={(itemsMercaderia) => {
+              console.log('onResolved 🍓🍓🍓🍓', itemsMercaderia);
+              const { data } = itemsMercaderia; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misReingresos.value = data;
               return (
@@ -178,7 +181,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
         </div>
         {/* REINGRESAR */}
         <input
-          id="btn_reingresarRequisiciones_ORDEN_SERVICIO_APERTURADO"
+          id="btn_reingresarVenta_VENTA"
           type="button"
           value="Reingresar"
           class="btn-centro"
@@ -226,24 +229,6 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                   : reingresoLocali.aReingresar
               );
 
-              // let stockEQUIVALENTE = 0;
-              // if (reingresoLocali.tipoEquivalencia) {
-              //   stockEQUIVALENTE =
-              //     parseFloat(reingresoLocali.stock.$numberDecimal) * parseFloat(reingresoLocali.laEquivalencia.$numberDecimal);
-              // } else {
-              //   stockEQUIVALENTE =
-              //     parseFloat(reingresoLocali.stock.$numberDecimal) / parseFloat(reingresoLocali.laEquivalencia.$numberDecimal);
-              // }
-
-              // console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, rein);
-              // if (rein > stockEQUIVALENTE) {
-              //   alert(
-              //     `ATENCIÓN: Desea despachar mayor cantidad ( ${rein} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`
-              //   );
-              //   todoCorrecto = false;
-              //   break;
-              // }
-
               console.log('despachado - reingresado - aReingre', despachado, reingresado, aReingre);
               if (aReingre > despachado - reingresado) {
                 alert(
@@ -262,15 +247,16 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             console.log('paso VERIFICACION de CANTIDADES A REINGRESAR');
             ////// copiar los datos al panel de EGRESO
 
-            //ID DE LA ORDEN SERVICIO
-            documento.idDocumento = props.osSeleccionada._id;
+            //ID DE LA VENTA
+            documento.idDocumento = props.ventaSeleccionada.idDocumento;
+            console.log('props.ventaSeleccionada._id A REINGRESAR', props.ventaSeleccionada.idDocumento);
 
             //DESTINATARIO
-            documento.idRemitente = props.osSeleccionada.idCliente;
-            documento.codigoTipoDocumentoIdentidad = props.osSeleccionada.codigoTipoDocumentoIdentidad;
-            documento.tipoDocumentoIdentidad = props.osSeleccionada.tipoDocumentoIdentidad;
-            documento.numeroIdentidad = props.osSeleccionada.numeroIdentidad;
-            documento.razonSocialNombre = props.osSeleccionada.razonSocialNombreCliente;
+            documento.idRemitente = props.ventaSeleccionada.idDestinatario;
+            documento.codigoTipoDocumentoIdentidad = props.ventaSeleccionada.codigoTipoDocumentoIdentidad;
+            documento.tipoDocumentoIdentidad = props.ventaSeleccionada.tipoDocumentoIdentidad;
+            documento.numeroIdentidad = props.ventaSeleccionada.numeroIdentidad;
+            documento.razonSocialNombre = props.ventaSeleccionada.razonSocialNombre;
 
             //TIPO DE DOCUMENTO -> ORDEN DE SERVICIO
             const numeroDocumentos = documento.documentosAdjuntos.length;
@@ -278,12 +264,12 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             documento.documentosAdjuntos.splice(0, numeroDocumentos);
             //inserta el elemento / documento en el array
             documento.documentosAdjuntos.push({
-              codigoTCP: '00',
-              descripcionTCP: 'Otros',
-              fecha: props.osSeleccionada.fechaInicio,
-              idAuxiliar: elIdAuxiliar(),
-              numero: props.osSeleccionada.numero,
-              serie: props.osSeleccionada.serie,
+              codigoTCP: props.ventaSeleccionada.codigoTCP,
+              descripcionTCP: props.ventaSeleccionada.descripcionTCP,
+              fecha: props.ventaSeleccionada.fecha,
+              idAuxiliar: props.ventaSeleccionada.idAuxiliar,
+              numero: props.ventaSeleccionada.numero,
+              serie: props.ventaSeleccionada.serie,
             });
 
             //INSERTAR MERCADERIA
@@ -299,8 +285,10 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               console.log('rein', rein);
               if (rein > 0) {
                 let IGVCalculado = 0;
-                console.log('reingresoLocali.igv', reingresoLocali.igv, reingresoLocali.igv.$numberDecimal);
-                const elIGV = reingresoLocali.igv.$numberDecimal ? reingresoLocali.igv.$numberDecimal : reingresoLocali.igv;
+                console.log('reingresoLocali.porcentaje', reingresoLocali.porcentaje, reingresoLocali.porcentaje.$numberDecimal);
+                const elIGV = reingresoLocali.porcentaje.$numberDecimal
+                  ? reingresoLocali.porcentaje.$numberDecimal
+                  : reingresoLocali.porcentaje;
                 if (elIGV === 0) {
                   IGVCalculado = 0;
                 } else {
@@ -321,7 +309,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                   idItem: reingresoLocali._id,
                   item: 0,
 
-                  IGV: reingresoLocali.igv,
+                  IGV: elIGV,
 
                   codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '_',
 
@@ -355,8 +343,9 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
 
             documento.reingreso = true;
 
-            ctx.mostrarPanelReingresoRequisiciones = false;
-            ctx.mostrarPanelBuscarOrdenServicioAperturado = false;
+            ctx_secundario.mostrarPanelVentaDespachadaReingreso = false;
+
+            ctx_principal.mostrarPanelBuscarVentaDespachadaReingreso = false;
           }}
         />
       </div>

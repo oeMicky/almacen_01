@@ -21,7 +21,7 @@ export interface IIngresoAAlmacen {
   reingreso: boolean;
 
   idElIgv: string;
-  elIgv: number;
+  elIgv: any;
 
   idRemitente: string;
   codigoTipoDocumentoIdentidad: string;

@@ -22,7 +22,7 @@ import { parametrosGlobales } from '../../login/index';
 // import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
-import { formatoDDMMYYYY_PEN, hoy } from '~/functions/comunes';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN, hoy } from '~/functions/comunes';
 // import pdfReporteVenta from '~/reports/MG/pdfReporteVenta';
 
 // import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
@@ -86,6 +86,7 @@ export default component$(() => {
   // const losPeriodosCargados = useSignal(JSON.parse(localStorage.getItem('periodos') || '[]'));
   // const losPeriodosCargados = useSignal<any>([]);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
+  const periodoAnterior = useStore({ idPeriodo: '', periodo: '' });
 
   // const ventas = useStore([]);
   // const fechas = useStore({
@@ -223,13 +224,13 @@ export default component$(() => {
           {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
-      <button
+      {/* <button
         onClick$={() => {
           console.log('PARAMETROS GLOABLES', parametrosGlobales);
         }}
       >
         parametros
-      </button>
+      </button> */}
       <h4 style={{ margin: '8px 0 4px 2px' }}>
         <u>Facturación</u>
       </h4>
@@ -284,21 +285,44 @@ export default component$(() => {
         <button
           title="Adiciona venta"
           onClick$={async () => {
+            const elHoy = new Date();
+            const elANIO = elHoy.getFullYear();
+            console.log(elANIO);
             //validar PERIODO
+            let anioAnterior = '';
+            let mesAnterior = '';
             const anio = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(0, 4);
             const mes = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(5, 7);
+            console.log(anio);
             // console.log('la fechitaaaa', anio + mes);
-            const mas = anio + mes;
+            const periodoActual = anio + mes;
             const PPP = losPeriodosCargados.value;
+            if (parseInt(mes) === 1) {
+              anioAnterior = (parseInt(anio) - 1).toString();
+              mesAnterior = '12';
+            } else {
+              anioAnterior = anio;
+              mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
+            }
+            const periodoANTE = anioAnterior + mesAnterior;
+            console.log(periodoANTE);
             // console.log('mas', mas);
             // console.log('PPP', PPP);
-            const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(mas));
-            console.log('elPeriodo', elPeriodo);
+            const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
+            console.log('⚠ elPeriodo', elPeriodo);
+            if (typeof elPeriodo === 'undefined') {
+              alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
+              return;
+            }
             periodo.idPeriodo = elPeriodo._id;
             periodo.periodo = elPeriodo.periodo;
+            //************* */
+            const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
+            periodoAnterior.idPeriodo = elPeriodoAnterior._id;
+            periodoAnterior.periodo = elPeriodoAnterior.periodo;
 
             if (periodo.idPeriodo === '') {
-              alert('Seleccione el periodo.');
+              alert('🔰 Seleccione el periodo.');
               document.getElementById('se_periodo')?.focus();
               ini.value++;
               return;
@@ -515,7 +539,7 @@ export default component$(() => {
         />
         {definicion_CTX_INDEX_VENTA.mostrarPanelVenta && (
           <div class="modal">
-            <AddVenta addPeriodo={periodo} igv={igv.value} />
+            <AddVenta addPeriodo={periodo} igv={igv.value} addPeriodoAnterior={periodoAnterior} />
           </div>
         )}
         {/* <input

@@ -89,7 +89,7 @@ export default component$((props: { buscarNotasDeSalidaReingreso: number; parame
           <>
             {misNotasDeSalida.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
                       <th>Nota de salida</th>
@@ -136,7 +136,7 @@ export default component$((props: { buscarNotasDeSalidaReingreso: number; parame
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

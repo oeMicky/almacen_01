@@ -186,7 +186,7 @@ export default component$(() => {
               idEmpresa: parametrosGlobales.idEmpresa,
             });
             elIgv = elIgv.data;
-            // console.log('elIgv', elIgv);
+            console.log('elIgv', elIgv);
             losIgvsCompra.value = elIgv;
             const tre = elIgv.filter((docs: any) => docs.default === true);
             // console.log('tre', tre);

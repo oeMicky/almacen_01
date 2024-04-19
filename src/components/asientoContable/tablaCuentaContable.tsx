@@ -71,7 +71,7 @@ export default component$((props: { buscarCuentaContable: number; parametrosBusq
           <>
             {misCuentasContables.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -93,10 +93,10 @@ export default component$((props: { buscarCuentaContable: number; parametrosBusq
                             <input
                               type="image"
                               src={images.check32}
-                              title="Seleccionar persona"
-                              height={12}
-                              width={12}
-                              style={{ margin: '2px' }}
+                              title="Seleccionar cuenta contable"
+                              height={14}
+                              width={14}
+                              style={{ margin: '4px' }}
                               onClick$={() => {
                                 ctx_compra_asiento.unshift({
                                   idAuxiliar: parseInt(elIdAuxiliar()),
@@ -126,13 +126,13 @@ export default component$((props: { buscarCuentaContable: number; parametrosBusq
                                 // }
                               }}
                             />
-                            <input
+                            {/* <input
                               type="image"
                               src={images.edit}
                               title="Editar persona"
-                              height={12}
-                              width={12}
-                              style={{ margin: '2px' }}
+                              height={14}
+                              width={14}
+                              // style={{ margin: '2px' }}
                               // onClick$={() => {
                               //   ctx_buscar_persona.pP = persoLocali;
                               //   ctx_buscar_persona.mostrarPanelNewEditPersona = true;
@@ -140,7 +140,7 @@ export default component$((props: { buscarCuentaContable: number; parametrosBusq
                               //   console.log('ctx', ctx);
                               //   console.log('selecion', persoLocali);
                               // }}
-                            />
+                            /> */}
                           </td>
                         </tr>
                       );
@@ -150,7 +150,7 @@ export default component$((props: { buscarCuentaContable: number; parametrosBusq
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

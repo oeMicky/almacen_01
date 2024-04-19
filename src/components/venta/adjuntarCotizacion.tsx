@@ -85,7 +85,8 @@ export default component$(() => {
           style={numeroOFecha.value === 'Número' ? { visibility: 'visible', display: 'flex' } : { visibility: 'collapse' }}
         >
           <input type="text" id="inputNumeroCotizacion" style={{ marginLeft: '91px', top: '0px', width: '95px' }}></input>
-          <ImgButton
+          <input
+            type="image"
             src={images.searchPLUS}
             alt="Icono de busqueda"
             height={16}

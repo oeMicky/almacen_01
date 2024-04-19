@@ -112,7 +112,7 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
           <>
             {misVehiculos.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -143,8 +143,8 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                               title="Seleccionar persona"
                               height={14}
                               width={14}
-                              style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              style={{ marginRight: '4px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 documento.idVehiculo = _id;
                                 documento.placa = placa;
@@ -164,8 +164,8 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                               title="Editar vehículo"
                               height={14}
                               width={14}
-                              style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // style={{ padding: '2px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_vehiculo.vV = vehiLocali;
                                 console.log('desde tablVehiuclosHallados', ctx_buscar_vehiculo.vV);
@@ -181,7 +181,7 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

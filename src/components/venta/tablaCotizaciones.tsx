@@ -117,7 +117,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
           <>
             {misCotizaciones.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.9em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Cotización</th>
@@ -155,9 +155,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   type="image"
                                   src={images.check32}
                                   title="Selecionar cotización"
-                                  height={12}
-                                  width={12}
-                                  style={{ marginRight: '6px' }}
+                                  height={14}
+                                  width={14}
+                                  style={{ marginRight: '4px' }}
                                   onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
                                     console.log('seleccionar cotizacion', COT);
@@ -184,7 +184,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                       console.log('ser', ser);
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
-                                        idKardex: ser.idKardex,
+                                        idMercaderia: null,
+                                        idEquivalencia: null,
+                                        idKardex: null,
                                         item: newItem,
                                         tipo: 'SERVICIO',
 
@@ -279,9 +281,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 type="image"
                                 src={images.edit}
                                 title="Editar venta"
-                                height={12}
-                                width={12}
-                                style={{ marginRight: '6px' }}
+                                height={14}
+                                width={14}
+                                style={{ marginRight: '4px' }}
                                 onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               />
                             )}
@@ -290,8 +292,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               type="image"
                               src={images.pdf}
                               title="Ver pdf"
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 pdfCotizacionMG(COT);
@@ -302,8 +304,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               type="image"
                               src={images.see}
                               title="Ver COT "
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 console.log('COT', COT);
@@ -318,7 +320,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

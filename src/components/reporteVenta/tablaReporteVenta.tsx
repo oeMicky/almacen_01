@@ -98,39 +98,39 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
                       </tr>
                     </thead>
                     <tbody>
-                      {misVentas.map((value, index) => {
+                      {misVentas.map((venta, index) => {
                         const indexItem = index + 1;
                         let bas = 0;
                         let ig = 0;
                         let tot = 0;
-                        bas = value.baseImponiblePEN.$numberDecimal
-                          ? value.baseImponiblePEN.$numberDecimal
-                          : value.baseImponiblePEN;
-                        ig = value.igvPEN.$numberDecimal ? value.igvPEN.$numberDecimal : value.igvPEN;
-                        tot = value.totalPEN.$numberDecimal ? value.totalPEN.$numberDecimal : value.totalPEN;
+                        bas = venta.baseImponiblePEN.$numberDecimal
+                          ? venta.baseImponiblePEN.$numberDecimal
+                          : venta.baseImponiblePEN;
+                        ig = venta.igvPEN.$numberDecimal ? venta.igvPEN.$numberDecimal : venta.igvPEN;
+                        tot = venta.totalPEN.$numberDecimal ? venta.totalPEN.$numberDecimal : venta.totalPEN;
 
                         suma_BASE = suma_BASE + Number(bas);
                         suma_IGV = suma_IGV + Number(ig);
                         suma_TOTAL = suma_TOTAL + Number(tot);
                         return (
-                          <tr key={value._id}>
+                          <tr key={venta._id}>
                             <td data-label="Item" class="comoCadena">
                               {indexItem}
                             </td>
                             <td data-label="Nro. Doc" class="comoCadena">
-                              {value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}
+                              {venta.clienteVentasVarias ? '-' : venta.tipoDocumentoIdentidad + ': ' + venta.numeroIdentidad}
                             </td>
                             <td data-label="Cliente" class="comoCadena">
-                              {value.razonSocialNombre}
+                              {venta.clienteVentasVarias ? 'Cliente ventas varias' : venta.razonSocialNombre}
                             </td>
                             <td data-label="Fecha" class="comoCadena">
-                              {formatoDDMMYYYY_PEN(value.fecha)}
+                              {formatoDDMMYYYY_PEN(venta.fecha)}
                             </td>
                             <td data-label="Ser-Nro" class="comoCadena">
-                              {value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}
+                              {venta.serie + ' - ' + cerosALaIzquierda(venta.numero, 8)}
                             </td>
                             <td data-label="Base Imp" class="comoNumero">
-                              {formatearMonedaPEN(value.baseImponiblePEN.$numberDecimal)}
+                              {formatearMonedaPEN(venta.baseImponiblePEN.$numberDecimal)}
                               {/* {formatear_2Decimales(mer)} */}
                               {/* {`${mer.toLocaleString('en-PE', {
                                 // style: 'currency',
@@ -139,7 +139,7 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
                               })}`} */}
                             </td>
                             <td data-label="IGV" class="comoNumero">
-                              {formatearMonedaPEN(value.igvPEN.$numberDecimal)}
+                              {formatearMonedaPEN(venta.igvPEN.$numberDecimal)}
                               {/* {`${ser.toLocaleString('en-PE', {
                                 // style: 'currency',
                                 currency: 'PEN',
@@ -148,7 +148,7 @@ export default component$((props: { buscarReporteVentas: number; parametrosBusqu
                             </td>
                             <td data-label="Importe" class="comoNumero">
                               {/* {formatearMonedaPEN(value.totalPEN.$numberDecimal)} */}
-                              {`${parseFloat(value.totalPEN.$numberDecimal).toLocaleString('en-PE', {
+                              {`${parseFloat(venta.totalPEN.$numberDecimal).toLocaleString('en-PE', {
                                 // style: 'currency',
                                 currency: 'PEN',
                                 minimumFractionDigits: 2,

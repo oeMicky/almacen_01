@@ -126,9 +126,9 @@ export default component$(() => {
                           parametrosGlobales.RUC = empre.numeroIdentidad;
                           parametrosGlobales.Direccion = empre.direccion;
 
-                          parametrosGlobales.idSucursal = empre.sucursales[0].idSucursal;
+                          parametrosGlobales.idSucursal = empre.sucursales[0]._id;
                           parametrosGlobales.sucursal = empre.sucursales[0].sucursal;
-                          parametrosGlobales.idAlmacen = empre.sucursales[0].idSucursal; //********* */
+                          parametrosGlobales.idAlmacen = empre.sucursales[0]._id; //********* */
                           parametrosGlobales.almacenActivo = activo[0].almacenActivo;
                           parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
                           parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;

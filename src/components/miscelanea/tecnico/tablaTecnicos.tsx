@@ -88,7 +88,7 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
           <>
             {misPersonas.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -116,8 +116,8 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
                               title="Seleccionar técnico"
                               height={14}
                               width={14}
-                              style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // style={{ padding: '2px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx.selecciono_Tecnico = true;
 
@@ -131,8 +131,8 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
                               title="Editar persona"
                               height={14}
                               width={14}
-                              style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // style={{ padding: '2px' }}
+                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 // ctx_buscar_persona.pP = persoLocali;
                                 // ctx_buscar_persona.mostrarPanelNewEditPersona = true;
@@ -149,7 +149,7 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

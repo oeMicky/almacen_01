@@ -57,21 +57,27 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
         />
       </div>
       {/* TITULO */}
-      <h2 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Kardexs</h2>
+      <h2 style={{ marginBottom: '8px', fontSize: '1rem' }}>Kardexs</h2>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: '8px' }}>
           {/* MERCADERIA */}
-          <div style={{ fontSize: '0.8em' }}>
-            <div style={{ margin: '5px 0' }}>Código:{` ${props.mercaINSelecci.codigo} `}</div>
-            <div style={{ margin: '5px 0' }}>Descripción:{` ${props.mercaINSelecci.descripcion}`}</div>
-            <div style={{ margin: '5px 0' }}>Linea/Tipo:{` ${props.mercaINSelecci.lineaTipo}`}</div>
+          <div style={{ fontSize: '0.8rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+              Código:{` ${props.mercaINSelecci.codigo} `}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+              Descripción:{` ${props.mercaINSelecci.descripcion}`}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+              Linea/Tipo:{` ${props.mercaINSelecci.lineaTipo}`}
+            </div>
           </div>
         </div>
         {/*  tabla KARDEXS  */}
         {lasMercaderias.length > 0 ? (
-          <table style={{ fontSize: '0.7em', fontWeight: 'lighter' }}>
+          <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
             <thead>
               <tr>
                 <th>Ítem</th>
@@ -135,7 +141,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
             </tbody>
           </table>
         ) : (
-          <i style={{ fontSize: '0.7rem' }}>No existen kardexs</i>
+          <i style={{ fontSize: '0.8rem' }}>No existen kardexs</i>
         )}
       </div>
       {definicion_CTX_KARDEXS.mostrarPanelKARDEX && (

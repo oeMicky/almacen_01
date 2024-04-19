@@ -60,7 +60,7 @@ export const CTX_ADD_VENTA = createContextId<any>('add_venta');
 //   return false;
 // }
 
-export default component$((props: { addPeriodo: any; igv: number }) => {
+export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnterior?: any }) => {
   useStylesScoped$(styleTabla);
   //#region DEFINICION CTX_ADD_VENTA
   const definicion_CTX_ADD_VENTA = useStore({
@@ -1047,7 +1047,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
     });
 
     if (ventaGRABADA.status === 400) {
-      alert('Falla al registrar la venta. ' + ventaGRABADA.message);
+      alert('🛑 Falla al registrar la venta. ' + ventaGRABADA.message);
       ctx_index_venta.mostrarSpinner = false;
       return;
     }
@@ -1140,7 +1140,7 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
     ctx_index_venta.mostrarSpinner = false;
     //OCULTAR MENSAJE DE GRABACION
     setTimeout(() => (pasoProcesoGrabacion.value = false), 3000);
-    alert('Registro satisfactorio!!!');
+    alert('✅ Registro satisfactorio!!!');
   });
   //#endregion SUBMIT
 
@@ -1188,19 +1188,19 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
             // console.log('ctx_index_venta', ctx_index_venta);
           })}
         />
-        {/* <ImgButton
+        <ImgButton
           src={images.see}
           alt="Icono de ver"
           height={16}
           width={16}
           title="ver"
           onClick={$(() => {
-            console.log('TOTAL,IMPUESTO', TOTAL, IMPUESTO);
+            console.log('props.addPeriod, props.addPeriodoAnterior', props.addPeriodo, props.addPeriodoAnterior);
             // console.log('grabo', grabo.value);
             // console.log('ctx_index_venta', ctx_index_venta);
           })}
         />
-        <ImgButton
+        {/*    <ImgButton
           src={images.see}
           alt="Icono de ver"
           height={16}
@@ -1561,7 +1561,13 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
               <label>IGV (%)</label>
               <div class="form-control form-agrupado">
                 <strong style={{ fontSize: '0.9rem', fontWeight: '400', paddingLeft: '4px', paddingRight: '24px' }}>IGV</strong>
-                <input type="text" id="inputIGV" disabled value={definicion_CTX_F_B_NC_ND.igv + ' %'} style={{ width: '100%' }} />
+                <input
+                  type="text"
+                  id="inputIGV"
+                  disabled
+                  value={definicion_CTX_F_B_NC_ND.igv.$numberDecimal + ' %'}
+                  style={{ width: '100%' }}
+                />
               </div>
             </div>
             {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
@@ -2243,6 +2249,15 @@ export default component$((props: { addPeriodo: any; igv: number }) => {
                                       ? iTVen.cantidadEquivalencia.$numberDecimal
                                       : iTVen.cantidadEquivalencia) *
                                     (iTVen.precioPEN.$numberDecimal ? iTVen.precioPEN.$numberDecimal : iTVen.precioPEN);
+                                }
+                                //actualizar COSTO UNITARIO - EQUIVALENTE -- SOLO SI ES SERVICIO
+                                if (iTVen.tipo === 'SERVICIO') {
+                                  iTVen.costoUnitarioPEN = redondeo6Decimales(
+                                    iTVen.precioPEN.$numberDecimal ? iTVen.precioPEN.$numberDecimal : iTVen.precioPEN
+                                  );
+                                  iTVen.costoUnitarioEquivalenciaPEN = redondeo6Decimales(
+                                    iTVen.precioPEN.$numberDecimal ? iTVen.precioPEN.$numberDecimal : iTVen.precioPEN
+                                  );
                                 }
                               }}
                             />
