@@ -1,9 +1,9 @@
 import { $, component$, useStore, useStylesScoped$ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city'; //action$, Form,
-import { getUsuario } from '~/apis/usuario.api';
+import { getSucursalesAdjuntasUsuario, getUsuarioPanel } from '~/apis/usuario.api';
 
 import styles from './login.css?inline';
-import { getActivoGEEMP, getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
+import { getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
 import Spinner from '~/components/system/spinner';
 
 // export const CTX_CONFIGURACION = createContextId<any>('__configuracion');
@@ -134,7 +134,7 @@ export default component$(() => {
     // email: 'carlos@merma.com',
     // email: 'paolo@cao.com',
     // email: 'joseluis@cao.com',
-    email: 'bugsbunny4@cao.com',
+    email: 'keymar0@cao.com',
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
@@ -169,346 +169,443 @@ export default component$(() => {
   //#endregion OBTENER PERIODOS
 
   //#region ANALISIS DEL LOGEO
-  const analisisDeLogeo = $(async (logeo: any) => {
-    // localStorage.setItem('ID', logeo._id);
-    console.log('***-->logeo', logeo);
-    if (typeof logeo.sucursalesAdjuntas === 'undefined' || logeo.sucursalesAdjuntas.length === 0) {
-      navegarA('/ningunaEmpresa');
-    } else {
-      if (logeo.sucursalesAdjuntas.length === 1) {
-        //UNA EMPRESA
-        console.log('UNA EMPRESA*');
-        if (logeo.sucursalesAdjuntas[0].todasLasSucursales === true) {
-          console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === true');
-          if (
-            typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
-            logeo.sucursalesAdjuntas[0].sucursales.length === 0
-          ) {
-            navegarA('/ningunaSucursal');
-          } else {
-            if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
-              console.log('UNA EMPRESA --> UNA SUCURSAL');
-              //UNA SUCURSAL
-              let activo = await getActivoGEEMPSUCUR({
-                idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
-                idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
-                idSucursal: logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal,
-              });
-              activo = activo.data;
+  const analisisDeLogeo = $(async (logeado: string, usuario: string) => {
+    console.log('analisisDeLogeo -> logeado', logeado);
+    const sucursales = await getSucursalesAdjuntasUsuario({ idUsuario: logeado });
+    console.log('analisisDeLogeo -> sucursales', sucursales.data);
 
-              if (!activo[0].activoGE) {
-                alert(
-                  `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              if (!activo[0].activoEMP) {
-                alert(
-                  `La empresa ${logeo.sucursalesAdjuntas[0].empresa} esta inactiva. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              if (!activo[0].activoSUCUR) {
-                alert(
-                  `La sucursal ${logeo.sucursalesAdjuntas[0].sucursales[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              ///////////
+    parametrosGlobales.usuario = usuario;
+    parametrosGlobales.sucursalesAdjuntas = sucursales.data;
 
-              // localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
-              // localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
-              // localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
-              // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
-              // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
-              // localStorage.setItem('usuario', logeo.usuario);
-              // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
-              // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
-              // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
-              console.log('**PAPASECA**');
-              parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
-              parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
-              parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
-              parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
-              parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
-              parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
-              parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
-              parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
-              parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
-              parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
-              parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
-              parametrosGlobales.facturaJSON = activo[0].facturaJSON;
-              parametrosGlobales.facturaXML = activo[0].facturaXML;
-              parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
-              parametrosGlobales.planesContables = activo[0].planesContables;
-              parametrosGlobales.asientoCompra = activo[0].asientoCompra;
-              parametrosGlobales.asientoVenta = activo[0].asientoVenta;
-              parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
-              parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
-              parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
-              parametrosGlobales.idEjercicio = activo[0].idEjercicio;
-              parametrosGlobales.ejercicio = activo[0].ejercicio;
-              parametrosGlobales.usuario = logeo.usuario;
-              parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
-              parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
-              parametrosGlobales.idAlmacen = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal; //******* */
-              parametrosGlobales.almacenActivo = activo[0].almacenActivo;
-              const losPeri = await getPeriodos({
-                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                idEmpresa: parametrosGlobales.idEmpresa,
-                bandera: '',
-              });
-              parametrosGlobales.periodos = losPeri.data;
-              // console.log('json_', losPeri.data);
-              // localStorage.setItem('periodos', losPeri.data);
-              //PAGINA DE INICIO
-              if (parametrosGlobales.almacenActivo) {
-                navegarA(parametrosGlobales.paginaInicioDelSistema);
-              } else {
-                if (
-                  parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
-                  parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
-                  parametrosGlobales.paginaInicioDelSistema === '/kardex'
-                ) {
-                  navegarA(parametrosGlobales.paginaInicioDefault);
-                } else {
-                  navegarA(parametrosGlobales.paginaInicioDelSistema);
-                }
-              }
+    //CERO SUCURSAL
+    if (sucursales.data.length === 0) {
+      console.log('sucursales.data.length === 0');
+      alert('No existe una sucursal adjunta.');
+    }
+    //UNA SUCURSAL
+    if (sucursales.data.length === 1) {
+      console.log('sucursales.data.length === 1');
 
-              // Object.freeze(parametrosGlobales);
-            } else {
-              console.log('UNA EMPRESA --> VARIAS SUCURSALES');
-              //VARIAS SUCURSALES
-              let activo = await getActivoGEEMP({
-                idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
-                idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
-              });
-              activo = activo.data;
+      let activo = await getActivoGEEMPSUCUR({
+        idGrupoEmpresarial: sucursales.data[0].idGrupoEmpresarial,
+        idEmpresa: sucursales.data[0].idEmpresa,
+        idSucursal: sucursales.data[0].idSucursal,
+      });
+      activo = activo.data;
 
-              if (!activo[0].activoGE) {
-                alert(
-                  `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              if (!activo[0].activoEMP) {
-                alert(
-                  `La empresa ${logeo.sucursalesAdjuntas[0].empresa} esta inactiva. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              // localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
-              // localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
-              // localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
-              // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
-              // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
-              // localStorage.setItem('usuario', logeo.usuario);
-              // localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
-              console.log('**MONDONGO**');
-              parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
-              parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
-              parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
-              parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
-              parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
-              parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
-              parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
-              parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
-              parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
-              parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
-              parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
-              parametrosGlobales.facturaJSON = activo[0].facturaJSON;
-              parametrosGlobales.facturaXML = activo[0].facturaXML;
-              parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
-              parametrosGlobales.planesContables = activo[0].planesContables;
-              parametrosGlobales.asientoCompra = activo[0].asientoCompra;
-              parametrosGlobales.asientoVenta = activo[0].asientoVenta;
-              parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
-              parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
-              parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
-              parametrosGlobales.idEjercicio = activo[0].idEjercicio;
-              parametrosGlobales.ejercicio = activo[0].ejercicio;
-              parametrosGlobales.usuario = logeo.usuario;
-              //  parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
-              //  parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
-              // Object.freeze(parametrosGlobales);
-              navegarA('/listadoSucursales');
-            }
-          }
-        } else {
-          console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === false');
-          if (
-            typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
-            logeo.sucursalesAdjuntas[0].sucursales.length === 0
-          ) {
-            navegarA('/ningunaSucursal');
-          } else {
-            if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
-              console.log('logeo.sucursalesAdjuntas[0].sucursales.length === 1 -->> va por: getActivoGEEMPSUCUR');
-              //UNA SUCURSAL
-              let activo = await getActivoGEEMPSUCUR({
-                idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
-                idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
-                idSucursal: logeo.sucursalesAdjuntas[0].sucursales[0]._id,
-              });
-              activo = activo.data;
+      if (!activo[0].activoGE) {
+        alert(
+          `El grupo empresarial ${sucursales.data[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
+        );
+        return;
+      }
+      if (!activo[0].activoEMP) {
+        alert(`La empresa ${sucursales.data[0].empresa} esta inactiva. Pongase en contacto con el administrador.`);
+        return;
+      }
+      if (!activo[0].activoSUCUR) {
+        alert(`La sucursal ${sucursales.data[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`);
+        return;
+      }
+      console.log('activo', activo);
+      console.log('**UNA SUCURSAL**');
+      parametrosGlobales.idSucursal = sucursales.data[0].idSucursal;
+      parametrosGlobales.sucursal = sucursales.data[0].sucursal;
+      parametrosGlobales.idAlmacen = sucursales.data[0].idSucursal; //******* */
+      parametrosGlobales.idGrupoEmpresarial = sucursales.data[0].idGrupoEmpresarial;
+      parametrosGlobales.nombreGrupoEmpresarial = sucursales.data[0].grupoEmpresarial;
+      parametrosGlobales.idEmpresa = sucursales.data[0].idEmpresa;
+      parametrosGlobales.RazonSocial = sucursales.data[0].empresa;
 
-              if (!activo[0].activoGE) {
-                alert(
-                  `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              if (!activo[0].activoEMP) {
-                alert(
-                  `La empresa ${logeo.sucursalesAdjuntas[0].empresa} esta inactiva. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              if (!activo[0].activoSUCUR) {
-                alert(
-                  `La sucursal ${logeo.sucursalesAdjuntas[0].sucursales[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
+      parametrosGlobales.RUC = sucursales.data[0].numeroIdentidad;
+      parametrosGlobales.Direccion = sucursales.data[0].direccion;
 
-              // localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
-              // localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
-              // localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
-              // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
-              // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
-              // localStorage.setItem('usuario', logeo.usuario);
+      parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
+      parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+      parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+      parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+      parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+      parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+      parametrosGlobales.facturaXML = activo[0].facturaXML;
+      parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+      parametrosGlobales.planesContables = activo[0].planesContables;
+      parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+      parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+      parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+      parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+      parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+      parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+      parametrosGlobales.ejercicio = activo[0].ejercicio;
+      parametrosGlobales.almacenActivo = activo[0].almacenActivo;
 
-              // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
-              // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
-              // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
-              console.log(
-                '**AJI**',
-                logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
-                logeo.sucursalesAdjuntas[0].grupoEmpresarial
-              );
-              // parametrosGlobales={};
-
-              parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
-              parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
-
-              parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
-              parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
-              parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
-              parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
-              parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
-              parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
-              parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
-              parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
-              parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
-              parametrosGlobales.facturaJSON = activo[0].facturaJSON;
-              parametrosGlobales.facturaXML = activo[0].facturaXML;
-              parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
-              parametrosGlobales.planesContables = activo[0].planesContables;
-              parametrosGlobales.asientoCompra = activo[0].asientoCompra;
-              parametrosGlobales.asientoVenta = activo[0].asientoVenta;
-              parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
-              parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
-              parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
-              parametrosGlobales.idEjercicio = activo[0].idEjercicio;
-              parametrosGlobales.ejercicio = activo[0].ejercicio;
-              parametrosGlobales.usuario = logeo.usuario;
-              parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0]._id;
-              parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
-              parametrosGlobales.idAlmacen = logeo.sucursalesAdjuntas[0].sucursales[0]._id; //******* */
-              parametrosGlobales.almacenActivo = activo[0].almacenActivo;
-              const losPeri = await getPeriodos({
-                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                idEmpresa: parametrosGlobales.idEmpresa,
-                bandera: '',
-              });
-              parametrosGlobales.periodos = losPeri.data;
-              // console.log('json_b', JSON.stringify(losPeri.data));
-              // localStorage.setItem('periodos', JSON.stringify(losPeri.data));
-              //PAGINA DE INICIO
-              if (parametrosGlobales.almacenActivo) {
-                navegarA(parametrosGlobales.paginaInicioDelSistema);
-              } else {
-                if (
-                  parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
-                  parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
-                  parametrosGlobales.paginaInicioDelSistema === '/kardex'
-                ) {
-                  navegarA(parametrosGlobales.paginaInicioDefault);
-                } else {
-                  navegarA(parametrosGlobales.paginaInicioDelSistema);
-                }
-              }
-              // Object.freeze(parametrosGlobales);
-            } else {
-              console.log('logeo.sucursalesAdjuntas[0].sucursales.length !== 1');
-              //VARIAS SUCURSALES
-              let activo = await getActivoGEEMP({
-                idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
-                idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
-              });
-              activo = activo.data;
-
-              if (!activo[0].activoGE) {
-                alert(
-                  `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              if (!activo[0].activoEMP) {
-                alert(
-                  `La empresa ${logeo.sucursalesAdjuntas[0].empresa} esta inactiva. Pongase en contacto con el administrador.`
-                );
-                return;
-              }
-              // localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
-              // localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
-              // localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
-              // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
-              // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
-              // localStorage.setItem('usuario', logeo.usuario);
-              console.log('**CHILE**');
-              parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
-              parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
-              parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
-              parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
-              parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
-              parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
-              parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
-              parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
-              parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
-              parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
-              parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
-              parametrosGlobales.facturaJSON = activo[0].facturaJSON;
-              parametrosGlobales.facturaXML = activo[0].facturaXML;
-              parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
-              parametrosGlobales.planesContables = activo[0].planesContables;
-              parametrosGlobales.asientoCompra = activo[0].asientoCompra;
-              parametrosGlobales.asientoVenta = activo[0].asientoVenta;
-              parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
-              parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
-              parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
-              parametrosGlobales.idEjercicio = activo[0].idEjercicio;
-              parametrosGlobales.ejercicio = activo[0].ejercicio;
-              parametrosGlobales.usuario = logeo.usuario;
-              // localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
-              // Object.freeze(parametrosGlobales);
-              navegarA('/listadoSucursales');
-            }
-          }
-        }
+      const losPeri = await getPeriodos({
+        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+        idEmpresa: parametrosGlobales.idEmpresa,
+        bandera: '',
+      });
+      parametrosGlobales.periodos = losPeri.data;
+      //PAGINA DE INICIO
+      if (parametrosGlobales.almacenActivo) {
+        navegarA(parametrosGlobales.paginaInicioDelSistema);
       } else {
-        //VARIAS EMPRESA
-        console.log('VARIAS EMPRESA');
-
-        // localStorage.setItem('usuario', logeo.usuario);
-        parametrosGlobales.usuario = logeo.usuario;
-        parametrosGlobales.sucursalesAdjuntas = logeo.sucursalesAdjuntas;
-        // localStorage.setItem('SUCURSALES_ADJUNTAS', JSON.stringify(logeo.sucursalesAdjuntas));
-        navegarA('/listadoEmpresas');
+        if (
+          parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+          parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+          parametrosGlobales.paginaInicioDelSistema === '/kardex'
+        ) {
+          navegarA(parametrosGlobales.paginaInicioDefault);
+        } else {
+          navegarA(parametrosGlobales.paginaInicioDelSistema);
+        }
       }
     }
+    //MAS DE UNA SUCURSAL
+    if (sucursales.data.length > 1) {
+      console.log('sucursales.data.length > 1');
+      navegarA('/listadoSucursales');
+    }
+    definicion_CTX_LOGEO.mostrarSpinner = false;
   });
+  // const analisisDeLogeo = $(async (logeo: any) => {
+  //   // localStorage.setItem('ID', logeo._id);
+  //   console.log('***-->logeo', logeo);
+  //   if (typeof logeo.sucursalesAdjuntas === 'undefined' || logeo.sucursalesAdjuntas.length === 0) {
+  //     navegarA('/ningunaEmpresa');
+  //   } else {
+  //     if (logeo.sucursalesAdjuntas.length === 1) {
+  //       //UNA EMPRESA
+  //       console.log('UNA EMPRESA*');
+  //       if (logeo.sucursalesAdjuntas[0].todasLasSucursales === true) {
+  //         console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === true');
+  //         if (
+  //           typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
+  //           logeo.sucursalesAdjuntas[0].sucursales.length === 0
+  //         ) {
+  //           navegarA('/ningunaSucursal');
+  //         } else {
+  //           if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
+  //             console.log('UNA EMPRESA --> UNA SUCURSAL');
+  //             //UNA SUCURSAL
+  //             let activo = await getActivoGEEMPSUCUR({
+  //               idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
+  //               idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
+  //               idSucursal: logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal,
+  //             });
+  //             activo = activo.data;
+
+  //             if (!activo[0].activoGE) {
+  //               alert(
+  //                 `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             if (!activo[0].activoEMP) {
+  //               alert(
+  //                 `La empresa ${logeo.sucursalesAdjuntas[0].empresa} esta inactiva. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             if (!activo[0].activoSUCUR) {
+  //               alert(
+  //                 `La sucursal ${logeo.sucursalesAdjuntas[0].sucursales[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             ///////////
+
+  //             // localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
+  //             // localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
+  //             // localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
+  //             // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
+  //             // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
+  //             // localStorage.setItem('usuario', logeo.usuario);
+  //             // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
+  //             // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
+  //             // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
+  //             console.log('**PAPASECA**');
+  //             parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
+  //             parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
+  //             parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
+  //             parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
+  //             parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
+  //             parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+  //             parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
+  //             parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+  //             parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+  //             parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+  //             parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+  //             parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+  //             parametrosGlobales.facturaXML = activo[0].facturaXML;
+  //             parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+  //             parametrosGlobales.planesContables = activo[0].planesContables;
+  //             parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+  //             parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+  //             parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+  //             parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+  //             parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+  //             parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+  //             parametrosGlobales.ejercicio = activo[0].ejercicio;
+  //             parametrosGlobales.usuario = logeo.usuario;
+  //             parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
+  //             parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
+  //             parametrosGlobales.idAlmacen = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal; //******* */
+  //             parametrosGlobales.almacenActivo = activo[0].almacenActivo;
+  //             const losPeri = await getPeriodos({
+  //               idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //               idEmpresa: parametrosGlobales.idEmpresa,
+  //               bandera: '',
+  //             });
+  //             parametrosGlobales.periodos = losPeri.data;
+  //             // console.log('json_', losPeri.data);
+  //             // localStorage.setItem('periodos', losPeri.data);
+  //             //PAGINA DE INICIO
+  //             if (parametrosGlobales.almacenActivo) {
+  //               navegarA(parametrosGlobales.paginaInicioDelSistema);
+  //             } else {
+  //               if (
+  //                 parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+  //                 parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+  //                 parametrosGlobales.paginaInicioDelSistema === '/kardex'
+  //               ) {
+  //                 navegarA(parametrosGlobales.paginaInicioDefault);
+  //               } else {
+  //                 navegarA(parametrosGlobales.paginaInicioDelSistema);
+  //               }
+  //             }
+
+  //             // Object.freeze(parametrosGlobales);
+  //           } else {
+  //             console.log('UNA EMPRESA --> VARIAS SUCURSALES');
+  //             //VARIAS SUCURSALES
+  //             let activo = await getActivoGEEMP({
+  //               idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
+  //               idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
+  //             });
+  //             activo = activo.data;
+
+  //             if (!activo[0].activoGE) {
+  //               alert(
+  //                 `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             if (!activo[0].activoEMP) {
+  //               alert(
+  //                 `La empresa ${logeo.sucursalesAdjuntas[0].empresa} esta inactiva. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             // localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
+  //             // localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
+  //             // localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
+  //             // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
+  //             // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
+  //             // localStorage.setItem('usuario', logeo.usuario);
+  //             // localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
+  //             console.log('**MONDONGO**');
+  //             parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
+  //             parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
+  //             parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
+  //             parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
+  //             parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
+  //             parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+  //             parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
+  //             parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+  //             parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+  //             parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+  //             parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+  //             parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+  //             parametrosGlobales.facturaXML = activo[0].facturaXML;
+  //             parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+  //             parametrosGlobales.planesContables = activo[0].planesContables;
+  //             parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+  //             parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+  //             parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+  //             parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+  //             parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+  //             parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+  //             parametrosGlobales.ejercicio = activo[0].ejercicio;
+  //             parametrosGlobales.usuario = logeo.usuario;
+  //             //  parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal;
+  //             //  parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
+  //             // Object.freeze(parametrosGlobales);
+  //             navegarA('/listadoSucursales');
+  //           }
+  //         }
+  //       } else {
+  //         console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === false');
+  //         if (
+  //           typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
+  //           logeo.sucursalesAdjuntas[0].sucursales.length === 0
+  //         ) {
+  //           navegarA('/ningunaSucursal');
+  //         } else {
+  //           if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
+  //             console.log('logeo.sucursalesAdjuntas[0].sucursales.length === 1 -->> va por: getActivoGEEMPSUCUR');
+  //             //UNA SUCURSAL
+  //             let activo = await getActivoGEEMPSUCUR({
+  //               idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
+  //               idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
+  //               idSucursal: logeo.sucursalesAdjuntas[0].sucursales[0]._id,
+  //             });
+  //             activo = activo.data;
+
+  //             if (!activo[0].activoGE) {
+  //               alert(
+  //                 `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             if (!activo[0].activoEMP) {
+  //               alert(
+  //                 `La empresa ${logeo.sucursalesAdjuntas[0].empresa} esta inactiva. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             if (!activo[0].activoSUCUR) {
+  //               alert(
+  //                 `La sucursal ${logeo.sucursalesAdjuntas[0].sucursales[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+
+  //             // localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
+  //             // localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
+  //             // localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
+  //             // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
+  //             // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
+  //             // localStorage.setItem('usuario', logeo.usuario);
+
+  //             // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
+  //             // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
+  //             // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
+  //             console.log(
+  //               '**AJI**',
+  //               logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
+  //               logeo.sucursalesAdjuntas[0].grupoEmpresarial
+  //             );
+  //             // parametrosGlobales={};
+
+  //             parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
+  //             parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
+
+  //             parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
+  //             parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
+  //             parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
+  //             parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+  //             parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
+  //             parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+  //             parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+  //             parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+  //             parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+  //             parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+  //             parametrosGlobales.facturaXML = activo[0].facturaXML;
+  //             parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+  //             parametrosGlobales.planesContables = activo[0].planesContables;
+  //             parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+  //             parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+  //             parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+  //             parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+  //             parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+  //             parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+  //             parametrosGlobales.ejercicio = activo[0].ejercicio;
+  //             parametrosGlobales.usuario = logeo.usuario;
+  //             parametrosGlobales.idSucursal = logeo.sucursalesAdjuntas[0].sucursales[0]._id;
+  //             parametrosGlobales.sucursal = logeo.sucursalesAdjuntas[0].sucursales[0].sucursal;
+  //             parametrosGlobales.idAlmacen = logeo.sucursalesAdjuntas[0].sucursales[0]._id; //******* */
+  //             parametrosGlobales.almacenActivo = activo[0].almacenActivo;
+  //             const losPeri = await getPeriodos({
+  //               idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //               idEmpresa: parametrosGlobales.idEmpresa,
+  //               bandera: '',
+  //             });
+  //             parametrosGlobales.periodos = losPeri.data;
+  //             // console.log('json_b', JSON.stringify(losPeri.data));
+  //             // localStorage.setItem('periodos', JSON.stringify(losPeri.data));
+  //             //PAGINA DE INICIO
+  //             if (parametrosGlobales.almacenActivo) {
+  //               navegarA(parametrosGlobales.paginaInicioDelSistema);
+  //             } else {
+  //               if (
+  //                 parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+  //                 parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+  //                 parametrosGlobales.paginaInicioDelSistema === '/kardex'
+  //               ) {
+  //                 navegarA(parametrosGlobales.paginaInicioDefault);
+  //               } else {
+  //                 navegarA(parametrosGlobales.paginaInicioDelSistema);
+  //               }
+  //             }
+  //             // Object.freeze(parametrosGlobales);
+  //           } else {
+  //             console.log('logeo.sucursalesAdjuntas[0].sucursales.length !== 1');
+  //             //VARIAS SUCURSALES
+  //             let activo = await getActivoGEEMP({
+  //               idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
+  //               idEmpresa: logeo.sucursalesAdjuntas[0].idEmpresa,
+  //             });
+  //             activo = activo.data;
+
+  //             if (!activo[0].activoGE) {
+  //               alert(
+  //                 `El grupo empresarial ${logeo.sucursalesAdjuntas[0].grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             if (!activo[0].activoEMP) {
+  //               alert(
+  //                 `La empresa ${logeo.sucursalesAdjuntas[0].empresa} esta inactiva. Pongase en contacto con el administrador.`
+  //               );
+  //               return;
+  //             }
+  //             // localStorage.setItem('idGrupoEmpresarial', logeo.sucursalesAdjuntas[0].idGrupoEmpresarial);
+  //             // localStorage.setItem('grupoEmpresarial', logeo.sucursalesAdjuntas[0].grupoEmpresarial);
+  //             // localStorage.setItem('idEmpresa', logeo.sucursalesAdjuntas[0].idEmpresa);
+  //             // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
+  //             // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
+  //             // localStorage.setItem('usuario', logeo.usuario);
+  //             console.log('**CHILE**');
+  //             parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
+  //             parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
+  //             parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
+  //             parametrosGlobales.RazonSocial = logeo.sucursalesAdjuntas[0].empresa;
+  //             parametrosGlobales.RUC = logeo.sucursalesAdjuntas[0].numeroIdentidad;
+  //             parametrosGlobales.Direccion = logeo.sucursalesAdjuntas[0].direccion;
+  //             parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
+  //             parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
+  //             parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
+  //             parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
+  //             parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
+  //             parametrosGlobales.facturaJSON = activo[0].facturaJSON;
+  //             parametrosGlobales.facturaXML = activo[0].facturaXML;
+  //             parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
+  //             parametrosGlobales.planesContables = activo[0].planesContables;
+  //             parametrosGlobales.asientoCompra = activo[0].asientoCompra;
+  //             parametrosGlobales.asientoVenta = activo[0].asientoVenta;
+  //             parametrosGlobales.codigoContableVentaServicio = activo[0].codigoContableVentaServicio;
+  //             parametrosGlobales.descripcionContableVentaServicio = activo[0].descripcionContableVentaServicio;
+  //             parametrosGlobales.idLibroDiario = activo[0].idLibroDiario;
+  //             parametrosGlobales.idEjercicio = activo[0].idEjercicio;
+  //             parametrosGlobales.ejercicio = activo[0].ejercicio;
+  //             parametrosGlobales.usuario = logeo.usuario;
+  //             // localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
+  //             // Object.freeze(parametrosGlobales);
+  //             navegarA('/listadoSucursales');
+  //           }
+  //         }
+  //       }
+  //     } else {
+  //       //VARIAS EMPRESA
+  //       console.log('VARIAS EMPRESA');
+
+  //       // localStorage.setItem('usuario', logeo.usuario);
+  //       parametrosGlobales.usuario = logeo.usuario;
+  //       parametrosGlobales.sucursalesAdjuntas = logeo.sucursalesAdjuntas;
+  //       // localStorage.setItem('SUCURSALES_ADJUNTAS', JSON.stringify(logeo.sucursalesAdjuntas));
+  //       navegarA('/listadoEmpresas');
+  //     }
+  //   }
+  // });
   //#endregion ANALISIS DEL LOGEO
 
   //#region INGRESAR AL SISTEMA
@@ -527,7 +624,7 @@ export default component$(() => {
     definicion_CTX_LOGEO.mostrarSpinner = true;
     // parametrosGlobales.mostrarSpinner = true;
     // console.log('pasooooooooooo!!!');
-    let elLogeo = await getUsuario({
+    let elLogeo = await getUsuarioPanel({
       usuario: definicion_CTX_LOGEO.email.trim(),
       clave: definicion_CTX_LOGEO.contrasena.trim(),
     });
@@ -535,7 +632,7 @@ export default component$(() => {
     console.log('********--elLogeo--******', elLogeo);
     if (elLogeo.length === 1) {
       if (elLogeo[0].activo) {
-        analisisDeLogeo(elLogeo[0]);
+        analisisDeLogeo(elLogeo[0]._id, elLogeo[0].usuario);
       } else {
         definicion_CTX_LOGEO.mostrarSpinner = false;
         // parametrosGlobales.mostrarSpinner = false;

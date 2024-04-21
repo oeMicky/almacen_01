@@ -442,8 +442,8 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                 type="image"
                                 src={images.pdf}
                                 title="Ver pdf"
-                                height={12}
-                                width={12}
+                                height={14}
+                                width={14}
                                 style={{ marginRight: '4px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={async () => {
@@ -466,41 +466,6 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                                   downloadLink.click();
                                 }}
                               />
-                              {/*       {parametrosGlobales.facturacionElectronica && parametrosGlobales.facturaJSON && (
-                                <input
-                                  // id="in_BuscarDetraccion"
-                                  type="image"
-                                  src={images.pdf_json}
-                                  title="Ver JSON"
-                                  height={12}
-                                  width={12}
-                                  style={{ marginRight: '4px' }}
-                                  onClick$={() => {
-                                    createAndDownloadFileJSON(venta.serie + ' - ' + venta.numero, venta);
-                                  }}
-                                />
-                              )}*/}
-
-                              {/* <input
-                                // id="in_BuscarDetraccion"
-                                type="image"
-                                src={images.send}
-                                title="Enviar JSON"
-                                height={12}
-                                width={12}
-                                style={{ marginRight: '4px' }}
-                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
-                                onClick$={async () => {
-                                  const respuesta = await sendJSONVenta({
-                                    idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                                    idEmpresa: parametrosGlobales.idEmpresa,
-                                    idVenta: venta._id,
-                                  });
-                                  console.log('respuesta:::--->>>', respuesta);
-                                  // ventaSeleccionada.value = value;
-                                  // clickPDF.value++;
-                                }}
-                              /> */}
                             </td>
                           </tr>
                         );
