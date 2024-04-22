@@ -33,7 +33,7 @@ export default component$((props: { registros: any[]; numero: number }) => {
   return (
     // <div>TABLASSSS</div>
     <table
-      style={{ fontSize: '0.7em', fontWeight: 'lighter', margin: '5px 0' }}
+      style={{ fontSize: '0.8rem', fontWeight: 'lighter', margin: '5px 0' }}
       onChange$={() => {
         num_regi.value = props.numero;
       }}

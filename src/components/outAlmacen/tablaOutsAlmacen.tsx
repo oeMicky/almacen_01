@@ -68,7 +68,7 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
           <>
             {misOutsAlmacen.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}
@@ -133,7 +133,7 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.87rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

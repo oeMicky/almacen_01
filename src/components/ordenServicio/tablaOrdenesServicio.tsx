@@ -81,7 +81,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
           <>
             {misOrdenesServicio.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}
@@ -159,7 +159,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

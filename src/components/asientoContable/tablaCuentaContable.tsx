@@ -71,7 +71,7 @@ export default component$((props: { buscarCuentaContable: number; parametrosBusq
           <>
             {misCuentasContables.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
