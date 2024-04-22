@@ -34,7 +34,7 @@ export default component$(() => {
           <thead>
             <tr>
               <th>Ítem</th>
-              <th>Grupo Empresarial</th>
+              {/* <th>Grupo Empresarial</th> */}
               <th>Empresa</th>
               <th>Sucursal</th>
               <th>Acciones</th>
@@ -47,7 +47,7 @@ export default component$(() => {
               return (
                 <tr key={indexItemVenta}>
                   <td data-label="Ítem" key={indexItemVenta}>{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
-                  <td data-label="Grupo Empresarial">{sucur.grupoEmpresarial}</td>
+                  {/* <td data-label="Grupo Empresarial">{sucur.grupoEmpresarial}</td> */}
                   <td data-label="Empresa">{sucur.empresa}</td>
                   <td data-label="Sucursal">{sucur.sucursal}</td>
                   <td data-label="Acciones" class="acciones">
