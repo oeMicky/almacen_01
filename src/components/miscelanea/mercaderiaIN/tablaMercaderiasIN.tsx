@@ -79,8 +79,8 @@ export default component$(
             <>
               {misMercaderiasIN.length > 0 ? (
                 <>
-                  {/* <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}> */}
-                  <table>
+                  <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
+                    {/* <table> */}
                     <thead>
                       <tr>
                         <th>Descripción</th>
@@ -242,7 +242,7 @@ export default component$(
                 </>
               ) : (
                 <div>
-                  <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                  <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                 </div>
               )}
             </>

@@ -236,7 +236,7 @@ export default component$(
             <>
               {ctx_buscar_persona.misPersonas.length > 0 ? (
                 <>
-                  <table style={{ fontSize: '0.8em', fontWeight: 'lighter' }}>
+                  <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Ítem</th>

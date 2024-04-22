@@ -52,7 +52,7 @@ export default component$(
             <>
               {misUnidadesSUNAT.length > 0 ? (
                 <>
-                  <table style={{ fontSize: '0.7em', fontWeight: 'lighter ' }}>
+                  <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                     <thead>
                       <tr>
                         <th>Código</th>
@@ -103,7 +103,7 @@ export default component$(
                 </>
               ) : (
                 <div>
-                  <i style={{ fontSize: '0.7rem' }}>No se encontraron registros</i>
+                  <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                 </div>
               )}
             </>
