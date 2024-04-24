@@ -447,7 +447,7 @@ function pdfOsMG(os: any) {
       },
     },
     images: {
-      logo: logit.logoMrBier,
+      logo: logit.logoMerma,
       poweredBy: logit.logoPiePagina,
 
       // morty: 'https://rickandmortyapi.com/api/character/avatar/795.jpeg',
