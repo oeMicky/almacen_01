@@ -338,7 +338,7 @@ function pdfReporteVenta(ventas: any) {
       },
     },
     images: {
-      logo: logit.logoChamo,
+      logo: logit.logoMerma,
       poweredBy: logit.logoPiePagina,
       // poweredBy: images.logoPiePagina,
 

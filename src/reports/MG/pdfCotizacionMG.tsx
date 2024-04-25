@@ -11,11 +11,18 @@ import {
   redondeo2Decimales,
 } from '~/functions/comunes';
 import logit from '../../assets/base64/imagesBase64.js';
+// import logosEMPS from '../../assets/logosEmpresas/20602683321.js';
+// import { parametrosGlobales } from '~/routes/login';
 
-function pdfCotizacionMG(cotizacion: any) {
+async function pdfCotizacionMG(cotizacion: any) {
   pdfMake.vfs = pdfFonts;
 
   console.log('cotizacion PDF', cotizacion);
+
+  // const KKK = `20602683321`;
+  // const rutaDelLogo = `../../assets/logosEmpresas/module-${KKK}.js`; // '../../assets/logosEmpresas/' + parametrosGlobales.RUC + '.js';
+  // console.log('rutaDelLogo', rutaDelLogo);
+  // let EL_LOGO = await import(rutaDelLogo);
 
   const servicios = cotizacion.servicios;
   const repuestosLubri = cotizacion.repuestosLubri;
@@ -388,7 +395,8 @@ function pdfCotizacionMG(cotizacion: any) {
       },
     },
     images: {
-      logo: logit.logoMrBier,
+      // logo: EL_LOGO,
+      logo: logit.logoMerma,
       poweredBy: logit.logoPiePagina,
       // poweredBy: images.logoPiePagina,
 
@@ -396,6 +404,7 @@ function pdfCotizacionMG(cotizacion: any) {
       // snow: 'https://picsum.photos/seed/picsum/200/300',
     },
   };
+
   //#endregion DEFINICION DEL DOCUMENTO
 
   //#region TABLA LAYOUTS

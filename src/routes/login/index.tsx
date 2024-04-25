@@ -83,58 +83,14 @@ export default component$(() => {
 
   const navegarA = useNavigate();
 
-  // const definicion_CTX_CONFIGURACION = useStore<any>({
-  //   paginaInicioDelSistema: '/venta',
-  //   paginaInicioDefault: '/venta',
-  //   //Grupo Empresarial
-  //   idGrupoEmpresarial: '', //'60f097ca53621708ecc4e781',
-  //   nombreGrupoEmpresarial: '', //'El Grupo Empresarial',
-  //   //Empresa
-  //   idEmpresa: '', //'60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
-  //   RazonSocial: '', //'CORPORACION ACME I',
-  //   colorHeaderEmpresarial: '',
-  //   Direccion: '', //'ARKANZAS NRO 354',
-  //   RUC: '', //'99999999999',
-  //   agenteRetencion: false,
-  //   agentePercepcion: false,
-  //   //Sucursal
-  //   idSucursal: '', //'651ad18424595a30fe7926d2',
-  //   sucursal: '', //'Pardo',
-  //   sucursalDireccion: 'Av. Pardo 9999',
-  //   // parameRUC: 'chamo', // '99999999999',
-  //   //Almacén
-  //   almacenActivo: false,
-  //   idAlmacen: '', //'60f3e61a41a71c1148bc4e29', //la SUCURSAL otorgara su ID al ALMACÉN
-  //   nombreAlmacen: 'Praga',
-  //   //Usuario
-  //   usuario: '', // 'octubre',
-  //   //
-  //   ingreso: false,
-  //   periodos: [],
-  //   // mostrarSpinner: false,
-  //   facturacionElectronica: false,
-  //   facturacionElectronicaAutomatica: false,
-  //   facturaJSON: false,
-  //   facturaXML: false,
-  //   contabilizarOperaciones: false,
-  //   planesContables: [],
-  //   asientoCompra: [],
-  //   asientoVenta: [],
-  //   codigoContableVentaServicio: '',
-  //   descripcionContableVentaServicio: '',
-  //   // idLibroDiario: '6604c567242e40cf619c834f',
-  //   idLibroDiario: '',
-  //   idEjercicio: '',
-  //   ejercicio: 0,
-  // });
-
   const definicion_CTX_LOGEO = useStore({
     mostrarSpinner: false,
     // email: 'mvizconde@msn.com',
     // email: 'carlos@merma.com',
     // email: 'paolo@cao.com',
     // email: 'joseluis@cao.com',
-    email: 'keymar0@cao.com',
+    // email: 'keymar0@cao.com',
+    email: 'mvizconde@cao.com',
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
