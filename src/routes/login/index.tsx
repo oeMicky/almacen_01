@@ -1,4 +1,4 @@
-import { $, component$, useStore, useStylesScoped$ } from '@builder.io/qwik';
+import { $, component$, useStore, useStyles$ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city'; //action$, Form,
 import { getSucursalesAdjuntasUsuario, getUsuarioPanel } from '~/apis/usuario.api';
 
@@ -11,11 +11,11 @@ import Spinner from '~/components/system/spinner';
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
-  // paginaInicioDelSistema: '/compra',
+  paginaInicioDelSistema: '/compra',
   // paginaInicioDelSistema: '/reporteVenta',
   // paginaInicioDelSistema: '/venta',
   // paginaInicioDelSistema: '/guiaRemision',
-  paginaInicioDelSistema: '/inAlmacen',
+  // paginaInicioDelSistema: '/inAlmacen',
   // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',
@@ -35,12 +35,12 @@ export const parametrosGlobales = {
   sucursalesAdjuntas: [],
   idSucursal: '', //'651ad18424595a30fe7926d2',
   sucursal: '', //'Pardo',
-  sucursalDireccion: 'Av. Pardo 9999',
+  sucursalDireccion: '', //Av. Pardo 9999',
   // parameRUC: 'chamo', // '99999999999',
   //Almacén
   almacenActivo: false,
   idAlmacen: '', //'60f3e61a41a71c1148bc4e29', //la SUCURSAL otorgara su ID al ALMACÉN
-  nombreAlmacen: 'Praga',
+  nombreAlmacen: '', // 'Praga',
   //Usuario
   usuario: '', // 'octubre',
   //
@@ -61,6 +61,17 @@ export const parametrosGlobales = {
   idLibroDiario: '',
   idEjercicio: '',
   ejercicio: 0,
+  //servicios
+  facturaElectronica: false,
+  guiaElectronica: false,
+  SIRE: false,
+  compras: false,
+  inventario: false,
+  ordenesServicio: false,
+  seguimientoCosto: false,
+  bancos: false,
+  planilla: false,
+  libroDiario: false,
 };
 
 //--nombre: 'GRUPO MERMA';
@@ -79,7 +90,7 @@ export const parametrosGlobales = {
 
 export default component$(() => {
   // dotenv.config();
-  useStylesScoped$(styles);
+  useStyles$(styles);
 
   const navegarA = useNavigate();
 
@@ -91,11 +102,13 @@ export default component$(() => {
     // email: 'joseluis@cao.com',
     // email: 'keymar0@cao.com',
     email: 'mvizconde@cao.com',
+    // email: '',
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
     contrasena: '123',
+    // contrasena: '',
   });
 
   //#region ACTIVO GE EMP
@@ -193,6 +206,16 @@ export default component$(() => {
       parametrosGlobales.idEjercicio = activo[0].idEjercicio;
       parametrosGlobales.ejercicio = activo[0].ejercicio;
       parametrosGlobales.almacenActivo = activo[0].almacenActivo;
+      //SERVICIOS
+      parametrosGlobales.facturaElectronica = sucursales.data[0].facturaElectronica;
+      parametrosGlobales.guiaElectronica = sucursales.data[0].guiaElectronica;
+      parametrosGlobales.SIRE = sucursales.data[0].SIRE;
+      parametrosGlobales.compras = sucursales.data[0].compras;
+      parametrosGlobales.inventario = sucursales.data[0].inventario; //******* */
+      parametrosGlobales.ordenesServicio = sucursales.data[0].ordenesServicio;
+      parametrosGlobales.bancos = sucursales.data[0].bancos;
+      parametrosGlobales.planilla = sucursales.data[0].planilla;
+      parametrosGlobales.libroDiario = sucursales.data[0].libroDiario;
 
       const losPeri = await getPeriodos({
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -201,19 +224,20 @@ export default component$(() => {
       });
       parametrosGlobales.periodos = losPeri.data;
       //PAGINA DE INICIO
-      if (parametrosGlobales.almacenActivo) {
-        navegarA(parametrosGlobales.paginaInicioDelSistema);
-      } else {
-        if (
-          parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
-          parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
-          parametrosGlobales.paginaInicioDelSistema === '/kardex'
-        ) {
-          navegarA(parametrosGlobales.paginaInicioDefault);
-        } else {
-          navegarA(parametrosGlobales.paginaInicioDelSistema);
-        }
-      }
+      navegarA('/seleccionarServicio');
+      // if (parametrosGlobales.almacenActivo) {
+      //   navegarA(parametrosGlobales.paginaInicioDelSistema);
+      // } else {
+      //   if (
+      //     parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+      //     parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+      //     parametrosGlobales.paginaInicioDelSistema === '/kardex'
+      //   ) {
+      //     navegarA(parametrosGlobales.paginaInicioDefault);
+      //   } else {
+      //     navegarA(parametrosGlobales.paginaInicioDelSistema);
+      //   }
+      // }
     }
     //MAS DE UNA SUCURSAL
     if (sucursales.data.length > 1) {

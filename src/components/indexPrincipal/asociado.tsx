@@ -13,7 +13,7 @@ export default component$((props: AsociadoProps) => {
   return (
     <>
       <center>
-        <img class="imagen-asociado" src={props.imagen} width={props.ancho} />
+        <img loading="lazy" class="imagen-asociado" src={props.imagen} width={props.ancho} />
         {/* <img src={imagen} width={ancho} /> */}
       </center>
     </>

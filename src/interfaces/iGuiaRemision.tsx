@@ -10,6 +10,11 @@ export interface IGuiaRemision {
   empresa: string;
   direccion: string;
 
+  idModalidadTraslado: string;
+  modalidadTraslado: string;
+  idMotivoTraslado: string;
+  motivoTraslado: string;
+
   codigoTipoComprobantePago: string;
   tipoComprobantePago: string;
   idSerieVenta: string;
@@ -18,11 +23,31 @@ export interface IGuiaRemision {
 
   fecha: string;
 
+  idRemitente: string;
+  codigoTipoDocumentoIdentidadRemitente: string;
+  tipoDocumentoIdentidadRemitente: string;
+  numeroIdentidadRemitente: string;
+  razonSocialNombreRemitente: string;
+
   idDestinatario: string;
-  codigoTipoDocumentoIdentidad: string;
-  tipoDocumentoIdentidad: string;
-  numeroIdentidad: string;
-  razonSocialNombre: string;
+  codigoTipoDocumentoIdentidadDestinatario: string;
+  tipoDocumentoIdentidadDestinatario: string;
+  numeroIdentidadDestinatario: string;
+  razonSocialNombreDestinatario: string;
+
+  idTransportista: string;
+  codigoTipoDocumentoIdentidadTransportista: string;
+  tipoDocumentoIdentidadTransportista: string;
+  numeroIdentidadTransportista: string;
+  razonSocialNombreTransportista: string;
+
+  numeroBultosPallets: string;
+  pesoBrutoTotal: string;
+
+  choferes: any;
+  unidadesTransporte: any;
+
+  observacion: string;
 
   //   igv: number;
   //   enDolares: boolean;

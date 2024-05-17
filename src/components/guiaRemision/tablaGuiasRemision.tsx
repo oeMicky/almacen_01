@@ -1,6 +1,6 @@
 import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
 import style from '../tabla/tabla.css?inline';
-import { CTX_INDEX_GUIA_REMISION } from '~/routes/(almacen)/guiaRemision';
+import { CTX_INDEX_GUIA_REMISION } from '~/routes/(guiasRemision)/guiaRemision';
 import { images } from '~/assets';
 // import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import type { IGuiaRemision } from '~/interfaces/iGuiaRemision';

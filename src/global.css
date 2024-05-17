@@ -9,6 +9,7 @@
  
 
 :root {
+  /* color-scheme:light dark  ; */
   --qwik-light-white: #ffffff;
   --qwik-dark-white: #eeeeee;
   --qwik-dark-blue: #006ce9;
@@ -16,6 +17,9 @@
   --qwik-light-purple: #ac7ff4;
   /* --qwik-dark-purple: #713fc2; */
   --qwik-dark-purple: #09cd33;
+  /*****COLORES DEL LOGO*/
+  --color-azul-claro:#00778F,
+  --color-azul-oscuro:#013E62,
 }
 
 body {
@@ -151,6 +155,8 @@ a.linkHeaderPrincipal:hover {
   
   align-items: center;
   justify-content: center;
+
+  margin-bottom: 32px;
 }
 .frase-principal {
   /* border: rgb(255, 142, 43) 3px dashed; */
@@ -196,6 +202,35 @@ a.linkHeaderPrincipal:hover {
     }
 }
 /************************************/
+/********SECCION SERVICIOS**********/
+/************************************/
+.seccion-servicios{
+  /* border: rgb(255, 142, 43) 1px dashed; */
+  display: flex;
+  flex-direction: column; 
+  margin-bottom: 32px;
+  /* flex-wrap: wrap; */
+  /* flex-direction: column */
+}
+.servicios {
+  /* border: rgb(215, 215, 216) 1px dashed; */
+  display: grid;
+  grid-template-columns: 1fr; 
+  /* gap: 32px; */
+ 
+  /* padding: 15px 15px */
+}
+@media screen and (min-width:768px) {
+  .servicios {
+    grid-template-columns: 1fr 1fr ;
+    /* padding: 15px 15px */
+  }
+}
+/* h2 {
+  color: #7e7e7e;
+  font-size: x-large;
+} */
+/************************************/
 /********SECCION PORTAFOLIO**********/
 /************************************/
 .seccion-portafolio{
@@ -213,7 +248,8 @@ h2 {
 .seccion-asociados {
   /* border: rgb(255, 142, 43) 1px dashed; */
   display: flex;
-  flex-direction: column
+  flex-direction: column;
+  margin-bottom: 32px;
 }
 .asociados {
   /* border: rgb(255, 43, 43) 1px dashed; */
@@ -233,7 +269,7 @@ h2 {
 .footer-principal{
   background: rgb(0, 0, 0);
   color: #ffffff;
-    height: 120px;
+    height: 144px;
 
   display: flex;
     flex-direction: column;

@@ -30,6 +30,7 @@ import {
 } from '~/apis/cotizacion.api';
 import BorrarServicio from './borrarServicio';
 import BorrarRepuestoLubri from './borrarRepuestoLubri';
+import NewEditNotaAdicionalServicio from './newEditNotaAdicionalServicio';
 
 export const CTX_COTIZACION = createContextId<ICotizacion>('cotizacion');
 
@@ -54,6 +55,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     mostrarPanelBuscarVehiculo: false,
     mostrarPanelBuscarServicio: false,
     mostrarPanelBuscarMercaderiaOUT: false,
+
+    mostrarPanelNotaAdicionalServicio: false,
 
     mostrarPanelDeleteItemServicio: false,
     borrarServicio: [],
@@ -418,8 +421,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             // ctx_index_cotizacion.grabo_Cotizacion = grabo.value;
@@ -436,7 +439,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
             console.log('definicion_CTX_COTIZACION', definicion_CTX_COTIZACION);
           })}
         />
-        <ImgButton
+        {/*    <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
@@ -455,7 +458,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           onClick={$(() => {
             console.log('definicion_CTX_NEW_EDIT_COTIZACION', definicion_CTX_NEW_EDIT_COTIZACION);
           })}
-        />
+        /> */}
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.8rem', marginLeft: '2px' }}>
@@ -732,28 +735,35 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              margin: '5px 0',
+              margin: '4px 0',
             }}
           >
             <div style={{ marginBottom: '4px' }}>
-              {definicion_CTX_COTIZACION._id === '' ? (
-                <ElButton
-                  class="btn"
-                  name="Add servicio"
-                  disabled
-                  title="Add servicio"
-                  style={{ background: '#aaa', color: '#d3d3d3' }}
-                />
-              ) : (
-                <ElButton
-                  class="btn"
-                  name="Add servicio"
-                  title="Add servicio"
-                  onClick={$(() => {
-                    definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarServicio = true;
-                  })}
-                />
-              )}
+              <ElButton
+                class="btn"
+                name="Add servicio"
+                disabled={definicion_CTX_COTIZACION._id === '' ? true : false}
+                title="Add servicio"
+                // style={definicion_CTX_COTIZACION._id === '' ? { background: '#aaa', color: '#d3d3d3' } : ''}
+                onClick={$(() => {
+                  definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarServicio = true;
+                })}
+              />
+              <ElButton
+                class="btn"
+                name="Add nota adicional"
+                disabled={definicion_CTX_COTIZACION._id === '' ? true : false}
+                title="Add nota adicional"
+                style={{ marginLeft: '4px' }}
+                // style={
+                //   definicion_CTX_COTIZACION._id === ''
+                //     ? { background: '#aaa', color: '#d3d3d3', marginLeft: '4px' }
+                //     : { marginLeft: '4px' }
+                // }
+                onClick={$(() => {
+                  definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelNotaAdicionalServicio = true;
+                })}
+              />
             </div>
             {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarServicio && (
               <div class="modal">
@@ -765,6 +775,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                       : definicion_CTX_COTIZACION.igv
                   }
                 />
+              </div>
+            )}
+            {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelNotaAdicionalServicio && (
+              <div class="modal">
+                <NewEditNotaAdicionalServicio notaAdicionalServicio={[]} contexto="new_edit_cotizacion" />
               </div>
             )}
             {/* TABLA SERVICIOS  */}
@@ -786,18 +801,21 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 <tbody>
                   {definicion_CTX_COTIZACION.servicios.map((iTCotiServi: any, index: number) => {
                     const indexItemServi = index + 1;
-                    const porc = iTCotiServi.porcentaje.$numberDecimal
-                      ? parseFloat(iTCotiServi.porcentaje.$numberDecimal)
-                      : parseFloat(iTCotiServi.porcentaje);
-                    console.log('first porc', indexItemServi, porc);
-                    sumaTOTAL_SERVI =
-                      sumaTOTAL_SERVI +
-                      redondeo6Decimales(
-                        iTCotiServi.ventaPEN.$numberDecimal ? iTCotiServi.ventaPEN.$numberDecimal : iTCotiServi.ventaPEN
-                      );
-                    subTOTAL_SERVI = redondeo6Decimales((sumaTOTAL_SERVI * 100) / (100 + porc));
-                    igvTOTAL_SERVI = redondeo6Decimales(sumaTOTAL_SERVI - subTOTAL_SERVI);
-                    console.log('firstfirstfirst _SERVI:::', porc, subTOTAL_SERVI, igvTOTAL_SERVI, sumaTOTAL_SERVI);
+                    if (iTCotiServi.tipo !== 'NOTA_ADICIONAL_SERVICIO') {
+                      const porc = iTCotiServi.porcentaje.$numberDecimal
+                        ? parseFloat(iTCotiServi.porcentaje.$numberDecimal)
+                        : parseFloat(iTCotiServi.porcentaje);
+                      console.log('first porc', indexItemServi, porc);
+                      sumaTOTAL_SERVI =
+                        sumaTOTAL_SERVI +
+                        redondeo6Decimales(
+                          iTCotiServi.ventaPEN.$numberDecimal ? iTCotiServi.ventaPEN.$numberDecimal : iTCotiServi.ventaPEN
+                        );
+                      subTOTAL_SERVI = redondeo6Decimales((sumaTOTAL_SERVI * 100) / (100 + porc));
+                      igvTOTAL_SERVI = redondeo6Decimales(sumaTOTAL_SERVI - subTOTAL_SERVI);
+                    }
+
+                    console.log('firstfirstfirst _SERVI:::', subTOTAL_SERVI, igvTOTAL_SERVI, sumaTOTAL_SERVI);
                     //SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
                     if (index + 1 === definicion_CTX_COTIZACION.servicios.length) {
                       // definicion_CTX_NEW_EDIT_COTIZACION.TOTAL_SERVICIOS = sumaTOTAL_SERVI;
@@ -820,10 +838,13 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                         <td data-label="Cantidad" class="comoNumero">
                           <input
                             style={{ width: '60px', textAlign: 'end' }}
+                            disabled={iTCotiServi.tipo === 'NOTA_ADICIONAL_SERVICIO' ? true : false}
                             value={
-                              iTCotiServi.cantidadEquivalencia.$numberDecimal
+                              iTCotiServi.tipo !== 'NOTA_ADICIONAL_SERVICIO'
                                 ? iTCotiServi.cantidadEquivalencia.$numberDecimal
-                                : iTCotiServi.cantidadEquivalencia
+                                  ? iTCotiServi.cantidadEquivalencia.$numberDecimal
+                                  : iTCotiServi.cantidadEquivalencia
+                                : ''
                             }
                             onChange$={(e) => {
                               iTCotiServi.cantidadEquivalencia = parseFloat((e.target as HTMLInputElement).value);
@@ -848,8 +869,13 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                         <td data-label="Precio Uni" class="comoNumero">
                           <input
                             style={{ width: '60px', textAlign: 'end' }}
+                            disabled={iTCotiServi.tipo === 'NOTA_ADICIONAL_SERVICIO' ? true : false}
                             value={
-                              iTCotiServi.precioPEN.$numberDecimal ? iTCotiServi.precioPEN.$numberDecimal : iTCotiServi.precioPEN
+                              iTCotiServi.tipo !== 'NOTA_ADICIONAL_SERVICIO'
+                                ? iTCotiServi.precioPEN.$numberDecimal
+                                  ? iTCotiServi.precioPEN.$numberDecimal
+                                  : iTCotiServi.precioPEN
+                                : ''
                             }
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
@@ -872,7 +898,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                         </td>
                         {/* ----------------------------------------------------- */}
                         <td data-label="Venta" class="comoNumero">
-                          {iTCotiServi.ventaPEN.$numberDecimal ? iTCotiServi.ventaPEN.$numberDecimal : iTCotiServi.ventaPEN}
+                          {iTCotiServi.tipo !== 'NOTA_ADICIONAL_SERVICIO'
+                            ? iTCotiServi.ventaPEN.$numberDecimal
+                              ? iTCotiServi.ventaPEN.$numberDecimal
+                              : iTCotiServi.ventaPEN
+                            : ''}
                         </td>
                         <td data-label="Acciones" class="acciones">
                           <input
@@ -965,27 +995,15 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               margin: '5px 0',
             }}
           >
-            <div style={{ marginBottom: '5px' }}>
-              {definicion_CTX_COTIZACION._id === '' ? (
-                <ElButton
-                  class="btn"
-                  name="Add mercadería"
-                  disabled
-                  title="Add mercadería"
-                  style={{ background: '#aaa', color: '#d3d3d3' }}
-                />
-              ) : (
-                <ElButton
-                  class="btn"
-                  name="Add mercadería"
-                  title="Add mercadería"
-                  onClick={$(() => {
-                    definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarMercaderiaOUT = true;
-                  })}
-                />
-              )}
+            <div style={{ marginBottom: '4px' }}>
+              <ElButton
+                class="btn"
+                name="Add mercadería"
+                disabled={definicion_CTX_COTIZACION._id === '' ? true : false}
+                title="Add mercadería"
+                // estilos={definicion_CTX_COTIZACION._id === '' ? { background: '#aaa', color: '#d3d3d3' } : ''}
+              />
             </div>
-
             {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarMercaderiaOUT && (
               <div class="modal">
                 <BuscarMercaderiaOUT

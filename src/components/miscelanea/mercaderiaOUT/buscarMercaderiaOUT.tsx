@@ -10,6 +10,7 @@ import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import KardexsOUT from './kardexsOUT';
+import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
 
@@ -39,9 +40,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
     case 'new_venta':
       ctx = useContext(CTX_ADD_VENTA);
       break;
-    // case 'cotizacion':
-    //   ctx = useContext(CTX_DOCS_COTIZACION);
-    //   break;
+    case 'new_edit_guiaRemision':
+      ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
+      break;
     case 'new_edit_cotizacion':
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
       break;
@@ -111,8 +112,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; porcen
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelBuscarMercaderiaOUT = false;

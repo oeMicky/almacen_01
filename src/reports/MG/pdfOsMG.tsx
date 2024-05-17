@@ -11,11 +11,14 @@ import {
   redondeo2Decimales,
 } from '~/functions/comunes';
 import logit from '../../assets/base64/imagesBase64.js';
+import { parametrosGlobales } from '~/routes/login';
 
-function pdfOsMG(os: any) {
+async function pdfOsMG(os: any) {
   pdfMake.vfs = pdfFonts;
 
   console.log('os PDF', os);
+
+  const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
 
   const servicios = os.servicios;
   // let repuestosDespachados: any = [];
@@ -115,7 +118,7 @@ function pdfOsMG(os: any) {
       {
         // margin: [izq, top, der, button],
         columns: [
-          { width: '30%', margin: [45, 11, 0, 2], image: 'logo', fit: [190, 66] },
+          { width: '30%', margin: [45, 11, 0, 2], image: 'logoEmp', fit: [190, 66] },
           {
             width: '30%',
             margin: [20, 11, 18, 0],
@@ -447,7 +450,8 @@ function pdfOsMG(os: any) {
       },
     },
     images: {
-      logo: logit.logoMerma,
+      // logo: logit.logoMerma,
+      logoEmp: LOGO_EMPRESA.default,
       poweredBy: logit.logoPiePagina,
 
       // morty: 'https://rickandmortyapi.com/api/character/avatar/795.jpeg',

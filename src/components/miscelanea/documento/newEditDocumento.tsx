@@ -128,7 +128,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   return (
     <div
       style={{
-        width: 'clamp386px, 86%, 600px)',
+        width: 'clamp(386px, 86%, 600px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -139,8 +139,8 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelAdjuntarDocumento = false;

@@ -21,3 +21,17 @@ export interface IModeloVehicular {
   idVehiculoModelo: string;
   vehiculoModelo: string;
 }
+
+export interface IUnidadTransporte {
+  _id: string;
+  idGrupoEmpresarial: string;
+  idEmpresa: string;
+  placa: string;
+  idVehiculoMarca: string;
+  vehiculoMarca: string;
+  idVehiculoModelo: string;
+  vehiculoModelo: string;
+  vin: string;
+
+  tarjetaCirculacionCertificadoHabilitacion: string;
+}

@@ -6,7 +6,7 @@ import type { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 // import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
+import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(ordenesServicio)/ordenServicio';
 import pdfOsMG from '~/reports/MG/pdfOsMG';
 
 export default component$((props: { buscarOrdenesServicio: number; parametrosBusqueda: any }) => {

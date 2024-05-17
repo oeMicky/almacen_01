@@ -8,6 +8,7 @@ import MercaderiaINSeleccionada from './mercaderiaINSeleccionada';
 import NewEditMercaderiaIN from './newEditMercaderiaIN';
 import KardexsIN from './kardexsIN';
 import Spinner from '~/components/system/spinner';
+import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
 
@@ -36,9 +37,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
     case 'new_in_almacen':
       ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
-    // case 'new_venta':
-    //   ctx = useContext(CTX_ADD_VENTA);
-    //   break;
+    case 'new_edit_guiaRemision':
+      ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
+      break;
     // case 'cotizacion':
     //   ctx = useContext(CTX_DOCS_COTIZACION);
     //   break;
@@ -118,8 +119,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelBuscarMercaderiaIN = false;

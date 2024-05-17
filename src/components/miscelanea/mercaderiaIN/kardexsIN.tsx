@@ -38,8 +38,8 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_buscar_mercaderia_in.mostrarPanelKardexsIN = false;

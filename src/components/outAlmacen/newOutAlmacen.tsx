@@ -14,7 +14,7 @@ import { images } from '~/assets';
 import style from '../tabla/tabla.css?inline';
 import { parametrosGlobales } from '~/routes/login';
 import type { IPersona } from '~/interfaces/iPersona';
-import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(almacen)/outAlmacen';
+import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
 import {
   cerosALaIzquierda,
   // elIdAuxiliar,
@@ -388,8 +388,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_index_out_almacen.mostrarPanelNewOutAlmacen = false;

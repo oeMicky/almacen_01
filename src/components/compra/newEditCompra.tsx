@@ -1,5 +1,5 @@
 import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { CTX_INDEX_COMPRA } from '~/routes/(almacen)/compra';
+import { CTX_INDEX_COMPRA } from '~/routes/(compras)/compra';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import ElSelect from '../system/elSelect';
@@ -31,7 +31,7 @@ export default component$(
     agenteRetencion: boolean;
     ejercicio: number;
     asientoC: any;
-    idLD?: string;
+    // idLD?: string;
   }) => {
     //#region DEFINICION CTX_NEW_EDIT_COMPRA
     const definicion_CTX_NEW_EDIT_COMPRA = useStore({
@@ -822,6 +822,11 @@ export default component$(
       }
       // CONTABILIZAR
       if (definicion_CTX_COMPRA.contabilizarOperaciones && definicion_CTX_COMPRA.asientoContableObligatorio) {
+        if (typeof parametrosGlobales.idLibroDiario === 'undefined' || parametrosGlobales.idLibroDiario.trim() === '') {
+          alert('No se puede identificar el libro diario.');
+          // document.getElementById('btn_AddCuentaContable_COMPRA')?.focus();
+          return;
+        }
         if (definicion_CTX_COMPRA.totalDebePEN !== definicion_CTX_COMPRA.totalHaberPEN) {
           alert('No se cumple la partida doble, verifique.');
           document.getElementById('btn_AddCuentaContable_COMPRA')?.focus();
@@ -857,7 +862,7 @@ export default component$(
       ctx_index_compra.mostrarSpinner = true;
       //enviar datos al SERVIDOR
       const compraGRABADA = await inUpCompra({
-        idLibroDiario: props.idLD,
+        idLibroDiario: parametrosGlobales.idLibroDiario,
 
         idCompra: definicion_CTX_COMPRA._id,
         idGrupoEmpresarial: definicion_CTX_COMPRA.idGrupoEmpresarial,
@@ -1082,8 +1087,8 @@ export default component$(
           <ImgButton
             src={images.x}
             alt="Icono de cerrar"
-            height={16}
-            width={16}
+            height={18}
+            width={18}
             title="Cerrar el formulario"
             onClick={$(() => {
               ctx_index_compra.grabo_Compra = grabo.value;
@@ -1098,6 +1103,16 @@ export default component$(
             title="parametrosGlobales"
             onClick={$(() => {
               console.log('parametrosGlobales', parametrosGlobales);
+            })}
+          />
+          <ImgButton
+            src={images.see}
+            alt="Icono de cerrar"
+            height={16}
+            width={16}
+            title="props"
+            onClick={$(() => {
+              console.log('props', props);
             })}
           />
           <ImgButton
@@ -2134,6 +2149,7 @@ export default component$(
               </div>
               <br></br>
             </div>
+            {/* ----------------------------------------------------- */}
             {/* OPERACION CONTABLE */}
             {definicion_CTX_COMPRA.contabilizarOperaciones && (
               <div>
@@ -2195,6 +2211,7 @@ export default component$(
                           <th>Código</th>
                           <th>Descripción</th>
                           <th>Tipo</th>
+                          <th>Destino</th>
                           <th>Importe</th>
                           <th>Acciones</th>
                         </tr>
@@ -2207,16 +2224,16 @@ export default component$(
                             : parseFloat(cuenta.importe);
 
                           if (cuenta.tipo) {
-                            console.log('first sumaTOTAL_DEBER', sumaTOTAL_DEBER, importesss);
+                            // console.log('first sumaTOTAL_DEBER', sumaTOTAL_DEBER, importesss);
                             sumaTOTAL_DEBER = sumaTOTAL_DEBER + importesss;
                           }
                           if (!cuenta.tipo) {
-                            console.log('first sumaTOTAL_HABER', sumaTOTAL_HABER, importesss);
+                            // console.log('first sumaTOTAL_HABER', sumaTOTAL_HABER, importesss);
                             sumaTOTAL_HABER = sumaTOTAL_HABER + importesss;
                           }
                           // sumaCuotas = sumaCuotas + redondeo2Decimales(value.importeCuotaPEN);
                           if (index + 1 === definicion_CTX_COMPRA.asientoContable.length) {
-                            console.log('antes de fijar', sumaTOTAL_DEBER, sumaTOTAL_HABER);
+                            // console.log('antes de fijar', sumaTOTAL_DEBER, sumaTOTAL_HABER);
                             fijarMontos({
                               sumaTOTAL_DEBER,
                               sumaTOTAL_HABER,
@@ -2236,7 +2253,7 @@ export default component$(
                               </td>
                               <td data-label="Tipo" class="acciones">
                                 <input
-                                  id="but_TipoCuentaContable"
+                                  id="btn_TipoCuentaContable"
                                   type="button"
                                   style={{ fontSize: '1em' }}
                                   value={cuenta.tipo === true ? 'DEBE' : 'HABER'}
@@ -2248,17 +2265,54 @@ export default component$(
                                   // onChange$={(e) => (cuenta.tipo = !(e.target as HTMLInputElement).value)}
                                 />
                               </td>
+                              <td data-label="Destino" class="acciones">
+                                {typeof cuenta.asientoDestino !== 'undefined' ? (
+                                  cuenta.asientoDestino.length > 0 ? (
+                                    <input
+                                      type="image"
+                                      src={images.list}
+                                      title="listar asiento destino"
+                                      height={14}
+                                      width={14}
+                                      // onClick$={() => {
+                                      //   ctx_buscar_cuenta_contable.cC = cuentaContable;
+                                      //   ctx_buscar_cuenta_contable.mostrarPanelNewEditCuentaContable = true;
+                                      // }}
+                                    />
+                                  ) : (
+                                    ''
+                                  )
+                                ) : (
+                                  ''
+                                )}
+                              </td>
                               <td data-label="Importe" class="acciones">
                                 <input
+                                  id={`in_Importe_NEW_EDIT_COMPRA_AC_${index}`}
                                   type="number"
-                                  style={{ textAlign: 'end' }}
+                                  style={{ textAlign: 'end', width: '80px' }}
                                   value={cuenta.importe.$numberDecimal ? cuenta.importe.$numberDecimal : cuenta.importe}
                                   onChange$={(e) => {
                                     cuenta.importe = parseFloat((e.target as HTMLInputElement).value);
+                                    // TIENE ASIENTO DESTINO ???!!!
+                                    if (typeof cuenta.asientoDestino !== 'undefined' && cuenta.asientoDestino.length > 0) {
+                                      for (let index = 0; index < cuenta.asientoDestino.length; index++) {
+                                        const element = cuenta.asientoDestino[index];
+                                        //calcular el IMPORTE
+                                        element.importe = cuenta.importe * (element.porcentaje / 100);
+                                      }
+                                    }
                                     // console.log('IMPORTE CHANGE', cuenta.importe);
                                   }}
                                   onFocusin$={(e) => {
                                     (e.target as HTMLInputElement).select();
+                                  }}
+                                  onKeyPress$={(e) => {
+                                    if (e.key === 'Enter') {
+                                      if (index + 1 < definicion_CTX_COMPRA.asientoContable.length) {
+                                        document.getElementById(`in_Importe_NEW_EDIT_COMPRA_AC_${index + 1}`)?.focus();
+                                      }
+                                    }
                                   }}
                                 />
                               </td>
@@ -2349,6 +2403,7 @@ export default component$(
                       ejercicio={props.ejercicio}
                       idPlanContable={idPlanContable.value}
                       tipoDefault={definicion_CTX_COMPRA.codigoTCP === '07' ? false : true}
+                      verificarAsientoDestino={true}
                     />
                   </div>
                 )}
@@ -2368,7 +2423,9 @@ export default component$(
                 />
               </div>
             )}
+            <br />
           </div>
+
           {/* GRABAR   onClick={(e) => onSubmit(e)}*/}
           <input
             id="bu_RegistrarDocumentoIN_MICE"

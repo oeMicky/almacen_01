@@ -4,10 +4,12 @@ import { cerosALaIzquierda, formatearMonedaPEN, formatoDDMMYYYY_PEN, redondeo2De
 import logit from '../../assets/base64/imagesBase64.js';
 import { parametrosGlobales } from '~/routes/login';
 
-function pdfReporteVenta(ventas: any) {
+async function pdfReporteVenta(ventas: any) {
   pdfMake.vfs = pdfFonts;
 
   console.log('ventas PDF', ventas);
+
+  const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
 
   const reportTitle: any = [];
 
@@ -84,7 +86,7 @@ function pdfReporteVenta(ventas: any) {
       {
         // margin: [izq, top, der, button],
         columns: [
-          { width: '24%', margin: [45, 11, 0, 2], image: 'logo', fit: [190, 66] },
+          { width: '24%', margin: [45, 11, 0, 2], image: 'logoEmp', fit: [190, 66] },
           {
             width: '76%',
             margin: [20, 16, 18, 0],
@@ -338,7 +340,8 @@ function pdfReporteVenta(ventas: any) {
       },
     },
     images: {
-      logo: logit.logoMerma,
+      // logo: logit.logoMerma,
+      logoEmp: LOGO_EMPRESA.default,
       poweredBy: logit.logoPiePagina,
       // poweredBy: images.logoPiePagina,
 

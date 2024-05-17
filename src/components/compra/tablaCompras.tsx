@@ -6,7 +6,7 @@ import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import style from '../tabla/tabla.css?inline';
 // import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_INDEX_COMPRA } from '~/routes/(almacen)/compra';
+import { CTX_INDEX_COMPRA } from '~/routes/(compras)/compra';
 
 export default component$((props: { buscarCompras: number; parametrosBusqueda: any }) => {
   useStyles$(style);

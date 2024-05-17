@@ -1,5 +1,5 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { getIDLibroDiario } from '~/apis/libroDiario.api';
+// import { getIDLibroDiario } from '~/apis/libroDiario.api';
 import { images } from '~/assets';
 // import { getIgvsCompra } from '~/apis/compra.api';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
@@ -45,7 +45,7 @@ export default component$(() => {
   const elEjercicio = useSignal(0);
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
-  const elID_LD = useSignal('');
+  // const elID_LD = useSignal('');
   const elAsientoCompra = Object.freeze(parametrosGlobales.asientoCompra);
   // const losIgvsCompra = useSignal([]);
   // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
@@ -181,25 +181,26 @@ export default component$(() => {
               // ini.value++;
               return;
             }
-            if (parametrosGlobales.contabilizarOperaciones) {
-              if (parametrosGlobales.idLibroDiario === '' || typeof parametrosGlobales.idLibroDiario === 'undefined') {
-                const LD = await getIDLibroDiario({
-                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                  idEmpresa: parametrosGlobales.idEmpresa,
-                  ejercicio: parseInt(periodo.periodo.substring(0, 4)),
-                });
-                console.log('LD.data', LD.data);
-                if (LD.data.length === 1) {
-                  elID_LD.value = LD.data[0]._id;
-                } else {
-                  elID_LD.value = '';
-                  alert('No se encuentra el libro diario del ejercicio' + periodo.periodo.substring(0, 4));
-                  return;
-                }
-              } else {
-                elID_LD.value = parametrosGlobales.idLibroDiario;
-              }
-            }
+            // if (parametrosGlobales.contabilizarOperaciones) {
+            //   if (parametrosGlobales.idLibroDiario === '' || typeof parametrosGlobales.idLibroDiario === 'undefined') {
+            //     const LD = await getIDLibroDiario({
+            //       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+            //       idEmpresa: parametrosGlobales.idEmpresa,
+            //       ejercicio: parseInt(periodo.periodo.substring(0, 4)),
+            //     });
+            //     console.log('LD.data', LD.data);
+            //     if (LD.data.length === 1) {
+            //       elID_LD.value = LD.data[0]._id;
+            //     } else {
+            //       elID_LD.value = '';
+            //       alert('No se encuentra el libro diario del ejercicio' + periodo.periodo.substring(0, 4));
+            //       return;
+            //     }
+            //   } else {
+            //     elID_LD.value = parametrosGlobales.idLibroDiario;
+            //     console.log('elID_LD.value ', elID_LD.value);
+            //   }
+            // }
 
             definicion_CTX_INDEX_COMPRA.cC = [];
             definicion_CTX_INDEX_COMPRA.mostrarPanelCompra = true;
@@ -384,7 +385,7 @@ export default component$(() => {
               agenteRetencion={parametrosGlobales.agenteRetencion}
               ejercicio={elEjercicio.value}
               asientoC={elAsientoCompra}
-              idLD={elID_LD.value}
+              // idLD={elID_LD.value}
               // losIgvsCompra={losIgvsCompra.value}
               // igvPorDefault={igvPorDefault}
               //  ancho={600} parametrosGlobales={parametrosGlobales}

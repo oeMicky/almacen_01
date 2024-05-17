@@ -64,8 +64,8 @@ export default component$((props: { contexto: string }) => {
           src={images.x}
           alt="Icono de cerrar"
           title="Cerrar el formulario"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           onClick={$(() => {
             ctx.mostrarPanelVentasClienteVentasVarias = false;
           })}

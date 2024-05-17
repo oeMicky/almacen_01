@@ -6,6 +6,7 @@ import NewEditVehiculo from './newEditVehiculo';
 import TablaVehiculosHallados from './tablaVehiculosHallados';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
+import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from '../unidadTransporte/buscarUnidadTransporte';
 
 export const CTX_BUSCAR_VEHICULO = createContextId<any>('vehiculo__');
 
@@ -29,15 +30,16 @@ export default component$((props: { contexto: string }) => {
       ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       // documento = useContext(CTX_O_S);
       break;
-    // case 'venta':
-    //   ctx = useContext(CTX_DOCS_VENTA);
-    //   break;
     case 'cotizacion':
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
+      break;
+    case 'buscar_unidadTransporte':
+      ctx = useContext(CTX_BUSCAR_UNIDAD_TRANSPORTE);
       break;
   }
   //#endregion CONTEXTOS
 
+  //#region INICIALIZACION
   const buscarVehiculos = useSignal(0);
   // const por = useSignal('VIN');
   // const cadena = useSignal('');
@@ -48,6 +50,7 @@ export default component$((props: { contexto: string }) => {
     buscarPor: 'Placa', //por.value,
     cadenaABuscar: '', //cadena.value,
   });
+  //#endregion INICIALIZACION
 
   //#region BUSCAR VEHICULOS
   const localizarVehiculos = $(() => {
@@ -76,7 +79,7 @@ export default component$((props: { contexto: string }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: 'clamp(330px, 86%, 600px)',
         // width: 'auto',
         padding: '1px',
         // border: '3px dashed yellow',
@@ -93,8 +96,8 @@ export default component$((props: { contexto: string }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelBuscarVehiculo = false;

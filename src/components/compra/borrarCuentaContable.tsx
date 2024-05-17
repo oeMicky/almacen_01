@@ -12,7 +12,7 @@ export default component$((props: { borrarCuentaContable: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 600px)',
+        width: 'clamp(330px, 86%, 400px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -24,8 +24,8 @@ export default component$((props: { borrarCuentaContable: any }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_new_edit_compra.mostrarPanelBorrarCuentaContable = false;
@@ -45,17 +45,17 @@ export default component$((props: { borrarCuentaContable: any }) => {
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: '10px' }}>
-          ¿Desea eliminar el ítem?
+        <div style={{ marginBottom: '8px' }}>
+          ¿Desea eliminar la cuenta contable?
           <div style={{ fontSize: '0.7rem' }}>
             <strong>{props.borrarCuentaContable.codigo}</strong>
             <br />
             <strong>{props.borrarCuentaContable.descripcion}</strong>
             <br />
           </div>
-          <div style={{ display: 'flex', marginTop: '10px', justifyContent: 'space-around', alignItems: 'center' }}>
+          <div style={{ display: 'flex', marginTop: '8px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
-              style={{ width: '60px' }}
+              style={{ width: '64px' }}
               onClick$={() => {
                 ctx_new_edit_compra.borrar_idAuxiliarCuentaContable = props.borrarCuentaContable.idAuxiliar;
                 ctx_new_edit_compra.mostrarPanelBorrarCuentaContable = false;
@@ -63,9 +63,9 @@ export default component$((props: { borrarCuentaContable: any }) => {
               }}
             >
               SI
-            </button>{' '}
+            </button>
             <button
-              style={{ width: '60px' }}
+              style={{ width: '64px' }}
               onClick$={() => {
                 ctx_new_edit_compra.mostrarPanelBorrarCuentaContable = false;
               }}

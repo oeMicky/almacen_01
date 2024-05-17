@@ -219,8 +219,8 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_buscar_vehiculo.mostrarPanelNewEditVehiculo = false;
@@ -361,25 +361,27 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                   }
                 })}
               />
-              <ImgButton
+              <input
+                type="image"
                 src={images.add}
                 alt="Icono de adicionar marca vehícular"
                 height={16}
                 width={16}
                 title="Adicionar la marca vehícular"
-                onClick={$(() => {
+                onClick$={() => {
                   marca._id = '';
                   marca.vehiculoMarca = '';
                   definicion_CTX_NEW_EDIT_VEHICULO.mostrarPanelNewEditMarcaVehicular = true;
-                })}
+                }}
               />
-              <ImgButton
+              <input
+                type="image"
                 src={images.edit}
                 alt="Icono de edición marca vehícular"
                 height={16}
                 width={16}
                 title="Editar marca vehícular"
-                onClick={$(() => {
+                onClick$={() => {
                   const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   console.log('elSelec[elIdx].id', elSelec[elIdx].id);
@@ -392,7 +394,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                   marca._id = elSelec[elIdx].id;
                   marca.vehiculoMarca = elSelec.value;
                   definicion_CTX_NEW_EDIT_VEHICULO.mostrarPanelNewEditMarcaVehicular = true;
-                })}
+                }}
               />
             </div>
           </div>
@@ -429,13 +431,14 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                   }
                 })}
               />
-              <ImgButton
+              <input
+                type="image"
                 src={images.add}
                 alt="Icono de adicionar modelo vehícular"
                 height={16}
                 width={16}
                 title="Adicionar el modelo vehícular"
-                onClick={$(() => {
+                onClick$={() => {
                   const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   console.log('elSelec[elIdx].id', elSelec[elIdx].id);
@@ -452,15 +455,16 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                   modelo.vehiculoModelo = '';
 
                   definicion_CTX_NEW_EDIT_VEHICULO.mostrarPanelNewEditModeloVehicular = true;
-                })}
+                }}
               />
-              <ImgButton
+              <input
+                type="image"
                 src={images.edit}
                 alt="Icono de editar modelo vehícular"
                 height={16}
                 width={16}
                 title="Editar modelo vehícular"
-                onClick={$(() => {
+                onClick$={() => {
                   const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   console.log('elSelec[elIdx].id', elSelec[elIdx].id);
@@ -486,7 +490,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                   }
 
                   definicion_CTX_NEW_EDIT_VEHICULO.mostrarPanelNewEditModeloVehicular = true;
-                })}
+                }}
               />
             </div>
           </div>

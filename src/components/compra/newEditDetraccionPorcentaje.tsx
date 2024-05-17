@@ -66,8 +66,8 @@ export default component$((props: { detraPorcSelec: any }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_buscar_detraccion_porcentaje.mostrarPanelNewEditDetraccionPorcentaje = false;
@@ -148,7 +148,7 @@ export default component$((props: { detraPorcSelec: any }) => {
               />
             </div>
           </div>
-          <hr style={{ margin: '5px 0' }}></hr>
+          <br />
         </div>
         {/* GRABAR   onClick={(e) => onSubmit(e)}*/}
         <input

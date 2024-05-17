@@ -5,7 +5,7 @@ import { CTX_KARDEXS } from './kardexs';
 import { parametrosGlobales } from '~/routes/login';
 import type { IMovimientoKARDEX } from '~/interfaces/iKardex';
 import { formatear_4Decimales, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
+import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import styles from '../tabla/tabla.css?inline';
 
 export default component$((props: { mercaSelecci: any; kardex: any; contexto: string }) => {
@@ -69,8 +69,8 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelKARDEX = false;

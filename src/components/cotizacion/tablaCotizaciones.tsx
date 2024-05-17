@@ -76,7 +76,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(cotizaciones) => {
-        console.log('onResolved 🍓🍓🍓🍓');
+        console.log('onResolved 🍓🍓🍓🍓', cotizaciones);
         const { data } = cotizaciones; //{ status, data, message }
         const misCotizaciones: ICotizacion[] = data;
         ctx_index_cotizacion.mostrarSpinner = false;

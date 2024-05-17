@@ -2,7 +2,7 @@ import { Resource, component$, useContext, useResource$, useStyles$ } from '@bui
 // import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import type { IMercaderiaIN } from '~/interfaces/iMercaderia';
-import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
+import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import style from '../tabla/tabla.css?inline';
 import { formatear_2Decimales } from '~/functions/comunes';
 

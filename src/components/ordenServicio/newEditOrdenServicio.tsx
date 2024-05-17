@@ -11,7 +11,7 @@ import {
 } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
+import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(ordenesServicio)/ordenServicio';
 import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo2Decimales, redondeo6Decimales } from '~/functions/comunes';
 import ElSelect from '../system/elSelect';
 import { getTecnico, getTecnicosActivos } from '~/apis/tecnico.api';
@@ -19,7 +19,7 @@ import { parametrosGlobales } from '~/routes/login';
 // import SeleccionarTecnico from './seleccionarTecnico';
 // import SeleccionarVehiculo from './seleccionarVehiculo';
 import type { IVehiculo } from '~/interfaces/iVehiculo';
-import ElButton from '../system/elButton';
+// import ElButton from '../system/elButton';
 import {
   borrarRequisicionOS,
   borrarServicioOS,
@@ -616,8 +616,8 @@ OBSERVACIÓN(ES):
         <ImgButton
           src={images.x}
           alt="imagen de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Ver datos"
           onClick={$(() => {
             // ctx_index_orden_servicio.grabo_OS = grabo.value;
@@ -1197,24 +1197,14 @@ OBSERVACIÓN(ES):
           >
             <div style={{ marginBottom: '5px' }}>
               {/* {typeof oS.correlativo === 'undefined' ? ( */}
-              {definicion_CTX_O_S.estado !== 'APERTURADO' || definicion_CTX_O_S.numero === 0 ? (
-                <ElButton
-                  class="btn"
-                  name="Add servicio"
-                  disabled
-                  title="Add servicio"
-                  style={{ background: '#aaa', color: '#d3d3d3' }}
-                />
-              ) : (
-                <ElButton
-                  class="btn"
-                  name="Add servicio"
-                  title="Add servicio"
-                  onClick={$(() => {
-                    definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarServicio = true;
-                  })}
-                />
-              )}
+              <button
+                disabled={definicion_CTX_O_S.estado !== 'APERTURADO' || definicion_CTX_O_S.numero === 0 ? true : false}
+                onClick$={() => {
+                  definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarServicio = true;
+                }}
+              >
+                Add servicio
+              </button>
             </div>
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarServicio && (
               <div class="modal">
@@ -1447,25 +1437,14 @@ OBSERVACIÓN(ES):
             }}
           >
             <div style={{ marginBottom: '5px' }}>
-              {definicion_CTX_O_S.estado !== 'APERTURADO' || definicion_CTX_O_S.numero === 0 ? (
-                <ElButton
-                  class="btn"
-                  name="Add requisición"
-                  disabled
-                  title="Add requisición"
-                  style={{ background: '#aaa', color: '#d3d3d3' }}
-                />
-              ) : (
-                <ElButton
-                  class="btn"
-                  name="Add requisición"
-                  title="Add requisición"
-                  // onClick={botonShowPanelAlmacen_Requisicion}
-                  onClick={$(() => {
-                    definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarMercaderiaOUT = true;
-                  })}
-                />
-              )}
+              <button
+                disabled={definicion_CTX_O_S.estado !== 'APERTURADO' || definicion_CTX_O_S.numero === 0 ? true : false}
+                onClick$={() => {
+                  definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarMercaderiaOUT = true;
+                }}
+              >
+                Add requisición
+              </button>
             </div>
 
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarMercaderiaOUT && (

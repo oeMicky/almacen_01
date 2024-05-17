@@ -51,8 +51,8 @@ export default component$((props: { mercaOUTSelecci: any }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = false;

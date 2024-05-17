@@ -2,7 +2,7 @@ import { $, component$, createContextId, useContext, useContextProvider, useStor
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatear_2Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
+import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import Kardex from './kardex';
 
 export const CTX_KARDEXS = createContextId<any>('ctx_kardexs__');
@@ -38,8 +38,8 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_index_kardex.mostrarPanelKARDEXS = false;

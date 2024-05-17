@@ -6,10 +6,16 @@ import { cerosALaIzquierda } from '~/functions/comunes';
 import styles from '../../../components/tabla/tabla.css?inline';
 import { getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
 import { parametrosGlobales } from '~/routes/login';
+import Spinner from '~/components/system/spinner';
 
 export default component$(() => {
   useStyles$(styles);
   const navegarA = useNavigate();
+
+  // const definicion_CTX_LISTADO_SUCURSALES = useStore({
+  //   mostrarSpinner: false,
+  // });
+  const mostrarSpinner = useSignal(false);
 
   //#region INICIAIZACION
   // const ini = useSignal(0);
@@ -27,10 +33,13 @@ export default component$(() => {
     <>
       <div class="container">
         <h2>BIENVENIDO AL SISTEMA</h2>
-        <b>{parametrosGlobales.usuario}</b>
-        <p>Seleccione una sucursal.</p>
+        <b style={{ marginLeft: '16px' }}>
+          <img src={images.user} width={16} height={16} style={{ marginRight: '8px' }} />
+          {parametrosGlobales.usuario}
+        </b>
+        <p style={{ marginLeft: '16px' }}>Seleccione una sucursal.</p>
 
-        <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
+        <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', margin: '0 16px' }}>
           <thead>
             <tr>
               <th>Ítem</th>
@@ -111,6 +120,16 @@ export default component$(() => {
                         parametrosGlobales.idEjercicio = activo[0].idEjercicio;
                         parametrosGlobales.ejercicio = activo[0].ejercicio;
                         parametrosGlobales.almacenActivo = activo[0].almacenActivo;
+                        //SERVICIOS
+                        parametrosGlobales.facturaElectronica = sucur.facturaElectronica;
+                        parametrosGlobales.guiaElectronica = sucur.guiaElectronica;
+                        parametrosGlobales.SIRE = sucur.SIRE;
+                        parametrosGlobales.compras = sucur.compras;
+                        parametrosGlobales.inventario = sucur.inventario; //******* */
+                        parametrosGlobales.ordenesServicio = sucur.ordenesServicio;
+                        parametrosGlobales.bancos = sucur.bancos;
+                        parametrosGlobales.planilla = sucur.planilla;
+                        parametrosGlobales.libroDiario = sucur.libroDiario;
 
                         const losPeri = await getPeriodos({
                           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -118,20 +137,23 @@ export default component$(() => {
                           bandera: '',
                         });
                         parametrosGlobales.periodos = losPeri.data;
+                        //
+                        mostrarSpinner.value = true;
                         //PAGINA DE INICIO
-                        if (parametrosGlobales.almacenActivo) {
-                          navegarA(parametrosGlobales.paginaInicioDelSistema);
-                        } else {
-                          if (
-                            parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
-                            parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
-                            parametrosGlobales.paginaInicioDelSistema === '/kardex'
-                          ) {
-                            navegarA(parametrosGlobales.paginaInicioDefault);
-                          } else {
-                            navegarA(parametrosGlobales.paginaInicioDelSistema);
-                          }
-                        }
+                        navegarA('/seleccionarServicio');
+                        // if (parametrosGlobales.almacenActivo) {
+                        //   navegarA(parametrosGlobales.paginaInicioDelSistema);
+                        // } else {
+                        //   if (
+                        //     parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
+                        //     parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
+                        //     parametrosGlobales.paginaInicioDelSistema === '/kardex'
+                        //   ) {
+                        //     navegarA(parametrosGlobales.paginaInicioDefault);
+                        //   } else {
+                        //     navegarA(parametrosGlobales.paginaInicioDelSistema);
+                        //   }
+                        // }
                       }}
                     />
                   </td>
@@ -140,7 +162,9 @@ export default component$(() => {
             })}
           </tbody>
         </table>
+        <br />
         <button
+          style={{ marginLeft: '16px', padding: '20px 40px', borderRadius: '8px' }}
           onClick$={() => {
             navegarA('/');
           }}
@@ -154,6 +178,12 @@ export default component$(() => {
         >
           ppppppppp
         </button> */}
+        {/* MOSTRAR SPINNER */}
+        {mostrarSpinner.value && (
+          <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Spinner />
+          </div>
+        )}
       </div>
     </>
   );

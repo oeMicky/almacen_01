@@ -1,7 +1,7 @@
 import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
 import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import style from '../tabla/tabla.css?inline';
-import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(almacen)/outAlmacen';
+import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
 import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
 import { images } from '~/assets';
 

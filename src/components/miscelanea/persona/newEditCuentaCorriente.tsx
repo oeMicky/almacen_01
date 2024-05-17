@@ -39,8 +39,8 @@ export default component$((props: { cuentaCorriSelec: any }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_editar_persona.mostrarPanelNewEditCuentaCorriente = false;

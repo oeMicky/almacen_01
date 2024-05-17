@@ -12,4 +12,5 @@ export interface ICuentaContable {
   _id: string;
   codigo: string;
   descripcion: string;
+  asientoDestino: any;
 }

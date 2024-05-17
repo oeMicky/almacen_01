@@ -1168,8 +1168,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_index_venta.grabo_Venta = grabo.value;

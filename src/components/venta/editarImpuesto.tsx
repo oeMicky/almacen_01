@@ -24,8 +24,8 @@ export default component$((props: { editarImpuesto_ItemVenta: any }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_add_venta.mostrarPanelEditarImpuesto = false;

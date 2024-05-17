@@ -1,11 +1,7 @@
 import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
-// import { CTX_PERSONA } from '../venta/addVenta';
 import ImgButton from '../../system/imgButton';
 import TablaPersonasHalladas from './tablaPersonasHalladas';
-// import { CTX_DOCS_VENTA } from '~/routes/(almacen)/venta';
-// import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
-// import { parametrosGlobales } from '~/routes/login';
 import NewEditPersona from './newEditPersona';
 import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
@@ -14,8 +10,9 @@ import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 import { CTX_NEW_EDIT_COMPRA } from '~/components/compra/newEditCompra';
 import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
 import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
-import VentasCliente from '../venta/ventasCliente';
 import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
+import { CTX_BUSCAR_CHOFER } from '../chofer/buscarChofer';
+import VentasCliente from '../venta/ventasCliente';
 import EditarPersona from './editarPersona';
 import type { IPersonaEdit } from '~/interfaces/iPersona';
 import VentasClienteVentasVarios from './ventasClienteVentasVarios';
@@ -66,6 +63,9 @@ export default component$(
         break;
       case 'buscar_tecnico':
         ctx = useContext(CTX_BUSCAR_TECNICO);
+        break;
+      case 'buscar_chofer':
+        ctx = useContext(CTX_BUSCAR_CHOFER);
         break;
     }
     //#endregion CONTEXTOS
@@ -145,8 +145,8 @@ export default component$(
           <ImgButton
             src={images.x}
             alt="Icono de cerrar"
-            height={16}
-            width={16}
+            height={18}
+            width={18}
             title="Cerrar el formulario"
             onClick={$(() => {
               if (props.contexto === 'new_out_almacen') {
@@ -154,6 +154,19 @@ export default component$(
                   ctx.mostrarPanelBuscarPersona_Venta = false;
                 } else {
                   ctx.mostrarPanelBuscarPersona = false;
+                }
+              } else if (props.contexto === 'new_edit_guiaRemision') {
+                if (props.rol === 'remitente') {
+                  ctx.mostrarPanelBuscarPersonaRemitente = false;
+                }
+                if (props.rol === 'destinatario') {
+                  ctx.mostrarPanelBuscarPersonaDestinatario = false;
+                }
+                if (props.rol === 'transportista') {
+                  ctx.mostrarPanelBuscarPersonaTransportista = false;
+                }
+                if (props.rol === 'chofer') {
+                  ctx.mostrarPanelBuscarPersonaChofer = false;
                 }
               } else {
                 ctx.mostrarPanelBuscarPersona = false;

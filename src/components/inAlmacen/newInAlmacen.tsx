@@ -11,7 +11,7 @@ import {
 } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_INDEX_IN_ALMACEN } from '~/routes/(almacen)/inAlmacen';
+import { CTX_INDEX_IN_ALMACEN } from '~/routes/(inventario)/inAlmacen';
 import type { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
 import ElButton from '../system/elButton';
 import NewEditDocumento from '../miscelanea/documento/newEditDocumento';
@@ -381,8 +381,8 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;

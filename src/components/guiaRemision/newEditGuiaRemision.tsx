@@ -3,12 +3,22 @@ import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import type { IGuiaRemision } from '~/interfaces/iGuiaRemision';
 import { parametrosGlobales } from '~/routes/login';
-import { CTX_INDEX_GUIA_REMISION } from '~/routes/(almacen)/guiaRemision';
+import { CTX_INDEX_GUIA_REMISION } from '~/routes/(guiasRemision)/guiaRemision';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import type { IPersona } from '~/interfaces/iPersona';
+import { cerosALaIzquierda, ultimoDiaDelPeriodoX } from '~/functions/comunes';
+import BuscarMercaderiaIN from '../miscelanea/mercaderiaIN/buscarMercaderiaIN';
+import ElButton from '../system/elButton';
+import BorrarChofer from './borrarChofer';
+import BorrarUnidadTransporte from './borrarUnidadTransporte';
+import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
+// import NewEditUnidadTransporte from './newEditUnidadTransporte';
+// import NewEditChofer from './newEditChofer';
+import BuscarChofer from '../miscelanea/chofer/buscarChofer';
+import BuscarUnidadTransporte from '../miscelanea/unidadTransporte/buscarUnidadTransporte';
 
 export const CTX_NEW_EDIT_GUIA_REMISION = createContextId<any>('__new_edit_guia_remision');
-export const CTX_GUIA_REMISION = createContextId<any>('__guia_remision');
+export const CTX_GUIA_REMISION = createContextId<IGuiaRemision>('__guia_remision');
 export const CTX_DESTINATARIO_GR = createContextId<any>('__destinatario');
 
 export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: any }) => {
@@ -20,9 +30,26 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
 
     rol_Persona: '',
     selecciono_Persona: false,
-    mostrarPanelBuscarPersona: false,
+    mostrarPanelBuscarPersonaRemitente: false,
     mostrarPanelBuscarServicio: false,
+
+    mostrarPanelBuscarMercaderiaIN: false,
     mostrarPanelBuscarMercaderiaOUT: false,
+
+    mostrarPanelBuscarPersonaDestinatario: false,
+
+    mostrarPanelBuscarPersonaTransportista: false,
+
+    mostrarPanelBuscarChofer: false,
+    selecciono_Chofer: false,
+    mostrarPanelDeleteChofer: false,
+    borrarIdAuxiliarChofer: 0,
+    mostrarPanelBuscarPersonaChofer: false,
+
+    mostrarPanelBuscarUnidadTransporte: false,
+    selecciono_UnidadTransporte: false,
+    mostrarPanelUnidadTransporte: false,
+    mostrarPanelDeleteUnidadTransporte: false,
 
     // mostrarAdjuntarOS: false,
     // mostrarAdjuntarCotizacion: false,
@@ -34,32 +61,60 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
   //#endregion DEFINICION CTX_NEW_EDIT_GUIA_REMISON
 
   //#region DEFINICION CTX_GUIA_REMISION
-  const definicion_CTX_GUIA_REMISION = useStore<IGuiaRemision>({
-    _id: '',
-    idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-    idEmpresa: parametrosGlobales.idEmpresa,
-    idSucursal: parametrosGlobales.idSucursal,
-    idPeriodo: props.addPeriodo.idPeriodo,
-    periodo: props.addPeriodo.periodo,
+  const definicion_CTX_GUIA_REMISION = useStore<IGuiaRemision>(
+    {
+      _id: '',
+      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+      idEmpresa: parametrosGlobales.idEmpresa,
+      idSucursal: parametrosGlobales.idSucursal,
+      idPeriodo: props.addPeriodo.idPeriodo,
+      periodo: props.addPeriodo.periodo,
 
-    ruc: parametrosGlobales.RUC,
-    empresa: parametrosGlobales.RazonSocial,
-    direccion: parametrosGlobales.Direccion,
+      ruc: parametrosGlobales.RUC,
+      empresa: parametrosGlobales.RazonSocial,
+      direccion: parametrosGlobales.Direccion,
 
-    codigoTipoComprobantePago: '',
-    tipoComprobantePago: '',
-    idSerieVenta: '',
-    serie: '',
-    numero: 0,
+      idModalidadTraslado: '',
+      modalidadTraslado: '',
+      idMotivoTraslado: '',
+      motivoTraslado: '',
 
-    fecha: '',
+      codigoTipoComprobantePago: '',
+      tipoComprobantePago: '',
+      idSerieVenta: '',
+      serie: '',
+      numero: 0,
 
-    idDestinatario: '',
-    codigoTipoDocumentoIdentidad: '',
-    tipoDocumentoIdentidad: '',
-    numeroIdentidad: '',
-    razonSocialNombre: '',
-  });
+      fecha: '',
+
+      idRemitente: '',
+      codigoTipoDocumentoIdentidadRemitente: '',
+      tipoDocumentoIdentidadRemitente: 'RUC',
+      numeroIdentidadRemitente: '',
+      razonSocialNombreRemitente: '',
+
+      idDestinatario: '',
+      codigoTipoDocumentoIdentidadDestinatario: '',
+      tipoDocumentoIdentidadDestinatario: 'RUC',
+      numeroIdentidadDestinatario: '',
+      razonSocialNombreDestinatario: '',
+
+      idTransportista: '',
+      codigoTipoDocumentoIdentidadTransportista: '',
+      tipoDocumentoIdentidadTransportista: 'RUC',
+      numeroIdentidadTransportista: '',
+      razonSocialNombreTransportista: '',
+
+      numeroBultosPallets: '',
+      pesoBrutoTotal: '',
+
+      choferes: [],
+      unidadesTransporte: [],
+
+      observacion: '',
+    },
+    { deep: true }
+  );
   useContextProvider(CTX_GUIA_REMISION, definicion_CTX_GUIA_REMISION);
   //#endregion DEFINICION CTX_GUIA_REMISION
 
@@ -85,7 +140,43 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
   //#region INICIALIZACION
   const grabo = useSignal(false);
 
+  const elChofSelecionado = useSignal([]);
+  const laUniSelecionada = useSignal([]);
+
+  const borrarChofer = useStore({
+    idAuxiliar: '',
+    item: '',
+    codigo: '',
+    descripcion: '',
+  });
+  const borrarUnidadTransporte = useStore({
+    idAuxiliar: '',
+    item: '',
+    codigo: '',
+    descripcion: '',
+  });
   //#endregion INICIALIZACION
+
+  //#region REMITENTE
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona);
+    if (
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona &&
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.rol_Persona === 'remitente'
+    ) {
+      // alert('evalua a la persona');
+      definicion_CTX_GUIA_REMISION.idRemitente = definicion_CTX_DESTINATARIO_GR._id;
+      definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadRemitente =
+        definicion_CTX_DESTINATARIO_GR.codigoTipoDocumentoIdentidad;
+      definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadRemitente = definicion_CTX_DESTINATARIO_GR.tipoDocumentoIdentidad;
+      definicion_CTX_GUIA_REMISION.numeroIdentidadRemitente = definicion_CTX_DESTINATARIO_GR.numeroIdentidad;
+      definicion_CTX_GUIA_REMISION.razonSocialNombreRemitente = definicion_CTX_DESTINATARIO_GR.razonSocialNombre;
+
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.rol_Persona = '';
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona = false;
+    }
+  });
+  //#endregion REMITENTE
 
   //#region DESTINATARIO
   useTask$(({ track }) => {
@@ -96,16 +187,38 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
     ) {
       // alert('evalua a la persona');
       definicion_CTX_GUIA_REMISION.idDestinatario = definicion_CTX_DESTINATARIO_GR._id;
-      definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidad = definicion_CTX_DESTINATARIO_GR.codigoTipoDocumentoIdentidad;
-      definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidad = definicion_CTX_DESTINATARIO_GR.tipoDocumentoIdentidad;
-      definicion_CTX_GUIA_REMISION.numeroIdentidad = definicion_CTX_DESTINATARIO_GR.numeroIdentidad;
-      definicion_CTX_GUIA_REMISION.razonSocialNombre = definicion_CTX_DESTINATARIO_GR.razonSocialNombre;
+      definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadDestinatario =
+        definicion_CTX_DESTINATARIO_GR.codigoTipoDocumentoIdentidad;
+      definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadDestinatario = definicion_CTX_DESTINATARIO_GR.tipoDocumentoIdentidad;
+      definicion_CTX_GUIA_REMISION.numeroIdentidadDestinatario = definicion_CTX_DESTINATARIO_GR.numeroIdentidad;
+      definicion_CTX_GUIA_REMISION.razonSocialNombreDestinatario = definicion_CTX_DESTINATARIO_GR.razonSocialNombre;
 
       definicion_CTX_NEW_EDIT_GUIA_REMISION.rol_Persona = '';
       definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona = false;
     }
   });
   //#endregion DESTINATARIO
+
+  //#region TRANSPORTISTA
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona);
+    if (
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona &&
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.rol_Persona === 'transportista'
+    ) {
+      // alert('evalua a la persona');
+      definicion_CTX_GUIA_REMISION.idTransportista = definicion_CTX_DESTINATARIO_GR._id;
+      definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadTransportista =
+        definicion_CTX_DESTINATARIO_GR.codigoTipoDocumentoIdentidad;
+      definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista = definicion_CTX_DESTINATARIO_GR.tipoDocumentoIdentidad;
+      definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista = definicion_CTX_DESTINATARIO_GR.numeroIdentidad;
+      definicion_CTX_GUIA_REMISION.razonSocialNombreTransportista = definicion_CTX_DESTINATARIO_GR.razonSocialNombre;
+
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.rol_Persona = '';
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona = false;
+    }
+  });
+  //#endregion TRANSPORTISTA
 
   return (
     <div
@@ -127,24 +240,14 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_index_guia_remision.grabo_GuiaRemision = grabo.value;
             ctx_index_guia_remision.mostrarPanelGuiaRemision = false;
           })}
         />
-        {/* <ImgButton
-          src={images.see}
-          alt="Icono de ver"
-          height={16}
-          width={16}
-          title="ver"
-          onClick={$(() => {
-            console.log('definicion_CTX_F_B_NC_ND', definicion_CTX_F_B_NC_ND);
-          })}
-        /> */}
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.8rem' }}>
@@ -152,534 +255,716 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       </h3>
       {/* FORMULARIO */}
       <div class="add-form">
-        {/* GENERALES */}
+        {/* ----------------------------------------------------- */}
+        {/* PERIODO */}
+        <div class="form-control">
+          <label>Periodo</label>
+          <div class="form-control form-agrupado">
+            <input
+              id="in_Periodo_GR"
+              style={{ width: '100%' }}
+              type="number"
+              disabled
+              value={definicion_CTX_GUIA_REMISION.periodo}
+            />
+          </div>
+        </div>
+        <br />
+        {/* ----------------------------------------------------- */}
+        {/* FECHA */}
+        <div class="form-control">
+          <label>Fecha</label>
+          <div class="form-control form-agrupado">
+            <input
+              id="in_Fecha_Para_Venta"
+              type="date"
+              // disabled
+              min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+              max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+              value={definicion_CTX_GUIA_REMISION.fecha}
+              onChange$={(e) => {
+                definicion_CTX_GUIA_REMISION.fecha = (e.target as HTMLInputElement).value;
+              }}
+              style={{ width: '100%' }}
+            />
+          </div>
+        </div>
+        <br />
+        {/* ----------------------------------------------------- */}
+        {/* MODALIDA - MOTIVO */}
         <div>
-          {/* ----------------------------------------------------- */}
-          {/* PERIODO */}
           <div class="form-control">
-            <label>Periodo</label>
             <div class="form-control form-agrupado">
-              <input
-                id="in_Periodo_GR"
-                style={{ width: '100%' }}
-                type="number"
+              <select
+                id="select_ModalidadTraslado"
+                // value={6}
+                value={definicion_CTX_GUIA_REMISION.modalidadTraslado}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const rere = e.target as HTMLSelectElement;
+                  const elOption = rere[idx];
+
+                  definicion_CTX_GUIA_REMISION.idModalidadTraslado = elOption.id;
+                  definicion_CTX_GUIA_REMISION.modalidadTraslado = (e.target as HTMLSelectElement).value;
+                }}
+              >
+                <option
+                  id="01"
+                  value="TRANSPORTE PÚBLICO"
+                  selected={definicion_CTX_GUIA_REMISION.modalidadTraslado === 'TRANSPORTE PÚBLICO'}
+                >
+                  TRANSPORTE PÚBLICO
+                </option>
+                <option
+                  id="02"
+                  value="TRANSPORTE PRIVADO"
+                  selected={definicion_CTX_GUIA_REMISION.modalidadTraslado === 'TRANSPORTE PRIVADO'}
+                >
+                  TRANSPORTE PRIVADO
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <select
+                id="select_MotivoTraslado"
+                // value={6}
+                value={definicion_CTX_GUIA_REMISION.motivoTraslado}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const rere = e.target as HTMLSelectElement;
+                  const elOption = rere[idx];
+
+                  definicion_CTX_GUIA_REMISION.idMotivoTraslado = elOption.id;
+                  definicion_CTX_GUIA_REMISION.motivoTraslado = (e.target as HTMLSelectElement).value;
+                }}
+              >
+                <option id="01" value="VENTA" selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'VENTA'}>
+                  VENTA
+                </option>
+                <option id="02" value="COMPRA" selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'COMPRA'}>
+                  COMPRA
+                </option>
+                <option
+                  id="03"
+                  value="VENTA CON ENTREGA A TERCEROS"
+                  selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'VENTA CON ENTREGA A TERCEROS'}
+                >
+                  VENTA CON ENTREGA A TERCEROS
+                </option>
+                <option
+                  id="04"
+                  value="TRASLADO ENTRE ESTABLECIMIENTOS DE LA MISMA EMPRESA"
+                  selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'TRASLADO ENTRE ESTABLECIMIENTOS DE LA MISMA EMPRESA'}
+                >
+                  TRASLADO ENTRE ESTABLECIMIENTOS DE LA MISMA EMPRESA
+                </option>
+                <option id="05" value="CONSIGNACIÓN" selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'CONSIGNACIÓN'}>
+                  CONSIGNACIÓN
+                </option>
+                <option id="06" value="DEVOLUCIÓN" selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'DEVOLUCIÓN'}>
+                  DEVOLUCIÓN
+                </option>
+                <option
+                  id="07"
+                  value="RECOJO DE BIENES TRANSFORMADOS"
+                  selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'RECOJO DE BIENES TRANSFORMADOS'}
+                >
+                  RECOJO DE BIENES TRANSFORMADOS
+                </option>
+                <option id="08" value="IMPORTACIÓN" selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'IMPORTACIÓN'}>
+                  IMPORTACIÓN
+                </option>
+                <option id="09" value="EXPORTACIÓN" selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'EXPORTACIÓN'}>
+                  EXPORTACIÓN
+                </option>
+                <option id="13" value="OTROS" selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'OTROS'}>
+                  OTROS
+                </option>
+                <option
+                  id="14"
+                  value="VENTA SUJETA A CONFIRMACIÓN DEL COMPRADOR   "
+                  selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'VENTA SUJETA A CONFIRMACIÓN DEL COMPRADOR   '}
+                >
+                  VENTA SUJETA A CONFIRMACIÓN DEL COMPRADOR
+                </option>
+                <option
+                  id="17"
+                  value="TRASLADO DE BIENES PARA TRANSFORMACIÓN"
+                  selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'TRASLADO DE BIENES PARA TRANSFORMACIÓN'}
+                >
+                  TRASLADO DE BIENES PARA TRANSFORMACIÓN
+                </option>
+                <option
+                  id="18"
+                  value="TRASLADO EMISOR ITINERANTE CP"
+                  selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'TRASLADO EMISOR ITINERANTE CP'}
+                >
+                  TRASLADO EMISOR ITINERANTE CP
+                </option>
+              </select>
+            </div>
+          </div>
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* GENERALES DEL REMITENTE */}
+        <div>
+          {/* tipo de documento identidad*/}
+          <div class="form-control">
+            <label>Tipo documento</label>
+            <div class="form-control form-agrupado">
+              <select
+                id="select_TipoDocumentoLiteral_REMITENTE"
                 disabled
-                value={definicion_CTX_GUIA_REMISION.periodo}
+                // value={6}
+                value={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadRemitente}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const rere = e.target as HTMLSelectElement;
+                  const elOption = rere[idx];
+
+                  definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadRemitente = elOption.id;
+                  definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadRemitente = (e.target as HTMLSelectElement).value;
+                }}
+              >
+                <option id="1" value="DNI" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadRemitente === 'DNI'}>
+                  DNI
+                </option>
+                <option id="6" value="RUC" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadRemitente === 'RUC'}>
+                  RUC
+                </option>
+                <option id="4" value="C.EXT" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadRemitente === 'C.EXT'}>
+                  C.EXT
+                </option>
+              </select>
+              <input
+                // id="in_BuscarDetraccion"
+                type="image"
+                src={images.searchPLUS}
+                title="Buscar datos de identidad"
+                height={16}
+                width={16}
+                // style={{ marginLeft: '2px', marginTop: '2px' }}
+                style={{ margin: '2px' }}
+                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaRemitente = true)}
               />
             </div>
           </div>
-          <br></br>
-          {/* ----------------------------------------------------- */}
-          {/* GENERALES DEL DESTINATARIO */}
-          <div>
-            {/* tipo de documento identidad*/}
-            <div class="form-control">
-              <label>Tipo documento</label>
-              <div class="form-control form-agrupado">
-                <select
-                  id="selectTipoDocumentoLiteral"
-                  disabled
-                  // value={6}
-                  value={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidad}
-                  onChange$={(e) => {
-                    const idx = (e.target as HTMLSelectElement).selectedIndex;
-                    const rere = e.target as HTMLSelectElement;
-                    const elOption = rere[idx];
-
-                    definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidad = elOption.id;
-                    definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
-                  }}
-                >
-                  <option id="1" value="DNI" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidad === 'DNI'}>
-                    DNI
-                  </option>
-                  <option id="6" value="RUC" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidad === 'RUC'}>
-                    RUC
-                  </option>
-                  <option id="4" value="C.EXT" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidad === 'C.EXT'}>
-                    C.EXT
-                  </option>
-                </select>
-                <input
-                  // id="in_BuscarDetraccion"
-                  type="image"
-                  src={images.searchPLUS}
-                  title="Buscar datos de identidad"
-                  height={16}
-                  width={16}
-                  // style={{ marginLeft: '2px', marginTop: '2px' }}
-                  style={{ margin: '2px' }}
-                  onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersona = true)}
-                />
-              </div>
+          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaRemitente && (
+            <div class="modal">
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="remitente"
+                contexto="new_edit_guiaRemision"
+                rol="remitente"
+              />
             </div>
-            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersona && (
-              <div class="modal">
-                <BuscarPersona
-                  soloPersonasNaturales={false}
-                  seleccionar="destinatario"
-                  contexto="new_edit_guiaRemision"
-                  rol="destinatario"
-                />
-              </div>
-            )}
-            {/* numero identidad*/}
-            <div class="form-control">
-              <label>Número identidad</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNumeroDocumentoIdentidad"
-                  type="number"
-                  placeholder="Add número"
-                  disabled
-                  style={{ width: '100%' }}
-                  value={definicion_CTX_GUIA_REMISION.numeroIdentidad}
-                  onChange$={(e) => (definicion_CTX_GUIA_REMISION.numeroIdentidad = (e.target as HTMLInputElement).value)}
-                />
-              </div>
+          )}
+          {/* numero identidad*/}
+          <div class="form-control">
+            <label>Número identidad</label>
+            <div class="form-control form-agrupado">
+              <input
+                id="input_NumeroDocumentoIdentidad_REMITENTE"
+                type="number"
+                placeholder="Número Identidad Remitente"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.numeroIdentidadRemitente}
+                onChange$={(e) => (definicion_CTX_GUIA_REMISION.numeroIdentidadRemitente = (e.target as HTMLInputElement).value)}
+              />
             </div>
-            {/* Razon Social / Nombre */}
-            <div class="form-control">
-              <label>Razón social / Nombre</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNombreCliente"
-                  type="text"
-                  placeholder="Razón social / Nombre"
-                  disabled
-                  style={{ width: '100%' }}
-                  value={definicion_CTX_GUIA_REMISION.razonSocialNombre}
-                />
-              </div>
-            </div>
-            <br></br>
           </div>
-          {/* ----------------------------------------------------- */}
-          {/* GENERALES DE FACTURA */}
-          <div>
-            {/* Documento */}
-            {/* <div class="form-control">
-              <label>Documento</label>
-              <div class="form-control form-agrupado">
-                <select
-                  id="selectDocumentoVenta"
-                  onChange$={(e) => {
-                    tipoDocumento.value = (e.target as HTMLSelectElement).value;
-                  }}
-                >
-                  <option value={'01'} selected={tipoDocumento.value === '01'}>
-                    FACTURA
-                  </option>
-                  <option value={'03'} selected={tipoDocumento.value === '03'}>
-                    BOLETA
-                  </option>
-                  <option value={'07'} selected={tipoDocumento.value === '07'}>
-                    NOTA DE CRÉDITO
-                  </option>
-                  <option value={'08'} selected={tipoDocumento.value === '08'}>
-                    NOTA DE DÉBITO
-                  </option>
-                </select>
-              </div>
+          {/* Razon Social / Nombre */}
+          <div class="form-control">
+            <label>Razón social / Nombre</label>
+            <div class="form-control form-agrupado">
+              <input
+                id="input_Nombre_REMITENTE"
+                type="text"
+                placeholder="Razón social / Nombre Remitente"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.razonSocialNombreRemitente}
+              />
             </div>
-            {/* Serie  */}
-            {/*  <div class="form-control">
-              <label>Serie</label>
-              <div class="form-control form-agrupado">
-                {
-                  <select
-                    id="selectSerieVenta"
-                    onChange$={(e) => {
-                      const idx = (e.target as HTMLSelectElement).selectedIndex;
-                      const elSelect = e.target as HTMLSelectElement;
-                      const elOption = elSelect[idx];
+          </div>
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* GENERALES DEL DESTINATARIO */}
+        <div>
+          {/* tipo de documento identidad*/}
+          <div class="form-control">
+            <label>Tipo documento</label>
+            <div class="form-control form-agrupado">
+              <select
+                id="select_TipoDocumentoLiteral_DESTINATARIO"
+                disabled
+                // value={6}
+                value={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadDestinatario}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const rere = e.target as HTMLSelectElement;
+                  const elOption = rere[idx];
 
-                      definicion_CTX_F_B_NC_ND.idSerieVenta = elOption.id;
-                      definicion_CTX_F_B_NC_ND.serie = (e.target as HTMLSelectElement).value;
-                      document.getElementById('in_Fecha')?.focus();
-                    }}
-                  >
-                    <option value="">-- Seleccione una serie --</option>
-                    {dataSerie.value.map((ser: any) => {
-                      return (
-                        <option id={ser._id} value={ser.serie} selected={definicion_CTX_F_B_NC_ND.serie === ser.serie}>
-                          {ser.serie}
-                        </option>
-                      );
-                    })}
-                  </select>
+                  definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadDestinatario = elOption.id;
+                  definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadDestinatario = (e.target as HTMLSelectElement).value;
+                }}
+              >
+                <option id="1" value="DNI" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadDestinatario === 'DNI'}>
+                  DNI
+                </option>
+                <option id="6" value="RUC" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadDestinatario === 'RUC'}>
+                  RUC
+                </option>
+                <option
+                  id="4"
+                  value="C.EXT"
+                  selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadDestinatario === 'C.EXT'}
+                >
+                  C.EXT
+                </option>
+              </select>
+              <input
+                // id="in_BuscarDetraccion"
+                type="image"
+                src={images.searchPLUS}
+                title="Buscar datos de identidad"
+                height={16}
+                width={16}
+                // style={{ marginLeft: '2px', marginTop: '2px' }}
+                style={{ margin: '2px' }}
+                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaDestinatario = true)}
+              />
+            </div>
+          </div>
+          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaDestinatario && (
+            <div class="modal">
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="destinatario"
+                contexto="new_edit_guiaRemision"
+                rol="destinatario"
+              />
+            </div>
+          )}
+          {/* numero identidad*/}
+          <div class="form-control">
+            <label>Número identidad</label>
+            <div class="form-control form-agrupado">
+              <input
+                id="input_NumeroDocumentoIdentidad_DESTINATARIO"
+                type="number"
+                placeholder="Número Identidad Destinatario"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.numeroIdentidadDestinatario}
+                onChange$={(e) =>
+                  (definicion_CTX_GUIA_REMISION.numeroIdentidadDestinatario = (e.target as HTMLInputElement).value)
                 }
-              </div>
+              />
             </div>
-            {/* fecha    */}
-            {/* <div class="form-control">
-              <label>Fecha</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Fecha_Para_Venta"
-                  type="date"
-                  // disabled
-                  min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
-                  value={definicion_CTX_F_B_NC_ND.fecha}
-                  onChange$={(e) => {
-                    definicion_CTX_F_B_NC_ND.fecha = (e.target as HTMLInputElement).value;
-                  }}
-                  style={{ width: '100%' }}
-                />
-              </div>
-            </div>
-            <br></br> */}
           </div>
-          {/* ----------------------------------------------------- */}
-          {/* IGV - TC */}
-          <div>
-            {/* IGV */}
-            {/* <div class="form-control">
-              <label>IGV (%)</label>
-              <div class="form-control form-agrupado">
-                <strong style={{ fontSize: '0.9rem', fontWeight: '400', paddingLeft: '4px', paddingRight: '24px' }}>IGV</strong>
-                <input type="text" id="inputIGV" disabled value={definicion_CTX_F_B_NC_ND.igv + ' %'} style={{ width: '100%' }} />
-              </div>
+          {/* Razon Social / Nombre */}
+          <div class="form-control">
+            <label>Razón social / Nombre</label>
+            <div class="form-control form-agrupado">
+              <input
+                id="input_Nombre_DESTINATARIO"
+                type="text"
+                placeholder="Razón social / Nombre Destinatario"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.razonSocialNombreDestinatario}
+              />
             </div>
-            {/* Tipo Cambio    */}
-            {/* <div class="form-control">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
-                <input
-                  type="checkbox"
-                  id="chbx_TipoCambio_Para_Venta"
-                
-                  onClick$={(e) => {
-                    if (definicion_CTX_F_B_NC_ND.fecha === '') {
-                      alert('Ingrese la fecha para esta venta');
-                      (e.target as HTMLInputElement).checked = false;
-                      document.getElementById('in_Fecha_Para_Venta')?.focus();
-                      return;
-                    }
-                    obtenerTipoCambio(e.target as HTMLInputElement);
-                  }}
-                />
-                <strong
-                  style={{ fontSize: '0.9rem', fontWeight: '400', cursor: 'pointer' }}
-                  onClick$={() => {
-                    if ((document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked === false) {
-                      if (definicion_CTX_F_B_NC_ND.fecha === '') {
-                        alert('Ingrese la fecha para esta venta');
-                        // (e.target as HTMLInputElement).checked = false;
-                        (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
-                        document.getElementById('in_Fecha_Para_Venta')?.focus();
-                        return;
-                      }
-                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = true;
-                    } else {
-                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
-                      // definicion_CTX_F_B_NC_ND.enDolares = false;
-                    }
-                    obtenerTipoCambio(document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement);
-                    // document.getElementById('chbx_TipoCambio_Para_Venta')?.onclick;
-                  }}
-                >
-                  USD
-                </strong>
-              </div>
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputTipoCambio"
-                  type="number"
-                  value={definicion_CTX_F_B_NC_ND.tipoCambio}
-                  disabled
-                  style={{ width: '100%' }}
-                />
-              </div>
-            </div>
-            <br></br> */}
           </div>
-          {/* ----------------------------------------------------- */}
-          {/* VENDEDOR - METODO DE PAGO */}
-          <div>
-            {/* Método Pago */}
-            {/* <div class="form-control">
-              <label>Método de pago</label>
-              <div class="form-control form-agrupado" style={{ display: 'flex' }}>
-                <select
-                  id="metodoPago"
-                  value={definicion_CTX_F_B_NC_ND.metodoPago}
-                  // onChange={changeMetodoPago}
-                  onChange$={() => {
-                    definicion_CTX_F_B_NC_ND.verCuotasCredito = !definicion_CTX_F_B_NC_ND.verCuotasCredito;
-                  }}
-                  style={definicion_CTX_F_B_NC_ND.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* GENERALES DEL TRANSPORTISTA */}
+        <div>
+          {/* tipo de documento identidad*/}
+          <div class="form-control">
+            <label>Tipo documento</label>
+            <div class="form-control form-agrupado">
+              <select
+                id="select_TipoDocumentoLiteral_TRANSPORTISTA"
+                disabled
+                // value={6}
+                value={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const rere = e.target as HTMLSelectElement;
+                  const elOption = rere[idx];
+
+                  definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadTransportista = elOption.id;
+                  definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista = (e.target as HTMLSelectElement).value;
+                }}
+              >
+                <option id="1" value="DNI" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista === 'DNI'}>
+                  DNI
+                </option>
+                <option id="6" value="RUC" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista === 'RUC'}>
+                  RUC
+                </option>
+                <option
+                  id="4"
+                  value="C.EXT"
+                  selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista === 'C.EXT'}
                 >
-                  <option value={'CONTADO'}>CONTADO</option>
-                  <option value={'CRÉDITO'}>CRÉDITO</option>
-                </select>
-                {definicion_CTX_F_B_NC_ND.verCuotasCredito && (
-                  <button
-                    id="addCuota"
-                    class="btn"
-                    title="Adicionar cuota"
-                    onClick$={() => {
-                      (cuota.idAuxiliar = parseInt(elIdAuxiliar())),
-                        (cuota.fechaCuota = hoy()),
-                        (cuota.importeCuotaPEN = 0),
-                        (cuotaCredito_esEdit.value = false);
-                      definicion_CTX_ADD_VENTA.mostrarPanelCuotasCredito = true;
-                      definicion_CTX_ADD_VENTA.grabo_CuotaCredito = false;
-                    }}
-                  >
-                    Add cuota
-                  </button>
-                )}
-              </div>
+                  C.EXT
+                </option>
+              </select>
+              <input
+                // id="in_BuscarDetraccion"
+                type="image"
+                src={images.searchPLUS}
+                title="Buscar datos de identidad"
+                height={16}
+                width={16}
+                // style={{ marginLeft: '2px', marginTop: '2px' }}
+                style={{ margin: '2px' }}
+                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaTransportista = true)}
+              />
             </div>
-            {!definicion_CTX_F_B_NC_ND.verCuotasCredito && (
-              <div>
-                <input
-                  type="radio"
-                  value="Todo en efectivo"
-                  id="Todo en efectivo"
-                  name="Contado"
-                  checked={definicion_CTX_F_B_NC_ND.todoEnEfectivo}
-                  onChange$={(e) => {
-                    definicion_CTX_F_B_NC_ND.todoEnEfectivo = (e.target as HTMLInputElement).checked;
-                    definicion_CTX_F_B_NC_ND.unaParteEnEfectivo = !definicion_CTX_F_B_NC_ND.todoEnEfectivo;
-                  }}
-                />
-                <label for="Todo en efectivo">Todo en efectivo</label>
-                <br></br>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-                  <div>
-                    <input
-                      type="radio"
-                      value="Una parte en efectivo"
-                      id="Una parte en efectivo"
-                      name="Contado"
-                      checked={definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
-                      onChange$={(e) => {
-                        definicion_CTX_F_B_NC_ND.unaParteEnEfectivo = (e.target as HTMLInputElement).checked;
-                        definicion_CTX_F_B_NC_ND.todoEnEfectivo = !definicion_CTX_F_B_NC_ND.unaParteEnEfectivo;
-                      }}
-                    />
-                    <label for="Una parte en efectivo">Una parte en efectivo</label>
-                  </div>
-                  <input
-                    type="number"
-                    id="inputMontoEnEfectivo"
-                    placeholder="Efectivo"
-                    disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
-                    value={definicion_CTX_F_B_NC_ND.montoEnEfectivo}
-                    onChange$={(e) => (definicion_CTX_F_B_NC_ND.montoEnEfectivo = (e.target as HTMLInputElement).value)}
-                    onKeyPress$={(e) => {
-                      if (e.key === 'Enter') {
-                        document.getElementById('select_contado')?.focus();
-                      }
-                    }}
-                  />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-                  <select
-                    id="select_contado"
-                    disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
-                    value={definicion_CTX_F_B_NC_ND.otroMedioPago}
-                    onChange$={(e) => {
-                      definicion_CTX_F_B_NC_ND.otroMedioPago = (e.target as HTMLSelectElement).value;
-                      document.getElementById('in_otroMedio')?.focus();
-                    }}
-                    onKeyPress$={(e) => {
-                      if (e.key === 'Enter') {
-                        document.getElementById('inputMontoOtroMedioPago')?.focus();
-                      }
-                    }}
-                  >
-                    <option value={'TRANSFERENCIA DE FONDOS'}>TRANSFERENCIA DE FONDOS</option>
-                    <option value={'TARJETA DE CRÉDITO'}>TARJETA DE CRÉDITO</option>
-                    <option value={'TARJETA DE DÉBITO'}>TARJETA DE DÉBITO</option>
-                    <option value={'DEPÓSITO EN CUENTA'}>DEPÓSITO EN CUENTA</option>
-                  </select>
-                  <input
-                    type="number"
-                    id="inputMontoOtroMedioPago"
-                    placeholder="Otro medio"
-                    disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
-                    value={definicion_CTX_F_B_NC_ND.montoOtroMedioPago}
-                    onChange$={(e) => (definicion_CTX_F_B_NC_ND.montoOtroMedioPago = (e.target as HTMLInputElement).value)}
-                    onKeyPress$={(e) => {
-                      if (e.key === 'Enter') {
-                        document.getElementById('btnVerAlmacen')?.focus();
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-            {definicion_CTX_ADD_VENTA.mostrarPanelCuotasCredito && (
+          </div>
+          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaTransportista && (
+            <div class="modal">
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="transportista"
+                contexto="new_edit_guiaRemision"
+                rol="transportista"
+              />
+            </div>
+          )}
+          {/* numero identidad*/}
+          <div class="form-control">
+            <label>Número identidad</label>
+            <div class="form-control form-agrupado">
+              <input
+                id="input_NumeroDocumentoIdentidad_TRANSPORTISTA"
+                type="number"
+                placeholder="Número Identidad Transportista"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista}
+                onChange$={(e) =>
+                  (definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista = (e.target as HTMLInputElement).value)
+                }
+              />
+            </div>
+          </div>
+          {/* Razon Social / Nombre */}
+          <div class="form-control">
+            <label>Razón social / Nombre</label>
+            <div class="form-control form-agrupado">
+              <input
+                id="input_Nombre_TRANSPORTISTA"
+                type="text"
+                placeholder="Razón social / Nombre Transportista"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.razonSocialNombreTransportista}
+              />
+            </div>
+          </div>
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* CHOFERES */}
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              margin: '4px 0',
+            }}
+          >
+            <div style={{ marginBottom: '4px' }}>
+              <ElButton
+                id="btn_Add_Chofer"
+                class="btn"
+                name="Add chofer"
+                title="Add chofer"
+                onClick={$(() => {
+                  elChofSelecionado.value = [];
+                  definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarChofer = true;
+                })}
+              />
+            </div>
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarChofer && (
               <div class="modal">
-                <NewEditCuotaCreditoVenta
-                  ancho={280}
-                  esEdit={cuotaCredito_esEdit.value}
-                  cuota={cuota}
-                  
-                />
+                <BuscarChofer contexto="new_edit_guiaRemision" />
+                {/* <NewEditChofer choferSeleccionado={elChofSelecionado.value} /> */}
               </div>
             )}
-            {/* TABLA DE CUOTAS DE PAGO venta.verCuotasCredito &&   ctx_PanelVenta.grabo_cuotas_numero &&*/}
-            {/* {
-              <div class="form-control">
-                {definicion_CTX_F_B_NC_ND.cuotasCredito.length > 0 ? (
-                  <table style={{ fontSize: '0.7em', fontWeight: 'lighter', margin: '5px 0' }}>
-                    <thead>
-                      <tr>
-                        <th>Nro. Cuota</th>
-                        <th>Fecha</th>
-                        <th>Importe</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {definicion_CTX_F_B_NC_ND.cuotasCredito.map((value: any, index: any) => {
-                        const indexItem = index + 1;
-                        sumaCuotas = sumaCuotas + redondeo2Decimales(value.importeCuotaPEN);
+            {/* TABLA CHOFERES   */}
+            {definicion_CTX_GUIA_REMISION.choferes.length > 0 ? (
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
+                <thead>
+                  <tr>
+                    <th>Ítem</th>
+                    <th>Tipo</th>
+                    <th>Número</th>
+                    <th>Nombre</th>
+                    <th>Licencia</th>
+                    <th>Acc</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {definicion_CTX_GUIA_REMISION.choferes.map((iTChof: any, index: number) => {
+                    const indexItemChof = index + 1;
 
-                       
-                        return (
-                          <tr key={value.idAuxiliar}>
-                            <td data-label="Nro. Cuota" key={value.idAuxiliar}>{`${cerosALaIzquierda(indexItem, 3)}`}</td>
-                            <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fechaCuota)}</td>
-                            <td data-label="Importe" style={{ textAlign: 'end' }}>
-                           
-                              {`${value.importeCuotaPEN.toLocaleString('en-PE', {
-                                // style: 'currency',
-                                currency: 'PEN',
-                                minimumFractionDigits: 2,
-                              })}`}
-                            </td>
-                            <td data-label="Acciones" style={{ textAlign: 'center' }}>
-                              <ImgButton
-                                src={images.edit}
-                                alt="icono de editar"
-                                height={12}
-                                width={12}
-                                title="Editar ítem"
-                             
-                              />
-                              <ImgButton
-                                src={images.trash}
-                                alt="icono de eliminar"
-                                height={12}
-                                width={12}
-                                title="Eliminar ítem"
-                               
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th colSpan={2} style={{ textAlign: 'end' }}>
-                          Suma Cuotas
-                        </th>
-                        <th colSpan={1} style={{ textAlign: 'end' }}>
-                          {`${sumaCuotas.toLocaleString('en-PE', {
-                            style: 'currency',
-                            currency: 'PEN',
-                            minimumFractionDigits: 2,
-                          })}`}
-                        </th>
-                        <th></th>
+                    return (
+                      <tr key={iTChof.idAuxiliar}>
+                        <td data-label="Ítem">{cerosALaIzquierda(indexItemChof, 3)}</td>
+                        <td data-label="Tipo">{iTChof.tipoDocumentoIdentidad}</td>
+                        <td data-label="Número">{iTChof.numeroIdentidad}</td>
+                        <td data-label="Nombre">{iTChof.razonSocialNombre}</td>
+                        <td data-label="Licencia">{iTChof.licencia}</td>
+                        <td data-label="Acc" class="accionesLeft">
+                          <input
+                            type="image"
+                            src={images.edit}
+                            title="Editar ítem"
+                            alt="icono de editar"
+                            disabled
+                            height={14}
+                            width={14}
+                            style={{ marginRight: '4px' }}
+                            // onClick$={() => {
+                            //   elChofSelecionado.value = iTChof;
+                            //   definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelChofer = true;
+                            // }}
+                          />
+                          <input
+                            type="image"
+                            src={images.trash}
+                            title="Eliminar ítem"
+                            alt="icono de eliminar"
+                            height={14}
+                            width={14}
+                            onClick$={() => {
+                              borrarChofer.idAuxiliar = iTChof.idAuxiliar;
+                              // borrarChofer.codigoTCP = iTChof.codigoTCP;
+                              // borrarChofer.descripcionTCP = iTChof.descripcionTCP;
+                              // borrarChofer.fecha = iTChof.fecha;
+                              // borrarChofer.serie = iTChof.serie;
+                              // borrarChofer.numero = iTChof.numero;
+                              definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteChofer = true;
+                            }}
+                          />
+                        </td>
                       </tr>
-                    </tfoot>
-                  </table>
-                ) : definicion_CTX_F_B_NC_ND.verCuotasCredito ? (
-                  <i style={{ fontSize: '0.7rem' }}>No existen cuotas de crédito</i>
-                ) : (
-                  ''
-                )}
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <i style={{ fontSize: '0.8rem' }}>No existen ningún chofer</i>
+            )}
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteChofer && (
+              <div class="modal">
+                <BorrarChofer borrarChofer={borrarChofer} />
               </div>
-            }
-
-            <br></br> */}
+            )}
           </div>
-          {/* ----------------------------------------------------- */}
-          {/* BOTONES */}
-          <div>
-            {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', backgroundColor: '#74a6ab' }}>
-              <button
-                id="btnVerAlmacen"
-                onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarMercaderiaOUT = true)}
-                style={{ cursor: 'pointer' }}
-              >
-                Ver almacén
-              </button>
-              {definicion_CTX_ADD_VENTA.mostrarPanelBuscarMercaderiaOUT && (
-                <div class="modal">
-                  <BuscarMercaderiaOUT contexto="new_venta" esAlmacen={false} />
-                </div>
-              )}
-              <button
-                id="btnAddServicio"
-                onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarServicio = true)}
-                style={{ cursor: 'pointer' }}
-              >
-                Add servicio
-              </button>
-              {definicion_CTX_ADD_VENTA.mostrarPanelBuscarServicio && (
-                <div class="modal">
-                  <BuscarServicio contexto="new_venta" />
-                </div>
-              )}
-              <button id="btnAdjuntarOS" onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarOS = true)}>
-                Adjuntar O.S.
-              </button>
-              {definicion_CTX_ADD_VENTA.mostrarAdjuntarOS && (
-                <div class="modal">
-                  <AdjuntarOrdenServicio />
-                </div>
-              )}
-              <button
-                id="btnAdjuntarCotizacion"
-                onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarCotizacion = true)}
-                style={{ cursor: 'pointer' }}
-              >
-                Adjuntar cotización
-              </button>
-              {definicion_CTX_ADD_VENTA.mostrarAdjuntarCotizacion && (
-                <div class="modal">
-                  <AdjuntarCotizacion />
-                </div>
-              )}
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* UNIDADES DE TRANSPORTE */}
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              margin: '4px 0',
+            }}
+          >
+            <div style={{ marginBottom: '4px' }}>
+              <ElButton
+                id="bu_Add_UnidadTransporte"
+                class="btn"
+                name="Add unidad de transporte"
+                title="Add unidad de transporte"
+                onClick={$(() => {
+                  laUniSelecionada.value = [];
+                  definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarUnidadTransporte = true;
+                })}
+              />
             </div>
-            <br></br> */}
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarUnidadTransporte && (
+              <div class="modal">
+                <BuscarUnidadTransporte contexto="new_edit_guiaRemision" />
+              </div>
+            )}
+            {/* TABLA UNIDADES DE TRANSPORTE   */}
+            {definicion_CTX_GUIA_REMISION.unidadesTransporte.length > 0 ? (
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
+                <thead>
+                  <tr>
+                    <th>Ítem</th>
+                    <th>Placa</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Tarj.Circul./Certif.Habilit.</th>
+                    <th>Acc</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {definicion_CTX_GUIA_REMISION.unidadesTransporte.map((iTUnidadTra: any, index: number) => {
+                    const indexItemUT = index + 1;
+
+                    return (
+                      <tr key={iTUnidadTra.idAuxiliar}>
+                        <td data-label="Ítem">{indexItemUT}</td>
+                        <td data-label="Placa">{iTUnidadTra.placa}</td>
+                        <td data-label="Marca">{iTUnidadTra.vehiculoMarca}</td>
+                        <td data-label="Modelo">{iTUnidadTra.vehiculoModelo}</td>
+                        <td data-label="Tarj.Circul./Certif.Habilit.">{iTUnidadTra.tarjetaCirculacionCertificadoHabilitacion}</td>
+                        <td data-label="Acc" class="accionesLeft">
+                          {/* <input
+                            type="image"
+                            src={images.edit}
+                            title="Editar ítem"
+                            alt="icono de editar"
+                            height={14}
+                            width={14}
+                            style={{ marginRight: '4px' }}
+                            onClick$={() => {
+                              laUniSelecionada.value = iTUnidadTra;
+                              definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelEditarUnidadTransporte = true;
+                            }}
+                          /> */}
+                          <input
+                            type="image"
+                            src={images.trash}
+                            title="Eliminar ítem"
+                            alt="icono de eliminar"
+                            height={14}
+                            width={14}
+                            // onClick$={() => {
+                            //   borrarDocumento.idAuxiliar = iTDocAdj.idAuxiliar;
+                            //   borrarDocumento.codigoTCP = iTDocAdj.codigoTCP;
+                            //   borrarDocumento.descripcionTCP = iTDocAdj.descripcionTCP;
+                            //   borrarDocumento.fecha = iTDocAdj.fecha;
+                            //   borrarDocumento.serie = iTDocAdj.serie;
+                            //   borrarDocumento.numero = iTDocAdj.numero;
+                            //   definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN = true;
+                            // }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <i style={{ fontSize: '0.8rem' }}>No existen ninguna unidad de transporte</i>
+            )}
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteUnidadTransporte && (
+              <div class="modal">
+                <BorrarUnidadTransporte borrarUnidadTransporte={borrarUnidadTransporte} />
+              </div>
+            )}
           </div>
-          {/* ----------------------------------------------------- */}
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* BULTOS / PALLETS / PESO BRUTO*/}
+        <div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+            <div>
+              <input
+                id="input_BultosPallets_GR"
+                type="number"
+                placeholder="Número bultos o pallets"
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.numeroBultosPallets}
+                onChange$={(e) => (definicion_CTX_GUIA_REMISION.numeroBultosPallets = (e.target as HTMLInputElement).value)}
+              />
+            </div>
+            <div>
+              <input
+                id="input_PesoBrutoTotal_GR"
+                type="number"
+                placeholder="Peso bruto total"
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.pesoBrutoTotal}
+                onChange$={(e) => (definicion_CTX_GUIA_REMISION.pesoBrutoTotal = (e.target as HTMLInputElement).value)}
+              />
+              <label>KGM</label>
+            </div>
+          </div>
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* OBSERVACION */}
+        <div>
           {/* OBSERVACION */}
-          <div>
-            {/* OBSERVACION */}
-            {/* <div class="form-control">
-              <label>Observación</label>
-              <div class="form-control form-agrupado">
-                <input
-                  type="text"
-                  id="in_Observacion"
-                  value={definicion_CTX_F_B_NC_ND.observacion}
-                  style={{ width: '100%', background: 'yellow' }}
-                  placeholder="Observación"
-                  onChange$={(e) => {
-                    definicion_CTX_F_B_NC_ND.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
-                  }}
-                />
-              </div>
+          <div class="form-control">
+            <label>Observación</label>
+            <div class="form-control form-agrupado">
+              <input
+                type="text"
+                id="in_Observacion"
+                value={definicion_CTX_GUIA_REMISION.observacion}
+                style={{ width: '100%', background: 'yellow' }}
+                placeholder="Observación"
+                onChange$={(e) => {
+                  definicion_CTX_GUIA_REMISION.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
+                }}
+              />
             </div>
-            <br></br> */}
           </div>
-          {/* ----------------------------------------------------- */}
-          {/* ----------------------------------------------------- */}
-          {/* ----------------------------------------------------- */}
-          {/*  tabla ITEMS - VENTA */}
-          {
-            <div class="form-control">
-              {/* {definicion_CTX_F_B_NC_ND.itemsVenta.length > 0 ? (
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* BOTONES */}
+        <div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', backgroundColor: '#74a6ab' }}>
+            <button
+              id="btn_VerAlmacen_IN_GR"
+              onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarMercaderiaIN = true)}
+              style={{ cursor: 'pointer' }}
+            >
+              Ingreso Mercadería
+            </button>
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarMercaderiaIN && (
+              <div class="modal">
+                <BuscarMercaderiaIN contexto="new_edit_guiaRemision" esAlmacen={false} igv={18} />
+              </div>
+            )}
+            <button
+              id="btn_VerAlmacen_OUT_GR"
+              onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarMercaderiaOUT = true)}
+              style={{ cursor: 'pointer' }}
+            >
+              Salida Mercadería
+            </button>
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarMercaderiaOUT && (
+              <div class="modal">
+                <BuscarMercaderiaOUT contexto="new_edit_guiaRemision" esAlmacen={false} porcentaje={18} />
+              </div>
+            )}
+          </div>
+          <br />
+        </div>
+
+        {/* ----------------------------------------------------- */}
+        {/* ----------------------------------------------------- */}
+        {/* ----------------------------------------------------- */}
+        {/*  tabla ITEMS - GUIA REMISION */}
+        {
+          <div class="form-control">
+            {/* {definicion_CTX_F_B_NC_ND.itemsVenta.length > 0 ? (
                 <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
@@ -788,7 +1073,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                             {iTVen.descripcionEquivalencia}
                           </td>
                           {/* ----------------------------------------------------- */}
-              {/*  <td data-label="Cantidad" class="comoNumero">
+            {/*  <td data-label="Cantidad" class="comoNumero">
                             <input
                               type="number"
                               style={{ width: '60px', textAlign: 'end' }}
@@ -811,7 +1096,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                             {iTVen.unidadEquivalencia}
                           </td>
                           {/* ----------------------------------------------------- */}
-              {/*  <td data-label="Precio Uni" class="comoNumero">
+            {/*  <td data-label="Precio Uni" class="comoNumero">
                             <input
                               type="number"
                               style={{ width: '60px', textAlign: 'end' }}
@@ -843,7 +1128,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                             />
                           </td>
                           {/* ----------------------------------------------------- */}
-              {/*   <td data-label="Venta" class="comoNumero">
+            {/*   <td data-label="Venta" class="comoNumero">
                             {iTVen.ventaPEN ? iTVen.ventaPEN : iTVen.ventaPEN.$numberDecimal}
                           </td>
                           <td data-label="Exo" class="acciones">
@@ -948,26 +1233,20 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
               ) : (
                 <i style={{ fontSize: '0.7rem' }}>No existen ítems para la venta</i>
               )} */}
-              {/* {definicion_CTX_ADD_VENTA.mostrarPanelBorrarItemVenta && (
+            {/* {definicion_CTX_ADD_VENTA.mostrarPanelBorrarItemVenta && (
                 <div class="modal">
                   <BorrarItemVenta borrarItemVenta={borrarItemVenta} />
                 </div>
               )} */}
-            </div>
-          }
-        </div>
-        {/* <input
+          </div>
+        }
+        <input
           type="submit"
-          value={botonGrabar.value === '' ? 'Grabar' : `${botonGrabar.value}`}
+          // value={botonGrabar.value === '' ? 'Grabar' : `${botonGrabar.value}`}
           class="btn-centro"
-          onClick$={() => grabandoVenta()}
-        /> */}
-        {/* {pasoProcesoGrabacion.value &&
-          (grabo.value ? (
-            <label style={{ color: 'green' }}>Registro SATISFACTORIO!!!</label>
-          ) : (
-            <label style={{ color: 'red' }}>Inconveniente en registro.</label>
-          ))} */}
+          // onClick$={() => grabandoVenta()}
+        />
+        {/* *************** */}
       </div>
     </div>
   );

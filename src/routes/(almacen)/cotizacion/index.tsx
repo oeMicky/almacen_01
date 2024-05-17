@@ -99,7 +99,7 @@ export default component$(() => {
           {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
         </h1> */}
         <div style={{ background: '#00778F' }}>
-          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
+          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.8rem', paddingLeft: '2px' }}>
             {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
               .getItem('empresa')
               ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -156,7 +156,7 @@ export default component$(() => {
         </div> */}
         {/* <button onClick$={() => console.log('parametros', parametrosGlobales)}>ver param</button> */}
         {/*  BOTONES */}
-        <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
+        <div style={{ marginBottom: '8px', paddingLeft: '2px' }}>
           <ElButton
             name="ADD COTIZACION"
             title="Add una cotización"
@@ -184,7 +184,7 @@ export default component$(() => {
           />
           <ElSelect
             id={'se_periodo'}
-            estilos={{ width: '168px', marginLeft: '5px' }}
+            estilos={{ width: '168px', marginLeft: '4px' }}
             registros={losPeriodosCargados.value}
             registroID={'_id'}
             registroTEXT={'periodo'}
@@ -247,7 +247,7 @@ export default component$(() => {
           )}
         </div>
         {/* TABLA COTIZACIONES */}
-        <div style={{ margin: '10px 0' }}>
+        <div style={{ margin: '8px 0' }}>
           {buscarCotizaciones.value > 0 ? (
             <TablaCotizaciones
               buscarCotizaciones={buscarCotizaciones.value}

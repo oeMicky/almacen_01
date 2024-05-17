@@ -126,7 +126,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
   return (
     <div
       style={{
-        width: 'clamp386px, 86%, 700px)',
+        width: 'clamp(386px, 86%, 700px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -137,8 +137,8 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_buscar_servicio.mostrarPanelNewEditServicio = false;

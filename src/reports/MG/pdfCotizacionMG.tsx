@@ -11,8 +11,10 @@ import {
   redondeo2Decimales,
 } from '~/functions/comunes';
 import logit from '../../assets/base64/imagesBase64.js';
+import { parametrosGlobales } from '~/routes/login';
 // import logosEMPS from '../../assets/logosEmpresas/20602683321.js';
 // import { parametrosGlobales } from '~/routes/login';
+// import dynamicImport from 'vite-plugin-dynamic-import';
 
 async function pdfCotizacionMG(cotizacion: any) {
   pdfMake.vfs = pdfFonts;
@@ -21,8 +23,13 @@ async function pdfCotizacionMG(cotizacion: any) {
 
   // const KKK = `20602683321`;
   // const rutaDelLogo = `../../assets/logosEmpresas/module-${KKK}.js`; // '../../assets/logosEmpresas/' + parametrosGlobales.RUC + '.js';
+  // const rutaDelLogo = `module-20602683321`;
+  // const rutaDelLogo = `20602683321`;
   // console.log('rutaDelLogo', rutaDelLogo);
-  // let EL_LOGO = await import(rutaDelLogo);
+  const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
+  // const EL_LOGO = await import(`./pres/${rutaDelLogo}.js`);
+  // console.log('EL_LOGO', EL_LOGO.default);
+  // console.log('EL_LOGO.logo', EL_LOGO.logo);
 
   const servicios = cotizacion.servicios;
   const repuestosLubri = cotizacion.repuestosLubri;
@@ -32,26 +39,30 @@ async function pdfCotizacionMG(cotizacion: any) {
   const reportTitle: any = [];
   // const details = [];
   // const rodape = [];
+  console.log('servoc', servicios);
 
   const losServicios = servicios.map((ser: any, index: number) => {
-    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
+    const { tipo, descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
-    totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
+    if (tipo === 'SERVICIO') {
+      totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
+    }
+
     return [
       { text: indexItem, style: 'tableBody' },
       // { text: codigo, style: 'tableBody' },
-      { text: descripcionEquivalencia, style: 'tableBody' },
+      { text: descripcionEquivalencia, style: 'tableBody_Descripcion' },
       {
-        text: formatear_4Decimales(cantidadEquivalencia.$numberDecimal),
+        text: tipo === 'SERVICIO' ? formatear_4Decimales(cantidadEquivalencia.$numberDecimal) : '',
         style: 'tableBody',
       },
       { text: unidadEquivalencia, style: 'tableBody' },
       {
-        text: formatearMonedaPEN(precioPEN.$numberDecimal),
+        text: tipo === 'SERVICIO' ? formatearMonedaPEN(precioPEN.$numberDecimal) : '',
         style: 'tableBody',
       },
       {
-        text: formatearMonedaPEN(ventaPEN.$numberDecimal),
+        text: tipo === 'SERVICIO' ? formatearMonedaPEN(ventaPEN.$numberDecimal) : '',
         style: 'tableBody',
       },
     ];
@@ -105,12 +116,17 @@ async function pdfCotizacionMG(cotizacion: any) {
     pageSize: 'A4',
     pageMargins: [13, 11, 13, 15],
 
+    // if (conWaterMarker) {
+
+    // }
+    // watermark: { text: 'cao-systems software', color: 'blue', opacity: 0.3, bold: true, italics: false },
+
     header: [reportTitle],
     content: [
       {
         // margin: [izq, top, der, button],
         columns: [
-          { width: '30%', margin: [45, 11, 0, 2], image: 'logo', fit: [190, 66] },
+          { width: '30%', margin: [45, 11, 0, 2], image: 'logoEmp', fit: [190, 66] },
           {
             width: '30%',
             margin: [20, 11, 18, 0],
@@ -348,6 +364,11 @@ async function pdfCotizacionMG(cotizacion: any) {
         color: '#50575E',
         alignment: 'center',
       },
+      tableBody_Descripcion: {
+        fontSize: 8,
+        color: '#50575E',
+        alignment: 'start',
+      },
       tableBodyRight: {
         fontSize: 8,
         color: '#50575E',
@@ -395,8 +416,8 @@ async function pdfCotizacionMG(cotizacion: any) {
       },
     },
     images: {
-      // logo: EL_LOGO,
-      logo: logit.logoMerma,
+      logoEmp: LOGO_EMPRESA.default,
+      // logo: logit.logoMerma,
       poweredBy: logit.logoPiePagina,
       // poweredBy: images.logoPiePagina,
 

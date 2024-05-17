@@ -65,8 +65,8 @@ export default component$((props: { lineaTipoSelecc: any }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx_new_edit_mercaderia_in.mostrarPanelNewEditLineaTipoIN = false;

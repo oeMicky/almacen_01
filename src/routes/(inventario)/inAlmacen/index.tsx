@@ -1,37 +1,40 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { getIgvsCompra } from '~/apis/compra.api';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
-import { getIgvVenta } from '~/apis/venta.api';
+// import { getIgvVenta } from '~/apis/venta.api';
 import { images } from '~/assets';
-import NewOutAlmacen from '~/components/outAlmacen/newOutAlmacen';
-import TablaOutsAlmacen from '~/components/outAlmacen/tablaOutsAlmacen';
+import NewInAlmacen from '~/components/inAlmacen/newInAlmacen';
+import TablaInsAlmacen from '~/components/inAlmacen/tablaInsAlmacen';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
-import Spinner from '~/components/system/spinner';
 // import ImgButton from '~/components/system/imgButton';
+import Spinner from '~/components/system/spinner';
 // import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
-export const CTX_INDEX_OUT_ALMACEN = createContextId<any>('index_out_almacen');
+export const CTX_INDEX_IN_ALMACEN = createContextId<any>('index_in_almacen');
 
 export default component$(() => {
-  //#region DEFINICION CTX_INDEX_OUT_ALMACEN
-  const definicion_CTX_INDEX_OUT_ALMACEN = useStore({
-    oNS: [],
-    mostrarPanelNewOutAlmacen: false,
-    grabo_OutAlmacen: false,
+  //#region DEFINICION CTX_INDEX_IN_ALMACEN
+  const definicion_CTX_INDEX_IN_ALMACEN = useStore({
+    iNS: [],
+    mostrarPanelNewInAlmacen: false,
+    grabo_InAlmacen: false,
 
     mostrarSpinner: false,
   });
-  useContextProvider(CTX_INDEX_OUT_ALMACEN, definicion_CTX_INDEX_OUT_ALMACEN);
-  //#endregion DEFINICION CTX_INDEX_OUT_ALMACEN
+  useContextProvider(CTX_INDEX_IN_ALMACEN, definicion_CTX_INDEX_IN_ALMACEN);
+  //#endregion DEFINICION CTX_INDEX_IN_ALMACEN
 
   //#region INICIALIZACION
   const ini = useSignal(0);
-  const buscarOUTAlmacen = useSignal(0);
+  const buscarInAlmacen = useSignal(0);
   // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
-  const igv = useSignal(0);
+  // const igv = useSignal(0);
+  const losIgvsCompra = useSignal([]);
+  const igvCompraPorDefault = useStore({ idElIgv: '', elIgv: '' });
   const porFechasT_porPeriodoF = useSignal(false);
 
   const parametrosBusqueda = useStore({
@@ -50,7 +53,7 @@ export default component$(() => {
   //   const losPeri = await getPeriodos({
   //     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
   //     idEmpresa: parametrosGlobales.idEmpresa,
-  //     bandera: 'outAlmacen',
+  //     bandera: 'inAlmacen',
   //   });
   //   console.log('losPeri', losPeri);
   //   losPeriodosCargados.value = losPeri.data;
@@ -65,16 +68,16 @@ export default component$(() => {
   // });
   //#endregion OBTENER PERIODOS
 
-  //#region ACTUALIZAR TABLA OUT ALMACEN
+  //#region ACTUALIZAR TABLA IN ALMACEN
   useTask$(({ track }) => {
-    track(() => definicion_CTX_INDEX_OUT_ALMACEN.grabo_OutAlmacen);
-    if (definicion_CTX_INDEX_OUT_ALMACEN.grabo_OutAlmacen) {
+    track(() => definicion_CTX_INDEX_IN_ALMACEN.grabo_InAlmacen);
+    if (definicion_CTX_INDEX_IN_ALMACEN.grabo_InAlmacen) {
       porFechasT_porPeriodoF.value = false;
-      buscarOUTAlmacen.value++;
-      definicion_CTX_INDEX_OUT_ALMACEN.grabo_OutAlmacen = false;
+      buscarInAlmacen.value++;
+      definicion_CTX_INDEX_IN_ALMACEN.grabo_InAlmacen = false;
     }
   });
-  //#endregion ACTUALIZAR TABLA OUT ALMACEN
+  //#endregion ACTUALIZAR TABLA IN ALMACEN
 
   return (
     <div class="container">
@@ -95,21 +98,23 @@ export default component$(() => {
       <h4 style={{ margin: '8px 0 0 2px' }}>
         <u>Almacén: </u>
       </h4>
-      {/* EGRESOS DE MERCADERIAS */}
+      {/* SUB - TITULO: INGRESOS DE MERCADERIAS   border: '1px solid #ff0000',   border: '1px solid blue'*/}
       <h4 style={{ margin: '4px 0 4px 0', display: 'flex' }}>
         <img
-          src={images.almacenOut}
+          src={images.almacenIn}
           width={'21'}
           height={'21'}
+          // style={{ marginRight: '4px ', left: 0, position: 'absolute' }}
           style={{ marginRight: '2px ', left: 0 }}
           // onClick={() => console.log('ingreso')}
-        ></img>
-        <label>Egresos de mercaderías</label>
+        />
+        <label>Ingresos de mercaderías</label>
+        {/* <label style={{ left: '24px', position: 'relative' }}>Ingresos de mercaderías</label> */}
       </h4>
       {/* DESDE - HASTA   */}
       {/* <div class="intervalo-fechas">
         <label class="fechas">
-          Desde:
+          Desde:{' '}
           <input
             id="in_fechaDesde"
             type="date"
@@ -119,8 +124,8 @@ export default component$(() => {
             }}
           />
         </label>
-        <label class="fechas" style={{ marginLeft: '4px' }}>
-          Hasta:
+        <label class="fechas">
+          Hasta:{' '}
           <input
             id="in_fechaHasta"
             type="date"
@@ -138,25 +143,35 @@ export default component$(() => {
             width={16}
             title="Buscar ventas"
             onClick={$(() => {
+              if (parametrosBusqueda.fechaInicio.trim() === '') {
+                alert('Verifique la fecha inicial');
+                document.getElementById('in_fechaDesde')?.focus();
+                return;
+              }
+              if (parametrosBusqueda.fechaFinal.trim() === '') {
+                alert('Verifique la fecha final');
+                document.getElementById('in_fechaHasta')?.focus();
+                return;
+              }
               if (parametrosBusqueda.fechaInicio > parametrosBusqueda.fechaFinal) {
                 alert('Verifique las fechas de busqueda');
                 document.getElementById('in_fechaDesde')?.focus();
                 return;
               }
               porFechasT_porPeriodoF.value = true;
-              buscarOUTAlmacen.value++;
+              buscarInAlmacen.value++;
               // console.log('buscarCotizaciones.value', buscarCotizaciones.value);
             })}
             // onClick={buscarCotizacionesEntreFechas}
           />
         </div>
       </div> */}
-      {/* ADD EGRESO DE MERCADERIAS */}
+      {/* ADD INGRESO DE MERCADERIAS */}
       <div>
         <ElButton
-          name="ADD EGRESO DE MERCADERÍAS"
-          title="Add un nuevo egreso de mercaderías"
-          estilos={{ marginLeft: '5px' }}
+          name="ADD INGRESO DE MERCADERÍAS"
+          title="Add un nuevo ingreso de mercaderías"
+          style={{ marginLeft: '5px' }}
           onClick={$(async () => {
             //validar PERIODO
             if (periodo.idPeriodo === '') {
@@ -165,42 +180,57 @@ export default component$(() => {
               ini.value++;
               return;
             }
-            //
-            let elIgv = await getIgvVenta(parametrosGlobales);
+            // obteniendo IGVs de COMPRA
+            let elIgv = await getIgvsCompra({
+              idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+              idEmpresa: parametrosGlobales.idEmpresa,
+            });
             elIgv = elIgv.data;
+            console.log('elIgv', elIgv);
+            losIgvsCompra.value = elIgv;
+            const tre = elIgv.filter((docs: any) => docs.default === true);
+            // console.log('tre', tre);
+            igvCompraPorDefault.idElIgv = tre[0]._id;
+            igvCompraPorDefault.elIgv = tre[0].igv;
+            // console.log('igvCompraPorDefault', igvCompraPorDefault);
+            //
+            // let elIgv = await getIgvVenta(parametrosGlobales);
+            // elIgv = elIgv.data;
             // console.log('elIgv', elIgv);
-            igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
+            // igv.value = elIgv[0].igv;
             // console.log('igv.value::', igv.value);
-            // showAddCotizacion.value = true;
-            definicion_CTX_INDEX_OUT_ALMACEN.oNS = [];
-            definicion_CTX_INDEX_OUT_ALMACEN.mostrarPanelNewOutAlmacen = true;
+
+            definicion_CTX_INDEX_IN_ALMACEN.iNS = [];
+            definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen = true;
           })}
         />
         <ElSelect
-          id={'se_periodo_OUT_ALMACEN'}
+          id={'se_periodo_IN_ALMACEN'}
           // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
-          estilos={{ width: '203px', marginLeft: '4px' }}
+          estilos={{ width: '168px', marginLeft: '5px' }}
           registros={losPeriodosCargados.value}
           registroID={'_id'}
           registroTEXT={'periodo'}
           seleccione={'-- Seleccione periodo --'}
           onChange={$(() => {
             // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-            const elSelec = document.getElementById('se_periodo_OUT_ALMACEN') as HTMLSelectElement;
+            const elSelec = document.getElementById('se_periodo_IN_ALMACEN') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
             // console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
             if (periodo.idPeriodo === '') {
               periodo.periodo = '';
+              parametrosBusqueda.periodo = '';
             } else {
               periodo.periodo = elSelec.value;
+              parametrosBusqueda.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
               // console.log('💨💨💨💨💨💨first', periodo);
               // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
-              buscarOUTAlmacen.value++;
+              buscarInAlmacen.value++;
 
-              definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner = true;
+              definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = true;
             }
           })}
           onKeyPress={$((e: any) => {
@@ -211,40 +241,44 @@ export default component$(() => {
         />
         <input
           type="image"
-          title="Buscar egresos"
+          title="Buscar ingresos"
           alt="icono buscar"
           height={16}
           width={16}
           src={images.searchPLUS}
           style={{ marginLeft: '2px' }}
           onClick$={() => {
-            if (periodo.idPeriodo === '') {
-              alert('Seleccione un periodo');
-              document.getElementById('se_periodo_OUT_ALMACEN')?.focus();
+            if (parametrosBusqueda.idPeriodo === '') {
+              alert('Debe seleccionar el periodo');
+              document.getElementById('se_periodo_IN_ALMACEN')?.focus();
               return;
             }
-            buscarOUTAlmacen.value++;
-            definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner = true;
+            buscarInAlmacen.value++;
+
+            definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = true;
           }}
         />
-        {/* <button
-          onClick$={() =>
-            console.log('parametrosGlobales.periodos outAlmacen - ini.value', parametrosGlobales.periodos, ini.value)
-          }
-        >
-          los
-        </button> */}
-        {definicion_CTX_INDEX_OUT_ALMACEN.mostrarPanelNewOutAlmacen && (
+        {definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen && (
           <div class="modal">
-            <NewOutAlmacen addPeriodo={periodo} outSelecci={definicion_CTX_INDEX_OUT_ALMACEN.oNS} igv={igv.value} />
+            <NewInAlmacen
+              addPeriodo={periodo}
+              inSelecci={definicion_CTX_INDEX_IN_ALMACEN.iNS}
+              losIgvsCompra={losIgvsCompra.value}
+              igvCompraPorDefault={igvCompraPorDefault}
+              // contexto={CTX_COTIZACION}
+              // ancho={'600px'}
+              // parametrosGlobales={parametrosGlobales}
+              // inicializacion={inicializacionCotizacion}
+              // onCerrar={cerrarPanelCotizacion}
+            />
           </div>
         )}
       </div>
-      {/*  tabla EGRESOS DE MERCADERIA */}
+      {/*  tabla INGRESOS DE MERCADERIA */}
       <div style={{ margin: '10px 0' }}>
-        {buscarOUTAlmacen.value > 0 ? (
-          <TablaOutsAlmacen
-            buscarOUTAlmacen={buscarOUTAlmacen.value}
+        {buscarInAlmacen.value > 0 ? (
+          <TablaInsAlmacen
+            buscarInAlmacen={buscarInAlmacen.value}
             porFechasT_porPeriodoF={porFechasT_porPeriodoF.value}
             parametrosBusqueda={parametrosBusqueda}
           />
@@ -253,7 +287,7 @@ export default component$(() => {
         )}
       </div>
       {/* MOSTRAR SPINNER */}
-      {definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner && (
+      {definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner && (
         <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>

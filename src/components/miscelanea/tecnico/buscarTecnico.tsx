@@ -53,7 +53,7 @@ export default component$((props: { contexto: string }) => {
   });
   //#endregion BUSCAR TÉCNICOS
 
-  //#region SELECCIONO PERSONA
+  //#region SELECCIONO PERSONA -> INSERTAR TECNICO
   useTask$(async ({ track }) => {
     track(() => definicion_CTX_BUSCAR_TECNICO.selecciono_Persona);
     if (definicion_CTX_BUSCAR_TECNICO.selecciono_Persona) {
@@ -76,7 +76,7 @@ export default component$((props: { contexto: string }) => {
       definicion_CTX_BUSCAR_TECNICO.selecciono_Persona = false;
     }
   });
-  //#endregion SELECCIONO PERSONA
+  //#endregion SELECCIONO PERSONA -> INSERTAR TECNICO
 
   return (
     <>
@@ -99,8 +99,8 @@ export default component$((props: { contexto: string }) => {
           <ImgButton
             src={images.x}
             alt="Icono de cerrar"
-            height={16}
-            width={16}
+            height={18}
+            width={18}
             title="Cerrar el formulario"
             onClick={$(() => {
               ctx.mostrarPanelBuscarTecnico = false;
@@ -172,26 +172,28 @@ export default component$((props: { contexto: string }) => {
                     (e.target as HTMLInputElement).select();
                   }}
                 />
-                <ImgButton
+                <input
+                  type="image"
                   src={images.searchPLUS}
                   alt="Icono de buscar técnico"
                   height={16}
                   width={16}
                   title="Buscar técnico"
-                  onClick={$(() => {
+                  onClick$={() => {
                     localizarTecnicos();
-                  })}
+                  }}
                 />
-                <ImgButton
+                <input
+                  type="image"
                   src={images.add}
                   alt="Icono de adicionar persona"
                   height={16}
                   width={16}
                   title="Adicionar persona"
-                  onClick={$(() => {
+                  onClick$={() => {
                     definicion_CTX_BUSCAR_TECNICO.tT = [];
                     definicion_CTX_BUSCAR_TECNICO.mostrarPanelBuscarPersona = true;
-                  })}
+                  }}
                 />
               </div>
             </div>

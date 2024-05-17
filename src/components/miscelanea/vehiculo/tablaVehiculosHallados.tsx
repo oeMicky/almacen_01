@@ -1,4 +1,4 @@
-import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_VEHICULO } from './buscarVehiculo';
 import type { IVehiculo } from '~/interfaces/iVehiculo';
@@ -6,9 +6,11 @@ import type { IVehiculo } from '~/interfaces/iVehiculo';
 import { images } from '~/assets';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO, CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
+// import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
+import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from '../unidadTransporte/buscarUnidadTransporte';
 
 export default component$((props: { buscarVehiculos: number; parametrosBusqueda: any; contexto: string }) => {
-  useStylesScoped$(style);
+  useStyles$(style);
 
   //#region CONTEXTOS
   let ctx: any = [];
@@ -19,14 +21,14 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
       documento = useContext(CTX_O_S);
       console.log('swicth.......useContext(CTX_NEW_EDIT_ORDEN_SERVICIO)');
       break;
-    // case 'venta':
-    //   ctx = useContext(CTX_DOCS_VENTA);
-    //   console.log('swicth.......useContext(CTX_DOCS_VENTA)');
-    //   break;
+
     case 'cotizacion':
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
       documento = useContext(CTX_COTIZACION);
       console.log('swicth.......useContext(CTX_NEW_EDIT_COTIZACION)');
+      break;
+    case 'buscar_unidadTransporte':
+      ctx = useContext(CTX_BUSCAR_UNIDAD_TRANSPORTE);
       break;
   }
 
@@ -153,7 +155,10 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                                 documento.idVehiculoModelo = idVehiculoModelo;
                                 documento.vehiculoModelo = vehiculoModelo;
                                 documento.vin = vin;
+                                console.log('ctx_rol', documento);
 
+                                ctx.selecciono_Vehiculo = true;
+                                ctx.idVehiculo = _id;
                                 ctx.mostrarPanelBuscarVehiculo = false;
                               }}
                             />

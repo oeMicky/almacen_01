@@ -24,7 +24,7 @@ import { parametrosGlobales } from '~/routes/login';
 import style from '../../tabla/tabla.css?inline';
 import { inUpMercaderia } from '~/apis/mercaderia.api';
 import NewEditMarcaIN from './newEditMarcaIN';
-import { CTX_INDEX_KARDEX } from '~/routes/(almacen)/kardex';
+import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import BuscarUnidadSUNAT from './buscarUnidadSUNAT';
 
 export const CTX_NEW_EDIT_MERCADERIA_IN = createContextId<any>('new_edit_mercaderia_IN');
@@ -502,8 +502,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelNewEditMercaderiaIN = false;

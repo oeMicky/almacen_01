@@ -1,4 +1,4 @@
-import { component$, useStylesScoped$ } from '@builder.io/qwik';
+import { component$, useStyles$ } from '@builder.io/qwik';
 import { Link, useNavigate } from '@builder.io/qwik-city';
 // import { CaoSLogo } from '../icons/cao-s';
 import style from './headerAlmacen.css?inline';
@@ -9,7 +9,7 @@ import { parametrosGlobales } from '~/routes/login';
 // export const CTX_HEADER_ALMACEN = createContextId<any>('__header_almacen');
 
 export default component$(() => {
-  useStylesScoped$(style);
+  useStyles$(style);
 
   //#region HEADER ALMACEN
   // const definicion_CTX_HEADER_ALMACEN = useStore({
@@ -67,11 +67,11 @@ export default component$(() => {
             >
               <input
                 type="image"
-                title="Ir a ventas"
+                src={images.Fac}
+                title="Facturación electronica"
                 alt="Boton venta"
                 width={30}
                 height={30}
-                src={images.Fac}
                 onClick$={() => {
                   navegarA('/venta/');
                   // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
@@ -89,11 +89,11 @@ export default component$(() => {
             >
               <input
                 type="image"
-                title="Ir a reporte ventas"
+                src={images.Rp}
+                title="Reporte ventas"
                 alt="Boton reporte venta"
                 width={30}
                 height={30}
-                src={images.Rp}
                 onClick$={() => {
                   navegarA('/reporteVenta/');
                   // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
@@ -111,11 +111,11 @@ export default component$(() => {
             >
               <input
                 type="image"
+                src={images.Cp}
                 title="Ir a compras"
                 alt="Boton venta"
                 width={30}
                 height={30}
-                src={images.Cp}
                 onClick$={() => {
                   navegarA('/compra/');
                   // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
@@ -145,7 +145,7 @@ export default component$(() => {
                 <img src={images.Os} style={{ width: '30px' }} />
               </Link>
             </li>
-            {/* <li
+            <li
               class="main-menu__item"
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
@@ -154,7 +154,7 @@ export default component$(() => {
               <Link href="/guiaRemision/">
                 <img src={images.Gr128} style={{ width: '30px' }} />
               </Link>
-            </li> */}
+            </li>
             <li
               hidden={!parametrosGlobales.almacenActivo}
               class="main-menu__item"

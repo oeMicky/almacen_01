@@ -13,6 +13,7 @@ import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_TECNICO } from '../tecnico/buscarTecnico';
 import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import { CTX_DESTINATARIO_GR, CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
+import { CTX_BUSCAR_CHOFER } from '../chofer/buscarChofer';
 
 //parametrosBusqueda: any;
 export default component$(
@@ -85,6 +86,9 @@ export default component$(
         break;
       case 'buscar_tecnico':
         ctx = useContext(CTX_BUSCAR_TECNICO);
+        break;
+      case 'buscar_chofer':
+        ctx = useContext(CTX_BUSCAR_CHOFER);
         break;
     }
     //
@@ -179,17 +183,6 @@ export default component$(
           return res.json();
         }
       }
-
-      // const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerPersonasPorDniRuc', {
-      //   // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(props.parametrosBusqueda),
-      //   signal: abortController.signal,
-      // });
-      // return res.json();
     });
     //#endregion BUSCANDO REGISTROS
 
