@@ -19,7 +19,7 @@ import { parametrosGlobales } from '~/routes/login';
 async function pdfCotizacionMG(cotizacion: any) {
   pdfMake.vfs = pdfFonts;
 
-  console.log('cotizacion PDF', cotizacion);
+  // console.log('cotizacion PDF', cotizacion);
 
   // const KKK = `20602683321`;
   // const rutaDelLogo = `../../assets/logosEmpresas/module-${KKK}.js`; // '../../assets/logosEmpresas/' + parametrosGlobales.RUC + '.js';
@@ -132,6 +132,10 @@ async function pdfCotizacionMG(cotizacion: any) {
             margin: [20, 11, 18, 0],
             // alignment: 'center',
             text: [
+              { text: 'Razón social\n', style: 'textoBold10' },
+              { text: cotizacion.empresa + '\n', style: 'texto' },
+              { text: 'Sucursal\n', style: 'textoBold10' },
+              { text: cotizacion.sucursal + '\n', style: 'texto' },
               { text: 'Dirección fiscal\n', style: 'textoBold10' },
               { text: cotizacion.direccion, style: 'texto' },
             ],
@@ -276,7 +280,7 @@ async function pdfCotizacionMG(cotizacion: any) {
       },
       //REPUESTOS
       {
-        columns: [{ width: '20%', margin: [50, 10, 0, 0], text: { text: 'REPUESTOS:', style: 'textoBold10' } }],
+        columns: [{ width: '35%', margin: [50, 10, 0, 0], text: { text: 'SUMINISTROS / REPUESTOS:', style: 'textoBold10' } }],
       },
       {
         // margin: [izq, top, der, button],

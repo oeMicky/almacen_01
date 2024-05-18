@@ -24,11 +24,11 @@ export default component$(() => {
         <img src={images.user} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.usuario}
       </b>
-      <p style={{ paddingLeft: '24px' }}>
+      <p style={{ paddingLeft: '24px', fontSize: '0.8rem' }}>
         <img src={images.buildings} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.RazonSocial}
       </p>
-      <p style={{ paddingLeft: '24px' }}>
+      <p style={{ paddingLeft: '24px', fontSize: '0.8rem' }}>
         <img src={images.sucursal} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.sucursal}
       </p>

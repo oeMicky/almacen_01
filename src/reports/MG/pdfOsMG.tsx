@@ -124,6 +124,10 @@ async function pdfOsMG(os: any) {
             margin: [20, 11, 18, 0],
             // alignment: 'center',
             text: [
+              { text: 'Razón social\n', style: 'textoBold10' },
+              { text: os.empresa + '\n', style: 'texto' },
+              { text: 'Sucursal\n', style: 'textoBold10' },
+              { text: os.sucursal + '\n', style: 'texto' },
               { text: 'Dirección fiscal\n', style: 'textoBold10' },
               { text: os.direccion, style: 'texto' },
             ],
@@ -324,7 +328,7 @@ async function pdfOsMG(os: any) {
       },
       //REPUESTOS
       {
-        columns: [{ width: '20%', margin: [50, 10, 0, 0], text: { text: 'REPUESTOS:', style: 'textoBold10' } }],
+        columns: [{ width: '35%', margin: [50, 10, 0, 0], text: { text: 'SUMINISTROS / REPUESTOS:', style: 'textoBold10' } }],
       },
       {
         // margin: [izq, top, der, button],

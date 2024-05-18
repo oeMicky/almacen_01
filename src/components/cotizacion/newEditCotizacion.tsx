@@ -86,6 +86,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
 
       ruc: props.cotizacionSelecci.ruc ? props.cotizacionSelecci.ruc : parametrosGlobales.RUC,
       empresa: props.cotizacionSelecci.empresa ? props.cotizacionSelecci.empresa : parametrosGlobales.RazonSocial,
+      sucursal: props.cotizacionSelecci.sucursal ? props.cotizacionSelecci.sucursal : parametrosGlobales.sucursal,
       direccion: props.cotizacionSelecci.direccion ? props.cotizacionSelecci.direccion : parametrosGlobales.Direccion,
 
       fecha: props.cotizacionSelecci.fecha ? props.cotizacionSelecci.fecha.substring(0, 10) : hoy(), // '',
@@ -348,6 +349,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
 
       ruc: definicion_CTX_COTIZACION.ruc,
       empresa: definicion_CTX_COTIZACION.empresa,
+      sucursal: definicion_CTX_COTIZACION.sucursal,
       direccion: definicion_CTX_COTIZACION.direccion,
 
       fecha: definicion_CTX_COTIZACION.fecha,
@@ -398,7 +400,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     definicion_CTX_COTIZACION.numero = coti.data.numero;
     //definicion_CTX_COTIZACION.correlativo = coti.data.correlativo;
     ctx_index_cotizacion.mostrarSpinner = false;
-    alert('Registro satisfactorio');
+    alert('✅ Registro satisfactorio');
   });
   //#endregion REGISTRAR COTIZACION
 

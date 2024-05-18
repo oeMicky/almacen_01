@@ -116,7 +116,7 @@ export default component$((props: { buscarTecnico: number; contexto: string }) =
                               title="Seleccionar técnico"
                               height={14}
                               width={14}
-                              // style={{ padding: '2px' }}
+                              style={{ marginRight: '4px' }}
                               // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx.selecciono_Tecnico = true;

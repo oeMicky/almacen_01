@@ -8,6 +8,7 @@ export interface IOrdenServicio {
 
   ruc: string;
   empresa: string;
+  sucursal: string;
   direccion: string;
 
   idSerieOrdenServicio: string;

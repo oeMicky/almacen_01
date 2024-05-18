@@ -86,6 +86,7 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any })
 
       ruc: props.oSSelecci.ruc ? props.oSSelecci.ruc : parametrosGlobales.RUC,
       empresa: props.oSSelecci.empresa ? props.oSSelecci.empresa : parametrosGlobales.RazonSocial,
+      sucursal: props.oSSelecci.sucursal ? props.oSSelecci.sucursal : parametrosGlobales.sucursal,
       direccion: props.oSSelecci.direccion ? props.oSSelecci.direccion : parametrosGlobales.Direccion,
 
       idSerieOrdenServicio: props.oSSelecci.idSerieOrdenServicio ? props.oSSelecci.idSerieOrdenServicio : '',
@@ -523,6 +524,7 @@ OBSERVACIÓN(ES):
 
       ruc: definicion_CTX_O_S.ruc,
       empresa: definicion_CTX_O_S.empresa,
+      sucursal: definicion_CTX_O_S.sucursal,
       direccion: definicion_CTX_O_S.direccion,
 
       idSerieOrdenServicio: definicion_CTX_O_S.idSerieOrdenServicio,

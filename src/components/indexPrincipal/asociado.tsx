@@ -3,7 +3,7 @@ import style from './asociado.css?inline';
 
 export interface AsociadoProps {
   imagen: string;
-  ancho: string;
+  ancho: number;
 }
 
 export default component$((props: AsociadoProps) => {

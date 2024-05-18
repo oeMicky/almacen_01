@@ -9,6 +9,7 @@ export interface ICotizacion {
 
   ruc: string;
   empresa: string;
+  sucursal: string;
   direccion: string;
 
   fecha: string;

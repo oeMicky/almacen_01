@@ -213,6 +213,7 @@ export default component$(() => {
       parametrosGlobales.compras = sucursales.data[0].compras;
       parametrosGlobales.inventario = sucursales.data[0].inventario; //******* */
       parametrosGlobales.ordenesServicio = sucursales.data[0].ordenesServicio;
+      parametrosGlobales.seguimientoCosto = sucursales.data[0].seguimientoCosto;
       parametrosGlobales.bancos = sucursales.data[0].bancos;
       parametrosGlobales.planilla = sucursales.data[0].planilla;
       parametrosGlobales.libroDiario = sucursales.data[0].libroDiario;
