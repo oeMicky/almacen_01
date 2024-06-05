@@ -8,6 +8,7 @@ export interface IGuiaRemision {
 
   ruc: string;
   empresa: string;
+  sucursal: string;
   direccion: string;
 
   idModalidadTraslado: string;
@@ -21,7 +22,13 @@ export interface IGuiaRemision {
   serie: string;
   numero: number;
 
-  fecha: string;
+  fechaEmision: string;
+  fechaInicioTraslado: string;
+
+  puntoPartida: string;
+  ubigeoPartida: string;
+  puntoLlegada: string;
+  ubigeoLlegada: string;
 
   idRemitente: string;
   codigoTipoDocumentoIdentidadRemitente: string;
@@ -34,6 +41,9 @@ export interface IGuiaRemision {
   tipoDocumentoIdentidadDestinatario: string;
   numeroIdentidadDestinatario: string;
   razonSocialNombreDestinatario: string;
+  direccionDestinatario: string;
+  emailDestinatario: string;
+  notificarDestinatario: boolean;
 
   idTransportista: string;
   codigoTipoDocumentoIdentidadTransportista: string;
@@ -49,64 +59,22 @@ export interface IGuiaRemision {
 
   observacion: string;
 
-  //   igv: number;
-  //   enDolares: boolean;
-  //   moneda: string;
-  //   tipoCambio: number;
+  itemsGuiaRemision: any;
+}
 
-  //   vendedor: string;
-  //   metodoPago: string;
+export interface IDireccionGR {
+  _id: string;
+  idGrupoEmpresarial: string;
+  idEmpresa: string;
+  idSucursal: string;
 
-  //   todoEnEfectivo: boolean;
-  //   unaParteEnEfectivo: boolean;
-  //   montoEnEfectivo: any;
-  //   otroMedioPago: string;
-  //   montoOtroMedioPago: any;
+  direccion: string;
 
-  //   verCuotasCredito: boolean;
-  //   cuotasCredito: any;
-  //   // cuotasCredito: [ICuotaCreditoVenta];
-  //   importeTotalCuotasCredito: number;
-
-  //   cotizacion: number;
-
-  //   // ordenServicio: number;
-  //   idOrdenServicio: string;
-  //   serieOrdenServicio: string;
-  //   numeroOrdenServicio: number;
-
-  //   observacion: string;
-
-  //   itemsVenta: any;
-
-  //   baseImponiblePEN: any;
-  //   igvPEN: any;
-  //   exoneradoPEN: any;
-  //   inafectoPEN: any;
-  //   iscPEN: any;
-  //   icbpPEN: any;
-  //   otrosPEN: any;
-  //   totalPEN: any;
-
-  //   baseImponibleUSD: any;
-  //   igvUSD: any;
-  //   exoneradoUSD: any;
-  //   inafectoUSD: any;
-  //   iscUSD: any;
-  //   icbpUSD: any;
-  //   otrosUSD: any;
-  //   totalUSD: any;
-
-  //   // montoSubTotalPEN: any;
-  //   // montoIGVPEN: any;
-  //   // montoTotalPEN: any;
-
-  //   // montoSubTotalUSD: any;
-  //   // montoIGVUSD: any;
-  //   // montoTotalUSD: any;
-
-  //   referenciaFecha: string;
-  //   referenciaTipo: string;
-  //   referenciaSerie: string;
-  //   referenciaNumero: number;
+  idDepartamento: string;
+  departamento: string;
+  idProvincia: string;
+  provincia: string;
+  idDistrito: string;
+  distrito: string;
+  ubigeo: string;
 }

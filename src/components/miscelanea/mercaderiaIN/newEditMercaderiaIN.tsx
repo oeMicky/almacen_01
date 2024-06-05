@@ -178,7 +178,6 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     console.log('entro a obtenerUnidades - idLineaTipo', idLineaTipo);
     const auxLineaTipo: any = lasLineasTipos.value.filter(({ _id }) => _id === idLineaTipo);
     const unis = auxLineaTipo[0].unidades;
-    //  auxLineaTipo[0].unidades;
     console.log('first - auxLineaTipo', auxLineaTipo[0]);
     console.log('first - unis', unis.sort());
     //ORDENANDO UNIDADES
@@ -196,14 +195,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     });
     console.log('first - unisOrde', unisOrde);
     lasUnidades.value = unisOrde;
-    // console.log('first - auxLineaTipo - unidades', auxLineaTipo[0].unidades.sort());
-    // const listaLineasTipos = await getLineasTipos({
-    //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-    //   idEmpresa: parametrosGlobales.idEmpresa,
-    // });
-    // console.log('listaLineasTipos.data', listaLineasTipos.data);
 
-    // lasLineasTipos.value = listaLineasTipos.data;
     const unisEqui = auxLineaTipo[0].unidadesEquivalencias;
     //ORDENANDO UNIDADES EQUIVALENCIAS
     const unisEquiOrde: any = unisEqui.sort((a: any, b: any) => {
@@ -222,12 +214,6 @@ export default component$((props: { mercaSeleccio: any; contexto: string }) => {
     lasUnidadesEquivalencias.value = unisEquiOrde;
     definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE = unisEquiOrde;
   });
-
-  // useTask$(({ track }) => {
-  //   track(() => ini.value);
-  //   console.log('entro a useTask');
-  //   obtenerLineasTipos();
-  // });
   //#endregion OBTENER UNIDADES DE MERCADERIAS
 
   //#region OBTENER LINEAS / TIPOS DE MERCADERIAS

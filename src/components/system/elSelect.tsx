@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$ } from "@builder.io/qwik";
 
 interface ISelect {
   id?: string;
@@ -12,15 +12,15 @@ interface ISelect {
   onKeyPress?: any;
   onFocus?: any;
   seleccione?: string;
-  valorSeleccionado?: any; // --> puede sert striong o number  //
+  valorSeleccionado?: any; // --> puede ser striong o number  //
   textoAdicional?: string;
 }
 
 export default component$((props: ISelect) => {
   const ID = props.registroID;
   const TEXT = props.registroTEXT;
-  const SELECCION = props.seleccione ? props.seleccione : '-- Seleccione una opción --';
-  const TEXT_ADICIONAL = props.textoAdicional ? props.textoAdicional : '';
+  const SELECCION = props.seleccione ? props.seleccione : "-- Seleccione una opción --";
+  const TEXT_ADICIONAL = props.textoAdicional ? props.textoAdicional : "";
   return (
     <select
       // value={props.elValor ? props.elValor : ''}

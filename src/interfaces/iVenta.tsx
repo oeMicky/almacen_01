@@ -103,6 +103,18 @@ export interface IVenta {
   totalHaberUSD: any;
 
   ganancias: any;
+
+  ventaConDetraccion: boolean;
+  detraccion: boolean;
+  detraccionCodigo: string;
+  detraccionDescripcion: string;
+  detraccionMedioPagoCodigo: string;
+  detraccionMedioPagoDescripcion: string;
+  detraccionMontoPEN: any;
+  detraccionNumCuentaBancoNacion: string;
+  detraccionPorcentaje: any;
+  detraccionConstancia: string;
+  detraccionFecha: string;
 }
 
 export interface ICuotaCreditoVenta {

@@ -1,26 +1,40 @@
-import { component$, useSignal, useStyles$ } from '@builder.io/qwik';
-import { useNavigate } from '@builder.io/qwik-city';
-import { images } from '~/assets';
+import { component$, createContextId, useContextProvider, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
+import { useNavigate } from "@builder.io/qwik-city";
+import { images } from "~/assets";
 // import ImgButton from '~/components/system/imgButton';
-import { cerosALaIzquierda } from '~/functions/comunes';
-import styles from '../../../components/tabla/tabla.css?inline';
-import { getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
-import { parametrosGlobales } from '~/routes/login';
-import Spinner from '~/components/system/spinner';
+import { cerosALaIzquierda } from "~/functions/comunes";
+import styles from "../../../components/tabla/tabla.css?inline";
+import { getActivoGEEMPSUCUR, getPeriodos } from "~/apis/grupoEmpresarial.api";
+import { parametrosGlobales } from "~/routes/login";
+import Spinner from "~/components/system/spinner";
+import CambioClave from "~/components/usuario/cambioClave";
+
+export const CTX_LISTADO_SUCURSALES = createContextId<any>("__listado_sucursales");
 
 export default component$(() => {
   useStyles$(styles);
+
+  //#region definicion_CTX_LISTADO_SUCURSALES
+  const definicion_CTX_LISTADO_SUCURSALES = useStore({
+    actualizo_Contrasena: false,
+    mostrarPanelCambiarClave: false,
+  });
+  useContextProvider(CTX_LISTADO_SUCURSALES, definicion_CTX_LISTADO_SUCURSALES);
+  //#endregion definicion_CTX_LISTADO_SUCURSALES
+
+  //#region INICIALIZAR
   const navegarA = useNavigate();
+  const mostrarSpinner = useSignal(false);
+  const lasSucursales = useSignal<any>(parametrosGlobales.sucursalesAdjuntas);
+  //#endregion INICIALIZAR
 
   // const definicion_CTX_LISTADO_SUCURSALES = useStore({
   //   mostrarSpinner: false,
   // });
-  const mostrarSpinner = useSignal(false);
 
   //#region INICIAIZACION
   // const ini = useSignal(0);
   // const lasSucursales = useSignal<any>([]);
-  const lasSucursales = useSignal<any>(parametrosGlobales.sucursalesAdjuntas);
 
   // useTask$(({ track }) => {
   //   track(() => ini.value);
@@ -33,13 +47,27 @@ export default component$(() => {
     <>
       <div class="container">
         <h2>BIENVENIDO AL SISTEMA</h2>
-        <b style={{ marginLeft: '16px' }}>
-          <img src={images.user} width={16} height={16} style={{ marginRight: '8px' }} />
-          {parametrosGlobales.usuario}
+        <b>
+          <img src={images.user} width={16} height={16} style={{ marginRight: "8px" }} />
+          <label style={{ marginRight: "8px" }}>{parametrosGlobales.usuario}</label>
+          <button
+            onClick$={() => {
+              if (parametrosGlobales.usuario !== "") {
+                definicion_CTX_LISTADO_SUCURSALES.mostrarPanelCambiarClave = true;
+              }
+            }}
+          >
+            Cambiar clave
+          </button>
         </b>
-        <p style={{ marginLeft: '16px' }}>Seleccione una sucursal.</p>
+        {definicion_CTX_LISTADO_SUCURSALES.mostrarPanelCambiarClave && (
+          <div class="modal">
+            <CambioClave />
+          </div>
+        )}
+        <p style={{ marginLeft: "16px" }}>Seleccione una sucursal.</p>
 
-        <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', margin: '0 16px' }}>
+        <table style={{ fontSize: "0.8rem", fontWeight: "lighter", margin: "0 16px" }}>
           <thead>
             <tr>
               <th>Ítem</th>
@@ -68,7 +96,7 @@ export default component$(() => {
                       height={14}
                       width={14}
                       // style={{ padding: '2px' }}
-                      onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                      onFocusin$={() => console.log("☪☪☪☪☪☪")}
                       onClick$={async () => {
                         let activo = await getActivoGEEMPSUCUR({
                           idGrupoEmpresarial: sucur.idGrupoEmpresarial,
@@ -76,11 +104,9 @@ export default component$(() => {
                           idSucursal: sucur.idSucursal,
                         });
                         activo = activo.data;
-                        console.log('activo', activo);
+                        console.log("🎫🎫🎫activo", activo);
                         if (!activo[0].activoGE) {
-                          alert(
-                            `El grupo empresarial ${sucur.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
-                          );
+                          alert(`El grupo empresarial ${sucur.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`);
                           return;
                         }
                         if (!activo[0].activoEMP) {
@@ -91,7 +117,7 @@ export default component$(() => {
                           alert(`La sucursal ${sucur.sucursal} esta inactiva. Pongase en contacto con el administrador.`);
                           return;
                         }
-                        console.log('**VARIAS SUCURSALES**');
+                        console.log("**VARIAS SUCURSALES**");
                         parametrosGlobales.idSucursal = sucur.idSucursal;
                         parametrosGlobales.sucursal = sucur.sucursal;
                         parametrosGlobales.idAlmacen = sucur.idSucursal; //******* */
@@ -99,11 +125,14 @@ export default component$(() => {
                         parametrosGlobales.nombreGrupoEmpresarial = sucur.grupoEmpresarial;
                         parametrosGlobales.idEmpresa = sucur.idEmpresa;
                         parametrosGlobales.RazonSocial = sucur.empresa;
+                        parametrosGlobales.idPersona = sucur.idPersona;
 
                         parametrosGlobales.RUC = sucur.numeroIdentidad;
                         parametrosGlobales.Direccion = sucur.direccion;
 
                         parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
+                        parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;
+                        parametrosGlobales.cuentaBancariaDetraccion = activo[0].cuentaBancariaDetraccion;
                         parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
                         parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
                         parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
@@ -134,13 +163,13 @@ export default component$(() => {
                         const losPeri = await getPeriodos({
                           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
                           idEmpresa: parametrosGlobales.idEmpresa,
-                          bandera: '',
+                          bandera: "",
                         });
                         parametrosGlobales.periodos = losPeri.data;
                         //
                         mostrarSpinner.value = true;
                         //PAGINA DE INICIO
-                        navegarA('/seleccionarServicio');
+                        navegarA("/seleccionarServicio");
                         // if (parametrosGlobales.almacenActivo) {
                         //   navegarA(parametrosGlobales.paginaInicioDelSistema);
                         // } else {
@@ -164,9 +193,9 @@ export default component$(() => {
         </table>
         <br />
         <button
-          style={{ marginLeft: '16px', padding: '20px 40px', borderRadius: '8px' }}
+          style={{ marginLeft: "16px", padding: "20px 40px", borderRadius: "8px" }}
           onClick$={() => {
-            navegarA('/');
+            navegarA("/");
           }}
         >
           Logout
@@ -180,7 +209,7 @@ export default component$(() => {
         </button> */}
         {/* MOSTRAR SPINNER */}
         {mostrarSpinner.value && (
-          <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Spinner />
           </div>
         )}

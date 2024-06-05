@@ -1,4 +1,4 @@
-import { component$, Resource, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { component$, Resource, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 // import ImgButton from '../../system/imgButton';
 import style from '../../tabla/tabla.css?inline';
@@ -18,7 +18,7 @@ import { CTX_BUSCAR_CHOFER } from '../chofer/buscarChofer';
 //parametrosBusqueda: any;
 export default component$(
   (props: { buscarPersona: number; soloPersonasNaturales: boolean; contexto: string; rol: string; personaEDITADA?: any }) => {
-    useStylesScoped$(style);
+    useStyles$(style);
 
     //#region CONTEXTOS
     let ctx: any = [];
@@ -263,8 +263,8 @@ export default component$(
                                 type="image"
                                 src={images.check32}
                                 title="Seleccionar persona"
-                                height={12}
-                                width={12}
+                                height={14}
+                                width={14}
                                 style={{ marginRight: '4px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
@@ -284,6 +284,18 @@ export default component$(
                                     console.log('ctx_rol', ctx_rol);
 
                                     ctx.mostrarPanelBuscarPersona = false;
+                                    if (props.rol === 'remitente') {
+                                      ctx.mostrarPanelBuscarPersonaRemitente = false;
+                                    }
+                                    if (props.rol === 'destinatario') {
+                                      ctx.mostrarPanelBuscarPersonaDestinatario = false;
+                                    }
+                                    if (props.rol === 'transportista') {
+                                      ctx.mostrarPanelBuscarPersonaTransportista = false;
+                                    }
+                                    if (props.rol === 'chofer') {
+                                      ctx.mostrarPanelBuscarPersonaChofer = false;
+                                    }
                                     ctx.idPersona = _id;
                                     ctx.conceptoABuscar = numeroIdentidad;
                                     ctx.rol_Persona = props.rol;
@@ -296,8 +308,8 @@ export default component$(
                                 type="image"
                                 src={images.edit}
                                 title="Editar persona"
-                                height={12}
-                                width={12}
+                                height={14}
+                                width={14}
                                 // style={{ margin: '2px' }}
                                 // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {

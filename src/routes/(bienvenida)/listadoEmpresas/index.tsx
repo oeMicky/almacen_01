@@ -1,14 +1,14 @@
-import { component$, createContextId, useContextProvider, useSignal, useStore, useStyles$, useTask$ } from '@builder.io/qwik';
-import { images } from '~/assets';
+import { component$, createContextId, useContextProvider, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
+import { images } from "~/assets";
 // import ImgButton from '~/components/system/imgButton';
-import { cerosALaIzquierda } from '~/functions/comunes';
-import styles from '../../../components/tabla/tabla.css?inline';
-import ListadoSucursalesModal from '~/components/miscelanea/sucursal/listadoSucursalesModal';
-import { useNavigate } from '@builder.io/qwik-city';
-import { getActivoGEEMP, getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
-import { parametrosGlobales } from '~/routes/login';
+import { cerosALaIzquierda } from "~/functions/comunes";
+import styles from "../../../components/tabla/tabla.css?inline";
+import ListadoSucursalesModal from "~/components/miscelanea/sucursal/listadoSucursalesModal";
+import { useNavigate } from "@builder.io/qwik-city";
+import { getActivoGEEMP, getActivoGEEMPSUCUR, getPeriodos } from "~/apis/grupoEmpresarial.api";
+import { parametrosGlobales } from "~/routes/login";
 
-export const CTX_LISTADO_EMPRESAS = createContextId<any>('listado_empresas');
+export const CTX_LISTADO_EMPRESAS = createContextId<any>("listado_empresas");
 
 export default component$(() => {
   useStyles$(styles);
@@ -29,19 +29,19 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     track(() => ini.value);
-    console.log('LISTADO EMPRESAS');
+    console.log("LISTADO EMPRESAS");
     // console.log('ingreso a INI', sessionStorage.getItem('SUCURSALES'));
     // lasEmpresas.value = JSON.parse(sessionStorage.SUCURSALES_ADJUNTAS);
     lasEmpresas.value = parametrosGlobales.sucursalesAdjuntas;
-    console.log('first lasEmpresas.value ', lasEmpresas.value);
+    console.log("first lasEmpresas.value ", lasEmpresas.value);
   });
   //#endregion INICIAIZACION
 
   return (
     <>
       <div class="container">
-        <h2>BIENVENIDO AL SISTEMA</h2>
-        <p>{sessionStorage.getItem('usuario')}</p>
+        <h2>BIENVENIDO AL SISTEMAs</h2>
+        <p>{sessionStorage.getItem("usuario")}</p>
         <p>Seleccione una empresa.</p>
         {/* <button onClick$={() => console.log('definicion_CTX_LISTADO_EMPRESAS', definicion_CTX_LISTADO_EMPRESAS)}>dsf</button> */}
         {definicion_CTX_LISTADO_EMPRESAS.mostrarPanelListadoSucursales && (
@@ -49,7 +49,7 @@ export default component$(() => {
             <ListadoSucursalesModal />
           </div>
         )}
-        <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
+        <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
           <thead>
             <tr>
               <th>Ítem</th>
@@ -79,12 +79,7 @@ export default component$(() => {
                       // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                       onClick$={async () => {
                         if (empre.sucursales.length === 1) {
-                          console.log(
-                            'UNA UNICA SUCURSAL empre.sucursales.length === 1',
-                            empre.idGrupoEmpresarial,
-                            empre.idEmpresa,
-                            empre.sucursales[0]._id
-                          );
+                          console.log("UNA UNICA SUCURSAL empre.sucursales.length === 1", empre.idGrupoEmpresarial, empre.idEmpresa, empre.sucursales[0]._id);
                           //UNA UNICA SUCURSAL
                           let activo = await getActivoGEEMPSUCUR({
                             idGrupoEmpresarial: empre.idGrupoEmpresarial,
@@ -92,11 +87,9 @@ export default component$(() => {
                             idSucursal: empre.sucursales[0]._id,
                           });
                           activo = activo.data;
-                          console.log('activo', activo);
+                          console.log("activo", activo);
                           if (!activo[0].activoGE) {
-                            alert(
-                              `El grupo empresarial ${empre.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
-                            );
+                            alert(`El grupo empresarial ${empre.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`);
                             return;
                           }
                           if (!activo[0].activoEMP) {
@@ -104,12 +97,10 @@ export default component$(() => {
                             return;
                           }
                           if (!activo[0].activoSUCUR) {
-                            alert(
-                              `La sucursal ${empre.sucursales[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`
-                            );
+                            alert(`La sucursal ${empre.sucursales[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`);
                             return;
                           }
-                          console.log('empre', empre);
+                          console.log("empre", empre);
                           // sessionStorage.setItem('idGrupoEmpresarial', empre.idGrupoEmpresarial);
                           // sessionStorage.setItem('grupoEmpresarial', empre.grupoEmpresarial);
                           // sessionStorage.setItem('idEmpresa', empre.idEmpresa);
@@ -131,6 +122,8 @@ export default component$(() => {
                           parametrosGlobales.idAlmacen = empre.sucursales[0]._id; //********* */
                           parametrosGlobales.almacenActivo = activo[0].almacenActivo;
                           parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
+                          parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;
+                          parametrosGlobales.cuentaBancariaDetraccion = activo[0].cuentaBancariaDetraccion;
                           parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
                           parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
                           parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;
@@ -149,7 +142,7 @@ export default component$(() => {
                           const losPeri = await getPeriodos({
                             idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
                             idEmpresa: parametrosGlobales.idEmpresa,
-                            bandera: '',
+                            bandera: "",
                           });
                           parametrosGlobales.periodos = losPeri.data;
                           //PAGINA DE INICIO
@@ -157,9 +150,9 @@ export default component$(() => {
                             navegarA(parametrosGlobales.paginaInicioDelSistema);
                           } else {
                             if (
-                              parametrosGlobales.paginaInicioDelSistema === '/inAlmacen' ||
-                              parametrosGlobales.paginaInicioDelSistema === '/outAlmacen' ||
-                              parametrosGlobales.paginaInicioDelSistema === '/kardex'
+                              parametrosGlobales.paginaInicioDelSistema === "/inAlmacen" ||
+                              parametrosGlobales.paginaInicioDelSistema === "/outAlmacen" ||
+                              parametrosGlobales.paginaInicioDelSistema === "/kardex"
                             ) {
                               navegarA(parametrosGlobales.paginaInicioDefault);
                             } else {
@@ -168,7 +161,7 @@ export default component$(() => {
                           }
                         } else {
                           console.log(
-                            'VARIAS SUCURSALES',
+                            "VARIAS SUCURSALES",
                             empre.idGrupoEmpresarial,
                             empre.idEmpresa
                             // empre.sucursales[0].idSucursal
@@ -179,11 +172,9 @@ export default component$(() => {
                             idEmpresa: empre.idEmpresa,
                           });
                           activo = activo.data;
-                          console.log('activo', activo);
+                          console.log("activo", activo);
                           if (!activo[0].activoGE) {
-                            alert(
-                              `El grupo empresarial ${empre.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`
-                            );
+                            alert(`El grupo empresarial ${empre.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`);
                             return;
                           }
                           if (!activo[0].activoEMP) {
@@ -204,7 +195,7 @@ export default component$(() => {
         </table>
         <button
           onClick$={() => {
-            navegarA('/');
+            navegarA("/");
           }}
         >
           Logout
