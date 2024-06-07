@@ -123,7 +123,7 @@ export default component$(() => {
             type="email"
             disabled
             placeholder="Email"
-            class="input-formulario"
+            class="input-formulario-usuario"
             value={parametrosGlobales.usuario}
             // onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
             onKeyPress$={(e) => {
@@ -141,7 +141,7 @@ export default component$(() => {
             name="usuario"
             type="password"
             placeholder="Clave anterior"
-            class="input-formulario"
+            class="input-formulario-usuario"
             value={definicion_CTX_CAMBIO_CLAVE.claveAnterior}
             onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
             onKeyPress$={(e) => {
@@ -158,7 +158,7 @@ export default component$(() => {
             name="clave"
             type="password"
             placeholder="Clave nueva"
-            class="input-formulario"
+            class="input-formulario-usuario"
             value={definicion_CTX_CAMBIO_CLAVE.claveNuevaA}
             onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveNuevaA = (e.target as HTMLInputElement).value)}
             onKeyPress$={(e) => {
@@ -175,7 +175,7 @@ export default component$(() => {
             name="clave"
             type="password"
             placeholder="Repetir clave nueva"
-            class="input-formulario"
+            class="input-formulario-usuario"
             value={definicion_CTX_CAMBIO_CLAVE.claveNuevaB}
             onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveNuevaB = (e.target as HTMLInputElement).value)}
             onKeyPress$={(e) => {

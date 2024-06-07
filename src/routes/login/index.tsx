@@ -1,10 +1,11 @@
-import { $, component$, useStore, useStyles$ } from "@builder.io/qwik";
+import { $, component$, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city"; //action$, Form,
 import { getSucursalesAdjuntasUsuario, getUsuarioPanel } from "~/apis/usuario.api";
 
 import styles from "./login.css?inline";
 import { getActivoGEEMPSUCUR, getPeriodos } from "~/apis/grupoEmpresarial.api";
 import Spinner from "~/components/system/spinner";
+import { images } from "~/assets";
 
 // export const CTX_CONFIGURACION = createContextId<any>('__configuracion');
 
@@ -96,25 +97,28 @@ export default component$(() => {
   // dotenv.config();
   useStyles$(styles);
 
+  //#region INICIALIZACION
   const navegarA = useNavigate();
+  const passwordTF = useSignal(true);
 
   const definicion_CTX_LOGEO = useStore({
     mostrarSpinner: false,
     // email: 'mvizconde@msn.com',
     // email: 'carlos@merma.com',
-    // email: "mvizconde@cao.com",
+    email: "mvizconde@cao.com",
     // email: "paolo@cao.com",
     // email: 'joseluis@cao.com',
     // email: 'keymar0@cao.com',
 
-    email: "",
+    // email: "",
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
-    // contrasena: "123",
-    contrasena: "",
+    contrasena: "123",
+    // contrasena: "",
   });
+  //#endregion INICIALIZACION
 
   //#region ACTIVO GE EMP
   // const activo_GE_EMP = $(async (parametros: any) => {
@@ -710,20 +714,31 @@ export default component$(() => {
             </div>
             <div class="linea-formulario">
               <label>Clave</label>
-              <input
-                id="inputClave_LOGIN"
-                name="clave"
-                type="password"
-                placeholder="Clave"
-                class="input-formulario"
-                value={definicion_CTX_LOGEO.contrasena}
-                onChange$={(e) => (definicion_CTX_LOGEO.contrasena = (e.target as HTMLInputElement).value)}
-                onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("buttonLogearse_LOGIN") as HTMLInputElement)?.focus();
-                  }
-                }}
-              />
+              <div style={{ position: "relative", left: "12px" }}>
+                <input
+                  id="inputClave_LOGIN"
+                  name="clave"
+                  type={passwordTF.value ? "password" : "text"}
+                  placeholder="Clave"
+                  class="input-formulario"
+                  value={definicion_CTX_LOGEO.contrasena}
+                  onChange$={(e) => (definicion_CTX_LOGEO.contrasena = (e.target as HTMLInputElement).value)}
+                  onKeyPress$={(e) => {
+                    if (e.key === "Enter") {
+                      (document.getElementById("buttonLogearse_LOGIN") as HTMLInputElement)?.focus();
+                    }
+                  }}
+                />
+                <img
+                  src={images.eye}
+                  height={12}
+                  width={12}
+                  style={{ cursor: "pointer", position: "relative", left: "-16px" }}
+                  onClick$={() => {
+                    passwordTF.value = !passwordTF.value;
+                  }}
+                />
+              </div>
             </div>
             {/* <button>Registrar</button> */}
             <input

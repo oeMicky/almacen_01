@@ -95,7 +95,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
           <>
             {misOrdenesServicio.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                <table style={{ fontSize: "0.8rem", fontWeight: "lighter", padding: "4px" }}>
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}

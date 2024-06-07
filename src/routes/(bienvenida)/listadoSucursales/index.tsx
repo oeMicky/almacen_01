@@ -43,7 +43,7 @@ export default component$(() => {
 
         <p style={{ marginLeft: "16px" }}>Seleccione una sucursal.</p>
 
-        <table style={{ fontSize: "0.8rem", fontWeight: "lighter", margin: "0 16px" }}>
+        <table style={{ fontSize: "0.8rem", fontWeight: "lighter", padding: "0 16px" }}>
           <thead>
             <tr>
               <th>Ítem</th>
@@ -63,7 +63,7 @@ export default component$(() => {
                   {/* <td data-label="Grupo Empresarial">{sucur.grupoEmpresarial}</td> */}
                   <td data-label="Empresa">{sucur.empresa}</td>
                   <td data-label="Sucursal">{sucur.sucursal}</td>
-                  <td data-label="Acciones" class="acciones">
+                  <td data-label="Acciones" class="accionesLeft">
                     <input
                       // id="in_BuscarDetraccion"
                       type="image"
