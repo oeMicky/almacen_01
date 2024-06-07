@@ -3,7 +3,7 @@ import pdfFonts from "../../assets/fonts/vfs_fonts";
 import {
   cerosALaIzquierda,
   formatearMonedaPEN,
-  // formatearNumeroINT,
+  formatearNumeroINT,
   // formatearMonedaUSD,
   formatear_4Decimales,
   formatoDDMMYYYY_PEN,
@@ -13,7 +13,7 @@ import {
 import logit from "../../assets/base64/imagesBase64.js";
 import { parametrosGlobales } from "~/routes/login";
 
-async function pdfOsMG(os: any) {
+async function pdfOsMG_ConVehiculo(os: any) {
   pdfMake.vfs = pdfFonts;
 
   console.log("os PDF", os);
@@ -218,6 +218,56 @@ async function pdfOsMG(os: any) {
             margin: [0, 4, 0, 0],
             // alignment: 'center',
             text: { text: os.tipo, style: "texto" },
+          },
+        ],
+      },
+      //DATOS VEHICULO
+      // margin: [izq, top, der, button],
+      {
+        columns: [
+          { width: "18%", margin: [50, 4, 0, 0], text: { text: "KM:", style: "textoBold" } },
+          {
+            width: "82%",
+            fontSize: 6,
+            margin: [0, 4, 0, 0],
+            // alignment: 'center',
+            text: { text: formatearNumeroINT(os.kilometraje), style: "texto" },
+          },
+        ],
+      },
+      {
+        columns: [
+          { width: "18%", margin: [50, 4, 0, 0], text: { text: "MARCA-MOD:", style: "textoBold" } },
+          {
+            width: "82%",
+            fontSize: 6,
+            margin: [0, 4, 0, 0],
+            // alignment: 'center',
+            text: { text: os.vehiculoMarca + " - " + os.vehiculoModelo, style: "texto" },
+          },
+        ],
+      },
+      {
+        columns: [
+          { width: "18%", margin: [50, 4, 0, 0], text: { text: "PLACA:", style: "textoBold" } },
+          {
+            width: "82%",
+            fontSize: 6,
+            margin: [0, 4, 0, 0],
+            // alignment: 'center',
+            text: { text: os.placa, style: "texto" },
+          },
+        ],
+      },
+      {
+        columns: [
+          { width: "18%", margin: [50, 4, 0, 0], text: { text: "VIN:", style: "textoBold" } },
+          {
+            width: "82%",
+            fontSize: 6,
+            margin: [0, 4, 0, 0],
+            // alignment: 'center',
+            text: { text: os.vin, style: "texto" },
           },
         ],
       },
@@ -436,4 +486,4 @@ async function pdfOsMG(os: any) {
   pdfMake.createPdf(docDefinitios).open(); //download('trice.pdf');
 }
 
-export default pdfOsMG;
+export default pdfOsMG_ConVehiculo;

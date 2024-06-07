@@ -30,6 +30,7 @@ export const parametrosGlobales = {
   colorHeaderEmpresarial: "",
   ventaConDetraccion: false,
   cuentaBancariaDetraccion: "",
+  osConRegistroDeVehiculo: false,
   Direccion: "", //'ARKANZAS NRO 354',
   RUC: "", //'99999999999',
   agenteRetencion: false,
@@ -195,6 +196,7 @@ export default component$(() => {
       parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
       parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;
       parametrosGlobales.cuentaBancariaDetraccion = activo[0].cuentaBancariaDetraccion;
+      parametrosGlobales.osConRegistroDeVehiculo = activo[0].osConRegistroDeVehiculo;
       parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
       parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
       parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;

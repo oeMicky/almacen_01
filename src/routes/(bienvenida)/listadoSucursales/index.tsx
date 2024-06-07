@@ -1,4 +1,4 @@
-import { component$, createContextId, useContextProvider, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
+import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
 import { images } from "~/assets";
 // import ImgButton from '~/components/system/imgButton';
@@ -7,20 +7,9 @@ import styles from "../../../components/tabla/tabla.css?inline";
 import { getActivoGEEMPSUCUR, getPeriodos } from "~/apis/grupoEmpresarial.api";
 import { parametrosGlobales } from "~/routes/login";
 import Spinner from "~/components/system/spinner";
-import CambioClave from "~/components/usuario/cambioClave";
-
-export const CTX_LISTADO_SUCURSALES = createContextId<any>("__listado_sucursales");
 
 export default component$(() => {
   useStyles$(styles);
-
-  //#region definicion_CTX_LISTADO_SUCURSALES
-  const definicion_CTX_LISTADO_SUCURSALES = useStore({
-    actualizo_Contrasena: false,
-    mostrarPanelCambiarClave: false,
-  });
-  useContextProvider(CTX_LISTADO_SUCURSALES, definicion_CTX_LISTADO_SUCURSALES);
-  //#endregion definicion_CTX_LISTADO_SUCURSALES
 
   //#region INICIALIZAR
   const navegarA = useNavigate();
@@ -50,21 +39,8 @@ export default component$(() => {
         <b>
           <img src={images.user} width={16} height={16} style={{ marginRight: "8px" }} />
           <label style={{ marginRight: "8px" }}>{parametrosGlobales.usuario}</label>
-          <button
-            onClick$={() => {
-              if (parametrosGlobales.usuario !== "") {
-                definicion_CTX_LISTADO_SUCURSALES.mostrarPanelCambiarClave = true;
-              }
-            }}
-          >
-            Cambiar clave
-          </button>
         </b>
-        {definicion_CTX_LISTADO_SUCURSALES.mostrarPanelCambiarClave && (
-          <div class="modal">
-            <CambioClave />
-          </div>
-        )}
+
         <p style={{ marginLeft: "16px" }}>Seleccione una sucursal.</p>
 
         <table style={{ fontSize: "0.8rem", fontWeight: "lighter", margin: "0 16px" }}>
@@ -133,6 +109,7 @@ export default component$(() => {
                         parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
                         parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;
                         parametrosGlobales.cuentaBancariaDetraccion = activo[0].cuentaBancariaDetraccion;
+                        parametrosGlobales.osConRegistroDeVehiculo = activo[0].osConRegistroDeVehiculo;
                         parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
                         parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
                         parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;

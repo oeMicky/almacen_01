@@ -124,6 +124,7 @@ export default component$(() => {
                           parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
                           parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;
                           parametrosGlobales.cuentaBancariaDetraccion = activo[0].cuentaBancariaDetraccion;
+                          parametrosGlobales.osConRegistroDeVehiculo = activo[0].osConRegistroDeVehiculo;
                           parametrosGlobales.agenteRetencion = activo[0].agenteRetencion;
                           parametrosGlobales.agentePercepcion = activo[0].agentePercepcion;
                           parametrosGlobales.facturacionElectronica = activo[0].facturacionElectronica;

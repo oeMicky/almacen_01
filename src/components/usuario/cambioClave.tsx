@@ -2,9 +2,10 @@ import { $, component$, useContext, useStore } from "@builder.io/qwik";
 // import { CTX_ADD_VENTA } from './addVenta';
 import ImgButton from "../system/imgButton";
 import { images } from "~/assets";
-import { CTX_LISTADO_SUCURSALES } from "~/routes/(bienvenida)/listadoSucursales";
+// import { CTX_SELECCIONAR_SERVICI } from "~/routes/(bienvenida)/listadoSucursales";
 import { parametrosGlobales } from "~/routes/login";
 import { upCambioClaveUsuario } from "~/apis/usuario.api";
+import { CTX_SELECCIONAR_SERVICIO } from "~/routes/(bienvenida)/seleccionarServicio";
 // import { CTX_NEW_EDIT_COMPRA } from './newEditCompra';
 
 export default component$(() => {
@@ -17,7 +18,7 @@ export default component$(() => {
   //#endregion definicion_CTX_CAMBIO_CLAVE
 
   //#region CONTEXTO
-  const ctx_listado_sucursales = useContext(CTX_LISTADO_SUCURSALES);
+  const ctx_seleccionar_servicio = useContext(CTX_SELECCIONAR_SERVICIO);
   //#endregion CONTEXTO
 
   //#region GRABAR
@@ -72,8 +73,8 @@ export default component$(() => {
       // }
     } else {
       console.log("🎇🎇🎇🎇🎇🎇");
-      ctx_listado_sucursales.actualizo_Contrasena = true;
-      ctx_listado_sucursales.mostrarPanelCambiarClave = false;
+      ctx_seleccionar_servicio.actualizo_Contrasena = true;
+      ctx_seleccionar_servicio.mostrarPanelCambiarClave = false;
     }
   });
   //#endregion GRABAR
@@ -97,7 +98,7 @@ export default component$(() => {
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_listado_sucursales.mostrarPanelCambiarClave = false;
+            ctx_seleccionar_servicio.mostrarPanelCambiarClave = false;
           })}
         />
         {/* <ImgButton

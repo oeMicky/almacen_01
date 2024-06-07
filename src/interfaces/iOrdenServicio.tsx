@@ -30,6 +30,7 @@ export interface IOrdenServicio {
   numeroIdentidad: string;
   razonSocialNombreCliente: string;
 
+  osConRegistroDeVehiculo: boolean;
   idVehiculo: string;
   placa: string;
   idVehiculoMarca: string;
