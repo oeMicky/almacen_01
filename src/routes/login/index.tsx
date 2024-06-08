@@ -115,7 +115,7 @@ export default component$(() => {
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
-    // contrasena: "123",
+    // contrasena: "12345678",
     contrasena: "",
   });
   //#endregion INICIALIZACION
@@ -730,7 +730,7 @@ export default component$(() => {
                   }}
                 />
                 <img
-                  src={images.eye}
+                  src={passwordTF.value ? images.eye : images.eyePassword}
                   height={12}
                   width={12}
                   style={{ cursor: "pointer", position: "relative", left: "-16px" }}

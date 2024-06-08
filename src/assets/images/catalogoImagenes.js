@@ -45,6 +45,7 @@ import download from "../images/download.svg";
 import edit from "../images/edit.svg";
 import equal from "../images/equal.svg";
 import eye from "../images/eye.svg";
+import eyePassword from "../images/eye password.svg";
 import facturasClaro from "../images/FACelec_IIClaro.svg";
 import facturasOscuro from "../images/FACelec_IIOscuro.svg";
 import facturasDisable from "../images/FACelec_IIDisable.svg";
@@ -147,6 +148,7 @@ export default {
   edit,
   equal,
   eye,
+  eyePassword,
   facturasClaro,
   facturasOscuro,
   facturasDisable,
