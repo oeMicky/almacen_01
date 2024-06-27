@@ -1,25 +1,25 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import TablaChoferes from './tablaChoferes';
-import BuscarPersona from '../persona/buscarPersona';
-import { parametrosGlobales } from '~/routes/login';
-import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
-import { inUpChofer } from '~/apis/chofer.api';
-import EditChofer from './editChofer';
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
+import TablaChoferes from "./tablaChoferes";
+import BuscarPersona from "../persona/buscarPersona";
+import { parametrosGlobales } from "~/routes/login";
+import { CTX_NEW_EDIT_GUIA_REMISION } from "~/components/guiaRemision/newEditGuiaRemision";
+import { inUpChofer } from "~/apis/chofer.api";
+import EditChofer from "./editChofer";
 
-export const CTX_BUSCAR_CHOFER = createContextId<any>('buscar_chofer');
+export const CTX_BUSCAR_CHOFER = createContextId<any>("buscar_chofer");
 
 export default component$((props: { contexto: string }) => {
   //#region DEFINICION CTX_BUSCAR_CHOFER
   const definicion_CTX_BUSCAR_CHOFER = useStore({
     cH: [],
     // grabo_Tecnico: false,
-    buscarPor: 'DNI / RUC',
-    conceptoABuscar: '',
+    buscarPor: "DNI / RUC",
+    conceptoABuscar: "",
 
     mostrarPanelBuscarPersona: false,
-    idPersona: '',
+    idPersona: "",
     selecciono_Persona: false,
 
     mostrarPanelEditChofer: false,
@@ -35,7 +35,7 @@ export default component$((props: { contexto: string }) => {
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
-    case 'new_edit_guiaRemision':
+    case "new_edit_guiaRemision":
       ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
       // documento = useContext(CTX_O_S);
       break;
@@ -48,9 +48,9 @@ export default component$((props: { contexto: string }) => {
 
   //#region BUSCAR CHOFERES
   const localizarChoferes = $(() => {
-    if (definicion_CTX_BUSCAR_CHOFER.conceptoABuscar === '') {
-      alert('Ingrese un valor para su busqueda!!!');
-      document.getElementById('in_conceptoABuscar_CHOFER')?.focus();
+    if (definicion_CTX_BUSCAR_CHOFER.conceptoABuscar === "") {
+      alert("Ingrese un valor para su busqueda!!!");
+      document.getElementById("in_conceptoABuscar_CHOFER")?.focus();
       return;
     }
     buscarChofer.value++;
@@ -71,9 +71,9 @@ export default component$((props: { contexto: string }) => {
         usuario: parametrosGlobales.usuario,
       });
 
-      console.log('el chofer creado/actualizado', chofer);
+      console.log("el chofer creado/actualizado", chofer);
       //buscando al CHOFER
-      definicion_CTX_BUSCAR_CHOFER.buscarPor = 'DNI / RUC';
+      definicion_CTX_BUSCAR_CHOFER.buscarPor = "DNI / RUC";
       localizarChoferes();
       //
 
@@ -98,17 +98,17 @@ export default component$((props: { contexto: string }) => {
       <div
         style={{
           // width: props.ancho + 'px',
-          width: 'clamp(330px, 86%, 700px)',
+          width: "clamp(330px, 86%, 700px)",
           // width: 'auto',
-          padding: '2px',
+          padding: "2px",
         }}
         class="container-modal"
       >
         {/* BOTONES DEL MARCO */}
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'end',
+            display: "flex",
+            justifyContent: "end",
           }}
         >
           <ImgButton
@@ -126,28 +126,24 @@ export default component$((props: { contexto: string }) => {
         {/* FORMULARIO */}
         <div class="add-form">
           {/* TITULO */}
-          <h3 style={{ marginBottom: '10px' }}>Buscar chofer</h3>
+          <h3 style={{ marginBottom: "10px" }}>Buscar chofer</h3>
           {/* ZONA DE BUSQUEDA */}
           <div>
             {/* Buscar por */}
             <div class="form-control">
-              <label>Buscar por</label>
               <div class="form-control form-agrupado">
                 <select
                   id="se_buscarPor_CHOFER"
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                   onChange$={(e) => {
                     definicion_CTX_BUSCAR_CHOFER.buscarPor = (e.target as HTMLSelectElement).value;
-                    document.getElementById('in_conceptoABuscar_CHOFER')?.focus();
+                    document.getElementById("in_conceptoABuscar_CHOFER")?.focus();
                   }}
                 >
-                  <option value={'DNI / RUC'} selected={definicion_CTX_BUSCAR_CHOFER.buscarPor === 'DNI / RUC'}>
+                  <option value={"DNI / RUC"} selected={definicion_CTX_BUSCAR_CHOFER.buscarPor === "DNI / RUC"}>
                     DNI / RUC
                   </option>
-                  <option
-                    value={'Nombre / Razón social'}
-                    selected={definicion_CTX_BUSCAR_CHOFER.buscarPor === 'Nombre / Razón social'}
-                  >
+                  <option value={"Nombre / Razón social"} selected={definicion_CTX_BUSCAR_CHOFER.buscarPor === "Nombre / Razón social"}>
                     Nombre / Razón social
                   </option>
                 </select>
@@ -155,11 +151,10 @@ export default component$((props: { contexto: string }) => {
             </div>
             {/* CONCEPTO A BUSCAR  */}
             <div class="form-control">
-              <label></label>
               <div class="form-control form-agrupado">
                 <input
                   id="in_conceptoABuscar_CHOFER"
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                   type="text"
                   autoFocus
                   value={definicion_CTX_BUSCAR_CHOFER.conceptoABuscar}
@@ -167,20 +162,17 @@ export default component$((props: { contexto: string }) => {
                     definicion_CTX_BUSCAR_CHOFER.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                   }}
                   onKeyPress$={(e) => {
-                    if (e.key === 'Enter') {
-                      if (definicion_CTX_BUSCAR_CHOFER.conceptoABuscar === '') {
-                        console.log(
-                          'definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?',
-                          definicion_CTX_BUSCAR_CHOFER.conceptoABuscar
-                        );
-                        alert('Ingrese un valor para su busqueda.{.{.');
-                        document.getElementById('in_conceptoABuscar_CHOFER')?.focus();
+                    if (e.key === "Enter") {
+                      if (definicion_CTX_BUSCAR_CHOFER.conceptoABuscar === "") {
+                        console.log("definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?", definicion_CTX_BUSCAR_CHOFER.conceptoABuscar);
+                        alert("Ingrese un valor para su busqueda.{.{.");
+                        document.getElementById("in_conceptoABuscar_CHOFER")?.focus();
                         return;
                       }
                       buscarChofer.value++;
                     }
-                    if (e.key === 'Escape') {
-                      document.getElementById('se_buscarPor_CHOFER')?.focus();
+                    if (e.key === "Escape") {
+                      document.getElementById("se_buscarPor_CHOFER")?.focus();
                     }
                   }}
                   onFocusin$={(e) => {
@@ -194,7 +186,7 @@ export default component$((props: { contexto: string }) => {
                   alt="Icono de buscar chofer"
                   height={16}
                   width={16}
-                  style={{ marginLeft: '4px' }}
+                  style={{ marginLeft: "4px" }}
                   onClick$={() => {
                     localizarChoferes();
                   }}
@@ -225,9 +217,7 @@ export default component$((props: { contexto: string }) => {
             </div>
           )}
           {/* TABLA DE CHOFERES HALLADOS*/}
-          <div class="form-control">
-            {buscarChofer.value > 0 ? <TablaChoferes buscarChofer={buscarChofer.value} contexto={props.contexto} /> : ''}
-          </div>
+          <div class="form-control">{buscarChofer.value > 0 ? <TablaChoferes buscarChofer={buscarChofer.value} contexto={props.contexto} /> : ""}</div>
         </div>
       </div>
     </>

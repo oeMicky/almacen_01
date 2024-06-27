@@ -1,7 +1,7 @@
 .linea-formulario {
   display: flex;
   justify-content: space-between;
-  margin: 5px 0;
+  margin: 4px 0;
 }
 
 .input-formulario {
@@ -17,7 +17,7 @@
   background-color: #231f20;
   color: #eeeeee;
   border-radius: 7px;
-  margin: 5px 0;
+  margin: 4px 0;
   cursor: pointer;
 }
 

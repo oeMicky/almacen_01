@@ -1,9 +1,9 @@
-import { $, component$, useContext, useSignal } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import { CTX_NEW_EDIT_EQUIVALENCIA_IN } from './newEditEquivalenciaIN';
-import { inUpUnidadEquivalencia } from '~/apis/lineaTipo.api';
-import { parametrosGlobales } from '~/routes/login';
+import { $, component$, useContext, useSignal } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
+import { CTX_NEW_EDIT_EQUIVALENCIA_IN } from "./newEditEquivalenciaIN";
+import { inUpUnidadEquivalencia } from "~/apis/lineaTipo.api";
+import { parametrosGlobales } from "~/routes/login";
 
 export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: string; unidadEquivalencia: string }) => {
   //#region UNIDAD EQUIVALENCIA - NEW / EDIT
@@ -17,9 +17,9 @@ export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: s
 
   //#region GRABAR UNIDAD EQUIVALENCIA
   const grabarUnidadEquivalencia = $(async () => {
-    if (uniEquiIN.value === '') {
-      alert('Ingrese la unidad equivalente');
-      document.getElementById('in_unidadEquivalenciaIN_MICE')?.focus();
+    if (uniEquiIN.value === "") {
+      alert("Ingrese la unidad equivalente");
+      document.getElementById("in_unidadEquivalenciaIN_MICE")?.focus();
       return;
     }
 
@@ -31,9 +31,9 @@ export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: s
       unidadEquivalencia: uniEquiIN.value,
     });
 
-    console.log('graboooooo laLinea', laLinea);
+    console.log("graboooooo laLinea", laLinea);
     laLinea = laLinea.data;
-    console.log('graboooooo laLinea.data', laLinea);
+    console.log("graboooooo laLinea.data", laLinea);
 
     ctx_new_edit_equivalencia_in.grabo_uniEq = true;
     ctx_new_edit_equivalencia_in.laLineaTipo = laLinea;
@@ -44,15 +44,15 @@ export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: s
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 360px)',
+        width: "clamp(330px, 86%, 360px)",
         // width: 'auto',
-        padding: '1px',
-        background: '#c0c0c0',
+        padding: "1px",
+        background: "#c0c0c0",
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -70,12 +70,11 @@ export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: s
 
       <div class="add-form">
         {/* Unidad de equivalencia */}
-        <div class="form-control" style={{ margin: '10px 0' }}>
-          <label>Unidad equivalencia</label>
+        <div class="form-control" style={{ margin: "8px 0" }}>
           <div class="form-control form-agrupado">
             <input
               id="in_unidadEquivalenciaIN_MICE"
-              style={{ width: '100%', background: '#eee' }}
+              style={{ width: "100%", background: "#eee" }}
               autoFocus
               type="text"
               placeholder="Unidad de equivalencia"
@@ -84,8 +83,8 @@ export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: s
                 uniEquiIN.value = (e.target as HTMLInputElement).value.trim().toUpperCase();
               }}
               onKeyUp$={(e) => {
-                if (e.key === 'Enter') {
-                  document.getElementById('buttonGrabar_MI_P')?.focus();
+                if (e.key === "Enter") {
+                  document.getElementById("buttonGrabar_MI_P")?.focus();
                 }
               }}
               onFocusin$={(e) => {
@@ -99,7 +98,7 @@ export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: s
         <input
           id="buttonGrabar_MI_P"
           type="submit"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             grabarUnidadEquivalencia();

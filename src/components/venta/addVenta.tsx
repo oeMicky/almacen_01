@@ -15,7 +15,7 @@ import {
 //
 import { hoy, elIdAuxiliar, cerosALaIzquierda, redondeo2Decimales, formatoDDMMYYYY_PEN, menosXdiasHoy, redondeo6Decimales } from "~/functions/comunes";
 // import SeleccionarPersona from '../miscelanea/persona/seleccionarPersona';
-import { CTX_INDEX_VENTA } from "~/routes/(almacen)/venta";
+import { CTX_INDEX_VENTA } from "~/routes/(ventas)/venta";
 import { getTipoCambio } from "~/apis/apisExternas.api";
 import { inVenta } from "~/apis/venta.api";
 import NewEditCuotaCreditoVenta from "./newEditCuotaCreditoVenta";
@@ -1271,7 +1271,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           <div style={{ display: "none" }}>
             {/* PERIODO */}
             <div class="form-control">
-              <label>Periodo</label>
               <div class="form-control form-agrupado">
                 <input
                   id="in_Periodo"
@@ -1327,7 +1326,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             </div>
             {/* tipo de documento identidad*/}
             <div class="form-control">
-              <label>Tipo documento</label>
               <div class="form-control form-agrupado">
                 <select
                   id="selectTipoDocumentoLiteral"
@@ -1378,7 +1376,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             )}
             {/* numero identidad*/}
             <div class="form-control">
-              <label>Número identidad</label>
               <div class="form-control form-agrupado">
                 <input
                   id="inputNumeroDocumentoIdentidad"
@@ -1394,7 +1391,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             </div>
             {/* Razon Social / Nombre */}
             <div class="form-control">
-              <label>Razón social / Nombre</label>
               <div class="form-control form-agrupado">
                 <input
                   id="inputNombreCliente"
@@ -1440,7 +1436,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           <div>
             {/* Documento */}
             <div class="form-control">
-              <label>Documento</label>
               <div class="form-control form-agrupado">
                 <select
                   id="selectDocumentoVenta"
@@ -1467,7 +1462,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             </div>
             {/* Serie  */}
             <div class="form-control">
-              <label>Serie</label>
               <div class="form-control form-agrupado">
                 {
                   <select
@@ -1496,7 +1490,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             </div>
             {/* fecha    */}
             <div class="form-control">
-              <label>Fecha</label>
               <div class="form-control form-agrupado">
                 <input
                   id="in_Fecha_Para_Venta"
@@ -1526,7 +1519,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 />
               </div>
             </div>
-            <br></br>
+            <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
@@ -1583,7 +1576,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           <div>
             {/* IGV */}
             <div class="form-control">
-              <label>IGV (%)</label>
               <div class="form-control form-agrupado">
                 <strong style={{ fontSize: "0.9rem", fontWeight: "400", paddingLeft: "4px", paddingRight: "24px" }}>IGV</strong>
                 <input type="text" id="inputIGV" disabled value={definicion_CTX_F_B_NC_ND.igv.$numberDecimal + " %"} style={{ width: "100%" }} />
@@ -1660,7 +1652,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             </div> */}
             {/* Método Pago */}
             <div class="form-control">
-              <label>Método de pago</label>
               <div class="form-control form-agrupado" style={{ display: "flex" }}>
                 <select
                   id="metodoPago"
@@ -1872,7 +1863,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     </tfoot>
                   </table>
                 ) : definicion_CTX_F_B_NC_ND.verCuotasCredito ? (
-                  <i style={{ fontSize: "0.7rem" }}>No existen cuotas de crédito</i>
+                  <i style={{ fontSize: "0.8rem" }}>No existen cuotas de crédito</i>
                 ) : (
                   ""
                 )}
@@ -1961,7 +1952,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           <div>
             {/* OBSERVACION */}
             <div class="form-control">
-              <label>Observación</label>
               <div class="form-control form-agrupado">
                 <input
                   type="text"

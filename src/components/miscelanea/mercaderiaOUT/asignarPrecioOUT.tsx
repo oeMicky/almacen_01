@@ -1,9 +1,9 @@
-import { $, component$, useContext, useSignal } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
-import { parametrosGlobales } from '~/routes/login';
-import { grabarPrecio } from '~/apis/mercaderia.api';
+import { $, component$, useContext, useSignal } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
+import { CTX_BUSCAR_MERCADERIA_OUT } from "./buscarMercaderiaOUT";
+import { parametrosGlobales } from "~/routes/login";
+import { grabarPrecio } from "~/apis/mercaderia.api";
 
 export default component$((props: { mercaOUTSelecci: any }) => {
   //#region CONTEXTOS
@@ -14,12 +14,12 @@ export default component$((props: { mercaOUTSelecci: any }) => {
 
   //#region ON SUBMIT
   const grabarPrecio_MICE = $(async () => {
-    if ((document.getElementById('inputPrecio_MICE') as HTMLInputElement)?.value.trim() === '') {
-      alert('Ingrese el precio.');
-      document.getElementById('inputPrecio_MICE')?.focus();
+    if ((document.getElementById("inputPrecio_MICE") as HTMLInputElement)?.value.trim() === "") {
+      alert("Ingrese el precio.");
+      document.getElementById("inputPrecio_MICE")?.focus();
       return;
     }
-    console.log('on......Submit');
+    console.log("on......Submit");
     const enviarDatos = await grabarPrecio({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
@@ -30,7 +30,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
       //   precio: parseFloat((document.getElementById('inputPrecio_MICE') as HTMLInputElement)?.value.trim()),
       //document.getElementById('inputPrecio')?.value,
     });
-    console.log('enviarDatos:', enviarDatos);
+    console.log("enviarDatos:", enviarDatos);
     ctx_buscar_mercaderia_out.grabo_PrecioOUT = true;
     ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = false;
   });
@@ -39,15 +39,15 @@ export default component$((props: { mercaOUTSelecci: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 500px)',
+        width: "clamp(330px, 86%, 500px)",
         // width: 'auto',
-        border: '1px solid red',
-        padding: '2px',
+        border: "1px solid red",
+        padding: "2px",
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -65,14 +65,14 @@ export default component$((props: { mercaOUTSelecci: any }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.mercaOUTSelecci', props.mercaOUTSelecci);
+            console.log("props.mercaOUTSelecci", props.mercaOUTSelecci);
           })}
         />
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* DATOS */}
-        <div style={{ fontSize: 'small', fontWeight: 'lighter' }}>
+        <div style={{ fontSize: "small", fontWeight: "lighter" }}>
           {/* Descripcion */}
           <div class="form-control">
             <strong>
@@ -121,12 +121,11 @@ export default component$((props: { mercaOUTSelecci: any }) => {
           </div> */}
           {/* Precio */}
           <div class="form-control">
-            |<label>Precio</label>
             <div class="form-control form-agrupado">
               <input
                 id="inputPrecio_MICE"
                 autoFocus
-                style={{ width: '100%', textAlign: 'end', marginRight: '2px' }}
+                style={{ width: "100%", textAlign: "end", marginRight: "2px" }}
                 type="number"
                 placeholder="Adicionar Precio"
                 value={precio.value}
@@ -137,8 +136,8 @@ export default component$((props: { mercaOUTSelecci: any }) => {
                   (e.target as HTMLInputElement).select();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('buttonGrabarPrecio_MICE') as HTMLInputElement)?.focus();
+                  if (e.key === "Enter") {
+                    (document.getElementById("buttonGrabarPrecio_MICE") as HTMLInputElement)?.focus();
                   }
                 }}
               />

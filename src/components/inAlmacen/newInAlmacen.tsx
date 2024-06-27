@@ -30,6 +30,8 @@ import ElSelect from "../system/elSelect";
 import BuscarOrdenServicioAperturado from "../miscelanea/ordenServicioAperturado/buscarOrdenServicioAperturado";
 import BuscarNotaDeSalidaReingreso from "./buscarNotaDeSalidaReingreso";
 import BuscarVentaDespachadaReingreso from "./buscarVentaDespachadaReingreso";
+import BuscarOrdenProduccionAperturado from "../miscelanea/ordenProduccionAperturado/buscarOrdenProduccionAperturado";
+import BuscarOrdenProduccionTerminado from "../miscelanea/ordenProduccionTerminado/buscarOrdenProduccionTerminado";
 
 export const CTX_NEW_IN_ALMACEN = createContextId<any>("new_in_almacen");
 
@@ -52,6 +54,11 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
     borrarIdAuxiliarDoc: 0,
     borrarIdAuxiliar: 0,
     mostrarPanelDeleteDocumentoIN: false,
+
+    mostrarPanelBuscarOrdenProduccionAperturado: false,
+
+    mostrarPanelBuscarOrdenProduccionTerminado: false,
+    mostrarPanelRegistroProductosTerminados: false,
 
     mostrarPanelBuscarOrdenServicioAperturado: false,
     mostrarPanelReingresoRequisiciones: false,
@@ -88,9 +95,10 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       // numero: props.inSelecci.numero ? props.inSelecci.numero : 0,
       FISMA: props.inSelecci.FISMA ? props.inSelecci.FISMA.substring(0, 10) : hoy(),
       reingreso: props.inSelecci.reingreso ? props.inSelecci.reingreso : false,
+      produccion: props.inSelecci.produccion ? props.inSelecci.produccion : false,
 
       idElIgv: props.inSelecci.idElIgv ? props.inSelecci.idElIgv : props.igvCompraPorDefault.idElIgv,
-      elIgv: props.inSelecci.igv ? props.inSelecci.igv.$numberDecimal : props.igvCompraPorDefault.elIgv.$numberDecimal,
+      elIgv: props.inSelecci.elIgv.$numberDecimal ? props.inSelecci.elIgv.$numberDecimal : props.igvCompraPorDefault.elIgv.$numberDecimal,
 
       // correlativo: props.inSelecci.correlativo ? props.inSelecci.correlativo : 0,
 
@@ -357,16 +365,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
         }}
       >
         <ImgButton
-          src={images.x}
-          alt="Icono de cerrar"
-          height={18}
-          width={18}
-          title="Cerrar el formulario"
-          onClick={$(() => {
-            ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
-          })}
-        />
-        <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
@@ -374,6 +372,16 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           title="Cerrar el formulario"
           onClick={$(() => {
             console.log("definicion_CTX_IN_ALMACEN", definicion_CTX_IN_ALMACEN);
+          })}
+        />
+        <ImgButton
+          src={images.x}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
           })}
         />
       </div>
@@ -390,7 +398,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           <div>
             {/* PERIODO */}
             <div class="form-control">
-              <label>Periodo</label>
               <div class="form-control form-agrupado">
                 <input
                   id="in_Periodo"
@@ -425,7 +432,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
             </div>
             {/* FISMA */}
             <div class="form-control form-control-check">
-              <label>FISMA</label>
               <div class="form-control form-agrupado">
                 <input
                   id="in_FISMA"
@@ -447,7 +453,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
             </div>
             {/* motivo de ingreso */}
             <div class="form-control">
-              <label>Tipo documento</label>
               <div class="form-control form-agrupado">
                 <ElSelect
                   id={"se_motivoIngreso"}
@@ -468,6 +473,14 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                       definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen = elSelec.value;
                       // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                       switch (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen) {
+                        case "ORDEN DE PRODUCCIÓN TERMINADA":
+                          // alert('Elegio os');
+                          definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenProduccionTerminado = true;
+                          break;
+                        case "ORDEN DE PRODUCCIÓN (R)":
+                          // alert('Elegio os');
+                          definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenProduccionAperturado = true;
+                          break;
                         case "ORDEN DE SERVICIO (R)":
                           // alert('Elegio os');
                           definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado = true;
@@ -504,8 +517,22 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               </div>
             </div>
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
-            <br></br>
+            <br />
           </div>
+          {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenProduccionTerminado && (
+            <div class="modal">
+              <BuscarOrdenProduccionTerminado
+                contexto="ingreso_a_almacen"
+                motivo={definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen}
+                igv={definicion_CTX_IN_ALMACEN.elIgv}
+              />
+            </div>
+          )}
+          {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenProduccionAperturado && (
+            <div class="modal">
+              <BuscarOrdenProduccionAperturado contexto="ingreso_a_almacen" />
+            </div>
+          )}
           {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado && (
             <div class="modal">
               <BuscarOrdenServicioAperturado contexto="ingreso_a_almacen" />
@@ -526,7 +553,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           <div>
             {/* tipo de documento identidad REMITENTE*/}
             <div class="form-control">
-              <label>Tipo documento</label>
               <div class="form-control form-agrupado">
                 <select
                   id="se_TipoDocumentoLiteral_REMITENTE"
@@ -581,7 +607,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
             )}
             {/* numero identidad REMITENTE*/}
             <div class="form-control">
-              <label>Número identidad</label>
               <div class="form-control form-agrupado">
                 <input
                   id="in_NumeroDocumentoIdentidad_REMITENTE"
@@ -602,7 +627,6 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
             {/* Razon Social / Nombre - REMITENTE*/}
             <div class="form-control">
-              <label>Razón social / Nombre</label>
               <div class="form-control form-agrupado">
                 <input
                   id="in_Nombre_REMITENTE"
@@ -620,14 +644,13 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               </div>
             </div>
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
-            <br></br>
+            <br />
           </div>
           {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
           <div>
             {/* IGV */}
             <div class="form-control">
-              <label>IGV (%)</label>
               <div class="form-control form-agrupado">
                 <input
                   type={"text"}
@@ -644,7 +667,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               </div>
             </div>
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
-            <br></br>
+            <br />
           </div>
           {/* ----------------------------------------------------- */}
         </div>
@@ -666,6 +689,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   class="btn"
                   name="Add documento"
                   title="Add documento"
+                  disabled={definicion_CTX_IN_ALMACEN.produccion}
                   onClick={$(() => {
                     elDocSelecionado.value = [];
                     definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento = true;
@@ -773,7 +797,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                   class="btn"
                   name="Add mercadería"
                   title="Add mercadería"
-                  disabled={definicion_CTX_IN_ALMACEN.reingreso}
+                  disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN.produccion}
                   onClick={$(() => {
                     if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === "") {
                       alert("Seleccione el motivo de ingreso");
@@ -811,7 +835,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     <th>Uni</th>
                     <th>CostoUniPEN</th>
                     <th>SubPEN</th>
-                    <th>PrecioUniPEN</th>
+                    <th>ValorUniPEN</th>
                     <th>TotPEN</th>
                     {definicion_CTX_IN_ALMACEN._id === "" ? <th>Acc</th> : ""}
                   </tr>
@@ -872,7 +896,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ""}
                             style={{ width: "90px", textAlign: "end" }}
-                            value={
+                            value={formatear_6Decimales(
                               !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.costoUnitarioPEN.$numberDecimal
                                   ? iTMercaIN.costoUnitarioPEN.$numberDecimal
@@ -880,7 +904,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 : iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
                                 ? iTMercaIN.costoUnitarioEquivalenciaPEN.$numberDecimal
                                 : iTMercaIN.costoUnitarioEquivalenciaPEN
-                            }
+                            )}
                             onChange$={(e) => {
                               const costo = parseFloat((e.target as HTMLInputElement).value);
 
@@ -930,7 +954,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ""}
                             style={{ width: "90px", textAlign: "end" }}
-                            value={
+                            value={formatear_6Decimales(
                               !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.valorUnitarioPEN.$numberDecimal
                                   ? iTMercaIN.valorUnitarioPEN.$numberDecimal
@@ -938,7 +962,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 : iTMercaIN.valorUnitarioEquivalenciaPEN.$numberDecimal
                                 ? iTMercaIN.valorUnitarioEquivalenciaPEN.$numberDecimal
                                 : iTMercaIN.valorUnitarioEquivalenciaPEN
-                            }
+                            )}
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
 

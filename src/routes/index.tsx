@@ -1,13 +1,13 @@
-import { component$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { component$ } from "@builder.io/qwik";
+import type { DocumentHead } from "@builder.io/qwik-city";
 // import { Link } from '@builder.io/qwik-city';
 // import catalogoImagenes from '~/assets/images/catalogoImagenes';
-import Asociado from '~/components/indexPrincipal/asociado';
+import Asociado from "~/components/indexPrincipal/asociado";
 // import Portafolio from '~/components/indexPrincipal/portafolio';
-import { images } from '~/assets';
-import Header from '~/components/header/header';
-import Footer from '~/components/footer/footer';
-import Portafolio2024 from '~/components/indexPrincipal/portafolio2024';
+import { images } from "~/assets";
+import Header from "~/components/header/header";
+import Footer from "~/components/footer/footer";
+import Portafolio2024 from "~/components/indexPrincipal/portafolio2024";
 
 // export const CTX_0 = createContextId<any>('app.del_0');
 
@@ -23,9 +23,9 @@ export default component$(() => {
               <label>
                 Somos
                 <br />
-                <strong style={{ color: '#00778F' }}>CAO</strong>
-                <strong style={{ color: '#003F62' }}>-S</strong>{' '}
-                <strong class="frase-principal-letraPeque" style={{ color: '#003F62' }}>
+                <strong style={{ color: "#00778F" }}>CAO</strong>
+                <strong style={{ color: "#003F62" }}>-S</strong>{" "}
+                <strong class="frase-principal-letraPeque" style={{ color: "#003F62" }}>
                   Software Development
                 </strong>
                 <br />Y estamos para ayudarte
@@ -35,50 +35,26 @@ export default component$(() => {
           </section>
           {/* PORTAFOLIO */}
           <section id="servicios" class="seccion-servicios">
-            <h2 style={{ marginLeft: '15px' }}>SERVICIOS</h2>
+            <h2 style={{ marginLeft: "15px" }}>SERVICIOS</h2>
             <div class="servicios">
-              <Portafolio2024
-                imagen={images.facturasOscuro}
-                titulo="Factura electrónica"
-                parrafo="Una manera intuitiva y segura de facturar."
-              />
-              <Portafolio2024
-                imagen={images.guiasClaro}
-                titulo="Guía electrónica"
-                parrafo="Las guías electrónicas para asegurar el traslado de los bienes."
-              />
-              <Portafolio2024
-                imagen={images.SIRE_IIOscuro}
-                titulo="SIRE"
-                parrafo="Sistema integrado de registros electronicos."
-              />
+              <Portafolio2024 imagen={images.facturasOscuro} titulo="Factura electrónica" parrafo="Una manera intuitiva y segura de facturar." />
+              <Portafolio2024 imagen={images.guiasClaro} titulo="Guía electrónica" parrafo="Las guías electrónicas para asegurar el traslado de los bienes." />
+              <Portafolio2024 imagen={images.SIRE_IIOscuro} titulo="SIRE" parrafo="Sistema integrado de registros electronicos." />
               <Portafolio2024 imagen={images.comprasClaro} titulo="Compras" parrafo="Un ambiente para gestionar tus compras." />
-              <Portafolio2024
-                imagen={images.inventarioOscuro}
-                titulo="Inventario"
-                parrafo="Sofisticada herramienta para el control de inventarios."
-              />
+              <Portafolio2024 imagen={images.inventarioOscuro} titulo="Inventario" parrafo="Sofisticada herramienta para el control de inventarios." />
               <Portafolio2024
                 imagen={images.ordenesServicioClaro}
-                titulo="Ordenes de servicio"
-                parrafo="Herramienta para el control y seguimiento para la producción de los servicios."
+                titulo="Ordenes de servicio o de producción"
+                parrafo="Herramienta para el control de los servicios o de producción."
               />
               <Portafolio2024
                 imagen={images.seguimientoCostoOscuro}
                 titulo="Seguimiento de costos"
                 parrafo="Herramienta para el control y seguimiento de costos."
               />
-              <Portafolio2024
-                imagen={images.bancosClaro}
-                titulo="Bancos"
-                parrafo="Para llevar el control de tus ingresos y egresos."
-              />
+              <Portafolio2024 imagen={images.bancosClaro} titulo="Bancos" parrafo="Para llevar el control de tus ingresos y egresos." />
               <Portafolio2024 imagen={images.planillaOscuro} titulo="Planilla" parrafo="Controlar tu planilla de tu personal." />
-              <Portafolio2024
-                imagen={images.libroDiarioClaro}
-                titulo="Libro diario"
-                parrafo="Tus hechos economicos siempre se registraran."
-              />
+              <Portafolio2024 imagen={images.libroDiarioClaro} titulo="Libro diario" parrafo="Tus hechos economicos siempre se registraran." />
             </div>
 
             {/* <Portafolio
@@ -100,7 +76,7 @@ export default component$(() => {
           </section>
           {/* ASOCIADOS */}
           <section id="asociados" class="seccion-asociados">
-            <h2 style={{ marginLeft: '16px' }}>ASOCIADOS</h2>
+            <h2 style={{ marginLeft: "16px" }}>ASOCIADOS</h2>
             <div class="asociados">
               <Asociado imagen={images.panafoodsBnWB} ancho={240} />
               <Asociado imagen={images.igmBnWB} ancho={160} />
@@ -120,11 +96,11 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Welcome to Cao Systems',
+  title: "Welcome to Cao Systems",
   meta: [
     {
-      name: 'Cao Systems',
-      content: 'Welcome to Cao Systems!!!',
+      name: "Cao Systems",
+      content: "Welcome to Cao Systems!!!",
     },
   ],
 };

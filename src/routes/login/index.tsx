@@ -72,6 +72,7 @@ export const parametrosGlobales = {
   SIRE: false,
   compras: false,
   inventario: false,
+  ordenesProduccion: false,
   ordenesServicio: false,
   seguimientoCosto: false,
   bancos: false,
@@ -105,18 +106,18 @@ export default component$(() => {
     mostrarSpinner: false,
     // email: 'mvizconde@msn.com',
     // email: 'carlos@merma.com',
-    // email: "mvizconde@cao.com",
+    email: "mvizconde@cao.com",
     // email: "paolo@cao.com",
     // email: 'joseluis@cao.com',
     // email: 'keymar0@cao.com',
 
-    email: "",
+    // email: "",
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
-    // contrasena: "12345678",
-    contrasena: "",
+    contrasena: "12345678",
+    // contrasena: "",
   });
   //#endregion INICIALIZACION
 
@@ -223,6 +224,7 @@ export default component$(() => {
       parametrosGlobales.SIRE = sucursales.data[0].SIRE;
       parametrosGlobales.compras = sucursales.data[0].compras;
       parametrosGlobales.inventario = sucursales.data[0].inventario; //******* */
+      parametrosGlobales.ordenesProduccion = sucursales.data[0].ordenesProduccion;
       parametrosGlobales.ordenesServicio = sucursales.data[0].ordenesServicio;
       parametrosGlobales.seguimientoCosto = sucursales.data[0].seguimientoCosto;
       parametrosGlobales.bancos = sucursales.data[0].bancos;

@@ -1,4 +1,4 @@
-import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from "@builder.io/qwik";
+import { $, Resource, component$, useContext, useResource$, useSignal, useStyles$, useTask$ } from "@builder.io/qwik";
 // import style from '../tabla.css?inline';
 // import style from '../../components/tabla/tabla.css?inline';
 import style from "../tabla/tabla.css?inline";
@@ -11,7 +11,7 @@ import pdfOsMG from "~/reports/MG/pdfOsMG";
 import pdfOsMG_ConVehiculo from "~/reports/MG/pdfOsMG_ConVehiculo";
 
 export default component$((props: { buscarOrdenesServicio: number; parametrosBusqueda: any }) => {
-  useStylesScoped$(style);
+  useStyles$(style);
 
   //#region CONTEXTOS
   const ctx_index_orden_servicio = useContext(CTX_INDEX_ORDEN_SERVICIO);

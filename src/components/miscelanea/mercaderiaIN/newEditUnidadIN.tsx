@@ -1,15 +1,15 @@
-import { $, component$, useContext, useStore } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import { CTX_NEW_EDIT_MERCADERIA_IN } from './newEditMercaderiaIN';
-import { inUpUnidad } from '~/apis/lineaTipo.api';
-import { parametrosGlobales } from '~/routes/login';
+import { $, component$, useContext, useStore } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
+import { CTX_NEW_EDIT_MERCADERIA_IN } from "./newEditMercaderiaIN";
+import { inUpUnidad } from "~/apis/lineaTipo.api";
+import { parametrosGlobales } from "~/routes/login";
 
 export default component$((props: { idLineaTipo: string; idUnidad: string; unidad: string }) => {
   //#region DEFINICON UNIDAD
   const unidad = useStore({
-    id: props.idUnidad ? props.idUnidad : '',
-    uni: props.unidad ? props.unidad : '',
+    id: props.idUnidad ? props.idUnidad : "",
+    uni: props.unidad ? props.unidad : "",
   });
   //#endregion DEFINICON UNIDAD
 
@@ -19,9 +19,9 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
 
   //#region GRABAR UNIDAD
   const grabarUnidad = $(async () => {
-    if (unidad.uni === '') {
-      alert('Ingrese la unidad');
-      document.getElementById('in_unidadIN_MICE')?.focus();
+    if (unidad.uni === "") {
+      alert("Ingrese la unidad");
+      document.getElementById("in_unidadIN_MICE")?.focus();
       return;
     }
 
@@ -33,8 +33,8 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
       unidad: unidad.uni,
     });
 
-    console.log('lt - unidad', lt);
-    console.log('lt.data - unidad', lt.data);
+    console.log("lt - unidad", lt);
+    console.log("lt.data - unidad", lt.data);
 
     // console.log('graboooooo laLinea', laLinea);
     // laLinea = laLinea.data;
@@ -49,15 +49,15 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 390px)',
+        width: "clamp(386px, 86%, 390px)",
         // width: 'auto',
-        padding: '2px',
+        padding: "2px",
         // background: '#c0c0c0',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -75,12 +75,11 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
 
       <div class="add-form">
         {/* Unidad  */}
-        <div class="form-control" style={{ margin: '10px 0' }}>
-          <label>Unidad</label>
+        <div class="form-control" style={{ margin: "8px 0" }}>
           <div class="form-control form-agrupado">
             <input
               id="in_unidadIN_MICE"
-              style={{ width: '100%', background: '#eee' }}
+              style={{ width: "100%", background: "#eee" }}
               autoFocus
               type="text"
               placeholder="Unidad"
@@ -89,8 +88,8 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
                 unidad.uni = (e.target as HTMLInputElement).value.trim().toUpperCase();
               }}
               onKeyUp$={(e) => {
-                if (e.key === 'Enter') {
-                  document.getElementById('buttonGrabar_MI_P')?.focus();
+                if (e.key === "Enter") {
+                  document.getElementById("buttonGrabar_MI_P")?.focus();
                 }
               }}
               onFocusin$={(e) => {
@@ -104,7 +103,7 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
         <input
           id="buttonGrabar_MI_P"
           type="submit"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             grabarUnidad();

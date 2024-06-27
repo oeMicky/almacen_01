@@ -122,8 +122,19 @@ export default component$(() => {
           <Servicio2024
             imagen={images.ordenesServicioClaro}
             imagenDisable={images.ordenesServicioDisable}
+            titulo="Ordenes de producción"
+            parrafo="Herramienta para el control para la producción."
+            cursorMano={parametrosGlobales.ordenesProduccion}
+            onClick={$(() => {
+              mostrarSpinner.value = true;
+              navegarA("/ordenProduccion");
+            })}
+          />
+          <Servicio2024
+            imagen={images.ordenesServicioClaro}
+            imagenDisable={images.ordenesServicioDisable}
             titulo="Ordenes de servicio"
-            parrafo="Herramienta para el control y seguimiento para la producción de los servicios."
+            parrafo="Herramienta para el control de los servicios."
             cursorMano={parametrosGlobales.ordenesServicio}
             onClick={$(() => {
               mostrarSpinner.value = true;

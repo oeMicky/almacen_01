@@ -52,7 +52,9 @@ export interface IMercaderiaIN {
   aplicacion: string;
 
   UNSPSC: string;
-  conFechaVencimientoLote: boolean;
+  conLote: boolean;
+  conFechaProduccion: boolean;
+  conFechaVencimiento: boolean;
   //IMPORTANTE
   idKardex: string;
   lote: string;

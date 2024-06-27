@@ -119,7 +119,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3>Despacho de requisiciones</h3>
+        <h3>Despacho de requisiciones OS</h3>
         {/* CLIENTE */}
         <div>
           <div style={{ margin: "4px 0" }}>ID:{` ${props.osSeleccionada._id} `}</div>
@@ -136,6 +136,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           <div style={{ margin: "4px 0" }}>
             Kilometraje:<b>{` ${props.osSeleccionada.kilometraje}`}</b>
           </div>
+          <br />
         </div>
         {/* TABLA DE REQUISICIONES */}
         <div class="form-control">
@@ -252,6 +253,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                             );
                           })}
                         </tbody>
+                        <br />
                       </table>
                     </>
                   ) : (

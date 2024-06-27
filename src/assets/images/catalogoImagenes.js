@@ -14,6 +14,7 @@ import Kx from "../images/Kx.webp";
 import almacenIn from "../images/almacenIn.webp";
 import almacenOut from "../images/almacenOut.webp";
 import Cat from "../images/Cat.webp";
+import Op from "../images/Op.webp";
 import Os from "../images/Os.webp";
 import Pm from "../images/Pm.webp";
 import Cp from "../images/Cp.webp";
@@ -117,6 +118,7 @@ export default {
   almacenIn,
   almacenOut,
   Cat,
+  Op,
   Os,
   Pm,
   Cp,

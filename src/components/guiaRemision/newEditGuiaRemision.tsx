@@ -282,7 +282,6 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
         {/* ----------------------------------------------------- */}
         {/* PERIODO */}
         <div class="form-control">
-          <label>Periodo</label>
           <div class="form-control form-agrupado">
             <input id="in_Periodo_GR" style={{ width: "100%" }} type="number" disabled value={definicion_CTX_GUIA_REMISION.periodo} />
           </div>
@@ -576,7 +575,6 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           )}
           {/* numero identidad*/}
           <div class="form-control">
-            <label>Número identidad</label>
             <div class="form-control form-agrupado">
               <input
                 id="input_NumeroDocumentoIdentidad_REMITENTE"
@@ -591,7 +589,6 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           </div>
           {/* Razon Social / Nombre */}
           <div class="form-control">
-            <label>Razón social / Nombre</label>
             <div class="form-control form-agrupado">
               <input
                 id="input_Nombre_REMITENTE"
@@ -657,7 +654,6 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           )}
           {/* numero identidad*/}
           <div class="form-control">
-            <label>Número identidad</label>
             <div class="form-control form-agrupado">
               <input
                 id="input_NumeroDocumentoIdentidad_DESTINATARIO"
@@ -672,7 +668,6 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           </div>
           {/* Razon Social / Nombre */}
           <div class="form-control">
-            <label>Razón social / Nombre</label>
             <div class="form-control form-agrupado">
               <input
                 id="input_Nombre_DESTINATARIO"
@@ -738,7 +733,6 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           )}
           {/* numero identidad*/}
           <div class="form-control">
-            <label>Número identidad</label>
             <div class="form-control form-agrupado">
               <input
                 id="input_NumeroDocumentoIdentidad_TRANSPORTISTA"
@@ -753,7 +747,6 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           </div>
           {/* Razon Social / Nombre */}
           <div class="form-control">
-            <label>Razón social / Nombre</label>
             <div class="form-control form-agrupado">
               <input
                 id="input_Nombre_TRANSPORTISTA"
@@ -1022,7 +1015,6 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
         <div>
           {/* OBSERVACION */}
           <div class="form-control">
-            <label>Observación</label>
             <div class="form-control form-agrupado">
               <input
                 type="text"

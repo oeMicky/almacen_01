@@ -132,6 +132,7 @@ export default component$(() => {
                         parametrosGlobales.SIRE = sucur.SIRE;
                         parametrosGlobales.compras = sucur.compras;
                         parametrosGlobales.inventario = sucur.inventario; //******* */
+                        parametrosGlobales.ordenesProduccion = sucur.ordenesProduccion;
                         parametrosGlobales.ordenesServicio = sucur.ordenesServicio;
                         parametrosGlobales.bancos = sucur.bancos;
                         parametrosGlobales.planilla = sucur.planilla;

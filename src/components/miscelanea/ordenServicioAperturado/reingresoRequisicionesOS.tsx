@@ -1,8 +1,8 @@
-import { $, Resource, component$, useContext, useResource$, useSignal } from '@builder.io/qwik';
-import { images } from '~/assets';
-import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
-import ImgButton from '~/components/system/imgButton';
-import { cerosALaIzquierda, elIdAuxiliar } from '~/functions/comunes';
+import { $, Resource, component$, useContext, useResource$, useSignal } from "@builder.io/qwik";
+import { images } from "~/assets";
+import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from "~/components/inAlmacen/newInAlmacen";
+import ImgButton from "~/components/system/imgButton";
+import { cerosALaIzquierda, elIdAuxiliar } from "~/functions/comunes";
 
 export default component$((props: { contexto: string; osSeleccionada: any }) => {
   //#region CONTEXTO
@@ -21,16 +21,16 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
   const losReingresos = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // track(() => props.buscarOrdenesServicio.valueOf());
     track(() => ini.value);
-    console.log('parametrosBusqueda losReingresos ini.value', ini.value);
+    console.log("parametrosBusqueda losReingresos ini.value", ini.value);
     const abortController = new AbortController();
-    cleanup(() => abortController.abort('cleanup'));
+    cleanup(() => abortController.abort("cleanup"));
 
-    console.log('parametrosBusqueda losReingresos', props.osSeleccionada._id);
+    console.log("parametrosBusqueda losReingresos", props.osSeleccionada._id);
 
-    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getReingresoRequisiciones', {
-      method: 'POST',
+    const res = await fetch(import.meta.env.VITE_URL + "/api/ordenServicio/getReingresoRequisiciones", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       // body: JSON.stringify(props.parametrosBusqueda),
       body: JSON.stringify({ idOs: props.osSeleccionada._id }),
@@ -44,14 +44,14 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 1000px)',
+        width: "clamp(330px, 86%, 1000px)",
         // width: 'auto',
-        border: '1px solid red',
-        padding: '2px',
+        border: "1px solid red",
+        padding: "2px",
       }}
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -67,25 +67,21 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
       <div class="add-form">
         <h3>Reingreso de requisiciones</h3>
         {/* CLIENTE */}
-        <div style={{ fontSize: '0.8rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+        <div style={{ fontSize: "0.8rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "90px 1fr", margin: "4px 0" }}>
             ID:<b>{` ${props.osSeleccionada._id} `}</b>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
-            OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
+          <div style={{ display: "grid", gridTemplateColumns: "90px 1fr", margin: "4px 0" }}>
+            OS:<b>{` ${props.osSeleccionada.serie + " - " + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+          <div style={{ display: "grid", gridTemplateColumns: "90px 1fr", margin: "4px 0" }}>
             Cliente:
-            <b>
-              {props.osSeleccionada.clienteVentasVarias
-                ? 'Cliente ventas varias'
-                : ` ${props.osSeleccionada.razonSocialNombreCliente}`}
-            </b>
+            <b>{props.osSeleccionada.clienteVentasVarias ? "Cliente ventas varias" : ` ${props.osSeleccionada.razonSocialNombreCliente}`}</b>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+          <div style={{ display: "grid", gridTemplateColumns: "90px 1fr", margin: "4px 0" }}>
             Placa:<b>{` ${props.osSeleccionada.placa} `}</b>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+          <div style={{ display: "grid", gridTemplateColumns: "90px 1fr", margin: "4px 0" }}>
             Kilometraje:<b>{` ${props.osSeleccionada.kilometraje}`}</b>
           </div>
           <br />
@@ -95,15 +91,15 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           <Resource
             value={losReingresos}
             onPending={() => {
-              console.log('onPending 🍉🍉🍉🍉');
+              console.log("onPending 🍉🍉🍉🍉");
               return <div>Cargando...</div>;
             }}
             onRejected={() => {
-              console.log('onRejected 🍍🍍🍍🍍');
+              console.log("onRejected 🍍🍍🍍🍍");
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(requisiciones) => {
-              console.log('onResolved 🍓🍓🍓🍓', requisiciones);
+              console.log("onResolved 🍓🍓🍓🍓", requisiciones);
               const { data } = requisiciones; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misReingresos.value = data;
@@ -111,7 +107,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 <>
                   {misReingresos.value.length > 0 ? (
                     <>
-                      <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
+                      <table style={{ fontSize: "0.8rem", fontWeight: "lighter " }}>
                         <thead>
                           <tr>
                             <th>Ítem</th>
@@ -148,11 +144,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                                 </td>
                                 <td data-label="Cant A Reingresar" class="comoNumero">
                                   <input
-                                    style={{ width: '60px', textAlign: 'end' }}
+                                    style={{ width: "60px", textAlign: "end" }}
                                     value={reingresoLocali.aReingresar}
                                     onChange$={(e) => {
                                       const a_Reingresar = parseFloat((e.target as HTMLInputElement).value);
-                                      console.log('a_Reingresar', a_Reingresar);
+                                      console.log("a_Reingresar", a_Reingresar);
                                       reingresoLocali.aReingresar = a_Reingresar;
                                     }}
                                     onFocusin$={(e) => {
@@ -164,11 +160,12 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                             );
                           })}
                         </tbody>
+                        <br />
                       </table>
                     </>
                   ) : (
                     <div>
-                      <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
+                      <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
                     </div>
                   )}
                 </>
@@ -183,17 +180,15 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           value="Reingresar"
           class="btn-centro"
           onClick$={() => {
-            console.log('losReingresos', losReingresos);
-            console.log('mis misReingresos', misReingresos.value);
+            console.log("losReingresos", losReingresos);
+            console.log("mis misReingresos", misReingresos.value);
 
             //VERIFICAR montos a REINGRESAR
             let todoCorrecto = true;
             let algunoMasQueCero = false;
             //VERIFICAR montos a REINGRESAR -> TODOS LOS MONTOS SON CEROS
             for (const reingresoLocali of misReingresos.value) {
-              const reingre = reingresoLocali.aReingresar.$numberDecimal
-                ? reingresoLocali.aReingresar.$numberDecimal
-                : reingresoLocali.aReingresar;
+              const reingre = reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar;
 
               if (reingre > 0) {
                 algunoMasQueCero = true;
@@ -201,7 +196,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             }
 
             if (!algunoMasQueCero) {
-              alert('ATENCIÓN: todos los montos a reingresar no pueden ser cero (0)');
+              alert("ATENCIÓN: todos los montos a reingresar no pueden ser cero (0)");
               return;
             }
 
@@ -210,20 +205,14 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               i++;
 
               const despachado = parseFloat(
-                reingresoLocali.cantidadDespachada.$numberDecimal
-                  ? reingresoLocali.cantidadDespachada.$numberDecimal
-                  : reingresoLocali.cantidadDespachada
+                reingresoLocali.cantidadDespachada.$numberDecimal ? reingresoLocali.cantidadDespachada.$numberDecimal : reingresoLocali.cantidadDespachada
               );
               const reingresado = parseFloat(
-                reingresoLocali.cantidadReingresada.$numberDecimal
-                  ? reingresoLocali.cantidadReingresada.$numberDecimal
-                  : reingresoLocali.cantidadReingresada
+                reingresoLocali.cantidadReingresada.$numberDecimal ? reingresoLocali.cantidadReingresada.$numberDecimal : reingresoLocali.cantidadReingresada
               );
 
               const aReingre = parseFloat(
-                reingresoLocali.aReingresar.$numberDecimal
-                  ? reingresoLocali.aReingresar.$numberDecimal
-                  : reingresoLocali.aReingresar
+                reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar
               );
 
               // let stockEQUIVALENTE = 0;
@@ -244,7 +233,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               //   break;
               // }
 
-              console.log('despachado - reingresado - aReingre', despachado, reingresado, aReingre);
+              console.log("despachado - reingresado - aReingre", despachado, reingresado, aReingre);
               if (aReingre > despachado - reingresado) {
                 alert(
                   `ATENCIÓN: La cantidad que puede ser reingresada ( D - R = ${
@@ -259,7 +248,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             if (!todoCorrecto) {
               return;
             }
-            console.log('paso VERIFICACION de CANTIDADES A REINGRESAR');
+            console.log("paso VERIFICACION de CANTIDADES A REINGRESAR");
             ////// copiar los datos al panel de EGRESO
 
             //ID DE LA ORDEN SERVICIO
@@ -278,8 +267,8 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             documento.documentosAdjuntos.splice(0, numeroDocumentos);
             //inserta el elemento / documento en el array
             documento.documentosAdjuntos.push({
-              codigoTCP: '00',
-              descripcionTCP: 'Otros',
+              codigoTCP: "00",
+              descripcionTCP: "Otros",
               fecha: props.osSeleccionada.fechaInicio,
               idAuxiliar: elIdAuxiliar(),
               numero: props.osSeleccionada.numero,
@@ -292,14 +281,12 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
             for (const reingresoLocali of misReingresos.value) {
-              const rein = reingresoLocali.aReingresar.$numberDecimal
-                ? reingresoLocali.aReingresar.$numberDecimal
-                : reingresoLocali.aReingresar;
+              const rein = reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar;
 
-              console.log('rein', rein);
+              console.log("rein", rein);
               if (rein > 0) {
                 let IGVCalculado = 0;
-                console.log('reingresoLocali.igv', reingresoLocali.igv, reingresoLocali.igv.$numberDecimal);
+                console.log("reingresoLocali.igv", reingresoLocali.igv, reingresoLocali.igv.$numberDecimal);
                 const elIGV = reingresoLocali.igv.$numberDecimal ? reingresoLocali.igv.$numberDecimal : reingresoLocali.igv;
                 if (elIGV === 0) {
                   IGVCalculado = 0;
@@ -312,7 +299,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 } else {
                   costo = reingresoLocali.costoUnitarioPEN.$numberDecimal * reingresoLocali.factor;
                 }
-                console.log('IGVCalculado -- costo', IGVCalculado, costo);
+                console.log("IGVCalculado -- costo", IGVCalculado, costo);
                 documento.itemsMercaderias.push({
                   idAuxiliar: reingresoLocali.idAuxiliar, //parseInt(elIdAuxiliar()),
                   idMercaderia: reingresoLocali.idMercaderia,
@@ -323,7 +310,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
 
                   IGV: reingresoLocali.igv,
 
-                  codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '_',
+                  codigo: reingresoLocali.codigo ? reingresoLocali.codigo : "_",
 
                   descripcion: reingresoLocali.descripcion,
                   descripcionEquivalencia: reingresoLocali.descripcionEquivalencia,

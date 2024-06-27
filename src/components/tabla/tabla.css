@@ -1,9 +1,9 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 table thead {
-    display: none;
+  display: none;
 }
 
 table,
@@ -11,68 +11,70 @@ table tbody,
 table tr,
 table td,
 table tfoot {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 
 table tr {
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 
 table td {
-    padding-left: 50%;
-    /* text-align: right; */
-    /* text-align: left; */
-    position: relative;
-    font-weight: 400;
+  padding-left: 50%;
+  /* text-align: right; */
+  /* text-align: left; */
+  position: relative;
+  font-weight: 400;
 }
 
 table td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 0;
-    width: 50%;
-    padding-left: 5px;/*15px*/
-    font-weight: bold;
-    text-align: left;
-    /* border: 1px dashed #2b2a2a */
+  content: attr(data-label);
+  position: absolute;
+  left: 0;
+  width: 50%;
+  padding-left: 5px; /*15px*/
+  font-weight: bold;
+  text-align: left;
+  /* border: 1px dashed #2b2a2a */
 }
 
 table tbody tr:nth-child(even) {
-    background-color: #c9c9c9;
-    /* background-color: #7f3b3b; */
-    border-radius: 6px;
+  /* background-color: #c9c9c9; */
+  /* background-color: #d5d5d5; */
+  /* background-color: #dcdcdc; */
+  background-color: #e1e1e1;
+  /* color: #9103aa; */
+  /* background-color: #7f3b3b; */
+  border-radius: 6px;
 }
 
 tfoot tr {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 tfoot td {
-    display: block;
-    background-color: #74a6ab;
-    color: #fff;
-    padding: 4px 0px;
-    font-weight: bold;
-
+  display: block;
+  background-color: #74a6ab;
+  color: #fff;
+  padding: 4px 0px;
+  font-weight: bold;
 }
 .comoCadena {
-    /* background: pink; */
-    text-align: right;
+  /* background: pink; */
+  text-align: right;
 }
 .comoNumero {
-    /* background: pink; */
-    text-align: right;
+  /* background: pink; */
+  text-align: right;
 }
 .acciones {
-    /* background: pink; */
-    text-align: right;
+  /* background: pink; */
+  text-align: right;
 }
 .accionesLeft {
-    /* background: pink; */
-    text-align: left;
+  /* background: pink; */
+  text-align: left;
 }
 
 /**********RESPONSIVE*********/
@@ -80,86 +82,83 @@ tfoot td {
 /* @media screen and (min-width:768px) { */
 /* @media screen and (min-width:685px) { */
 /* @media screen and (min-width:750px) { */
-@media screen and (min-width:750px) {
-/* @media screen and (min-width:488px) { */
-/* @media screen and (min-width:1059px) { */
-    table {
-        display: table;
-        width: 100%;
-        border-collapse: collapse;
-    }
+@media screen and (min-width: 750px) {
+  /* @media screen and (min-width:488px) { */
+  /* @media screen and (min-width:1059px) { */
+  table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-    table thead {
-        display: table-header-group;
-    }
+  table thead {
+    display: table-header-group;
+  }
 
-    table thead tr {
-        display: table-row;
-    }
+  table thead tr {
+    display: table-row;
+  }
 
-    table tbody {
-        display: table-row-group;
-    }
+  table tbody {
+    display: table-row-group;
+  }
 
-    table tr {
-        display: table-row;
-    }
+  table tr {
+    display: table-row;
+  }
 
-    table td {
-        display: table-cell;
-        position: static;
-        width: auto;
-        /* text-align: left; */
-    }
+  table td {
+    display: table-cell;
+    position: static;
+    width: auto;
+    /* text-align: left; */
+  }
 
-    table td::before {
-        content: none;
-    }
+  table td::before {
+    content: none;
+  }
 
-    table th {
-        background-color: #74a6ab;
-        /* background-color: red; */
-        color: #fff;
-        font-weight: bold;
-    }
+  table th {
+    background-color: #74a6ab;
+    /* background-color: red; */
+    color: #fff;
+    font-weight: bold;
+  }
 
-    table th ,
-     table td {
-        padding: 4px 10px;
-        border: 1px solid #ffffff;
-        border-radius: 6px;
-/* text-align: center; */
-    }
-        /* */
-     
+  table th,
+  table td {
+    padding: 4px 10px;
+    border: 1px solid #ffffff;
+    border-radius: 6px;
+    /* text-align: center; */
+  }
+  /* */
 
-    table tfoot {
-        display: table-footer-group;
-    }
-    .comoCadena {
-        /* background: yellow; */
-        border-radius: 6px;
-        text-align: left;
-    }
+  table tfoot {
+    display: table-footer-group;
+  }
+  .comoCadena {
+    /* background: yellow; */
+    border-radius: 6px;
+    text-align: left;
+  }
 
-    .comoNumero {
-        /* background: yellow; */
-        text-align: right;
-    }
-   .acciones {
-        /* border: 5px solid blue;
+  .comoNumero {
+    /* background: yellow; */
+    text-align: right;
+  }
+  .acciones {
+    /* border: 5px solid blue;
         background:yellow;  */
-        text-align: center;
-    }
-   .accionesLeft {
-        /* border: 5px solid blue;
+    text-align: center;
+  }
+  .accionesLeft {
+    /* border: 5px solid blue;
         background:yellow;  */
-        text-align: center;
-    }
-    .resultado {
-        font-weight: bold;
-        text-align: right;
-        
-    }
-
+    text-align: center;
+  }
+  .resultado {
+    font-weight: bold;
+    text-align: right;
+  }
 }

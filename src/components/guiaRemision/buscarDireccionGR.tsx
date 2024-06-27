@@ -131,7 +131,6 @@ export default component$((props: { sentido: string }) => {
         <div style={{ marginBottom: "8px" }}>
           {/* CONCEPTO A BUSCAR  */}
           <div class="form-control">
-            <label></label>
             <div class="form-control form-agrupado">
               <input
                 id="in_conceptoABuscar_DIRECCION_GR"

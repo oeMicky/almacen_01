@@ -1,4 +1,4 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useStylesScoped$, useTask$ } from "@builder.io/qwik";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
 import ImgButton from "../system/imgButton";
 import { images } from "~/assets";
 import { CTX_INDEX_ORDEN_SERVICIO } from "~/routes/(ordenesServicio)/ordenServicio";
@@ -30,7 +30,7 @@ export const CTX_VEHICULO_OS = createContextId<IVehiculo>("os__vehiculo");
 export const CTX_NEW_EDIT_ORDEN_SERVICIO = createContextId<any>("new_edit_orden_servicio");
 
 export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any }) => {
-  useStylesScoped$(style);
+  useStyles$(style);
 
   //#region DEFINICION CTX_NEW_EDIT_ORDEN_SERVICIO
   const definicion_CTX_NEW_EDIT_ORDEN_SERVICIO = useStore({
@@ -376,7 +376,7 @@ OBSERVACIÓN(ES):
   });
   //#endregion ELIMINAR SERVICIO
 
-  //#region ELIMINAR REQUISICION
+  //#region ELIMINAR REQUISICION DE LA MERCADERIA
   useTask$(async ({ track }) => {
     track(() => definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion);
 
@@ -393,7 +393,7 @@ OBSERVACIÓN(ES):
             (despa: any) => despa.idKardex === definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion
           );
 
-          if (despachos[0].cantidadDespachada > 0) {
+          if (despachos[0].cantidadDespachada.$numberDecimal - despachos[0].cantidadReingresada.$numberDecimal > 0) {
             alert("El artículo no puede ser eliminado debido a que ha sido despachado por almacén.");
             return;
           }
@@ -434,7 +434,7 @@ OBSERVACIÓN(ES):
     }
   });
 
-  //#endregion ELIMINAR REQUISICION
+  //#endregion ELIMINAR REQUISICION DE LA MERCADERIA
 
   //#region ON SUBMIT
   const grabarOS = $(async () => {
@@ -444,7 +444,7 @@ OBSERVACIÓN(ES):
       return;
     }
     if (definicion_CTX_O_S.idSerieOrdenServicio === "" || typeof definicion_CTX_O_S.idSerieOrdenServicio === "undefined") {
-      alert("Ingrese la serie");
+      alert("Seleccione la serie");
       document.getElementById("selectSerieOrdenServicio")?.focus();
       return;
     }
@@ -670,7 +670,6 @@ OBSERVACIÓN(ES):
           <div>
             {/* fecha */}
             <div class="form-control form-control-check">
-              <label>Fecha</label>
               <div class="form-control form-agrupado">
                 <input
                   id="inputFecha"
@@ -690,7 +689,6 @@ OBSERVACIÓN(ES):
             </div>
             {/* Numero de Orden de Servicio*/}
             <div class="form-control">
-              <label>Serie</label>
               <div class="form-control form-agrupado">
                 {definicion_CTX_O_S.idSerieOrdenServicio !== "" ? (
                   <input
@@ -742,7 +740,6 @@ OBSERVACIÓN(ES):
             </div> */}
             {/* Estado */}
             <div class="form-control">
-              <label>Estado</label>
               <div class="form-control form-agrupado">
                 <select
                   id="selectEstado"
@@ -766,7 +763,6 @@ OBSERVACIÓN(ES):
             </div>
             {/* Tipo */}
             <div class="form-control">
-              <label>Tipo</label>
               <div class="form-control form-agrupado">
                 <select
                   id="selectTipo"
@@ -803,7 +799,6 @@ OBSERVACIÓN(ES):
             </div>
             {/* Técnico */}
             <div class="form-control">
-              <label>Técnico</label>
               <div class="form-control form-agrupado">
                 {tecnicoACTIVO.value ? (
                   <>
@@ -849,7 +844,7 @@ OBSERVACIÓN(ES):
                 )}
               </div>
             </div>
-            <br></br>
+            <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
@@ -884,7 +879,6 @@ OBSERVACIÓN(ES):
             </div>
             {/* tipo de documento identidad*/}
             <div class="form-control">
-              <label>Tipo documento</label>
               <div class="form-control form-agrupado">
                 <select
                   id="selectTipoDocumentoLiteral"
@@ -932,7 +926,6 @@ OBSERVACIÓN(ES):
             </div>
             {/* numero identidad*/}
             <div class="form-control">
-              <label>Número identidad</label>
               <div class="form-control form-agrupado">
                 <input
                   id="inputNumeroIdentidad"
@@ -949,7 +942,6 @@ OBSERVACIÓN(ES):
             </div>
             {/* Razon Social / Nombre */}
             <div class="form-control">
-              <label>Razón social / Nombre</label>
               <div class="form-control form-agrupado">
                 <input
                   id="inputNombreCliente"
@@ -964,12 +956,12 @@ OBSERVACIÓN(ES):
                 />
               </div>
             </div>
-            <br></br>
+            <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarPersona && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="orden servicio" rol="cliente" />
+              <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="orden_servicio" rol="cliente" />
             </div>
           )}
           {/* ----------------------------------------------------- */}
@@ -977,7 +969,6 @@ OBSERVACIÓN(ES):
           <div>
             {/* IGV */}
             <div class="form-control">
-              <label>IGV (%)</label>
               <div class="form-control form-agrupado">
                 <input type="number" id="inputIGV" disabled value={definicion_CTX_O_S.igv.$numberDecimal} style={{ width: "100%" }} />
               </div>
@@ -990,7 +981,6 @@ OBSERVACIÓN(ES):
           <div hidden={!definicion_CTX_O_S.osConRegistroDeVehiculo}>
             {/* Placa */}
             <div class="form-control">
-              <label>Placa</label>
               <div class="form-control form-agrupado">
                 <input
                   id="inputPlaca"
@@ -1023,21 +1013,18 @@ OBSERVACIÓN(ES):
             </div>
             {/* Marca */}
             <div class="form-control">
-              <label>Marca</label>
               <div class="form-control form-agrupado">
                 <input id="inputMarca" style={{ width: "100%" }} type="text" placeholder="Marca" disabled value={definicion_CTX_O_S.vehiculoMarca} />
               </div>
             </div>
             {/* Modelo */}
             <div class="form-control">
-              <label>Modelo</label>
               <div class="form-control form-agrupado">
                 <input id="inputModelo" style={{ width: "100%" }} type="text" placeholder="Modelo" disabled value={definicion_CTX_O_S.vehiculoModelo} />
               </div>
             </div>
             {/* VIN */}
             <div class="form-control">
-              <label>VIN</label>
               <div class="form-control form-agrupado">
                 <input id="inputVIN" style={{ width: "100%" }} type="text" placeholder="VIN" disabled value={definicion_CTX_O_S.vin} />
               </div>
@@ -1099,7 +1086,7 @@ OBSERVACIÓN(ES):
           </div>
           {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarVehiculo && (
             <div class="modal">
-              <BuscarVehiculo contexto="orden servicio" />
+              <BuscarVehiculo contexto="orden_servicio" />
             </div>
           )}
 
@@ -1156,7 +1143,7 @@ OBSERVACIÓN(ES):
             </div>
           </div>
           {/* ----------------------------------------------------- */}
-          <br></br>
+          <br />
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* BOTON SERVICIO */}
@@ -1169,7 +1156,7 @@ OBSERVACIÓN(ES):
               margin: "5px 0",
             }}
           >
-            <div style={{ marginBottom: "5px" }}>
+            <div style={{ marginBottom: "4px" }}>
               {/* {typeof oS.correlativo === 'undefined' ? ( */}
               <button
                 disabled={definicion_CTX_O_S.estado !== "APERTURADO" || definicion_CTX_O_S.numero === 0 ? true : false}
@@ -1183,7 +1170,7 @@ OBSERVACIÓN(ES):
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarServicio && (
               <div class="modal">
                 <BuscarServicio
-                  contexto="orden servicio"
+                  contexto="orden_servicio"
                   porcentaje={definicion_CTX_O_S.igv.$numberDecimal ? definicion_CTX_O_S.igv.$numberDecimal : definicion_CTX_O_S.igv}
                   // ancho={'500px'}
                   // seleccionar={'servicio'}
@@ -1196,7 +1183,7 @@ OBSERVACIÓN(ES):
             )}
             {/* TABLA SERVICIOS  */}
             {definicion_CTX_O_S.servicios.length > 0 ? (
-              <table style={{ fontSize: "0.7rem", fontWeight: "lighter" }}>
+              <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -1372,7 +1359,7 @@ OBSERVACIÓN(ES):
               //   actualizarServicio={upServicio}
               //   fijarMontosTotales={fijarMontosTotalesServicios}
               // />
-              <i style={{ fontSize: "0.7rem" }}>No existen servicios</i>
+              <i style={{ fontSize: "0.8rem" }}>No existen servicios</i>
             )}
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBorrarServicioOS && (
               <div class="modal">
@@ -1381,7 +1368,7 @@ OBSERVACIÓN(ES):
             )}
           </div>
           {/* ----------------------------------------------------- */}
-          <br></br>
+          <br />
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* BOTON REQUISICION */}
@@ -1394,7 +1381,7 @@ OBSERVACIÓN(ES):
               margin: "5px 0",
             }}
           >
-            <div style={{ marginBottom: "5px" }}>
+            <div style={{ marginBottom: "4px" }}>
               <button
                 disabled={definicion_CTX_O_S.estado !== "APERTURADO" || definicion_CTX_O_S.numero === 0 ? true : false}
                 onClick$={() => {
@@ -1404,11 +1391,10 @@ OBSERVACIÓN(ES):
                 Add requisición
               </button>
             </div>
-
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarMercaderiaOUT && (
               <div class="modal">
                 <BuscarMercaderiaOUT
-                  contexto="orden servicio"
+                  contexto="orden_servicio"
                   esAlmacen={false}
                   porcentaje={definicion_CTX_O_S.igv.$numberDecimal ? definicion_CTX_O_S.igv.$numberDecimal : definicion_CTX_O_S.igv}
                 />
@@ -1416,7 +1402,7 @@ OBSERVACIÓN(ES):
             )}
             {/* TABLA REQUISICIONES */}
             {definicion_CTX_O_S.requisiciones.length > 0 ? (
-              <table style={{ fontSize: "0.7rem", fontWeight: "lighter" }}>
+              <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -1595,7 +1581,7 @@ OBSERVACIÓN(ES):
                 </tfoot>
               </table>
             ) : (
-              <i style={{ fontSize: "0.7rem" }}>No existen requisiciones</i>
+              <i style={{ fontSize: "0.8rem" }}>No existen requisiciones</i>
             )}
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBorrarRequisicionOS && (
               <div class="modal">
@@ -1604,7 +1590,7 @@ OBSERVACIÓN(ES):
             )}
           </div>
           {/* ----------------------------------------------------- */}
-          <br></br>
+          <br />
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* REPUESTOS DESPACHADOS */}
@@ -1614,14 +1600,14 @@ OBSERVACIÓN(ES):
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              margin: "5px 0",
+              margin: "4px 0",
             }}
           >
-            <div style={{ marginBottom: "5px" }}>Ítems despachados</div>
+            <div style={{ marginBottom: "4px" }}>Ítems despachados</div>
             {/* TABLA REPUESTOS DESPACHADOS  */}
             <div>
               {repuestosDespachados.value.length > 0 ? (
-                <table style={{ fontSize: "0.7rem", fontWeight: "lighter" }}>
+                <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -1724,12 +1710,12 @@ OBSERVACIÓN(ES):
                   </tfoot>
                 </table>
               ) : (
-                <i style={{ fontSize: "0.7rem" }}>No existen repuestos despachados</i>
+                <i style={{ fontSize: "0.8rem" }}>No existen repuestos despachados</i>
               )}
             </div>
           </div>
           {/* ----------------------------------------------------- */}
-          <br></br>
+          <br />
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* GRABAR   onClick={(e) => onSubmit(e)}*/}

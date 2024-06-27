@@ -6,6 +6,7 @@ import TablaTecnicos from "./tablaTecnicos";
 import BuscarPersona from "../persona/buscarPersona";
 import { inUpTecnico } from "~/apis/tecnico.api";
 import { parametrosGlobales } from "~/routes/login";
+import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from "~/components/ordenProduccion/newEditOrdenProduccion";
 
 export const CTX_BUSCAR_TECNICO = createContextId<any>("buscar_tecnico");
 
@@ -24,15 +25,15 @@ export default component$((props: { contexto: string }) => {
   useContextProvider(CTX_BUSCAR_TECNICO, definicion_CTX_BUSCAR_TECNICO);
   //#endregion DEFINICION CTX_BUSCAR_TECNICO
 
-  //#region CONTEXTO
-  // const ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
-  //#endregion CONTEXTO
-
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
     case "orden_servicio":
       ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
+      // documento = useContext(CTX_O_S);
+      break;
+    case "orden_produccion":
+      ctx = useContext(CTX_NEW_EDIT_ORDEN_PRODUCCION);
       // documento = useContext(CTX_O_S);
       break;
   }
@@ -116,7 +117,6 @@ export default component$((props: { contexto: string }) => {
           <div>
             {/* Buscar por */}
             <div class="form-control">
-              <label>Buscar por</label>
               <div class="form-control form-agrupado">
                 <select
                   id="se_buscarPor_TECNICO"
@@ -137,7 +137,6 @@ export default component$((props: { contexto: string }) => {
             </div>
             {/* CONCEPTO A BUSCAR  */}
             <div class="form-control">
-              <label></label>
               <div class="form-control form-agrupado">
                 <input
                   id="in_conceptoABuscar_TECNICO"

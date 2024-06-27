@@ -19,6 +19,7 @@ export interface IIngresoAAlmacen {
   // numero: number;
   FISMA: string;
   reingreso: boolean;
+  produccion: boolean;
 
   idElIgv: string;
   elIgv: any;

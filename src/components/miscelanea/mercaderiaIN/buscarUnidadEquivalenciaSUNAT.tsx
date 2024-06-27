@@ -1,9 +1,9 @@
-import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
+import { $, component$, useContext, useSignal, useStore } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
 // import TablaUnidadesSUNAT from './tablaUnidadesSUNAT';
-import { CTX_NEW_EDIT_MERCADERIA_IN } from './newEditMercaderiaIN';
-import TablaUnidadesEquivalenciaSUNAT from './tablaUnidadesEquivalenciaSUNAT';
+import { CTX_NEW_EDIT_MERCADERIA_IN } from "./newEditMercaderiaIN";
+import TablaUnidadesEquivalenciaSUNAT from "./tablaUnidadesEquivalenciaSUNAT";
 // import { CTX_NEW_EDIT_EQUIVALENCIA_IN } from './newEditEquivalenciaIN';
 
 export default component$((props: { idLineaTipo: string; lineaTipo: string }) => {
@@ -16,33 +16,34 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
   //   const cadenaABuscar = useSignal('');
   const buscarUnidadesEquivalenciaSUNAT = useSignal(0);
   const parametrosBusqueda = useStore({
-    cadenaABuscar: '', // 'acce 5', //cadena.value,
+    cadenaABuscar: "", // 'acce 5', //cadena.value,
   });
   //#endregion INICIALIZAR
 
   //#region BUSCAR
   const localizarUnidadEquivalenciaSUNAT = $(() => {
-    if (parametrosBusqueda.cadenaABuscar.trim() === '') {
-      alert('Debe ingresar la descripción de la unidad de medida a buscar');
-      document.getElementById('in_codigoDescripcion_BUSCAR_UNIDAD_EQUIVALENCIA_SUNAT')?.focus();
+    if (parametrosBusqueda.cadenaABuscar.trim() === "") {
+      alert("Debe ingresar la descripción de la unidad de medida a buscar");
+      document.getElementById("in_codigoDescripcion_BUSCAR_UNIDAD_EQUIVALENCIA_SUNAT")?.focus();
       return;
     }
-    console.log('buscarndo');
+    console.log("buscarndo");
     buscarUnidadesEquivalenciaSUNAT.value++;
   });
   //#endregion BUSCAR
+
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 420px)',
+        width: "clamp(330px, 86%, 420px)",
         // width: 'auto',
-        border: '1px solid red',
-        padding: '2px',
+        border: "1px solid red",
+        padding: "2px",
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -55,18 +56,17 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Buscar unidad equivalencia SUNAT - {props.lineaTipo}</h3>
+      <h3 style={{ marginBottom: "10px", fontSize: "0.9rem" }}>Buscar unidad equivalencia SUNAT - {props.lineaTipo}</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: "10px" }}>
           {/* Buscar por */}
           <div class="form-control">
-            <label style={{ marginRight: '10px' }}></label>
             <div class="form-control form-agrupado">
               <input
                 id="in_codigoDescripcion_BUSCAR_UNIDAD_EQUIVALENCIA_SUNAT"
-                style={{ width: '100%', marginRight: '4px' }}
+                style={{ width: "100%", marginRight: "4px" }}
                 type="text"
                 placeholder="Ingrese la unidad de medida a buscar"
                 value={parametrosBusqueda.cadenaABuscar}
@@ -77,9 +77,9 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
                   (e.target as HTMLInputElement).select();
                 }}
                 onKeyPress$={(e) => {
-                  console.log('onKeyPress', parametrosBusqueda.cadenaABuscar);
-                  if (e.key === 'Enter') {
-                    console.log('onKeyPress - ENTER');
+                  console.log("onKeyPress", parametrosBusqueda.cadenaABuscar);
+                  if (e.key === "Enter") {
+                    console.log("onKeyPress - ENTER");
                     localizarUnidadEquivalenciaSUNAT();
                   }
                 }}
@@ -90,7 +90,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
                 alt="icono buscar"
                 height={16}
                 width={16}
-                style={{ marginRight: '2px' }}
+                style={{ marginRight: "2px" }}
                 src={images.searchPLUS}
                 onClick$={() => {
                   localizarUnidadEquivalenciaSUNAT();
@@ -109,7 +109,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
               cadenaABuscar={parametrosBusqueda}
             />
           ) : (
-            ''
+            ""
           )}
         </div>
       </div>

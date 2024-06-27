@@ -1,25 +1,25 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { images } from '~/assets';
-import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
-import ImgButton from '~/components/system/imgButton';
-import BuscarVehiculo from '../vehiculo/buscarVehiculo';
-import EditUnidadTransporte from './editUnidadTransporte';
-import TablaUnidadesTransporte from './tablaUnidadesTransporte';
-import { parametrosGlobales } from '~/routes/login';
-import { inUpUnidadTransporte } from '~/apis/unidadTransporte.api';
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
+import { images } from "~/assets";
+import { CTX_NEW_EDIT_GUIA_REMISION } from "~/components/guiaRemision/newEditGuiaRemision";
+import ImgButton from "~/components/system/imgButton";
+import BuscarVehiculo from "../vehiculo/buscarVehiculo";
+import EditUnidadTransporte from "./editUnidadTransporte";
+import TablaUnidadesTransporte from "./tablaUnidadesTransporte";
+import { parametrosGlobales } from "~/routes/login";
+import { inUpUnidadTransporte } from "~/apis/unidadTransporte.api";
 
-export const CTX_BUSCAR_UNIDAD_TRANSPORTE = createContextId<any>('buscar_unidad_transporte');
+export const CTX_BUSCAR_UNIDAD_TRANSPORTE = createContextId<any>("buscar_unidad_transporte");
 
 export default component$((props: { contexto: string }) => {
   //#region DEFINICION CTX_BUSCAR_UNIDAD_TRASNPORTE
   const definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE = useStore({
     uT: [],
     grabo_unidad_transporte: false,
-    buscarPor: 'Placa',
-    conceptoABuscar: '',
+    buscarPor: "Placa",
+    conceptoABuscar: "",
 
     mostrarPanelBuscarVehiculo: false,
-    idVehiculo: '',
+    idVehiculo: "",
     selecciono_Vehiculo: false,
 
     mostrarPanelEditUnidadTransporte: false,
@@ -38,9 +38,9 @@ export default component$((props: { contexto: string }) => {
 
   //#region BUSCAR UNIDAD_TRASNPORTE
   const localizarUnidadesTransporte = $(() => {
-    if (definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar === '') {
-      alert('Ingrese un valor para su busqueda!!!');
-      document.getElementById('in_conceptoABuscar_CHOFER')?.focus();
+    if (definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar === "") {
+      alert("Ingrese un valor para su busqueda!!!");
+      document.getElementById("in_conceptoABuscar_CHOFER")?.focus();
       return;
     }
     buscarUnidadTransporte.value++;
@@ -61,9 +61,9 @@ export default component$((props: { contexto: string }) => {
         usuario: parametrosGlobales.usuario,
       });
 
-      console.log('la uniTransp creado/actualizado', uniTransp);
+      console.log("la uniTransp creado/actualizado", uniTransp);
       //buscando al CHOFER
-      definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.buscarPor = 'Placa';
+      definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.buscarPor = "Placa";
       localizarUnidadesTransporte();
       //
 
@@ -87,17 +87,17 @@ export default component$((props: { contexto: string }) => {
     <div
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(330px, 86%, 700px)',
+        width: "clamp(330px, 86%, 700px)",
         // width: 'auto',
-        padding: '2px',
+        padding: "2px",
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'end',
+          display: "flex",
+          justifyContent: "end",
         }}
       >
         <ImgButton
@@ -115,25 +115,24 @@ export default component$((props: { contexto: string }) => {
       {/* FORMULARIO */}
       <div class="add-form">
         {/* TITULO */}
-        <h3 style={{ marginBottom: '10px' }}>Buscar unidad de transporte</h3>
+        <h3 style={{ marginBottom: "10px" }}>Buscar unidad de transporte</h3>
         {/* ZONA DE BUSQUEDA */}
         <div>
           {/* Buscar por */}
           <div class="form-control">
-            <label>Buscar por</label>
             <div class="form-control form-agrupado">
               <select
                 id="se_buscarPor_CHOFER"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 onChange$={(e) => {
                   definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.buscarPor = (e.target as HTMLSelectElement).value;
-                  document.getElementById('in_conceptoABuscar_CHOFER')?.focus();
+                  document.getElementById("in_conceptoABuscar_CHOFER")?.focus();
                 }}
               >
-                <option value={'Placa'} selected={definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.buscarPor === 'Placa'}>
+                <option value={"Placa"} selected={definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.buscarPor === "Placa"}>
                   Placa
                 </option>
-                <option value={'Marca'} selected={definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.buscarPor === 'Marca'}>
+                <option value={"Marca"} selected={definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.buscarPor === "Marca"}>
                   Marca
                 </option>
               </select>
@@ -141,11 +140,10 @@ export default component$((props: { contexto: string }) => {
           </div>
           {/* CONCEPTO A BUSCAR  */}
           <div class="form-control">
-            <label></label>
             <div class="form-control form-agrupado">
               <input
                 id="in_conceptoABuscar_CHOFER"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="text"
                 autoFocus
                 value={definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar}
@@ -153,20 +151,17 @@ export default component$((props: { contexto: string }) => {
                   definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    if (definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar === '') {
-                      console.log(
-                        'definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?',
-                        definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar
-                      );
-                      alert('Ingrese un valor para su busqueda.{.{.');
-                      document.getElementById('in_conceptoABuscar_CHOFER')?.focus();
+                  if (e.key === "Enter") {
+                    if (definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar === "") {
+                      console.log("definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?", definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar);
+                      alert("Ingrese un valor para su busqueda.{.{.");
+                      document.getElementById("in_conceptoABuscar_CHOFER")?.focus();
                       return;
                     }
                     buscarUnidadTransporte.value++;
                   }
-                  if (e.key === 'Escape') {
-                    document.getElementById('se_buscarPor_CHOFER')?.focus();
+                  if (e.key === "Escape") {
+                    document.getElementById("se_buscarPor_CHOFER")?.focus();
                   }
                 }}
                 onFocusin$={(e) => {
@@ -180,7 +175,7 @@ export default component$((props: { contexto: string }) => {
                 alt="Icono de buscar chofer"
                 height={16}
                 width={16}
-                style={{ marginLeft: '4px' }}
+                style={{ marginLeft: "4px" }}
                 onClick$={() => {
                   localizarUnidadesTransporte();
                 }}
@@ -212,11 +207,7 @@ export default component$((props: { contexto: string }) => {
         )}
         {/* TABLA DE CHOFERES HALLADOS*/}
         <div class="form-control">
-          {buscarUnidadTransporte.value > 0 ? (
-            <TablaUnidadesTransporte buscarUnidadTransporte={buscarUnidadTransporte.value} contexto={props.contexto} />
-          ) : (
-            ''
-          )}
+          {buscarUnidadTransporte.value > 0 ? <TablaUnidadesTransporte buscarUnidadTransporte={buscarUnidadTransporte.value} contexto={props.contexto} /> : ""}
         </div>
       </div>
     </div>

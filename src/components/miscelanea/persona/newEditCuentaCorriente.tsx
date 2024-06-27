@@ -1,9 +1,9 @@
-import { $, component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import { CTX_EDIT_PERSONA, CTX_PERSONA } from './editarPersona';
-import { cargarEntidadesFinancieras } from '~/apis/entidadFinanciera.api';
-import { elIdAuxiliar } from '~/functions/comunes';
+import { $, component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
+import { CTX_EDIT_PERSONA, CTX_PERSONA } from "./editarPersona";
+import { cargarEntidadesFinancieras } from "~/apis/entidadFinanciera.api";
+import { elIdAuxiliar } from "~/functions/comunes";
 
 export default component$((props: { cuentaCorriSelec: any }) => {
   //#region CONTEXTO
@@ -21,21 +21,21 @@ export default component$((props: { cuentaCorriSelec: any }) => {
 
     lasEntidadesFinancieras.value = enti.data;
 
-    console.log('lasEntidadesFinancieras.value :::: ', lasEntidadesFinancieras.value);
+    console.log("lasEntidadesFinancieras.value :::: ", lasEntidadesFinancieras.value);
   });
   //#endregion INICIALIZAR
 
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 500px)',
+        width: "clamp(330px, 86%, 500px)",
         // width: 'auto',
-        padding: '2px',
+        padding: "2px",
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -61,7 +61,6 @@ export default component$((props: { cuentaCorriSelec: any }) => {
         <div>
           {/* Banco */}
           <div class="form-control">
-            <label>Banco</label>
             <div class="form-control form-agrupado">
               {/* {lasEntidadesFinancieras.value.map((enti: any) => {
                 return console.log('enti', enti);
@@ -69,9 +68,9 @@ export default component$((props: { cuentaCorriSelec: any }) => {
               })} */}
               <select
                 id="se_banco_CUENTACORRIENTE"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 onChange$={(e) => {
-                  console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
+                  console.log("🥓🥓🥓(e.target as HTMLSelectElement).value", (e.target as HTMLSelectElement).value);
                   props.cuentaCorriSelec.banco = (e.target as HTMLSelectElement).value;
                   // persona.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
                   // document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
@@ -97,13 +96,12 @@ export default component$((props: { cuentaCorriSelec: any }) => {
           </div>
           {/* Moneda */}
           <div class="form-control">
-            <label>Número identidad</label>
             <div class="form-control form-agrupado">
               <select
                 id="se_moneda_CUENTACORRIENTE"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 onChange$={(e) => {
-                  console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
+                  console.log("🥓🥓🥓(e.target as HTMLSelectElement).value", (e.target as HTMLSelectElement).value);
                   props.cuentaCorriSelec.moneda = (e.target as HTMLSelectElement).value;
                   // persona.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
                   // document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
@@ -115,10 +113,10 @@ export default component$((props: { cuentaCorriSelec: any }) => {
                   // );
                 }}
               >
-                <option value={'PEN'} selected={props.cuentaCorriSelec.moneda === 'PEN'}>
+                <option value={"PEN"} selected={props.cuentaCorriSelec.moneda === "PEN"}>
                   PEN
                 </option>
-                <option value={'USD'} selected={props.cuentaCorriSelec.moneda === 'USD'}>
+                <option value={"USD"} selected={props.cuentaCorriSelec.moneda === "USD"}>
                   USD
                 </option>
               </select>
@@ -126,11 +124,10 @@ export default component$((props: { cuentaCorriSelec: any }) => {
           </div>
           {/* //Cuenta Corriente */}
           <div class="form-control">
-            <label>Cuenta Corriente</label>
             <div class="form-control form-agrupado">
               <input
                 id="in_CuentaCorriente_CC"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="number"
                 placeholder="Cuenta corriente"
                 value={props.cuentaCorriSelec.cuentaCorriente}
@@ -155,11 +152,10 @@ export default component$((props: { cuentaCorriSelec: any }) => {
           </div>
           {/* //Cuenta Corriente Interbancario*/}
           <div class="form-control">
-            <label>Cuenta Corriente Interbancario</label>
             <div class="form-control form-agrupado">
               <input
                 id="in_CuentaCorrienteInterbancario_CC"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="number"
                 placeholder="CCI"
                 value={props.cuentaCorriSelec.cci}
@@ -188,26 +184,26 @@ export default component$((props: { cuentaCorriSelec: any }) => {
         <input
           id="btn_grabar_CUENTACORRIENTE"
           type="submit"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
-            if (props.cuentaCorriSelec.banco === '') {
-              alert('Seleccione la entidad financiera');
-              document.getElementById('se_banco_CUENTACORRIENTE')?.focus();
+            if (props.cuentaCorriSelec.banco === "") {
+              alert("Seleccione la entidad financiera");
+              document.getElementById("se_banco_CUENTACORRIENTE")?.focus();
               return;
             }
-            if (props.cuentaCorriSelec.moneda === '') {
-              alert('Seleccione la moneda');
-              document.getElementById('se_moneda_CUENTACORRIENTE')?.focus();
+            if (props.cuentaCorriSelec.moneda === "") {
+              alert("Seleccione la moneda");
+              document.getElementById("se_moneda_CUENTACORRIENTE")?.focus();
               return;
             }
-            if (props.cuentaCorriSelec.cuentaCorriente === '') {
-              alert('Ingrese la cuenta corriente');
-              document.getElementById('in_CuentaCorriente_CC')?.focus();
+            if (props.cuentaCorriSelec.cuentaCorriente === "") {
+              alert("Ingrese la cuenta corriente");
+              document.getElementById("in_CuentaCorriente_CC")?.focus();
               return;
             }
             // irARegistrarPersona();
-            if (props.cuentaCorriSelec.idAuxiliar === '') {
+            if (props.cuentaCorriSelec.idAuxiliar === "") {
               ctx_persona.cuentasCorrientes.push({
                 idAuxiliar: elIdAuxiliar(),
                 banco: props.cuentaCorriSelec.banco,

@@ -1,11 +1,11 @@
-import { $, component$, createContextId, useContext, useContextProvider, useStore } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
-import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import MercaderiaINSeleccionada from './mercaderiaINSeleccionada';
+import { $, component$, createContextId, useContext, useContextProvider, useStore } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
+import { CTX_BUSCAR_MERCADERIA_IN } from "./buscarMercaderiaIN";
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from "~/functions/comunes";
+import MercaderiaINSeleccionada from "./mercaderiaINSeleccionada";
 
-export const CTX_KARDEXS_IN = createContextId<any>('kardexs_in__');
+export const CTX_KARDEXS_IN = createContextId<any>("kardexs_in__");
 
 export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; contexto: string; igv: number }) => {
   //#region DEFINICION CTX_KARDEXS_IN
@@ -26,15 +26,15 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: "clamp(330px, 86%, 700px)",
         // width: 'auto',
-        border: '1px solid red',
-        padding: '2px',
+        border: "1px solid red",
+        padding: "2px",
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -52,26 +52,26 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.mercaINSelecci', props.mercaINSelecci);
+            console.log("props.mercaINSelecci", props.mercaINSelecci);
           })}
         />
       </div>
       {/* TITULO */}
-      <h2 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Kardexs / IN</h2>
+      <h2 style={{ marginBottom: "8px", fontSize: "0.8rem" }}>Kardexs / IN</h2>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: "8px" }}>
           {/* MERCADERIA */}
-          <div style={{ fontSize: 'small' }}>
-            <div style={{ margin: '5px 0' }}>Código:{` ${props.mercaINSelecci.codigo} `}</div>
-            <div style={{ margin: '5px 0' }}>Descripción:{` ${props.mercaINSelecci.descripcion}`}</div>
-            <div style={{ margin: '5px 0' }}>Linea/Tipo:{` ${props.mercaINSelecci.lineaTipo}`}</div>
+          <div style={{ fontSize: "small" }}>
+            <div style={{ margin: "4px 0" }}>Código:{` ${props.mercaINSelecci.codigo} `}</div>
+            <div style={{ margin: "4px 0" }}>Descripción:{` ${props.mercaINSelecci.descripcion}`}</div>
+            <div style={{ margin: "4px 0" }}>Linea/Tipo:{` ${props.mercaINSelecci.lineaTipo}`}</div>
           </div>
         </div>
         {/*  tabla KARDEXS  */}
         {lasMercaderias.length > 0 ? (
-          <table style={{ fontSize: '0.7rem', fontWeight: 'lighter' }}>
+          <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
             <thead>
               <tr>
                 <th>Ítem</th>
@@ -95,16 +95,14 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
                     <td data-label="Lote">{iTKardexsIN.lote}</td>
                     <td data-label="Fecha vencimiento">{formatoDDMMYYYY_PEN(iTKardexsIN.fechaVencimiento)}</td>
                     <td data-label="Costo PEN">
-                      {typeof iTKardexsIN.costoUnitarioMovil !== 'undefined' && iTKardexsIN.costoUnitarioMovil !== null
+                      {typeof iTKardexsIN.costoUnitarioMovil !== "undefined" && iTKardexsIN.costoUnitarioMovil !== null
                         ? iTKardexsIN.costoUnitarioMovil.$numberDecimal
                           ? iTKardexsIN.costoUnitarioMovil.$numberDecimal
                           : iTKardexsIN.costoUnitarioMovil
-                        : '_'}
+                        : "_"}
                     </td>
-                    <td data-label="Stock" style={{ textAlign: 'end' }}>
-                      {iTKardexsIN.cantidadSaldo.$numberDecimal
-                        ? iTKardexsIN.cantidadSaldo.$numberDecimal
-                        : iTKardexsIN.cantidadSaldo}
+                    <td data-label="Stock" style={{ textAlign: "end" }}>
+                      {iTKardexsIN.cantidadSaldo.$numberDecimal ? iTKardexsIN.cantidadSaldo.$numberDecimal : iTKardexsIN.cantidadSaldo}
                     </td>
                     <td data-label="Uni">{props.mercaINSelecci.unidad}</td>
 
@@ -116,13 +114,13 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
                         title="Seleccionar ítem"
                         height={14}
                         width={14}
-                        style={{ padding: '2px' }}
-                        onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                        style={{ padding: "2px" }}
+                        onFocusin$={() => console.log("☪☪☪☪☪☪")}
                         onClick$={() => {
                           ctx_buscar_mercaderia_in.mM = props.mercaINSelecci;
                           ctx_buscar_mercaderia_in.kK = props.mercaINSelecci.KARDEXS[index];
                           definicion_CTX_KARDEXS_IN.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = true;
-                          console.log('la mercade seleccionada IN --INDIRECTA', ctx_buscar_mercaderia_in.mM);
+                          console.log("la mercade seleccionada IN --INDIRECTA", ctx_buscar_mercaderia_in.mM);
                         }}
                       />
                     </td>
@@ -132,7 +130,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
             </tbody>
           </table>
         ) : (
-          <i style={{ fontSize: '0.7rem' }}>No existen kardexs</i>
+          <i style={{ fontSize: "0.8rem" }}>No existen kardexs</i>
         )}
       </div>
       {definicion_CTX_KARDEXS_IN.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS && (
@@ -142,7 +140,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
             elKardex={ctx_buscar_mercaderia_in.kK}
             esAlmacen={props.esAlmacen}
             // esAlmacen={false}
-            contexto={'kardexs_in'}
+            contexto={"kardexs_in"}
             contextoParaDocumento={props.contexto}
             igv={props.igv}
           />

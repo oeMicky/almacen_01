@@ -29,8 +29,8 @@ export default component$(() => {
   //#region INICIALIZACION
   const ini = useSignal(0);
   const buscarInAlmacen = useSignal(0);
-  // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
+  // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: "", periodo: "" });
   // const igv = useSignal(0);
   const losIgvsCompra = useSignal([]);
@@ -166,114 +166,124 @@ export default component$(() => {
           />
         </div>
       </div> */}
-      {/* ADD INGRESO DE MERCADERIAS */}
-      <div>
-        <ElButton
-          name="ADD INGRESO DE MERCADERÍAS"
-          title="Add un nuevo ingreso de mercaderías"
-          style={{ marginLeft: "4px" }}
-          onClick={$(async () => {
-            //validar PERIODO
-            if (periodo.idPeriodo === "") {
-              alert("Seleccione el periodo.");
-              document.getElementById("se_periodo")?.focus();
-              ini.value++;
-              return;
-            }
-            // obteniendo IGVs de COMPRA
-            let elIgv = await getIgvsCompra({
-              idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-              idEmpresa: parametrosGlobales.idEmpresa,
-            });
-            elIgv = elIgv.data;
-            console.log("elIgv", elIgv);
-            losIgvsCompra.value = elIgv;
-            const tre = elIgv.filter((docs: any) => docs.default === true);
-            // console.log('tre', tre);
-            igvCompraPorDefault.idElIgv = tre[0]._id;
-            igvCompraPorDefault.elIgv = tre[0].igv;
-            // console.log('igvCompraPorDefault', igvCompraPorDefault);
-            //
-            // let elIgv = await getIgvVenta(parametrosGlobales);
-            // elIgv = elIgv.data;
-            // console.log('elIgv', elIgv);
-            // igv.value = elIgv[0].igv;
-            // console.log('igv.value::', igv.value);
+      {/* ADD INGRESO DE MERCADERIAS style={{ display: "flex" }}*/}
+      <div class="intervalo-fechas">
+        <div>
+          <ElButton
+            name="ADD INGRESO DE MERCADERÍAS"
+            title="Add un nuevo ingreso de mercaderías"
+            style={{ marginLeft: "4px" }}
+            onClick={$(async () => {
+              //validar PERIODO
+              if (periodo.idPeriodo === "") {
+                alert("Seleccione el periodo.");
+                document.getElementById("se_periodo")?.focus();
+                ini.value++;
+                return;
+              }
+              // obteniendo IGVs de COMPRA
+              let elIgv = await getIgvsCompra({
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idEmpresa: parametrosGlobales.idEmpresa,
+              });
+              elIgv = elIgv.data;
+              console.log("elIgv", elIgv);
+              losIgvsCompra.value = elIgv;
+              const tre = elIgv.filter((docs: any) => docs.default === true);
+              // console.log('tre', tre);
+              igvCompraPorDefault.idElIgv = tre[0]._id;
+              igvCompraPorDefault.elIgv = tre[0].igv;
+              // console.log('igvCompraPorDefault', igvCompraPorDefault);
+              //
+              // let elIgv = await getIgvVenta(parametrosGlobales);
+              // elIgv = elIgv.data;
+              // console.log('elIgv', elIgv);
+              // igv.value = elIgv[0].igv;
+              // console.log('igv.value::', igv.value);
 
-            definicion_CTX_INDEX_IN_ALMACEN.iNS = [];
-            definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen = true;
-          })}
-        />
-        <ElSelect
-          id={"se_periodo_IN_ALMACEN"}
-          // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
-          estilos={{ width: "168px", marginLeft: "4px" }}
-          registros={losPeriodosCargados.value}
-          registroID={"_id"}
-          registroTEXT={"periodo"}
-          seleccione={"-- Seleccione periodo --"}
-          onChange={$(() => {
-            // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-            const elSelec = document.getElementById("se_periodo_IN_ALMACEN") as HTMLSelectElement;
-            const elIdx = elSelec.selectedIndex;
-            // console.log('?', elIdx, elSelec[elIdx].id);
-            periodo.idPeriodo = elSelec[elIdx].id;
-            if (periodo.idPeriodo === "") {
-              periodo.periodo = "";
-              parametrosBusqueda.periodo = "";
-            } else {
-              periodo.periodo = elSelec.value;
-              parametrosBusqueda.periodo = elSelec.value;
-              // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
-              parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-              // console.log('💨💨💨💨💨💨first', periodo);
-              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+              definicion_CTX_INDEX_IN_ALMACEN.iNS = [];
+              definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen = true;
+            })}
+          />
+        </div>
+        <div>
+          {/* <label>hola</label> */}
+          <ElSelect
+            id={"se_periodo_IN_ALMACEN"}
+            // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
+            estilos={{ width: "168px", marginLeft: "4px" }}
+            registros={losPeriodosCargados.value}
+            registroID={"_id"}
+            registroTEXT={"periodo"}
+            seleccione={"-- Seleccione periodo --"}
+            onChange={$(() => {
+              // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+              const elSelec = document.getElementById("se_periodo_IN_ALMACEN") as HTMLSelectElement;
+              const elIdx = elSelec.selectedIndex;
+              // console.log('?', elIdx, elSelec[elIdx].id);
+              periodo.idPeriodo = elSelec[elIdx].id;
+              if (periodo.idPeriodo === "") {
+                periodo.periodo = "";
+                parametrosBusqueda.periodo = "";
+              } else {
+                periodo.periodo = elSelec.value;
+                parametrosBusqueda.periodo = elSelec.value;
+                // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                parametrosBusqueda.idPeriodo = periodo.idPeriodo;
+                // console.log('💨💨💨💨💨💨first', periodo);
+                // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+                buscarInAlmacen.value++;
+
+                definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = true;
+              }
+            })}
+            onKeyPress={$((e: any) => {
+              if (e.key === "Enter") {
+                (document.getElementById("in_Fecha_MICE") as HTMLSelectElement)?.focus();
+              }
+            })}
+          />
+          <input
+            type="image"
+            title="Buscar ingresos"
+            alt="icono buscar"
+            height={16}
+            width={16}
+            src={images.searchPLUS}
+            style={{ marginLeft: "2px" }}
+            onClick$={() => {
+              if (parametrosBusqueda.idPeriodo === "") {
+                alert("Debe seleccionar el periodo");
+                document.getElementById("se_periodo_IN_ALMACEN")?.focus();
+                return;
+              }
               buscarInAlmacen.value++;
 
               definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = true;
-            }
-          })}
-          onKeyPress={$((e: any) => {
-            if (e.key === "Enter") {
-              (document.getElementById("in_Fecha_MICE") as HTMLSelectElement)?.focus();
-            }
-          })}
-        />
-        <input
-          type="image"
-          title="Buscar ingresos"
-          alt="icono buscar"
-          height={16}
-          width={16}
-          src={images.searchPLUS}
-          style={{ marginLeft: "2px" }}
-          onClick$={() => {
-            if (parametrosBusqueda.idPeriodo === "") {
-              alert("Debe seleccionar el periodo");
-              document.getElementById("se_periodo_IN_ALMACEN")?.focus();
-              return;
-            }
-            buscarInAlmacen.value++;
-
-            definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = true;
-          }}
-        />
-        {definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen && (
-          <div class="modal">
-            <NewInAlmacen
-              addPeriodo={periodo}
-              inSelecci={definicion_CTX_INDEX_IN_ALMACEN.iNS}
-              losIgvsCompra={losIgvsCompra.value}
-              igvCompraPorDefault={igvCompraPorDefault}
-              // contexto={CTX_COTIZACION}
-              // ancho={'600px'}
-              // parametrosGlobales={parametrosGlobales}
-              // inicializacion={inicializacionCotizacion}
-              // onCerrar={cerrarPanelCotizacion}
-            />
-          </div>
-        )}
+            }}
+          />
+        </div>
       </div>
+      {/* style={{ display: "flex", flexDirection: "column" }} */}
+      {/* <div>
+        <label>hola 1</label>
+        <label>hola 2</label>
+      </div> */}
+      {definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen && (
+        <div class="modal">
+          <NewInAlmacen
+            addPeriodo={periodo}
+            inSelecci={definicion_CTX_INDEX_IN_ALMACEN.iNS}
+            losIgvsCompra={losIgvsCompra.value}
+            igvCompraPorDefault={igvCompraPorDefault}
+            // contexto={CTX_COTIZACION}
+            // ancho={'600px'}
+            // parametrosGlobales={parametrosGlobales}
+            // inicializacion={inicializacionCotizacion}
+            // onCerrar={cerrarPanelCotizacion}
+          />
+        </div>
+      )}
       {/*  tabla INGRESOS DE MERCADERIA */}
       <div style={{ margin: "10px 0" }}>
         {buscarInAlmacen.value > 0 ? (

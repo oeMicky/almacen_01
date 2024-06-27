@@ -137,7 +137,6 @@ export default component$((props: { elUbi: any }) => {
       <div class="add-form">
         {/* Departamento */}
         <div class="form-control">
-          <label>Departamento</label>
           <div class="form-control form-agrupado">
             <ElSelect
               id={"se_Departamento_UBIGEO_SUNAT"}
@@ -172,7 +171,6 @@ export default component$((props: { elUbi: any }) => {
         </div>
         {/* Provincia */}
         <div class="form-control">
-          <label>Provincia</label>
           <div class="form-control form-agrupado">
             <ElSelect
               id={"se_Provincia_UBIGEO_SUNAT"}
@@ -205,7 +203,6 @@ export default component$((props: { elUbi: any }) => {
         </div>
         {/* Distrito */}
         <div class="form-control">
-          <label>Distrito</label>
           <div class="form-control form-agrupado">
             <ElSelect
               id={"se_Distrito_UBIGEO_SUNAT"}
@@ -240,7 +237,6 @@ export default component$((props: { elUbi: any }) => {
         </div>
         {/* Ubigeo SUNAT */}
         <div class="form-control">
-          <label>Ubigeo SUNAT</label>
           <div class="form-control form-agrupado">
             <input
               id="in_UbigeoSUNAT_GR"

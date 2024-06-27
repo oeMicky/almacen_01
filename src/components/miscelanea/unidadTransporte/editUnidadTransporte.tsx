@@ -1,10 +1,10 @@
-import { $, component$, useContext, useStore } from '@builder.io/qwik';
-import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from './buscarUnidadTransporte';
-import { elIdAuxiliar } from '~/functions/comunes';
-import ImgButton from '~/components/system/imgButton';
-import { images } from '~/assets';
-import { parametrosGlobales } from '~/routes/login';
-import { inUpUnidadTransporte } from '~/apis/unidadTransporte.api';
+import { $, component$, useContext, useStore } from "@builder.io/qwik";
+import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from "./buscarUnidadTransporte";
+import { elIdAuxiliar } from "~/functions/comunes";
+import ImgButton from "~/components/system/imgButton";
+import { images } from "~/assets";
+import { parametrosGlobales } from "~/routes/login";
+import { inUpUnidadTransporte } from "~/apis/unidadTransporte.api";
 
 export default component$((props: { uniTranspSeleccionado: any }) => {
   //#region CONTEXTOS
@@ -13,30 +13,30 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
 
   //#region INICIALIZACION
   const laUnidadTransp = useStore({
-    idUnidadTransporte: props.uniTranspSeleccionado.idUnidadTransporte ? props.uniTranspSeleccionado.idUnidadTransporte : '',
-    idVehiculo: props.uniTranspSeleccionado.idVehiculo ? props.uniTranspSeleccionado.idVehiculo : '',
+    idUnidadTransporte: props.uniTranspSeleccionado.idUnidadTransporte ? props.uniTranspSeleccionado.idUnidadTransporte : "",
+    idVehiculo: props.uniTranspSeleccionado.idVehiculo ? props.uniTranspSeleccionado.idVehiculo : "",
     idAuxiliar: props.uniTranspSeleccionado.idAuxiliar ? props.uniTranspSeleccionado.idAuxiliar : elIdAuxiliar(),
 
-    activo: typeof props.uniTranspSeleccionado.activo === 'undefined' ? true : props.uniTranspSeleccionado.activo,
+    activo: typeof props.uniTranspSeleccionado.activo === "undefined" ? true : props.uniTranspSeleccionado.activo,
 
-    placa: props.uniTranspSeleccionado.placa ? props.uniTranspSeleccionado.placa : '',
-    idVehiculoMarca: props.uniTranspSeleccionado.idVehiculoMarca ? props.uniTranspSeleccionado.idVehiculoMarca : '',
-    vehiculoMarca: props.uniTranspSeleccionado.vehiculoMarca ? props.uniTranspSeleccionado.vehiculoMarca : '',
-    idVehiculoModelo: props.uniTranspSeleccionado.idVehiculoModelo ? props.uniTranspSeleccionado.idVehiculoModelo : '',
-    vehiculoModelo: props.uniTranspSeleccionado.vehiculoModelo ? props.uniTranspSeleccionado.vehiculoModelo : '',
-    vin: props.uniTranspSeleccionado.vin ? props.uniTranspSeleccionado.vin : '',
+    placa: props.uniTranspSeleccionado.placa ? props.uniTranspSeleccionado.placa : "",
+    idVehiculoMarca: props.uniTranspSeleccionado.idVehiculoMarca ? props.uniTranspSeleccionado.idVehiculoMarca : "",
+    vehiculoMarca: props.uniTranspSeleccionado.vehiculoMarca ? props.uniTranspSeleccionado.vehiculoMarca : "",
+    idVehiculoModelo: props.uniTranspSeleccionado.idVehiculoModelo ? props.uniTranspSeleccionado.idVehiculoModelo : "",
+    vehiculoModelo: props.uniTranspSeleccionado.vehiculoModelo ? props.uniTranspSeleccionado.vehiculoModelo : "",
+    vin: props.uniTranspSeleccionado.vin ? props.uniTranspSeleccionado.vin : "",
 
     tarjetaCirculacionCertificadoHabilitacion: props.uniTranspSeleccionado.tarjetaCirculacionCertificadoHabilitacion
       ? props.uniTranspSeleccionado.tarjetaCirculacionCertificadoHabilitacion
-      : '',
+      : "",
   });
   //#endregion INICIALIZACION
 
   //#region UPDATE UNIDAD TRANSPORTE
   const actualizarUnidadTransporte = $(async () => {
-    if (laUnidadTransp.tarjetaCirculacionCertificadoHabilitacion.trim() === '') {
-      alert('Debe ingresar la Tarjeta Circulacion / Certificado Habilitacion');
-      document.getElementById('input_Licencia_CHOFER')?.focus();
+    if (laUnidadTransp.tarjetaCirculacionCertificadoHabilitacion.trim() === "") {
+      alert("Debe ingresar la Tarjeta Circulacion / Certificado Habilitacion");
+      document.getElementById("input_Licencia_CHOFER")?.focus();
       return;
     }
 
@@ -60,15 +60,15 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 400px)',
+        width: "clamp(330px, 86%, 400px)",
         // width: 'auto',
-        padding: '1px',
+        padding: "1px",
         // border: '3px dashed yellow',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -109,11 +109,10 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
         <div>
           {/* Placa */}
           <div class="form-control">
-            <label>Placa</label>
             <div class="form-control form-agrupado">
               <input
                 id="in_placa_VEHICULO"
-                style={{ width: '100%', background: 'orange' }}
+                style={{ width: "100%", background: "orange" }}
                 disabled
                 type="text"
                 minLength={5}
@@ -124,8 +123,8 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
                   laUnidadTransp.placa = (e.target as HTMLInputElement).value.toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('se_marca_VEHICULO') as HTMLSelectElement)?.focus();
+                  if (e.key === "Enter") {
+                    (document.getElementById("se_marca_VEHICULO") as HTMLSelectElement)?.focus();
                   }
                 }}
               />
@@ -133,9 +132,8 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
           </div>
           {/* marca */}
           <div class="form-control">
-            <label>Marca</label>
             <div class="form-control form-agrupado">
-              <input type="text" disabled value={laUnidadTransp.vehiculoMarca} style={{ width: '100%' }} />
+              <input type="text" disabled value={laUnidadTransp.vehiculoMarca} style={{ width: "100%" }} />
               {/* <ElSelect
                 id={'se_marca_VEHICULO'}
                 valorSeleccionado={vehiculo.vehiculoMarca}
@@ -205,9 +203,8 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
           )} */}
           {/* modelo */}
           <div class="form-control">
-            <label>Modelo</label>
             <div class="form-control form-agrupado">
-              <input type="text" disabled value={laUnidadTransp.vehiculoModelo} style={{ width: '100%' }} />
+              <input type="text" disabled value={laUnidadTransp.vehiculoModelo} style={{ width: "100%" }} />
               {/* <ElSelect
                 id={'se_modelo_VEHICULO'}
                 valorSeleccionado={vehiculo.vehiculoModelo}
@@ -302,11 +299,10 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
           )} */}
           {/* VIN */}
           <div class="form-control">
-            <label>VIN</label>
             <div class="form-control form-agrupado">
               <input
                 id="in_VIN_UNIDAD_TRANSPORTE"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 disabled
                 type="text"
                 placeholder="VIN"
@@ -315,12 +311,8 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
                   laUnidadTransp.vin = (e.target as HTMLInputElement).value.toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    (
-                      document.getElementById(
-                        'in_TarjetaCirculacion_CertificadoHabilitacion_UNIDAD_TRANSPORTE'
-                      ) as HTMLInputElement
-                    )?.focus();
+                  if (e.key === "Enter") {
+                    (document.getElementById("in_TarjetaCirculacion_CertificadoHabilitacion_UNIDAD_TRANSPORTE") as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -328,11 +320,10 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
           </div>
           {/* Tarjeta Circulación / Certificado Habilitacion */}
           <div class="form-control">
-            <label>VIN</label>
             <div class="form-control form-agrupado">
               <input
                 id="in_TarjetaCirculacion_CertificadoHabilitacion_UNIDAD_TRANSPORTE"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="text"
                 placeholder="Tarjeta Circulación / Certificado Habilitación"
                 value={laUnidadTransp.tarjetaCirculacionCertificadoHabilitacion}
@@ -340,8 +331,8 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
                   laUnidadTransp.tarjetaCirculacionCertificadoHabilitacion = (e.target as HTMLInputElement).value.toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('btn_actualizar_UNIDAD_TRANSPORTE') as HTMLInputElement)?.focus();
+                  if (e.key === "Enter") {
+                    (document.getElementById("btn_actualizar_UNIDAD_TRANSPORTE") as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -353,7 +344,7 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
         <input
           id="btn_actualizar_UNIDAD_TRANSPORTE"
           type="button"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             actualizarUnidadTransporte();

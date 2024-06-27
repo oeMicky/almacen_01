@@ -1,18 +1,18 @@
-import { $, component$, useContext, useStore } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import { CTX_NEW_EDIT_VEHICULO } from './newEditVehiculo';
-import type { IModeloVehicular } from '~/interfaces/iVehiculo';
-import { inUpVehiculoMarcaModelo } from '~/apis/vehiculo.api';
-import { parametrosGlobales } from '~/routes/login';
+import { $, component$, useContext, useStore } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
+import { CTX_NEW_EDIT_VEHICULO } from "./newEditVehiculo";
+import type { IModeloVehicular } from "~/interfaces/iVehiculo";
+import { inUpVehiculoMarcaModelo } from "~/apis/vehiculo.api";
+import { parametrosGlobales } from "~/routes/login";
 
 export default component$((props: { modeloVehicularSelecci: any }) => {
   //#region DEFINICION MODELO VEHICULAR - NEW  /EDIT
   const modeloVehicular = useStore<IModeloVehicular>({
-    idVehiculoMarca: props.modeloVehicularSelecci.idVehiculoMarca ? props.modeloVehicularSelecci.idVehiculoMarca : '',
-    vehiculoMarca: props.modeloVehicularSelecci.vehiculoMarca ? props.modeloVehicularSelecci.vehiculoMarca : '',
-    idVehiculoModelo: props.modeloVehicularSelecci.idVehiculoModelo ? props.modeloVehicularSelecci.idVehiculoModelo : '',
-    vehiculoModelo: props.modeloVehicularSelecci.vehiculoModelo ? props.modeloVehicularSelecci.vehiculoModelo : '',
+    idVehiculoMarca: props.modeloVehicularSelecci.idVehiculoMarca ? props.modeloVehicularSelecci.idVehiculoMarca : "",
+    vehiculoMarca: props.modeloVehicularSelecci.vehiculoMarca ? props.modeloVehicularSelecci.vehiculoMarca : "",
+    idVehiculoModelo: props.modeloVehicularSelecci.idVehiculoModelo ? props.modeloVehicularSelecci.idVehiculoModelo : "",
+    vehiculoModelo: props.modeloVehicularSelecci.vehiculoModelo ? props.modeloVehicularSelecci.vehiculoModelo : "",
   });
   //#endregion DEFINICION MODELO VEHICULAR - NEW  /EDIT
 
@@ -22,9 +22,9 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
 
   //#region SUBMIT
   const grabarModeloVehicular = $(async () => {
-    if (modeloVehicular.vehiculoModelo === '') {
-      alert('Ingrese la modelo.');
-      document.getElementById('inputModelo_MICE')?.focus();
+    if (modeloVehicular.vehiculoModelo === "") {
+      alert("Ingrese la modelo.");
+      document.getElementById("inputModelo_MICE")?.focus();
       return;
     }
     let modeloVehi = await inUpVehiculoMarcaModelo({
@@ -35,9 +35,9 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
       idVehiculoModelo: modeloVehicular.idVehiculoModelo,
       vehiculoModelo: modeloVehicular.vehiculoModelo,
     });
-    console.log('graboooooo modeloVehi', modeloVehi);
+    console.log("graboooooo modeloVehi", modeloVehi);
     modeloVehi = modeloVehi.data;
-    console.log('graboooooo modeloVehi.data', modeloVehi);
+    console.log("graboooooo modeloVehi.data", modeloVehi);
 
     ctx_new_edit_vehiculo.grabo_modelo = true;
     ctx_new_edit_vehiculo.mostrarPanelNewEditModeloVehicular = false;
@@ -48,14 +48,14 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: "clamp(330px, 86%, 700px)",
         // width: 'auto',
-        padding: '1px',
+        padding: "1px",
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -73,7 +73,7 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('modeloVehicularSelecci', props.modeloVehicularSelecci);
+            console.log("modeloVehicularSelecci", props.modeloVehicularSelecci);
           })}
         />
       </div>
@@ -83,11 +83,10 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
       <div class="add-form">
         {/* Marca */}
         <div class="form-control">
-          <label>Marca</label>
           <div class="form-control form-agrupado">
             <input
               id="inputMarca_MICE"
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               type="text"
               disabled
               //   placeholder="Add marca vehícular"
@@ -98,12 +97,11 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
         </div>
         {/* Modelo */}
         <div class="form-control">
-          <label>Modelo</label>
           <div class="form-control form-agrupado">
             <input
               id="inputModelo_MICE"
               autoFocus
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               type="text"
               placeholder="Add modelo vehícular"
               value={modeloVehicular.vehiculoModelo}
@@ -111,8 +109,8 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
                 modeloVehicular.vehiculoModelo = (e.target as HTMLInputElement).value.toUpperCase();
               }}
               onKeyPress$={(e) => {
-                if (e.key === 'Enter') {
-                  (document.getElementById('buttonGrabarModeloVehicular') as HTMLInputElement)?.focus();
+                if (e.key === "Enter") {
+                  (document.getElementById("buttonGrabarModeloVehicular") as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -122,7 +120,7 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
         <input
           id="buttonGrabarModeloVehicular"
           type="button"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             grabarModeloVehicular();

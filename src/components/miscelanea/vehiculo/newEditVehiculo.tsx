@@ -1,29 +1,29 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-import { images } from '~/assets';
-import ImgButton from '~/components/system/imgButton';
-import ElSelect from '~/components/system/elSelect';
-import type { IMarcaVehicular, IModeloVehicular, IVehiculo } from '~/interfaces/iVehiculo';
-import { CTX_BUSCAR_VEHICULO } from './buscarVehiculo';
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
+import { images } from "~/assets";
+import ImgButton from "~/components/system/imgButton";
+import ElSelect from "~/components/system/elSelect";
+import type { IMarcaVehicular, IModeloVehicular, IVehiculo } from "~/interfaces/iVehiculo";
+import { CTX_BUSCAR_VEHICULO } from "./buscarVehiculo";
 // import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
-import { getMarcasVehiculares, getModelosVehiculares, inUpVehiculo } from '~/apis/vehiculo.api';
-import { parametrosGlobales } from '~/routes/login';
-import NewEditMarcaVehicular from './newEditMarcaVehicular';
-import NewEditModeloVehicular from './newEditModeloVehicular';
+import { getMarcasVehiculares, getModelosVehiculares, inUpVehiculo } from "~/apis/vehiculo.api";
+import { parametrosGlobales } from "~/routes/login";
+import NewEditMarcaVehicular from "./newEditMarcaVehicular";
+import NewEditModeloVehicular from "./newEditModeloVehicular";
 
-export const CTX_NEW_EDIT_VEHICULO = createContextId<any>('new_edit_vehiculo');
+export const CTX_NEW_EDIT_VEHICULO = createContextId<any>("new_edit_vehiculo");
 
 export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
   //#region DEFINICION VEHICULO - NEW  /EDIT
   const vehiculo = useStore<IVehiculo>({
-    _id: props.vehiculoSelecci._id ? props.vehiculoSelecci._id : '',
-    idGrupoEmpresarial: props.vehiculoSelecci.idGrupoEmpresarial ? props.vehiculoSelecci.idGrupoEmpresarial : '',
-    idEmpresa: props.vehiculoSelecci.idEmpresa ? props.vehiculoSelecci.idEmpresa : '',
-    placa: props.vehiculoSelecci.placa ? props.vehiculoSelecci.placa : '',
-    idVehiculoMarca: props.vehiculoSelecci.idVehiculoMarca ? props.vehiculoSelecci.idVehiculoMarca : '',
-    vehiculoMarca: props.vehiculoSelecci.vehiculoMarca ? props.vehiculoSelecci.vehiculoMarca : '',
-    idVehiculoModelo: props.vehiculoSelecci.idVehiculoModelo ? props.vehiculoSelecci.idVehiculoModelo : '',
-    vehiculoModelo: props.vehiculoSelecci.vehiculoModelo ? props.vehiculoSelecci.vehiculoModelo : '',
-    vin: props.vehiculoSelecci.vin ? props.vehiculoSelecci.vin : '',
+    _id: props.vehiculoSelecci._id ? props.vehiculoSelecci._id : "",
+    idGrupoEmpresarial: props.vehiculoSelecci.idGrupoEmpresarial ? props.vehiculoSelecci.idGrupoEmpresarial : "",
+    idEmpresa: props.vehiculoSelecci.idEmpresa ? props.vehiculoSelecci.idEmpresa : "",
+    placa: props.vehiculoSelecci.placa ? props.vehiculoSelecci.placa : "",
+    idVehiculoMarca: props.vehiculoSelecci.idVehiculoMarca ? props.vehiculoSelecci.idVehiculoMarca : "",
+    vehiculoMarca: props.vehiculoSelecci.vehiculoMarca ? props.vehiculoSelecci.vehiculoMarca : "",
+    idVehiculoModelo: props.vehiculoSelecci.idVehiculoModelo ? props.vehiculoSelecci.idVehiculoModelo : "",
+    vehiculoModelo: props.vehiculoSelecci.vehiculoModelo ? props.vehiculoSelecci.vehiculoModelo : "",
+    vin: props.vehiculoSelecci.vin ? props.vehiculoSelecci.vin : "",
   });
   //#endregion DEFINICION VEHICULO
 
@@ -39,17 +39,17 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
 
   //#region MODELO
   const marca = useStore<IMarcaVehicular>({
-    _id: '',
-    vehiculoMarca: '',
+    _id: "",
+    vehiculoMarca: "",
   });
   //#endregion MODELO
 
   //#region MODELO
   const modelo = useStore<IModeloVehicular>({
-    idVehiculoMarca: '',
-    vehiculoMarca: '',
-    idVehiculoModelo: '',
-    vehiculoModelo: '',
+    idVehiculoMarca: "",
+    vehiculoMarca: "",
+    idVehiculoModelo: "",
+    vehiculoModelo: "",
   });
   //#endregion MODELO
 
@@ -78,18 +78,18 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
 
   //***** obtener MARCAS Y MODELOS VEHICULARES
   const obtenerMarcasVehiculares = $(async () => {
-    console.log('first first first 🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖', vehiculo.vehiculoMarca, vehiculo.vehiculoModelo);
+    console.log("first first first 🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖", vehiculo.vehiculoMarca, vehiculo.vehiculoModelo);
     const mars = await getMarcasVehiculares({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
     });
-    console.log('mars.data', mars.data);
+    console.log("mars.data", mars.data);
     lasMarcas.value = mars.data;
 
-    if (ini.value === 0 && vehiculo._id !== '') {
-      console.log('********---ES EDICION---*******');
+    if (ini.value === 0 && vehiculo._id !== "") {
+      console.log("********---ES EDICION---*******");
       const tre: any = lasMarcas.value.find(({ _id }) => _id === vehiculo.idVehiculoMarca);
-      console.log('tre', tre.modelos);
+      console.log("tre", tre.modelos);
       losModelos.value = tre.modelos;
     }
     //*
@@ -106,10 +106,10 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
 
   useTask$(({ track }) => {
     track(() => ini.value);
-    console.log('obtenerMarcasVehiculares()', ini.value);
+    console.log("obtenerMarcasVehiculares()", ini.value);
     obtenerMarcasVehiculares();
     //
-    console.log('first', vehiculo.idVehiculoModelo, vehiculo.vehiculoModelo);
+    console.log("first", vehiculo.idVehiculoModelo, vehiculo.vehiculoModelo);
     // (document.getElementById('se_modelo_VEHICULO') as HTMLSelectElement).value = 'MAZDA 3'; //vehiculo.vehiculoModelo;
   });
   //#endregion INICIALIZAR
@@ -133,7 +133,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
       idEmpresa: parametrosGlobales.idEmpresa,
       idMarca: vehiculo.idVehiculoMarca,
     });
-    console.log('modelos', mods.data);
+    console.log("modelos", mods.data);
     losModelos.value = mods.data;
   });
   //#endregion MODELO
@@ -152,19 +152,19 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
 
   //#region ON SUBMIT
   const grabarVehiculo = $(async () => {
-    if (vehiculo.placa === '') {
-      alert('Ingrese la placa.');
-      document.getElementById('in_placa_VEHICULO')?.focus();
+    if (vehiculo.placa === "") {
+      alert("Ingrese la placa.");
+      document.getElementById("in_placa_VEHICULO")?.focus();
       return;
     }
-    if (vehiculo.idVehiculoMarca === '') {
-      alert('Ingrese la marca.');
-      document.getElementById('se_marca_VEHICULO')?.focus();
+    if (vehiculo.idVehiculoMarca === "") {
+      alert("Ingrese la marca.");
+      document.getElementById("se_marca_VEHICULO")?.focus();
       return;
     }
-    if (vehiculo.idVehiculoModelo === '') {
-      alert('Ingrese el modelo.');
-      document.getElementById('se_modelo_VEHICULO')?.focus();
+    if (vehiculo.idVehiculoModelo === "") {
+      alert("Ingrese el modelo.");
+      document.getElementById("se_modelo_VEHICULO")?.focus();
       return;
     }
 
@@ -181,9 +181,9 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
       usuario: parametrosGlobales.usuario,
     });
 
-    console.log('graboooooo marvaVehi', vehi);
+    console.log("graboooooo marvaVehi", vehi);
     vehi = vehi.data;
-    console.log('graboooooo marvaVehi.data', vehi);
+    console.log("graboooooo marvaVehi.data", vehi);
 
     ctx_buscar_vehiculo.grabo_vehiculo = true;
     ctx_buscar_vehiculo.mostrarPanelNewEditVehiculo = false;
@@ -207,15 +207,15 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 700px)',
+        width: "clamp(330px, 86%, 700px)",
         // width: 'auto',
-        padding: '1px',
+        padding: "1px",
         // border: '3px dashed yellow',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -234,7 +234,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
           width={16}
           title="Ver vehículo"
           onClick={$(() => {
-            console.log('vehículo', vehiculo);
+            console.log("vehículo", vehiculo);
           })}
         />
         <ImgButton
@@ -244,7 +244,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
           width={16}
           title="Ver vehículo"
           onClick={$(() => {
-            console.log('ini.value', ini.value);
+            console.log("ini.value", ini.value);
           })}
         />
       </div>
@@ -256,11 +256,10 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
         <div>
           {/* Placa */}
           <div class="form-control">
-            <label>Placa</label>
             <div class="form-control form-agrupado">
               <input
                 id="in_placa_VEHICULO"
-                style={{ width: '100%', background: 'orange' }}
+                style={{ width: "100%", background: "orange" }}
                 autoFocus
                 type="text"
                 // type="number"
@@ -281,8 +280,8 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                   vehiculo.placa = (e.target as HTMLInputElement).value.toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('se_marca_VEHICULO') as HTMLSelectElement)?.focus();
+                  if (e.key === "Enter") {
+                    (document.getElementById("se_marca_VEHICULO") as HTMLSelectElement)?.focus();
                   }
                 }}
                 // onKeyPress$={(e) => {
@@ -334,30 +333,29 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
           </div>
           {/* marca */}
           <div class="form-control">
-            <label>Marca</label>
             <div class="form-control form-agrupado">
               <ElSelect
-                id={'se_marca_VEHICULO'}
+                id={"se_marca_VEHICULO"}
                 valorSeleccionado={vehiculo.vehiculoMarca}
                 registros={lasMarcas.value}
-                registroID={'_id'}
-                registroTEXT={'vehiculoMarca'}
-                seleccione={'-- Seleccione marca --'}
+                registroID={"_id"}
+                registroTEXT={"vehiculoMarca"}
+                seleccione={"-- Seleccione marca --"}
                 onChange={$(() => {
                   // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-                  const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
+                  const elSelec = document.getElementById("se_marca_VEHICULO") as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   vehiculo.idVehiculoMarca = elSelec[elIdx].id;
-                  if (vehiculo.idVehiculoMarca === '') {
-                    vehiculo.vehiculoMarca = '';
+                  if (vehiculo.idVehiculoMarca === "") {
+                    vehiculo.vehiculoMarca = "";
                   } else {
                     vehiculo.vehiculoMarca = elSelec.value;
                     obtenerModelosVehiculares();
                   }
                 })}
                 onKeyPress={$((e: any) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('se_modelo_VEHICULO') as HTMLSelectElement)?.focus();
+                  if (e.key === "Enter") {
+                    (document.getElementById("se_modelo_VEHICULO") as HTMLSelectElement)?.focus();
                   }
                 })}
               />
@@ -369,8 +367,8 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 width={16}
                 title="Adicionar la marca vehícular"
                 onClick$={() => {
-                  marca._id = '';
-                  marca.vehiculoMarca = '';
+                  marca._id = "";
+                  marca.vehiculoMarca = "";
                   definicion_CTX_NEW_EDIT_VEHICULO.mostrarPanelNewEditMarcaVehicular = true;
                 }}
               />
@@ -382,12 +380,12 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 width={16}
                 title="Editar marca vehícular"
                 onClick$={() => {
-                  const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
+                  const elSelec = document.getElementById("se_marca_VEHICULO") as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
-                  if (elSelec[elIdx].id === '') {
-                    alert('Selecione la marca del vehículo');
+                  console.log("elSelec[elIdx].id", elSelec[elIdx].id);
+                  console.log("elSelec.value", elSelec.value);
+                  if (elSelec[elIdx].id === "") {
+                    alert("Selecione la marca del vehículo");
                     elSelec.focus();
                     return;
                   }
@@ -405,29 +403,28 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
           )}
           {/* modelo */}
           <div class="form-control">
-            <label>Modelo</label>
             <div class="form-control form-agrupado">
               <ElSelect
-                id={'se_modelo_VEHICULO'}
+                id={"se_modelo_VEHICULO"}
                 valorSeleccionado={vehiculo.vehiculoModelo}
                 registros={losModelos.value}
-                registroID={'_id'}
-                registroTEXT={'modelo'}
-                seleccione={'-- Seleccione modelo --'}
+                registroID={"_id"}
+                registroTEXT={"modelo"}
+                seleccione={"-- Seleccione modelo --"}
                 onChange={$(() => {
-                  console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢👓👓');
-                  const elSelec = document.getElementById('se_modelo_VEHICULO') as HTMLSelectElement;
+                  console.log("🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢👓👓");
+                  const elSelec = document.getElementById("se_modelo_VEHICULO") as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   vehiculo.idVehiculoModelo = elSelec[elIdx].id;
-                  if (vehiculo.idVehiculoModelo === '') {
-                    vehiculo.vehiculoModelo = '';
+                  if (vehiculo.idVehiculoModelo === "") {
+                    vehiculo.vehiculoModelo = "";
                   } else {
                     vehiculo.vehiculoModelo = elSelec.value;
                   }
                 })}
                 onKeyPress={$((e: any) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('in_VIN_VEHICULO') as HTMLInputElement)?.focus();
+                  if (e.key === "Enter") {
+                    (document.getElementById("in_VIN_VEHICULO") as HTMLInputElement)?.focus();
                   }
                 })}
               />
@@ -439,20 +436,20 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 width={16}
                 title="Adicionar el modelo vehícular"
                 onClick$={() => {
-                  const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
+                  const elSelec = document.getElementById("se_marca_VEHICULO") as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
-                  if (elSelec[elIdx].id === '') {
-                    alert('Seleccione la marca del vehículo');
+                  console.log("elSelec[elIdx].id", elSelec[elIdx].id);
+                  console.log("elSelec.value", elSelec.value);
+                  if (elSelec[elIdx].id === "") {
+                    alert("Seleccione la marca del vehículo");
                     elSelec.focus();
                     return;
                   }
                   modelo.idVehiculoMarca = elSelec[elIdx].id;
                   modelo.vehiculoMarca = elSelec.value;
 
-                  modelo.idVehiculoModelo = '';
-                  modelo.vehiculoModelo = '';
+                  modelo.idVehiculoModelo = "";
+                  modelo.vehiculoModelo = "";
 
                   definicion_CTX_NEW_EDIT_VEHICULO.mostrarPanelNewEditModeloVehicular = true;
                 }}
@@ -465,23 +462,23 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 width={16}
                 title="Editar modelo vehícular"
                 onClick$={() => {
-                  const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
+                  const elSelec = document.getElementById("se_marca_VEHICULO") as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
-                  if (elSelec[elIdx].id === '') {
-                    alert('Seleccione la marca del vehículo');
+                  console.log("elSelec[elIdx].id", elSelec[elIdx].id);
+                  console.log("elSelec.value", elSelec.value);
+                  if (elSelec[elIdx].id === "") {
+                    alert("Seleccione la marca del vehículo");
                     elSelec.focus();
                     return;
                   }
                   modelo.idVehiculoMarca = elSelec[elIdx].id;
                   modelo.vehiculoMarca = elSelec.value;
 
-                  const elSelecMo = document.getElementById('se_modelo_VEHICULO') as HTMLSelectElement;
+                  const elSelecMo = document.getElementById("se_modelo_VEHICULO") as HTMLSelectElement;
                   const elIdxMo = elSelecMo.selectedIndex;
 
-                  if (elSelecMo[elIdxMo].id === '') {
-                    alert('Seleccione el modelo del vehículo');
+                  if (elSelecMo[elIdxMo].id === "") {
+                    alert("Seleccione el modelo del vehículo");
                     elSelecMo.focus();
                     return;
                   } else {
@@ -501,11 +498,10 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
           )}
           {/* VIN */}
           <div class="form-control">
-            <label>VIN</label>
             <div class="form-control form-agrupado">
               <input
                 id="in_VIN_VEHICULO"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="text"
                 placeholder="VIN"
                 value={vehiculo.vin}
@@ -513,8 +509,8 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                   vehiculo.vin = (e.target as HTMLInputElement).value.toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('btn_grabar_VEHICULO') as HTMLInputElement)?.focus();
+                  if (e.key === "Enter") {
+                    (document.getElementById("btn_grabar_VEHICULO") as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -525,7 +521,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
         <input
           id="btn_grabar_VEHICULO"
           type="button"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             grabarVehiculo();

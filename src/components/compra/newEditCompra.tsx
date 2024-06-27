@@ -1100,7 +1100,6 @@ export default component$(
               {/* ----------------------------------------------------- */}
               {/* PERIODO */}
               <div class="form-control">
-                <label>Periodo</label>
                 <div class="form-control form-agrupado">
                   <input
                     id="in_Periodo"
@@ -1123,7 +1122,6 @@ export default component$(
               </div>
               {/* TCP */}
               <div class="form-control">
-                <label>TCP</label>
                 <div class="form-control form-agrupado">
                   <ElSelect
                     id={"se_tcp"}
@@ -1161,7 +1159,6 @@ export default component$(
             <div>
               {/* tipo de documento identidad*/}
               <div class="form-control">
-                <label>Tipo documento</label>
                 <div class="form-control form-agrupado">
                   <select
                     id="se_TipoDocumentoLiteral"
@@ -1224,7 +1221,6 @@ export default component$(
               )}
               {/* numero identidad*/}
               <div class="form-control">
-                <label>Número identidad</label>
                 <div class="form-control form-agrupado">
                   <input
                     id="in_NumeroDocumentoIdentidad"
@@ -1240,7 +1236,6 @@ export default component$(
               </div>
               {/* Razon Social / Nombre */}
               <div class="form-control">
-                <label>Razón social / Nombre</label>
                 <div class="form-control form-agrupado">
                   <input
                     id="in_NombreProveedor"
@@ -1353,7 +1348,6 @@ export default component$(
             <div>
               {/* Fecha */}
               <div class="form-control">
-                <label>Fecha</label>
                 <div class="form-control form-agrupado">
                   <input
                     id="in_Fecha"
@@ -1423,7 +1417,6 @@ export default component$(
               </div>
               {/* Año DUA o DSI */}
               <div class="form-control">
-                <label>Año DUA o DSI</label>
                 <div class="form-control form-agrupado">
                   <input
                     id="in_Anio_DUA_DSI"
@@ -1445,7 +1438,6 @@ export default component$(
               </div>
               {/* Serie */}
               <div class="form-control">
-                <label>Serie</label>
                 <div class="form-control form-agrupado">
                   <input
                     id="in_Serie"
@@ -1468,7 +1460,6 @@ export default component$(
               </div>
               {/* Número */}
               <div class="form-control">
-                <label>Número</label>
                 <div class="form-control form-agrupado">
                   <input
                     id="in_Numero"
@@ -1628,7 +1619,6 @@ export default component$(
             <div>
               {/* TIPO DE COMPRA */}
               <div class="form-control">
-                <label>TIPO DE COMPRA</label>
                 <div class="form-control form-agrupado">
                   <select
                     id="se_TipoCompra"
@@ -1656,7 +1646,6 @@ export default component$(
               </div>
               {/* Base imponible */}
               <div class="form-control">
-                <label>Base imponible</label>
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
@@ -1688,7 +1677,6 @@ export default component$(
               </div>
               {/* IGV */}
               <div class="form-control">
-                <label>IGV</label>
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
@@ -1766,7 +1754,6 @@ export default component$(
               </div>
               {/* Adquisiciones No Gravadas */}
               <div class="form-control">
-                <label>Adquisiciones No Gravadas</label>
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
@@ -1794,7 +1781,6 @@ export default component$(
               </div>
               {/* ISC */}
               <div class="form-control">
-                <label>ISC</label>
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
@@ -1820,7 +1806,6 @@ export default component$(
               </div>
               {/* ICBP */}
               <div class="form-control">
-                <label>ICBP</label>
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
@@ -1846,7 +1831,6 @@ export default component$(
               </div>
               {/* Otros */}
               <div class="form-control">
-                <label>Otros</label>
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
@@ -1872,7 +1856,6 @@ export default component$(
               </div>
               {/* Total */}
               <div class="form-control">
-                <label>Total</label>
                 <div class="form-control form-agrupado">
                   <input
                     type="number"
@@ -2040,7 +2023,6 @@ export default component$(
               <div id="zona_Retencion_Secundaria" hidden={!definicion_CTX_COMPRA.retencion}>
                 {/* Retencion Porcentaje */}
                 <div class="form-control">
-                  <label>Porcentaje de retención</label>
                   <div class="form-control form-agrupado">
                     <input
                       type="number"

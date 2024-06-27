@@ -1,15 +1,15 @@
-import { $, component$, createContextId, useContext, useContextProvider, useStore, useTask$ } from '@builder.io/qwik';
-import ImgButton from '../system/imgButton';
-import { images } from '~/assets';
-import { cerosALaIzquierda } from '~/functions/comunes';
-import { CTX_BUSCAR_CUENTA_CONTABLE } from './buscarCuentaContable';
-import BuscarCuentaDestino from './buscarCuentaDestino';
-import BorrarCuentaDestino from './borrarCuentaDestino';
-import { inUpCuentaContable } from '~/apis/cuentaContable.api';
-import { parametrosGlobales } from '~/routes/login';
+import { $, component$, createContextId, useContext, useContextProvider, useStore, useTask$ } from "@builder.io/qwik";
+import ImgButton from "../system/imgButton";
+import { images } from "~/assets";
+import { cerosALaIzquierda } from "~/functions/comunes";
+import { CTX_BUSCAR_CUENTA_CONTABLE } from "./buscarCuentaContable";
+import BuscarCuentaDestino from "./buscarCuentaDestino";
+import BorrarCuentaDestino from "./borrarCuentaDestino";
+import { inUpCuentaContable } from "~/apis/cuentaContable.api";
+import { parametrosGlobales } from "~/routes/login";
 
-export const CTX_NEW_EDIT_CUENTA_CONTABLE = createContextId<any>('__new_edit_cuenta_contable');
-export const CTX_CUENTA_CONTABLE = createContextId<any>('__cuenta_contable');
+export const CTX_NEW_EDIT_CUENTA_CONTABLE = createContextId<any>("__new_edit_cuenta_contable");
+export const CTX_CUENTA_CONTABLE = createContextId<any>("__cuenta_contable");
 
 export default component$((props: { CCSelecionada: any; ejercicio: number; idPlanContable: string; tipoDefault?: boolean }) => {
   //#region NEW_EDIT CUENTA CONTABLE
@@ -26,9 +26,9 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
   //#region CUENTA CONTABLE
   const definicion_CTX_CUENTA_CONTABLE = useStore(
     {
-      _id: props.CCSelecionada._id ? props.CCSelecionada._id : '',
-      codigo: props.CCSelecionada.codigo ? props.CCSelecionada.codigo : '',
-      descripcion: props.CCSelecionada.descripcion ? props.CCSelecionada.descripcion : '',
+      _id: props.CCSelecionada._id ? props.CCSelecionada._id : "",
+      codigo: props.CCSelecionada.codigo ? props.CCSelecionada.codigo : "",
+      descripcion: props.CCSelecionada.descripcion ? props.CCSelecionada.descripcion : "",
       asientoDestino: props.CCSelecionada.asientoDestino ? props.CCSelecionada.asientoDestino : [],
     },
     {
@@ -44,9 +44,9 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
 
   //#region INICIALIZAR
   const borrarCuentaDestino = useStore({
-    idAuxiliar: '',
-    codigo: '',
-    descripcion: '',
+    idAuxiliar: "",
+    codigo: "",
+    descripcion: "",
   });
   //#endregion INICIALIZAR
 
@@ -69,14 +69,14 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
 
   //#region REGISTRAR CUENTA CONTABLE
   const registrarCuentaContable = $(async () => {
-    if (definicion_CTX_CUENTA_CONTABLE.codigo.trim() === '') {
-      alert('Ingrese el código.');
-      document.getElementById('in_codigo_CUENTA_CONTABLE')?.focus();
+    if (definicion_CTX_CUENTA_CONTABLE.codigo.trim() === "") {
+      alert("Ingrese el código.");
+      document.getElementById("in_codigo_CUENTA_CONTABLE")?.focus();
       return;
     }
-    if (definicion_CTX_CUENTA_CONTABLE.descripcion.trim() === '') {
-      alert('Ingrese el descripción.');
-      document.getElementById('in_descripcion_CUENTA_CONTABLE')?.focus();
+    if (definicion_CTX_CUENTA_CONTABLE.descripcion.trim() === "") {
+      alert("Ingrese el descripción.");
+      document.getElementById("in_descripcion_CUENTA_CONTABLE")?.focus();
       return;
     }
     if (definicion_CTX_CUENTA_CONTABLE.asientoDestino.length > 0) {
@@ -85,7 +85,7 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
       let suma_HABER = 0;
       for (let index = 0; index < definicion_CTX_CUENTA_CONTABLE.asientoDestino.length; index++) {
         const element = definicion_CTX_CUENTA_CONTABLE.asientoDestino[index];
-        console.log('element', element);
+        console.log("element", element);
         if (element.tipo) {
           suma_DEBE = suma_DEBE + element.porcentaje;
         } else {
@@ -103,7 +103,7 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
       }
     }
 
-    console.log('paso a registro de CC');
+    console.log("paso a registro de CC");
     // const cuentaConta =
     await inUpCuentaContable({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -125,14 +125,14 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 600px)',
+        width: "clamp(386px, 86%, 600px)",
         // width: 'auto',
-        padding: '2px',
+        padding: "2px",
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div style={{ display: "flex", justifyContent: "end" }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -150,12 +150,12 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
           height={18}
           width={18}
           onClick={$(() => {
-            console.log('definicion_CTX_CUENTA_CONTABLE', definicion_CTX_CUENTA_CONTABLE);
+            console.log("definicion_CTX_CUENTA_CONTABLE", definicion_CTX_CUENTA_CONTABLE);
           })}
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: '0.8rem' }}>Registro de cuenta contable</h3>
+      <h3 style={{ fontSize: "0.8rem" }}>Registro de cuenta contable</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
@@ -165,7 +165,7 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
             <div>
               <input
                 id="in_codigo_CUENTA_CONTABLE"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="number"
                 placeholder="Código"
                 value={definicion_CTX_CUENTA_CONTABLE.codigo}
@@ -177,11 +177,10 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
           </div>
           {/* descripcion*/}
           <div class="form-control">
-            <label>Descripción</label>
             <div class="form-control form-agrupado">
               <input
                 id="in_descripcion_CUENTA_CONTABLE"
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
                 type="text"
                 placeholder="Descripción"
                 value={definicion_CTX_CUENTA_CONTABLE.descripcion}
@@ -194,7 +193,6 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
           {/* /********************ASIENTO DESTINO***************** */}
           {/* AddCuentaDestino */}
           <div class="form-control">
-            <label>AddCuentaDestino</label>
             <div class="form-control form-agrupado">
               <button
                 id="btn_AddCuentaDestino_CUENTA_CONTABLE"
@@ -218,7 +216,7 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
           )}
           <div class="form-control">
             {definicion_CTX_CUENTA_CONTABLE.asientoDestino.length > 0 ? (
-              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', margin: '5px 0' }}>
+              <table style={{ fontSize: "0.8rem", fontWeight: "lighter", margin: "5px 0" }}>
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -254,10 +252,7 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
                     // }
                     return (
                       <tr key={cuentaDesti.idAuxiliar}>
-                        <td data-label="Ítem" key={cuentaDesti.idAuxiliar} class="comoNumero">{`${cerosALaIzquierda(
-                          indexItem,
-                          3
-                        )}`}</td>
+                        <td data-label="Ítem" key={cuentaDesti.idAuxiliar} class="comoNumero">{`${cerosALaIzquierda(indexItem, 3)}`}</td>
                         <td data-label="Código" class="comoNumero">
                           {cuentaDesti.codigo}
                         </td>
@@ -268,12 +263,12 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
                           <input
                             id="btn_TipoCuentaContable"
                             type="button"
-                            style={{ fontSize: '1em' }}
-                            value={cuentaDesti.tipo === true ? 'DEBE' : 'HABER'}
+                            style={{ fontSize: "1em" }}
+                            value={cuentaDesti.tipo === true ? "DEBE" : "HABER"}
                             // onClick$={() => (cuenta.tipo = !cuenta.tipo)}
                             onClick$={(e) => {
                               cuentaDesti.tipo = !cuentaDesti.tipo;
-                              (e.target as HTMLInputElement).value = cuentaDesti.tipo ? 'DEBE' : 'HABER';
+                              (e.target as HTMLInputElement).value = cuentaDesti.tipo ? "DEBE" : "HABER";
                             }}
                             // onChange$={(e) => (cuenta.tipo = !(e.target as HTMLInputElement).value)}
                           />
@@ -281,13 +276,9 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
                         <td data-label="Porcentaje" class="acciones">
                           <input
                             type="number"
-                            style={{ textAlign: 'end', width: '64px' }}
+                            style={{ textAlign: "end", width: "64px" }}
                             // width={40}
-                            value={
-                              cuentaDesti.porcentaje.$numberDecimal
-                                ? cuentaDesti.porcentaje.$numberDecimal
-                                : cuentaDesti.porcentaje
-                            }
+                            value={cuentaDesti.porcentaje.$numberDecimal ? cuentaDesti.porcentaje.$numberDecimal : cuentaDesti.porcentaje}
                             onChange$={(e) => {
                               cuentaDesti.porcentaje = parseFloat((e.target as HTMLInputElement).value);
                               // console.log('IMPORTE CHANGE', cuenta.importe);
@@ -307,9 +298,9 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
                             width={14}
                             onClick$={() => {
                               if (index > 0) {
-                                console.log('va para ARRIBA', index);
+                                console.log("va para ARRIBA", index);
                                 const car = definicion_CTX_CUENTA_CONTABLE.asientoDestino[index];
-                                console.log('va para ARRIBA car', car);
+                                console.log("va para ARRIBA car", car);
                                 definicion_CTX_CUENTA_CONTABLE.asientoDestino.splice(index, 1);
                                 definicion_CTX_CUENTA_CONTABLE.asientoDestino.splice(index - 1, 0, car);
                               }
@@ -322,12 +313,12 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
                             alt="icono de mover abajo"
                             height={14}
                             width={14}
-                            style={{ margin: '0 2px' }}
+                            style={{ margin: "0 2px" }}
                             onClick$={() => {
                               if (index < definicion_CTX_CUENTA_CONTABLE.asientoDestino.length - 1) {
-                                console.log('va para ABAJOOOOO', index, definicion_CTX_CUENTA_CONTABLE.asientoDestino.length - 1);
+                                console.log("va para ABAJOOOOO", index, definicion_CTX_CUENTA_CONTABLE.asientoDestino.length - 1);
                                 const elemento = definicion_CTX_CUENTA_CONTABLE.asientoDestino.splice(index, 1)[0];
-                                console.log('va para ABAJOOOOO elemento', elemento);
+                                console.log("va para ABAJOOOOO elemento", elemento);
                                 definicion_CTX_CUENTA_CONTABLE.asientoDestino.splice(index + 1, index, elemento);
                               }
                             }}
@@ -363,7 +354,7 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
                 </tfoot> */}
               </table>
             ) : (
-              <i style={{ fontSize: '0.8rem' }}>No existen cuentas destino</i>
+              <i style={{ fontSize: "0.8rem" }}>No existen cuentas destino</i>
             )}
           </div>
           <br />
@@ -372,7 +363,7 @@ export default component$((props: { CCSelecionada: any; ejercicio: number; idPla
         <input
           id="btn_RegistrarCuentaContable_CUENTA_CONTABLE"
           type="button"
-          value={'Registrar'}
+          value={"Registrar"}
           class="btn-centro"
           onClick$={() => registrarCuentaContable()}
         />

@@ -103,6 +103,7 @@ export default component$((props: { dGR: any }) => {
     ctx_buscar_Direccion_GR.mostrarPanelNewEditDireccionGR = false;
   });
   //#endregion GRABAR DIRECCION GR
+
   return (
     <div
       style={{
@@ -143,7 +144,6 @@ export default component$((props: { dGR: any }) => {
       <div class="add-form">
         {/* Dirección  */}
         <div class="form-control">
-          <label>Dirección</label>
           <div class="form-control form-agrupado">
             <input
               id="in_Direccion_GR"
@@ -168,7 +168,6 @@ export default component$((props: { dGR: any }) => {
         </div>
         {/* Ubigeo SUNAT */}
         <div class="form-control">
-          <label>Ubigeo SUNAT</label>
           <div class="form-control form-agrupado">
             <input
               id="in_UbigeoSUNAT_GR"

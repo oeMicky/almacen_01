@@ -53,7 +53,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
           <>
             {misMercaderiasKARDEX.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter ", padding: "2px" }}>
+                <table style={{ fontSize: "0.9rem", fontWeight: "lighter ", padding: "2px" }}>
                   <thead>
                     <tr>
                       <th>Descripción</th>
