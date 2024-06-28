@@ -225,14 +225,7 @@ export default component$((props: { dGR: any }) => {
       {/* MOSTRAR SPINNER */}
       {/* {mostrarSpinner.value && ( */}
       {definicion_CTX_NEW_EDIT_DIRECCION_GR.mostrarSpinner && (
-        <div
-          class="modal"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           <Spinner />
         </div>
       )}
