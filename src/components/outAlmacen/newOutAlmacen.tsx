@@ -913,6 +913,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     );
                   })}
                 </tbody>
+                <br />
               </table>
             ) : (
               <i style={{ fontSize: "0.8rem" }}>No existen mercaderías registradas</i>

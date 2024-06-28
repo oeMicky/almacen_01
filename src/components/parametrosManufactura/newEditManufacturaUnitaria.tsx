@@ -15,11 +15,15 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
   const definicion_CTX_MANUFACTURA_UNITARIA = useStore<IManufacturaUnitaria>({
     _id: props.manuUnitaSelecci._id ? props.manuUnitaSelecci._id : "",
     manufacturaUnitaria: props.manuUnitaSelecci.manufacturaUnitaria ? props.manuUnitaSelecci.manufacturaUnitaria : "",
-    tiempoManufacturaUnitariaPorHora: props.manuUnitaSelecci.tiempoManufacturaUnitariaPorHora.$numberDecimal
+    tiempoManufacturaUnitariaPorHora: props.manuUnitaSelecci.tiempoManufacturaUnitariaPorHora
       ? props.manuUnitaSelecci.tiempoManufacturaUnitariaPorHora.$numberDecimal
+        ? props.manuUnitaSelecci.tiempoManufacturaUnitariaPorHora.$numberDecimal
+        : props.manuUnitaSelecci.tiempoManufacturaUnitariaPorHora
       : 0,
-    totalCostosDirectos: props.manuUnitaSelecci.totalCostosDirectos.$numberDecimal
+    totalCostosDirectos: props.manuUnitaSelecci.totalCostosDirectos
       ? props.manuUnitaSelecci.totalCostosDirectos.$numberDecimal
+        ? props.manuUnitaSelecci.totalCostosDirectos.$numberDecimal
+        : props.manuUnitaSelecci.totalCostosDirectos
       : props.totalCostosDirectos,
     // costoManufacturaUnitario: props.manuUnitaSelecci.costoPEN ? props.manuUnitaSelecci.costoPEN : 0,
   });

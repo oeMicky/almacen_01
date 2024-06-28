@@ -98,7 +98,11 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       produccion: props.inSelecci.produccion ? props.inSelecci.produccion : false,
 
       idElIgv: props.inSelecci.idElIgv ? props.inSelecci.idElIgv : props.igvCompraPorDefault.idElIgv,
-      elIgv: props.inSelecci.elIgv.$numberDecimal ? props.inSelecci.elIgv.$numberDecimal : props.igvCompraPorDefault.elIgv.$numberDecimal,
+      elIgv: props.inSelecci.elIgv
+        ? props.inSelecci.elIgv.$numberDecimal
+          ? props.inSelecci.elIgv.$numberDecimal
+          : props.inSelecci.elIgv
+        : props.igvCompraPorDefault.elIgv.$numberDecimal,
 
       // correlativo: props.inSelecci.correlativo ? props.inSelecci.correlativo : 0,
 
@@ -372,6 +376,16 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           title="Cerrar el formulario"
           onClick={$(() => {
             console.log("definicion_CTX_IN_ALMACEN", definicion_CTX_IN_ALMACEN);
+          })}
+        />
+        <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el  props.igvCompraPorDefault"
+          onClick={$(() => {
+            console.log(" props.igvCompraPorDefault", props.igvCompraPorDefault);
           })}
         />
         <ImgButton

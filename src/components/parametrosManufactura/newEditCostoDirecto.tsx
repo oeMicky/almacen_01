@@ -13,7 +13,11 @@ export default component$((props: { cosDirecSelecci: any; idParametrosManufactur
   const definicion_CTX_COSTO_DIRECTO = useStore<ICostoDirecto>({
     _id: props.cosDirecSelecci._id ? props.cosDirecSelecci._id : "",
     costoDirecto: props.cosDirecSelecci.costoDirecto ? props.cosDirecSelecci.costoDirecto : "",
-    costoPEN: props.cosDirecSelecci.costoPEN.$numberDecimal ? props.cosDirecSelecci.costoPEN.$numberDecimal : 0,
+    costoPEN: props.cosDirecSelecci.costoPEN
+      ? props.cosDirecSelecci.costoPEN.$numberDecimal
+        ? props.cosDirecSelecci.costoPEN.$numberDecimal
+        : props.cosDirecSelecci.costoPEN
+      : 0,
   });
   //#endregion definicion_CTX_COSTO_DIRECTO
 
