@@ -1,7 +1,7 @@
-import { $, component$, useContext } from "@builder.io/qwik";
-import { CTX_ADD_VENTA } from "./addVenta";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
+import { $, component$, useContext } from '@builder.io/qwik';
+import { CTX_ADD_VENTA } from './addVenta';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
 
 export default component$((props: { borrarItemVenta: any }) => {
   //#region CONTEXTO
@@ -11,15 +11,16 @@ export default component$((props: { borrarItemVenta: any }) => {
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 600px)",
+        width: 'clamp(330px, 86%, 600px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
+        background: '#eee',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -37,24 +38,25 @@ export default component$((props: { borrarItemVenta: any }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log("itemVenta", props.borrarItemVenta);
+            console.log('itemVenta', props.borrarItemVenta);
           })}
         />
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: "10px" }}>
-          ¿Desea eliminar el ítem?
-          <div style={{ fontSize: "0.7rem" }}>
+        <div style={{ marginBottom: '8px' }}>
+          <label>¿Desea eliminar el ítem?</label>
+          <br />
+          <p style={{ fontSize: '0.8rem' }}>
             <strong>{props.borrarItemVenta.codigo}</strong>
             <br />
             <strong>{props.borrarItemVenta.descripcion}</strong>
             <br />
-          </div>
-          <div style={{ display: "flex", marginTop: "10px", justifyContent: "space-around", alignItems: "center" }}>
+          </p>
+          <div style={{ display: 'flex', marginTop: '8px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
-              style={{ width: "60px" }}
+              style={{ width: '60px' }}
               onClick$={() => {
                 ctx_add_venta.borrar_idAuxilarVenta = props.borrarItemVenta.idAuxiliar;
                 ctx_add_venta.mostrarPanelBorrarItemVenta = false;
@@ -64,7 +66,7 @@ export default component$((props: { borrarItemVenta: any }) => {
               SI
             </button>
             <button
-              style={{ width: "60px" }}
+              style={{ width: '60px' }}
               onClick$={() => {
                 ctx_add_venta.mostrarPanelBorrarItemVenta = false;
               }}

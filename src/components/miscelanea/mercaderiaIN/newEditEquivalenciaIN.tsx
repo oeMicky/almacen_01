@@ -1,16 +1,16 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import ImgButton from "~/components/system/imgButton";
-import { CTX_MERCADERIA_IN, CTX_NEW_EDIT_MERCADERIA_IN } from "./newEditMercaderiaIN";
-import ElSelect from "~/components/system/elSelect";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import ImgButton from '~/components/system/imgButton';
+import { CTX_MERCADERIA_IN, CTX_NEW_EDIT_MERCADERIA_IN } from './newEditMercaderiaIN';
+import ElSelect from '~/components/system/elSelect';
 // import NewEditUnidadEquivalenciaIN from './newEditUnidadEquivalenciaIN';
-import type { IMercaEquivalenciaIN } from "~/interfaces/iMercaderia";
+import type { IMercaEquivalenciaIN } from '~/interfaces/iMercaderia';
 // import { getLineasTipos } from '~/apis/lineaTipo.api';
-import { elIdAuxiliar } from "~/functions/comunes";
+import { elIdAuxiliar } from '~/functions/comunes';
 // import BuscarUnidadSUNAT from './buscarUnidadSUNAT';
-import BuscarUnidadEquivalenciaSUNAT from "./buscarUnidadEquivalenciaSUNAT";
+import BuscarUnidadEquivalenciaSUNAT from './buscarUnidadEquivalenciaSUNAT';
 
-export const CTX_NEW_EDIT_EQUIVALENCIA_IN = createContextId<any>("new_edit_equivalencia_IN");
+export const CTX_NEW_EDIT_EQUIVALENCIA_IN = createContextId<any>('new_edit_equivalencia_IN');
 
 export default component$((props: { unidadIN: string; idLineaTipo: string; lineaTipo: string; equivaSelecci: any; insertar: boolean }) => {
   //#region DEFINICION CTX_NEW_EDIT_EQUIVALENCIA_IN
@@ -25,13 +25,13 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
 
   //#region DEFINICION EQUIVALENCIA  -  NEW  /  EDIT
   const equivalenciaIN = useStore<IMercaEquivalenciaIN>({
-    _id: props.equivaSelecci._id ? props.equivaSelecci._id : "",
-    idAuxiliar: props.equivaSelecci.idAuxiliar ? props.equivaSelecci.idAuxiliar : "",
-    descripcionEquivalencia: props.equivaSelecci.descripcionEquivalencia ? props.equivaSelecci.descripcionEquivalencia : "",
-    laEquivalencia: props.equivaSelecci.laEquivalencia ? props.equivaSelecci.laEquivalencia : "",
-    idUnidadEquivalencia: props.equivaSelecci.idUnidadEquivalencia ? props.equivaSelecci.idUnidadEquivalencia : "",
-    unidadEquivalencia: props.equivaSelecci.unidadEquivalencia ? props.equivaSelecci.unidadEquivalencia : "",
-    pesoKg: props.equivaSelecci.pesoKg ? props.equivaSelecci.pesoKg : "",
+    _id: props.equivaSelecci._id ? props.equivaSelecci._id : '',
+    idAuxiliar: props.equivaSelecci.idAuxiliar ? props.equivaSelecci.idAuxiliar : '',
+    descripcionEquivalencia: props.equivaSelecci.descripcionEquivalencia ? props.equivaSelecci.descripcionEquivalencia : '',
+    laEquivalencia: props.equivaSelecci.laEquivalencia ? props.equivaSelecci.laEquivalencia : '',
+    idUnidadEquivalencia: props.equivaSelecci.idUnidadEquivalencia ? props.equivaSelecci.idUnidadEquivalencia : '',
+    unidadEquivalencia: props.equivaSelecci.unidadEquivalencia ? props.equivaSelecci.unidadEquivalencia : '',
+    pesoKg: props.equivaSelecci.pesoKg ? props.equivaSelecci.pesoKg : '',
     factor: props.equivaSelecci.factor ? props.equivaSelecci.factor : 1,
     tipoEquivalencia: props.equivaSelecci.idAuxiliar ? props.equivaSelecci.tipoEquivalencia : true,
   });
@@ -48,31 +48,31 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
   // const directoIndirecto = useSignal(true); //directo=true  indirecto=false
   const lasUnidadesEquivalentes = useSignal<any>(ctx_new_edit_mercaderia_in.lasUE);
   const uniEq = useStore({
-    idUniEq: "",
-    uniEq: "",
+    idUniEq: '',
+    uniEq: '',
   });
   //#endregion INICIALIZAR
 
   //#region REGISTRAR EQUIVALENCIA
   const registrarEquivalencia = $(() => {
-    if (equivalenciaIN.descripcionEquivalencia === "") {
-      alert("Ingrese la descripción de la equivalencia.");
-      document.getElementById("in_descripcionEquivalenciaIN_MICE")?.focus();
+    if (equivalenciaIN.descripcionEquivalencia === '') {
+      alert('Ingrese la descripción de la equivalencia.');
+      document.getElementById('in_descripcionEquivalenciaIN_MICE')?.focus();
       return;
     }
-    if (equivalenciaIN.idUnidadEquivalencia === "") {
-      alert("Ingrese la unidad para la equivalencia.");
-      document.getElementById("se_unidadEquivalenciaIN_MICE")?.focus();
+    if (equivalenciaIN.idUnidadEquivalencia === '') {
+      alert('Ingrese la unidad para la equivalencia.');
+      document.getElementById('se_unidadEquivalenciaIN_MICE')?.focus();
       return;
     }
-    if (equivalenciaIN.factor === 0 || equivalenciaIN.factor.toString() === "") {
-      alert("Ingrese un factor adecuado. El factor no puede ser cero (0)");
-      document.getElementById("in_factorIN_MICE")?.focus();
+    if (equivalenciaIN.factor === 0 || equivalenciaIN.factor.toString() === '') {
+      alert('Ingrese un factor adecuado. El factor no puede ser cero (0)');
+      document.getElementById('in_factorIN_MICE')?.focus();
       return;
     }
     equivalenciaIN.laEquivalencia = equivalenciaIN.tipoEquivalencia ? equivalenciaIN.factor : 1 / equivalenciaIN.factor;
     if (props.insertar) {
-      console.log("insertado");
+      console.log('insertado');
 
       ctxDocumento.push({
         // _id: props.equivaSelecci._id ? props.equivaSelecci._id : '',
@@ -86,13 +86,13 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
         factor: equivalenciaIN.factor,
         laEquivalencia: equivalenciaIN.laEquivalencia,
       });
-      console.log("equivalenciaIN enviado por INSERCION", equivalenciaIN);
+      console.log('equivalenciaIN enviado por INSERCION', equivalenciaIN);
     } else {
-      console.log("editado - documento", ctxDocumento);
-      console.log("editado", ctxDocumento[0].idAuxiliar, equivalenciaIN.idAuxiliar);
+      console.log('editado - documento', ctxDocumento);
+      console.log('editado', ctxDocumento[0].idAuxiliar, equivalenciaIN.idAuxiliar);
       // documento.find(( idAuxiliar:any ) => idAuxiliar === equivalenciaIN.idAuxiliar);
       const aMod: any = ctxDocumento.find((docs: any) => docs.idAuxiliar === equivalenciaIN.idAuxiliar);
-      console.log("aMod", aMod);
+      console.log('aMod', aMod);
 
       (aMod.descripcionEquivalencia = equivalenciaIN.descripcionEquivalencia),
         // : props.equivaSelecci._id ? props.equivaSelecci._id : '',
@@ -102,7 +102,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
         (aMod.tipoEquivalencia = equivalenciaIN.tipoEquivalencia),
         (aMod.factor = equivalenciaIN.factor),
         (aMod.laEquivalencia = equivalenciaIN.laEquivalencia);
-      console.log("equivalenciaIN enviado por EDICION", equivalenciaIN);
+      console.log('equivalenciaIN enviado por EDICION', equivalenciaIN);
     }
 
     ctx_new_edit_mercaderia_in.mostrarPanelNewEditEquivalenciaIN = false;
@@ -116,7 +116,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
     if (definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.grabo_uniEq) {
       // lasUnidadesEquivalentes.value=definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.laLineaTipo[0].unidadesEquivalencias;
       const uno: any = definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.laLineaTipo;
-      console.log("uno", uno);
+      console.log('uno', uno);
       const dos: any = uno.unidadesEquivalencias;
       //ORDENANDO UNIDADES EQUIVALENCIAS
       const unisEquiOrde: any = dos.sort((a: any, b: any) => {
@@ -131,7 +131,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
         // names must be equal
         return 0;
       });
-      console.log("first - unisEquiOrde", unisEquiOrde);
+      console.log('first - unisEquiOrde', unisEquiOrde);
       lasUnidadesEquivalentes.value = unisEquiOrde;
 
       definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.grabo_uniEq = false;
@@ -159,14 +159,14 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 560px)",
+        width: 'clamp(330px, 86%, 560px)',
         // width: 'auto',
-        padding: "1px",
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -184,7 +184,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log("props.equivaSelecci", props.equivaSelecci);
+            console.log('props.equivaSelecci', props.equivaSelecci);
           })}
         />
         <ImgButton
@@ -194,7 +194,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log("equivalenciaIN", equivalenciaIN);
+            console.log('equivalenciaIN', equivalenciaIN);
           })}
         />
       </div>
@@ -206,11 +206,11 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
         {/* ENCABEZADO */}
         <div>
           {/* Descripción de equivalencia */}
-          <div class="form-control" style={{ margin: "4px 0" }}>
+          <div class="form-control" style={{ margin: '4px 0' }}>
             <div class="form-control form-agrupado">
               <input
                 id="in_descripcionEquivalenciaIN_MICE"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 type="text"
                 placeholder="Descripción de equivalencia"
                 value={equivalenciaIN.descripcionEquivalencia}
@@ -218,8 +218,8 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
                   equivalenciaIN.descripcionEquivalencia = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    document.getElementById("se_tipoEquivalenciaIN_MICE")?.focus();
+                  if (e.key === 'Enter') {
+                    document.getElementById('se_tipoEquivalenciaIN_MICE')?.focus();
                   }
                 }}
                 onFocusin$={(e) => {
@@ -229,59 +229,59 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
             </div>
           </div>
           {/* Tipo equivalencia   */}
-          <div style={{ margin: "4px 0" }}>
+          <div style={{ margin: '4px 0' }}>
             <div>
               <select
                 id="se_tipoEquivalenciaIN_MICE"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onChange$={(e) => {
-                  if ((e.target as HTMLSelectElement).value === "Directa") {
+                  if ((e.target as HTMLSelectElement).value === 'Directa') {
                     equivalenciaIN.tipoEquivalencia = true;
                   } else {
                     equivalenciaIN.tipoEquivalencia = false;
                   }
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    document.getElementById("se_unidadEquivalenciaIN_MICE")?.focus();
+                  if (e.key === 'Enter') {
+                    document.getElementById('se_unidadEquivalenciaIN_MICE')?.focus();
                   }
                 }}
               >
-                <option value={"Directa"} selected={equivalenciaIN.tipoEquivalencia ? true : false}>
+                <option value={'Directa'} selected={equivalenciaIN.tipoEquivalencia ? true : false}>
                   Directa
                 </option>
-                <option value={"Indirecta"} selected={equivalenciaIN.tipoEquivalencia ? false : true}>
+                <option value={'Indirecta'} selected={equivalenciaIN.tipoEquivalencia ? false : true}>
                   Indirecta
                 </option>
               </select>
             </div>
           </div>
           {/* Unidad equivalencia */}
-          <div class="form-control" style={{ margin: "4px 0" }}>
+          <div class="form-control" style={{ margin: '4px 0' }}>
             <div class="form-control form-agrupado">
               <ElSelect
                 // estilos={{ width: '100%' }}
-                id={"se_unidadEquivalenciaIN_MICE"}
+                id={'se_unidadEquivalenciaIN_MICE'}
                 valorSeleccionado={props.equivaSelecci.unidadEquivalencia}
                 registros={lasUnidadesEquivalentes.value}
-                registroID={"_id"}
-                registroTEXT={"unidadEquivalencia"}
-                seleccione={"-- Seleccione unidad equivalencia --"}
+                registroID={'_id'}
+                registroTEXT={'unidadEquivalencia'}
+                seleccione={'-- Seleccione unidad equivalencia --'}
                 onChange={$(() => {
                   // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-                  const elSelec = document.getElementById("se_unidadEquivalenciaIN_MICE") as HTMLSelectElement;
+                  const elSelec = document.getElementById('se_unidadEquivalenciaIN_MICE') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   equivalenciaIN.idUnidadEquivalencia = elSelec[elIdx].id;
-                  if (equivalenciaIN.idUnidadEquivalencia === "") {
-                    equivalenciaIN.unidadEquivalencia = "";
+                  if (equivalenciaIN.idUnidadEquivalencia === '') {
+                    equivalenciaIN.unidadEquivalencia = '';
                   } else {
                     equivalenciaIN.unidadEquivalencia = elSelec.value;
                     //obtenerModelosVehiculares();
                   }
                 })}
                 onKeyPress={$((e: any) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("in_factorIN_MICE") as HTMLSelectElement)?.focus();
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_factorIN_MICE') as HTMLSelectElement)?.focus();
                   }
                 })}
               />
@@ -292,10 +292,10 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
                 height={16}
                 width={16}
                 title="Buscar unidad equivalente de SUNAT"
-                style={{ marginLeft: "2px" }}
+                style={{ marginLeft: '2px' }}
                 onClick$={() => {
-                  uniEq.idUniEq = "";
-                  uniEq.uniEq = "";
+                  uniEq.idUniEq = '';
+                  uniEq.uniEq = '';
 
                   ctx_new_edit_mercaderia_in.mostrarPanelBuscarUnidadEquivalenciaSUNAT = true;
                 }}
@@ -353,17 +353,17 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
             )} */}
           </div>
 
-          <div style={{ display: "flex", justifyContent: "center", alignContent: "center", margin: "4px 0" }}>
-            <img src={images.equal} style={{ width: "12px", height: "12px" }}></img>
+          <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', margin: '4px 0' }}>
+            <img src={images.equal} style={{ width: '12px', height: '12px' }}></img>
           </div>
 
           {/* Factor */}
-          <div style={{ margin: "4px 0" }}>
-            <div style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
-              {equivalenciaIN.tipoEquivalencia ? "" : "1/"}
+          <div style={{ margin: '4px 0' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+              {equivalenciaIN.tipoEquivalencia ? '' : '1/'}
               <input
                 id="in_factorIN_MICE"
-                style={{ marginRight: "4px" }}
+                style={{ marginRight: '4px' }}
                 type="number"
                 placeholder="Factor de equivalencia"
                 value={equivalenciaIN.factor}
@@ -371,8 +371,8 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
                   equivalenciaIN.factor = parseFloat((e.target as HTMLInputElement).value.trim());
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    document.getElementById("bu_Grabar_Equivalencia_IN_MI_P")?.focus();
+                  if (e.key === 'Enter') {
+                    document.getElementById('bu_Grabar_Equivalencia_IN_MI_P')?.focus();
                   }
                 }}
                 onFocusin$={(e) => {
@@ -389,7 +389,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
           id="bu_Grabar_Equivalencia_IN_MI_P"
           // type="submit"
           type="button"
-          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             registrarEquivalencia();

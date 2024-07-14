@@ -1,88 +1,26 @@
 import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from '../../assets/fonts/vfs_fonts';
+import pdfFonts from '../assets/fonts/vfs_fonts';
 import {
   cerosALaIzquierda,
-  formatearMonedaPEN,
   formatearNumeroINT,
   // formatearMonedaUSD,
-  formatear_4Decimales,
   formatoDDMMYYYY_PEN,
   // literal,
-  redondeo2Decimales,
 } from '~/functions/comunes';
-import logit from '../../assets/base64/imagesBase64.js';
+import logit from '../assets/base64/imagesBase64.js';
 import { parametrosGlobales } from '~/routes/login';
+import vehiculoInventario from '../assets/base64/vehiculoInventario.js';
 
-async function pdfOsMG_ConVehiculo(os: any) {
+async function pdfOs_InventarioVehicular(os: any) {
   pdfMake.vfs = pdfFonts;
 
   console.log('os PDF', os);
 
-  const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
-
-  const servicios = os.servicios;
-  // let repuestosDespachados: any = [];
-  const repuestosDespachados = os.requisiciones.filter((plot: any) => plot.cantidadDespachada.$numberDecimal > 0);
-  console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
-  let totalServicios = 0;
-  let totalRepuestos = 0;
+  const LOGO_EMPRESA = await import(`../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
 
   const reportTitle: any = [];
   // const details = [];
   // const rodape = [];
-
-  const losServicios = servicios.map((ser: any, index: number) => {
-    console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
-    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
-    const indexItem = index + 1;
-    totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
-    return [
-      { text: indexItem, style: 'tableBody' },
-      // { text: codigo, style: 'tableBody' },
-      { text: descripcionEquivalencia, style: 'tableBody' },
-      {
-        text: formatear_4Decimales(cantidadEquivalencia.$numberDecimal),
-        style: 'tableBody',
-      },
-      { text: unidadEquivalencia, style: 'tableBody' },
-      {
-        text: formatearMonedaPEN(precioPEN.$numberDecimal),
-        style: 'tableBody',
-      },
-      {
-        text: formatearMonedaPEN(ventaPEN.$numberDecimal),
-        style: 'tableBody',
-      },
-    ];
-  });
-
-  const losRepuestos = repuestosDespachados.map((repu: any, index: number) => {
-    console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
-    const { codigo, descripcionEquivalencia, cantidadDespachada, cantidadReingresada, unidadEquivalencia, precioPEN } = repu;
-    console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
-    if (cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal > 0) {
-      const indexItem = index + 1;
-      totalRepuestos = totalRepuestos + redondeo2Decimales((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal);
-      return [
-        { text: indexItem, style: 'tableBody' },
-        { text: codigo, style: 'tableBody' },
-        { text: descripcionEquivalencia, style: 'tableBody' },
-        {
-          text: formatear_4Decimales(cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal),
-          style: 'tableBody',
-        },
-        { text: unidadEquivalencia, style: 'tableBody' },
-        {
-          text: formatearMonedaPEN(precioPEN.$numberDecimal),
-          style: 'tableBody',
-        },
-        {
-          text: formatearMonedaPEN((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal),
-          style: 'tableBody',
-        },
-      ];
-    }
-  });
 
   //#region FUNCION PIE DE PAGINA
   // margin: [izq, top, der, button],
@@ -99,16 +37,19 @@ async function pdfOsMG_ConVehiculo(os: any) {
           ':' +
           cerosALaIzquierda(d.getMinutes(), 2) +
           ':' +
-          cerosALaIzquierda(d.getSeconds(), 2),
+          cerosALaIzquierda(d.getSeconds(), 2) +
+          '\n\nUsuario: ' +
+          parametrosGlobales.usuario,
         style: 'textoImpresion',
         margin: [15, -15, 0, 0],
+        // margin: [0, 0, 0, 0],
       },
       {
         image: 'poweredBy',
         fit: [70, 35],
         alignment: 'center',
         // margin: [0, -35, 0, 0],
-        margin: [0, -25, 0, 0],
+        margin: [-180, -40, 0, 0],
         // margin: [0, 0, 0, 0],
       },
       {
@@ -157,7 +98,7 @@ async function pdfOsMG_ConVehiculo(os: any) {
               headerRows: 0,
               widths: ['*'],
 
-              body: [['R U C N° ' + os.ruc + '\n\nORDEN DE SERVICIO\n\n' + os.serie + ' - ' + cerosALaIzquierda(os.numero, 8) + '\n']],
+              body: [['R U C N° ' + os.ruc + '\n\nINVENTARIO\n\n' + os.serie + ' - ' + cerosALaIzquierda(os.numero, 8) + '\n']],
             },
             // text: [
             //   { text: 'R U C N° 20602683321\n', style: 'textoBold10' },
@@ -306,97 +247,81 @@ async function pdfOsMG_ConVehiculo(os: any) {
       },
       //TRABAJOS REALIZADOS / OBSERVACIONES
       {
-        columns: [{ width: '100%', margin: [50, 10, 0, 0], text: { text: 'TRABAJOS REALIZADOS / OBSERVACIONES:', style: 'textoBold10' } }],
+        columns: [{ width: '100%', margin: [50, 10, 0, 0], text: { text: 'OBSERVACIONES:', style: 'textoBold10' } }],
       },
       {
         columns: [{ width: '100%', margin: [50, 10, 0, 0], text: { text: os.observacionesCliente, style: 'texto' } }],
       },
-      //SERVICIOS
-      {
-        columns: [{ width: '20%', margin: [50, 10, 0, 0], text: { text: 'SERVICIOS:', style: 'textoBold10' } }],
-      },
-      {
-        // margin: [izq, top, der, button],
-        margin: [30, 10, 30, 3],
-        style: 'tableExample',
-        table: {
-          headerRows: 1,
-          //
-          // widths: ['*', 'auto', '*', '*', '*', '*'],
-          widths: ['*', 'auto', '*', '*', '*', '*'],
-          body: [
-            [
-              { text: 'Ítem', style: 'tableHeaderLight' },
-              // { text: 'Código', style: 'tableHeaderLight' },
-              { text: 'Descripción', style: 'tableHeaderLight' },
-              { text: 'Cantidad', style: 'tableHeaderLight' },
-              { text: 'Uni', style: 'tableHeaderLight' },
-              { text: 'Precio', style: 'tableHeaderLight' },
-              { text: 'Venta', style: 'tableHeaderLight' },
-            ],
-            ...losServicios,
-          ],
-        },
-        // layout: 'itemsVentaLayout', //{ defaultBorder: false }, //'lightHorizontalLines', // 'noBorders', //'lightHorizontalLines',
-        layout: 'noBorders',
-      },
+      //SELECTORES II  --  IMAGEN VEHICULO
       {
         columns: [
           {
-            width: '100%',
-            margin: [0, 0, 30, 0],
-
-            text: { text: 'SUBTOTAL ' + formatearMonedaPEN(totalServicios), style: 'tableBodyRight' },
-            alignment: 'right',
+            // width: '94%',
+            margin: [50, 11, 0, 0],
+            // alignment: 'center',
+            style: 'tableLetraPequena',
+            table: {
+              // headers are automatically repeated if the table spans over multiple pages
+              // you can declare how many rows should be treated as headers
+              headerRows: 0,
+              widths: [90, 8],
+              body: [
+                ['LLAVEROS', ''],
+                ['CONTROLES DE ALARMA', ''],
+                ['CONTROLES DE GARAGE / RADIO', ''],
+                ['CLAXON', ''],
+                ['RADIO CASSETTE', ''],
+                ['ANTENAS', ''],
+                ['ENCENDEDOR', ''],
+                ['CENICEROS', ''],
+                ['TAPASOLES', ''],
+                ['ESPEJOS INT./EXT.', ''],
+                ['FALSOS', ''],
+                ['TAPICES Y ALFOMBRAS', ''],
+                ['MANIJAS Y PERILLAS', ''],
+                ['FAROS DELANTEROS', ''],
+                ['FAROS POSTERIORES', ''],
+              ],
+            },
           },
+          {
+            // width: '94%',
+            margin: [-17, 11, 0, 0],
+            // alignment: 'center',
+            style: 'tableLetraPequena',
+            table: {
+              // headers are automatically repeated if the table spans over multiple pages
+              // you can declare how many rows should be treated as headers
+              headerRows: 0,
+              widths: [86, 8],
+              body: [
+                ['INY. AGUA PARABRISAS', ''],
+                ['BRAZOO Y PLUMILLAS', ''],
+                ['PARABRISAS', ''],
+                ['LUNAS LATERALES', ''],
+                ['LUNA POSTERIOR', ''],
+                ['MASCARA', ''],
+                ['EMBLEMAS', ''],
+                ['ESCARPINES', ''],
+                ['COPAS Y VASOS', ''],
+                ['SEGURO DE RUEDAS', ''],
+                ['LLANTAS Y AROS', ''],
+                ['CHAPAS Y PUERTAS', ''],
+                ['TAPA DE GASOLINA INT./EXT.', ''],
+                ['JGO. HERRAM. PALANCA/GATA', ''],
+                ['ALARMA', ''],
+                ['PASAPORTE DE SERVICIO', ''],
+              ],
+            },
+          },
+          { margin: [-82, 11, 0, 2], image: 'vehiculo', fit: [249, 265] },
         ],
       },
-      //REPUESTOS
-      {
-        columns: [{ width: '35%', margin: [50, 10, 0, 0], text: { text: 'SUMINISTROS :', style: 'textoBold10' } }],
-      },
-      {
-        // margin: [izq, top, der, button],
-        margin: [30, 10, 30, 3],
-        style: 'tableExample',
-        table: {
-          headerRows: 1,
-          //
-          // widths: ['*', 'auto', '*', '*', '*', '*'],
-          widths: ['*', '*', 'auto', '*', '*', '*', '*'],
-          body: [
-            [
-              { text: 'Ítem', style: 'tableHeaderLight' },
-              { text: 'Código', style: 'tableHeaderLight' },
-              { text: 'Descripción', style: 'tableHeaderLight' },
-              { text: 'Cantidad', style: 'tableHeaderLight' },
-              { text: 'Uni', style: 'tableHeaderLight' },
-              { text: 'Precio', style: 'tableHeaderLight' },
-              { text: 'Venta', style: 'tableHeaderLight' },
-            ],
-            ...losRepuestos,
-          ],
-        },
-        layout: 'noBorders',
-      },
+      //firmas CLIENTE / ASESOR
       {
         columns: [
-          {
-            width: '100%',
-            margin: [0, 0, 30, 0],
-            text: { text: 'SUBTOTAL ' + formatearMonedaPEN(totalRepuestos), style: 'tableBodyRight' },
-            alignment: 'right',
-          },
-        ],
-      },
-      //TOTAL
-      {
-        columns: [
-          {
-            margin: [0, 5, 30, 0],
-            text: { text: 'TOTAL PEN ' + formatearMonedaPEN(totalServicios + totalRepuestos), style: 'textoBold10' },
-            alignment: 'right',
-          },
+          { width: '50%', margin: [50, 100, 0, 0], text: { text: 'VoBo CLIENTE', alignment: 'center', style: 'textoBold' } },
+          { width: '50%', margin: [50, 100, 0, 0], text: { text: 'ASESOR', alignment: 'center', style: 'textoBold' } },
         ],
       },
     ],
@@ -413,6 +338,15 @@ async function pdfOsMG_ConVehiculo(os: any) {
         color: 'black',
         // alignment: 'start',
         alignment: 'center',
+        // border: [false, false, false, false],
+      },
+      tableLetraPequena: {
+        // bold: true,
+        fontSize: 6,
+        // fillColor: '#d9d9d9',
+        color: 'black',
+        alignment: 'left',
+        // alignment: 'center',
         // border: [false, false, false, false],
       },
       tableHeader: {
@@ -462,13 +396,13 @@ async function pdfOsMG_ConVehiculo(os: any) {
       },
       textoImpresion: {
         alignment: 'left',
-        fontSize: 8,
+        fontSize: 6,
         bold: true,
         color: '#50575E',
       },
       textoPaginacion: {
         alignment: 'right',
-        fontSize: 8,
+        fontSize: 6,
         bold: true,
         color: '#50575E',
       },
@@ -497,8 +431,8 @@ async function pdfOsMG_ConVehiculo(os: any) {
     images: {
       // logo: logit.logoMerma,
       logoEmp: LOGO_EMPRESA.default,
+      vehiculo: vehiculoInventario,
       poweredBy: logit.logoPiePagina,
-
       // morty: 'https://rickandmortyapi.com/api/character/avatar/795.jpeg',
       // snow: 'https://picsum.photos/seed/picsum/200/300',
     },
@@ -535,4 +469,4 @@ async function pdfOsMG_ConVehiculo(os: any) {
   pdfMake.createPdf(docDefinitios).open(); //download('trice.pdf');
 }
 
-export default pdfOsMG_ConVehiculo;
+export default pdfOs_InventarioVehicular;

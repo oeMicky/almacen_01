@@ -1,18 +1,18 @@
-import { $, component$, useSignal, useStore, useStyles$ } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city"; //action$, Form,
-import { getSucursalesAdjuntasUsuario, getUsuarioPanel } from "~/apis/usuario.api";
+import { $, component$, useSignal, useStore, useStyles$ } from '@builder.io/qwik';
+import { useNavigate } from '@builder.io/qwik-city'; //action$, Form,
+import { getSucursalesAdjuntasUsuario, getUsuarioPanel } from '~/apis/usuario.api';
 
-import styles from "./login.css?inline";
-import { getActivoGEEMPSUCUR, getPeriodos } from "~/apis/grupoEmpresarial.api";
-import Spinner from "~/components/system/spinner";
-import { images } from "~/assets";
+import styles from './login.css?inline';
+import { getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
+import Spinner from '~/components/system/spinner';
+import { images } from '~/assets';
 
 // export const CTX_CONFIGURACION = createContextId<any>('__configuracion');
 
 //--nombre: 'Grupo Empresarial nro 1';
 export const parametrosGlobales = {
   // paginaInicioDelSistema: '/cotizacion',
-  paginaInicioDelSistema: "/compra",
+  paginaInicioDelSistema: '/compra',
   // paginaInicioDelSistema: '/reporteVenta',
   // paginaInicioDelSistema: '/venta',
   // paginaInicioDelSistema: '/guiaRemision',
@@ -20,34 +20,34 @@ export const parametrosGlobales = {
   // paginaInicioDelSistema: '/outAlmacen',
   // paginaInicioDelSistema: '/ordenServicio',
   // paginaInicioDelSistema: '/kardex',
-  paginaInicioDefault: "/venta",
+  paginaInicioDefault: '/venta',
   //Grupo Empresarial
-  idGrupoEmpresarial: "", //'60f097ca53621708ecc4e781',
-  nombreGrupoEmpresarial: "", //'El Grupo Empresarial',
+  idGrupoEmpresarial: '', //'60f097ca53621708ecc4e781',
+  nombreGrupoEmpresarial: '', //'El Grupo Empresarial',
   //Empresa
-  idPersona: "",
-  idEmpresa: "", //'60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
-  RazonSocial: "", //'CORPORACION ACME I',
-  colorHeaderEmpresarial: "",
+  idPersona: '',
+  idEmpresa: '', //'60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
+  RazonSocial: '', //'CORPORACION ACME I',
+  colorHeaderEmpresarial: '',
   ventaConDetraccion: false,
-  cuentaBancariaDetraccion: "",
+  cuentaBancariaDetraccion: '',
   osConRegistroDeVehiculo: false,
-  Direccion: "", //'ARKANZAS NRO 354',
-  RUC: "", //'99999999999',
+  Direccion: '', //'ARKANZAS NRO 354',
+  RUC: '', //'99999999999',
   agenteRetencion: false,
   agentePercepcion: false,
   //Sucursal
   sucursalesAdjuntas: [],
-  idSucursal: "", //'651ad18424595a30fe7926d2',
-  sucursal: "", //'Pardo',
-  sucursalDireccion: "", //Av. Pardo 9999',
+  idSucursal: '', //'651ad18424595a30fe7926d2',
+  sucursal: '', //'Pardo',
+  sucursalDireccion: '', //Av. Pardo 9999',
   // parameRUC: 'chamo', // '99999999999',
   //Almacén
   almacenActivo: false,
-  idAlmacen: "", //'60f3e61a41a71c1148bc4e29', //la SUCURSAL otorgara su ID al ALMACÉN
-  nombreAlmacen: "", // 'Praga',
+  idAlmacen: '', //'60f3e61a41a71c1148bc4e29', //la SUCURSAL otorgara su ID al ALMACÉN
+  nombreAlmacen: '', // 'Praga',
   //Usuario
-  usuario: "", // 'octubre',
+  usuario: '', // 'octubre',
   //
   ingreso: false,
   periodos: [],
@@ -56,15 +56,19 @@ export const parametrosGlobales = {
   facturacionElectronicaAutomatica: false,
   facturaJSON: false,
   facturaXML: false,
+  verificarObservacionVenta: false,
+  guiaRemisionElectronica: false,
+  guiaRemisionElectronicaAutomatica: false,
+  verificarObservacionGR: false,
   contabilizarOperaciones: false,
   planesContables: [],
   asientoCompra: [],
   asientoVenta: [],
-  codigoContableVentaServicio: "",
-  descripcionContableVentaServicio: "",
+  codigoContableVentaServicio: '',
+  descripcionContableVentaServicio: '',
   // idLibroDiario: '6604c567242e40cf619c834f',
-  idLibroDiario: "",
-  idEjercicio: "",
+  idLibroDiario: '',
+  idEjercicio: '',
   ejercicio: 0,
   //servicios
   facturaElectronica: false,
@@ -105,20 +109,19 @@ export default component$(() => {
   const definicion_CTX_LOGEO = useStore({
     mostrarSpinner: false,
     // email: 'mvizconde@msn.com',
-    // email: "mvizconde@cao.com",
     // email: 'carlos@merma.com',
+    email: 'mvizconde@cao.com',
     // email: "paolo@cao.com",
     // email: 'joseluis@cao.com',
     // email: 'keymar0@cao.com',
-    email: "",
 
     // email: "",
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
-    // contrasena: "12345678",
-    contrasena: "",
+    contrasena: '12345678',
+    // contrasena: "",
   });
   //#endregion INICIALIZACION
 
@@ -150,21 +153,21 @@ export default component$(() => {
 
   //#region ANALISIS DEL LOGEO
   const analisisDeLogeo = $(async (logeado: string, usuario: string) => {
-    console.log("analisisDeLogeo -> logeado", logeado);
+    console.log('analisisDeLogeo -> logeado', logeado);
     const sucursales = await getSucursalesAdjuntasUsuario({ idUsuario: logeado });
-    console.log("analisisDeLogeo -> sucursales", sucursales.data);
+    console.log('analisisDeLogeo -> sucursales', sucursales.data);
 
     parametrosGlobales.usuario = usuario;
     parametrosGlobales.sucursalesAdjuntas = sucursales.data;
 
     //CERO SUCURSAL
     if (sucursales.data.length === 0) {
-      console.log("sucursales.data.length === 0");
-      alert("No existe una sucursal adjunta.");
+      console.log('sucursales.data.length === 0');
+      alert('No existe una sucursal adjunta.');
     }
     //UNA SUCURSAL
     if (sucursales.data.length === 1) {
-      console.log("sucursales.data.length === 1");
+      console.log('sucursales.data.length === 1');
 
       let activo = await getActivoGEEMPSUCUR({
         idGrupoEmpresarial: sucursales.data[0].idGrupoEmpresarial,
@@ -185,8 +188,8 @@ export default component$(() => {
         alert(`La sucursal ${sucursales.data[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`);
         return;
       }
-      console.log("🧧🧧🧧activo", activo);
-      console.log("**UNA SUCURSAL**");
+      console.log('🧧🧧🧧activo', activo);
+      console.log('**UNA SUCURSAL**');
       parametrosGlobales.idSucursal = sucursales.data[0].idSucursal;
       parametrosGlobales.sucursal = sucursales.data[0].sucursal;
       parametrosGlobales.idAlmacen = sucursales.data[0].idSucursal; //******* */
@@ -209,6 +212,10 @@ export default component$(() => {
       parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
       parametrosGlobales.facturaJSON = activo[0].facturaJSON;
       parametrosGlobales.facturaXML = activo[0].facturaXML;
+      parametrosGlobales.verificarObservacionVenta = activo[0].verificarObservacionVenta;
+      parametrosGlobales.guiaRemisionElectronica = activo[0].guiaRemisionElectronica;
+      parametrosGlobales.guiaRemisionElectronicaAutomatica = activo[0].guiaRemisionElectronicaAutomatica;
+      parametrosGlobales.verificarObservacionGR = activo[0].verificarObservacionGR;
       parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
       parametrosGlobales.planesContables = activo[0].planesContables;
       parametrosGlobales.asientoCompra = activo[0].asientoCompra;
@@ -235,11 +242,11 @@ export default component$(() => {
       const losPeri = await getPeriodos({
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
-        bandera: "",
+        bandera: '',
       });
       parametrosGlobales.periodos = losPeri.data;
       //PAGINA DE INICIO
-      navegarA("/seleccionarServicio");
+      navegarA('/seleccionarServicio');
       // if (parametrosGlobales.almacenActivo) {
       //   navegarA(parametrosGlobales.paginaInicioDelSistema);
       // } else {
@@ -256,8 +263,8 @@ export default component$(() => {
     }
     //MAS DE UNA SUCURSAL
     if (sucursales.data.length > 1) {
-      console.log("sucursales.data.length > 1");
-      navegarA("/listadoSucursales");
+      console.log('sucursales.data.length > 1');
+      navegarA('/listadoSucursales');
     }
     definicion_CTX_LOGEO.mostrarSpinner = false;
   });
@@ -605,14 +612,14 @@ export default component$(() => {
 
   //#region INGRESAR AL SISTEMA
   const enviar = $(async () => {
-    if (definicion_CTX_LOGEO.email.trim() === "") {
-      alert("Ingrese el email.");
-      document.getElementById("in_email_INICIAR")?.focus();
+    if (definicion_CTX_LOGEO.email.trim() === '') {
+      alert('Ingrese el email.');
+      document.getElementById('in_email_INICIAR')?.focus();
       return;
     }
-    if (definicion_CTX_LOGEO.contrasena.trim() === "") {
-      alert("Ingrese la contraseña.");
-      document.getElementById("in_contrasena_INICIAR")?.focus();
+    if (definicion_CTX_LOGEO.contrasena.trim() === '') {
+      alert('Ingrese la contraseña.');
+      document.getElementById('in_contrasena_INICIAR')?.focus();
       return;
     }
 
@@ -624,14 +631,14 @@ export default component$(() => {
       clave: definicion_CTX_LOGEO.contrasena.trim(),
     });
     elLogeo = elLogeo.data;
-    console.log("********--elLogeo--******", elLogeo);
+    console.log('********--elLogeo--******', elLogeo);
     if (elLogeo.length === 1) {
       if (elLogeo[0].activo) {
         analisisDeLogeo(elLogeo[0]._id, elLogeo[0].usuario);
       } else {
         definicion_CTX_LOGEO.mostrarSpinner = false;
         // parametrosGlobales.mostrarSpinner = false;
-        alert("El usuario no se encuentra activo, pongase en contacto con el administrador.");
+        alert('El usuario no se encuentra activo, pongase en contacto con el administrador.');
       }
 
       // sessionStorage.setItem('ID', elLogeo[0]._id);
@@ -644,7 +651,7 @@ export default component$(() => {
       // sessionStorage.removeItem('NOMBRE');
       definicion_CTX_LOGEO.mostrarSpinner = false;
       // parametrosGlobales.mostrarSpinner = false;
-      alert("El correo o la contraseña estan erradas.");
+      alert('El correo o la contraseña estan erradas.');
     }
 
     // const registro = new Promise((resolve, reject) => {
@@ -683,20 +690,20 @@ export default component$(() => {
 
   return (
     <>
-      <div class="container">
+      <div class="container" style={{ background: '#eee' }}>
         <div
           style={{
             // border: '1px solid red',
-            height: "300px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
+            height: '300px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           {/* <Form action={login}>            
           </Form> */}
-          <form style={{ width: "300px" }}>
+          <form style={{ width: '300px' }}>
             <div class="linea-formulario">
               <label>Usuario</label>
               <input
@@ -709,26 +716,26 @@ export default component$(() => {
                 value={definicion_CTX_LOGEO.email}
                 onChange$={(e) => (definicion_CTX_LOGEO.email = (e.target as HTMLInputElement).value)}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("inputClave_LOGIN") as HTMLInputElement)?.focus();
+                  if (e.key === 'Enter') {
+                    (document.getElementById('inputClave_LOGIN') as HTMLInputElement)?.focus();
                   }
                 }}
               />
             </div>
             <div class="linea-formulario">
               <label>Clave</label>
-              <div style={{ position: "relative", left: "12px" }}>
+              <div style={{ position: 'relative', left: '12px' }}>
                 <input
                   id="inputClave_LOGIN"
                   name="clave"
-                  type={passwordTF.value ? "password" : "text"}
+                  type={passwordTF.value ? 'password' : 'text'}
                   placeholder="Clave"
                   class="input-formulario"
                   value={definicion_CTX_LOGEO.contrasena}
                   onChange$={(e) => (definicion_CTX_LOGEO.contrasena = (e.target as HTMLInputElement).value)}
                   onKeyPress$={(e) => {
-                    if (e.key === "Enter") {
-                      (document.getElementById("buttonLogearse_LOGIN") as HTMLInputElement)?.focus();
+                    if (e.key === 'Enter') {
+                      (document.getElementById('buttonLogearse_LOGIN') as HTMLInputElement)?.focus();
                     }
                   }}
                 />
@@ -736,7 +743,7 @@ export default component$(() => {
                   src={passwordTF.value ? images.eye : images.eyePassword}
                   height={12}
                   width={12}
-                  style={{ cursor: "pointer", position: "relative", left: "-16px" }}
+                  style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
                   onClick$={() => {
                     passwordTF.value = !passwordTF.value;
                   }}
@@ -765,7 +772,7 @@ export default component$(() => {
           </div> */}
           {/* MOSTRAR SPINNER */}
           {definicion_CTX_LOGEO.mostrarSpinner && (
-            <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Spinner />
             </div>
           )}

@@ -1,11 +1,12 @@
-import { Resource, component$, useContext, useResource$, useStyles$ } from "@builder.io/qwik";
-import style from "../../tabla/tabla.css?inline";
-import { parametrosGlobales } from "~/routes/login";
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
+import style from '../../tabla/tabla.css?inline';
+import { parametrosGlobales } from '~/routes/login';
 // import ImgButton from '~/components/system/imgButton';
-import { images } from "~/assets";
-import type { IChofer } from "~/interfaces/iPersona";
-import { CTX_GUIA_REMISION, CTX_NEW_EDIT_GUIA_REMISION } from "~/components/guiaRemision/newEditGuiaRemision";
-import { CTX_BUSCAR_CHOFER } from "./buscarChofer";
+import { images } from '~/assets';
+import type { IChofer } from '~/interfaces/iPersona';
+import { CTX_GUIA_REMISION, CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
+import { CTX_BUSCAR_CHOFER } from './buscarChofer';
+import { elIdAuxiliar } from '~/functions/comunes';
 // import { elIdAuxiliar } from '~/functions/comunes';
 
 export default component$((props: { buscarChofer: number; contexto: string }) => {
@@ -15,7 +16,7 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
   let ctx: any = [];
   let documento: any = [];
   switch (props.contexto) {
-    case "new_edit_guiaRemision":
+    case 'new_edit_guiaRemision':
       ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
       documento = useContext(CTX_GUIA_REMISION).choferes;
       break;
@@ -28,17 +29,17 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
     track(() => props.buscarChofer.valueOf());
 
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
-    console.log("buscarChofer:::...", props.buscarChofer);
+    console.log('buscarChofer:::...', props.buscarChofer);
 
-    if (ctx_buscar_chofer.buscarPor === "Nombre / Razón social") {
-      console.log("Nombre:::...");
-      const res = await fetch(import.meta.env.VITE_URL + "/api/chofer/obtenerChoferesPorNombre", {
+    if (ctx_buscar_chofer.buscarPor === 'Nombre / Razón social') {
+      console.log('Nombre:::...');
+      const res = await fetch(import.meta.env.VITE_URL + '/api/chofer/obtenerChoferesPorNombre', {
         // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -50,13 +51,13 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
       });
       return res.json();
     }
-    if (ctx_buscar_chofer.buscarPor === "DNI / RUC") {
-      console.log("DNI:::...");
-      const res = await fetch(import.meta.env.VITE_URL + "/api/chofer/obtenerChoferesPorDni", {
+    if (ctx_buscar_chofer.buscarPor === 'DNI / RUC') {
+      console.log('DNI:::...');
+      const res = await fetch(import.meta.env.VITE_URL + '/api/chofer/obtenerChoferesPorDni', {
         // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -75,22 +76,22 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
     <Resource
       value={losChoferes}
       onPending={() => {
-        console.log("onPending 🍉🍉🍉🍉");
+        console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log("onRejected 🍍🍍🍍🍍");
+        console.log('onRejected 🍍🍍🍍🍍');
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(choferes) => {
-        console.log("onResolved 🍓🍓🍓🍓", choferes);
+        console.log('onResolved 🍓🍓🍓🍓', choferes);
         const { data } = choferes; //{ status, data, message }
         const misChoferes: IChofer[] = data;
         return (
           <>
             {misChoferes.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -120,16 +121,16 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
                               title="Seleccionar chofer"
                               height={14}
                               width={14}
-                              style={{ marginRight: "4px" }}
+                              style={{ marginRight: '4px' }}
                               // onFocusin$={() => console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
-                                if (typeof licencia === "undefined" || licencia.trim() === "") {
-                                  alert("No presenta la licencia.");
+                                if (typeof licencia === 'undefined' || licencia.trim() === '') {
+                                  alert('No presenta la licencia.');
                                   return;
                                 }
 
                                 documento.push({
-                                  // idAuxiliar: elIdAuxiliar(),
+                                  idAuxiliar: elIdAuxiliar(),
                                   codigoTipoDocumentoIdentidad: codigoTipoDocumentoIdentidad,
                                   tipoDocumentoIdentidad: tipoDocumentoIdentidad,
                                   numeroIdentidad: numeroIdentidad,
@@ -153,8 +154,8 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
                               onClick$={() => {
                                 // ctx_buscar_persona.pP = persoLocali;
                                 // ctx_buscar_persona.mostrarPanelNewEditPersona = true;
-                                console.log("ctx", ctx);
-                                console.log("selecion", persoLocali);
+                                console.log('ctx', ctx);
+                                console.log('selecion', persoLocali);
                                 ctx_buscar_chofer.cH = persoLocali;
                                 ctx_buscar_chofer.mostrarPanelEditChofer = true;
                               }}
@@ -168,7 +169,7 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
               </>
             ) : (
               <div>
-                <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

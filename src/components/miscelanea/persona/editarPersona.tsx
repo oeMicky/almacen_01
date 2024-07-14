@@ -1,16 +1,16 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import ImgButton from "~/components/system/imgButton";
-import { CTX_BUSCAR_PERSONA } from "./buscarPersona";
-import type { IPersonaEdit } from "~/interfaces/iPersona";
-import Spinner from "~/components/system/spinner";
-import NewEditCuentaCorriente from "./newEditCuentaCorriente";
-import style from "../../tabla/tabla.css?inline";
-import { inUpPersona } from "~/apis/persona.api";
-import { parametrosGlobales } from "~/routes/login";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useStyles$, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import ImgButton from '~/components/system/imgButton';
+import { CTX_BUSCAR_PERSONA } from './buscarPersona';
+import type { IPersonaEdit } from '~/interfaces/iPersona';
+import Spinner from '~/components/system/spinner';
+import NewEditCuentaCorriente from './newEditCuentaCorriente';
+import style from '../../tabla/tabla.css?inline';
+import { inUpPersona } from '~/apis/persona.api';
+import { parametrosGlobales } from '~/routes/login';
 
-export const CTX_EDIT_PERSONA = createContextId<any>("edit_persona__");
-export const CTX_PERSONA = createContextId<any>("persona__");
+export const CTX_EDIT_PERSONA = createContextId<any>('edit_persona__');
+export const CTX_PERSONA = createContextId<any>('persona__');
 
 export default component$((props: { soloPersonaNatural: boolean; personaSeleccio: any; contexto: string }) => {
   useStyles$(style);
@@ -19,7 +19,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   const definicion_CTX_EDIT_PERSONA = useStore({
     mostrarPanelNewEditCuentaCorriente: false,
     editar_idAuxiliarCuentaCorri: 0,
-    cuentaCorrienteSeleccionado: { _id: "", idAuxiliar: "", banco: "", moneda: "", cuentaCorriente: "", cci: "" },
+    cuentaCorrienteSeleccionado: { _id: '', idAuxiliar: '', banco: '', moneda: '', cuentaCorriente: '', cci: '' },
     grabo_cuentaCorriente: false,
 
     mostrarSpinner: false,
@@ -29,18 +29,18 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
 
   //#region DEFINICION PERSONA
   const definicion_CTX_PERSONA = useStore<IPersonaEdit>({
-    _id: props.personaSeleccio._id ? props.personaSeleccio._id : "",
-    codigoTipoDocumentoIdentidad: props.personaSeleccio.codigoTipoDocumentoIdentidad ? props.personaSeleccio.codigoTipoDocumentoIdentidad : "",
-    tipoDocumentoIdentidad: props.personaSeleccio.tipoDocumentoIdentidad ? props.personaSeleccio.tipoDocumentoIdentidad : "",
-    numeroIdentidad: props.personaSeleccio.numeroIdentidad ? props.personaSeleccio.numeroIdentidad : "",
-    razonSocialNombre: props.personaSeleccio.razonSocialNombre ? props.personaSeleccio.razonSocialNombre : "",
-    nombre: props.personaSeleccio.nombre ? props.personaSeleccio.nombre : "",
-    paterno: props.personaSeleccio.paterno ? props.personaSeleccio.paterno : "",
-    materno: props.personaSeleccio.materno ? props.personaSeleccio.materno : "",
+    _id: props.personaSeleccio._id ? props.personaSeleccio._id : '',
+    codigoTipoDocumentoIdentidad: props.personaSeleccio.codigoTipoDocumentoIdentidad ? props.personaSeleccio.codigoTipoDocumentoIdentidad : '',
+    tipoDocumentoIdentidad: props.personaSeleccio.tipoDocumentoIdentidad ? props.personaSeleccio.tipoDocumentoIdentidad : '',
+    numeroIdentidad: props.personaSeleccio.numeroIdentidad ? props.personaSeleccio.numeroIdentidad : '',
+    razonSocialNombre: props.personaSeleccio.razonSocialNombre ? props.personaSeleccio.razonSocialNombre : '',
+    nombre: props.personaSeleccio.nombre ? props.personaSeleccio.nombre : '',
+    paterno: props.personaSeleccio.paterno ? props.personaSeleccio.paterno : '',
+    materno: props.personaSeleccio.materno ? props.personaSeleccio.materno : '',
     activo: props.personaSeleccio.activo ? props.personaSeleccio.activo : true,
 
-    email: props.personaSeleccio.email ? props.personaSeleccio.email : "",
-    telefono: props.personaSeleccio.telefono ? props.personaSeleccio.telefono : "",
+    email: props.personaSeleccio.email ? props.personaSeleccio.email : '',
+    telefono: props.personaSeleccio.telefono ? props.personaSeleccio.telefono : '',
     cuentasCorrientes: props.personaSeleccio.cuentasCorrientes ? props.personaSeleccio.cuentasCorrientes : [],
   });
   useContextProvider(CTX_PERSONA, definicion_CTX_PERSONA);
@@ -77,31 +77,31 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   //#region EDITAR CUENTA CORRIENTE
   useTask$(({ track }) => {
     track(() => definicion_CTX_EDIT_PERSONA.grabo_cuentaCorriente);
-    console.log("first");
+    console.log('first');
     if (definicion_CTX_EDIT_PERSONA.grabo_cuentaCorriente && definicion_CTX_EDIT_PERSONA.editar_idAuxiliarCuentaCorri > 0) {
-      console.log("first true");
+      console.log('first true');
       let laFila = definicion_CTX_PERSONA.cuentasCorrientes.filter(
         (elemento: any) => elemento.idAuxiliar === definicion_CTX_EDIT_PERSONA.editar_idAuxiliarCuentaCorri
       );
       laFila = laFila[0];
-      console.log("first true 2");
+      console.log('first true 2');
       const { idAuxiliar, banco, moneda, cuentaCorriente, cci } = definicion_CTX_EDIT_PERSONA.cuentaCorrienteSeleccionado;
-      console.log("first true 2-1");
+      console.log('first true 2-1');
       laFila.idAuxiliar = idAuxiliar;
-      console.log("first true 2-2");
+      console.log('first true 2-2');
       laFila.banco = banco;
       laFila.moneda = moneda;
       laFila.cuentaCorriente = cuentaCorriente;
       laFila.cci = cci;
-      console.log("first true 3");
+      console.log('first true 3');
 
       definicion_CTX_EDIT_PERSONA.cuentaCorrienteSeleccionado = {
-        _id: "",
-        idAuxiliar: "",
-        banco: "",
-        moneda: "",
-        cuentaCorriente: "",
-        cci: "",
+        _id: '',
+        idAuxiliar: '',
+        banco: '',
+        moneda: '',
+        cuentaCorriente: '',
+        cci: '',
       };
       definicion_CTX_EDIT_PERSONA.editar_idAuxiliarCuentaCorri = 0;
       definicion_CTX_EDIT_PERSONA.grabo_cuentaCorriente = false;
@@ -111,30 +111,30 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
 
   //#region ACTUALIZAR PERSONA
   const actualizarPersona = $(async () => {
-    if (definicion_CTX_PERSONA.numeroIdentidad.trim() === "") {
-      alert("Verifique el número de identidad");
+    if (definicion_CTX_PERSONA.numeroIdentidad.trim() === '') {
+      alert('Verifique el número de identidad');
       return;
     }
-    if (definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === "6") {
-      if (definicion_CTX_PERSONA.razonSocialNombre.trim() === "") {
-        alert("Verifique la razón social");
-        document.getElementById("in_razonSocial_PERSONA")?.focus();
+    if (definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '6') {
+      if (definicion_CTX_PERSONA.razonSocialNombre.trim() === '') {
+        alert('Verifique la razón social');
+        document.getElementById('in_razonSocial_PERSONA')?.focus();
         return;
       }
     } else {
-      if (definicion_CTX_PERSONA.nombre.trim() === "") {
-        alert("Verifique el nombre");
-        document.getElementById("in_nombre_PERSONA")?.focus();
+      if (definicion_CTX_PERSONA.nombre.trim() === '') {
+        alert('Verifique el nombre');
+        document.getElementById('in_nombre_PERSONA')?.focus();
         return;
       }
-      if (definicion_CTX_PERSONA.paterno.trim() === "") {
-        alert("Verifique el apellido paterno");
-        document.getElementById("in_apellidoPaterno_PERSONA")?.focus();
+      if (definicion_CTX_PERSONA.paterno.trim() === '') {
+        alert('Verifique el apellido paterno');
+        document.getElementById('in_apellidoPaterno_PERSONA')?.focus();
         return;
       }
-      if (definicion_CTX_PERSONA.materno.trim() === "") {
-        alert("Verifique el apellido materno");
-        document.getElementById("in_apellidoMaterno_PERSONA")?.focus();
+      if (definicion_CTX_PERSONA.materno.trim() === '') {
+        alert('Verifique el apellido materno');
+        document.getElementById('in_apellidoMaterno_PERSONA')?.focus();
         return;
       }
     }
@@ -160,14 +160,14 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
 
       usuario: parametrosGlobales.usuario,
     });
-    console.log("LAS PASO.............");
+    console.log('LAS PASO.............');
     if (persoActuli.status === 400) {
-      alert("Falla al registrar la persona. " + persoActuli.message);
+      alert('Falla al registrar la persona. ' + persoActuli.message);
       mostrarSpinner.value = false;
       return;
     }
 
-    console.log("persoActuli", persoActuli);
+    console.log('persoActuli', persoActuli);
     mostrarSpinner.value = false;
     ctx_buscar_persona.grabo_Persona = true;
     ctx_buscar_persona.personaEDITADA = persoActuli.data;
@@ -178,14 +178,14 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 500px)",
+        width: 'clamp(330px, 86%, 500px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -203,7 +203,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
           width={16}
           title="Ver persona"
           onClick={$(() => {
-            console.log("definicion_CTX_PERSONA", definicion_CTX_PERSONA);
+            console.log('definicion_CTX_PERSONA', definicion_CTX_PERSONA);
           })}
         />
       </div>
@@ -225,55 +225,55 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
               {props.soloPersonaNatural ? (
                 <select
                   id="se_tipoDocumentoIdentidad_PERSONA"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   disabled
                   onChange$={(e) => {
-                    console.log("🥓🥓🥓(e.target as HTMLSelectElement).value", (e.target as HTMLSelectElement).value);
+                    console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                     definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                     definicion_CTX_PERSONA.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
-                    document.getElementById("in_numeroIdentidad_PERSONA")?.focus();
+                    document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                     console.log(
-                      "soloPersonaNatural, cTDI, tDI",
+                      'soloPersonaNatural, cTDI, tDI',
                       props.soloPersonaNatural,
                       definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad,
                       definicion_CTX_PERSONA.tipoDocumentoIdentidad
                     );
                   }}
                 >
-                  <option value={"1"} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === "1"}>
+                  <option value={'1'} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '1'}>
                     DNI
                   </option>
-                  <option value={"4"} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === "4"}>
+                  <option value={'4'} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '4'}>
                     C.EXT
                   </option>
                 </select>
               ) : (
                 <select
                   id="se_tipoDocumentoIdentidad_PERSONA"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   disabled
                   // value={persona.codigoTipoDocumentoIdentidad}
                   // value={'1'}
                   onChange$={(e) => {
-                    console.log("🥓🥓🥓(e.target as HTMLSelectElement).value", (e.target as HTMLSelectElement).value);
+                    console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                     definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                     definicion_CTX_PERSONA.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
-                    document.getElementById("in_numeroIdentidad_PERSONA")?.focus();
+                    document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                     console.log(
-                      "soloPersonaNatural, cTDI, tDI",
+                      'soloPersonaNatural, cTDI, tDI',
                       props.soloPersonaNatural,
                       definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad,
                       definicion_CTX_PERSONA.tipoDocumentoIdentidad
                     );
                   }}
                 >
-                  <option value={"6"} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === "6"}>
+                  <option value={'6'} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '6'}>
                     RUC
                   </option>
-                  <option value={"1"} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === "1"}>
+                  <option value={'1'} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '1'}>
                     DNI
                   </option>
-                  <option value={"4"} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === "4"}>
+                  <option value={'4'} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '4'}>
                     C.EXT
                   </option>
                 </select>
@@ -285,29 +285,29 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
             <div class="form-control form-agrupado">
               <input
                 id="in_numeroIdentidad_PERSONA"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 disabled
                 type="number"
                 placeholder="Número identidad"
                 value={definicion_CTX_PERSONA.numeroIdentidad}
                 onChange$={(e) => {
-                  console.log("CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...", definicion_CTX_PERSONA.numeroIdentidad);
+                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', definicion_CTX_PERSONA.numeroIdentidad);
                   definicion_CTX_PERSONA.numeroIdentidad = (e.target as HTMLInputElement).value.trim().toUpperCase();
-                  console.log("CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...", definicion_CTX_PERSONA.numeroIdentidad);
+                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', definicion_CTX_PERSONA.numeroIdentidad);
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e: any) => {
                   // alert(`onKeyPress... ${event}`);
                   // console.log('onKeyPress-1-1-1-1-1-1', event.key);
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     // console.log('55555555', persona.numeroIdentidad);
                     // buscarPersonaEnAPIExterna();
-                    if ((document.getElementById("se_tipoDocumentoIdentidad_PERSONA") as HTMLSelectElement).value === "6") {
+                    if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
                       // console.log('6666666');
-                      document.getElementById("in_razonSocial_PERSONA")?.focus();
+                      document.getElementById('in_razonSocial_PERSONA')?.focus();
                     } else {
                       //   alert('Ingrese un valor a buscar');
-                      document.getElementById("in_nombre_PERSONA")?.focus();
+                      document.getElementById('in_nombre_PERSONA')?.focus();
                     }
                   }
                 }}
@@ -330,13 +330,13 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
               /> */}
             </div>
           </div>
-          {definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === "6" ? (
+          {definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '6' ? (
             // Razón social
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <input
                   id="in_razonSocial_PERSONA"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   type="text"
                   placeholder="Razón social"
                   value={definicion_CTX_PERSONA.razonSocialNombre}
@@ -344,8 +344,8 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     definicion_CTX_PERSONA.razonSocialNombre = (e.target as HTMLInputElement).value.trim().toUpperCase();
                   }}
                   onKeyPress$={(e: any) => {
-                    if (e.key === "Enter") {
-                      document.getElementById("btn_grabar_PERSONA")?.focus();
+                    if (e.key === 'Enter') {
+                      document.getElementById('btn_grabar_PERSONA')?.focus();
                     }
                   }}
 
@@ -367,7 +367,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 <div class="form-control form-agrupado">
                   <input
                     id="in_nombre_PERSONA"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     type="text"
                     placeholder="Nombres"
                     value={definicion_CTX_PERSONA.nombre}
@@ -375,11 +375,11 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                       definicion_CTX_PERSONA.nombre = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
                     onKeyPress$={(e) => {
-                      if (e.key === "Enter") {
-                        document.getElementById("in_apellidoPaterno_PERSONA")?.focus();
+                      if (e.key === 'Enter') {
+                        document.getElementById('in_apellidoPaterno_PERSONA')?.focus();
                       }
-                      if (e.key === "Escape") {
-                        document.getElementById("in_numeroIdentidad_PERSONA")?.focus();
+                      if (e.key === 'Escape') {
+                        document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                       }
                     }}
                     // onFocusin$={(e) => {
@@ -395,7 +395,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 <div class="form-control form-agrupado">
                   <input
                     id="in_apellidoPaterno_PERSONA"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     type="text"
                     placeholder="Apellido paterno"
                     value={definicion_CTX_PERSONA.paterno}
@@ -403,11 +403,11 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                       definicion_CTX_PERSONA.paterno = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
                     onKeyPress$={(e) => {
-                      if (e.key === "Enter") {
-                        document.getElementById("in_apellidoMaterno_PERSONA")?.focus();
+                      if (e.key === 'Enter') {
+                        document.getElementById('in_apellidoMaterno_PERSONA')?.focus();
                       }
-                      if (e.key === "Escape") {
-                        document.getElementById("in_nombre_PERSONA")?.focus();
+                      if (e.key === 'Escape') {
+                        document.getElementById('in_nombre_PERSONA')?.focus();
                       }
                     }}
                   />
@@ -418,7 +418,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 <div class="form-control form-agrupado">
                   <input
                     id="in_apellidoMaterno_PERSONA"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     type="text"
                     placeholder="Apellido materno"
                     value={definicion_CTX_PERSONA.materno}
@@ -426,12 +426,12 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                       definicion_CTX_PERSONA.materno = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
                     onKeyPress$={(e) => {
-                      if (e.key === "Enter") {
-                        console.log("###############");
-                        document.getElementById("in_email_PERSONA")?.focus();
+                      if (e.key === 'Enter') {
+                        console.log('###############');
+                        document.getElementById('in_email_PERSONA')?.focus();
                       }
-                      if (e.key === "Escape") {
-                        document.getElementById("in_apellidoPaterno_PERSONA")?.focus();
+                      if (e.key === 'Escape') {
+                        document.getElementById('in_apellidoPaterno_PERSONA')?.focus();
                       }
                     }}
                   />
@@ -444,7 +444,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
             <div class="form-control form-agrupado">
               <input
                 id="in_email_PERSONA"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 type="email"
                 placeholder="Email"
                 value={definicion_CTX_PERSONA.email}
@@ -452,12 +452,12 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   definicion_CTX_PERSONA.email = (e.target as HTMLInputElement).value.trim();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    console.log("###############");
-                    document.getElementById("btn_grabar_PERSONA")?.focus();
+                  if (e.key === 'Enter') {
+                    console.log('###############');
+                    document.getElementById('btn_grabar_PERSONA')?.focus();
                   }
-                  if (e.key === "Escape") {
-                    document.getElementById("in_apellidoMaterno_PERSONA")?.focus();
+                  if (e.key === 'Escape') {
+                    document.getElementById('in_apellidoMaterno_PERSONA')?.focus();
                   }
                 }}
               />
@@ -468,7 +468,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
             <div class="form-control form-agrupado">
               <input
                 id="in_telefono_PERSONA"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 type="text"
                 placeholder="Teléfono"
                 value={definicion_CTX_PERSONA.telefono}
@@ -476,12 +476,12 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   definicion_CTX_PERSONA.telefono = (e.target as HTMLInputElement).value.trim();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    console.log("###############");
-                    document.getElementById("btn_grabar_PERSONA")?.focus();
+                  if (e.key === 'Enter') {
+                    console.log('###############');
+                    document.getElementById('btn_grabar_PERSONA')?.focus();
                   }
-                  if (e.key === "Escape") {
-                    document.getElementById("in_apellidoMaterno_PERSONA")?.focus();
+                  if (e.key === 'Escape') {
+                    document.getElementById('in_apellidoMaterno_PERSONA')?.focus();
                   }
                 }}
               />
@@ -492,22 +492,22 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
           <div>
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                margin: "5px 0",
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                margin: '5px 0',
               }}
             >
-              <div style={{ marginBottom: "5px" }}>
+              <div style={{ marginBottom: '5px' }}>
                 <button
                   onClick$={() => {
                     definicion_CTX_EDIT_PERSONA.cuentaCorrienteSeleccionado = {
-                      _id: "",
-                      idAuxiliar: "",
-                      banco: "",
-                      moneda: "PEN",
-                      cuentaCorriente: "",
-                      cci: "",
+                      _id: '',
+                      idAuxiliar: '',
+                      banco: '',
+                      moneda: 'PEN',
+                      cuentaCorriente: '',
+                      cci: '',
                     };
                     definicion_CTX_EDIT_PERSONA.mostrarPanelNewEditCuentaCorriente = true;
                   }}
@@ -516,9 +516,9 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 </button>
               </div>
               {/* TABLA CUENTAS CORRIENTES */}
-              {typeof definicion_CTX_PERSONA.cuentasCorrientes !== "undefined" ? (
+              {typeof definicion_CTX_PERSONA.cuentasCorrientes !== 'undefined' ? (
                 definicion_CTX_PERSONA.cuentasCorrientes.length > 0 ? (
-                  <table id="ta_CuentasCorrientes" style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                  <table id="ta_CuentasCorrientes" style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Banco</th>
@@ -544,7 +544,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                                 height={12}
                                 width={12}
                                 src={images.edit}
-                                style={{ marginRight: "2px" }}
+                                style={{ marginRight: '2px' }}
                                 onClick$={() => {
                                   definicion_CTX_EDIT_PERSONA.cuentaCorrienteSeleccionado = iTCuentaCorri;
                                   definicion_CTX_EDIT_PERSONA.editar_idAuxiliarCuentaCorri = iTCuentaCorri.idAuxiliar;
@@ -583,10 +583,10 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     </tbody>
                   </table>
                 ) : (
-                  <i style={{ fontSize: "0.8rem" }}>No existen cuentas corrientes</i>
+                  <i style={{ fontSize: '0.8rem' }}>No existen cuentas corrientes</i>
                 )
               ) : (
-                <i style={{ fontSize: "0.8rem" }}>No existen cuentas corrientes</i>
+                <i style={{ fontSize: '0.8rem' }}>No existen cuentas corrientes</i>
               )}
               {definicion_CTX_EDIT_PERSONA.mostrarPanelNewEditCuentaCorriente && (
                 <div class="modal">
@@ -604,7 +604,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
         <input
           id="btn_grabar_PERSONA"
           type="submit"
-          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             actualizarPersona();
@@ -614,7 +614,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       {/* </Form> */}
       {/* MOSTRAR SPINNER */}
       {mostrarSpinner.value && (
-        <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>
       )}

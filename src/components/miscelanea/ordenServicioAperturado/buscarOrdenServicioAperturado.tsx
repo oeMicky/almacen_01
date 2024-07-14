@@ -1,15 +1,15 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore } from "@builder.io/qwik";
-import { images } from "~/assets";
-import { CTX_NEW_OUT_ALMACEN } from "~/components/outAlmacen/newOutAlmacen";
-import ImgButton from "~/components/system/imgButton";
-import TablaOrdenesServicio from "./tablaOrdenesServicioAperturados";
-import { parametrosGlobales } from "~/routes/login";
-import { hoy, menosXdiasHoy } from "~/functions/comunes";
-import DespachoRequisiciones from "./despachoRequisicionesOS";
-import { CTX_NEW_IN_ALMACEN } from "~/components/inAlmacen/newInAlmacen";
-import ReingresoRequisiciones from "./reingresoRequisicionesOS";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import { images } from '~/assets';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import ImgButton from '~/components/system/imgButton';
+import TablaOrdenesServicio from './tablaOrdenesServicioAperturados';
+import { parametrosGlobales } from '~/routes/login';
+import { hoy, menosXdiasHoy } from '~/functions/comunes';
+import DespachoRequisiciones from './despachoRequisicionesOS';
+import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import ReingresoRequisiciones from './reingresoRequisicionesOS';
 
-export const CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO = createContextId<any>("buscar_orden_servicio_aperturado_");
+export const CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO = createContextId<any>('buscar_orden_servicio_aperturado_');
 
 export default component$((props: { contexto: string }) => {
   //#region DEFINICIO CTX_BUSCAR_ORDEN_SERVICIO
@@ -23,10 +23,10 @@ export default component$((props: { contexto: string }) => {
   //#region CONTEXTO
   let ctx: any = [];
   switch (props.contexto) {
-    case "egreso_de_almacen":
+    case 'egreso_de_almacen':
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
-    case "ingreso_a_almacen":
+    case 'ingreso_a_almacen':
       ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
   }
@@ -48,14 +48,14 @@ export default component$((props: { contexto: string }) => {
     <div
       class="container-modal"
       style={{
-        width: "clamp(330px, 86%, 800px)",
+        width: 'clamp(330px, 86%, 800px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
       }}
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -80,8 +80,8 @@ export default component$((props: { contexto: string }) => {
       {/* FORMULARIO */}
       <div class="add-form">
         <h3>
-          Buscar orden servicio <strong style={{ color: "#aa032f" }}>aperturado</strong>
-          {props.contexto === "ingreso_a_almacen" ? " (Reingreso)" : ""}
+          Buscar orden servicio <strong style={{ color: '#aa032f' }}>aperturado</strong>
+          {props.contexto === 'ingreso_a_almacen' ? ' (Reingreso)' : ''}
         </h3>
         {/* por Fechas */}
         <div
@@ -89,7 +89,7 @@ export default component$((props: { contexto: string }) => {
           class="intervalo-fechas"
           // style={numeroOFecha.value === 'Entre fechas' ? { visibility: 'visible' } : { visibility: 'collapse' }}
         >
-          <label class="fechas" style={{ margin: "2px 4px 0 4px" }}>
+          <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
             Desde
           </label>
           <input
@@ -100,7 +100,7 @@ export default component$((props: { contexto: string }) => {
               parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
             }}
           />
-          <label class="fechas" style={{ margin: "2px 4px 0 4px" }}>
+          <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
             Hasta
           </label>
           <input
@@ -120,11 +120,11 @@ export default component$((props: { contexto: string }) => {
             height={16}
             width={16}
             src={images.searchPLUS}
-            style={{ marginLeft: "4px" }}
+            style={{ marginLeft: '4px' }}
             onClick$={() => {
               if (parametrosBusqueda.fechaInicio > parametrosBusqueda.fechaFinal) {
-                alert("Verifique las fechas de busqueda");
-                document.getElementById("fechaDesdeBusqueda")?.focus();
+                alert('Verifique las fechas de busqueda');
+                document.getElementById('fechaDesdeBusqueda')?.focus();
                 return;
               }
               buscarOrdenesServicio.value++;
@@ -148,7 +148,7 @@ export default component$((props: { contexto: string }) => {
           {/* </div> */}
         </div>
         {/* TABLA Ordenes Servicio */}
-        <div style={{ marginTop: "15px" }}>
+        <div style={{ marginTop: '15px' }}>
           {buscarOrdenesServicio.value > 0 ? (
             <TablaOrdenesServicio
               contexto={props.contexto}
@@ -157,7 +157,7 @@ export default component$((props: { contexto: string }) => {
               parametrosBusqueda={parametrosBusqueda}
             />
           ) : (
-            ""
+            ''
           )}
         </div>
         {ctx.mostrarPanelDespachoRequisiciones && (

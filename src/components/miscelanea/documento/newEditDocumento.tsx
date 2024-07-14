@@ -1,25 +1,25 @@
-import { $, component$, useContext, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { loadTiposComprobantePago } from "~/apis/sunat.api";
-import { images } from "~/assets";
-import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from "~/components/inAlmacen/newInAlmacen";
-import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from "~/components/outAlmacen/newOutAlmacen";
-import ElSelect from "~/components/system/elSelect";
-import ImgButton from "~/components/system/imgButton";
-import { elIdAuxiliar, hoy } from "~/functions/comunes";
-import type { IDocumento } from "~/interfaces/iDocumento";
+import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { loadTiposComprobantePago } from '~/apis/sunat.api';
+import { images } from '~/assets';
+import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import ElSelect from '~/components/system/elSelect';
+import ImgButton from '~/components/system/imgButton';
+import { elIdAuxiliar, hoy } from '~/functions/comunes';
+import type { IDocumento } from '~/interfaces/iDocumento';
 
 export default component$((props: { docSelecci: any; contexto: string }) => {
   //#region DEFINICION DOCUMENTO - NEW  /EDIT
   const documentoIN = useStore<IDocumento>({
-    _id: props.docSelecci._id ? props.docSelecci._id : "",
-    idAuxiliar: props.docSelecci.idAuxiliar ? props.docSelecci.idAuxiliar : "",
+    _id: props.docSelecci._id ? props.docSelecci._id : '',
+    idAuxiliar: props.docSelecci.idAuxiliar ? props.docSelecci.idAuxiliar : '',
     // tipo: props.docSelecci.tipo ? props.docSelecci.tipo : '',
-    codigoTCP: props.docSelecci.codigoTCP ? props.docSelecci.codigoTCP : "",
-    descripcionTCP: props.docSelecci.descripcionTCP ? props.docSelecci.descripcionTCP : "",
-    serie: props.docSelecci.serie ? props.docSelecci.serie : "",
-    numero: props.docSelecci.numero ? props.docSelecci.numero : "", //0,
+    codigoTCP: props.docSelecci.codigoTCP ? props.docSelecci.codigoTCP : '',
+    descripcionTCP: props.docSelecci.descripcionTCP ? props.docSelecci.descripcionTCP : '',
+    serie: props.docSelecci.serie ? props.docSelecci.serie : '',
+    numero: props.docSelecci.numero ? props.docSelecci.numero : '', //0,
     fecha: props.docSelecci.fecha ? props.docSelecci.fecha : hoy(),
-    lote: props.docSelecci.lote ? props.docSelecci.lote : "",
+    lote: props.docSelecci.lote ? props.docSelecci.lote : '',
   });
   //#endregion DEFINICION DOCUMENTO
 
@@ -27,11 +27,11 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   let ctx: any = [];
   let ctxDocumentosAdjuntos: any = [];
   switch (props.contexto) {
-    case "new_in_almacen":
+    case 'new_in_almacen':
       ctxDocumentosAdjuntos = useContext(CTX_IN_ALMACEN).documentosAdjuntos;
       ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
-    case "new_out_almacen":
+    case 'new_out_almacen':
       ctxDocumentosAdjuntos = useContext(CTX_OUT_ALMACEN).documentosAdjuntos;
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
@@ -53,9 +53,9 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   //#region CARGAR LOS TCP
   const cargarLosTCP = $(async () => {
     const losTCP = await loadTiposComprobantePago();
-    console.log("losTCP", losTCP);
+    console.log('losTCP', losTCP);
     LosTCPcargados.value = losTCP.data;
-    console.log(" LosTCPcargados.value", LosTCPcargados.value);
+    console.log(' LosTCPcargados.value', LosTCPcargados.value);
   });
 
   useTask$(({ track }) => {
@@ -66,28 +66,28 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
 
   //#region REGISTRAR DOCUMENTO
   const registrarDocumentoIN = $(() => {
-    if (documentoIN.codigoTCP === "") {
-      alert("Seleccione el tipo de comprobante de pago.");
-      document.getElementById("se_tcpIN_DOCUMENTO")?.focus();
+    if (documentoIN.codigoTCP === '') {
+      alert('Seleccione el tipo de comprobante de pago.');
+      document.getElementById('se_tcpIN_DOCUMENTO')?.focus();
       return;
     }
-    if (documentoIN.fecha === "") {
-      alert("Seleccione la fecha del documento.");
-      document.getElementById("in_Fecha_DOCUMENTO")?.focus();
+    if (documentoIN.fecha === '') {
+      alert('Seleccione la fecha del documento.');
+      document.getElementById('in_Fecha_DOCUMENTO')?.focus();
       return;
     }
-    if (documentoIN.serie === "") {
-      alert("Ingrese la serie del documento.");
-      document.getElementById("in_Serie_DOCUMENTO")?.focus();
+    if (documentoIN.serie === '') {
+      alert('Ingrese la serie del documento.');
+      document.getElementById('in_Serie_DOCUMENTO')?.focus();
       return;
     }
-    if (documentoIN.numero === 0 || documentoIN.numero.toString() === "") {
-      alert("Ingrese el número del documento.");
-      document.getElementById("in_Numero_DOCUMENTO")?.focus();
+    if (documentoIN.numero === 0 || documentoIN.numero.toString() === '') {
+      alert('Ingrese el número del documento.');
+      document.getElementById('in_Numero_DOCUMENTO')?.focus();
       return;
     }
 
-    if (documentoIN.idAuxiliar === "") {
+    if (documentoIN.idAuxiliar === '') {
       ctxDocumentosAdjuntos.push({
         idAuxiliar: parseInt(elIdAuxiliar()),
         // tipo: props.docSelecci.tipo ? props.docSelecci.tipo : '',
@@ -103,7 +103,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
       ctx.mostrarPanelAdjuntarDocumento = false;
     } else {
       const aMod: any = ctxDocumentosAdjuntos.find((docs: any) => docs.idAuxiliar === documentoIN.idAuxiliar);
-      console.log("aMod", aMod);
+      console.log('aMod', aMod);
 
       aMod.codigoTCP = documentoIN.codigoTCP;
       aMod.descripcionTCP = documentoIN.descripcionTCP;
@@ -128,14 +128,14 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   return (
     <div
       style={{
-        width: "clamp(386px, 86%, 600px)",
+        width: 'clamp(386px, 86%, 600px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -148,7 +148,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: "0.8rem" }}>Registro de documento</h3>
+      <h3 style={{ fontSize: '0.8rem' }}>Registro de documento</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
@@ -157,28 +157,28 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
           <div class="form-control">
             <div class="form-control form-agrupado">
               <ElSelect
-                id={"se_tcpIN_DOCUMENTO"}
+                id={'se_tcpIN_DOCUMENTO'}
                 valorSeleccionado={documentoIN.descripcionTCP}
                 registros={LosTCPcargados.value}
-                registroID={"codigo"}
-                registroTEXT={"descripcion"}
-                seleccione={"-- Seleccione TCP --"}
+                registroID={'codigo'}
+                registroTEXT={'descripcion'}
+                seleccione={'-- Seleccione TCP --'}
                 onChange={$(() => {
                   // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-                  const elSelec = document.getElementById("se_tcpIN_DOCUMENTO") as HTMLSelectElement;
+                  const elSelec = document.getElementById('se_tcpIN_DOCUMENTO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   // console.log('?', elIdx, elSelec[elIdx].id);
                   documentoIN.codigoTCP = elSelec[elIdx].id;
-                  if (documentoIN.codigoTCP === "") {
-                    documentoIN.descripcionTCP = "";
+                  if (documentoIN.codigoTCP === '') {
+                    documentoIN.descripcionTCP = '';
                   } else {
                     documentoIN.descripcionTCP = elSelec.value;
                     // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                   }
                 })}
                 onKeyPress={$((e: any) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("in_Fecha_DOCUMENTO") as HTMLSelectElement)?.focus();
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_Fecha_DOCUMENTO') as HTMLSelectElement)?.focus();
                   }
                 })}
               />
@@ -189,7 +189,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
             <div class="form-control form-agrupado">
               <input
                 id="in_Fecha_DOCUMENTO"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 type="date"
                 autoFocus
                 placeholder="Add fecha"
@@ -198,8 +198,8 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
                   documentoIN.fecha = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("in_Serie_DOCUMENTO") as HTMLInputElement)?.focus();
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_Serie_DOCUMENTO') as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -210,7 +210,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
             <div class="form-control form-agrupado">
               <input
                 id="in_Serie_DOCUMENTO"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 type="text"
                 autoFocus
                 placeholder="Add serie"
@@ -219,8 +219,8 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
                   documentoIN.serie = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("in_Numero_DOCUMENTO") as HTMLInputElement)?.focus();
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_Numero_DOCUMENTO') as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -231,7 +231,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
             <div class="form-control form-agrupado">
               <input
                 id="in_Numero_DOCUMENTO"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 type="number"
                 placeholder="Add número"
                 value={documentoIN.numero}
@@ -239,8 +239,8 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
                   documentoIN.numero = parseFloat((e.target as HTMLInputElement).value.trim());
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("bu_RegistrarDocumentoIN_DOCUMENTO") as HTMLInputElement)?.focus();
+                  if (e.key === 'Enter') {
+                    (document.getElementById('bu_RegistrarDocumentoIN_DOCUMENTO') as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -274,7 +274,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
         <input
           id="bu_RegistrarDocumentoIN_DOCUMENTO"
           type="button"
-          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           // value={botonGrabar === '' ? 'Grabar' : `${botonGrabar}`}
           class="btn-centro"
           onClick$={() => registrarDocumentoIN()}

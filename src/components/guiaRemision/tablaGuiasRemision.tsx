@@ -1,15 +1,18 @@
-import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
+import { $, Resource, component$, useContext, useResource$, useSignal, useStyles$, useTask$ } from '@builder.io/qwik';
 import style from '../tabla/tabla.css?inline';
 import { CTX_INDEX_GUIA_REMISION } from '~/routes/(guiasRemision)/guiaRemision';
 import { images } from '~/assets';
-// import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+// import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes'; cerosALaIzquierda
 import type { IGuiaRemision } from '~/interfaces/iGuiaRemision';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { parametrosGlobales } from '~/routes/login';
+import { reenviarGuiaRemision } from '~/apis/guiaRemision.api';
 
 export default component$((props: { buscarGuiasRemision: number; parametrosBusqueda: any }) => {
-  useStylesScoped$(style);
+  useStyles$(style);
 
   //#region CONTEXTO
-  const ctx_index_venta = useContext(CTX_INDEX_GUIA_REMISION);
+  const ctx_index_guia_remision = useContext(CTX_INDEX_GUIA_REMISION);
   //#region CONTEXTO
 
   //#region INICIALIZACION
@@ -89,15 +92,15 @@ export default component$((props: { buscarGuiasRemision: number; parametrosBusqu
       onRejected={() => {
         console.log('onRejected 🍍🍍🍍🍍');
         // props.buscarVentas = false;
-        ctx_index_venta.mostrarSpinner = false;
+        ctx_index_guia_remision.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(guiasRemision) => {
-        console.log('onResolved 🍓🍓🍓🍓');
+        console.log('onResolved 🍓🍓🍓🍓', guiasRemision);
         const { data } = guiasRemision; //{ status, data, message }
         const misGuiasRemision: IGuiaRemision[] = data;
         // ctx_index_venta.miscVts = misGuiasRemision;
-        ctx_index_venta.mostrarSpinner = false;
+        ctx_index_guia_remision.mostrarSpinner = false;
 
         return (
           <>
@@ -107,73 +110,60 @@ export default component$((props: { buscarGuiasRemision: number; parametrosBusqu
                   <thead>
                     <tr>
                       <th>Item</th>
-                      <th>Nro. Doc</th>
-                      <th>Destinatario</th>
                       <th>Ser-Nro</th>
-                      <th>Fecha</th>
+                      <th>Fecha Emision</th>
+                      <th>Fecha Ini Trasl</th>
+                      <th>Remitente</th>
+                      <th>Destinatario</th>
+                      <th>Transportista</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {misGuiasRemision.map((value, index) => {
+                    {misGuiasRemision.map((gr, index) => {
                       const indexItem = index + 1;
                       return (
-                        <tr key={value._id}>
+                        <tr key={gr._id}>
                           <td data-label="Item" class="comoCadena">
                             {indexItem}
                           </td>
-                          <td data-label="Nro. Doc" class="comoCadena">
-                            {/* {value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad} */}
+                          <td data-label="Ser-Nro" class="comoCadena">
+                            {typeof gr.serie !== 'undefined' ? gr.serie + ' - ' : '' + '-'}
+                            {typeof gr.numero !== 'undefined' ? cerosALaIzquierda(gr.numero, 8) : ''}
+                          </td>
+                          <td data-label="Fecha Emision" class="comoCadena">
+                            {formatoDDMMYYYY_PEN(gr.fechaEmision)}
+                          </td>
+                          <td data-label="Fecha Ini Trasl" class="comoCadena">
+                            {formatoDDMMYYYY_PEN(gr.fechaInicioTraslado)}
+                          </td>
+                          <td data-label="Remitente" class="comoCadena">
+                            {gr.razonSocialNombreRemitente}
                           </td>
                           <td data-label="Destinatario" class="comoCadena">
-                            {/* {value.razonSocialNombre} */}
+                            {gr.razonSocialNombreDestinatario}
                           </td>
-                          <td data-label="Ser-Nro" class="comoCadena">
-                            {/* {value.serie + '-' + cerosALaIzquierda(value.numero, 8)} */}
-                          </td>
-                          <td data-label="Fecha" class="comoCadena">
-                            {/* {formatoDDMMYYYY_PEN(value.fecha)} */}
-                          </td>
-                          <td data-label="Importe" class="comoNumero">
-                            {/* {value.moneda === 'PEN'
-                              ? parseFloat(value.totalPEN.$numberDecimal).toLocaleString('en-PE', {
-                                  // style: 'currency',
-                                  currency: 'PEN',
-                                  minimumFractionDigits: 2,
-                                })
-                              : parseFloat(value.totalUSD.$numberDecimal).toLocaleString('en-US', {
-                                  // style: 'currency',
-                                  currency: 'PEN',
-                                  minimumFractionDigits: 2,
-                                })} */}
+                          <td data-label="Transportista" class="comoCadena">
+                            {gr.razonSocialNombreTransportista}
                           </td>
                           <td data-label="Acciones" class="acciones">
                             <input
-                              // id="in_BuscarDetraccion"
                               type="image"
-                              src={images.pdf}
-                              title="Ver pdf"
-                              height={12}
-                              width={12}
-                              style={{ margin: '2px' }}
-                              // onClick$={() => {
-                              //   guiaSeleccionada.value = value;
-                              //   clickPDF.value++;
-                              // }}
-                            />
-                            <input
-                              // id="in_BuscarDetraccion"
-                              type="image"
-                              src={images.xml}
-                              title="Ver xml"
-                              height={12}
-                              width={12}
-                              style={{ margin: '2px' }}
-                              // onClick$={() => {
-                              //   guiaSeleccionada.value = value;
-                              //   createAndDownloadFile(value.serie + '-' + value.numero);
-                              //   console.log('xml', guiaSeleccionada.value);
-                              // }}
+                              src={images.resendEmail}
+                              title="Reenviar guía de remisión"
+                              height={14}
+                              width={14}
+                              style={{ marginRight: '4px' }}
+                              onClick$={async () => {
+                                ctx_index_guia_remision.mostrarSpinner = true;
+                                await reenviarGuiaRemision({
+                                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                  idEmpresa: parametrosGlobales.idEmpresa,
+                                  idGuiaRemision: gr._id,
+                                });
+                                ctx_index_guia_remision.buscarGuiasRemision++;
+                                // ctx_index_venta.mostrarSpinner = false;
+                              }}
                             />
                           </td>
                         </tr>

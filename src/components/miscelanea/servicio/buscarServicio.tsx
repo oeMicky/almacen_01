@@ -1,19 +1,19 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import ImgButton from "~/components/system/imgButton";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import ImgButton from '~/components/system/imgButton';
 // import { CTX_DOCS_VENTA } from '~/routes/(almacen)/venta';
-import TablaServiciosHallados from "./tablaServiciosHallados";
-import ServicioSeleccionado from "./servicioSeleccionado";
-import NewEditServicio from "./newEditServicio";
+import TablaServiciosHallados from './tablaServiciosHallados';
+import ServicioSeleccionado from './servicioSeleccionado';
+import NewEditServicio from './newEditServicio';
 // import { CTX_DOCS_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 // import { CTX_DOCS_COTIZACION } from '~/routes/(almacen)/cotizacion';
-import { parametrosGlobales } from "~/routes/login";
-import { CTX_NEW_EDIT_COTIZACION } from "~/components/cotizacion/newEditCotizacion";
-import { CTX_ADD_VENTA } from "~/components/venta/addVenta";
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from "~/components/ordenServicio/newEditOrdenServicio";
-import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from "~/components/ordenProduccion/newEditOrdenProduccion";
+import { parametrosGlobales } from '~/routes/login';
+import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
+import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
+import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
 
-export const CTX_BUSCAR_SERVICIO = createContextId<any>("servicio__");
+export const CTX_BUSCAR_SERVICIO = createContextId<any>('servicio__');
 
 export default component$((props: { contexto: string; porcentaje: any }) => {
   //#region DEFINICION CTX_BUSCAR_SERVICIO - para eDITAR - para sELECCIONAR
@@ -29,19 +29,19 @@ export default component$((props: { contexto: string; porcentaje: any }) => {
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
-    case "orden_servicio":
+    case 'orden_servicio':
       ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       break;
-    case "orden_produccion":
+    case 'orden_produccion':
       ctx = useContext(CTX_NEW_EDIT_ORDEN_PRODUCCION);
       break;
-    case "new_venta":
+    case 'new_venta':
       ctx = useContext(CTX_ADD_VENTA);
       break;
     // case 'cotizacion':
     //   ctx = useContext(CTX_DOCS_COTIZACION);
     //   break;
-    case "new_edit_cotizacion":
+    case 'new_edit_cotizacion':
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
       break;
   }
@@ -53,14 +53,14 @@ export default component$((props: { contexto: string; porcentaje: any }) => {
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    cadenaABuscar: "", //cadena.value,
+    cadenaABuscar: '', //cadena.value,
   });
 
   //#region BUSCAR SERVICIOS
   const localizarServicios = $(() => {
-    if (parametrosBusqueda.cadenaABuscar === "") {
-      alert("Ingrese un valor para su busqueda 🦪");
-      document.getElementById("in_BusquedaServicio_SERVICIO")?.focus();
+    if (parametrosBusqueda.cadenaABuscar === '') {
+      alert('Ingrese un valor para su busqueda 🦪');
+      document.getElementById('in_BusquedaServicio_SERVICIO')?.focus();
       return;
     }
     buscarServicios.value++;
@@ -83,16 +83,16 @@ export default component$((props: { contexto: string; porcentaje: any }) => {
     <div
       class="container-modal"
       style={{
-        width: "clamp(330px, 86%, 680px)",
+        width: 'clamp(330px, 86%, 680px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
       }}
     >
       {/* BOTONES DEL MARCO */}
       <div
         style={{
-          display: "flex",
-          justifyContent: "end",
+          display: 'flex',
+          justifyContent: 'end',
           // marginTop: '16px',
         }}
       >
@@ -110,9 +110,9 @@ export default component$((props: { contexto: string; porcentaje: any }) => {
       {/* FORMULARIO */}
       <div class="add-form" style={{}}>
         {/* TITULO */}
-        <h3 style={{ marginBottom: "8px", fontSize: "0.8rem" }}>Buscar servicio</h3>
+        <h3 style={{ marginBottom: '8px', fontSize: '0.8rem' }}>Buscar servicio</h3>
         {/* ZONA DE BUSQUEDA */}
-        <div style={{ marginBottom: "8px" }}>
+        <div style={{ marginBottom: '8px' }}>
           {/* Codigo Descripcion */}
           <div class="form-control">
             <div class="form-control form-agrupado">
@@ -121,13 +121,13 @@ export default component$((props: { contexto: string; porcentaje: any }) => {
                 autoFocus
                 type="text"
                 placeholder="Ingrese el servicio a buscar"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 value={parametrosBusqueda.cadenaABuscar}
                 onChange$={(e) => {
                   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
                 }}
                 onKeyUp$={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     localizarServicios();
                     // if ((document.getElementById('inputBusquedaServicio_MICE') as HTMLInputElement).value.trim() !== '') {
                     //   if (parametrosBusqueda.cadenaABuscar === '') {
@@ -158,7 +158,7 @@ export default component$((props: { contexto: string; porcentaje: any }) => {
                 alt="icon buscar"
                 height={16}
                 width={16}
-                style={{ margin: "0 4px" }}
+                style={{ margin: '0 4px' }}
                 onClick$={() => localizarServicios()}
               />
               <input
@@ -187,7 +187,7 @@ export default component$((props: { contexto: string; porcentaje: any }) => {
           {buscarServicios.value > 0 ? (
             <TablaServiciosHallados buscarServicios={buscarServicios.value} parametrosBusqueda={parametrosBusqueda} contexto={props.contexto} />
           ) : (
-            ""
+            ''
           )}
           {definicion_CTX_BUSCAR_SERVICIO.mostrarPanelServicioSeleccionado && (
             <div class="modal">

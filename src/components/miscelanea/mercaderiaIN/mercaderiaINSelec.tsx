@@ -1,8 +1,8 @@
-import { $, component$, useContext, useSignal, useStyles$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import ImgButton from "~/components/system/imgButton";
-import { CTX_BUSCAR_MERCADERIA_IN } from "./buscarMercaderiaIN";
-import styleFormulario from "../../../routes/login/login.css?inline";
+import { $, component$, useContext, useSignal, useStyles$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import ImgButton from '~/components/system/imgButton';
+import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
+import styleFormulario from '../../../routes/login/login.css?inline';
 
 export default component$(() => {
   useStyles$(styleFormulario);
@@ -34,15 +34,15 @@ export default component$(() => {
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 500px)",
+        width: 'clamp(330px, 86%, 500px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -64,10 +64,10 @@ export default component$(() => {
         {/* CAMPOS */}
         <div>
           {/* Manufactura unitaria  justify-content: space-between; star  end */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             {/* <div style={{ display: "flex", margin: "4px 0", justifyContent: "space-between" }}> */}
-            <div style={{ border: "1px solid blue" }}>
-              <label style={{ width: "150px", border: "1px solid red" }}>Código</label>
+            <div style={{ border: '1px solid blue' }}>
+              <label style={{ width: '150px', border: '1px solid red' }}>Código</label>
             </div>
 
             {/* <input
@@ -85,10 +85,10 @@ export default component$(() => {
               //   }
               // }}
             /> */}
-            <div style={{ border: "1px solid purple" }}>
+            <div style={{ border: '1px solid purple' }}>
               <input
                 id="in_Codigo_MANUFACTURA_UNITARIA"
-                style={{ width: "150px" }}
+                style={{ width: '150px' }}
                 type="text"
                 placeholder="Add manufactura unitaria"
                 value={ini.value + 1}

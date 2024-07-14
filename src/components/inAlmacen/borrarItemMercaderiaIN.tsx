@@ -4,7 +4,7 @@ import { images } from '~/assets';
 import { CTX_NEW_IN_ALMACEN } from './newInAlmacen';
 // import { cerosALaIzquierda } from '~/functions/comunes';
 
-export default component$((props: { borrarItemMerca: any }) => {
+export default component$((props: { borrarItemMercaIN: any }) => {
   //#region CONTEXTO
   // let documentos: any = [];
   // documentos = useContext(CTX_IN_ALMACEN).itemsMercaderias;
@@ -13,10 +13,11 @@ export default component$((props: { borrarItemMerca: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 400px)',
         //width: 'auto',
         border: '1px solid red',
         padding: '2px',
+        // background: '#eee',
       }}
       class="container-modal"
     >
@@ -37,15 +38,16 @@ export default component$((props: { borrarItemMerca: any }) => {
       <div class="add-form">
         {/* ENCABEZADO */}
         <div style={{ marginBottom: '10px' }}>
-          ¿Desea eliminar el ítem?
-          <div>
+          <label>¿Desea eliminar el ítem?</label>
+          <br />
+          <p>
             {/* <label>{cerosALaIzquierda(props.borrarItemMerca.item, 3)}</label>
             <br /> */}
-            <label>{props.borrarItemMerca.codigo}</label>
+            <label>{props.borrarItemMercaIN.codigo}</label>
             <br />
-            <label>{props.borrarItemMerca.descripcion}</label>
+            <label>{props.borrarItemMercaIN.descripcion}</label>
             <br />
-          </div>
+          </p>
           <div style={{ display: 'flex', marginTop: '5px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
               style={{ width: '60px' }}
@@ -56,12 +58,12 @@ export default component$((props: { borrarItemMerca: any }) => {
                 // const aMod: any = documentos.filter((docs: any) => docs.idAuxiliar !== props.borrarItemMerca.idAuxiliar);
                 // console.log('- aMod', aMod);
                 // documentos = aMod;
-                ctx_new_in_almacen.borrarIdAuxiliar = props.borrarItemMerca.idAuxiliar;
+                ctx_new_in_almacen.borrarIdAuxiliar = props.borrarItemMercaIN.idAuxiliar;
                 ctx_new_in_almacen.mostrarPanelDeleteItemMercaderiaIN = false;
               }}
             >
               SI
-            </button>{' '}
+            </button>
             <button
               style={{ width: '60px' }}
               onClick$={() => {

@@ -1,23 +1,19 @@
 import { $, component$, useContext } from '@builder.io/qwik';
-import { CTX_NEW_IN_ALMACEN } from './newInAlmacen';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
+import { CTX_NEW_EDIT_GUIA_REMISION } from './newEditGuiaRemision';
 
-export default component$((props: { borrarDocumento: any }) => {
+export default component$((props: { borrarItemGuiaRemision: any }) => {
   //#region CONTEXTO
-  //   let documentos: any = [];
-  //   documentos = useContext(CTX_IN_ALMACEN).itemsMercaderias;
-  const ctx_new_in_almacen = useContext(CTX_NEW_IN_ALMACEN);
+  const ctx_new_edit_GuiaRemision = useContext(CTX_NEW_EDIT_GUIA_REMISION);
   //#endregion CONTEXTO
-
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 400px)',
+        width: 'clamp(330px, 86%, 370px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
-        // background: '#eee',
       }}
       class="container-modal"
     >
@@ -30,7 +26,7 @@ export default component$((props: { borrarDocumento: any }) => {
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_new_in_almacen.mostrarPanelDeleteDocumentoIN = false;
+            ctx_new_edit_GuiaRemision.mostrarPanelDeleteItemGuiaRemision = false;
           })}
         />
       </div>
@@ -38,32 +34,30 @@ export default component$((props: { borrarDocumento: any }) => {
       <div class="add-form">
         {/* ENCABEZADO */}
         <div style={{ marginBottom: '8px' }}>
-          <label>¿Desea eliminar el documento?</label>
+          <label>¿Desea eliminar el item de la guía de remisión?</label>
           <br />
           <p>
             <label>
-              {props.borrarDocumento.fecha} - {props.borrarDocumento.descripcionTCP}
+              {props.borrarItemGuiaRemision.cantidad} {props.borrarItemGuiaRemision.unidad}
             </label>
             <br />
-            <label>
-              {props.borrarDocumento.serie} - {props.borrarDocumento.numero}
-            </label>
+            <label>{props.borrarItemGuiaRemision.descripcion}</label>
             <br />
           </p>
           <div style={{ display: 'flex', marginTop: '4px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
               style={{ width: '60px' }}
               onClick$={() => {
-                ctx_new_in_almacen.borrarIdAuxiliarDoc = props.borrarDocumento.idAuxiliar;
-                ctx_new_in_almacen.mostrarPanelDeleteDocumentoIN = false;
+                ctx_new_edit_GuiaRemision.borrarIdAuxiliarItemGuiaRemision = props.borrarItemGuiaRemision.idAuxiliar;
+                ctx_new_edit_GuiaRemision.mostrarPanelDeleteItemGuiaRemision = false;
               }}
             >
               SI
-            </button>{' '}
+            </button>
             <button
               style={{ width: '60px' }}
               onClick$={() => {
-                ctx_new_in_almacen.mostrarPanelDeleteDocumentoIN = false;
+                ctx_new_edit_GuiaRemision.mostrarPanelDeleteItemGuiaRemision = false;
               }}
             >
               NO

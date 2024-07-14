@@ -1,12 +1,12 @@
-import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city";
-import { images } from "~/assets";
+import { component$, useSignal, useStyles$ } from '@builder.io/qwik';
+import { useNavigate } from '@builder.io/qwik-city';
+import { images } from '~/assets';
 // import ImgButton from '~/components/system/imgButton';
-import { cerosALaIzquierda } from "~/functions/comunes";
-import styles from "../../../components/tabla/tabla.css?inline";
-import { getActivoGEEMPSUCUR, getPeriodos } from "~/apis/grupoEmpresarial.api";
-import { parametrosGlobales } from "~/routes/login";
-import Spinner from "~/components/system/spinner";
+import { cerosALaIzquierda } from '~/functions/comunes';
+import styles from '../../../components/tabla/tabla.css?inline';
+import { getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
+import { parametrosGlobales } from '~/routes/login';
+import Spinner from '~/components/system/spinner';
 
 export default component$(() => {
   useStyles$(styles);
@@ -37,13 +37,13 @@ export default component$(() => {
       <div class="container">
         <h2>BIENVENIDO AL SISTEMA</h2>
         <b>
-          <img src={images.user} width={16} height={16} style={{ marginRight: "8px" }} />
-          <label style={{ marginRight: "8px" }}>{parametrosGlobales.usuario}</label>
+          <img src={images.user} width={16} height={16} style={{ marginRight: '8px' }} />
+          <label style={{ marginRight: '8px' }}>{parametrosGlobales.usuario}</label>
         </b>
 
-        <p style={{ marginLeft: "16px" }}>Seleccione una sucursal.</p>
+        <p style={{ marginLeft: '16px' }}>Seleccione una sucursal.</p>
 
-        <table style={{ fontSize: "0.8rem", fontWeight: "lighter", padding: "0 16px" }}>
+        <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', padding: '0 16px' }}>
           <thead>
             <tr>
               <th>Ítem</th>
@@ -72,7 +72,7 @@ export default component$(() => {
                       height={14}
                       width={14}
                       // style={{ padding: '2px' }}
-                      onFocusin$={() => console.log("☪☪☪☪☪☪")}
+                      onFocusin$={() => console.log('☪☪☪☪☪☪')}
                       onClick$={async () => {
                         let activo = await getActivoGEEMPSUCUR({
                           idGrupoEmpresarial: sucur.idGrupoEmpresarial,
@@ -80,7 +80,7 @@ export default component$(() => {
                           idSucursal: sucur.idSucursal,
                         });
                         activo = activo.data;
-                        console.log("🎫🎫🎫activo", activo);
+                        console.log('🎫🎫🎫activo', activo);
                         if (!activo[0].activoGE) {
                           alert(`El grupo empresarial ${sucur.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`);
                           return;
@@ -93,7 +93,7 @@ export default component$(() => {
                           alert(`La sucursal ${sucur.sucursal} esta inactiva. Pongase en contacto con el administrador.`);
                           return;
                         }
-                        console.log("**VARIAS SUCURSALES**");
+                        console.log('**VARIAS SUCURSALES**');
                         parametrosGlobales.idSucursal = sucur.idSucursal;
                         parametrosGlobales.sucursal = sucur.sucursal;
                         parametrosGlobales.idAlmacen = sucur.idSucursal; //******* */
@@ -116,6 +116,10 @@ export default component$(() => {
                         parametrosGlobales.facturacionElectronicaAutomatica = activo[0].facturacionElectronicaAutomatica;
                         parametrosGlobales.facturaJSON = activo[0].facturaJSON;
                         parametrosGlobales.facturaXML = activo[0].facturaXML;
+                        parametrosGlobales.verificarObservacionVenta = activo[0].verificarObservacionVenta;
+                        parametrosGlobales.guiaRemisionElectronica = activo[0].guiaRemisionElectronica;
+                        parametrosGlobales.guiaRemisionElectronicaAutomatica = activo[0].guiaRemisionElectronicaAutomatica;
+                        parametrosGlobales.verificarObservacionGR = activo[0].verificarObservacionGR;
                         parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
                         parametrosGlobales.planesContables = activo[0].planesContables;
                         parametrosGlobales.asientoCompra = activo[0].asientoCompra;
@@ -141,13 +145,13 @@ export default component$(() => {
                         const losPeri = await getPeriodos({
                           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
                           idEmpresa: parametrosGlobales.idEmpresa,
-                          bandera: "",
+                          bandera: '',
                         });
                         parametrosGlobales.periodos = losPeri.data;
                         //
                         mostrarSpinner.value = true;
                         //PAGINA DE INICIO
-                        navegarA("/seleccionarServicio");
+                        navegarA('/seleccionarServicio');
                         // if (parametrosGlobales.almacenActivo) {
                         //   navegarA(parametrosGlobales.paginaInicioDelSistema);
                         // } else {
@@ -171,9 +175,9 @@ export default component$(() => {
         </table>
         <br />
         <button
-          style={{ marginLeft: "16px", padding: "20px 40px", borderRadius: "8px" }}
+          style={{ marginLeft: '16px', padding: '20px 40px', borderRadius: '8px' }}
           onClick$={() => {
-            navegarA("/");
+            navegarA('/');
           }}
         >
           Logout
@@ -187,7 +191,7 @@ export default component$(() => {
         </button> */}
         {/* MOSTRAR SPINNER */}
         {mostrarSpinner.value && (
-          <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Spinner />
           </div>
         )}

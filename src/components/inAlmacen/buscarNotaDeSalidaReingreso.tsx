@@ -1,13 +1,13 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_NEW_IN_ALMACEN } from "./newInAlmacen";
-import { parametrosGlobales } from "~/routes/login";
-import { hoy, menosXdiasHoy } from "~/functions/comunes";
-import TablaNotaDeSalidaReingreso from "./tablaNotaDeSalidaReingreso";
-import NotaDeSalidaReingreso from "./notaDeSalidaReingreso";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_NEW_IN_ALMACEN } from './newInAlmacen';
+import { parametrosGlobales } from '~/routes/login';
+import { hoy, menosXdiasHoy } from '~/functions/comunes';
+import TablaNotaDeSalidaReingreso from './tablaNotaDeSalidaReingreso';
+import NotaDeSalidaReingreso from './notaDeSalidaReingreso';
 
-export const CTX_BUSCAR_NOTA_SALIDA_REINGRESO = createContextId<any>("_buscar_nota_salida_reingreso");
+export const CTX_BUSCAR_NOTA_SALIDA_REINGRESO = createContextId<any>('_buscar_nota_salida_reingreso');
 
 export default component$(() => {
   //#region definicion_CTX_BUSCAR_NOTA_SALIDA_REINGRESO
@@ -31,11 +31,11 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
     idAlmacen: parametrosGlobales.idAlmacen,
-    BuscarPor: "Por destinatario",
-    PorNombre_RUCDNI: "Nombre / Razón social",
+    BuscarPor: 'Por destinatario',
+    PorNombre_RUCDNI: 'Nombre / Razón social',
     fechaInicio: menosXdiasHoy(5), //hoy(), // primeroDelMes(), // '2023-01-01', //hoy(), //por.value,
     fechaFinal: hoy(), //cadena.value,
-    cadenaABuscar: "",
+    cadenaABuscar: '',
   });
   //#endregion INICIALIZACION
 
@@ -43,14 +43,15 @@ export default component$(() => {
     <div
       class="container-modal"
       style={{
-        width: "clamp(330px, 86%, 700px)",
+        width: 'clamp(330px, 86%, 700px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
+        background: '#eee',
       }}
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -66,64 +67,64 @@ export default component$(() => {
       <div class="add-form">
         <h3>Buscar nota de salida (Reingreso)</h3>
         {/* SELECTOR :  por Fechas - por Número */}
-        <div class="form-control" style={{ marginBottom: "8px" }}>
+        <div class="form-control" style={{ marginBottom: '8px' }}>
           <div class="form-control form-agrupado">
             <select
               onChange$={(e) => {
                 parametrosBusqueda.BuscarPor = (e.target as HTMLSelectElement).value;
-                if (parametrosBusqueda.BuscarPor === "Entre fechas") {
-                  document.getElementById("in_fechaDesde_IN_NS_REINGRESO")?.focus();
+                if (parametrosBusqueda.BuscarPor === 'Entre fechas') {
+                  document.getElementById('in_fechaDesde_IN_NS_REINGRESO')?.focus();
                 }
-                if (parametrosBusqueda.BuscarPor === "Por número") {
-                  document.getElementById("in_numero_IN_NS_REINGRESO")?.focus();
+                if (parametrosBusqueda.BuscarPor === 'Por número') {
+                  document.getElementById('in_numero_IN_NS_REINGRESO')?.focus();
                 }
               }}
             >
-              <option value="Por destinatario" selected={parametrosBusqueda.BuscarPor === "Por destinatario"}>
+              <option value="Por destinatario" selected={parametrosBusqueda.BuscarPor === 'Por destinatario'}>
                 Por destinatario
               </option>
-              <option value="Entre fechas" selected={parametrosBusqueda.BuscarPor === "Entre fechas"}>
+              <option value="Entre fechas" selected={parametrosBusqueda.BuscarPor === 'Entre fechas'}>
                 Entre fechas
               </option>
-              <option value="Por número" selected={parametrosBusqueda.BuscarPor === "Por número"}>
+              <option value="Por número" selected={parametrosBusqueda.BuscarPor === 'Por número'}>
                 Por número
               </option>
             </select>
           </div>
         </div>
         {/* por Destinatario */}
-        <div id="porDestinatario" style={parametrosBusqueda.BuscarPor === "Por destinatario" ? { visibility: "visible" } : { visibility: "collapse" }}>
-          <div style={{ marginBottom: "8px" }}>
+        <div id="porDestinatario" style={parametrosBusqueda.BuscarPor === 'Por destinatario' ? { visibility: 'visible' } : { visibility: 'collapse' }}>
+          <div style={{ marginBottom: '8px' }}>
             <select
               id="se_buscarPor_DESTINATARIO"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               onChange$={(e) => {
                 parametrosBusqueda.PorNombre_RUCDNI = (e.target as HTMLSelectElement).value;
-                document.getElementById("in_NombreRUCDNI_IN_VENTA_REINGRESO")?.focus();
+                document.getElementById('in_NombreRUCDNI_IN_VENTA_REINGRESO')?.focus();
               }}
             >
-              <option value={"DNI / RUC"} selected={parametrosBusqueda.PorNombre_RUCDNI === "DNI / RUC"}>
+              <option value={'DNI / RUC'} selected={parametrosBusqueda.PorNombre_RUCDNI === 'DNI / RUC'}>
                 DNI / RUC
               </option>
-              <option value={"Nombre / Razón social"} selected={parametrosBusqueda.PorNombre_RUCDNI === "Nombre / Razón social"}>
+              <option value={'Nombre / Razón social'} selected={parametrosBusqueda.PorNombre_RUCDNI === 'Nombre / Razón social'}>
                 Nombre / Razón social
               </option>
             </select>
           </div>
           <div class="form-control form-agrupado">
             <input
-              type={parametrosBusqueda.PorNombre_RUCDNI === "DNI / RUC" ? "number" : "text"}
+              type={parametrosBusqueda.PorNombre_RUCDNI === 'DNI / RUC' ? 'number' : 'text'}
               id="in_NombreRUCDNI_IN_NS_REINGRESO"
               value={parametrosBusqueda.cadenaABuscar}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               onInput$={(e) => {
                 parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
               }}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  console.log("e", (e.target as HTMLInputElement).value);
+                if (e.key === 'Enter') {
+                  console.log('e', (e.target as HTMLInputElement).value);
                   // (document.getElementById('btn_Buscar_Nombre_RUCDNI_NOTA_SALIDA_REINGRESO') as HTMLInputElement)?.focus();
-                  if ((e.target as HTMLInputElement).value !== "") {
+                  if ((e.target as HTMLInputElement).value !== '') {
                     buscarNotaDeSalidaReingreso.value++;
                   }
                 }
@@ -137,11 +138,11 @@ export default component$(() => {
               alt="icono buscar"
               height={16}
               width={16}
-              style={{ margin: "2px 4px" }}
+              style={{ margin: '2px 4px' }}
               onClick$={() => {
-                if (parametrosBusqueda.cadenaABuscar.trim() === "") {
-                  alert("Ingrese el nombre / RUC DNI");
-                  document.getElementById("in_NombreRUCDNI_IN_NS_REINGRESO")?.focus();
+                if (parametrosBusqueda.cadenaABuscar.trim() === '') {
+                  alert('Ingrese el nombre / RUC DNI');
+                  document.getElementById('in_NombreRUCDNI_IN_NS_REINGRESO')?.focus();
                   return;
                 }
                 buscarNotaDeSalidaReingreso.value++;
@@ -153,9 +154,9 @@ export default component$(() => {
         <div
           id="porFechas"
           class="intervalo-fechas"
-          style={parametrosBusqueda.BuscarPor === "Entre fechas" ? { visibility: "visible" } : { visibility: "collapse" }}
+          style={parametrosBusqueda.BuscarPor === 'Entre fechas' ? { visibility: 'visible' } : { visibility: 'collapse' }}
         >
-          <label class="fechas" style={{ margin: "2px 4px 0 4px" }}>
+          <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
             Desde
           </label>
           <input
@@ -166,7 +167,7 @@ export default component$(() => {
               parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
             }}
           />
-          <label class="fechas" style={{ margin: "2px 4px 0 4px" }}>
+          <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
             Hasta
           </label>
           <input
@@ -184,11 +185,11 @@ export default component$(() => {
             height={16}
             width={16}
             src={images.searchPLUS}
-            style={{ marginLeft: "4px" }}
+            style={{ marginLeft: '4px' }}
             onClick$={() => {
               if (parametrosBusqueda.fechaInicio > parametrosBusqueda.fechaFinal) {
-                alert("Verifique las fechas de busqueda");
-                document.getElementById("in_fechaDesde_IN_NS_REINGRESO")?.focus();
+                alert('Verifique las fechas de busqueda');
+                document.getElementById('in_fechaDesde_IN_NS_REINGRESO')?.focus();
                 return;
               }
               buscarNotaDeSalidaReingreso.value++;
@@ -196,7 +197,7 @@ export default component$(() => {
           />
         </div>
         {/* por Número */}
-        <div id="porNumero" style={parametrosBusqueda.BuscarPor === "Por número" ? { visibility: "visible" } : { visibility: "collapse" }}>
+        <div id="porNumero" style={parametrosBusqueda.BuscarPor === 'Por número' ? { visibility: 'visible' } : { visibility: 'collapse' }}>
           <input
             type="number"
             id="in_numero_IN_NS_REINGRESO"
@@ -205,10 +206,10 @@ export default component$(() => {
               parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
             }}
             onKeyPress$={(e) => {
-              if (e.key === "Enter") {
-                console.log("e", (e.target as HTMLInputElement).value);
+              if (e.key === 'Enter') {
+                console.log('e', (e.target as HTMLInputElement).value);
                 // (document.getElementById('btn_Numero_NOTA_SALIDA_REINGRESO') as HTMLInputElement)?.focus();
-                if ((e.target as HTMLInputElement).value !== "") {
+                if ((e.target as HTMLInputElement).value !== '') {
                   buscarNotaDeSalidaReingreso.value++;
                 }
               }
@@ -222,11 +223,11 @@ export default component$(() => {
             height={16}
             width={16}
             src={images.searchPLUS}
-            style={{ marginLeft: "4px" }}
+            style={{ marginLeft: '4px' }}
             onClick$={() => {
-              if (parametrosBusqueda.cadenaABuscar.trim() === "") {
-                alert("Ingrese un número");
-                document.getElementById("in_numero_IN_NS_REINGRESO")?.focus();
+              if (parametrosBusqueda.cadenaABuscar.trim() === '') {
+                alert('Ingrese un número');
+                document.getElementById('in_numero_IN_NS_REINGRESO')?.focus();
                 return;
               }
               buscarNotaDeSalidaReingreso.value++;
@@ -234,7 +235,7 @@ export default component$(() => {
           />
         </div>
         {/* TABLA Notas de Salida A REINGRESAR */}
-        <div style={{ marginTop: "16px" }}>
+        <div style={{ marginTop: '16px' }}>
           {buscarNotaDeSalidaReingreso.value > 0 ? (
             <TablaNotaDeSalidaReingreso
               // contexto={props.contexto}
@@ -243,7 +244,7 @@ export default component$(() => {
               parametrosBusqueda={parametrosBusqueda}
             />
           ) : (
-            ""
+            ''
           )}
         </div>
         {definicion_CTX_BUSCAR_NOTA_SALIDA_REINGRESO.mostrarPanelNotaDeSalidaReingreso && (

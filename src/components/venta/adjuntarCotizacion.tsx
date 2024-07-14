@@ -1,15 +1,15 @@
-import { $, component$, useContext, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
+import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
 // import { CTX_DOCS_VENTA } from '~/routes/(almacen)/factura';
-import { hoy, primeroDelMes } from "~/functions/comunes";
-import TablaCotizaciones from "./tablaCotizaciones";
-import { CTX_ADD_VENTA } from "./addVenta";
-import { parametrosGlobales } from "~/routes/login";
+import { hoy, primeroDelMes } from '~/functions/comunes';
+import TablaCotizaciones from './tablaCotizaciones';
+import { CTX_ADD_VENTA } from './addVenta';
+import { parametrosGlobales } from '~/routes/login';
 
 export default component$(() => {
   const ctx_add_venta = useContext(CTX_ADD_VENTA);
-  const numeroOFecha = useSignal("Entre fechas");
+  const numeroOFecha = useSignal('Entre fechas');
   const buscarCotizaciones = useSignal(0);
   const fechas = useStore({
     desde: primeroDelMes(),
@@ -33,14 +33,15 @@ export default component$(() => {
     <div
       class="container-modal"
       style={{
-        width: "clamp(330px, 86%, 768px)",
+        width: 'clamp(330px, 86%, 768px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
+        background: '#eee',
       }}
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -81,8 +82,8 @@ export default component$(() => {
           </select>
         </div> */}
         {/* por Número*/}
-        <div id="porNumero" style={numeroOFecha.value === "Número" ? { visibility: "visible", display: "flex" } : { visibility: "collapse" }}>
-          <input type="text" id="inputNumeroCotizacion" style={{ marginLeft: "91px", top: "0px", width: "95px" }}></input>
+        <div id="porNumero" style={numeroOFecha.value === 'Número' ? { visibility: 'visible', display: 'flex' } : { visibility: 'collapse' }}>
+          <input type="text" id="inputNumeroCotizacion" style={{ marginLeft: '91px', top: '0px', width: '95px' }}></input>
           <input
             type="image"
             src={images.searchPLUS}
@@ -96,27 +97,27 @@ export default component$(() => {
           />
         </div>
         {/* por Fechas  , display: 'flex', fontSize: '0.8rem', border: '1px solid red'*/}
-        <div id="porFechas" class="intervalo-fechas" style={numeroOFecha.value === "Entre fechas" ? { visibility: "visible" } : { visibility: "collapse" }}>
+        <div id="porFechas" class="intervalo-fechas" style={numeroOFecha.value === 'Entre fechas' ? { visibility: 'visible' } : { visibility: 'collapse' }}>
           {/*  style={{ width: '210px', display: 'flex', justifyContent: 'space-between' }} */}
           <label class="fechas">Desde</label>
           <input
             type="date"
             id="fechaDesdeBusqueda"
             value={fechas.desde}
-            style={{ marginLeft: "2px" }}
+            style={{ marginLeft: '2px' }}
             onInput$={(e) => {
               fechas.desde = (e.target as HTMLInputElement).value;
             }}
           />
           {/*  style={{ width: '174px', display: 'flex', justifyContent: 'space-between', marginLeft: '10px' }}*/}
-          <label class="fechas" style={{ marginLeft: "4px" }}>
+          <label class="fechas" style={{ marginLeft: '4px' }}>
             Hasta
           </label>
           <input
             type="date"
             id="fechaHastaBusqueda"
             value={fechas.hasta}
-            style={{ marginLeft: "2px" }}
+            style={{ marginLeft: '2px' }}
             onInput$={(e) => {
               fechas.hasta = (e.target as HTMLInputElement).value;
             }}
@@ -129,11 +130,11 @@ export default component$(() => {
             height={16}
             width={16}
             src={images.searchPLUS}
-            style={{ marginLeft: "2px" }}
+            style={{ marginLeft: '2px' }}
             onClick$={() => {
               if (fechas.desde > fechas.hasta) {
-                alert("Verifique las fechas de busqueda");
-                document.getElementById("fechaDesdeBusqueda")?.focus();
+                alert('Verifique las fechas de busqueda');
+                document.getElementById('fechaDesdeBusqueda')?.focus();
                 return;
               }
               // console.log('click en lupa: parameBusqueda ', parameBusqueda);
@@ -145,7 +146,7 @@ export default component$(() => {
           {/* </div> */}
         </div>
         {/* TABLA COTIZACIONES */}
-        <div style={{ marginTop: "15px" }}>
+        <div style={{ marginTop: '15px' }}>
           {buscarCotizaciones.value > 0 ? (
             <TablaCotizaciones
               buscarCotizaciones={buscarCotizaciones.value}
@@ -154,7 +155,7 @@ export default component$(() => {
               parametrosBusqueda={parametrosBusqueda}
             />
           ) : (
-            ""
+            ''
           )}
         </div>
       </div>

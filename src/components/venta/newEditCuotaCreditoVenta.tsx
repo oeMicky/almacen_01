@@ -1,9 +1,9 @@
-import { $, component$, useContext } from "@builder.io/qwik";
-import { images } from "~/assets";
+import { $, component$, useContext } from '@builder.io/qwik';
+import { images } from '~/assets';
 // import { , hoy } from '~/functions/comunes';
-import ImgButton from "../system/imgButton";
-import type { ICuotaCreditoVenta } from "~/interfaces/iVenta";
-import { CTX_ADD_VENTA } from "./addVenta";
+import ImgButton from '../system/imgButton';
+import type { ICuotaCreditoVenta } from '~/interfaces/iVenta';
+import { CTX_ADD_VENTA } from './addVenta';
 
 export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuotaCreditoVenta }) => {
   const ctx_add_venta = useContext(CTX_ADD_VENTA);
@@ -32,13 +32,14 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 330px)",
+        width: 'clamp(330px, 86%, 330px)',
+        background: '#eee',
         //  width: props.ancho + 'px'
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO   */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -53,11 +54,11 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
           height={16}
           width={16}
           title="imprimir see"
-          onClick={$(() => console.log("cuota.idAuxiliar", props.cuota.idAuxiliar))}
+          onClick={$(() => console.log('cuota.idAuxiliar', props.cuota.idAuxiliar))}
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: "0.8rem" }}>Cuota</h3>
+      <h3 style={{ fontSize: '0.8rem' }}>Cuota</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* fecha */}
@@ -66,7 +67,7 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
             <input
               type="date"
               id="inputFechaCuota"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               value={props.cuota.fechaCuota}
               onChange$={(e) => {
                 props.cuota.fechaCuota = (e.target as HTMLInputElement).value;
@@ -81,7 +82,7 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
             <input
               type="number"
               id="inputImporteCuota"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               placeholder="Add importe cuota"
               value={props.cuota.importeCuotaPEN}
               onChange$={(e) => {
@@ -96,7 +97,7 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
           type="button"
           value="Grabar "
           class="btn-centro"
-          style={{ marginTop: "7px" }}
+          style={{ marginTop: '7px' }}
           onClick$={() => {
             onSubmit();
           }}

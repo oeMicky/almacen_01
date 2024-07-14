@@ -1,5 +1,5 @@
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "../../assets/fonts/vfs_fonts";
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from '../../assets/fonts/vfs_fonts';
 import {
   cerosALaIzquierda,
   formatearMonedaPEN,
@@ -9,21 +9,21 @@ import {
   formatoDDMMYYYY_PEN,
   // literal,
   redondeo2Decimales,
-} from "~/functions/comunes";
-import logit from "../../assets/base64/imagesBase64.js";
-import { parametrosGlobales } from "~/routes/login";
+} from '~/functions/comunes';
+import logit from '../../assets/base64/imagesBase64.js';
+import { parametrosGlobales } from '~/routes/login';
 
 async function pdfOsMG(os: any) {
   pdfMake.vfs = pdfFonts;
 
-  console.log("os PDF", os);
+  console.log('os PDF', os);
 
   const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
 
   const servicios = os.servicios;
   // let repuestosDespachados: any = [];
   const repuestosDespachados = os.requisiciones.filter((plot: any) => plot.cantidadDespachada.$numberDecimal > 0);
-  console.log("repuestosDespachadosyyyyyyy", repuestosDespachados);
+  console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
   let totalServicios = 0;
   let totalRepuestos = 0;
 
@@ -32,53 +32,53 @@ async function pdfOsMG(os: any) {
   // const rodape = [];
 
   const losServicios = servicios.map((ser: any, index: number) => {
-    console.log("pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...");
+    console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
     const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
     totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
-      { text: indexItem, style: "tableBody" },
+      { text: indexItem, style: 'tableBody' },
       // { text: codigo, style: 'tableBody' },
-      { text: descripcionEquivalencia, style: "tableBody" },
+      { text: descripcionEquivalencia, style: 'tableBody' },
       {
         text: formatear_4Decimales(cantidadEquivalencia.$numberDecimal),
-        style: "tableBody",
+        style: 'tableBody',
       },
-      { text: unidadEquivalencia, style: "tableBody" },
+      { text: unidadEquivalencia, style: 'tableBody' },
       {
         text: formatearMonedaPEN(precioPEN.$numberDecimal),
-        style: "tableBody",
+        style: 'tableBody',
       },
       {
         text: formatearMonedaPEN(ventaPEN.$numberDecimal),
-        style: "tableBody",
+        style: 'tableBody',
       },
     ];
   });
 
   const losRepuestos = repuestosDespachados.map((repu: any, index: number) => {
-    console.log("pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...");
+    console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
     const { codigo, descripcionEquivalencia, cantidadDespachada, cantidadReingresada, unidadEquivalencia, precioPEN } = repu;
-    console.log("cantidadDespachada - cantidadDespachada.$numberDecimal", cantidadDespachada, cantidadDespachada.$numberDecimal);
+    console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
     if (cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal > 0) {
       const indexItem = index + 1;
       totalRepuestos = totalRepuestos + redondeo2Decimales((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal);
       return [
-        { text: indexItem, style: "tableBody" },
-        { text: codigo, style: "tableBody" },
-        { text: descripcionEquivalencia, style: "tableBody" },
+        { text: indexItem, style: 'tableBody' },
+        { text: codigo, style: 'tableBody' },
+        { text: descripcionEquivalencia, style: 'tableBody' },
         {
           text: formatear_4Decimales(cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal),
-          style: "tableBody",
+          style: 'tableBody',
         },
-        { text: unidadEquivalencia, style: "tableBody" },
+        { text: unidadEquivalencia, style: 'tableBody' },
         {
           text: formatearMonedaPEN(precioPEN.$numberDecimal),
-          style: "tableBody",
+          style: 'tableBody',
         },
         {
           text: formatearMonedaPEN((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal),
-          style: "tableBody",
+          style: 'tableBody',
         },
       ];
     }
@@ -89,14 +89,14 @@ async function pdfOsMG(os: any) {
   function Pie(currentPage: number, pageCount: number) {
     return [
       {
-        image: "poweredBy",
+        image: 'poweredBy',
         fit: [70, 35],
-        alignment: "center",
+        alignment: 'center',
         margin: [0, -35, 0, 0],
       },
       {
-        text: currentPage + " / " + pageCount,
-        style: "textoPaginacion",
+        text: currentPage + ' / ' + pageCount,
+        style: 'textoPaginacion',
         margin: [0, -15, 17, 15],
       },
     ];
@@ -105,7 +105,7 @@ async function pdfOsMG(os: any) {
 
   //#region DEFINICION DEL DOCUMENTO
   const docDefinitios: any = {
-    pageSize: "A4",
+    pageSize: 'A4',
     pageMargins: [13, 11, 13, 15],
 
     header: [reportTitle],
@@ -114,31 +114,31 @@ async function pdfOsMG(os: any) {
       {
         // margin: [izq, top, der, button],
         columns: [
-          { width: "30%", margin: [45, 11, 0, 2], image: "logoEmp", fit: [190, 66] },
+          { width: '30%', margin: [45, 11, 0, 2], image: 'logoEmp', fit: [190, 66] },
           {
-            width: "30%",
+            width: '30%',
             margin: [20, 11, 18, 0],
             // alignment: 'center',
             text: [
-              { text: "Razón social\n", style: "textoBold10" },
-              { text: os.empresa + "\n", style: "texto" },
-              { text: "Sucursal\n", style: "textoBold10" },
-              { text: os.sucursal + "\n", style: "texto" },
-              { text: "Dirección fiscal\n", style: "textoBold10" },
-              { text: os.direccion, style: "texto" },
+              { text: 'Razón social\n', style: 'textoBold10' },
+              { text: os.empresa + '\n', style: 'texto' },
+              { text: 'Sucursal\n', style: 'textoBold10' },
+              { text: os.sucursal + '\n', style: 'texto' },
+              { text: 'Dirección fiscal\n', style: 'textoBold10' },
+              { text: os.direccion, style: 'texto' },
             ],
           },
           {
-            width: "40%",
+            width: '40%',
             margin: [22, 11, 34, 0],
-            alignment: "center",
+            alignment: 'center',
             table: {
               // headers are automatically repeated if the table spans over multiple pages
               // you can declare how many rows should be treated as headers
               headerRows: 0,
-              widths: ["*"],
+              widths: ['*'],
 
-              body: [["R U C N° " + os.ruc + "\n\nORDEN DE SERVICIO\n\n" + os.serie + " - " + cerosALaIzquierda(os.numero, 8) + "\n"]],
+              body: [['R U C N° ' + os.ruc + '\n\nORDEN DE SERVICIO\n\n' + os.serie + ' - ' + cerosALaIzquierda(os.numero, 8) + '\n']],
             },
             // text: [
             //   { text: 'R U C N° 20602683321\n', style: 'textoBold10' },
@@ -155,154 +155,154 @@ async function pdfOsMG(os: any) {
       {
         columns: [
           {
-            width: "18%",
+            width: '18%',
             margin: [50, 20, 0, 0],
-            text: { text: os.tipoDocumentoIdentidad + ":", style: "textoBold" },
+            text: { text: os.tipoDocumentoIdentidad + ':', style: 'textoBold' },
           },
           {
-            width: "42%",
+            width: '42%',
             fontSize: 6,
             margin: [0, 20, 0, 0],
             // alignment: 'center',
-            text: { text: os.numeroIdentidad, style: "texto" },
+            text: { text: os.numeroIdentidad, style: 'texto' },
           },
           {
-            width: "16%",
+            width: '16%',
             margin: [50, 20, 0, 0],
-            text: { text: "FECHA" + ":", style: "textoBold" },
+            text: { text: 'FECHA' + ':', style: 'textoBold' },
           },
           {
-            width: "24%",
+            width: '24%',
             fontSize: 6,
             margin: [0, 20, 0, 0],
             // alignment: 'center',
-            text: { text: formatoDDMMYYYY_PEN(os.fechaInicio), style: "texto" },
+            text: { text: formatoDDMMYYYY_PEN(os.fechaInicio), style: 'texto' },
           },
         ],
       },
       {
         columns: [
-          { width: "18%", margin: [50, 4, 0, 0], text: { text: "CLIENTE:", style: "textoBold" } },
+          { width: '18%', margin: [50, 4, 0, 0], text: { text: 'CLIENTE:', style: 'textoBold' } },
           {
-            width: "42%",
+            width: '42%',
             fontSize: 6,
             margin: [0, 4, 0, 0],
             // alignment: 'center',
-            text: { text: os.razonSocialNombreCliente, style: "texto" },
+            text: { text: os.razonSocialNombreCliente, style: 'texto' },
           },
-          { width: "16%", margin: [50, 4, 0, 0], text: { text: "ESTADO:", style: "textoBold" } },
+          { width: '16%', margin: [50, 4, 0, 0], text: { text: 'ESTADO:', style: 'textoBold' } },
           {
-            width: "24%",
+            width: '24%',
             fontSize: 6,
             margin: [0, 4, 0, 0],
             // alignment: 'center',
-            text: { text: os.estado, style: "texto" },
+            text: { text: os.estado, style: 'texto' },
           },
         ],
       },
       //DATOS TECNICO
       {
         columns: [
-          { width: "18%", margin: [50, 4, 0, 0], text: { text: "TECNICO:", style: "textoBold" } },
+          { width: '18%', margin: [50, 4, 0, 0], text: { text: 'TECNICO:', style: 'textoBold' } },
           {
-            width: "42%",
+            width: '42%',
             fontSize: 6,
             margin: [0, 4, 0, 0],
             // alignment: 'center',
-            text: { text: os.razonSocialNombreTecnico, style: "texto" },
+            text: { text: os.razonSocialNombreTecnico, style: 'texto' },
           },
-          { width: "16%", margin: [50, 4, 0, 0], text: { text: "TIPO:", style: "textoBold" } },
+          { width: '16%', margin: [50, 4, 0, 0], text: { text: 'TIPO:', style: 'textoBold' } },
           {
-            width: "24%",
+            width: '24%',
             fontSize: 6,
             margin: [0, 4, 0, 0],
             // alignment: 'center',
-            text: { text: os.tipo, style: "texto" },
+            text: { text: os.tipo, style: 'texto' },
           },
         ],
       },
       //TRABAJOS REALIZADOS / OBSERVACIONES
       {
-        columns: [{ width: "100%", margin: [50, 10, 0, 0], text: { text: "TRABAJOS REALIZADOS / OBSERVACIONES:", style: "textoBold10" } }],
+        columns: [{ width: '100%', margin: [50, 10, 0, 0], text: { text: 'TRABAJOS REALIZADOS / OBSERVACIONES:', style: 'textoBold10' } }],
       },
       {
-        columns: [{ width: "100%", margin: [50, 10, 0, 0], text: { text: os.observacionesCliente, style: "texto" } }],
+        columns: [{ width: '100%', margin: [50, 10, 0, 0], text: { text: os.observacionesCliente, style: 'texto' } }],
       },
       //SERVICIOS
       {
-        columns: [{ width: "20%", margin: [50, 10, 0, 0], text: { text: "SERVICIOS:", style: "textoBold10" } }],
+        columns: [{ width: '20%', margin: [50, 10, 0, 0], text: { text: 'SERVICIOS:', style: 'textoBold10' } }],
       },
       {
         // margin: [izq, top, der, button],
         margin: [30, 10, 30, 3],
-        style: "tableExample",
+        style: 'tableExample',
         table: {
           headerRows: 1,
           //
           // widths: ['*', 'auto', '*', '*', '*', '*'],
-          widths: ["*", "auto", "*", "*", "*", "*"],
+          widths: ['*', 'auto', '*', '*', '*', '*'],
           body: [
             [
-              { text: "Ítem", style: "tableHeaderLight" },
+              { text: 'Ítem', style: 'tableHeaderLight' },
               // { text: 'Código', style: 'tableHeaderLight' },
-              { text: "Descripción", style: "tableHeaderLight" },
-              { text: "Cantidad", style: "tableHeaderLight" },
-              { text: "Uni", style: "tableHeaderLight" },
-              { text: "Precio", style: "tableHeaderLight" },
-              { text: "Venta", style: "tableHeaderLight" },
+              { text: 'Descripción', style: 'tableHeaderLight' },
+              { text: 'Cantidad', style: 'tableHeaderLight' },
+              { text: 'Uni', style: 'tableHeaderLight' },
+              { text: 'Precio', style: 'tableHeaderLight' },
+              { text: 'Venta', style: 'tableHeaderLight' },
             ],
             ...losServicios,
           ],
         },
         // layout: 'itemsVentaLayout', //{ defaultBorder: false }, //'lightHorizontalLines', // 'noBorders', //'lightHorizontalLines',
-        layout: "noBorders",
+        layout: 'noBorders',
       },
       {
         columns: [
           {
-            width: "100%",
+            width: '100%',
             margin: [0, 0, 30, 0],
 
-            text: { text: "SUBTOTAL " + formatearMonedaPEN(totalServicios), style: "tableBodyRight" },
-            alignment: "right",
+            text: { text: 'SUBTOTAL ' + formatearMonedaPEN(totalServicios), style: 'tableBodyRight' },
+            alignment: 'right',
           },
         ],
       },
       //REPUESTOS
       {
-        columns: [{ width: "35%", margin: [50, 10, 0, 0], text: { text: "SUMINISTROS :", style: "textoBold10" } }],
+        columns: [{ width: '35%', margin: [50, 10, 0, 0], text: { text: 'SUMINISTROS :', style: 'textoBold10' } }],
       },
       {
         // margin: [izq, top, der, button],
         margin: [30, 10, 30, 3],
-        style: "tableExample",
+        style: 'tableExample',
         table: {
           headerRows: 1,
           //
           // widths: ['*', 'auto', '*', '*', '*', '*'],
-          widths: ["*", "*", "auto", "*", "*", "*", "*"],
+          widths: ['*', '*', 'auto', '*', '*', '*', '*'],
           body: [
             [
-              { text: "Ítem", style: "tableHeaderLight" },
-              { text: "Código", style: "tableHeaderLight" },
-              { text: "Descripción", style: "tableHeaderLight" },
-              { text: "Cantidad", style: "tableHeaderLight" },
-              { text: "Uni", style: "tableHeaderLight" },
-              { text: "Precio", style: "tableHeaderLight" },
-              { text: "Venta", style: "tableHeaderLight" },
+              { text: 'Ítem', style: 'tableHeaderLight' },
+              { text: 'Código', style: 'tableHeaderLight' },
+              { text: 'Descripción', style: 'tableHeaderLight' },
+              { text: 'Cantidad', style: 'tableHeaderLight' },
+              { text: 'Uni', style: 'tableHeaderLight' },
+              { text: 'Precio', style: 'tableHeaderLight' },
+              { text: 'Venta', style: 'tableHeaderLight' },
             ],
             ...losRepuestos,
           ],
         },
-        layout: "noBorders",
+        layout: 'noBorders',
       },
       {
         columns: [
           {
-            width: "100%",
+            width: '100%',
             margin: [0, 0, 30, 0],
-            text: { text: "SUBTOTAL " + formatearMonedaPEN(totalRepuestos), style: "tableBodyRight" },
-            alignment: "right",
+            text: { text: 'SUBTOTAL ' + formatearMonedaPEN(totalRepuestos), style: 'tableBodyRight' },
+            alignment: 'right',
           },
         ],
       },
@@ -311,8 +311,8 @@ async function pdfOsMG(os: any) {
         columns: [
           {
             margin: [0, 5, 30, 0],
-            text: { text: "TOTAL PEN " + formatearMonedaPEN(totalServicios + totalRepuestos), style: "textoBold10" },
-            alignment: "right",
+            text: { text: 'TOTAL PEN ' + formatearMonedaPEN(totalServicios + totalRepuestos), style: 'textoBold10' },
+            alignment: 'right',
           },
         ],
       },
@@ -326,29 +326,29 @@ async function pdfOsMG(os: any) {
       tableHeaderLight: {
         bold: true,
         fontSize: 8,
-        fillColor: "#d9d9d9",
-        color: "black",
+        fillColor: '#d9d9d9',
+        color: 'black',
         // alignment: 'start',
-        alignment: "center",
+        alignment: 'center',
         // border: [false, false, false, false],
       },
       tableHeader: {
         bold: true,
         fontSize: 8,
-        fillColor: "#34495E",
-        color: "white",
-        alignment: "center",
+        fillColor: '#34495E',
+        color: 'white',
+        alignment: 'center',
         // border: [false, false, false, false],
       },
       tableBody: {
         fontSize: 8,
-        color: "#50575E",
-        alignment: "center",
+        color: '#50575E',
+        alignment: 'center',
       },
       tableBodyRight: {
         fontSize: 8,
-        color: "#50575E",
-        alignment: "right",
+        color: '#50575E',
+        alignment: 'right',
       },
       textoBold10: {
         fontSize: 10,
@@ -368,31 +368,31 @@ async function pdfOsMG(os: any) {
         bold: true,
       },
       textoBoldRight: {
-        alignment: "right",
+        alignment: 'right',
         fontSize: 8,
         bold: true,
       },
       textoPaginacion: {
-        alignment: "right",
+        alignment: 'right',
         fontSize: 8,
         bold: true,
-        color: "#50575E",
+        color: '#50575E',
       },
       texto: {
         fontSize: 8,
-        color: "#50575E",
+        color: '#50575E',
       },
       texto7: {
         fontSize: 7,
-        color: "#50575E",
+        color: '#50575E',
       },
       texto6: {
         fontSize: 6,
-        color: "#50575E",
+        color: '#50575E',
       },
       texto10: {
         fontSize: 10,
-        color: "#50575E",
+        color: '#50575E',
       },
     },
     images: {
@@ -421,7 +421,7 @@ async function pdfOsMG(os: any) {
         return 0;
       },
       hLineColor: function (i) {
-        return i === 1 ? "black" : "#aaa";
+        return i === 1 ? 'black' : '#aaa';
       },
       paddingLeft: function (i) {
         return i === 0 ? 0 : 8;

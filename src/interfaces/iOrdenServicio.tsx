@@ -17,6 +17,7 @@ export interface IOrdenServicio {
 
   igv: any;
   fechaInicio: string;
+  fechaFinal: string;
   // correlativo: number;
   estado: string;
   tipo: string;

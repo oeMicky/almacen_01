@@ -1,33 +1,33 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useStyles$, useTask$ } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_INDEX_ORDEN_SERVICIO } from "~/routes/(ordenesServicio)/ordenServicio";
-import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo2Decimales, redondeo6Decimales } from "~/functions/comunes";
-import ElSelect from "../system/elSelect";
-import { parametrosGlobales } from "~/routes/login";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useStyles$, useTask$ } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(ordenesServicio)/ordenServicio';
+import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo6Decimales } from '~/functions/comunes';
+import ElSelect from '../system/elSelect';
+import { parametrosGlobales } from '~/routes/login';
 // import SeleccionarTecnico from './seleccionarTecnico';
 // import SeleccionarVehiculo from './seleccionarVehiculo';
 // import ElButton from '../system/elButton';
-import { getTecnico, getTecnicosActivos } from "~/apis/tecnico.api";
-import { borrarRequisicionOS, borrarServicioOS, getSeriesActivasOrdenesServicio, inUpOrdenServicio, loadTiposOrdenServicio } from "~/apis/ordenServicio.api";
-import type { IVehiculo } from "~/interfaces/iVehiculo";
-import type { IPersona } from "~/interfaces/iPersona";
-import type { IOrdenServicio } from "~/interfaces/iOrdenServicio";
+import { getTecnico, getTecnicosActivos } from '~/apis/tecnico.api';
+import { borrarRequisicionOS, borrarServicioOS, getSeriesActivasOrdenesServicio, inUpOrdenServicio, loadTiposOrdenServicio } from '~/apis/ordenServicio.api';
+import type { IVehiculo } from '~/interfaces/iVehiculo';
+import type { IPersona } from '~/interfaces/iPersona';
+import type { IOrdenServicio } from '~/interfaces/iOrdenServicio';
 
-import style from "../tabla/tabla.css?inline";
+import style from '../tabla/tabla.css?inline';
 
-import BuscarPersona from "../miscelanea/persona/buscarPersona";
-import BuscarVehiculo from "../miscelanea/vehiculo/buscarVehiculo";
-import BuscarMercaderiaOUT from "../miscelanea/mercaderiaOUT/buscarMercaderiaOUT";
-import BuscarServicio from "../miscelanea/servicio/buscarServicio";
-import BuscarTecnico from "../miscelanea/tecnico/buscarTecnico";
-import BorrarServicioOS from "./borrarServicioOS";
-import BorrarRequisicionOS from "./borrarRequisicionOS";
+import BuscarPersona from '../miscelanea/persona/buscarPersona';
+import BuscarVehiculo from '../miscelanea/vehiculo/buscarVehiculo';
+import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
+import BuscarServicio from '../miscelanea/servicio/buscarServicio';
+import BuscarTecnico from '../miscelanea/tecnico/buscarTecnico';
+import BorrarServicioOS from './borrarServicioOS';
+import BorrarRequisicionOS from './borrarRequisicionOS';
 
-export const CTX_O_S = createContextId<IOrdenServicio>("os");
-export const CTX_CLIENTE_OS = createContextId<IPersona>("os__cliente");
-export const CTX_VEHICULO_OS = createContextId<IVehiculo>("os__vehiculo");
-export const CTX_NEW_EDIT_ORDEN_SERVICIO = createContextId<any>("new_edit_orden_servicio");
+export const CTX_O_S = createContextId<IOrdenServicio>('os');
+export const CTX_CLIENTE_OS = createContextId<IPersona>('os__cliente');
+export const CTX_VEHICULO_OS = createContextId<IVehiculo>('os__vehiculo');
+export const CTX_NEW_EDIT_ORDEN_SERVICIO = createContextId<any>('new_edit_orden_servicio');
 
 export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any }) => {
   useStyles$(style);
@@ -38,7 +38,7 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any })
     selecciono_Tecnico: false,
     mostrarPanelBuscarTecnico: false,
 
-    rol_Persona: "",
+    rol_Persona: '',
     selecciono_Persona: false,
     mostrarPanelBuscarPersona: false,
 
@@ -47,12 +47,12 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any })
     mostrarPanelBuscarMercaderiaOUT: false,
 
     mostrarPanelBorrarServicioOS: false,
-    borrar_idServicioOS: "",
+    borrar_idServicioOS: '',
     borrar_idAuxiliarServicio: 0,
 
     mostrarPanelBorrarRequisicionOS: false,
-    borrar_idRequisicionOS: "",
-    borrar_idKardexRequisicion: "",
+    borrar_idRequisicionOS: '',
+    borrar_idKardexRequisicion: '',
     borrar_idAuxiliarRequisicion: 0,
   });
   useContextProvider(CTX_NEW_EDIT_ORDEN_SERVICIO, definicion_CTX_NEW_EDIT_ORDEN_SERVICIO);
@@ -61,7 +61,7 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any })
   //#region DEFINICION CTX_O_S
   const definicion_CTX_O_S = useStore<IOrdenServicio>(
     {
-      _id: props.oSSelecci._id ? props.oSSelecci._id : "",
+      _id: props.oSSelecci._id ? props.oSSelecci._id : '',
 
       idGrupoEmpresarial: props.oSSelecci.idGrupoEmpresarial ? props.oSSelecci.idGrupoEmpresarial : parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: props.oSSelecci.idEmpresa ? props.oSSelecci.idEmpresa : parametrosGlobales.idEmpresa,
@@ -74,38 +74,39 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any })
       sucursal: props.oSSelecci.sucursal ? props.oSSelecci.sucursal : parametrosGlobales.sucursal,
       direccion: props.oSSelecci.direccion ? props.oSSelecci.direccion : parametrosGlobales.Direccion,
 
-      idSerieOrdenServicio: props.oSSelecci.idSerieOrdenServicio ? props.oSSelecci.idSerieOrdenServicio : "",
-      serie: props.oSSelecci.serie ? props.oSSelecci.serie : "",
+      idSerieOrdenServicio: props.oSSelecci.idSerieOrdenServicio ? props.oSSelecci.idSerieOrdenServicio : '',
+      serie: props.oSSelecci.serie ? props.oSSelecci.serie : '',
       numero: props.oSSelecci.numero ? props.oSSelecci.numero : 0,
 
       fechaInicio: props.oSSelecci.fechaInicio ? props.oSSelecci.fechaInicio.substring(0, 10) : hoy(),
+      fechaFinal: props.oSSelecci.fechaFinal ? props.oSSelecci.fechaFinal.substring(0, 10) : hoy(),
       // fechaInicio: props.oSSelecci.fechaInicio ? formatoDDMMYYYY_PEN(props.oSSelecci.fechaInicio) : hoy(),
       // fechaInicio: props.oSSelecci.fechaInicio ? '2025-05-25' : hoy(),
       // fechaInicio: props.oSSelecci.fechaInicio ? formatoDDMMYYYY_PEN('2023-05-25T00:00:00.000Z') : hoy(),
 
-      estado: props.oSSelecci.estado ? props.oSSelecci.estado : "APERTURADO",
-      tipo: props.oSSelecci.tipo ? props.oSSelecci.tipo : "MANTENIMIENTO",
-      idTecnico: props.oSSelecci.idTecnico ? props.oSSelecci.idTecnico : "",
-      razonSocialNombreTecnico: props.oSSelecci.razonSocialNombreTecnico ? props.oSSelecci.razonSocialNombreTecnico : "",
+      estado: props.oSSelecci.estado ? props.oSSelecci.estado : 'APERTURADO',
+      tipo: props.oSSelecci.tipo ? props.oSSelecci.tipo : 'MANTENIMIENTO',
+      idTecnico: props.oSSelecci.idTecnico ? props.oSSelecci.idTecnico : '',
+      razonSocialNombreTecnico: props.oSSelecci.razonSocialNombreTecnico ? props.oSSelecci.razonSocialNombreTecnico : '',
 
-      clienteVentasVarias: typeof props.oSSelecci.clienteVentasVarias !== "undefined" ? props.oSSelecci.clienteVentasVarias : false,
+      clienteVentasVarias: typeof props.oSSelecci.clienteVentasVarias !== 'undefined' ? props.oSSelecci.clienteVentasVarias : false,
       idCliente: props.oSSelecci.idCliente ? props.oSSelecci.idCliente : null,
-      codigoTipoDocumentoIdentidad: props.oSSelecci.codigoTipoDocumentoIdentidad ? props.oSSelecci.codigoTipoDocumentoIdentidad : "6",
-      tipoDocumentoIdentidad: props.oSSelecci.tipoDocumentoIdentidad ? props.oSSelecci.tipoDocumentoIdentidad : "RUC",
-      numeroIdentidad: props.oSSelecci.numeroIdentidad ? props.oSSelecci.numeroIdentidad : "",
-      razonSocialNombreCliente: props.oSSelecci.razonSocialNombreCliente ? props.oSSelecci.razonSocialNombreCliente : "",
+      codigoTipoDocumentoIdentidad: props.oSSelecci.codigoTipoDocumentoIdentidad ? props.oSSelecci.codigoTipoDocumentoIdentidad : '6',
+      tipoDocumentoIdentidad: props.oSSelecci.tipoDocumentoIdentidad ? props.oSSelecci.tipoDocumentoIdentidad : 'RUC',
+      numeroIdentidad: props.oSSelecci.numeroIdentidad ? props.oSSelecci.numeroIdentidad : '',
+      razonSocialNombreCliente: props.oSSelecci.razonSocialNombreCliente ? props.oSSelecci.razonSocialNombreCliente : '',
 
       osConRegistroDeVehiculo: props.oSSelecci.osConRegistroDeVehiculo ? props.oSSelecci.osConRegistroDeVehiculo : parametrosGlobales.osConRegistroDeVehiculo,
       idVehiculo: props.oSSelecci.idVehiculo ? props.oSSelecci.idVehiculo : null,
-      placa: props.oSSelecci.placa ? props.oSSelecci.placa : "",
+      placa: props.oSSelecci.placa ? props.oSSelecci.placa : '',
       idVehiculoMarca: props.oSSelecci.idVehiculoMarca ? props.oSSelecci.idVehiculoMarca : null,
-      vehiculoMarca: props.oSSelecci.vehiculoMarca ? props.oSSelecci.vehiculoMarca : "",
+      vehiculoMarca: props.oSSelecci.vehiculoMarca ? props.oSSelecci.vehiculoMarca : '',
       idVehiculoModelo: props.oSSelecci.idVehiculoModelo ? props.oSSelecci.idVehiculoModelo : null,
-      vehiculoModelo: props.oSSelecci.vehiculoModelo ? props.oSSelecci.vehiculoModelo : "",
-      vin: props.oSSelecci.vin ? props.oSSelecci.vin : "",
+      vehiculoModelo: props.oSSelecci.vehiculoModelo ? props.oSSelecci.vehiculoModelo : '',
+      vin: props.oSSelecci.vin ? props.oSSelecci.vin : '',
       kilometraje: props.oSSelecci.kilometraje ? props.oSSelecci.kilometraje : 0,
 
-      requerimientosCliente: props.oSSelecci.requerimientosCliente ? props.oSSelecci.requerimientosCliente : "NINGUNO.",
+      requerimientosCliente: props.oSSelecci.requerimientosCliente ? props.oSSelecci.requerimientosCliente : 'NINGUNO.',
       observacionesCliente: props.oSSelecci.observacionesCliente
         ? props.oSSelecci.observacionesCliente
         : `TRABAJO(S) REALIZADO(S):
@@ -133,14 +134,14 @@ OBSERVACIÓN(ES):
 
   //#region DEFINICION CTX_CLIENTE_OS
   const defini_CTX_CLIENTE_OS = useStore<IPersona>({
-    _id: "",
-    codigoTipoDocumentoIdentidad: "",
-    tipoDocumentoIdentidad: "",
-    numeroIdentidad: "",
-    razonSocialNombre: "",
-    nombre: "",
-    paterno: "",
-    materno: "",
+    _id: '',
+    codigoTipoDocumentoIdentidad: '',
+    tipoDocumentoIdentidad: '',
+    numeroIdentidad: '',
+    razonSocialNombre: '',
+    nombre: '',
+    paterno: '',
+    materno: '',
     activo: true,
   });
   useContextProvider(CTX_CLIENTE_OS, defini_CTX_CLIENTE_OS);
@@ -186,21 +187,21 @@ OBSERVACIÓN(ES):
   // const grabo = useSignal(false);
 
   const borrarServicio = useStore({
-    _id: "",
-    idAuxiliar: "",
-    idKardex: "",
-    item: "",
-    codigo: "",
-    descripcion: "",
+    _id: '',
+    idAuxiliar: '',
+    idKardex: '',
+    item: '',
+    codigo: '',
+    descripcion: '',
   });
 
   const borrarRequisicion = useStore({
-    _id: "",
-    idAuxiliar: "",
-    idKardex: "",
-    item: "",
-    codigo: "",
-    descripcion: "",
+    _id: '',
+    idAuxiliar: '',
+    idKardex: '',
+    item: '',
+    codigo: '',
+    descripcion: '',
   });
 
   let sumaTOTAL_servicios = 0;
@@ -212,8 +213,8 @@ OBSERVACIÓN(ES):
   let igvTOTAL_requisiciones = 0;
 
   let sumaTOTAL_repuestosDespachados = 0;
-  let subTOTAL_repuestosDespachados = 0;
-  let igvTOTAL_repuestosDespachados = 0;
+  // let subTOTAL_repuestosDespachados = 0;
+  // let igvTOTAL_repuestosDespachados = 0;
   //*registros
   const cargarTiposOrdenServicio = $(async () => {
     const losTiposOS = await loadTiposOrdenServicio({
@@ -272,7 +273,7 @@ OBSERVACIÓN(ES):
     cantidadesDespachadas(definicion_CTX_O_S.requisiciones);
     obtenerTecnicosActivos();
 
-    if (definicion_CTX_O_S._id !== "") {
+    if (definicion_CTX_O_S._id !== '') {
       //el tecnico esta ACTIVO???
 
       const verificarTEC = await getTecnico({ idTecnico: definicion_CTX_O_S.idTecnico });
@@ -284,7 +285,7 @@ OBSERVACIÓN(ES):
       tecnicoACTIVO.value = true;
     }
     //
-    if (definicion_CTX_O_S.idSerieOrdenServicio === "") {
+    if (definicion_CTX_O_S.idSerieOrdenServicio === '') {
       // obtenerSerie();
       const parametros = {
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -313,7 +314,7 @@ OBSERVACIÓN(ES):
   //#region CLIENTE
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.selecciono_Persona);
-    if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.selecciono_Persona && definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.rol_Persona === "cliente") {
+    if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.selecciono_Persona && definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.rol_Persona === 'cliente') {
       definicion_CTX_O_S.clienteVentasVarias = false;
 
       definicion_CTX_O_S.idCliente = defini_CTX_CLIENTE_OS._id;
@@ -322,7 +323,7 @@ OBSERVACIÓN(ES):
       definicion_CTX_O_S.numeroIdentidad = defini_CTX_CLIENTE_OS.numeroIdentidad;
       definicion_CTX_O_S.razonSocialNombreCliente = defini_CTX_CLIENTE_OS.razonSocialNombre;
 
-      definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.rol_Persona = "";
+      definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.rol_Persona = '';
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.selecciono_Persona = false;
     }
   });
@@ -353,9 +354,9 @@ OBSERVACIÓN(ES):
     if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarServicio > 0) {
       //borrar en la BD
       if (
-        definicion_CTX_O_S._id !== "" &&
-        typeof definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idServicioOS !== "undefined" &&
-        definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idServicioOS !== ""
+        definicion_CTX_O_S._id !== '' &&
+        typeof definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idServicioOS !== 'undefined' &&
+        definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idServicioOS !== ''
       ) {
         await borrarServicioOS({
           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -370,7 +371,7 @@ OBSERVACIÓN(ES):
       );
       definicion_CTX_O_S.servicios = newItems;
 
-      definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idServicioOS = "";
+      definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idServicioOS = '';
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarServicio = 0;
     }
   });
@@ -382,9 +383,9 @@ OBSERVACIÓN(ES):
 
     if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion > 0) {
       //verificar si ya se a DESPACHADO
-      if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion !== "") {
+      if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion !== '') {
         console.log(
-          "definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion definicion_CTX_O_S.requisiciones.length",
+          'definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion definicion_CTX_O_S.requisiciones.length',
           definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion,
           definicion_CTX_O_S.requisiciones.length
         );
@@ -394,7 +395,7 @@ OBSERVACIÓN(ES):
           );
 
           if (despachos[0].cantidadDespachada.$numberDecimal - despachos[0].cantidadReingresada.$numberDecimal > 0) {
-            alert("El artículo no puede ser eliminado debido a que ha sido despachado por almacén.");
+            alert('El artículo no puede ser eliminado debido a que ha sido despachado por almacén.');
             return;
           }
           //  else {
@@ -411,9 +412,9 @@ OBSERVACIÓN(ES):
       //borrar en la BD
 
       if (
-        definicion_CTX_O_S._id !== "" &&
-        typeof definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idRequisicionOS !== "undefined" &&
-        definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idRequisicionOS !== ""
+        definicion_CTX_O_S._id !== '' &&
+        typeof definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idRequisicionOS !== 'undefined' &&
+        definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idRequisicionOS !== ''
       ) {
         await borrarRequisicionOS({
           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -428,8 +429,8 @@ OBSERVACIÓN(ES):
       );
       definicion_CTX_O_S.requisiciones = newItems;
 
-      definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idRequisicionOS = "";
-      definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion = "";
+      definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idRequisicionOS = '';
+      definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion = '';
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion = 0;
     }
   });
@@ -438,64 +439,69 @@ OBSERVACIÓN(ES):
 
   //#region ON SUBMIT
   const grabarOS = $(async () => {
-    if (definicion_CTX_O_S.fechaInicio === "" || typeof definicion_CTX_O_S.fechaInicio === "undefined") {
-      alert("Seleccione la fecha.");
-      document.getElementById("inputFecha")?.focus();
+    if (definicion_CTX_O_S.fechaInicio === '' || typeof definicion_CTX_O_S.fechaInicio === 'undefined') {
+      alert('Seleccione la fecha de inicio.');
+      document.getElementById('inputFechaInicio')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.idSerieOrdenServicio === "" || typeof definicion_CTX_O_S.idSerieOrdenServicio === "undefined") {
-      alert("Seleccione la serie");
-      document.getElementById("selectSerieOrdenServicio")?.focus();
+    if (definicion_CTX_O_S.fechaFinal === '' || typeof definicion_CTX_O_S.fechaFinal === 'undefined') {
+      alert('Seleccione la fecha final.');
+      document.getElementById('inputFechaFinal')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.estado === "" || typeof definicion_CTX_O_S.estado === "undefined") {
-      alert("Seleccione el estado.");
-      document.getElementById("selectEstado")?.focus();
+    if (definicion_CTX_O_S.idSerieOrdenServicio === '' || typeof definicion_CTX_O_S.idSerieOrdenServicio === 'undefined') {
+      alert('Seleccione la serie');
+      document.getElementById('selectSerieOrdenServicio')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.tipo === "" || typeof definicion_CTX_O_S.tipo === "undefined") {
-      alert("Seleccione el tipo de orden de servicio.");
-      document.getElementById("selectTipo")?.focus();
+    if (definicion_CTX_O_S.estado === '' || typeof definicion_CTX_O_S.estado === 'undefined') {
+      alert('Seleccione el estado.');
+      document.getElementById('selectEstado')?.focus();
       return;
     }
-    if (definicion_CTX_O_S.idTecnico === "" || typeof definicion_CTX_O_S.idTecnico === "undefined") {
-      alert("Seleccione al técnico.");
-      document.getElementById("selectTecnico")?.focus();
+    if (definicion_CTX_O_S.tipo === '' || typeof definicion_CTX_O_S.tipo === 'undefined') {
+      alert('Seleccione el tipo de orden de servicio.');
+      document.getElementById('selectTipo')?.focus();
+      return;
+    }
+    if (definicion_CTX_O_S.idTecnico === '' || typeof definicion_CTX_O_S.idTecnico === 'undefined') {
+      alert('Seleccione al técnico.');
+      document.getElementById('selectTecnico')?.focus();
       return;
     }
     if (!definicion_CTX_O_S.clienteVentasVarias) {
-      if (definicion_CTX_O_S.idCliente === "" || typeof definicion_CTX_O_S.idCliente === "undefined") {
-        alert("Seleccione al cliente.");
-        document.getElementById("selectTipoDocumentoLiteral")?.focus();
+      if (definicion_CTX_O_S.idCliente === '' || typeof definicion_CTX_O_S.idCliente === 'undefined') {
+        alert('Seleccione al cliente.');
+        document.getElementById('selectTipoDocumentoLiteral')?.focus();
         return;
       }
-      if (definicion_CTX_O_S.numeroIdentidad === "" || typeof definicion_CTX_O_S.numeroIdentidad === "undefined") {
-        alert("Seleccione al cliente.");
-        document.getElementById("selectTipoDocumentoLiteral")?.focus();
+      if (definicion_CTX_O_S.numeroIdentidad === '' || typeof definicion_CTX_O_S.numeroIdentidad === 'undefined') {
+        alert('Seleccione al cliente.');
+        document.getElementById('selectTipoDocumentoLiteral')?.focus();
         return;
       }
-      if (definicion_CTX_O_S.razonSocialNombreCliente === "" || typeof definicion_CTX_O_S.razonSocialNombreCliente === "undefined") {
-        alert("Seleccione al cliente.");
-        document.getElementById("selectTipoDocumentoLiteral")?.focus();
+      if (definicion_CTX_O_S.razonSocialNombreCliente === '' || typeof definicion_CTX_O_S.razonSocialNombreCliente === 'undefined') {
+        alert('Seleccione al cliente.');
+        document.getElementById('selectTipoDocumentoLiteral')?.focus();
         return;
       }
     }
 
     if (definicion_CTX_O_S.osConRegistroDeVehiculo) {
-      if (definicion_CTX_O_S.idVehiculo === "" || typeof definicion_CTX_O_S.idVehiculo === "undefined") {
-        alert("Seleccione el vehículo.");
-        document.getElementById("inputPlaca")?.focus();
+      if (definicion_CTX_O_S.idVehiculo === '' || typeof definicion_CTX_O_S.idVehiculo === 'undefined') {
+        alert('Seleccione el vehículo.');
+        document.getElementById('inputPlaca')?.focus();
         return;
       }
-      if (definicion_CTX_O_S.vehiculoMarca === "" || typeof definicion_CTX_O_S.vehiculoMarca === "undefined") {
-        alert("Seleccione el vehículo.");
-        document.getElementById("inputPlaca")?.focus();
+      if (definicion_CTX_O_S.vehiculoMarca === '' || typeof definicion_CTX_O_S.vehiculoMarca === 'undefined') {
+        alert('Seleccione el vehículo.');
+        document.getElementById('inputPlaca')?.focus();
         return;
       }
-      if (definicion_CTX_O_S.kilometraje.toString().trim() === "" || typeof definicion_CTX_O_S.kilometraje === "undefined") {
+      if (definicion_CTX_O_S.kilometraje.toString().trim() === '' || typeof definicion_CTX_O_S.kilometraje === 'undefined') {
         //const kilo = parseFloat(oS.kilometraje);
-        alert("Seleccione el kilometraje.");
-        document.getElementById("inputKilometraje")?.focus();
+        alert('Seleccione el kilometraje.');
+        document.getElementById('inputKilometraje')?.focus();
         return;
       }
     }
@@ -523,6 +529,7 @@ OBSERVACIÓN(ES):
       numero: definicion_CTX_O_S.numero,
 
       fechaInicio: definicion_CTX_O_S.fechaInicio,
+      fechaFinal: definicion_CTX_O_S.fechaFinal,
 
       // correlativo: definicion_CTX_O_S.correlativo,
       estado: definicion_CTX_O_S.estado,
@@ -558,7 +565,7 @@ OBSERVACIÓN(ES):
 
     if (ordenS.status === 400) {
       ctx_index_orden_servicio.mostrarSpinner = false;
-      alert("🛑 Falla al registrar la orden de servicio. " + ordenS.message);
+      alert('🛑 Falla al registrar la orden de servicio. ' + ordenS.message);
       return;
     }
 
@@ -585,16 +592,16 @@ OBSERVACIÓN(ES):
     definicion_CTX_O_S.servicios = ordenS.data.servicios;
     definicion_CTX_O_S.requisiciones = ordenS.data.requisiciones;
     ctx_index_orden_servicio.mostrarSpinner = false;
-    alert("✅ Registro satisfactorio");
+    alert('✅ Registro satisfactorio');
   });
   //#endregion ON SUBMIT
 
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 782px)",
+        width: 'clamp(330px, 86%, 782px)',
         // width: 'auto',
-        padding: "1px",
+        padding: '1px',
         // border: '3px dashed yellow',
       }}
       class="container-modal"
@@ -602,8 +609,8 @@ OBSERVACIÓN(ES):
       {/* BOTONES DEL MARCO */}
       <div
         style={{
-          display: "flex",
-          justifyContent: "end",
+          display: 'flex',
+          justifyContent: 'end',
           //   border: '1px solid green',
         }}
       >
@@ -624,7 +631,7 @@ OBSERVACIÓN(ES):
           height={16}
           width={16}
           title="Ver datos"
-          onClick={$(() => console.log("definicion_CTX_O_S", definicion_CTX_O_S))}
+          onClick={$(() => console.log('definicion_CTX_O_S', definicion_CTX_O_S))}
         />
         {/* <ImgButton
           src={images.see}
@@ -658,7 +665,7 @@ OBSERVACIÓN(ES):
         /> */}
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: "0.8rem" }}>
+      <h3 style={{ fontSize: '0.8rem' }}>
         Orden de servicio - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
       </h3>
       {/* FORMULARIO */}
@@ -668,14 +675,14 @@ OBSERVACIÓN(ES):
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE ORDEN DE SERVICIO */}
           <div>
-            {/* fecha */}
+            {/* fecha Inicio */}
             <div class="form-control form-control-check">
               <div class="form-control form-agrupado">
                 <input
-                  id="inputFecha"
+                  id="inputFechaInicio"
                   type="date"
-                  style={{ width: "100%" }}
-                  // disabled
+                  style={{ width: '100%' }}
+                  disabled={definicion_CTX_O_S._id !== '' ? true : false}
                   min={menosXdiasHoy(2)}
                   max={hoy()}
                   // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
@@ -687,19 +694,38 @@ OBSERVACIÓN(ES):
                 />
               </div>
             </div>
+            {/* fecha Final */}
+            <div class="form-control form-control-check">
+              <div class="form-control form-agrupado">
+                <input
+                  id="inputFechaFinal"
+                  type="date"
+                  style={{ width: '100%' }}
+                  // disabled
+                  min={definicion_CTX_O_S.fechaInicio}
+                  // max={hoy()}
+                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                  value={definicion_CTX_O_S.fechaFinal}
+                  onChange$={(e) => {
+                    definicion_CTX_O_S.fechaFinal = (e.target as HTMLInputElement).value;
+                  }}
+                />
+              </div>
+            </div>
             {/* Numero de Orden de Servicio*/}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                {definicion_CTX_O_S.idSerieOrdenServicio !== "" ? (
+                {definicion_CTX_O_S.idSerieOrdenServicio !== '' ? (
                   <input
                     id="inputSerieOrdenServicio"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     type="text"
                     disabled
                     value={
-                      definicion_CTX_O_S._id === ""
+                      definicion_CTX_O_S._id === ''
                         ? definicion_CTX_O_S.serie
-                        : definicion_CTX_O_S.serie + " - " + cerosALaIzquierda(definicion_CTX_O_S.numero, 8)
+                        : definicion_CTX_O_S.serie + ' - ' + cerosALaIzquierda(definicion_CTX_O_S.numero, 8)
                     }
                   />
                 ) : (
@@ -717,7 +743,7 @@ OBSERVACIÓN(ES):
                       // );
                       // //
                       // definicion_CTX_COTIZACION.numero = elementoSerie[0].correlativo;
-                      document.getElementById("in_Fecha")?.focus();
+                      document.getElementById('in_Fecha')?.focus();
                     }}
                   >
                     <option value="">-- Seleccione una serie --</option>
@@ -747,15 +773,15 @@ OBSERVACIÓN(ES):
                   onChange$={(e) => {
                     definicion_CTX_O_S.estado = (e.target as HTMLSelectElement).value;
                   }}
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                 >
-                  <option value={"TERMINADO"} selected={definicion_CTX_O_S.estado === "TERMINADO"}>
+                  <option value={'TERMINADO'} selected={definicion_CTX_O_S.estado === 'TERMINADO'}>
                     TERMINADO
                   </option>
-                  <option value={"DE BAJA"} selected={definicion_CTX_O_S.estado === "DE BAJA"}>
+                  <option value={'DE BAJA'} selected={definicion_CTX_O_S.estado === 'DE BAJA'}>
                     DE BAJA
                   </option>
-                  <option value={"APERTURADO"} selected={definicion_CTX_O_S.estado === "APERTURADO"}>
+                  <option value={'APERTURADO'} selected={definicion_CTX_O_S.estado === 'APERTURADO'}>
                     APERTURADO
                   </option>
                 </select>
@@ -770,7 +796,7 @@ OBSERVACIÓN(ES):
                   onChange$={(e) => {
                     definicion_CTX_O_S.tipo = (e.target as HTMLSelectElement).value;
                   }}
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                 >
                   {losTiposOSCargados.value.map((tipo: any) => {
                     return (
@@ -803,20 +829,20 @@ OBSERVACIÓN(ES):
                 {tecnicoACTIVO.value ? (
                   <>
                     <ElSelect
-                      id={"selectTecnico"}
+                      id={'selectTecnico'}
                       // elValor={oS.razonSocialNombreTecnico}
                       valorSeleccionado={definicion_CTX_O_S.razonSocialNombreTecnico}
                       registros={losTecnicos.value}
-                      registroID={"idTecnico"}
-                      registroTEXT={"razonSocialNombre"}
-                      seleccione={"-- Seleccione un técnico --"}
+                      registroID={'idTecnico'}
+                      registroTEXT={'razonSocialNombre'}
+                      seleccione={'-- Seleccione un técnico --'}
                       // onChange={changeTecnico}
                       onChange={$(() => {
-                        const elSelec = document.getElementById("selectTecnico") as HTMLSelectElement;
+                        const elSelec = document.getElementById('selectTecnico') as HTMLSelectElement;
                         const elIdx = elSelec.selectedIndex;
                         definicion_CTX_O_S.idTecnico = elSelec[elIdx].id;
-                        if (definicion_CTX_O_S.idTecnico === "") {
-                          definicion_CTX_O_S.razonSocialNombreTecnico = "";
+                        if (definicion_CTX_O_S.idTecnico === '') {
+                          definicion_CTX_O_S.razonSocialNombreTecnico = '';
                         } else {
                           definicion_CTX_O_S.razonSocialNombreTecnico = elSelec.value;
                         }
@@ -829,12 +855,12 @@ OBSERVACIÓN(ES):
                       alt="icono buscar"
                       height={16}
                       width={16}
-                      style={{ marginLeft: "4px" }}
+                      style={{ marginLeft: '4px' }}
                       onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarTecnico = true)}
                     />
                   </>
                 ) : (
-                  <input type="text" value={definicion_CTX_O_S.razonSocialNombreTecnico} disabled style={{ width: "100%" }} />
+                  <input type="text" value={definicion_CTX_O_S.razonSocialNombreTecnico} disabled style={{ width: '100%' }} />
                 )}
 
                 {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarTecnico && (
@@ -858,21 +884,21 @@ OBSERVACIÓN(ES):
                   id="chk_clienteVentasVarias_VENTA"
                   type="checkbox"
                   title="Cliente Ventas Varias"
-                  style={{ margin: "2px" }}
+                  style={{ margin: '2px' }}
                   checked={definicion_CTX_O_S.clienteVentasVarias}
                   onChange$={(e) => {
                     definicion_CTX_O_S.clienteVentasVarias = (e.target as HTMLInputElement).checked;
                   }}
                   onKeyPress$={(e) => {
-                    if (e.key === "Enter") {
-                      document.getElementById("btn_PlanContableOrigen_GRUPO_EMPRESARIAL")?.focus();
+                    if (e.key === 'Enter') {
+                      document.getElementById('btn_PlanContableOrigen_GRUPO_EMPRESARIAL')?.focus();
                     }
                   }}
                   onFocusin$={(e) => {
                     (e.target as HTMLInputElement).select();
                   }}
                 />
-                <label for="chk_clienteVentasVarias_VENTA" style={{ marginLeft: "2px" }}>
+                <label for="chk_clienteVentasVarias_VENTA" style={{ marginLeft: '2px' }}>
                   Cliente Ventas Varias (Boletas)
                 </label>
               </div>
@@ -887,15 +913,15 @@ OBSERVACIÓN(ES):
                     //
                     definicion_CTX_O_S.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                   }}
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                 >
-                  <option value={"1"} selected={definicion_CTX_O_S.codigoTipoDocumentoIdentidad === "1"}>
+                  <option value={'1'} selected={definicion_CTX_O_S.codigoTipoDocumentoIdentidad === '1'}>
                     DNI
                   </option>
-                  <option value={"6"} selected={definicion_CTX_O_S.codigoTipoDocumentoIdentidad === "6"}>
+                  <option value={'6'} selected={definicion_CTX_O_S.codigoTipoDocumentoIdentidad === '6'}>
                     RUC
                   </option>
-                  <option value={"4"} selected={definicion_CTX_O_S.codigoTipoDocumentoIdentidad === "4"}>
+                  <option value={'4'} selected={definicion_CTX_O_S.codigoTipoDocumentoIdentidad === '4'}>
                     C.EXT
                   </option>
                 </select>
@@ -906,7 +932,7 @@ OBSERVACIÓN(ES):
                   alt="icono buscar"
                   height={16}
                   width={16}
-                  style={{ marginLeft: "4px" }}
+                  style={{ marginLeft: '4px' }}
                   onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarPersona = true)}
                 />
                 {/* <ImgButton
@@ -929,7 +955,7 @@ OBSERVACIÓN(ES):
               <div class="form-control form-agrupado">
                 <input
                   id="inputNumeroIdentidad"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   type="number"
                   disabled
                   placeholder="Add número identidad"
@@ -945,7 +971,7 @@ OBSERVACIÓN(ES):
               <div class="form-control form-agrupado">
                 <input
                   id="inputNombreCliente"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   type="text"
                   placeholder="Razón social / Nombre"
                   disabled
@@ -970,7 +996,7 @@ OBSERVACIÓN(ES):
             {/* IGV */}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                <input type="number" id="inputIGV" disabled value={definicion_CTX_O_S.igv.$numberDecimal} style={{ width: "100%" }} />
+                <input type="number" id="inputIGV" disabled value={definicion_CTX_O_S.igv.$numberDecimal} style={{ width: '100%' }} />
               </div>
             </div>
           </div>
@@ -984,7 +1010,7 @@ OBSERVACIÓN(ES):
               <div class="form-control form-agrupado">
                 <input
                   id="inputPlaca"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   type="text"
                   placeholder="Add placa: AAA123, TRU789, XRW695"
                   value={definicion_CTX_O_S.placa}
@@ -1006,7 +1032,7 @@ OBSERVACIÓN(ES):
                   alt="icono buscar"
                   height={16}
                   width={16}
-                  style={{ marginLeft: "4px" }}
+                  style={{ marginLeft: '4px' }}
                   onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarVehiculo = true)}
                 />
               </div>
@@ -1014,19 +1040,19 @@ OBSERVACIÓN(ES):
             {/* Marca */}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                <input id="inputMarca" style={{ width: "100%" }} type="text" placeholder="Marca" disabled value={definicion_CTX_O_S.vehiculoMarca} />
+                <input id="inputMarca" style={{ width: '100%' }} type="text" placeholder="Marca" disabled value={definicion_CTX_O_S.vehiculoMarca} />
               </div>
             </div>
             {/* Modelo */}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                <input id="inputModelo" style={{ width: "100%" }} type="text" placeholder="Modelo" disabled value={definicion_CTX_O_S.vehiculoModelo} />
+                <input id="inputModelo" style={{ width: '100%' }} type="text" placeholder="Modelo" disabled value={definicion_CTX_O_S.vehiculoModelo} />
               </div>
             </div>
             {/* VIN */}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                <input id="inputVIN" style={{ width: "100%" }} type="text" placeholder="VIN" disabled value={definicion_CTX_O_S.vin} />
+                <input id="inputVIN" style={{ width: '100%' }} type="text" placeholder="VIN" disabled value={definicion_CTX_O_S.vin} />
               </div>
             </div>
             {/* Kilometraje */}
@@ -1035,7 +1061,7 @@ OBSERVACIÓN(ES):
               <div class="form-control form-agrupado">
                 <input
                   id="inputKilometraje"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   type="number"
                   placeholder="Add kilometraje"
                   value={definicion_CTX_O_S.kilometraje}
@@ -1102,8 +1128,8 @@ OBSERVACIÓN(ES):
             <label>Requerimientos del cliente</label>
             <div>
               <textarea
-                style={{ maxWidth: "100%" }}
-                disabled={definicion_CTX_O_S.estado === "APERTURADO" ? false : true}
+                style={{ maxWidth: '100%' }}
+                disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                 cols={90}
                 value={definicion_CTX_O_S.requerimientosCliente}
                 onChange$={(e) => {
@@ -1116,7 +1142,7 @@ OBSERVACIÓN(ES):
             </div>
           </div>
           {/* ----------------------------------------------------- */}
-          <br></br>
+          <br />
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* OBSERVACIONES */}
@@ -1129,8 +1155,8 @@ OBSERVACIÓN(ES):
             <label>Observaciones</label>
             <div>
               <textarea
-                style={{ maxWidth: "100%" }}
-                disabled={definicion_CTX_O_S.estado === "APERTURADO" ? false : true}
+                style={{ maxWidth: '100%' }}
+                disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                 cols={90}
                 value={definicion_CTX_O_S.observacionesCliente}
                 onChange$={(e) => {
@@ -1150,16 +1176,16 @@ OBSERVACIÓN(ES):
         <div>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              margin: "5px 0",
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              margin: '5px 0',
             }}
           >
-            <div style={{ marginBottom: "4px" }}>
+            <div style={{ marginBottom: '4px' }}>
               {/* {typeof oS.correlativo === 'undefined' ? ( */}
               <button
-                disabled={definicion_CTX_O_S.estado !== "APERTURADO" || definicion_CTX_O_S.numero === 0 ? true : false}
+                disabled={definicion_CTX_O_S.estado !== 'APERTURADO' || definicion_CTX_O_S.numero === 0 ? true : false}
                 onClick$={() => {
                   definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarServicio = true;
                 }}
@@ -1183,7 +1209,7 @@ OBSERVACIÓN(ES):
             )}
             {/* TABLA SERVICIOS  */}
             {definicion_CTX_O_S.servicios.length > 0 ? (
-              <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -1230,8 +1256,8 @@ OBSERVACIÓN(ES):
                         <td data-label="Cantidad" class="comoNumero">
                           <input
                             type="number"
-                            disabled={definicion_CTX_O_S.estado === "APERTURADO" ? false : true}
-                            style={{ width: "60px", textAlign: "end" }}
+                            disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
+                            style={{ width: '60px', textAlign: 'end' }}
                             value={iTSer.cantidadEquivalencia.$numberDecimal ? iTSer.cantidadEquivalencia.$numberDecimal : iTSer.cantidadEquivalencia}
                             onChange$={(e) => {
                               // const iv = itemsVentaK[index];
@@ -1249,18 +1275,18 @@ OBSERVACIÓN(ES):
                         <td data-label="Precio Uni" class="comoNumero">
                           <input
                             type="number"
-                            disabled={definicion_CTX_O_S.estado === "APERTURADO" ? false : true}
-                            style={{ width: "60px", textAlign: "end" }}
+                            disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
+                            style={{ width: '60px', textAlign: 'end' }}
                             value={iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN}
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
-                              console.log(".........precio", precio);
+                              console.log('.........precio', precio);
                               iTSer.precioPEN = precio;
-                              console.log(".........iTSer.precioPEN ", iTSer.precioPEN, iTSer.cantidadEquivalencia);
+                              console.log('.........iTSer.precioPEN ', iTSer.precioPEN, iTSer.cantidadEquivalencia);
                               const K = iTSer.cantidadEquivalencia.$numberDecimal
                                 ? parseFloat(iTSer.cantidadEquivalencia.$numberDecimal)
                                 : parseFloat(iTSer.cantidadEquivalencia);
-                              console.log("K", K);
+                              console.log('K', K);
                               iTSer.ventaPEN = K * (iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN);
                             }}
                           />
@@ -1277,7 +1303,7 @@ OBSERVACIÓN(ES):
                             type="image"
                             title="Eliminar ítem"
                             alt="icono eliminar"
-                            hidden={definicion_CTX_O_S.estado === "APERTURADO" ? false : true}
+                            hidden={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             height={14}
                             width={14}
                             src={images.trash}
@@ -1315,37 +1341,37 @@ OBSERVACIÓN(ES):
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colSpan={6} style={{ textAlign: "end" }}>
+                    <td colSpan={6} style={{ textAlign: 'end' }}>
                       Sub total
                     </td>
-                    <td colSpan={1} style={{ textAlign: "end" }}>
-                      {`${subTOTAL_servicios.toLocaleString("en-PE", {
-                        style: "currency",
-                        currency: "PEN",
+                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                      {`${subTOTAL_servicios.toLocaleString('en-PE', {
+                        style: 'currency',
+                        currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
                   </tr>
                   <tr>
-                    <td colSpan={6} style={{ textAlign: "end" }}>
+                    <td colSpan={6} style={{ textAlign: 'end' }}>
                       IGV
                     </td>
-                    <td colSpan={1} style={{ textAlign: "end" }}>
-                      {`${igvTOTAL_servicios.toLocaleString("en-PE", {
-                        style: "currency",
-                        currency: "PEN",
+                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                      {`${igvTOTAL_servicios.toLocaleString('en-PE', {
+                        style: 'currency',
+                        currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
                   </tr>
                   <tr>
-                    <td colSpan={6} style={{ textAlign: "end" }}>
+                    <td colSpan={6} style={{ textAlign: 'end' }}>
                       Total
                     </td>
-                    <td colSpan={1} style={{ textAlign: "end" }}>
-                      {`${sumaTOTAL_servicios.toLocaleString("en-PE", {
-                        style: "currency",
-                        currency: "PEN",
+                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                      {`${sumaTOTAL_servicios.toLocaleString('en-PE', {
+                        style: 'currency',
+                        currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
@@ -1359,7 +1385,7 @@ OBSERVACIÓN(ES):
               //   actualizarServicio={upServicio}
               //   fijarMontosTotales={fijarMontosTotalesServicios}
               // />
-              <i style={{ fontSize: "0.8rem" }}>No existen servicios</i>
+              <i style={{ fontSize: '0.8rem' }}>No existen servicios</i>
             )}
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBorrarServicioOS && (
               <div class="modal">
@@ -1375,15 +1401,15 @@ OBSERVACIÓN(ES):
         <div>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              margin: "5px 0",
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              margin: '5px 0',
             }}
           >
-            <div style={{ marginBottom: "4px" }}>
+            <div style={{ marginBottom: '4px' }}>
               <button
-                disabled={definicion_CTX_O_S.estado !== "APERTURADO" || definicion_CTX_O_S.numero === 0 ? true : false}
+                disabled={definicion_CTX_O_S.estado !== 'APERTURADO' || definicion_CTX_O_S.numero === 0 ? true : false}
                 onClick$={() => {
                   definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarMercaderiaOUT = true;
                 }}
@@ -1402,7 +1428,7 @@ OBSERVACIÓN(ES):
             )}
             {/* TABLA REQUISICIONES */}
             {definicion_CTX_O_S.requisiciones.length > 0 ? (
-              <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -1436,7 +1462,7 @@ OBSERVACIÓN(ES):
                       <tr key={iTRequi.idAuxiliar}>
                         <td data-label="Ítem" key={iTRequi.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(indexItemRequi, 3)}`}</td>
                         <td data-label="Kx" class="comoCadena">
-                          {typeof iTRequi.idKardex !== "undefined" && iTRequi.idKardex !== "" ? iTRequi.idKardex.substring(iTRequi.idKardex.length - 6) : ""}
+                          {typeof iTRequi.idKardex !== 'undefined' && iTRequi.idKardex !== '' ? iTRequi.idKardex.substring(iTRequi.idKardex.length - 6) : ''}
                         </td>
                         <td data-label="Código" class="comoCadena">
                           {iTRequi.codigo}
@@ -1447,8 +1473,8 @@ OBSERVACIÓN(ES):
                         <td data-label="Cantidad" class="comoNumero">
                           <input
                             type="number"
-                            disabled={definicion_CTX_O_S.estado === "APERTURADO" ? false : true}
-                            style={{ width: "60px", textAlign: "end" }}
+                            disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
+                            style={{ width: '60px', textAlign: 'end' }}
                             value={iTRequi.cantidadEquivalencia.$numberDecimal ? iTRequi.cantidadEquivalencia.$numberDecimal : iTRequi.cantidadEquivalencia}
                             // onInput$={(e) => {
                             //   console.log('.......firts...onInput....');
@@ -1481,8 +1507,8 @@ OBSERVACIÓN(ES):
                         <td data-label="Precio Uni" class="comoNumero">
                           <input
                             type="number"
-                            disabled={definicion_CTX_O_S.estado === "APERTURADO" ? false : true}
-                            style={{ width: "60px", textAlign: "end" }}
+                            disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
+                            style={{ width: '60px', textAlign: 'end' }}
                             value={iTRequi.precioPEN.$numberDecimal ? iTRequi.precioPEN.$numberDecimal : iTRequi.precioPEN}
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
@@ -1503,7 +1529,7 @@ OBSERVACIÓN(ES):
                             type="image"
                             title="Eliminar ítem"
                             alt="icono eliminar"
-                            hidden={definicion_CTX_O_S.estado === "APERTURADO" ? false : true}
+                            hidden={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             height={14}
                             width={14}
                             src={images.trash}
@@ -1543,37 +1569,37 @@ OBSERVACIÓN(ES):
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colSpan={7} style={{ textAlign: "end" }}>
+                    <td colSpan={7} style={{ textAlign: 'end' }}>
                       Sub total
                     </td>
-                    <td colSpan={1} style={{ textAlign: "end" }}>
-                      {`${subTOTAL_requisiciones.toLocaleString("en-PE", {
-                        style: "currency",
-                        currency: "PEN",
+                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                      {`${subTOTAL_requisiciones.toLocaleString('en-PE', {
+                        style: 'currency',
+                        currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
                   </tr>
                   <tr>
-                    <td colSpan={7} style={{ textAlign: "end" }}>
+                    <td colSpan={7} style={{ textAlign: 'end' }}>
                       IGV
                     </td>
-                    <td colSpan={1} style={{ textAlign: "end" }}>
-                      {`${igvTOTAL_requisiciones.toLocaleString("en-PE", {
-                        style: "currency",
-                        currency: "PEN",
+                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                      {`${igvTOTAL_requisiciones.toLocaleString('en-PE', {
+                        style: 'currency',
+                        currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
                   </tr>
                   <tr>
-                    <td colSpan={7} style={{ textAlign: "end" }}>
+                    <td colSpan={7} style={{ textAlign: 'end' }}>
                       Total
                     </td>
-                    <td colSpan={1} style={{ textAlign: "end" }}>
-                      {`${sumaTOTAL_requisiciones.toLocaleString("en-PE", {
-                        style: "currency",
-                        currency: "PEN",
+                    <td colSpan={1} style={{ textAlign: 'end' }}>
+                      {`${sumaTOTAL_requisiciones.toLocaleString('en-PE', {
+                        style: 'currency',
+                        currency: 'PEN',
                         minimumFractionDigits: 2,
                       })}`}
                     </td>
@@ -1581,7 +1607,7 @@ OBSERVACIÓN(ES):
                 </tfoot>
               </table>
             ) : (
-              <i style={{ fontSize: "0.8rem" }}>No existen requisiciones</i>
+              <i style={{ fontSize: '0.8rem' }}>No existen requisiciones</i>
             )}
             {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBorrarRequisicionOS && (
               <div class="modal">
@@ -1597,17 +1623,17 @@ OBSERVACIÓN(ES):
         <div>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              margin: "4px 0",
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              margin: '4px 0',
             }}
           >
-            <div style={{ marginBottom: "4px" }}>Ítems despachados</div>
+            <div style={{ marginBottom: '4px' }}>Ítems despachados</div>
             {/* TABLA REPUESTOS DESPACHADOS  */}
             <div>
               {repuestosDespachados.value.length > 0 ? (
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -1631,16 +1657,16 @@ OBSERVACIÓN(ES):
                           ? iTRepuDespachado.cantidadDespachada.$numberDecimal
                           : iTRepuDespachado.cantidadDespachada) *
                           (iTRepuDespachado.precioPEN.$numberDecimal ? iTRepuDespachado.precioPEN.$numberDecimal : iTRepuDespachado.precioPEN);
-                      subTOTAL_repuestosDespachados = redondeo2Decimales((sumaTOTAL_repuestosDespachados * 100) / (100 + definicion_CTX_O_S.igv));
-                      igvTOTAL_repuestosDespachados = redondeo2Decimales(sumaTOTAL_repuestosDespachados - subTOTAL_repuestosDespachados);
+                      // subTOTAL_repuestosDespachados = redondeo2Decimales((sumaTOTAL_repuestosDespachados * 100) / (100 + definicion_CTX_O_S.igv));
+                      // igvTOTAL_repuestosDespachados = redondeo2Decimales(sumaTOTAL_repuestosDespachados - subTOTAL_repuestosDespachados);
 
                       return (
                         <tr key={iTRepuDespachado.idAuxiliar}>
                           <td data-label="Ítem" key={iTRepuDespachado.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(indexItemRequiDespachados, 3)}`}</td>
                           <td data-label="Kx" class="comoCadena">
-                            {typeof iTRepuDespachado.idKardex !== "undefined" && iTRepuDespachado.idKardex !== ""
+                            {typeof iTRepuDespachado.idKardex !== 'undefined' && iTRepuDespachado.idKardex !== ''
                               ? iTRepuDespachado.idKardex.substring(iTRepuDespachado.idKardex.length - 6)
-                              : ""}
+                              : ''}
                           </td>
                           <td data-label="Código" class="comoCadena">
                             {iTRepuDespachado.codigo}
@@ -1656,7 +1682,7 @@ OBSERVACIÓN(ES):
                           <td data-label="Uni" class="comoCadena">
                             {iTRepuDespachado.unidadEquivalencia}
                           </td>
-                          <td data-label="Precio Uni" style={{ textAlign: "end" }}>
+                          <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
                             {iTRepuDespachado.precioPEN.$numberDecimal ? iTRepuDespachado.precioPEN.$numberDecimal : iTRepuDespachado.precioPEN}
                           </td>
                           <td data-label="Venta" class="comoNumero">
@@ -1671,7 +1697,7 @@ OBSERVACIÓN(ES):
                     })}
                   </tbody>
                   <tfoot>
-                    <tr>
+                    {/* <tr>
                       <td colSpan={7} style={{ textAlign: "end" }}>
                         Sub total
                       </td>
@@ -1694,15 +1720,15 @@ OBSERVACIÓN(ES):
                           minimumFractionDigits: 2,
                         })}`}
                       </td>
-                    </tr>
+                    </tr> */}
                     <tr>
-                      <td colSpan={7} style={{ textAlign: "end" }}>
+                      <td colSpan={7} style={{ textAlign: 'end' }}>
                         Total
                       </td>
-                      <td colSpan={1} style={{ textAlign: "end" }}>
-                        {`${sumaTOTAL_repuestosDespachados.toLocaleString("en-PE", {
-                          style: "currency",
-                          currency: "PEN",
+                      <td colSpan={1} style={{ textAlign: 'end' }}>
+                        {`${sumaTOTAL_repuestosDespachados.toLocaleString('en-PE', {
+                          style: 'currency',
+                          currency: 'PEN',
                           minimumFractionDigits: 2,
                         })}`}
                       </td>
@@ -1710,7 +1736,7 @@ OBSERVACIÓN(ES):
                   </tfoot>
                 </table>
               ) : (
-                <i style={{ fontSize: "0.8rem" }}>No existen repuestos despachados</i>
+                <i style={{ fontSize: '0.8rem' }}>No existen repuestos despachados</i>
               )}
             </div>
           </div>
@@ -1722,7 +1748,7 @@ OBSERVACIÓN(ES):
         <input
           type="button"
           // disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
-          value={definicion_CTX_O_S.numero === 0 ? "Aperturar orden de servicio" : `Grabar`}
+          value={definicion_CTX_O_S.numero === 0 ? 'Aperturar orden de servicio' : `Grabar`}
           class="btn-centro"
           // onClick={(e) => onSubmit(e)}
           onClick$={() => {

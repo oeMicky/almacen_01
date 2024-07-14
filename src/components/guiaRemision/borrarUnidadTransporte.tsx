@@ -10,7 +10,7 @@ export default component$((props: { borrarUnidadTransporte: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 600px)',
+        width: 'clamp(330px, 86%, 380px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -26,7 +26,7 @@ export default component$((props: { borrarUnidadTransporte: any }) => {
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_new_edit_GuiaRemision.mostrarPanelDeleteChofer = false;
+            ctx_new_edit_GuiaRemision.mostrarPanelDeleteUnidadTransporte = false;
           })}
         />
       </div>
@@ -34,17 +34,16 @@ export default component$((props: { borrarUnidadTransporte: any }) => {
       <div class="add-form">
         {/* ENCABEZADO */}
         <div style={{ marginBottom: '8px' }}>
-          ¿Desea eliminar la unidad transporte?
-          <div>
-            <label>{props.borrarUnidadTransporte.descripcionTCP}</label>
+          <label>¿Desea eliminar la unidad transporte?</label>
+          <br />
+          <p>
+            <label>{props.borrarUnidadTransporte.placa}</label>
             <br />
-            <label>{props.borrarUnidadTransporte.fecha}</label>
+            <label>
+              {props.borrarUnidadTransporte.vehiculoMarca} - {props.borrarUnidadTransporte.vehiculoModelo}
+            </label>
             <br />
-            <label>{props.borrarUnidadTransporte.serie}</label>
-            <br />
-            <label>{props.borrarUnidadTransporte.numero}</label>
-            <br />
-          </div>
+          </p>
           <div style={{ display: 'flex', marginTop: '4px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
               style={{ width: '60px' }}
@@ -58,7 +57,7 @@ export default component$((props: { borrarUnidadTransporte: any }) => {
             <button
               style={{ width: '60px' }}
               onClick$={() => {
-                ctx_new_edit_GuiaRemision.mostrarPanelDeleteChofer = false;
+                ctx_new_edit_GuiaRemision.mostrarPanelDeleteUnidadTransporte = false;
               }}
             >
               NO

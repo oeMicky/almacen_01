@@ -1,13 +1,13 @@
-import { $, component$, createContextId, useContext, useContextProvider, useStore } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_NEW_EDIT_ORDEN_PRODUCCION, CTX_O_P } from "./newEditOrdenProduccion";
-import { elIdAuxiliar } from "~/functions/comunes";
+import { $, component$, createContextId, useContext, useContextProvider, useStore } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_NEW_EDIT_ORDEN_PRODUCCION, CTX_O_P } from './newEditOrdenProduccion';
+import { elIdAuxiliar } from '~/functions/comunes';
 // import styleFormulario from "../../routes/login/login.css?inline";
-import BuscarManufacturaStandarizada from "./buscarManufacturaStandarizada";
+import BuscarManufacturaStandarizada from './buscarManufacturaStandarizada';
 // import styleFormulario from "../../css/formulario.css?inline";
 
-export const CTX_ADD_MANUFACTURA = createContextId<any>("__add_manufactura");
+export const CTX_ADD_MANUFACTURA = createContextId<any>('__add_manufactura');
 
 export default component$((props: { manuSeleccio: any }) => {
   // useStyles$(styleFormulario);
@@ -15,8 +15,8 @@ export default component$((props: { manuSeleccio: any }) => {
   //#region definicion_CTX_ADD_MANUFACTURA
   const definicion_CTX_ADD_MANUFACTURA = useStore({
     cantidad: props.manuSeleccio.cantidad ? props.manuSeleccio.cantidad : 1,
-    unidad: props.manuSeleccio.unidad ? props.manuSeleccio.unidad : "NIU",
-    descripcion: props.manuSeleccio.descripcion ? props.manuSeleccio.descripcion : "",
+    unidad: props.manuSeleccio.unidad ? props.manuSeleccio.unidad : 'NIU',
+    descripcion: props.manuSeleccio.descripcion ? props.manuSeleccio.descripcion : '',
     costoUnitarioPEN: props.manuSeleccio.costoUnitarioPEN ? props.manuSeleccio.costoUnitarioPEN : 0,
     costoTotalPEN: props.manuSeleccio.costoTotalPEN ? props.manuSeleccio.costoTotalPEN : 0,
   });
@@ -30,9 +30,9 @@ export default component$((props: { manuSeleccio: any }) => {
 
   //#region REGISTRAR MANUFACTURA
   const registrarManufactura = $(() => {
-    if (definicion_CTX_ADD_MANUFACTURA.descripcion.trim() === "") {
-      alert("Ingrese la descripción de la manufactura.");
-      document.getElementById("in_descripcion_ADD_MANUFACTURA")?.focus();
+    if (definicion_CTX_ADD_MANUFACTURA.descripcion.trim() === '') {
+      alert('Ingrese la descripción de la manufactura.');
+      document.getElementById('in_descripcion_ADD_MANUFACTURA')?.focus();
       return;
     }
 
@@ -45,7 +45,7 @@ export default component$((props: { manuSeleccio: any }) => {
       cantidad: definicion_CTX_ADD_MANUFACTURA.cantidad,
       // cantidad: definicion_CTX_ADD_MANUFACTURA.cantidad,
 
-      unidad: "NIU",
+      unidad: 'NIU',
       costoUnitarioPEN: definicion_CTX_ADD_MANUFACTURA.costoUnitarioPEN,
       costoTotalPEN: definicion_CTX_ADD_MANUFACTURA.costoTotalPEN,
     });
@@ -57,14 +57,15 @@ export default component$((props: { manuSeleccio: any }) => {
   return (
     <div
       style={{
-        width: "clamp(386px, 86%, 400px)",
+        width: 'clamp(386px, 86%, 400px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
+        background: '#eee',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -89,7 +90,7 @@ export default component$((props: { manuSeleccio: any }) => {
               <input
                 id="in_cantidad_ADD_MANUFACTURA"
                 // style={{ width: "245px" }}
-                style={{ width: "clamp(200px, 245px, 245px)" }}
+                style={{ width: 'clamp(200px, 245px, 245px)' }}
                 // style={{ width: "clamp(200px, 86%, 246px)" }}
                 type="number"
                 // disabled
@@ -100,12 +101,12 @@ export default component$((props: { manuSeleccio: any }) => {
                   definicion_CTX_ADD_MANUFACTURA.costoTotalPEN = definicion_CTX_ADD_MANUFACTURA.cantidad * definicion_CTX_ADD_MANUFACTURA.costoUnitarioPEN;
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("in_descripcion_ADD_MANUFACTURA") as HTMLInputElement)?.focus();
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_descripcion_ADD_MANUFACTURA') as HTMLInputElement)?.focus();
                   }
                 }}
               />
-              <label style={{ marginLeft: "4px" }}>{definicion_CTX_ADD_MANUFACTURA.unidad}</label>
+              <label style={{ marginLeft: '4px' }}>{definicion_CTX_ADD_MANUFACTURA.unidad}</label>
             </div>
           </div>
           {/* Descripcion */}
@@ -114,7 +115,7 @@ export default component$((props: { manuSeleccio: any }) => {
             <div>
               <input
                 id="in_descripcion_ADD_MANUFACTURA"
-                style={{ width: "clamp(200px, 245px, 245px)" }}
+                style={{ width: 'clamp(200px, 245px, 245px)' }}
                 type="text"
                 placeholder="Add descripción"
                 value={definicion_CTX_ADD_MANUFACTURA.descripcion}
@@ -122,8 +123,8 @@ export default component$((props: { manuSeleccio: any }) => {
                   definicion_CTX_ADD_MANUFACTURA.descripcion = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    (document.getElementById("in_costoUnitario_ADD_MANUFACTURA") as HTMLInputElement)?.focus();
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_costoUnitario_ADD_MANUFACTURA') as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -134,7 +135,7 @@ export default component$((props: { manuSeleccio: any }) => {
                 alt="icono buscar"
                 height={16}
                 width={16}
-                style={{ margin: "0 4px" }}
+                style={{ margin: '0 4px' }}
                 onClick$={() => {
                   ctx_new_edit_orden_produccion.mostrarPanelBuscarManufacturaStandarizada = true;
                   // localizarMercaderiasIN();
@@ -152,7 +153,7 @@ export default component$((props: { manuSeleccio: any }) => {
             <label>Costo Unitario PEN</label>
             <input
               id="in_costoUnitario_ADD_MANUFACTURA"
-              style={{ width: "clamp(200px, 86%, 270px)" }}
+              style={{ width: 'clamp(200px, 86%, 270px)' }}
               type="number"
               placeholder="Add costo unitario (PEN)"
               value={definicion_CTX_ADD_MANUFACTURA.costoUnitarioPEN}
@@ -162,8 +163,8 @@ export default component$((props: { manuSeleccio: any }) => {
                 definicion_CTX_ADD_MANUFACTURA.costoTotalPEN = definicion_CTX_ADD_MANUFACTURA.cantidad * definicion_CTX_ADD_MANUFACTURA.costoUnitarioPEN;
               }}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("in_costoTotal_ADD_MANUFACTURA") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('in_costoTotal_ADD_MANUFACTURA') as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -173,7 +174,7 @@ export default component$((props: { manuSeleccio: any }) => {
             <label>Costo Total PEN</label>
             <input
               id="in_costoTotal_ADD_MANUFACTURA"
-              style={{ width: "clamp(200px, 86%, 270px)" }}
+              style={{ width: 'clamp(200px, 86%, 270px)' }}
               type="number"
               placeholder="Add costo total (PEN)"
               value={definicion_CTX_ADD_MANUFACTURA.costoTotalPEN}
@@ -185,8 +186,8 @@ export default component$((props: { manuSeleccio: any }) => {
                 }
               }}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("btn_registrar_ADD_MANUFACTURA") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('btn_registrar_ADD_MANUFACTURA') as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -198,7 +199,7 @@ export default component$((props: { manuSeleccio: any }) => {
         <input
           id="btn_registrar_ADD_MANUFACTURA"
           type="button"
-          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           // value={botonGrabar === '' ? 'Grabar' : `${botonGrabar}`}
           class="btn-centro"
           onClick$={() => registrarManufactura()}

@@ -1,21 +1,22 @@
-import { $, component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import { CTX_IN_ALMACEN } from "~/components/inAlmacen/newInAlmacen";
-import ImgButton from "~/components/system/imgButton";
-import { CTX_BUSCAR_MERCADERIA_IN } from "./buscarMercaderiaIN";
-import { CTX_KARDEXS_IN } from "./kardexsIN";
+import { $, component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import { CTX_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import ImgButton from '~/components/system/imgButton';
+import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
+import { CTX_KARDEXS_IN } from './kardexsIN';
 // import styleFormulario12 from "../../../routes/login/login.css?inline";
 // import styleFormulario12 from "../../routes/login/login.css?inline";
 // import styleFormulario12 from "../../../css/formulario.css?inline";
-import { elIdAuxiliar, formatear_6Decimales } from "~/functions/comunes";
-import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from "../ordenProduccionTerminado/registroProductosTerminados";
+import { elIdAuxiliar, formatear_6Decimales } from '~/functions/comunes';
+import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from '../ordenProduccionTerminado/registroProductosTerminados';
+import { CTX_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 
 export default component$(
   (props: {
     mercaINSelecci: any;
     elKardex: any;
     esAlmacen: boolean;
-    contexto: string;
+    contextoInmediato: string;
     contextoParaDocumento: string;
     igv: number;
     motivo?: string;
@@ -29,22 +30,26 @@ export default component$(
     let documento: any = [];
     let documentoItems: any = [];
     switch (props.contextoParaDocumento) {
-      case "new_in_almacen":
+      case 'new_in_almacen':
         documento = useContext(CTX_IN_ALMACEN);
         documentoItems = useContext(CTX_IN_ALMACEN).itemsMercaderias;
+        break;
+      case 'new_edit_guiaRemision':
+        documento = useContext(CTX_GUIA_REMISION);
+        documentoItems = useContext(CTX_GUIA_REMISION).itemsGuiaRemision;
         break;
     }
 
     // const ctx_buscar_mercaderia_in = useContext(CTX_BUSCAR_MERCADERIA_IN);
     let ctx: any = [];
-    switch (props.contexto) {
-      case "buscar_mercaderia_in":
+    switch (props.contextoInmediato) {
+      case 'buscar_mercaderia_in':
         ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
         break;
-      case "kardexs_in":
+      case 'kardexs_in':
         ctx = useContext(CTX_KARDEXS_IN);
         break;
-      case "registro_productos_terminados":
+      case 'registro_productos_terminados':
         ctx = useContext(CTX_REGISTRO_PRODUCTOS_TERMINADOS);
         break;
     }
@@ -53,11 +58,11 @@ export default component$(
     //#region INICIALIZANDO
     const ini = useSignal(0);
     // const lote = useSignal("");
-    const lote = useSignal(typeof props.OP !== "undefined" ? props.OP._id : "");
-    const fechaProduccion = useSignal(typeof props.OP !== "undefined" ? props.OP.fechaInicio.substring(0, 10) : "");
-    const fechaVencimiento = useSignal("");
+    const lote = useSignal(typeof props.OP !== 'undefined' ? props.OP._id : '');
+    const fechaProduccion = useSignal(typeof props.OP !== 'undefined' ? props.OP.fechaInicio.substring(0, 10) : '');
+    const fechaVencimiento = useSignal('');
     const cantidad = useSignal(1);
-    const costo = useSignal(typeof props.CUP !== "undefined" ? props.CUP : 0);
+    const costo = useSignal(typeof props.CUP !== 'undefined' ? props.CUP : 0);
     // const precio = useSignal(typeof props.CUP !== "undefined" ? props.CUP : 0);
     const costoMasIGV = useSignal(0);
     const elIGV = useSignal(0);
@@ -76,8 +81,8 @@ export default component$(
       }
 
       if (ini.value === 0) {
-        console.log("💫💫💫💫💫💫💫💫");
-        if (props.motivo === "APERTURA DE INVENTARIO") {
+        console.log('💫💫💫💫💫💫💫💫');
+        if (props.motivo === 'APERTURA DE INVENTARIO') {
           costo.value = props.mercaINSelecci.costoDeInicioPEN.$numberDecimal;
           if (elIGV.value === 0) {
             costoMasIGV.value = costo.value;
@@ -85,7 +90,7 @@ export default component$(
             costoMasIGV.value = costo.value * IGVCalculado.value;
           }
         }
-        if (props.motivo === "ORDEN DE PRODUCCIÓN TERMINADA") {
+        if (props.motivo === 'ORDEN DE PRODUCCIÓN TERMINADA') {
           costoMasIGV.value = costo.value * IGVCalculado.value;
         }
         costo.value;
@@ -121,15 +126,15 @@ export default component$(
     return (
       <div
         style={{
-          width: "clamp(330px, 86%, 416px)",
+          width: 'clamp(330px, 86%, 416px)',
           // width: 'auto',
-          border: "3px solid red",
-          padding: "2px",
+          border: '3px solid red',
+          padding: '2px',
         }}
         class="container-modal"
       >
         {/* BOTONES DEL MARCO */}
-        <div style={{ display: "flex", justifyContent: "end" }}>
+        <div style={{ display: 'flex', justifyContent: 'end' }}>
           <ImgButton
             src={images.x}
             alt="Icono de cerrar"
@@ -137,10 +142,10 @@ export default component$(
             width={18}
             title="Cerrar el formulario"
             onClick={$(() => {
-              if (props.contexto === "buscar_mercaderia_in" || props.contexto === "registro_productos_terminados") {
+              if (props.contextoInmediato === 'buscar_mercaderia_in' || props.contextoInmediato === 'registro_productos_terminados') {
                 ctx.mostrarPanelMercaderiaINSeleccionada = false;
               }
-              if (props.contexto === "kardexs_in") {
+              if (props.contextoInmediato === 'kardexs_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = false;
               }
 
@@ -154,7 +159,7 @@ export default component$(
           <div>
             <div class="linea-formulario12">
               <label>Kardex</label>
-              <b>{typeof props.elKardex._id !== "undefined" ? " " + props.elKardex._id : ""}</b>
+              <b>{typeof props.elKardex._id !== 'undefined' ? ' ' + props.elKardex._id : ''}</b>
             </div>
             <div class="linea-formulario12">
               <label>Código</label>
@@ -174,8 +179,8 @@ export default component$(
             </div>
             <div class="linea-formulario12">
               <label>Stock</label>
-              <strong style={{ color: "green" }}>
-                {typeof props.elKardex.cantidadSaldo !== "undefined" && props.elKardex.cantidadSaldo !== null
+              <strong style={{ color: 'green' }}>
+                {typeof props.elKardex.cantidadSaldo !== 'undefined' && props.elKardex.cantidadSaldo !== null
                   ? ` ${props.elKardex.cantidadSaldo.$numberDecimal ? props.elKardex.cantidadSaldo.$numberDecimal : props.elKardex.cantidadSaldo}`
                   : ``}
                 {props.mercaINSelecci.unidad !== null ? ` ${props.mercaINSelecci.unidad}` : ``}
@@ -183,7 +188,7 @@ export default component$(
             </div>
             {/* conLote */}
             {props.mercaINSelecci.conLote ? (
-              props.elKardex._id !== "" ? (
+              props.elKardex._id !== '' ? (
                 <>
                   {/* Lote: */}
                   <div class="linea-formulario12">
@@ -202,8 +207,8 @@ export default component$(
                         (e.target as HTMLInputElement).select();
                       }}
                       onKeyPress$={(e) => {
-                        if (e.key === "Enter") {
-                          (document.getElementById("in_Fecha_Vencimiento_MICE") as HTMLInputElement).focus();
+                        if (e.key === 'Enter') {
+                          (document.getElementById('in_Fecha_Vencimiento_MICE') as HTMLInputElement).focus();
                         }
                       }}
                     />
@@ -227,8 +232,8 @@ export default component$(
                         (e.target as HTMLInputElement).select();
                       }}
                       onKeyPress$={(e) => {
-                        if (e.key === "Enter") {
-                          (document.getElementById("in_Fecha_Vencimiento_MICE") as HTMLInputElement).focus();
+                        if (e.key === 'Enter') {
+                          (document.getElementById('in_Fecha_Vencimiento_MICE') as HTMLInputElement).focus();
                         }
                       }}
                     />
@@ -236,11 +241,11 @@ export default component$(
                 </>
               )
             ) : (
-              ""
+              ''
             )}
             {/* conFechaProduccion */}
             {props.mercaINSelecci.conFechaProduccion ? (
-              props.elKardex._id !== "" ? (
+              props.elKardex._id !== '' ? (
                 <>
                   {/* Fecha Produccion */}
                   <div class="linea-formulario12">
@@ -259,8 +264,8 @@ export default component$(
                         (e.target as HTMLInputElement).select();
                       }}
                       onKeyPress$={(e) => {
-                        if (e.key === "Enter") {
-                          (document.getElementById("in_Cantidad_MICE") as HTMLInputElement).focus();
+                        if (e.key === 'Enter') {
+                          (document.getElementById('in_Cantidad_MICE') as HTMLInputElement).focus();
                         }
                       }}
                     />
@@ -284,8 +289,8 @@ export default component$(
                         (e.target as HTMLInputElement).select();
                       }}
                       onKeyPress$={(e) => {
-                        if (e.key === "Enter") {
-                          (document.getElementById("in_Cantidad_MICE") as HTMLInputElement).focus();
+                        if (e.key === 'Enter') {
+                          (document.getElementById('in_Cantidad_MICE') as HTMLInputElement).focus();
                         }
                       }}
                     />
@@ -293,11 +298,11 @@ export default component$(
                 </>
               )
             ) : (
-              ""
+              ''
             )}
             {/* conFechaVencimiento */}
             {props.mercaINSelecci.conFechaVencimiento ? (
-              props.elKardex._id !== "" ? (
+              props.elKardex._id !== '' ? (
                 <>
                   {/* Fecha Vencimiento: */}
                   <div class="linea-formulario12">
@@ -316,8 +321,8 @@ export default component$(
                         (e.target as HTMLInputElement).select();
                       }}
                       onKeyPress$={(e) => {
-                        if (e.key === "Enter") {
-                          (document.getElementById("in_Cantidad_MICE") as HTMLInputElement).focus();
+                        if (e.key === 'Enter') {
+                          (document.getElementById('in_Cantidad_MICE') as HTMLInputElement).focus();
                         }
                       }}
                     />
@@ -341,8 +346,8 @@ export default component$(
                         (e.target as HTMLInputElement).select();
                       }}
                       onKeyPress$={(e) => {
-                        if (e.key === "Enter") {
-                          (document.getElementById("in_Cantidad_MICE") as HTMLInputElement).focus();
+                        if (e.key === 'Enter') {
+                          (document.getElementById('in_Cantidad_MICE') as HTMLInputElement).focus();
                         }
                       }}
                     />
@@ -350,7 +355,7 @@ export default component$(
                 </>
               )
             ) : (
-              ""
+              ''
             )}
             {/* Cantidad: */}
             <div class="linea-formulario12">
@@ -371,10 +376,10 @@ export default component$(
                 //   (e.target as HTMLInputElement).select();
                 // }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     // (document.getElementById("in_CostoPEN_MICE") as HTMLInputElement).focus();
-                    console.log("ingreso a ENTER 0> in_CostoPEN_M_IN_SELECCIONADA");
-                    (document.getElementById("in_CostoPEN_M_IN_SELECCIONADA") as HTMLInputElement).focus();
+                    console.log('ingreso a ENTER 0> in_CostoPEN_M_IN_SELECCIONADA');
+                    (document.getElementById('in_CostoPEN_M_IN_SELECCIONADA') as HTMLInputElement).focus();
                   }
                 }}
               />
@@ -382,15 +387,15 @@ export default component$(
             {/* Costo UNITARIO (PEN): */}
             <div class="linea-formulario12">
               <label>Costo UNITARIO</label>
-              <div style={{ display: "flex", width: "auto" }}>
+              <div style={{ display: 'flex', width: 'auto' }}>
                 <input
                   id="in_CostoPEN_M_IN_SELECCIONADA"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   type="number"
                   placeholder="Add costo"
                   value={formatear_6Decimales(costo.value)}
                   // disabled={typeof props.OP !== "undefined"}
-                  readOnly={typeof props.OP !== "undefined"}
+                  readOnly={typeof props.OP !== 'undefined'}
                   onChange$={(e) => {
                     costo.value = parseFloat((e.target as HTMLInputElement).value);
                     calcularPrecio();
@@ -399,27 +404,27 @@ export default component$(
                   //   (e.target as HTMLInputElement).select();
                   // }}
                   onKeyPress$={(e) => {
-                    if (e.key === "Enter") {
-                      console.log("ingreso a ENTER => in_ValorUniPEN_M_IN_SELECCIONADA");
-                      (document.getElementById("in_ValorUniPEN_M_IN_SELECCIONADA") as HTMLInputElement).focus();
+                    if (e.key === 'Enter') {
+                      console.log('ingreso a ENTER => in_ValorUniPEN_M_IN_SELECCIONADA');
+                      (document.getElementById('in_ValorUniPEN_M_IN_SELECCIONADA') as HTMLInputElement).focus();
                     }
                   }}
                 />
-                <label style={{ marginLeft: "4px" }}>PEN</label>
+                <label style={{ marginLeft: '4px' }}>PEN</label>
               </div>
             </div>
             {/* Costo UNITARIO + IGV (PEN): */}
             <div class="linea-formulario12">
               <label>Costo UNITARIO + IGV</label>
-              <div style={{ display: "flex", width: "100%" }}>
+              <div style={{ display: 'flex', width: '100%' }}>
                 <input
                   id="in_ValorUniPEN_M_IN_SELECCIONADA"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   type="number"
                   placeholder="Add Valor Uni"
                   value={formatear_6Decimales(costoMasIGV.value)}
                   // disabled={typeof props.OP !== "undefined"}
-                  readOnly={typeof props.OP !== "undefined"}
+                  readOnly={typeof props.OP !== 'undefined'}
                   onChange$={(e) => {
                     costoMasIGV.value = parseFloat((e.target as HTMLInputElement).value);
 
@@ -429,12 +434,12 @@ export default component$(
                   //   (e.target as HTMLInputElement).select();
                   // }}
                   onKeyPress$={(e) => {
-                    if (e.key === "Enter") {
-                      (document.getElementById("btn_Registrar_MercaderiaIN_MICE") as HTMLInputElement).focus();
+                    if (e.key === 'Enter') {
+                      (document.getElementById('btn_Registrar_MercaderiaIN_MICE') as HTMLInputElement).focus();
                     }
                   }}
                 />
-                <label style={{ marginLeft: "4px" }}>PEN</label>
+                <label style={{ marginLeft: '4px' }}>PEN</label>
               </div>
             </div>
             <br />
@@ -447,28 +452,28 @@ export default component$(
             value="Grabar "
             class="btn-centro"
             onClick$={() => {
-              if (typeof props.mercaINSelecci.conLote !== "undefined" && props.mercaINSelecci.conLote) {
-                if (lote.value.trim() === "") {
-                  alert("Ingrese el lote");
-                  document.getElementById("in_Lote_MICE")?.focus;
+              if (typeof props.mercaINSelecci.conLote !== 'undefined' && props.mercaINSelecci.conLote) {
+                if (lote.value.trim() === '') {
+                  alert('Ingrese el lote');
+                  document.getElementById('in_Lote_MICE')?.focus;
                   return;
                 }
               }
-              if (typeof props.mercaINSelecci.conFechaProduccion !== "undefined" && props.mercaINSelecci.conFechaProduccion) {
-                if (fechaProduccion.value.trim() === "") {
-                  alert("Ingrese la fecha producción");
-                  document.getElementById("in_Fecha_Produccion_MICE")?.focus;
+              if (typeof props.mercaINSelecci.conFechaProduccion !== 'undefined' && props.mercaINSelecci.conFechaProduccion) {
+                if (fechaProduccion.value.trim() === '') {
+                  alert('Ingrese la fecha producción');
+                  document.getElementById('in_Fecha_Produccion_MICE')?.focus;
                   return;
                 }
               }
-              if (typeof props.mercaINSelecci.conFechaVencimiento !== "undefined" && props.mercaINSelecci.conFechaVencimiento) {
-                if (fechaVencimiento.value.trim() === "") {
-                  alert("Ingrese la fecha vencimiento");
-                  document.getElementById("in_Fecha_Vencimiento_MICE")?.focus;
+              if (typeof props.mercaINSelecci.conFechaVencimiento !== 'undefined' && props.mercaINSelecci.conFechaVencimiento) {
+                if (fechaVencimiento.value.trim() === '') {
+                  alert('Ingrese la fecha vencimiento');
+                  document.getElementById('in_Fecha_Vencimiento_MICE')?.focus;
                   return;
                 }
               }
-              if (props.contexto === "registro_productos_terminados") {
+              if (props.contextoInmediato === 'registro_productos_terminados') {
                 documento.produccion = true;
 
                 if (documento.documentosAdjuntos.length === 0) {
@@ -483,8 +488,8 @@ export default component$(
                   documento.documentosAdjuntos.push({
                     idAuxiliar: parseInt(elIdAuxiliar()),
                     // tipo: props.docSelecci.tipo ? props.docSelecci.tipo : '',
-                    codigoTCP: "0", // documentoIN.codigoTCP,
-                    descripcionTCP: "Otros", //documentoIN.descripcionTCP,
+                    codigoTCP: '0', // documentoIN.codigoTCP,
+                    descripcionTCP: 'Otros', //documentoIN.descripcionTCP,
                     fecha: fechaProduccion.value, // OP.fechaInicio
                     serie: props.OP.serie,
                     numero: props.OP.numero,
@@ -494,15 +499,17 @@ export default component$(
                 }
               }
 
+              // documentoItems.push({ idAuxiliar: 6265, codigo: 'ds687', descripcionEquivalencia: 'anteojos', cantidad: 555, unidadEquivalencia: 'VIV' });
               documentoItems.push({
                 idAuxiliar: parseInt(elIdAuxiliar()),
                 idMercaderia: props.mercaINSelecci._id,
                 idKardex: props.elKardex._id,
                 item: 0,
 
-                codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : "_",
+                codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '_',
 
                 descripcion: props.mercaINSelecci.descripcion,
+                // descripcionEquivalencia: props.mercaINSelecci.descripcion,
 
                 lote: lote.value,
                 fechaProduccion: fechaProduccion.value,
@@ -512,8 +519,10 @@ export default component$(
                 IGV: elIGV.value,
 
                 cantidadIngresada: cantidad.value,
+                // cantidad: cantidad.value,
 
                 unidad: props.mercaINSelecci.unidad,
+                // unidadEquivalencia: props.mercaINSelecci.unidad,
 
                 costoUnitarioPEN: costo.value,
 
@@ -522,10 +531,10 @@ export default component$(
                 valorUnitarioPEN: costoMasIGV.value,
                 totPEN: cantidad.value * costoMasIGV.value,
               });
-              if (props.contexto === "buscar_mercaderia_in" || props.contexto === "registro_productos_terminados") {
+              if (props.contextoInmediato === 'buscar_mercaderia_in' || props.contextoInmediato === 'registro_productos_terminados') {
                 ctx.mostrarPanelMercaderiaINSeleccionada = false;
               }
-              if (props.contexto === "kardexs_in") {
+              if (props.contextoInmediato === 'kardexs_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = false;
               }
             }}

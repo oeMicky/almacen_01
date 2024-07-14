@@ -1,34 +1,31 @@
 import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
-// import TablaUnidadesSUNAT from './tablaUnidadesSUNAT';
-import { CTX_NEW_EDIT_MERCADERIA_IN } from './newEditMercaderiaIN';
-import TablaUnidadesEquivalenciaSUNAT from './tablaUnidadesEquivalenciaSUNAT';
-// import { CTX_NEW_EDIT_EQUIVALENCIA_IN } from './newEditEquivalenciaIN';
+import { CTX_NEW_EDIT_REGISTRO_BIEN_GR } from './newEditRegistroBienGR';
+import TablaSoloUnidadesSUNAT from './tablaSoloUnidadesSUNAT';
 
-export default component$((props: { idLineaTipo: string; lineaTipo: string }) => {
+export default component$(() => {
   //#region CONTEXTO
-  const ctx_new_edit_mercaderia_in = useContext(CTX_NEW_EDIT_MERCADERIA_IN);
-  // const ctx_new_edit_equivalencia_in = useContext(CTX_NEW_EDIT_EQUIVALENCIA_IN);
+  const ctx_new_edit_registro_bien_gr = useContext(CTX_NEW_EDIT_REGISTRO_BIEN_GR);
   //#endregion CONTEXTO
 
   //#region INICIALIZAR
   //   const cadenaABuscar = useSignal('');
-  const buscarUnidadesEquivalenciaSUNAT = useSignal(0);
+  const buscarSoloUnidadesSUNAT = useSignal(0);
   const parametrosBusqueda = useStore({
     cadenaABuscar: '', // 'acce 5', //cadena.value,
   });
   //#endregion INICIALIZAR
 
   //#region BUSCAR
-  const localizarUnidadEquivalenciaSUNAT = $(() => {
+  const localizarUnidadSUNAT = $(() => {
     if (parametrosBusqueda.cadenaABuscar.trim() === '') {
       alert('Debe ingresar la descripción de la unidad de medida a buscar');
-      document.getElementById('in_codigoDescripcion_BUSCAR_UNIDAD_EQUIVALENCIA_SUNAT')?.focus();
+      document.getElementById('in_codigoDescripcion_BUSCAR_UNIDAD_SUNAT')?.focus();
       return;
     }
     console.log('buscarndo');
-    buscarUnidadesEquivalenciaSUNAT.value++;
+    buscarSoloUnidadesSUNAT.value++;
   });
   //#endregion BUSCAR
 
@@ -51,12 +48,12 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_new_edit_mercaderia_in.mostrarPanelBuscarUnidadEquivalenciaSUNAT = false;
+            ctx_new_edit_registro_bien_gr.mostrarPanelBuscarSoloUnidadSUNAT = false;
           })}
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Buscar unidad equivalencia SUNAT - {props.lineaTipo}</h3>
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Buscar unidad SUNAT</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
@@ -65,11 +62,14 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
           <div class="form-control">
             <div class="form-control form-agrupado">
               <input
-                id="in_codigoDescripcion_BUSCAR_UNIDAD_EQUIVALENCIA_SUNAT"
+                id="in_codigoDescripcion_BUSCAR_UNIDAD_SUNAT"
                 style={{ width: '100%', marginRight: '4px' }}
                 type="text"
                 placeholder="Ingrese la unidad de medida a buscar"
                 value={parametrosBusqueda.cadenaABuscar}
+                // onChange$={(e) => {
+                //   cadenaABuscar.value = (e.target as HTMLInputElement).value;
+                // }}
                 onInput$={(e) => {
                   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
                 }}
@@ -80,7 +80,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
                   console.log('onKeyPress', parametrosBusqueda.cadenaABuscar);
                   if (e.key === 'Enter') {
                     console.log('onKeyPress - ENTER');
-                    localizarUnidadEquivalenciaSUNAT();
+                    localizarUnidadSUNAT();
                   }
                 }}
               />
@@ -93,7 +93,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
                 style={{ marginRight: '2px' }}
                 src={images.searchPLUS}
                 onClick$={() => {
-                  localizarUnidadEquivalenciaSUNAT();
+                  localizarUnidadSUNAT();
                 }}
               />
             </div>
@@ -101,13 +101,8 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
         </div>
         {/*  tabla LOCALIZADOS UNIDAD SUNAT */}
         <div class="form-control">
-          {buscarUnidadesEquivalenciaSUNAT.value > 0 ? (
-            <TablaUnidadesEquivalenciaSUNAT
-              idLineaTipo={props.idLineaTipo}
-              lineaTipo={props.lineaTipo}
-              buscarUnidadesEquivalenciaSUNAT={buscarUnidadesEquivalenciaSUNAT.value}
-              cadenaABuscar={parametrosBusqueda}
-            />
+          {buscarSoloUnidadesSUNAT.value > 0 ? (
+            <TablaSoloUnidadesSUNAT buscarSoloUnidadesSUNAT={buscarSoloUnidadesSUNAT.value} cadenaABuscar={parametrosBusqueda} />
           ) : (
             ''
           )}

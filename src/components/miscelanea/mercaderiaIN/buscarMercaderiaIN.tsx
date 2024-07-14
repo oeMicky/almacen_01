@@ -1,17 +1,17 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import { CTX_NEW_IN_ALMACEN } from "~/components/inAlmacen/newInAlmacen";
-import ImgButton from "~/components/system/imgButton";
-import { parametrosGlobales } from "~/routes/login";
-import TablaMercaderiasIN from "./tablaMercaderiasIN";
-import MercaderiaINSeleccionada from "./mercaderiaINSeleccionada";
-import NewEditMercaderiaIN from "./newEditMercaderiaIN";
-import KardexsIN from "./kardexsIN";
-import Spinner from "~/components/system/spinner";
-import { CTX_NEW_EDIT_GUIA_REMISION } from "~/components/guiaRemision/newEditGuiaRemision";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import ImgButton from '~/components/system/imgButton';
+import { parametrosGlobales } from '~/routes/login';
+import TablaMercaderiasIN from './tablaMercaderiasIN';
+import MercaderiaINSeleccionada from './mercaderiaINSeleccionada';
+import NewEditMercaderiaIN from './newEditMercaderiaIN';
+import KardexsIN from './kardexsIN';
+import Spinner from '~/components/system/spinner';
+import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 // import MercaderiaINSelec from "./mercaderiaINSelec";
 
-export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>("buscar_mercaderia_in");
+export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
 
 export default component$((props: { contexto: string; esAlmacen: boolean; igv: number; motivo?: string }) => {
   //#region DEFINICION CTX_BUSCAR_MERCADERIA_IN - para eDITAR - para sELECCIONAR
@@ -20,7 +20,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
     kK: [],
 
     mostrarPanelNewEditMercaderiaIN: false,
-    abuscar: "",
+    abuscar: '',
     grabo_mercaderiaIN: false,
 
     mostrarPanelKardexsIN: false,
@@ -35,10 +35,10 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
-    case "new_in_almacen":
+    case 'new_in_almacen':
       ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
-    case "new_edit_guiaRemision":
+    case 'new_edit_guiaRemision':
       ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
       break;
     // case 'cotizacion':
@@ -58,16 +58,16 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
-    buscarPor: "Descripción", //por.value,
-    cadenaABuscar: "sho", // 'acce 5', //cadena.value,
+    buscarPor: 'Descripción', //por.value,
+    cadenaABuscar: '', // 'acce 5', //cadena.value,
   });
   //#endregion INICIALIZACION
 
   //#region BUSCAR MERCADERIAS IN
   const localizarMercaderiasIN = $(() => {
-    if (parametrosBusqueda.cadenaABuscar === "") {
-      alert("Ingrese un valor para su busqueda 🦪");
-      document.getElementById("in_codigoDescripcion_BUSCAR_MERCADERIA_IN")?.focus();
+    if (parametrosBusqueda.cadenaABuscar === '') {
+      alert('Ingrese un valor para su busqueda 🦪');
+      document.getElementById('in_codigoDescripcion_BUSCAR_MERCADERIA_IN')?.focus();
       return;
     }
 
@@ -101,22 +101,22 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
       style={
         verLineaMarca.value || verAplicacion.value
           ? {
-              width: "clamp(330px, 86%, 1112px)",
+              width: 'clamp(330px, 86%, 1112px)',
               // width: 'auto',
-              border: "1px solid red",
-              padding: "2px",
+              border: '1px solid red',
+              padding: '2px',
             }
           : {
-              width: "clamp(330px, 86%, 800px)",
+              width: 'clamp(330px, 86%, 800px)',
               // width: 'auto',
-              border: "1px solid red",
-              padding: "2px",
+              border: '1px solid red',
+              padding: '2px',
             }
       }
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -129,18 +129,18 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: "10px", fontSize: "0.9rem" }}>Buscar mercaderías / IN</h3>
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Buscar mercaderías / IN</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: "8px" }}>
+        <div style={{ marginBottom: '8px' }}>
           {/* Buscar por */}
           <div class="form-control">
             <div class="form-control form-agrupado">
               <input
                 id="in_codigoDescripcion_BUSCAR_MERCADERIA_IN"
                 autoFocus
-                style={{ width: "100%", marginRight: "4px" }}
+                style={{ width: '100%', marginRight: '4px' }}
                 type="text"
                 placeholder="Ingrese la mercadería a buscar"
                 value={parametrosBusqueda.cadenaABuscar}
@@ -151,7 +151,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 //   (e.target as HTMLInputElement).select();
                 // }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     localizarMercaderiasIN();
                   }
                 }}
@@ -163,7 +163,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 alt="icono buscar"
                 height={16}
                 width={16}
-                style={{ marginRight: "2px" }}
+                style={{ marginRight: '2px' }}
                 onClick$={() => {
                   localizarMercaderiasIN();
                 }}
@@ -182,7 +182,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
             </div>
           </div>
           {/* Buscar por: Aplicacion */}
-          <div style={{ display: "flex" }}>
+          <div style={{ display: 'flex' }}>
             {/* <div style={{ margin: '0 auto' }}> */}
             <div>
               <input
@@ -193,9 +193,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
 
                 onChange$={(e) => {
                   if ((e.target as HTMLInputElement).checked) {
-                    parametrosBusqueda.buscarPor = "Aplicación";
+                    parametrosBusqueda.buscarPor = 'Aplicación';
                   } else {
-                    parametrosBusqueda.buscarPor = "Descripción";
+                    parametrosBusqueda.buscarPor = 'Descripción';
                   }
                 }}
                 // value={parametrosBusqueda.cadenaABuscar}
@@ -211,7 +211,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 //   }
                 // }}
               />
-              <label for="in_Aplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: "16px" }}>
+              <label for="in_Aplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: '16px' }}>
                 Aplicación
               </label>
             </div>
@@ -237,7 +237,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 //   }
                 // }}
               />
-              <label for="in_verAplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: "16px" }}>
+              <label for="in_verAplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: '16px' }}>
                 Ver Aplicacion
               </label>
             </div>
@@ -273,7 +273,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
             <TablaMercaderiasIN
               buscarMercaderiasIN={buscarMercaderiasIN.value}
               parametrosBusqueda={parametrosBusqueda}
-              contexto={props.contexto}
+              // contexto={props.contexto}
+              contextoInmediato={'buscar_mercaderia_in'}
               esAlmacen={props.esAlmacen}
               verAplicacion={verAplicacion.value}
               verLineaMarca={verLineaMarca.value}
@@ -282,7 +283,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
               //   parametrosBusqueda={parametrosBusqueda}
             />
           ) : (
-            ""
+            ''
           )}
           {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelMercaderiaINSeleccionada && (
             <div class="modal">
@@ -291,7 +292,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 mercaINSelecci={definicion_CTX_BUSCAR_MERCADERIA_IN.mM}
                 elKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.kK}
                 esAlmacen={true}
-                contexto={"buscar_mercaderia_in"}
+                contextoInmediato={'buscar_mercaderia_in'}
                 contextoParaDocumento={props.contexto}
                 igv={props.igv}
                 motivo={props.motivo}
@@ -311,7 +312,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
           )}
           {/* MOSTRAR SPINNER */}
           {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarSpinner && (
-            <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Spinner />
             </div>
           )}

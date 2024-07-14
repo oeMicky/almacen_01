@@ -1,7 +1,7 @@
-import { $, component$, useContext } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_ADD_VENTA } from "./addVenta";
+import { $, component$, useContext } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_ADD_VENTA } from './addVenta';
 
 export default component$((props: { editarImpuesto_ItemVenta: any }) => {
   //#region CONTEXTOS
@@ -11,15 +11,16 @@ export default component$((props: { editarImpuesto_ItemVenta: any }) => {
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 320px)",
+        width: 'clamp(330px, 86%, 320px)',
         // width: 'auto',
         // border: '1px solid red',
-        padding: "2px",
+        padding: '2px',
+        background: '#eee',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         {/* <Button name="T/C" onClick={tipoCambio} /> */}
         <ImgButton
           src={images.x}
@@ -45,33 +46,33 @@ export default component$((props: { editarImpuesto_ItemVenta: any }) => {
           <div class="form-control form-agrupado">
             <select
               id="se_tipoImpuesto_MERCADERIA_IN"
-              style={{ width: "288px" }}
+              style={{ width: '288px' }}
               onChange$={(e) => {
                 props.editarImpuesto_ItemVenta.tipoImpuesto = (e.target as HTMLSelectElement).value;
               }}
             >
-              <option value="IGV" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === "IGV"}>
+              <option value="IGV" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === 'IGV'}>
                 IGV
               </option>
-              <option value="ISC" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === "ISC"}>
+              <option value="ISC" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === 'ISC'}>
                 ISC
               </option>
-              <option value="IVAP" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === "IVAP"}>
+              <option value="IVAP" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === 'IVAP'}>
                 IVAP
               </option>
-              <option value="exoneradas" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === "exoneradas"}>
+              <option value="exoneradas" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === 'exoneradas'}>
                 exoneradas
               </option>
-              <option value="exportación" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === "exportación"}>
+              <option value="exportación" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === 'exportación'}>
                 exportación
               </option>
-              <option value="gratuitas" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === "gratuitas"}>
+              <option value="gratuitas" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === 'gratuitas'}>
                 gratuitas
               </option>
-              <option value="inafecta" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === "inafecta"}>
+              <option value="inafecta" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === 'inafecta'}>
                 inafecta
               </option>
-              <option value="otrosTributos" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === "otrosTributos"}>
+              <option value="otrosTributos" selected={props.editarImpuesto_ItemVenta.tipoImpuesto === 'otrosTributos'}>
                 otrosTributos
               </option>
             </select>
@@ -82,66 +83,66 @@ export default component$((props: { editarImpuesto_ItemVenta: any }) => {
           <div class="form-control ">
             <select
               id="se_tipoAfectacionDelImpuesto_MERCADERIA_IN"
-              style={{ width: "288px" }}
+              style={{ width: '288px' }}
               onChange$={(e) => {
                 props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto = (e.target as HTMLSelectElement).value;
               }}
             >
-              <option value="10" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "10"}>
+              <option value="10" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '10'}>
                 Gravado - Operación Onerosa
               </option>
-              <option value="11" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "11"}>
+              <option value="11" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '11'}>
                 Gravado - Retiro por premio
               </option>
-              <option value="12" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "12"}>
+              <option value="12" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '12'}>
                 Gravado - Retiro por donación
               </option>
-              <option value="13" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "13"}>
+              <option value="13" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '13'}>
                 Gravado - Retiro
               </option>
-              <option value="14" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "14"}>
+              <option value="14" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '14'}>
                 Gravado - Retiro por publicidad
               </option>
-              <option value="15" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "15"}>
+              <option value="15" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '15'}>
                 Gravado - Bonificaciones
               </option>
-              <option value="16" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "16"}>
+              <option value="16" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '16'}>
                 Gravado - Retiro por entrega a trabajadores
               </option>
-              <option value="17" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "17"}>
+              <option value="17" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '17'}>
                 Gravado - IVAP
               </option>
-              <option value="20" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "20"}>
+              <option value="20" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '20'}>
                 Exonerado - Operación Onerosa
               </option>
-              <option value="21" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "21"}>
+              <option value="21" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '21'}>
                 Exonerado - Transferencia gratuita
               </option>
-              <option value="30" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "30"}>
+              <option value="30" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '30'}>
                 Inafecto - Operación Onerosa
               </option>
-              <option value="31" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "31"}>
+              <option value="31" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '31'}>
                 Inafecto - Retiro por Bonificación
               </option>
-              <option value="32" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "32"}>
+              <option value="32" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '32'}>
                 Inafecto - Retiro
               </option>
-              <option value="33" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "33"}>
+              <option value="33" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '33'}>
                 Inafecto - Retiro por Muestras Médicas
               </option>
-              <option value="34" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "34"}>
+              <option value="34" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '34'}>
                 Inafecto - Retiro por Convenio Colectivo
               </option>
-              <option value="35" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "35"}>
+              <option value="35" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '35'}>
                 Inafecto - Retiro por premio
               </option>
-              <option value="36" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "36"}>
+              <option value="36" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '36'}>
                 Inafecto - Retiro por publicidad
               </option>
-              <option value="37" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "37"}>
+              <option value="37" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '37'}>
                 Inafecto - Transferencia gratuita
               </option>
-              <option value="40" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === "40"}>
+              <option value="40" selected={props.editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '40'}>
                 Exportación de Bienes o Servicios
               </option>
             </select>

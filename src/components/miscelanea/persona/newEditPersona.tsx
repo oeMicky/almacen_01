@@ -1,16 +1,16 @@
-import { $, component$, useContext, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { inUpPersona } from "~/apis/persona.api";
-import { images } from "~/assets";
-import ImgButton from "~/components/system/imgButton";
-import type { IPersona } from "~/interfaces/iPersona";
-import { parametrosGlobales } from "~/routes/login";
-import { CTX_BUSCAR_PERSONA } from "./buscarPersona";
-import { getDNI, getRUC } from "~/apis/apisExternas.api";
-import Spinner from "~/components/system/spinner";
+import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { inUpPersona } from '~/apis/persona.api';
+import { images } from '~/assets';
+import ImgButton from '~/components/system/imgButton';
+import type { IPersona } from '~/interfaces/iPersona';
+import { parametrosGlobales } from '~/routes/login';
+import { CTX_BUSCAR_PERSONA } from './buscarPersona';
+import { getDNI, getRUC } from '~/apis/apisExternas.api';
+import Spinner from '~/components/system/spinner';
 //
 //parametrosGlobales:any
 export const registrarPersona = $(async (persona: any) => {
-  console.log("persona....", persona);
+  console.log('persona....', persona);
   const registro = await inUpPersona({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
@@ -30,22 +30,22 @@ export const registrarPersona = $(async (persona: any) => {
 
     usuario: parametrosGlobales.usuario,
   });
-  console.log("registro GRABADO:", registro);
-  console.log("registro GRABADO-statu:", registro.status);
+  console.log('registro GRABADO:', registro);
+  console.log('registro GRABADO-statu:', registro.status);
   return registro;
 });
 
 export default component$((props: { soloPersonaNatural: boolean; personaSeleccio: any; contexto: string }) => {
   //#region DEFINICION PERSONA - NEW  /EDIT
   const persona = useStore<IPersona>({
-    _id: props.personaSeleccio._id ? props.personaSeleccio._id : "",
-    codigoTipoDocumentoIdentidad: props.personaSeleccio.codigoTipoDocumentoIdentidad ? props.personaSeleccio.codigoTipoDocumentoIdentidad : "",
-    tipoDocumentoIdentidad: props.personaSeleccio.tipoDocumentoIdentidad ? props.personaSeleccio.tipoDocumentoIdentidad : "",
-    numeroIdentidad: props.personaSeleccio.numeroIdentidad ? props.personaSeleccio.numeroIdentidad : "",
-    razonSocialNombre: props.personaSeleccio.razonSocialNombre ? props.personaSeleccio.razonSocialNombre : "",
-    nombre: props.personaSeleccio.nombre ? props.personaSeleccio.nombre : "",
-    paterno: props.personaSeleccio.paterno ? props.personaSeleccio.paterno : "",
-    materno: props.personaSeleccio.materno ? props.personaSeleccio.materno : "",
+    _id: props.personaSeleccio._id ? props.personaSeleccio._id : '',
+    codigoTipoDocumentoIdentidad: props.personaSeleccio.codigoTipoDocumentoIdentidad ? props.personaSeleccio.codigoTipoDocumentoIdentidad : '',
+    tipoDocumentoIdentidad: props.personaSeleccio.tipoDocumentoIdentidad ? props.personaSeleccio.tipoDocumentoIdentidad : '',
+    numeroIdentidad: props.personaSeleccio.numeroIdentidad ? props.personaSeleccio.numeroIdentidad : '',
+    razonSocialNombre: props.personaSeleccio.razonSocialNombre ? props.personaSeleccio.razonSocialNombre : '',
+    nombre: props.personaSeleccio.nombre ? props.personaSeleccio.nombre : '',
+    paterno: props.personaSeleccio.paterno ? props.personaSeleccio.paterno : '',
+    materno: props.personaSeleccio.materno ? props.personaSeleccio.materno : '',
     activo: props.personaSeleccio.activo ? props.personaSeleccio.activo : true,
   });
   //#endregion DEFINICION PERSONA
@@ -55,24 +55,24 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
-  const condicion = useSignal("");
+  const condicion = useSignal('');
   const mostrarSpinner = useSignal(false);
 
   useTask$(({ track }) => {
     track(() => {
       props.soloPersonaNatural;
     });
-    if (persona._id === "") {
+    if (persona._id === '') {
       //INSERTANDO
-      console.log("//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO");
+      console.log('//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
       if (props.soloPersonaNatural) {
-        console.log("//dni//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO");
-        persona.codigoTipoDocumentoIdentidad = "1";
-        persona.tipoDocumentoIdentidad = "DNI";
+        console.log('//dni//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
+        persona.codigoTipoDocumentoIdentidad = '1';
+        persona.tipoDocumentoIdentidad = 'DNI';
       } else {
-        console.log("//ruc//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO");
-        persona.codigoTipoDocumentoIdentidad = "6";
-        persona.tipoDocumentoIdentidad = "RUC";
+        console.log('//ruc//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
+        persona.codigoTipoDocumentoIdentidad = '6';
+        persona.tipoDocumentoIdentidad = 'RUC';
       }
     }
     // else {
@@ -86,25 +86,25 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
 
   //#region BUSCAR_PERSONA_EN_API_EXTERNA
   const buscarPersonaEnAPIExterna = $(async () => {
-    if (persona.numeroIdentidad === "") {
-      alert("Ingrese el número de identidad.");
-      persona.razonSocialNombre = "";
-      condicion.value = "";
-      document.getElementById("in_numeroIdentidad_PERSONA")?.focus();
+    if (persona.numeroIdentidad === '') {
+      alert('Ingrese el número de identidad.');
+      persona.razonSocialNombre = '';
+      condicion.value = '';
+      document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
       return;
     }
-    condicion.value = "";
+    condicion.value = '';
     mostrarSpinner.value = true;
-    if (persona.codigoTipoDocumentoIdentidad === "6") {
+    if (persona.codigoTipoDocumentoIdentidad === '6') {
       const laIdentidad = await getRUC(persona.numeroIdentidad);
-      console.log("laIdentidad - RUC:", laIdentidad);
+      console.log('laIdentidad - RUC:', laIdentidad);
       const laData = laIdentidad.data;
       persona.razonSocialNombre = laData.nombre;
       condicion.value = laData.condicion;
     } else {
-      if (persona.codigoTipoDocumentoIdentidad === "1") {
+      if (persona.codigoTipoDocumentoIdentidad === '1') {
         const laIdentidad = await getDNI(persona.numeroIdentidad);
-        console.log("laIdentidad - DNI:", laIdentidad);
+        console.log('laIdentidad - DNI:', laIdentidad);
         const laData = laIdentidad.data;
         persona.nombre = laData.nombres;
         persona.paterno = laData.apellidoPaterno;
@@ -119,43 +119,43 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   //#region IR_A_REGISTRAR_PERSONA
   const irARegistrarPersona = $(async () => {
     // ctx.graboPersona = false;
-    if (persona.numeroIdentidad.trim() === "") {
-      alert("Ingrese el número de identidad (RUC, DNI, etc.)");
-      document.getElementById("in_numeroIdentidad_PERSONA")?.focus();
+    if (persona.numeroIdentidad.trim() === '') {
+      alert('Ingrese el número de identidad (RUC, DNI, etc.)');
+      document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
       return;
     }
-    if (persona.codigoTipoDocumentoIdentidad === "6") {
-      if (persona.razonSocialNombre.trim() === "") {
-        alert("Ingrese la razón social");
-        document.getElementById("in_razonSocial_PERSONA")?.focus();
+    if (persona.codigoTipoDocumentoIdentidad === '6') {
+      if (persona.razonSocialNombre.trim() === '') {
+        alert('Ingrese la razón social');
+        document.getElementById('in_razonSocial_PERSONA')?.focus();
         return;
       }
-      persona.nombre = "";
-      persona.paterno = "";
-      persona.materno = "";
+      persona.nombre = '';
+      persona.paterno = '';
+      persona.materno = '';
     } else {
-      if (persona.nombre.trim() === "") {
-        alert("Ingrese el nombre");
-        document.getElementById("in_nombre_PERSONA")?.focus();
+      if (persona.nombre.trim() === '') {
+        alert('Ingrese el nombre');
+        document.getElementById('in_nombre_PERSONA')?.focus();
         return;
       }
-      if (persona.paterno.trim() === "") {
-        alert("Ingrese el apellido paterno");
-        document.getElementById("in_apellidoPaterno_PERSONA")?.focus();
+      if (persona.paterno.trim() === '') {
+        alert('Ingrese el apellido paterno');
+        document.getElementById('in_apellidoPaterno_PERSONA')?.focus();
         return;
       }
-      if (persona.materno.trim() === "") {
-        alert("Ingrese el apellido materno");
-        document.getElementById("in_apellidoMaterno_PERSONA")?.focus();
+      if (persona.materno.trim() === '') {
+        alert('Ingrese el apellido materno');
+        document.getElementById('in_apellidoMaterno_PERSONA')?.focus();
         return;
       }
-      persona.razonSocialNombre = "";
+      persona.razonSocialNombre = '';
     }
-    console.log("persona...", persona);
+    console.log('persona...', persona);
     // let resultPersona;
-    if (persona.codigoTipoDocumentoIdentidad === "6") {
+    if (persona.codigoTipoDocumentoIdentidad === '6') {
       // resultPersona =
-      console.log("//RUC");
+      console.log('//RUC');
       //RUC
       await registrarPersona({
         idPersona: persona._id,
@@ -168,7 +168,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       });
     } else {
       // resultPersona =
-      console.log("//DNI");
+      console.log('//DNI');
       //DNI
       await registrarPersona({
         idPersona: persona._id,
@@ -181,7 +181,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
         apellidoMaterno: persona.materno,
         activo: persona.activo,
 
-        razonSocial: persona.nombre + " " + persona.paterno + " " + persona.materno,
+        razonSocial: persona.nombre + ' ' + persona.paterno + ' ' + persona.materno,
       });
     }
 
@@ -196,14 +196,14 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 500px)",
+        width: 'clamp(330px, 86%, 500px)',
         // width: 'auto',
-        padding: "1px",
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -221,7 +221,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
           width={16}
           title="Ver persona"
           onClick={$(() => {
-            console.log("persona", persona);
+            console.log('persona', persona);
           })}
         />
       </div>
@@ -243,53 +243,53 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
               {props.soloPersonaNatural ? (
                 <select
                   id="se_tipoDocumentoIdentidad_PERSONA"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   onChange$={(e) => {
-                    console.log("🥓🥓🥓(e.target as HTMLSelectElement).value", (e.target as HTMLSelectElement).value);
+                    console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                     persona.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                     persona.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
-                    document.getElementById("in_numeroIdentidad_PERSONA")?.focus();
+                    document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                     console.log(
-                      "soloPersonaNatural, cTDI, tDI",
+                      'soloPersonaNatural, cTDI, tDI',
                       props.soloPersonaNatural,
                       persona.codigoTipoDocumentoIdentidad,
                       persona.tipoDocumentoIdentidad
                     );
                   }}
                 >
-                  <option value={"1"} selected={persona.codigoTipoDocumentoIdentidad === "1"}>
+                  <option value={'1'} selected={persona.codigoTipoDocumentoIdentidad === '1'}>
                     DNI
                   </option>
-                  <option value={"4"} selected={persona.codigoTipoDocumentoIdentidad === "4"}>
+                  <option value={'4'} selected={persona.codigoTipoDocumentoIdentidad === '4'}>
                     C.EXT
                   </option>
                 </select>
               ) : (
                 <select
                   id="se_tipoDocumentoIdentidad_PERSONA"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   // value={persona.codigoTipoDocumentoIdentidad}
                   // value={'1'}
                   onChange$={(e) => {
-                    console.log("🥓🥓🥓(e.target as HTMLSelectElement).value", (e.target as HTMLSelectElement).value);
+                    console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                     persona.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                     persona.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
-                    document.getElementById("in_numeroIdentidad_PERSONA")?.focus();
+                    document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                     console.log(
-                      "soloPersonaNatural, cTDI, tDI",
+                      'soloPersonaNatural, cTDI, tDI',
                       props.soloPersonaNatural,
                       persona.codigoTipoDocumentoIdentidad,
                       persona.tipoDocumentoIdentidad
                     );
                   }}
                 >
-                  <option value={"6"} selected={persona.codigoTipoDocumentoIdentidad === "6"}>
+                  <option value={'6'} selected={persona.codigoTipoDocumentoIdentidad === '6'}>
                     RUC
                   </option>
-                  <option value={"1"} selected={persona.codigoTipoDocumentoIdentidad === "1"}>
+                  <option value={'1'} selected={persona.codigoTipoDocumentoIdentidad === '1'}>
                     DNI
                   </option>
-                  <option value={"4"} selected={persona.codigoTipoDocumentoIdentidad === "4"}>
+                  <option value={'4'} selected={persona.codigoTipoDocumentoIdentidad === '4'}>
                     C.EXT
                   </option>
                 </select>
@@ -301,29 +301,29 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
             <div class="form-control form-agrupado">
               <input
                 id="in_numeroIdentidad_PERSONA"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 autoFocus
                 type="number"
                 placeholder="Número identidad"
                 value={persona.numeroIdentidad}
                 onChange$={(e) => {
-                  console.log("CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...", persona.numeroIdentidad);
+                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
                   persona.numeroIdentidad = (e.target as HTMLInputElement).value.trim().toUpperCase();
-                  console.log("CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...", persona.numeroIdentidad);
+                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e: any) => {
                   // alert(`onKeyPress... ${event}`);
                   // console.log('onKeyPress-1-1-1-1-1-1', event.key);
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     // console.log('55555555', persona.numeroIdentidad);
                     // buscarPersonaEnAPIExterna();
-                    if ((document.getElementById("se_tipoDocumentoIdentidad_PERSONA") as HTMLSelectElement).value === "6") {
+                    if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
                       // console.log('6666666');
-                      document.getElementById("in_razonSocial_PERSONA")?.focus();
+                      document.getElementById('in_razonSocial_PERSONA')?.focus();
                     } else {
                       //   alert('Ingrese un valor a buscar');
-                      document.getElementById("in_nombre_PERSONA")?.focus();
+                      document.getElementById('in_nombre_PERSONA')?.focus();
                     }
                   }
                 }}
@@ -362,7 +362,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 height={16}
                 width={16}
                 title="Buscar datos de persona"
-                style={{ margin: "2px 2px" }}
+                style={{ margin: '0 4px' }}
                 // onFocusin$={() => console.log('🎁🎁🎁🎁🎁')}
                 // onClick$={() => localizarPersonas()}
                 onClick$={() => buscarPersonaEnAPIExterna()}
@@ -370,13 +370,13 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
               />
             </div>
           </div>
-          {persona.codigoTipoDocumentoIdentidad === "6" ? (
+          {persona.codigoTipoDocumentoIdentidad === '6' ? (
             // Razón social
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <input
                   id="in_razonSocial_PERSONA"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   type="text"
                   placeholder="Razón social"
                   value={persona.razonSocialNombre}
@@ -386,12 +386,12 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   onKeyPress$={(e: any) => {
                     // alert(`onKeyPress... ${event}`);
                     // console.log('onKeyPress-1-1-1-1-1-1', event.key);
-                    if (e.key === "Enter") {
+                    if (e.key === 'Enter') {
                       // console.log('55555555', persona.numeroIdentidad);
                       // buscarPersonaEnAPIExterna();
                       // if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
                       // console.log('6666666');
-                      document.getElementById("btn_grabar_PERSONA")?.focus();
+                      document.getElementById('btn_grabar_PERSONA')?.focus();
                     }
                   }}
                   // onKeyUp$={(e) => {
@@ -405,11 +405,11 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   // }}
                   onFocusin$={(e) => {
                     // alert(`INGRESO... ${e}`);
-                    console.log("INGRESO-", e);
+                    console.log('INGRESO-', e);
                     buscarPersonaEnAPIExterna();
                   }}
                 />
-                <strong style={{ color: condicion.value === "HABIDO" ? "green" : "red", marginLeft: "5px" }}>{condicion.value}</strong>
+                <strong style={{ color: condicion.value === 'HABIDO' ? 'green' : 'red', marginLeft: '5px' }}>{condicion.value}</strong>
               </div>
             </div>
           ) : (
@@ -419,7 +419,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 <div class="form-control form-agrupado">
                   <input
                     id="in_nombre_PERSONA"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     type="text"
                     placeholder="Nombres"
                     value={persona.nombre}
@@ -427,16 +427,16 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                       persona.nombre = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
                     onKeyPress$={(e) => {
-                      if (e.key === "Enter") {
-                        document.getElementById("in_apellidoPaterno_PERSONA")?.focus();
+                      if (e.key === 'Enter') {
+                        document.getElementById('in_apellidoPaterno_PERSONA')?.focus();
                       }
-                      if (e.key === "Escape") {
-                        document.getElementById("in_numeroIdentidad_PERSONA")?.focus();
+                      if (e.key === 'Escape') {
+                        document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                       }
                     }}
                     onFocusin$={(e) => {
                       // alert(`INGRESO... ${e}`);
-                      console.log("INGRESO-", e);
+                      console.log('INGRESO-', e);
                       buscarPersonaEnAPIExterna();
                     }}
                   />
@@ -447,7 +447,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 <div class="form-control form-agrupado">
                   <input
                     id="in_apellidoPaterno_PERSONA"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     type="text"
                     placeholder="Apellido paterno"
                     value={persona.paterno}
@@ -455,11 +455,11 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                       persona.paterno = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
                     onKeyPress$={(e) => {
-                      if (e.key === "Enter") {
-                        document.getElementById("in_apellidoMaterno_PERSONA")?.focus();
+                      if (e.key === 'Enter') {
+                        document.getElementById('in_apellidoMaterno_PERSONA')?.focus();
                       }
-                      if (e.key === "Escape") {
-                        document.getElementById("in_nombre_PERSONA")?.focus();
+                      if (e.key === 'Escape') {
+                        document.getElementById('in_nombre_PERSONA')?.focus();
                       }
                     }}
                   />
@@ -470,7 +470,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 <div class="form-control form-agrupado">
                   <input
                     id="in_apellidoMaterno_PERSONA"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     type="text"
                     placeholder="Apellido materno"
                     value={persona.materno}
@@ -478,12 +478,12 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                       persona.materno = (e.target as HTMLInputElement).value.trim().toUpperCase();
                     }}
                     onKeyPress$={(e) => {
-                      if (e.key === "Enter") {
-                        console.log("###############");
-                        document.getElementById("btn_grabar_PERSONA")?.focus();
+                      if (e.key === 'Enter') {
+                        console.log('###############');
+                        document.getElementById('btn_grabar_PERSONA')?.focus();
                       }
-                      if (e.key === "Escape") {
-                        document.getElementById("in_apellidoPaterno_PERSONA")?.focus();
+                      if (e.key === 'Escape') {
+                        document.getElementById('in_apellidoPaterno_PERSONA')?.focus();
                       }
                     }}
                   />
@@ -497,7 +497,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
         <input
           id="btn_grabar_PERSONA"
           type="submit"
-          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             irARegistrarPersona();
@@ -507,7 +507,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       {/* </Form> */}
       {/* MOSTRAR SPINNER */}
       {mostrarSpinner.value && (
-        <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>
       )}

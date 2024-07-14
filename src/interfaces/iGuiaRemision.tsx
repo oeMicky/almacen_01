@@ -11,16 +11,18 @@ export interface IGuiaRemision {
   sucursal: string;
   direccion: string;
 
+  guiaRemisionElectronica: boolean;
+  guiaRemisionElectronicaAutomatica: boolean;
+  verificarObservacionGR: boolean;
+
+  idSerieGuiaRemision: string;
+  serie: string;
+  numero: any; // number;
+
   idModalidadTraslado: string;
   modalidadTraslado: string;
   idMotivoTraslado: string;
   motivoTraslado: string;
-
-  codigoTipoComprobantePago: string;
-  tipoComprobantePago: string;
-  idSerieVenta: string;
-  serie: string;
-  numero: number;
 
   fechaEmision: string;
   fechaInicioTraslado: string;

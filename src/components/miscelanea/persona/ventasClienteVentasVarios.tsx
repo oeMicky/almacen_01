@@ -50,6 +50,7 @@ export default component$((props: { contexto: string }) => {
         width: 'clamp(330px, 86%, 600px)',
         // width: 'auto',
         padding: '2px',
+        background: '#eee',
       }}
       class="container-modal"
     >
@@ -193,11 +194,7 @@ export default component$((props: { contexto: string }) => {
                                     width={14}
                                     style={{ marginRight: '4px' }}
                                     onClick$={() => {
-                                      if (
-                                        venta.idOrdenServicio !== null &&
-                                        typeof venta.idOrdenServicio !== 'undefined' &&
-                                        venta.idOrdenServicio !== ''
-                                      ) {
+                                      if (venta.idOrdenServicio !== null && typeof venta.idOrdenServicio !== 'undefined' && venta.idOrdenServicio !== '') {
                                         alert(
                                           `La venta presenta adjunto una orden de servicio ${venta.serieOrdenServicio} - ${
                                             venta.numeroOrdenServicio ? cerosALaIzquierda(venta.numeroOrdenServicio, 8) : ''

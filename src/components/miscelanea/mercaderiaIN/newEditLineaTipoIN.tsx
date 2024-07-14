@@ -1,23 +1,23 @@
-import { $, component$, useContext, useStore } from "@builder.io/qwik";
-import { images } from "~/assets";
-import ImgButton from "~/components/system/imgButton";
-import { CTX_NEW_EDIT_MERCADERIA_IN } from "./newEditMercaderiaIN";
-import { inUpLineaTipoMercaderia } from "~/apis/lineaTipo.api";
-import { parametrosGlobales } from "~/routes/login";
+import { $, component$, useContext, useStore } from '@builder.io/qwik';
+import { images } from '~/assets';
+import ImgButton from '~/components/system/imgButton';
+import { CTX_NEW_EDIT_MERCADERIA_IN } from './newEditMercaderiaIN';
+import { inUpLineaTipoMercaderia } from '~/apis/lineaTipo.api';
+import { parametrosGlobales } from '~/routes/login';
 
 // export default component$((props: { idLineaTipo: string; lineaTipo: string }) => {
 export default component$((props: { lineaTipoSelecc: any }) => {
   //#region LINEA TIPO
   const definicion_CTX_LINEA_TIPO = useStore({
-    id: props.lineaTipoSelecc.idLineaTipo ? props.lineaTipoSelecc.idLineaTipo : "",
-    lineaTipo: props.lineaTipoSelecc.lineaTipo ? props.lineaTipoSelecc.lineaTipo : "",
+    id: props.lineaTipoSelecc.idLineaTipo ? props.lineaTipoSelecc.idLineaTipo : '',
+    lineaTipo: props.lineaTipoSelecc.lineaTipo ? props.lineaTipoSelecc.lineaTipo : '',
     contabilizarOperaciones:
-      typeof props.lineaTipoSelecc.contabilizarOperaciones !== "undefined"
+      typeof props.lineaTipoSelecc.contabilizarOperaciones !== 'undefined'
         ? props.lineaTipoSelecc.contabilizarOperaciones
         : parametrosGlobales.contabilizarOperaciones,
-    codigoContableVenta: props.lineaTipoSelecc.codigoContableVenta ? props.lineaTipoSelecc.codigoContableVenta : "",
-    descripcionContableVenta: props.lineaTipoSelecc.descripcionContableVenta ? props.lineaTipoSelecc.descripcionContableVenta : "",
-    tipoContableVenta: typeof props.lineaTipoSelecc.tipoContableVenta !== "undefined" ? props.lineaTipoSelecc.tipoContableVenta : false,
+    codigoContableVenta: props.lineaTipoSelecc.codigoContableVenta ? props.lineaTipoSelecc.codigoContableVenta : '',
+    descripcionContableVenta: props.lineaTipoSelecc.descripcionContableVenta ? props.lineaTipoSelecc.descripcionContableVenta : '',
+    tipoContableVenta: typeof props.lineaTipoSelecc.tipoContableVenta !== 'undefined' ? props.lineaTipoSelecc.tipoContableVenta : false,
   });
   //#endregion LINEA TIPO
 
@@ -27,9 +27,9 @@ export default component$((props: { lineaTipoSelecc: any }) => {
 
   //#region REGISTRAR LNEA TIPO
   const registrarLineaTipo = $(async () => {
-    if (definicion_CTX_LINEA_TIPO.lineaTipo === "") {
-      alert("Ingresar la linea / tipo");
-      document.getElementById("in_loteTipoIN_MICE")?.focus();
+    if (definicion_CTX_LINEA_TIPO.lineaTipo === '') {
+      alert('Ingresar la linea / tipo');
+      document.getElementById('in_loteTipoIN_MICE')?.focus();
       return;
     }
 
@@ -40,7 +40,7 @@ export default component$((props: { lineaTipoSelecc: any }) => {
       lineaTipoMercaderia: definicion_CTX_LINEA_TIPO.lineaTipo,
     });
 
-    console.log("lT.data", lT.data);
+    console.log('lT.data', lT.data);
 
     ctx_new_edit_mercaderia_in.grabo_lineaTipo = true;
     ctx_new_edit_mercaderia_in.mostrarPanelNewEditLineaTipoIN = false;
@@ -50,15 +50,15 @@ export default component$((props: { lineaTipoSelecc: any }) => {
   return (
     <div
       style={{
-        width: "clamp(386px, 86%, 390px)",
+        width: 'clamp(386px, 86%, 390px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
         // background: '#c0c0c0',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -76,11 +76,11 @@ export default component$((props: { lineaTipoSelecc: any }) => {
 
       <div class="add-form">
         {/* Lote / Tipo */}
-        <div class="form-control" style={{ margin: "8px 0" }}>
+        <div class="form-control" style={{ margin: '8px 0' }}>
           <div class="form-control form-agrupado">
             <input
               id="in_loteTipoIN_MICE"
-              style={{ width: "100%", background: "#eee" }}
+              style={{ width: '100%', background: '#eee' }}
               autoFocus
               type="text"
               placeholder="Lote / Tipo"
@@ -89,8 +89,8 @@ export default component$((props: { lineaTipoSelecc: any }) => {
                 definicion_CTX_LINEA_TIPO.lineaTipo = (e.target as HTMLInputElement).value.trim().toUpperCase();
               }}
               onKeyUp$={(e) => {
-                if (e.key === "Enter") {
-                  document.getElementById("bu_registrar_LineaTipo_MI_P")?.focus();
+                if (e.key === 'Enter') {
+                  document.getElementById('bu_registrar_LineaTipo_MI_P')?.focus();
                 }
               }}
               onFocusin$={(e) => {
@@ -104,7 +104,7 @@ export default component$((props: { lineaTipoSelecc: any }) => {
         <input
           id="bu_registrar_LineaTipo_MI_P"
           type="submit"
-          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
             registrarLineaTipo();

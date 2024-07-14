@@ -1,19 +1,19 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import { CTX_NEW_EDIT_COTIZACION } from "~/components/cotizacion/newEditCotizacion";
-import ImgButton from "~/components/system/imgButton";
-import { parametrosGlobales } from "~/routes/login";
-import TablaMercaderiasOUT from "./tablaMercaderiasOUT";
-import MercaderiaOUTSeleccionada from "./mercaderiaOUTSeleccionada";
-import AsignarPrecioOUT from "./asignarPrecioOUT";
-import { CTX_ADD_VENTA } from "~/components/venta/addVenta";
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from "~/components/ordenServicio/newEditOrdenServicio";
-import { CTX_NEW_OUT_ALMACEN } from "~/components/outAlmacen/newOutAlmacen";
-import KardexsOUT from "./kardexsOUT";
-import { CTX_NEW_EDIT_GUIA_REMISION } from "~/components/guiaRemision/newEditGuiaRemision";
-import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from "~/components/ordenProduccion/newEditOrdenProduccion";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import { CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
+import ImgButton from '~/components/system/imgButton';
+import { parametrosGlobales } from '~/routes/login';
+import TablaMercaderiasOUT from './tablaMercaderiasOUT';
+import MercaderiaOUTSeleccionada from './mercaderiaOUTSeleccionada';
+import AsignarPrecioOUT from './asignarPrecioOUT';
+import { CTX_ADD_VENTA } from '~/components/venta/addVenta';
+import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import KardexsOUT from './kardexsOUT';
+import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
+import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
 
-export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>("buscar_mercaderia_out__");
+export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
 
 export default component$((props: { contexto: string; esAlmacen: boolean; esProduccion?: boolean; porcentaje: any }) => {
   //#region DEFINICION CTX_BUSCAR_MERCADERIA_OUT - para eDITAR - para BUSCAR
@@ -35,22 +35,22 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
-    case "orden_servicio":
+    case 'orden_servicio':
       ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       break;
-    case "orden_produccion":
+    case 'orden_produccion':
       ctx = useContext(CTX_NEW_EDIT_ORDEN_PRODUCCION);
       break;
-    case "new_venta":
+    case 'new_venta':
       ctx = useContext(CTX_ADD_VENTA);
       break;
-    case "new_edit_guiaRemision":
+    case 'new_edit_guiaRemision':
       ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
       break;
-    case "new_edit_cotizacion":
+    case 'new_edit_cotizacion':
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
       break;
-    case "new_out_almacen":
+    case 'new_out_almacen':
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
   }
@@ -64,15 +64,15 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
-    buscarPor: "Descripción", //por.value,
-    cadenaABuscar: "", // 'acce 5', //cadena.value,
+    buscarPor: 'Descripción', //por.value,
+    cadenaABuscar: '', // 'acce 5', //cadena.value,
   });
   //#endregion INICIALIZACION
 
   //#region BUSCAR MERCADERIAS OUT
   const localizarMercaderiasOUT = $(() => {
-    if (parametrosBusqueda.cadenaABuscar === "") {
-      alert("Ingrese un valor para su busqueda 🦪");
+    if (parametrosBusqueda.cadenaABuscar === '') {
+      alert('Ingrese un valor para su busqueda 🦪');
       //document.getElementById('inputBusquedaServicio_MICE')?.focus();
       return;
     }
@@ -98,21 +98,21 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
       style={
         verLineaMarca.value || verAplicacion.value
           ? {
-              width: "clamp(330px, 86%, 1112px)",
+              width: 'clamp(330px, 86%, 1112px)',
               // width: 'auto',
-              border: "1px solid red",
-              padding: "2px",
+              border: '1px solid red',
+              padding: '2px',
             }
           : {
-              width: "clamp(330px, 86%, 800px)",
+              width: 'clamp(330px, 86%, 800px)',
               // width: 'auto',
-              border: "1px solid red",
-              padding: "2px",
+              border: '1px solid red',
+              padding: '2px',
             }
       }
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -125,17 +125,17 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: "10px", fontSize: "0.9rem" }}>Buscar mercaderías / OUT</h3>
+      <h3 style={{ marginBottom: '8px', fontSize: '0.9rem' }}>Buscar bienes / OUT</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: "10px" }}>
+        <div style={{ marginBottom: '8px' }}>
           {/* Buscar por */}
-          <div class="form-control" style={{ marginBottom: "4px" }}>
+          <div class="form-control" style={{ marginBottom: '4px' }}>
             <div class="form-control form-agrupado">
               <input
                 id="codigoDescripcion_MICE"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 type="text"
                 placeholder="Ingrese la mercadería a buscar"
                 value={parametrosBusqueda.cadenaABuscar}
@@ -146,7 +146,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 //   (e.target as HTMLInputElement).select();
                 // }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     localizarMercaderiasOUT();
                   }
                 }}
@@ -158,26 +158,27 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 title="Buscar datos de mercadería"
                 height={16}
                 width={16}
-                style={{ marginLeft: "4px" }}
+                style={{ marginLeft: '4px' }}
                 onClick$={() => {
                   localizarMercaderiasOUT();
                 }}
               />
             </div>
           </div>
+
           {/* Buscar por: Aplicacion */}
           {/* <div style={{ display: 'flex', alignItems: 'center' }}> */}
-          <div style={{ display: "flex" }}>
-            <div style={{ marginRight: "12px" }}>
+          <div style={{ display: 'flex' }}>
+            <div style={{ marginRight: '12px' }}>
               <input
                 id="in_Aplicacion_MICE"
                 type="checkbox"
                 placeholder="Buscar por aplicación"
                 onChange$={(e) => {
                   if ((e.target as HTMLInputElement).checked) {
-                    parametrosBusqueda.buscarPor = "Aplicación";
+                    parametrosBusqueda.buscarPor = 'Aplicación';
                   } else {
-                    parametrosBusqueda.buscarPor = "Descripción";
+                    parametrosBusqueda.buscarPor = 'Descripción';
                   }
                 }}
                 // value={parametrosBusqueda.cadenaABuscar}
@@ -195,7 +196,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               />
               <label for="in_Aplicacion_MICE">Aplicación</label>
             </div>
-            <div style={{ marginRight: "12px" }}>
+            <div style={{ marginRight: '12px' }}>
               <input
                 id="in_VerAplicacion_MICE"
                 type="checkbox"
@@ -258,7 +259,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               //   parametrosBusqueda={parametrosBusqueda}
             />
           ) : (
-            ""
+            ''
           )}
           {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelMercaderiaOUTSeleccionada && (
             <div class="modal">
@@ -267,7 +268,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 elKardex={definicion_CTX_BUSCAR_MERCADERIA_OUT.kK}
                 esAlmacen={props.esAlmacen}
                 esProduccion={props.esProduccion}
-                contexto={"buscar_mercaderia_out"}
+                contexto={'buscar_mercaderia_out'}
                 contextoParaDocumento={props.contexto}
                 porcentaje={props.porcentaje}
               />

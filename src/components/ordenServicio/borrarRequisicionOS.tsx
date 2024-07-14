@@ -1,7 +1,7 @@
-import { $, component$, useContext } from "@builder.io/qwik";
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from "./newEditOrdenServicio";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
+import { $, component$, useContext } from '@builder.io/qwik';
+import { CTX_NEW_EDIT_ORDEN_SERVICIO } from './newEditOrdenServicio';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
 
 export default component$((props: { borrarRequisicion: any }) => {
   //#region CONTEXTO
@@ -11,15 +11,16 @@ export default component$((props: { borrarRequisicion: any }) => {
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 600px)",
+        width: 'clamp(330px, 86%, 600px)',
         //width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
+        background: '#eee',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -34,7 +35,7 @@ export default component$((props: { borrarRequisicion: any }) => {
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: "10px" }}>
+        <div style={{ marginBottom: '10px' }}>
           ¿Desea eliminar el ítem?
           <div>
             {/* <label>{cerosALaIzquierda(props.borrarItemMerca.item, 3)}</label>
@@ -44,9 +45,9 @@ export default component$((props: { borrarRequisicion: any }) => {
             <label>{props.borrarRequisicion.descripcion}</label>
             <br />
           </div>
-          <div style={{ display: "flex", marginTop: "5px", justifyContent: "space-around", alignItems: "center" }}>
+          <div style={{ display: 'flex', marginTop: '5px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
-              style={{ width: "60px" }}
+              style={{ width: '60px' }}
               onClick$={() => {
                 // borrar_idAuxiliar = props.borrarItemMerca.idAuxiliar;
                 // console.log('- documentos', documentos);
@@ -63,7 +64,7 @@ export default component$((props: { borrarRequisicion: any }) => {
               SI
             </button>
             <button
-              style={{ width: "60px" }}
+              style={{ width: '60px' }}
               onClick$={() => {
                 ctx_new_edit_orden_servicio.mostrarPanelBorrarRequisicionOS = false;
               }}

@@ -1,10 +1,10 @@
-import { $, Resource, component$, useContext, useResource$, useSignal } from "@builder.io/qwik";
-import { images } from "~/assets";
-import ImgButton from "~/components/system/imgButton";
+import { $, Resource, component$, useContext, useResource$, useSignal } from '@builder.io/qwik';
+import { images } from '~/assets';
+import ImgButton from '~/components/system/imgButton';
 // import { CTX_BUSCAR_ORDEN_SERVICIO_APERTURADO } from './buscarOrdenServicioAperturado';
 // import { IOrdenServicio_DespachoRequisicion } from '~/interfaces/iOrdenServicio';
-import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from "~/components/outAlmacen/newOutAlmacen";
-import { cerosALaIzquierda, elIdAuxiliar, formatear_6Decimales } from "~/functions/comunes";
+import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { cerosALaIzquierda, elIdAuxiliar, formatear_6Decimales } from '~/functions/comunes';
 
 export default component$((props: { contexto: string; osSeleccionada: any }) => {
   //#region OS_SELECCINADA
@@ -32,7 +32,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
   let documento: any = [];
   // let documentoAdjunto: any = [];
   switch (props.contexto) {
-    case "egreso_de_almacen":
+    case 'egreso_de_almacen':
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
       documento = useContext(CTX_OUT_ALMACEN);
       // documentoAdjunto = useContext(CTX_OUT_ALMACEN);
@@ -55,16 +55,16 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
   const losDespachos = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // track(() => props.buscarOrdenesServicio.valueOf());
     track(() => ini.value);
-    console.log("parametrosBusqueda losDespachos ini.value", ini.value);
+    console.log('parametrosBusqueda losDespachos ini.value', ini.value);
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
-    console.log("parametrosBusqueda losDespachos requisiones", props.osSeleccionada._id);
+    console.log('parametrosBusqueda losDespachos requisiones', props.osSeleccionada._id);
 
-    const res = await fetch(import.meta.env.VITE_URL + "/api/ordenServicio/getDespachoRequisiciones", {
-      method: "POST",
+    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getDespachoRequisiciones', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       // body: JSON.stringify(props.parametrosBusqueda),
       body: JSON.stringify({ idOs: props.osSeleccionada._id }),
@@ -78,14 +78,14 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
     <div
       class="container-modal"
       style={{
-        width: "clamp(330px, 86%, 1016px)",
+        width: 'clamp(330px, 86%, 1016px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
       }}
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -103,7 +103,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log("osSeleccionada", props.osSeleccionada);
+            console.log('osSeleccionada', props.osSeleccionada);
           })}
         />
         <ImgButton
@@ -113,7 +113,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log("misDespachos", misDespachos.value);
+            console.log('misDespachos', misDespachos.value);
           })}
         />
       </div>
@@ -122,18 +122,18 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
         <h3>Despacho de requisiciones OS</h3>
         {/* CLIENTE */}
         <div>
-          <div style={{ margin: "4px 0" }}>ID:{` ${props.osSeleccionada._id} `}</div>
-          <div style={{ margin: "4px 0" }}>
-            OS:<b>{` ${props.osSeleccionada.serie + " - " + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
+          <div style={{ margin: '4px 0' }}>ID:{` ${props.osSeleccionada._id} `}</div>
+          <div style={{ margin: '4px 0' }}>
+            OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
           </div>
-          <div style={{ margin: "4px 0" }}>
+          <div style={{ margin: '4px 0' }}>
             Cliente:
-            <b>{props.osSeleccionada.clienteVentasVarias ? " Cliente ventas varias" : ` ${props.osSeleccionada.razonSocialNombreCliente}`}</b>
+            <b>{props.osSeleccionada.clienteVentasVarias ? ' Cliente ventas varias' : ` ${props.osSeleccionada.razonSocialNombreCliente}`}</b>
           </div>
-          <div style={{ margin: "4px 0" }}>
+          <div style={{ margin: '4px 0' }}>
             Placa:<b>{` ${props.osSeleccionada.placa} `}</b>
           </div>
-          <div style={{ margin: "4px 0" }}>
+          <div style={{ margin: '4px 0' }}>
             Kilometraje:<b>{` ${props.osSeleccionada.kilometraje}`}</b>
           </div>
           <br />
@@ -143,15 +143,15 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           <Resource
             value={losDespachos}
             onPending={() => {
-              console.log("onPending 🍉🍉🍉🍉");
+              console.log('onPending 🍉🍉🍉🍉');
               return <div>Cargando...</div>;
             }}
             onRejected={() => {
-              console.log("onRejected 🍍🍍🍍🍍");
+              console.log('onRejected 🍍🍍🍍🍍');
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(ordenesServicio) => {
-              console.log("onResolved ordenesServicio 🍓🍓🍓🍓", ordenesServicio);
+              console.log('onResolved ordenesServicio 🍓🍓🍓🍓', ordenesServicio);
               const { data } = ordenesServicio; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misDespachos.value = data;
@@ -159,7 +159,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 <>
                   {misDespachos.value.length > 0 ? (
                     <>
-                      <table style={{ fontSize: "0.8rem", fontWeight: "lighter " }}>
+                      <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                         <thead>
                           <tr>
                             <th>Ítem</th>
@@ -237,11 +237,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                                 </td>
                                 <td data-label="Cant A Despachar" class="comoNumero">
                                   <input
-                                    style={{ width: "80px", textAlign: "end" }}
+                                    style={{ width: '80px', textAlign: 'end' }}
                                     value={despachoLocali.aDespachar}
                                     onChange$={(e) => {
                                       const a_Despachar = parseFloat((e.target as HTMLInputElement).value);
-                                      console.log("a_Despachar", a_Despachar);
+                                      console.log('a_Despachar', a_Despachar);
                                       despachoLocali.aDespachar = a_Despachar;
                                     }}
                                     // onFocusin$={(e) => {
@@ -258,7 +258,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                     </>
                   ) : (
                     <div>
-                      <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                      <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                     </div>
                   )}
                 </>
@@ -273,9 +273,9 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           value="Despachar"
           class="btn-centro"
           onClick$={() => {
-            console.log("losDespachos", losDespachos);
-            console.log("mis despachos", misDespachos.value);
-            console.log("props.osSeleccionadas", props.osSeleccionada);
+            console.log('losDespachos', losDespachos);
+            console.log('mis despachos', misDespachos.value);
+            console.log('props.osSeleccionadas', props.osSeleccionada);
 
             //VERIFICAR montos a DESPACHAR
             let todoCorrecto = true;
@@ -290,7 +290,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             }
 
             if (!algunoMasQueCero) {
-              alert("ATENCIÓN: todos los montos a despachar no pueden ser cero (0)");
+              alert('ATENCIÓN: todos los montos a despachar no pueden ser cero (0)');
               return;
             }
 
@@ -317,14 +317,14 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 stockEQUIVALENTE = parseFloat(despachoLocali.stock.$numberDecimal) / parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
               }
 
-              console.log("stockEQUIVALENTE - por despa", stockEQUIVALENTE, aDespa);
+              console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
               if (aDespa > stockEQUIVALENTE) {
                 alert(`ATENCIÓN: Desea despachar mayor cantidad ( ${aDespa} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`);
                 todoCorrecto = false;
                 break;
               }
 
-              console.log("canti - despachado - reing - por aDespa", canti, despachado, reing, aDespa);
+              console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
               if (despachado - reing + aDespa > canti) {
                 alert(
                   `ATENCIÓN: Se intenta despachar una cantidad mayor a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( Despachado-Reingresada = ${
@@ -338,7 +338,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             if (!todoCorrecto) {
               return;
             }
-            console.log("paso VERIFICACION de CANTIDADES A DESPACHAR");
+            console.log('paso VERIFICACION de CANTIDADES A DESPACHAR');
             //** copiar los datos al panel de EGRESO */
 
             //ID DE LA ORDEN SERVICIO
@@ -359,8 +359,8 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             documento.documentosAdjuntos.splice(0, numeroDocumentos);
             //inserta el elemento / documento en el array
             documento.documentosAdjuntos.push({
-              codigoTCP: "00",
-              descripcionTCP: "Otros",
+              codigoTCP: '00',
+              descripcionTCP: 'Otros',
               fecha: props.osSeleccionada.fechaInicio,
               idAuxiliar: elIdAuxiliar(),
               numero: props.osSeleccionada.numero,
@@ -372,11 +372,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             //borra todos los elementos del array
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
-            console.log("🚍🚍🚍🚍🚍numeroMercaderias", numeroMercaderias);
+            console.log('🚍🚍🚍🚍🚍numeroMercaderias', numeroMercaderias);
             for (const despachoLocali of misDespachos.value) {
               const despaEquiva = despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar;
-              console.log("🚍🚍🚍🚍🚍despaEquiva", despaEquiva);
-              console.log("despachoLocali", despachoLocali);
+              console.log('🚍🚍🚍🚍🚍despaEquiva', despaEquiva);
+              console.log('despachoLocali', despachoLocali);
               if (despaEquiva > 0) {
                 // let despa = 0;
 
@@ -388,7 +388,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                   idItem: despachoLocali._id,
                   item: 0,
 
-                  codigo: despachoLocali.codigo ? despachoLocali.codigo : "_",
+                  codigo: despachoLocali.codigo ? despachoLocali.codigo : '_',
 
                   descripcion: despachoLocali.descripcion,
                   descripcionEquivalencia: despachoLocali.descripcionEquivalencia,

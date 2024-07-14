@@ -1,11 +1,11 @@
-import { $, component$, useContext, useStore } from "@builder.io/qwik";
-import { images } from "~/assets";
-import { elIdAuxiliar } from "~/functions/comunes";
-import ImgButton from "~/components/system/imgButton";
+import { $, component$, useContext, useStore } from '@builder.io/qwik';
+import { images } from '~/assets';
+import { elIdAuxiliar } from '~/functions/comunes';
+import ImgButton from '~/components/system/imgButton';
 // import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
-import { inUpChofer } from "~/apis/chofer.api";
-import { parametrosGlobales } from "~/routes/login";
-import { CTX_BUSCAR_CHOFER } from "./buscarChofer";
+import { inUpChofer } from '~/apis/chofer.api';
+import { parametrosGlobales } from '~/routes/login';
+import { CTX_BUSCAR_CHOFER } from './buscarChofer';
 
 export default component$((props: { choferSeleccionado: any }) => {
   //#region CONTEXTOS
@@ -14,25 +14,25 @@ export default component$((props: { choferSeleccionado: any }) => {
 
   //#region INICIALIZACION
   const elChofer = useStore({
-    idChofer: props.choferSeleccionado.idChofer ? props.choferSeleccionado.idChofer : "",
-    idPersona: props.choferSeleccionado.idPersona ? props.choferSeleccionado.idPersona : "",
+    idChofer: props.choferSeleccionado.idChofer ? props.choferSeleccionado.idChofer : '',
+    idPersona: props.choferSeleccionado.idPersona ? props.choferSeleccionado.idPersona : '',
     idAuxiliar: props.choferSeleccionado.idAuxiliar ? props.choferSeleccionado.idAuxiliar : elIdAuxiliar(),
 
-    activo: typeof props.choferSeleccionado.activo === "undefined" ? true : props.choferSeleccionado.activo,
+    activo: typeof props.choferSeleccionado.activo === 'undefined' ? true : props.choferSeleccionado.activo,
 
-    codigoTipoDocumentoIdentidad: props.choferSeleccionado.codigoTipoDocumentoIdentidad ? props.choferSeleccionado.codigoTipoDocumentoIdentidad : "1",
-    tipoDocumentoIdentidad: props.choferSeleccionado.tipoDocumentoIdentidad ? props.choferSeleccionado.tipoDocumentoIdentidad : "DNI",
-    numeroIdentidad: props.choferSeleccionado.numeroIdentidad ? props.choferSeleccionado.numeroIdentidad : "",
-    razonSocialNombre: props.choferSeleccionado.razonSocialNombre ? props.choferSeleccionado.razonSocialNombre : "",
-    licencia: props.choferSeleccionado.licencia ? props.choferSeleccionado.licencia : "",
+    codigoTipoDocumentoIdentidad: props.choferSeleccionado.codigoTipoDocumentoIdentidad ? props.choferSeleccionado.codigoTipoDocumentoIdentidad : '1',
+    tipoDocumentoIdentidad: props.choferSeleccionado.tipoDocumentoIdentidad ? props.choferSeleccionado.tipoDocumentoIdentidad : 'DNI',
+    numeroIdentidad: props.choferSeleccionado.numeroIdentidad ? props.choferSeleccionado.numeroIdentidad : '',
+    razonSocialNombre: props.choferSeleccionado.razonSocialNombre ? props.choferSeleccionado.razonSocialNombre : '',
+    licencia: props.choferSeleccionado.licencia ? props.choferSeleccionado.licencia : '',
   });
   //#endregion INICIALIZACION
 
   //#region UPDATE CHOFER
   const actualizarChofer = $(async () => {
-    if (elChofer.licencia.trim() === "") {
-      alert("Debe ingresar la licencia");
-      document.getElementById("input_Licencia_CHOFER")?.focus();
+    if (elChofer.licencia.trim() === '') {
+      alert('Debe ingresar la licencia');
+      document.getElementById('input_Licencia_CHOFER')?.focus();
       return;
     }
 
@@ -56,14 +56,14 @@ export default component$((props: { choferSeleccionado: any }) => {
   return (
     <div
       style={{
-        width: "clamp(386px, 86%, 600px)",
+        width: 'clamp(386px, 86%, 600px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -81,12 +81,12 @@ export default component$((props: { choferSeleccionado: any }) => {
           height={18}
           width={18}
           onClick={$(() => {
-            console.log("props.choferSeleccionado", props.choferSeleccionado);
+            console.log('props.choferSeleccionado', props.choferSeleccionado);
           })}
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: "0.8rem" }}>Registro de chofer</h3>
+      <h3 style={{ fontSize: '0.8rem' }}>Registro de chofer</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
@@ -126,10 +126,10 @@ export default component$((props: { choferSeleccionado: any }) => {
                   elChofer.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                 }}
               >
-                <option id="1" value="DNI" selected={elChofer.tipoDocumentoIdentidad === "DNI"}>
+                <option id="1" value="DNI" selected={elChofer.tipoDocumentoIdentidad === 'DNI'}>
                   DNI
                 </option>
-                <option id="4" value="C.EXT" selected={elChofer.tipoDocumentoIdentidad === "C.EXT"}>
+                <option id="4" value="C.EXT" selected={elChofer.tipoDocumentoIdentidad === 'C.EXT'}>
                   C.EXT
                 </option>
               </select>
@@ -155,7 +155,7 @@ export default component$((props: { choferSeleccionado: any }) => {
                 type="number"
                 placeholder="Número Identidad Chofer"
                 disabled
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 value={elChofer.numeroIdentidad}
                 // onChange$={(e) => (elChofer.numeroIdentidad = (e.target as HTMLInputElement).value)}
               />
@@ -164,7 +164,7 @@ export default component$((props: { choferSeleccionado: any }) => {
           {/* Razon Social / Nombre */}
           <div class="form-control">
             <div class="form-control form-agrupado">
-              <input id="input_Nombre_CHOFER" type="text" placeholder="Nombre Chofer" disabled style={{ width: "100%" }} value={elChofer.razonSocialNombre} />
+              <input id="input_Nombre_CHOFER" type="text" placeholder="Nombre Chofer" disabled style={{ width: '100%' }} value={elChofer.razonSocialNombre} />
             </div>
           </div>
           {/* Licencia */}
@@ -174,14 +174,14 @@ export default component$((props: { choferSeleccionado: any }) => {
                 id="input_Licencia_CHOFER"
                 type="text"
                 placeholder="Licencia de Chofer"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 value={elChofer.licencia}
                 onChange$={(e) => {
                   elChofer.licencia = (e.target as HTMLInputElement).value;
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
-                    document.getElementById("btn_RegistrarChofer_DOCUMENTO")?.focus();
+                  if (e.key === 'Enter') {
+                    document.getElementById('btn_RegistrarChofer_DOCUMENTO')?.focus();
                   }
                 }}
               />
@@ -193,7 +193,7 @@ export default component$((props: { choferSeleccionado: any }) => {
         <input
           id="btn_RegistrarChofer_DOCUMENTO"
           type="button"
-          value={"Registrar"} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           // value={botonGrabar === '' ? 'Grabar' : `${botonGrabar}`}
           class="btn-centro"
           onClick$={() => actualizarChofer()}

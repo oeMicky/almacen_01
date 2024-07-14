@@ -48,6 +48,7 @@ export default component$(() => {
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
+        background: '#eee',
       }}
     >
       {/* BOTONES DEL MARCO */}
@@ -80,10 +81,7 @@ export default component$(() => {
                 }
               }}
             >
-              <option
-                value="Por cliente / destinatario"
-                selected={parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario'}
-              >
+              <option value="Por cliente / destinatario" selected={parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario'}>
                 Por cliente / destinatario
               </option>
               <option value="Entre fechas" selected={parametrosBusqueda.PorDestinatario_EntreFechas === 'Entre fechas'}>
@@ -95,11 +93,7 @@ export default component$(() => {
         {/* por Cliente - Destinatario */}
         <div
           id="porDestinatario"
-          style={
-            parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario'
-              ? { visibility: 'visible' }
-              : { visibility: 'collapse' }
-          }
+          style={parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario' ? { visibility: 'visible' } : { visibility: 'collapse' }}
         >
           <div style={{ marginBottom: '8px' }}>
             <select
@@ -158,11 +152,7 @@ export default component$(() => {
         <div
           id="porFechas"
           class="intervalo-fechas"
-          style={
-            parametrosBusqueda.PorDestinatario_EntreFechas === 'Entre fechas'
-              ? { visibility: 'visible' }
-              : { visibility: 'collapse' }
-          }
+          style={parametrosBusqueda.PorDestinatario_EntreFechas === 'Entre fechas' ? { visibility: 'visible' } : { visibility: 'collapse' }}
         >
           <label class="fechas" style={{ margin: '2px 4px 0 4px' }}>
             Desde
@@ -220,10 +210,7 @@ export default component$(() => {
         </div>
         {definicion_CTX_BUSCAR_VENTA_DESPACHADA_REINGRESO.mostrarPanelVentaDespachadaReingreso && (
           <div class="modal">
-            <ReingresoVenta
-              contexto="ingreso_a_almacen"
-              ventaSeleccionada={definicion_CTX_BUSCAR_VENTA_DESPACHADA_REINGRESO.vV}
-            />
+            <ReingresoVenta contexto="ingreso_a_almacen" ventaSeleccionada={definicion_CTX_BUSCAR_VENTA_DESPACHADA_REINGRESO.vV} />
           </div>
         )}
         {/* {definicion_CTX_BUSCAR_NOTA_SALIDA_REINGRESO.mostrarPanelNotaDeSalidaReingreso && (

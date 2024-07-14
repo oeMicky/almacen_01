@@ -50,6 +50,7 @@ export default component$((props: { nsSeleccionada: any }) => {
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
+        background: '#eee',
       }}
     >
       {/* BOTONES DEL MARCO */}
@@ -188,9 +189,7 @@ export default component$((props: { nsSeleccionada: any }) => {
             let algunoMasQueCero = false;
             //VERIFICAR montos a REINGRESAR -> TODOS LOS MONTOS SON CEROS
             for (const reingresoLocali of misReingresos.value) {
-              const reingre = reingresoLocali.aReingresar.$numberDecimal
-                ? reingresoLocali.aReingresar.$numberDecimal
-                : reingresoLocali.aReingresar;
+              const reingre = reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar;
 
               if (reingre > 0) {
                 algunoMasQueCero = true;
@@ -213,15 +212,11 @@ export default component$((props: { nsSeleccionada: any }) => {
               );
 
               const Reingresada = parseFloat(
-                reingresoLocali.cantidadReingresada.$numberDecimal
-                  ? reingresoLocali.cantidadReingresada.$numberDecimal
-                  : reingresoLocali.cantidadReingresada
+                reingresoLocali.cantidadReingresada.$numberDecimal ? reingresoLocali.cantidadReingresada.$numberDecimal : reingresoLocali.cantidadReingresada
               );
 
               const aReingre = parseFloat(
-                reingresoLocali.aReingresar.$numberDecimal
-                  ? reingresoLocali.aReingresar.$numberDecimal
-                  : reingresoLocali.aReingresar
+                reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar
               );
 
               console.log('despa <=> reingre + Reingresada', despa, aReingre, Reingresada);
@@ -270,9 +265,7 @@ export default component$((props: { nsSeleccionada: any }) => {
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
             for (const reingresoLocali of misReingresos.value) {
-              const aRein = reingresoLocali.aReingresar.$numberDecimal
-                ? reingresoLocali.aReingresar.$numberDecimal
-                : reingresoLocali.aReingresar;
+              const aRein = reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar;
 
               console.log('aRein', aRein);
               if (aRein > 0) {

@@ -1,22 +1,23 @@
-import { $, component$, useContext, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_NEW_EDIT_DIRECCION_GR } from "./newEditDireccionGR";
-import { obtenerUbigeoSUNAT } from "~/apis/guiaRemision.api";
-// import Spinner from "../system/spinner";
-import ElSelect from "../system/elSelect";
+import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_NEW_EDIT_DIRECCION_GR } from './newEditDireccionGR';
+import { obtenerUbigeoSUNAT } from '~/apis/guiaRemision.api';
+import Spinner from '../system/spinner';
+import ElSelect from '../system/elSelect';
+// import Spinner from '../system/spinner';
 // import { CLIENT_RENEG_LIMIT } from 'tls';
 
 export default component$((props: { elUbi: any }) => {
   //#region definicion_CTX_SELECCIONAR_UBIGEO_SUNAT
   const definicion_CTX_SELECCIONAR_UBIGEO_SUNAT = useStore({
-    idDepartamento: props.elUbi.idDepartamento ? props.elUbi.idDepartamento : "",
-    departamento: props.elUbi.departamento ? props.elUbi.departamento : "",
-    idProvincia: props.elUbi.idProvincia ? props.elUbi.idProvincia : "",
-    provincia: props.elUbi.provincia ? props.elUbi.provincia : "",
-    idDistrito: props.elUbi.idDistrito ? props.elUbi.idDistrito : "",
-    distrito: props.elUbi.distrito ? props.elUbi.distrito : "",
-    ubigeo: props.elUbi.ubigeo ? props.elUbi.ubigeo : "",
+    idDepartamento: props.elUbi.idDepartamento ? props.elUbi.idDepartamento : '',
+    departamento: props.elUbi.departamento ? props.elUbi.departamento : '',
+    idProvincia: props.elUbi.idProvincia ? props.elUbi.idProvincia : '',
+    provincia: props.elUbi.provincia ? props.elUbi.provincia : '',
+    idDistrito: props.elUbi.idDistrito ? props.elUbi.idDistrito : '',
+    distrito: props.elUbi.distrito ? props.elUbi.distrito : '',
+    ubigeo: props.elUbi.ubigeo ? props.elUbi.ubigeo : '',
   });
   //#endregion definicion_CTX_SELECCIONAR_UBIGEO_SUNAT
 
@@ -26,7 +27,7 @@ export default component$((props: { elUbi: any }) => {
 
   //#region INICIALIZANDO
   const ini = useSignal(0);
-  // const mostrarSpinner = useSignal(false);
+  const mostrarSpinner = useSignal(true);
 
   const losDepartamentos = useSignal([]);
   const lasProvincias = useSignal([]);
@@ -38,9 +39,9 @@ export default component$((props: { elUbi: any }) => {
     track(() => ini.value);
 
     // mostrarSpinner.value = true;
-
+    // ctx_new_edit_direccion_gr.mostrarSpinner = true;
     const Dep = await obtenerUbigeoSUNAT();
-    console.log("UBIGEOS", Dep.data);
+    console.log('UBIGEOS', Dep.data);
     losDepartamentos.value = Dep.data;
     //ordenar
     losDepartamentos.value = losDepartamentos.value.sort((a: any, b: any) => {
@@ -56,16 +57,16 @@ export default component$((props: { elUbi: any }) => {
       return 0;
     });
 
-    // mostrarSpinner.value = false;
-    ctx_new_edit_direccion_gr.mostrarSpinner = false;
+    mostrarSpinner.value = false;
+    // ctx_new_edit_direccion_gr.mostrarSpinner = false;
   });
   //#endregion OBTENER UBIGEO SUNAT
 
   //#region OBTENER PROVINCIAS
   const obtenerProvincias = $((idDepa: string) => {
-    console.log("idDepa", idDepa);
+    console.log('idDepa', idDepa);
     const ppp: any = losDepartamentos.value.filter((depas: any) => depas._id === idDepa);
-    console.log("ppp", ppp);
+    console.log('ppp', ppp);
     lasProvincias.value = ppp[0].provincias;
     //ordenar
     lasProvincias.value = lasProvincias.value.sort((a: any, b: any) => {
@@ -80,15 +81,15 @@ export default component$((props: { elUbi: any }) => {
       // names must be equal
       return 0;
     });
-    console.log("lasProvincias.value", lasProvincias.value);
+    console.log('lasProvincias.value', lasProvincias.value);
   });
   //#endregion OBTENER PROVINCIAS
 
   //#region OBTENER DISTRITOS
   const obtenerDistritos = $((idProv: string) => {
-    console.log("idProv", idProv);
+    console.log('idProv', idProv);
     const ddd: any = lasProvincias.value.filter((provs: any) => provs._id === idProv);
-    console.log("ddd", ddd);
+    console.log('ddd', ddd);
     losDistritos.value = ddd[0].distritos;
     //ordenar
     losDistritos.value = losDistritos.value.sort((a: any, b: any) => {
@@ -103,22 +104,22 @@ export default component$((props: { elUbi: any }) => {
       // names must be equal
       return 0;
     });
-    console.log("losDistritos.value", losDistritos.value);
+    console.log('losDistritos.value', losDistritos.value);
   });
   //#endregion OBTENER DISTRITOS
 
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 340px)",
+        width: 'clamp(330px, 86%, 340px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
         // background: '#c0c0c0',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -139,31 +140,31 @@ export default component$((props: { elUbi: any }) => {
         <div class="form-control">
           <div class="form-control form-agrupado">
             <ElSelect
-              id={"se_Departamento_UBIGEO_SUNAT"}
+              id={'se_Departamento_UBIGEO_SUNAT'}
               valorSeleccionado={definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.departamento}
               registros={losDepartamentos.value}
-              registroID={"_id"}
-              registroTEXT={"departamento"}
-              seleccione={"-- Seleccione departamento --"}
+              registroID={'_id'}
+              registroTEXT={'departamento'}
+              seleccione={'-- Seleccione departamento --'}
               onChange={$(() => {
-                const elSelec = document.getElementById("se_Departamento_UBIGEO_SUNAT") as HTMLSelectElement;
+                const elSelec = document.getElementById('se_Departamento_UBIGEO_SUNAT') as HTMLSelectElement;
                 const elIdx = elSelec.selectedIndex;
                 definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDepartamento = elSelec[elIdx].id;
-                if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDepartamento === "") {
-                  definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.departamento = "";
+                if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDepartamento === '') {
+                  definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.departamento = '';
                 } else {
                   definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.departamento = elSelec.value;
                   obtenerProvincias(definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDepartamento);
                 }
-                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idProvincia = "";
-                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.provincia = "";
-                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito = "";
-                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito = "";
-                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.ubigeo = "";
+                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idProvincia = '';
+                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.provincia = '';
+                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito = '';
+                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito = '';
+                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.ubigeo = '';
               })}
               onKeyPress={$((e: any) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("se_Provincia_MERCADERIA_IN") as HTMLSelectElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('se_Provincia_MERCADERIA_IN') as HTMLSelectElement)?.focus();
                 }
               })}
             />
@@ -173,29 +174,29 @@ export default component$((props: { elUbi: any }) => {
         <div class="form-control">
           <div class="form-control form-agrupado">
             <ElSelect
-              id={"se_Provincia_UBIGEO_SUNAT"}
+              id={'se_Provincia_UBIGEO_SUNAT'}
               valorSeleccionado={definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.provincia}
               registros={lasProvincias.value}
-              registroID={"_id"}
-              registroTEXT={"provincia"}
-              seleccione={"-- Seleccione provincia --"}
+              registroID={'_id'}
+              registroTEXT={'provincia'}
+              seleccione={'-- Seleccione provincia --'}
               onChange={$(() => {
-                const elSelec = document.getElementById("se_Provincia_UBIGEO_SUNAT") as HTMLSelectElement;
+                const elSelec = document.getElementById('se_Provincia_UBIGEO_SUNAT') as HTMLSelectElement;
                 const elIdx = elSelec.selectedIndex;
                 definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idProvincia = elSelec[elIdx].id;
-                if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idProvincia === "") {
-                  definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.provincia = "";
+                if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idProvincia === '') {
+                  definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.provincia = '';
                 } else {
                   definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.provincia = elSelec.value;
                   obtenerDistritos(definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idProvincia);
                 }
-                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito = "";
-                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito = "";
-                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.ubigeo = "";
+                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito = '';
+                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito = '';
+                definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.ubigeo = '';
               })}
               onKeyPress={$((e: any) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("se_Distrito_UBIGEO_SUNAT") as HTMLSelectElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('se_Distrito_UBIGEO_SUNAT') as HTMLSelectElement)?.focus();
                 }
               })}
             />
@@ -205,31 +206,31 @@ export default component$((props: { elUbi: any }) => {
         <div class="form-control">
           <div class="form-control form-agrupado">
             <ElSelect
-              id={"se_Distrito_UBIGEO_SUNAT"}
+              id={'se_Distrito_UBIGEO_SUNAT'}
               valorSeleccionado={definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito}
               registros={losDistritos.value}
-              registroID={"_id"}
-              registroTEXT={"distrito"}
-              seleccione={"-- Seleccione distrito --"}
+              registroID={'_id'}
+              registroTEXT={'distrito'}
+              seleccione={'-- Seleccione distrito --'}
               onChange={$(() => {
-                const elSelec = document.getElementById("se_Distrito_UBIGEO_SUNAT") as HTMLSelectElement;
+                const elSelec = document.getElementById('se_Distrito_UBIGEO_SUNAT') as HTMLSelectElement;
                 const elIdx = elSelec.selectedIndex;
                 definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito = elSelec[elIdx].id;
-                if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito === "") {
-                  definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito = "";
-                  definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.ubigeo = "";
+                if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito === '') {
+                  definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito = '';
+                  definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.ubigeo = '';
                 } else {
                   definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito = elSelec.value;
                   // obtenerUbigeo()
-                  console.log("definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito", definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito);
+                  console.log('definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito', definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito);
                   const sele: any = losDistritos.value.find((kkk: any) => kkk._id === definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito);
-                  console.log("sele", sele);
+                  console.log('sele', sele);
                   definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.ubigeo = sele.ubigeo;
                 }
               })}
               onKeyPress={$((e: any) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("se_unidad_UBIGEO_SUNAT") as HTMLSelectElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('se_unidad_UBIGEO_SUNAT') as HTMLSelectElement)?.focus();
                 }
               })}
             />
@@ -240,7 +241,7 @@ export default component$((props: { elUbi: any }) => {
           <div class="form-control form-agrupado">
             <input
               id="in_UbigeoSUNAT_GR"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               disabled
               type="text"
               placeholder="Ubigeo"
@@ -249,8 +250,8 @@ export default component$((props: { elUbi: any }) => {
               //   marca.mar = (e.target as HTMLInputElement).value.trim().toUpperCase();
               // }}
               onKeyUp$={(e) => {
-                if (e.key === "Enter") {
-                  document.getElementById("btn_seleccionatUbigeoSUNAT")?.focus();
+                if (e.key === 'Enter') {
+                  document.getElementById('btn_seleccionatUbigeoSUNAT')?.focus();
                 }
               }}
               onFocusin$={(e) => {
@@ -267,19 +268,19 @@ export default component$((props: { elUbi: any }) => {
           value="Seleccionar" //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
           onClick$={() => {
-            if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.departamento.trim() === "") {
-              alert("Seleccione el departamento");
-              document.getElementById("se_Departamento_UBIGEO_SUNAT")?.focus();
+            if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.departamento.trim() === '') {
+              alert('Seleccione el departamento');
+              document.getElementById('se_Departamento_UBIGEO_SUNAT')?.focus();
               return;
             }
-            if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.provincia.trim() === "") {
-              alert("Seleccione la provincia");
-              document.getElementById("se_Provincia_UBIGEO_SUNAT")?.focus();
+            if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.provincia.trim() === '') {
+              alert('Seleccione la provincia');
+              document.getElementById('se_Provincia_UBIGEO_SUNAT')?.focus();
               return;
             }
-            if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito.trim() === "") {
-              alert("Seleccione el distrito");
-              document.getElementById("se_Distrito_UBIGEO_SUNAT")?.focus();
+            if (definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito.trim() === '') {
+              alert('Seleccione el distrito');
+              document.getElementById('se_Distrito_UBIGEO_SUNAT')?.focus();
               return;
             }
             props.elUbi.idDepartamento = definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDepartamento;
@@ -296,18 +297,12 @@ export default component$((props: { elUbi: any }) => {
       </div>
       {/* </Form> */}
       {/* MOSTRAR SPINNER */}
-      {/* {mostrarSpinner.value && (
-        <div
-          class="modal"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+
+      {mostrarSpinner.value && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>
-      )} */}
+      )}
     </div>
   );
 });

@@ -16,7 +16,7 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
   // let ctx: any = [];
   let documento: any = [];
   switch (props.contexto) {
-    case 'orden servicio':
+    case 'orden_servicio':
       console.log('contexto::: orden servicio');
       // ctx = useContext(CTX_DOCS_ORDEN_SERVICIO);
       documento = useContext(CTX_O_S).servicios;
@@ -142,12 +142,7 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
           value="Grabar "
           class="btn-centro"
           onClick$={() => {
-            console.log(
-              'props.serviSelecci - props.porcentaje.$numberDecimal -  precio.value',
-              props.serviSelecci,
-              parseFloat(props.porcentaje),
-              precio.value
-            );
+            console.log('props.serviSelecci - props.porcentaje.$numberDecimal -  precio.value', props.serviSelecci, parseFloat(props.porcentaje), precio.value);
             // let tipoImpuesto = 'IGV';
             // documento.itemsVenta.push({
             documento.push({

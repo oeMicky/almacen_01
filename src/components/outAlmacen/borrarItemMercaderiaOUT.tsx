@@ -1,7 +1,7 @@
-import { $, component$, useContext } from "@builder.io/qwik";
-import { CTX_NEW_OUT_ALMACEN } from "./newOutAlmacen";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
+import { $, component$, useContext } from '@builder.io/qwik';
+import { CTX_NEW_OUT_ALMACEN } from './newOutAlmacen';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
 
 export default component$((props: { borrarItemMerca: any }) => {
   //#region CONTEXTO
@@ -11,15 +11,16 @@ export default component$((props: { borrarItemMerca: any }) => {
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 600px)",
+        width: 'clamp(330px, 86%, 400px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
+        // background: '#eee',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -34,19 +35,20 @@ export default component$((props: { borrarItemMerca: any }) => {
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: "10px" }}>
-          ¿Desea eliminar el ítem?
-          <div>
+        <div style={{ marginBottom: '8px' }}>
+          <label>¿Desea eliminar el ítem?</label>
+          <br />
+          <p>
             {/* <label>{cerosALaIzquierda(props.borrarItemMerca.item, 3)}</label>
             <br /> */}
             <label>{props.borrarItemMerca.codigo}</label>
             <br />
             <label>{props.borrarItemMerca.descripcion}</label>
             <br />
-          </div>
-          <div style={{ display: "flex", marginTop: "5px", justifyContent: "space-around", alignItems: "center" }}>
+          </p>
+          <div style={{ display: 'flex', marginTop: '4px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
-              style={{ width: "60px" }}
+              style={{ width: '60px' }}
               onClick$={() => {
                 // borrar_idAuxiliar = props.borrarItemMerca.idAuxiliar;
                 // console.log('- documentos', documentos);
@@ -61,7 +63,7 @@ export default component$((props: { borrarItemMerca: any }) => {
               SI
             </button>
             <button
-              style={{ width: "60px" }}
+              style={{ width: '60px' }}
               onClick$={() => {
                 ctx_new_out_almacen.mostrarPanelDeleteItemMercaderiaOUT = false;
               }}

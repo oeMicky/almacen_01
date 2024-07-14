@@ -1,5 +1,4 @@
 import {
-  $,
   component$,
   createContextId,
   useContextProvider,
@@ -19,10 +18,10 @@ import AddVenta from '~/components/venta/addVenta';
 import { getIgvVenta } from '~/apis/venta.api';
 // import style from './index.css?inline';
 import { parametrosGlobales } from '../../login/index';
-// import ElSelect from '~/components/system/elSelect';
+// import ElSelect from '~/components/system/elSelect';  formatoDDMMYYYY_PEN
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
-import { cerosALaIzquierda, formatoDDMMYYYY_PEN, hoy } from '~/functions/comunes';
+import { cerosALaIzquierda, hoy, menosXdiasHoy } from '~/functions/comunes';
 // import pdfReporteVenta from '~/reports/MG/pdfReporteVenta';
 
 // import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
@@ -59,6 +58,7 @@ export default component$(() => {
 
   //#region DEFINICION CTX_INDEX_VENTA
   const definicion_CTX_INDEX_VENTA = useStore({
+    buscarVentas: 0,
     miscVts: [],
 
     mostrarPanelVenta: false,
@@ -76,7 +76,7 @@ export default component$(() => {
 
   //#region INICIALIZACION
   const ini = useSignal(0);
-  const buscarVentas = useSignal(0);
+  // const buscarVentas = useSignal(0);
   const igv = useSignal(0);
   // const xmlDoc = useSignal<any>();
 
@@ -172,7 +172,7 @@ export default component$(() => {
     // console.log('0 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
     // const BO = definicion_CTX_INDEX_VENTA.grabo_Venta;
     if (definicion_CTX_INDEX_VENTA.grabo_Venta) {
-      buscarVentas.value++;
+      definicion_CTX_INDEX_VENTA.buscarVentas++;
       // console.log('1 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
       definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
       definicion_CTX_INDEX_VENTA.grabo_Venta = false;
@@ -182,29 +182,29 @@ export default component$(() => {
   //#endregion REFRESCAR REGISTROS
 
   //#region CREAR Y DOWNLOAD TXT
-  const createAndDownloadFile = $((nameFile: string, texto: string) => {
-    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
-    // const texto = 'hOLA A TODOS';
+  // const createAndDownloadFile = $((nameFile: string, texto: string) => {
+  //   // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+  //   // const texto = 'hOLA A TODOS';
 
-    const filename = nameFile; ///'file.xml';
-    const pom = document.createElement('a');
-    const bb = new Blob([texto], { type: 'text/plain' });
+  //   const filename = nameFile; ///'file.xml';
+  //   const pom = document.createElement('a');
+  //   const bb = new Blob([texto], { type: 'text/plain' });
 
-    pom.setAttribute('href', window.URL.createObjectURL(bb));
-    // pom.setAttribute('download', filename);
-    pom.setAttribute('download', filename + '.txt');
+  //   pom.setAttribute('href', window.URL.createObjectURL(bb));
+  //   // pom.setAttribute('download', filename);
+  //   pom.setAttribute('download', filename + '.txt');
 
-    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
-    pom.draggable = true;
-    pom.classList.add('dragout');
+  //   pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+  //   pom.draggable = true;
+  //   pom.classList.add('dragout');
 
-    pom.click();
+  //   pom.click();
 
-    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
-    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
-    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-    console.log('first txt');
-  });
+  //   // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+  //   // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+  //   // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+  //   console.log('first txt');
+  // });
   //#endregion CREAR Y DOWNLOAD TXT
 
   return (
@@ -367,7 +367,18 @@ export default component$(() => {
             definicion_CTX_INDEX_VENTA.mostrarPanelVenta = true;
           })}
         /> */}
-        <input id="in_laFechaHoyVenta" type="date" disabled value={hoy()} style={{ marginLeft: '4px' }} />
+        <input
+          id="in_laFechaHoyVenta"
+          type="date"
+          max={hoy()}
+          min={menosXdiasHoy(2)}
+          value={parametrosBusqueda.fechaInicio}
+          style={{ marginLeft: '4px' }}
+          onChange$={(e) => {
+            parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
+            parametrosBusqueda.fechaFinal = (e.target as HTMLInputElement).value;
+          }}
+        />
         {/*   <input id="in_laFechaHoyVenta" type="date" disabled value={'2024-04-09'} style={{ marginLeft: '4px' }} />*/}
         <input
           type="image"
@@ -376,11 +387,23 @@ export default component$(() => {
           src={images.searchPLUS}
           style={{ marginLeft: '2px' }}
           onClick$={() => {
-            buscarVentas.value++;
+            definicion_CTX_INDEX_VENTA.buscarVentas++;
 
             definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
           }}
         />
+        {/* <button onClick$={() => alert(Date())}>hora actual</button>
+        <button
+          onClick$={() => {
+            const d = new Date();
+            alert(cerosALaIzquierda(d.getHours(), 2) + ':' + cerosALaIzquierda(d.getMinutes(), 2) + ':' + cerosALaIzquierda(d.getSeconds(), 2));
+          }}
+        >
+          hora
+        </button>
+        <button onClick$={() => alert(Date())}>minuto</button>
+        <button onClick$={() => alert(Date())}>segundo</button> */}
+        {/* <button onClick$={() => alert(definicion_CTX_INDEX_VENTA.buscarVentas)}>buscarVentas</button> */}
         {/* <ElSelect
           id="se_periodo_VENTA"
           estilos={{ width: '114px', marginLeft: '5px' }}
@@ -429,7 +452,7 @@ export default component$(() => {
             definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
           }}
         />*/}
-        <input
+        {/* <input
           type="button"
           value="pre PLE"
           title="PLE de ventas"
@@ -536,7 +559,7 @@ export default component$(() => {
             // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
             createAndDownloadFile('elPLE_VENTA_' + periodo.periodo, aExportar);
           }}
-        />
+        /> */}
         {definicion_CTX_INDEX_VENTA.mostrarPanelVenta && (
           <div class="modal">
             <AddVenta addPeriodo={periodo} igv={igv.value} addPeriodoAnterior={periodoAnterior} />
@@ -564,10 +587,10 @@ export default component$(() => {
         /> */}
       </div>
       {/* TABLA VENTAS */}
-      <div id="ventassss" style={{ margin: '10px 0' }}>
-        {buscarVentas.value > 0 ? (
+      <div id="ventassss" style={{ margin: '8px 0' }}>
+        {definicion_CTX_INDEX_VENTA.buscarVentas > 0 ? (
           <TablaVentas
-            buscarVentas={buscarVentas.value}
+            // buscarVentas={buscarVentas.value}
             parametrosBusqueda={parametrosBusqueda}
             facturacionElectronica={parametrosGlobales.facturacionElectronica}
           />

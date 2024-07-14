@@ -1,7 +1,7 @@
-import { $, component$, useContext } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from "./newEditOrdenProduccion";
+import { $, component$, useContext } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from './newEditOrdenProduccion';
 // import { CTX_NEW_EDIT_ORDEN_SERVICIO } from './newEditOrdenServicio';
 
 export default component$((props: { borrarManufactura: any }) => {
@@ -12,15 +12,16 @@ export default component$((props: { borrarManufactura: any }) => {
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 420px)",
+        width: 'clamp(330px, 86%, 420px)',
         //  width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
+        background: '#eee',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -35,7 +36,7 @@ export default component$((props: { borrarManufactura: any }) => {
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
-        <div style={{ marginBottom: "10px" }}>
+        <div style={{ marginBottom: '10px' }}>
           ¿Desea eliminar la manufactura?
           <div>
             {/* <label>{cerosALaIzquierda(props.borrarItemMerca.item, 3)}</label>
@@ -46,9 +47,9 @@ export default component$((props: { borrarManufactura: any }) => {
             <br />
           </div>
           <br />
-          <div style={{ display: "flex", marginTop: "4px", justifyContent: "space-around", alignItems: "center" }}>
+          <div style={{ display: 'flex', marginTop: '4px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
-              style={{ width: "60px" }}
+              style={{ width: '60px' }}
               onClick$={() => {
                 ctx_new_edit_orden_produccion.borrar_idAuxiliarManufactura = props.borrarManufactura.idAuxiliar;
                 ctx_new_edit_orden_produccion.borrar_idManufacturaOP = props.borrarManufactura._id;
@@ -58,7 +59,7 @@ export default component$((props: { borrarManufactura: any }) => {
               SI
             </button>
             <button
-              style={{ width: "60px" }}
+              style={{ width: '60px' }}
               onClick$={() => {
                 ctx_new_edit_orden_produccion.mostrarPanelBorrarManufacturaOP = false;
               }}

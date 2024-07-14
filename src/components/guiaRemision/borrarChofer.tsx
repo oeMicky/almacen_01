@@ -10,7 +10,7 @@ export default component$((props: { borrarChofer: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 600px)',
+        width: 'clamp(330px, 86%, 370px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -19,6 +19,16 @@ export default component$((props: { borrarChofer: any }) => {
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('borrarChofer', props.borrarChofer);
+          })}
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -34,17 +44,16 @@ export default component$((props: { borrarChofer: any }) => {
       <div class="add-form">
         {/* ENCABEZADO */}
         <div style={{ marginBottom: '8px' }}>
-          ¿Desea eliminar el documento?
-          <div>
-            <label>{props.borrarChofer.descripcionTCP}</label>
+          <label>¿Desea eliminar el chofer?</label>
+          <br />
+          <p>
+            <label>{props.borrarChofer.numeroIdentidad}</label>
             <br />
-            <label>{props.borrarChofer.fecha}</label>
+            <label>{props.borrarChofer.razonSocialNombre}</label>
             <br />
-            <label>{props.borrarChofer.serie}</label>
+            <label>{props.borrarChofer.licencia}</label>
             <br />
-            <label>{props.borrarChofer.numero}</label>
-            <br />
-          </div>
+          </p>
           <div style={{ display: 'flex', marginTop: '4px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
               style={{ width: '60px' }}

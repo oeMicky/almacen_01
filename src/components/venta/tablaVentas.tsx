@@ -1,4 +1,4 @@
-import { $, component$, Resource, useContext, useResource$, useSignal, useStyles$, useTask$ } from "@builder.io/qwik";
+import { $, component$, Resource, useContext, useResource$, useSignal, useStyles$, useTask$ } from '@builder.io/qwik';
 import {
   cerosALaIzquierda,
   formatoDDMMYYYY_PEN,
@@ -6,26 +6,26 @@ import {
   // formatoYYYY_MM_DD_PEN,
   // redondeo2Decimales,
   // redondeo6Decimales,
-} from "~/functions/comunes";
-import { images } from "~/assets";
+} from '~/functions/comunes';
+import { images } from '~/assets';
 // import styles from '../../components/tabla.css?inline';
-import style from "../tabla/tabla.css?inline";
+import style from '../tabla/tabla.css?inline';
 // import ImgButton from '../system/imgButton';
 // import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
 // import pdfVentaMG from '~/reports/pdfVentaMG';
-import pdfVentaMG from "~/reports/MG/pdfVentaMG";
-import type { IReporteVenta, IVenta } from "~/interfaces/iVenta";
-import { CTX_INDEX_VENTA } from "~/routes/(ventas)/venta";
-import { parametrosGlobales } from "~/routes/login";
-import { descargaArchivoVenta } from "~/apis/venta.api";
+import pdfVentaMG from '~/reports/MG/pdfVentaMG';
+import type { IReporteVenta, IVenta } from '~/interfaces/iVenta';
+import { CTX_INDEX_VENTA } from '~/routes/(ventas)/venta';
+import { parametrosGlobales } from '~/routes/login';
+import { descargaArchivoVenta, reenviarDocumentoVenta } from '~/apis/venta.api';
 
 // interface IEstructura {
 //   _id: string;
 //   especie: string;
-//   numero: number;
+//   numero: number;   buscarVentas: number;
 // }
 
-export default component$((props: { buscarVentas: number; parametrosBusqueda: any; facturacionElectronica: boolean }) => {
+export default component$((props: { parametrosBusqueda: any; facturacionElectronica: boolean }) => {
   // console.log('🎫🎫🎫🎫🎫🎫');
   useStyles$(style);
 
@@ -46,7 +46,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
   //#region VER PDF
   const verPDF = $((venta: any) => {
     // console.log('a pdfFactura98', venta.untrackedValue); //venta !== null &&
-    if (typeof venta.untrackedValue !== "undefined") {
+    if (typeof venta.untrackedValue !== 'undefined') {
       // console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', venta.untrackedValue);
       // pdfFactura98(venta.untrackedValue);
       pdfVentaMG(venta.untrackedValue);
@@ -63,21 +63,22 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
 
   //#region BUSCANDO REGISTROS
   const lasVentas = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    console.log("tablaVentas ->->-> parameBusqueda", props.parametrosBusqueda);
-    track(() => props.buscarVentas.valueOf());
+    console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
+    // track(() => props.buscarVentas.valueOf());
+    track(() => ctx_index_venta.buscarVentas);
 
     // console.log('props.buscarVentas.valueOf', props.buscarVentas.valueOf());
     // if (props.buscarVentas.valueOf()) {
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
     // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorPeriodo`, {
     // const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/obtenerVentasPorFechas`, {
     // const res = await fetch(`https://backendalmacen-production.up.railway.app/api/venta/obtenerVentasPorFechas`, {
     const res = await fetch(`${import.meta.env.VITE_URL}/api/venta/reporteVentasPorFechas`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(props.parametrosBusqueda),
       signal: abortController.signal,
@@ -305,18 +306,18 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
       <Resource
         value={lasVentas}
         onPending={() => {
-          console.log("onPending 🍉🍉🍉🍉");
+          console.log('onPending 🍉🍉🍉🍉');
           //
           return <div>Cargando...</div>;
         }}
         onRejected={() => {
-          console.log("onRejected 🍍🍍🍍🍍");
+          console.log('onRejected 🍍🍍🍍🍍');
           // props.buscarVentas = false;
           ctx_index_venta.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ventas) => {
-          console.log("onResolved 🍓🍓🍓🍓", ventas);
+          console.log('onResolved 🍓🍓🍓🍓', ventas);
           const { data } = ventas; //{ status, data, message }
           const misVentas: IReporteVenta[] = data;
           ctx_index_venta.miscVts = misVentas;
@@ -327,7 +328,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
             <>
               {misVentas.length > 0 ? (
                 <>
-                  <table class="tabla-venta" style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                  <table class="tabla-venta" style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
                         <th>Item</th>
@@ -352,7 +353,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                         let tot = 0;
 
                         efec =
-                          venta.metodoPago === "CONTADO" ? (venta.todoEnEfectivo ? venta.totalPEN.$numberDecimal : venta.montoEnEfectivo.$numberDecimal) : 0;
+                          venta.metodoPago === 'CONTADO' ? (venta.todoEnEfectivo ? venta.totalPEN.$numberDecimal : venta.montoEnEfectivo.$numberDecimal) : 0;
                         //  venta.totalPEN.$numberDecimal ? venta.totalPEN.$numberDecimal : venta.totalPEN;
                         otro = venta.montoOtroMedioPago.$numberDecimal;
                         tot = venta.totalPEN.$numberDecimal ? venta.totalPEN.$numberDecimal : venta.totalPEN;
@@ -377,27 +378,27 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                               {indexItem}
                             </td>
                             <td data-label="Nro. Doc" class="comoCadena">
-                              {venta.clienteVentasVarias ? "-" : venta.tipoDocumentoIdentidad + ": " + venta.numeroIdentidad}
+                              {venta.clienteVentasVarias ? '-' : venta.tipoDocumentoIdentidad + ': ' + venta.numeroIdentidad}
                             </td>
                             <td data-label="Cliente" class="comoCadena">
-                              {venta.clienteVentasVarias ? "Cliente ventas varias" : venta.razonSocialNombre}
+                              {venta.clienteVentasVarias ? 'Cliente ventas varias' : venta.razonSocialNombre}
                             </td>
                             <td data-label="Fecha" class="comoCadena">
                               {formatoDDMMYYYY_PEN(venta.fecha)}
                             </td>
                             <td data-label="Ser-Nro" class="comoCadena">
-                              {venta.serie + " - " + cerosALaIzquierda(venta.numero, 8)}
+                              {venta.serie + ' - ' + cerosALaIzquierda(venta.numero, 8)}
                             </td>
                             <td data-label="Importe" class="comoNumero">
-                              {venta.moneda === "PEN"
-                                ? parseFloat(venta.totalPEN.$numberDecimal).toLocaleString("en-PE", {
+                              {venta.moneda === 'PEN'
+                                ? parseFloat(venta.totalPEN.$numberDecimal).toLocaleString('en-PE', {
                                     // style: 'currency',
-                                    currency: "PEN",
+                                    currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })
-                                : parseFloat(venta.totalUSD.$numberDecimal).toLocaleString("en-US", {
+                                : parseFloat(venta.totalUSD.$numberDecimal).toLocaleString('en-US', {
                                     // style: 'currency',
-                                    currency: "PEN",
+                                    currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })}
                             </td>
@@ -408,60 +409,83 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                               {venta.metodoPago}
                             </td>
                             <td data-label="Efectivo" class="comoNumero">
-                              {venta.metodoPago === "CONTADO"
+                              {venta.metodoPago === 'CONTADO'
                                 ? venta.todoEnEfectivo
-                                  ? parseFloat(venta.totalPEN.$numberDecimal).toLocaleString("en-PE", {
+                                  ? parseFloat(venta.totalPEN.$numberDecimal).toLocaleString('en-PE', {
                                       // style: 'currency',
-                                      currency: "PEN",
+                                      currency: 'PEN',
                                       minimumFractionDigits: 2,
                                     })
-                                  : parseFloat(venta.montoEnEfectivo.$numberDecimal).toLocaleString("en-PE", {
+                                  : parseFloat(venta.montoEnEfectivo.$numberDecimal).toLocaleString('en-PE', {
                                       // style: 'currency',
-                                      currency: "PEN",
+                                      currency: 'PEN',
                                       minimumFractionDigits: 2,
                                     })
-                                : ""}
+                                : ''}
                             </td>
                             <td data-label="O. M. Pago" class="comoCadena">
-                              {venta.metodoPago === "CONTADO" ? (venta.todoEnEfectivo ? "" : venta.otroMedioPago) : ""}
+                              {venta.metodoPago === 'CONTADO' ? (venta.todoEnEfectivo ? '' : venta.otroMedioPago) : ''}
                             </td>
                             <td data-label="Monto O. M. Pago" class="comoNumero">
-                              {parseFloat(venta.montoOtroMedioPago.$numberDecimal).toLocaleString("en-PE", {
+                              {parseFloat(venta.montoOtroMedioPago.$numberDecimal).toLocaleString('en-PE', {
                                 // style: 'currency',
-                                currency: "PEN",
+                                currency: 'PEN',
                                 minimumFractionDigits: 2,
                               })}
                             </td>
                             <td data-label="Acciones" class="acciones">
-                              <input
-                                // id="in_BuscarDetraccion"
-                                type="image"
-                                src={images.pdf}
-                                title="Ver pdf"
-                                height={14}
-                                width={14}
-                                style={{ marginRight: "4px" }}
-                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
-                                onClick$={async () => {
-                                  // ventaSeleccionada.value = venta;
-                                  // clickPDF.value++;
-                                  const DescarArchi = await descargaArchivoVenta({
-                                    idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                                    idEmpresa: parametrosGlobales.idEmpresa,
-                                    idVenta: venta._id,
-                                    tipo: "PDF",
-                                  });
-                                  console.log("DescarArchi", DescarArchi);
-                                  console.log("DescarArchi.data.archivo", DescarArchi.data.archivo);
+                              {venta.proveedor_estatus ? (
+                                <input
+                                  // id="in_BuscarDetraccion"
+                                  type="image"
+                                  src={images.pdf}
+                                  title="Ver pdf"
+                                  height={14}
+                                  width={14}
+                                  style={{ marginRight: '4px' }}
+                                  // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                  onClick$={async () => {
+                                    ctx_index_venta.mostrarSpinner = true;
+                                    // ventaSeleccionada.value = venta;
+                                    // clickPDF.value++;
+                                    const DescarArchi = await descargaArchivoVenta({
+                                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                      idEmpresa: parametrosGlobales.idEmpresa,
+                                      idVenta: venta._id,
+                                      tipo: 'PDF',
+                                    });
+                                    console.log('DescarArchi', DescarArchi);
+                                    console.log('DescarArchi.data.archivo', DescarArchi.data.archivo);
 
-                                  const linkSource = `data:application/pdf;base64,${DescarArchi.data.archivo}`;
-                                  const downloadLink = document.createElement("a");
-                                  const fileName = "abc.pdf";
-                                  downloadLink.href = linkSource;
-                                  downloadLink.download = fileName;
-                                  downloadLink.click();
-                                }}
-                              />
+                                    const linkSource = `data:application/pdf;base64,${DescarArchi.data.archivo}`;
+                                    const downloadLink = document.createElement('a');
+                                    const fileName = 'abc.pdf';
+                                    downloadLink.href = linkSource;
+                                    downloadLink.download = fileName;
+                                    downloadLink.click();
+                                    ctx_index_venta.mostrarSpinner = false;
+                                  }}
+                                />
+                              ) : (
+                                <input
+                                  type="image"
+                                  src={images.resendEmail}
+                                  title="Reenviar documento"
+                                  height={14}
+                                  width={14}
+                                  style={{ marginRight: '4px' }}
+                                  onClick$={async () => {
+                                    ctx_index_venta.mostrarSpinner = true;
+                                    await reenviarDocumentoVenta({
+                                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                      idEmpresa: parametrosGlobales.idEmpresa,
+                                      idVenta: venta._id,
+                                    });
+                                    ctx_index_venta.buscarVentas++;
+                                    // ctx_index_venta.mostrarSpinner = false;
+                                  }}
+                                />
+                              )}
                             </td>
                           </tr>
                         );
@@ -469,30 +493,30 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colSpan={5} class="comoNumero" style={{ color: "#2E1800" }}>
+                        <td colSpan={5} class="comoNumero" style={{ color: '#2E1800' }}>
                           TOTALES PEN
                         </td>
-                        <td class="comoNumero" style={{ color: "#2E1800" }}>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {/* {suma_TOTAL_IMPORTE_PEN} */}
-                          {`${suma_TOTAL_IMPORTE_PEN.toLocaleString("en-PE", {
+                          {`${suma_TOTAL_IMPORTE_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
-                            currency: "PEN",
+                            currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td colSpan={2} class="comoCadena" style={{ color: "#2E1800" }}></td>
-                        <td class="comoNumero" style={{ color: "#2E1800" }}>
-                          {`${suma_TOTAL_EFECTIVO_PEN.toLocaleString("en-PE", {
+                        <td colSpan={2} class="comoCadena" style={{ color: '#2E1800' }}></td>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
+                          {`${suma_TOTAL_EFECTIVO_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
-                            currency: "PEN",
+                            currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
                         <td class="comoNumero"></td>
-                        <td class="comoNumero" style={{ color: "#2E1800" }}>
-                          {`${suma_TOTAL_OTROMONTO_PEN.toLocaleString("en-PE", {
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
+                          {`${suma_TOTAL_OTROMONTO_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
-                            currency: "PEN",
+                            currency: 'PEN',
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
@@ -503,7 +527,7 @@ export default component$((props: { buscarVentas: number; parametrosBusqueda: an
                 </>
               ) : (
                 <div>
-                  <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                  <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
                 </div>
               )}
             </>

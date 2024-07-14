@@ -1,11 +1,11 @@
-import { $, component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from "./newEditOrdenProduccion";
-import { loadParametrosManufactura } from "~/apis/parametrosManufactura.api";
-import { parametrosGlobales } from "~/routes/login";
-import { CTX_ADD_MANUFACTURA } from "./addManufactura";
-import { redondeo6Decimales } from "~/functions/comunes";
+import { $, component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from './newEditOrdenProduccion';
+import { loadParametrosManufactura } from '~/apis/parametrosManufactura.api';
+import { parametrosGlobales } from '~/routes/login';
+import { CTX_ADD_MANUFACTURA } from './addManufactura';
+import { redondeo6Decimales } from '~/functions/comunes';
 // import TablaManufacturasUnitarias from "../parametrosManufactura/tablaManufacturasUnitarias";
 
 export default component$(() => {
@@ -28,9 +28,9 @@ export default component$(() => {
       idEmpresa: parametrosGlobales.idEmpresa,
     });
     parametros = parametros.data;
-    console.log("para Manufaurta TTT", parametros);
+    console.log('para Manufaurta TTT', parametros);
     lasMS.value = parametros[0].manufacturasUnitarias;
-    console.log("para Manufaurta lasMS.value", lasMS.value);
+    console.log('para Manufaurta lasMS.value', lasMS.value);
     // const cross = parametros.data;
     // console.log("para Manufactura", cross);
     // definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.idParametrosManufactura = cross[0]._id;
@@ -51,15 +51,16 @@ export default component$(() => {
   return (
     <div
       style={{
-        width: "clamp(330px, 96%, 600px)",
+        width: 'clamp(330px, 96%, 600px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
+        background: '#eee',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -72,13 +73,13 @@ export default component$(() => {
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: "10px", fontSize: "0.9rem" }}>Seleccionar manufactura standarizada</h3>
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Seleccionar manufactura standarizada</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
         {lasMS.value.length > 0 ? (
           <>
-            <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+            <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
               <thead>
                 <tr>
                   <th>Manufactura unitaria</th>
@@ -99,32 +100,32 @@ export default component$(() => {
                       </td>
                       <td data-label="Tiempo manufactura unitaria x hora" class="comoNumero">
                         {manuUnit.tiempoManufacturaUnitariaPorHora
-                          ? parseFloat(manuUnit.tiempoManufacturaUnitariaPorHora.$numberDecimal).toLocaleString("en-PE", {
+                          ? parseFloat(manuUnit.tiempoManufacturaUnitariaPorHora.$numberDecimal).toLocaleString('en-PE', {
                               // style: 'currency',
-                              currency: "PEN",
+                              currency: 'PEN',
                               minimumFractionDigits: 2,
                             })
-                          : ""}
+                          : ''}
                       </td>
                       <td data-label="Total costos directos PEN" class="comoNumero">
                         {manuUnit.totalCostosDirectos
-                          ? parseFloat(manuUnit.totalCostosDirectos.$numberDecimal).toLocaleString("en-PE", {
+                          ? parseFloat(manuUnit.totalCostosDirectos.$numberDecimal).toLocaleString('en-PE', {
                               // style: 'currency',
-                              currency: "PEN",
+                              currency: 'PEN',
                               minimumFractionDigits: 2,
                             })
-                          : ""}
+                          : ''}
                       </td>
                       <td data-label="Costo manufactura unitaria PEN" class="comoNumero">
                         {manuUnit.totalCostosDirectos
                           ? (
                               parseFloat(manuUnit.tiempoManufacturaUnitariaPorHora.$numberDecimal) * parseFloat(manuUnit.totalCostosDirectos.$numberDecimal)
-                            ).toLocaleString("en-PE", {
+                            ).toLocaleString('en-PE', {
                               // style: 'currency',
-                              currency: "PEN",
+                              currency: 'PEN',
                               minimumFractionDigits: 2,
                             })
-                          : ""}
+                          : ''}
                       </td>
                       <td data-label="Acciones" class="acciones">
                         <input
@@ -134,7 +135,7 @@ export default component$(() => {
                           title="Seleccionar manufactura standarizada"
                           height={14}
                           width={14}
-                          style={{ marginRight: "8px" }}
+                          style={{ marginRight: '8px' }}
                           onClick$={() => {
                             add.descripcion = manuUnit.manufacturaUnitaria;
                             add.costoUnitarioPEN = redondeo6Decimales(
@@ -158,7 +159,7 @@ export default component$(() => {
           </>
         ) : (
           <div>
-            <i style={{ fontSize: "0.8rem" }}>No se encontraron manufacturas unitarias</i>
+            <i style={{ fontSize: '0.8rem' }}>No se encontraron manufacturas unitarias</i>
           </div>
         )}
         <br />

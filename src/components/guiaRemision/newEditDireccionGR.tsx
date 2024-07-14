@@ -1,49 +1,40 @@
-import {
-  $,
-  component$,
-  createContextId,
-  useContext,
-  useContextProvider,
-  // useSignal,
-  useStore,
-} from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_BUSCAR_DIRECCION_GR } from "./buscarDireccionGR";
-import SeleccionarUbigeoSUNAT from "./seleccionarUbigeoSUNAT";
-import { parametrosGlobales } from "~/routes/login";
-import Spinner from "../system/spinner";
-import { inUpDireccionGR } from "~/apis/guiaRemision.api";
-// import Spinner from "../system/spinner";
+import { $, component$, createContextId, useContext, useContextProvider, useStore } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_BUSCAR_DIRECCION_GR } from './buscarDireccionGR';
+import SeleccionarUbigeoSUNAT from './seleccionarUbigeoSUNAT';
+import { parametrosGlobales } from '~/routes/login';
+// import Spinner from '../system/spinner';
+import { inUpDireccionGR } from '~/apis/guiaRemision.api';
 
-export const CTX_NEW_EDIT_DIRECCION_GR = createContextId<any>("__new_edit_direccion_gr");
+export const CTX_NEW_EDIT_DIRECCION_GR = createContextId<any>('__new_edit_direccion_gr');
 
 export default component$((props: { dGR: any }) => {
   //#region definicion_CTX_NEW_EDIT_DIRECCION_GR
   const definicion_CTX_NEW_EDIT_DIRECCION_GR = useStore({
     mostrarPanelSeleccionarUbigeoSUNAT: false,
 
-    mostrarSpinner: false,
+    // mostrarSpinner: false,
   });
   useContextProvider(CTX_NEW_EDIT_DIRECCION_GR, definicion_CTX_NEW_EDIT_DIRECCION_GR);
   //#endregion definicion_CTX_NEW_EDIT_DIRECCION_GR
 
   //#region definicion_CTX_DIRECCION_GR
   const definicion_CTX_DIRECCION_GR = useStore({
-    _id: props.dGR._id ? props.dGR._id : "",
+    _id: props.dGR._id ? props.dGR._id : '',
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
 
-    direccion: props.dGR.direccion ? props.dGR.direccion : "",
+    direccion: props.dGR.direccion ? props.dGR.direccion : '',
 
-    idDepartamento: props.dGR.idDepartamento ? props.dGR.idDepartamento : "",
-    departamento: props.dGR.departamento ? props.dGR.departamento : "",
-    idProvincia: props.dGR.idProvincia ? props.dGR.idProvincia : "",
-    provincia: props.dGR.provincia ? props.dGR.provincia : "",
-    idDistrito: props.dGR.idDistrito ? props.dGR.idDistrito : "",
-    distrito: props.dGR.distrito ? props.dGR.distrito : "",
-    ubigeo: props.dGR.ubigeo ? props.dGR.ubigeo : "",
+    idDepartamento: props.dGR.idDepartamento ? props.dGR.idDepartamento : '',
+    departamento: props.dGR.departamento ? props.dGR.departamento : '',
+    idProvincia: props.dGR.idProvincia ? props.dGR.idProvincia : '',
+    provincia: props.dGR.provincia ? props.dGR.provincia : '',
+    idDistrito: props.dGR.idDistrito ? props.dGR.idDistrito : '',
+    distrito: props.dGR.distrito ? props.dGR.distrito : '',
+    ubigeo: props.dGR.ubigeo ? props.dGR.ubigeo : '',
   });
   // useContextProvider(
   //   CTX_DIRECCION_GR,
@@ -62,14 +53,14 @@ export default component$((props: { dGR: any }) => {
 
   //#region GRABAR DIRECCION GR
   const grabarDireccionGR = $(async () => {
-    if (definicion_CTX_DIRECCION_GR.direccion.trim() === "") {
-      alert("Ingrese la dirección");
-      document.getElementById("in_Direccion_GR")?.focus();
+    if (definicion_CTX_DIRECCION_GR.direccion.trim() === '') {
+      alert('Ingrese la dirección');
+      document.getElementById('in_Direccion_GR')?.focus();
       return;
     }
-    if (definicion_CTX_DIRECCION_GR.ubigeo.trim() === "") {
-      alert("Seleccione el ubigeo");
-      document.getElementById("in_UbigeoSUNAT_GR")?.focus();
+    if (definicion_CTX_DIRECCION_GR.ubigeo.trim() === '') {
+      alert('Seleccione el ubigeo');
+      document.getElementById('in_UbigeoSUNAT_GR')?.focus();
       return;
     }
 
@@ -94,7 +85,7 @@ export default component$((props: { dGR: any }) => {
       usuario: parametrosGlobales.usuario,
     });
 
-    console.log("direc.data.direccion", direc.data.direccion);
+    console.log('direc.data.direccion', direc.data.direccion);
     // ctx_buscar_Direccion_GR.conceptoABuscar = direc.data.direccion;
     ctx_buscar_Direccion_GR.conceptoABuscar = definicion_CTX_DIRECCION_GR.direccion;
     // ctx_buscar_Direccion_GR.solo_Direccion = true;
@@ -107,15 +98,15 @@ export default component$((props: { dGR: any }) => {
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 390px)",
+        width: 'clamp(330px, 86%, 390px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
         // background: '#c0c0c0',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.see}
           alt="Icono de ver"
@@ -123,7 +114,7 @@ export default component$((props: { dGR: any }) => {
           width={18}
           title="Ceverrrar el formulario"
           onClick={$(() => {
-            console.log("definicion_CTX_DIRECCION_GR", definicion_CTX_DIRECCION_GR);
+            console.log('definicion_CTX_DIRECCION_GR', definicion_CTX_DIRECCION_GR);
           })}
         />
         <ImgButton
@@ -147,7 +138,7 @@ export default component$((props: { dGR: any }) => {
           <div class="form-control form-agrupado">
             <input
               id="in_Direccion_GR"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               autoFocus
               type="text"
               placeholder="Dirección de Partida / LLegada"
@@ -156,8 +147,8 @@ export default component$((props: { dGR: any }) => {
                 definicion_CTX_DIRECCION_GR.direccion = (e.target as HTMLInputElement).value.trim().toUpperCase();
               }}
               onKeyUp$={(e) => {
-                if (e.key === "Enter") {
-                  document.getElementById("btn_grabar_MARCA_IN")?.focus();
+                if (e.key === 'Enter') {
+                  document.getElementById('btn_grabar_MARCA_IN')?.focus();
                 }
               }}
               // onFocusin$={(e) => {
@@ -171,7 +162,7 @@ export default component$((props: { dGR: any }) => {
           <div class="form-control form-agrupado">
             <input
               id="in_UbigeoSUNAT_GR"
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               disabled
               type="text"
               placeholder="Ubigeo"
@@ -180,8 +171,8 @@ export default component$((props: { dGR: any }) => {
               //   marca.mar = (e.target as HTMLInputElement).value.trim().toUpperCase();
               // }}
               onKeyUp$={(e) => {
-                if (e.key === "Enter") {
-                  document.getElementById("btn_grabar_Direccion_GR")?.focus();
+                if (e.key === 'Enter') {
+                  document.getElementById('btn_grabar_Direccion_GR')?.focus();
                 }
               }}
               onFocusin$={(e) => {
@@ -196,9 +187,9 @@ export default component$((props: { dGR: any }) => {
               alt="buscar"
               height={16}
               width={16}
-              style={{ margin: "0px 4px" }}
+              style={{ margin: '0px 4px' }}
               onClick$={() => {
-                definicion_CTX_NEW_EDIT_DIRECCION_GR.mostrarSpinner = true;
+                // definicion_CTX_NEW_EDIT_DIRECCION_GR.mostrarSpinner = true;
                 // mostrarSpinner.value = true;
                 definicion_CTX_NEW_EDIT_DIRECCION_GR.mostrarPanelSeleccionarUbigeoSUNAT = true;
               }}
@@ -210,7 +201,7 @@ export default component$((props: { dGR: any }) => {
             <SeleccionarUbigeoSUNAT elUbi={definicion_CTX_DIRECCION_GR} />
           </div>
         )}
-        {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción*/}
+        {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción      */}
         <input
           id="btn_grabar_Direccion_GR"
           type="submit"
@@ -224,11 +215,11 @@ export default component$((props: { dGR: any }) => {
       {/* </Form> */}
       {/* MOSTRAR SPINNER */}
       {/* {mostrarSpinner.value && ( */}
-      {definicion_CTX_NEW_EDIT_DIRECCION_GR.mostrarSpinner && (
-        <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      {/* {definicion_CTX_NEW_EDIT_DIRECCION_GR.mostrarSpinner && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>
-      )}
+      )} */}
     </div>
   );
 });

@@ -1,17 +1,17 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore } from "@builder.io/qwik";
-import { images } from "~/assets";
-import { CTX_NEW_OUT_ALMACEN } from "~/components/outAlmacen/newOutAlmacen";
-import ImgButton from "~/components/system/imgButton";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import { images } from '~/assets';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import ImgButton from '~/components/system/imgButton';
 // import TablaOrdenesProduccion from "./tablaOrdenesProduccionTerminados";
-import { parametrosGlobales } from "~/routes/login";
-import { hoy, menosXdiasHoy } from "~/functions/comunes";
-import { CTX_NEW_IN_ALMACEN } from "~/components/inAlmacen/newInAlmacen";
-import TablaOrdenesProduccionTerminados from "./tablaOrdenesProduccionTerminados";
-import RegistroProductosTerminados from "./registroProductosTerminados";
+import { parametrosGlobales } from '~/routes/login';
+import { hoy, menosXdiasHoy } from '~/functions/comunes';
+import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import TablaOrdenesProduccionTerminados from './tablaOrdenesProduccionTerminados';
+import RegistroProductosTerminados from './registroProductosTerminados';
 // import DespachoRequisicionesOP from "./despachoRequisicionesOP";
 // import ReingresoRequisicionesOP from "./reingresoRequisicionesOP";
 
-export const CTX_BUSCAR_ORDEN_PRODUCCION_TERMINADO = createContextId<any>("buscar_orden_produccion_terminado_");
+export const CTX_BUSCAR_ORDEN_PRODUCCION_TERMINADO = createContextId<any>('buscar_orden_produccion_terminado_');
 
 export default component$((props: { contexto: string; motivo: string; igv: number }) => {
   //#region DEFINICIO CTX_BUSCAR_ORDEN_PRODUCCION_TERMINADO
@@ -25,10 +25,10 @@ export default component$((props: { contexto: string; motivo: string; igv: numbe
   //#region CONTEXTO
   let ctx: any = [];
   switch (props.contexto) {
-    case "egreso_de_almacen":
+    case 'egreso_de_almacen':
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
-    case "ingreso_a_almacen":
+    case 'ingreso_a_almacen':
       ctx = useContext(CTX_NEW_IN_ALMACEN);
       break;
   }
@@ -50,14 +50,14 @@ export default component$((props: { contexto: string; motivo: string; igv: numbe
     <div
       class="container-modal"
       style={{
-        width: "clamp(330px, 86%, 800px)",
+        width: 'clamp(330px, 86%, 800px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
       }}
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -81,12 +81,12 @@ export default component$((props: { contexto: string; motivo: string; igv: numbe
       </div>
       {/* TITULO */}
       <h3>
-        Buscar orden producción <strong style={{ color: "#aa032f" }}>terminado</strong>
+        Buscar orden producción <strong style={{ color: '#aa032f' }}>terminado</strong>
       </h3>
       <div class="add-form">
         <div class="columnaSimpleColumnaDoble">
           <div>
-            <label style={{ margin: "2px 4px 0 4px" }}>Desde</label>
+            <label style={{ margin: '2px 4px 0 4px' }}>Desde</label>
             <input
               type="date"
               id="in_fechaDesde_MICE_ORDEN_PRODUCCION"
@@ -97,7 +97,7 @@ export default component$((props: { contexto: string; motivo: string; igv: numbe
             />
           </div>
           <div class="interlineadoCsCd">
-            <label style={{ margin: "2px 6px 0 4px" }}>Hasta</label>
+            <label style={{ margin: '2px 6px 0 4px' }}>Hasta</label>
             <input
               type="date"
               id="in_fechaHasta_MICE_ORDEN_PRODUCCION"
@@ -113,11 +113,11 @@ export default component$((props: { contexto: string; motivo: string; igv: numbe
               height={16}
               width={16}
               src={images.searchPLUS}
-              style={{ marginLeft: "4px" }}
+              style={{ marginLeft: '4px' }}
               onClick$={() => {
                 if (parametrosBusqueda.fechaInicio > parametrosBusqueda.fechaFinal) {
-                  alert("Verifique las fechas de busqueda");
-                  document.getElementById("fechaDesdeBusqueda")?.focus();
+                  alert('Verifique las fechas de busqueda');
+                  document.getElementById('fechaDesdeBusqueda')?.focus();
                   return;
                 }
                 buscarOrdenesProduccion.value++;
@@ -128,7 +128,7 @@ export default component$((props: { contexto: string; motivo: string; igv: numbe
         {/* por Fechas */}
 
         {/* TABLA Ordenes Produccion border: "1px solid purple" */}
-        <div style={{ marginTop: "12px" }}>
+        <div style={{ marginTop: '12px' }}>
           {buscarOrdenesProduccion.value > 0 ? (
             <TablaOrdenesProduccionTerminados
               contexto={props.contexto}
@@ -137,7 +137,7 @@ export default component$((props: { contexto: string; motivo: string; igv: numbe
               parametrosBusqueda={parametrosBusqueda}
             />
           ) : (
-            ""
+            ''
           )}
         </div>
         {ctx.mostrarPanelRegistroProductosTerminados && (

@@ -6,6 +6,7 @@
  *
  */
  /* @import url(); */
+ @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
  
 
 :root {
@@ -28,6 +29,8 @@ body {
     font-family: Roboto, system-ui, -apple-system,
       BlinkMacSystemFont, 'Segoe UI', Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+      background: #eee;
   /* background-color: #3c5741; */
 /*  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   padding: 20px 20px 40px 20px; */
@@ -44,6 +47,21 @@ input[type=number] {
   
   appearance: textfield;
 
+}
+input{
+  border: none;
+  background: #fff;
+  border-radius: 4px;
+}
+select{
+  border: none;
+  background: #fff;
+  border-radius: 4px;
+}
+textarea{
+  border:  none;
+  background: #fff;
+  border-radius: 4px;
 }
 /* a.linkHeaderPrincipal {
   display: inline-block;
@@ -88,8 +106,9 @@ a.linkHeaderPrincipal:hover {
 
 }
 .container-modal {
+  background: #eee;
   width: 500px;
-  background-color: #fefefe;
+  /* background-color: #fefefe; */
   margin: 15% auto;
   padding: 20px ;
   border: 1px solid #888;
@@ -163,6 +182,7 @@ a.linkHeaderPrincipal:hover {
   /* border: rgb(255, 142, 43) 3px dashed; */
   color: #75ABB2; 
   font-family: 'Roboto Condensed'; 
+  /* font-family: 'Roboto';  */
   font-size: 1.8rem
  /* padding-bottom: 20px; */
 }
@@ -273,6 +293,7 @@ h2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 4px 0;
+  /* border : 1px solid red */
 }
 .linea-formulario12 {
   display: grid;

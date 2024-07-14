@@ -17,6 +17,7 @@ export interface IVenta {
   numero: number;
 
   fecha: string;
+  hora: string;
 
   clienteVentasVarias: boolean;
   idCliente: string;
@@ -92,6 +93,7 @@ export interface IVenta {
 
   facturacionElectronica: boolean;
   facturacionElectronicaAutomatica: boolean;
+  verificarObservacionVenta: boolean;
 
   json: string;
 
@@ -155,6 +157,8 @@ export interface IReporteVenta {
   tipoCambio: number;
 
   ganancias: any;
+
+  proveedor_estatus: boolean;
 }
 
 export interface IVentaCLienteVentasVarias {

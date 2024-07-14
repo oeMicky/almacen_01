@@ -1,4 +1,4 @@
-import { $, component$, createContextId, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import NewEditGuiaRemision from '~/components/guiaRemision/newEditGuiaRemision';
 import TablaGuiasRemision from '~/components/guiaRemision/tablaGuiasRemision';
@@ -12,6 +12,7 @@ export const CTX_INDEX_GUIA_REMISION = createContextId<any>('__guia_remision');
 export default component$(() => {
   //#region DEFINICION CTX_INDEX_GUIA_REMISION
   const definicion_CTX_INDEX_GUIA_REMISION = useStore({
+    buscarGuiasRemision: 0,
     gG: [],
 
     mostrarPanelGuiaRemision: false,
@@ -24,7 +25,7 @@ export default component$(() => {
 
   //#region INICIALIZACION
   // const ini = useSignal(0);
-  const buscarGuiasRemision = useSignal(0);
+  // const buscarGuiasRemision = useSignal(0);
 
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
@@ -35,6 +36,17 @@ export default component$(() => {
     idPeriodo: '',
   });
   //#endregion INICIALIZACION
+
+  //#region GRABO GUIA REMISION
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_INDEX_GUIA_REMISION.grabo_GuiaRemision);
+
+    if (definicion_CTX_INDEX_GUIA_REMISION.grabo_GuiaRemision) {
+      definicion_CTX_INDEX_GUIA_REMISION.buscarGuiasRemision++;
+      definicion_CTX_INDEX_GUIA_REMISION.grabo_GuiaRemision = false;
+    }
+  });
+  //#endregion GRABO GUIA REMISION
 
   return (
     <div class="container">
@@ -95,7 +107,7 @@ export default component$(() => {
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
               // console.log('💨💨💨💨💨💨first', periodo);
               // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
-              buscarGuiasRemision.value++;
+              definicion_CTX_INDEX_GUIA_REMISION.buscarGuiasRemision++;
 
               definicion_CTX_INDEX_GUIA_REMISION.mostrarSpinner = true;
             }
@@ -123,7 +135,7 @@ export default component$(() => {
               return;
             }
 
-            buscarGuiasRemision.value++;
+            definicion_CTX_INDEX_GUIA_REMISION.buscarGuiasRemision++;
             definicion_CTX_INDEX_GUIA_REMISION.mostrarSpinner = true;
           }}
         />
@@ -141,8 +153,8 @@ export default component$(() => {
       </div>
       {/* TABLA VENTAS */}
       <div id="ventassss" style={{ margin: '10px 0' }}>
-        {buscarGuiasRemision.value > 0 ? (
-          <TablaGuiasRemision buscarGuiasRemision={buscarGuiasRemision.value} parametrosBusqueda={parametrosBusqueda} />
+        {definicion_CTX_INDEX_GUIA_REMISION.buscarGuiasRemision > 0 ? (
+          <TablaGuiasRemision buscarGuiasRemision={definicion_CTX_INDEX_GUIA_REMISION.buscarGuiasRemision} parametrosBusqueda={parametrosBusqueda} />
         ) : (
           ''
         )}

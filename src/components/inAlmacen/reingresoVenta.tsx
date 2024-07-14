@@ -48,6 +48,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
+        background: '#eee',
       }}
     >
       {/* BOTONES DEL MARCO */}
@@ -84,9 +85,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
             Cliente:
-            <b>{` ${
-              props.ventaSeleccionada.clienteVentasVarias ? 'Cliente ventas varias' : props.ventaSeleccionada.razonSocialNombre
-            }`}</b>
+            <b>{` ${props.ventaSeleccionada.clienteVentasVarias ? 'Cliente ventas varias' : props.ventaSeleccionada.razonSocialNombre}`}</b>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
             Fecha:<b>{` ${formatoDDMMYYYY_PEN(props.ventaSeleccionada.fecha)} `}</b>
@@ -194,9 +193,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             let algunoMasQueCero = false;
             //VERIFICAR montos a REINGRESAR -> TODOS LOS MONTOS SON CEROS
             for (const reingresoLocali of misReingresos.value) {
-              const reingre = reingresoLocali.aReingresar.$numberDecimal
-                ? reingresoLocali.aReingresar.$numberDecimal
-                : reingresoLocali.aReingresar;
+              const reingre = reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar;
 
               if (reingre > 0) {
                 algunoMasQueCero = true;
@@ -213,20 +210,14 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
               i++;
 
               const despachado = parseFloat(
-                reingresoLocali.cantidadDespachada.$numberDecimal
-                  ? reingresoLocali.cantidadDespachada.$numberDecimal
-                  : reingresoLocali.cantidadDespachada
+                reingresoLocali.cantidadDespachada.$numberDecimal ? reingresoLocali.cantidadDespachada.$numberDecimal : reingresoLocali.cantidadDespachada
               );
               const reingresado = parseFloat(
-                reingresoLocali.cantidadReingresada.$numberDecimal
-                  ? reingresoLocali.cantidadReingresada.$numberDecimal
-                  : reingresoLocali.cantidadReingresada
+                reingresoLocali.cantidadReingresada.$numberDecimal ? reingresoLocali.cantidadReingresada.$numberDecimal : reingresoLocali.cantidadReingresada
               );
 
               const aReingre = parseFloat(
-                reingresoLocali.aReingresar.$numberDecimal
-                  ? reingresoLocali.aReingresar.$numberDecimal
-                  : reingresoLocali.aReingresar
+                reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar
               );
 
               console.log('despachado - reingresado - aReingre', despachado, reingresado, aReingre);
@@ -278,17 +269,13 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
             for (const reingresoLocali of misReingresos.value) {
-              const rein = reingresoLocali.aReingresar.$numberDecimal
-                ? reingresoLocali.aReingresar.$numberDecimal
-                : reingresoLocali.aReingresar;
+              const rein = reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar;
 
               console.log('rein', rein);
               if (rein > 0) {
                 let IGVCalculado = 0;
                 console.log('reingresoLocali.porcentaje', reingresoLocali.porcentaje, reingresoLocali.porcentaje.$numberDecimal);
-                const elIGV = reingresoLocali.porcentaje.$numberDecimal
-                  ? reingresoLocali.porcentaje.$numberDecimal
-                  : reingresoLocali.porcentaje;
+                const elIGV = reingresoLocali.porcentaje.$numberDecimal ? reingresoLocali.porcentaje.$numberDecimal : reingresoLocali.porcentaje;
                 if (elIGV === 0) {
                   IGVCalculado = 0;
                 } else {

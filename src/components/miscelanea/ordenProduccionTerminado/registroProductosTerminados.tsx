@@ -1,17 +1,17 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { getOrdenProduccion } from "~/apis/ordenProduccion.api";
-import { images } from "~/assets";
-import { CTX_NEW_IN_ALMACEN } from "~/components/inAlmacen/newInAlmacen";
-import ImgButton from "~/components/system/imgButton";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { getOrdenProduccion } from '~/apis/ordenProduccion.api';
+import { images } from '~/assets';
+import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import ImgButton from '~/components/system/imgButton';
 // import NewEditMercaderiaIN from "../mercaderiaIN/newEditMercaderiaIN";
-import { formatear_6Decimales, redondeo4Decimales } from "~/functions/comunes";
-import NewEditMercaderiaIN from "../mercaderiaIN/newEditMercaderiaIN";
-import Spinner from "~/components/system/spinner";
-import TablaMercaderiasIN from "../mercaderiaIN/tablaMercaderiasIN";
-import { parametrosGlobales } from "~/routes/login";
-import MercaderiaINSeleccionada from "../mercaderiaIN/mercaderiaINSeleccionada";
+import { formatear_6Decimales, redondeo4Decimales } from '~/functions/comunes';
+import NewEditMercaderiaIN from '../mercaderiaIN/newEditMercaderiaIN';
+import Spinner from '~/components/system/spinner';
+import TablaMercaderiasIN from '../mercaderiaIN/tablaMercaderiasIN';
+import { parametrosGlobales } from '~/routes/login';
+import MercaderiaINSeleccionada from '../mercaderiaIN/mercaderiaINSeleccionada';
 
-export const CTX_REGISTRO_PRODUCTOS_TERMINADOS = createContextId<any>("__registro_productos_terminados");
+export const CTX_REGISTRO_PRODUCTOS_TERMINADOS = createContextId<any>('__registro_productos_terminados');
 
 export default component$((props: { opSeleccionada: any; motivo: string; igv: number }) => {
   //#region DEFINICION CTX_REGISTRO_PRODUCTOS_TERMINADOS
@@ -20,7 +20,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
     kK: [],
 
     mostrarPanelNewEditMercaderiaIN: false,
-    abuscar: "",
+    abuscar: '',
     grabo_mercaderiaIN: false,
 
     mostrarPanelKardexsIN: false,
@@ -49,8 +49,8 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
-    buscarPor: "Descripción", //por.value,
-    cadenaABuscar: "pol", // 'acce 5', //cadena.value,
+    buscarPor: 'Descripción', //por.value,
+    cadenaABuscar: 'pol', // 'acce 5', //cadena.value,
   });
 
   const sumaTOTAL_manufacturas = useSignal(0);
@@ -111,9 +111,9 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
 
     laOP.value = await getOrdenProduccion({ idOrdenProduccion: props.opSeleccionada._id });
 
-    console.log("laOP.value 1", laOP.value);
+    console.log('laOP.value 1', laOP.value);
     laOP.value = laOP.value.data;
-    console.log("laOP.value 2", laOP.value);
+    console.log('laOP.value 2', laOP.value);
 
     sumaTOTAL_manufacturas.value = await calcularSumatoriaManufacturas(laOP.value);
     sumaTOTAL_suministrosDespachados.value = await calcularSumatoriaSuministrosDespachados(laOP.value);
@@ -138,9 +138,9 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
 
   //#region BUSCAR MERCADERIAS IN
   const localizarMercaderiasIN = $(() => {
-    if (parametrosBusqueda.cadenaABuscar === "") {
-      alert("Ingrese un valor para su busqueda 🦪");
-      document.getElementById("in_codigoDescripcion_BUSCAR_MERCADERIA_IN")?.focus();
+    if (parametrosBusqueda.cadenaABuscar === '') {
+      alert('Ingrese un valor para su busqueda 🦪');
+      document.getElementById('in_codigoDescripcion_BUSCAR_MERCADERIA_IN')?.focus();
       return;
     }
 
@@ -166,14 +166,14 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
     <div
       class="container-modal"
       style={{
-        width: "clamp(330px, 86%, 768px)",
+        width: 'clamp(330px, 86%, 768px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
       }}
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -187,42 +187,42 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
       </div>
       {/* TITULO */}
       <h3>
-        Registro de productos <strong style={{ color: "#aa032f" }}>terminados</strong>
+        Registro de productos <strong style={{ color: '#aa032f' }}>terminados</strong>
       </h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* razonSocialNombreCliente  -- requerimientosCliente*/}
         <div>
-          <label style={{ color: "#444444" }}>{laOP.value.razonSocialNombreCliente}</label>
-          <br style={{ marginBottom: "8px" }} />
-          <label style={{ fontSize: "0.8rem", color: "#444444" }}>{laOP.value.requerimientosCliente}</label>
+          <label style={{ color: '#444444' }}>{laOP.value.razonSocialNombreCliente}</label>
+          <br style={{ marginBottom: '8px' }} />
+          <label style={{ fontSize: '0.8rem', color: '#444444' }}>{laOP.value.requerimientosCliente}</label>
         </div>
         <br />
         {/* ID (LOTE) y FECHA PRODUCCION () */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", margin: "8px 0", gap: "4px" }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '8px 0', gap: '4px' }}>
           <div>
-            <label style={{ fontSize: "0.8rem", color: "#444444" }}>LOTE</label>
-            <input id="inputLote" style={{ fontSize: "0.8rem", width: "100%" }} type="text" placeholder="Lote" value={laOP.value._id} disabled />
+            <label style={{ fontSize: '0.8rem', color: '#444444' }}>LOTE</label>
+            <input id="inputLote" style={{ fontSize: '0.8rem', width: '100%' }} type="text" placeholder="Lote" value={laOP.value._id} disabled />
           </div>
           <div>
-            <label style={{ fontSize: "0.8rem", color: "#444444" }}>FECHA PRODUCCIÓN</label>
+            <label style={{ fontSize: '0.8rem', color: '#444444' }}>FECHA PRODUCCIÓN</label>
             <input
               id="inputFecha"
-              style={{ fontSize: "0.8rem", width: "100%" }}
+              style={{ fontSize: '0.8rem', width: '100%' }}
               type="date"
               placeholder="Fecha"
-              value={laOP.value.fechaInicio ? laOP.value.fechaInicio.substring(0, 10) : ""}
+              value={laOP.value.fechaInicio ? laOP.value.fechaInicio.substring(0, 10) : ''}
               disabled
             />
           </div>
         </div>
         {/* CUP - PRECIO VENTA SIN IGV */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", margin: "8px 0", gap: "4px" }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '8px 0', gap: '4px' }}>
           <div>
-            <label style={{ fontSize: "0.8rem", color: "#444444" }}>COSTO UNITARIO PRODUCCIÓN PEN</label>
+            <label style={{ fontSize: '0.8rem', color: '#444444' }}>COSTO UNITARIO PRODUCCIÓN PEN</label>
             <input
               id="inputCOSTOUNITARIOPRODUCCIÓNPEN"
-              style={{ fontSize: "0.8rem", width: "100%" }}
+              style={{ fontSize: '0.8rem', width: '100%' }}
               type="text"
               placeholder="COSTO UNITARIO PRODUCCIÓN PEN"
               value={CUP.value}
@@ -230,10 +230,10 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
             />
           </div>
           <div>
-            <label style={{ fontSize: "0.8rem", color: "#444444" }}>PRECIO VENTA SUGERIDO PEN</label>
+            <label style={{ fontSize: '0.8rem', color: '#444444' }}>PRECIO VENTA SUGERIDO PEN</label>
             <input
               id="inputPRECIOVENTASUGERIDOPEN"
-              style={{ fontSize: "0.8rem", width: "100%" }}
+              style={{ fontSize: '0.8rem', width: '100%' }}
               type="text"
               placeholder="PRECIO VENTA SUGERIDO PEN"
               value={PRECIO_VENTA_SUGERIDO.value}
@@ -241,15 +241,15 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
             />
           </div>
         </div>
-        <hr style={{ margin: "8px 0" }}></hr>
-        <div style={{ marginBottom: "8px" }}>
+        <hr style={{ margin: '8px 0' }}></hr>
+        <div style={{ marginBottom: '8px' }}>
           {/* Buscar por */}
           <div class="form-control">
             <div class="form-control form-agrupado">
               <input
                 id="in_codigoDescripcion_BUSCAR_MERCADERIA_IN"
                 autoFocus
-                style={{ width: "100%", marginRight: "4px" }}
+                style={{ width: '100%', marginRight: '4px' }}
                 type="text"
                 placeholder="Ingrese la mercadería a buscar"
                 value={parametrosBusqueda.cadenaABuscar}
@@ -260,7 +260,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
                 //   (e.target as HTMLInputElement).select();
                 // }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     localizarMercaderiasIN();
                   }
                 }}
@@ -272,7 +272,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
                 alt="icono buscar"
                 height={16}
                 width={16}
-                style={{ marginRight: "2px" }}
+                style={{ marginRight: '2px' }}
                 onClick$={() => {
                   localizarMercaderiasIN();
                 }}
@@ -293,7 +293,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
             </div>
           </div>
           {/* Buscar por: Aplicacion */}
-          <div style={{ display: "flex" }}>
+          <div style={{ display: 'flex' }}>
             {/* <div style={{ margin: '0 auto' }}> */}
             <div>
               <input
@@ -304,13 +304,13 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
 
                 onChange$={(e) => {
                   if ((e.target as HTMLInputElement).checked) {
-                    parametrosBusqueda.buscarPor = "Aplicación";
+                    parametrosBusqueda.buscarPor = 'Aplicación';
                   } else {
-                    parametrosBusqueda.buscarPor = "Descripción";
+                    parametrosBusqueda.buscarPor = 'Descripción';
                   }
                 }}
               />
-              <label for="in_Aplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: "16px" }}>
+              <label for="in_Aplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: '16px' }}>
                 Aplicación
               </label>
             </div>
@@ -324,7 +324,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
                   verAplicacion.value = (e.target as HTMLInputElement).checked;
                 }}
               />
-              <label for="in_verAplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: "16px" }}>
+              <label for="in_verAplicacion_BUSCAR_MERCADERIA_IN" style={{ marginRight: '16px' }}>
                 Ver Aplicacion
               </label>
             </div>
@@ -348,7 +348,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
             <TablaMercaderiasIN
               buscarMercaderiasIN={buscarMercaderiasIN.value}
               parametrosBusqueda={parametrosBusqueda}
-              contexto={"registro_productos_terminados"}
+              contextoInmediato={'registro_productos_terminados'}
               esAlmacen={true} //{props.esAlmacen}
               verAplicacion={verAplicacion.value}
               verLineaMarca={verLineaMarca.value}
@@ -357,7 +357,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
               //   parametrosBusqueda={parametrosBusqueda}
             />
           ) : (
-            ""
+            ''
           )}
           {definicion_CTX_REGISTRO_PRODUCTOS_TERMINADOS.mostrarPanelMercaderiaINSeleccionada && (
             <div class="modal">
@@ -366,8 +366,8 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
                 mercaINSelecci={definicion_CTX_REGISTRO_PRODUCTOS_TERMINADOS.mM}
                 elKardex={definicion_CTX_REGISTRO_PRODUCTOS_TERMINADOS.kK}
                 esAlmacen={true}
-                contexto={"registro_productos_terminados"}
-                contextoParaDocumento={"new_in_almacen"}
+                contextoInmediato={'registro_productos_terminados'}
+                contextoParaDocumento={'new_in_almacen'}
                 igv={props.igv}
                 motivo={props.motivo}
                 OP={props.opSeleccionada}
@@ -386,7 +386,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
             <div class="modal">
               <NewEditMercaderiaIN
                 mercaSeleccio={definicion_CTX_REGISTRO_PRODUCTOS_TERMINADOS.mM}
-                contexto={"registro_productos_terminados"}
+                contexto={'registro_productos_terminados'}
                 conLote={true}
                 conFechaProduccion={true}
               />
@@ -394,7 +394,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
           )}
           {/* MOSTRAR SPINNER */}
           {definicion_CTX_REGISTRO_PRODUCTOS_TERMINADOS.mostrarSpinner && (
-            <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Spinner />
             </div>
           )}

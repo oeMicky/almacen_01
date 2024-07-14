@@ -10,10 +10,11 @@ export default component$((props: { borrarServicio: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(330px, 86%, 400px)',
         //  width: 'auto',
         border: '1px solid red',
         padding: '2px',
+        // background: '#eee',
       }}
       class="container-modal"
     >
@@ -43,6 +44,7 @@ export default component$((props: { borrarServicio: any }) => {
             <label>{props.borrarServicio.descripcion}</label>
             <br />
           </div>
+          <br />
           <div style={{ display: 'flex', marginTop: '5px', justifyContent: 'space-around', alignItems: 'center' }}>
             <button
               style={{ width: '60px' }}
