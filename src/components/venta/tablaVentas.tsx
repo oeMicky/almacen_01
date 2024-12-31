@@ -1,7 +1,7 @@
 import { $, component$, Resource, useContext, useResource$, useSignal, useStyles$, useTask$ } from '@builder.io/qwik';
 import {
   cerosALaIzquierda,
-  formatoDDMMYYYY_PEN,
+  // formatoDDMMYYYY_PEN,
   // formatoHH_MM_SS_PEN,
   // formatoYYYY_MM_DD_PEN,
   // redondeo2Decimales,
@@ -13,11 +13,14 @@ import style from '../tabla/tabla.css?inline';
 // import ImgButton from '../system/imgButton';
 // import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
 // import pdfVentaMG from '~/reports/pdfVentaMG';
-import pdfVentaMG from '~/reports/MG/pdfVentaMG';
-import type { IReporteVenta, IVenta } from '~/interfaces/iVenta';
+// import pdfVentaMG from '~/reports/MG/pdfVentaMG';
+import pdfFactura00 from '~/reports/pdfFactura00';
+import type { IReporteVenta } from '~/interfaces/iVenta'; //IVenta
 import { CTX_INDEX_VENTA } from '~/routes/(ventas)/venta';
 import { parametrosGlobales } from '~/routes/login';
-import { descargaArchivoVenta, reenviarDocumentoVenta } from '~/apis/venta.api';
+import { descargaArchivoVenta, getSunatCDRXml, getVenta, getXml, reenviarDocumentoVentaJSON, reenviarDocumentoVentaXML } from '~/apis/venta.api';
+
+//ejecutarCreacionXML
 
 // interface IEstructura {
 //   _id: string;
@@ -26,7 +29,7 @@ import { descargaArchivoVenta, reenviarDocumentoVenta } from '~/apis/venta.api';
 // }
 
 export default component$((props: { parametrosBusqueda: any; facturacionElectronica: boolean }) => {
-  // console.log('🎫🎫🎫🎫🎫🎫');
+  // //console.log('🎫🎫🎫🎫🎫🎫');
   useStyles$(style);
 
   //#region CONTEXTO
@@ -35,7 +38,8 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
 
   //#region INICIALIZACION
   const clickPDF = useSignal(0);
-  const ventaSeleccionada = useSignal<IVenta>();
+  const idVentaSeleccionada = useSignal('');
+  // const ventaSeleccionada = useSignal<IVenta>();
   // let suma_GAxM = 0;
   // let suma_GAxS = 0;
   let suma_TOTAL_IMPORTE_PEN = 0;
@@ -45,29 +49,42 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
 
   //#region VER PDF
   const verPDF = $((venta: any) => {
-    // console.log('a pdfFactura98', venta.untrackedValue); //venta !== null &&
-    if (typeof venta.untrackedValue !== 'undefined') {
-      // console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', venta.untrackedValue);
-      // pdfFactura98(venta.untrackedValue);
-      pdfVentaMG(venta.untrackedValue);
-    }
+    //console.log('a pdfVentaMG', venta); //venta !== null &&
+    // if (venta.length > 0) {
+    //   //console.log('entro pdfVentaMG');
+    // //console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', venta.untrackedValue);
+    // pdfFactura98(venta.untrackedValue);
+    pdfFactura00(venta);
+    // }
   });
 
   useTask$(async ({ track }) => {
     track(() => clickPDF.value);
-    // console.log('a useTask useTask useTask useTask:', clickPDF.value);
-    // console.log('a useTask useTask useTask useTask 2:', clickPDF.value + 1);
-    await verPDF(ventaSeleccionada);
+    //OBTENIENDO LA VENTA
+    if (clickPDF.value > 0) {
+      const ventaSeleccionada = await getVenta({
+        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+        idEmpresa: parametrosGlobales.idEmpresa,
+        idVenta: idVentaSeleccionada.value,
+      });
+      // //console.log(ventaSeleccionada.data.length);
+      // //console.log(ventaSeleccionada.data[0]);
+      // //console.log('a useTask useTask useTask useTask:', clickPDF.value);
+      // //console.log('a useTask useTask useTask useTask 2:', clickPDF.value + 1);
+      if (ventaSeleccionada.data.length === 1) {
+        await verPDF(ventaSeleccionada.data[0]);
+      }
+    }
   });
   //#endregion VER PDF
 
   //#region BUSCANDO REGISTROS
   const lasVentas = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
+    //console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
     // track(() => props.buscarVentas.valueOf());
     track(() => ctx_index_venta.buscarVentas);
 
-    // console.log('props.buscarVentas.valueOf', props.buscarVentas.valueOf());
+    // //console.log('props.buscarVentas.valueOf', props.buscarVentas.valueOf());
     // if (props.buscarVentas.valueOf()) {
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
@@ -109,7 +126,7 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
   //   // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
   //   // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
   //   // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-  //   // console.log('first xml');
+  //   // //console.log('first xml');
   // });
   //#endregion CREAR Y DOWNLOAD TXT
 
@@ -128,9 +145,9 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
   //       // let porcIGV = 0;
   //       // let baseImp = 0;
   //       // porcIGV = archivo.igv.$numberDecimal;
-  //       // baseImp = redondeo6Decimales(it.precioPEN.$numberDecimal / (1 + porcIGV / 100));
+  //       // baseImp = redondeo6Decimales(it.precioUnitarioPEN.$numberDecimal / (1 + porcIGV / 100));
   //       // if (it.exonerado || it.inafecto) {
-  //       //   baseImp = redondeo6Decimales(it.precioPEN.$numberDecimal);
+  //       //   baseImp = redondeo6Decimales(it.precioUnitarioPEN.$numberDecimal);
   //       // }
   //       //
   //       if (it.tipoImpuesto === 'IGV') {
@@ -248,10 +265,10 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
   // 				"unidadMedida": "${it.unidadEquivalencia}",
   // 				"descripcion": "${it.descripcionEquivalencia}",
   // 				"cantidad": "${it.cantidadEquivalencia.$numberDecimal}",
-  // 				"precioVentaUnitarioItem": "${it.precioPEN.$numberDecimal}",
-  // 				"valorUnitarioBI": "${redondeo6Decimales(it.precioPEN.$numberDecimal / (1 + porcentaje / 100))}",
+  // 				"precioVentaUnitarioItem": "${it.precioUnitarioPEN.$numberDecimal}",
+  // 				"valorUnitarioBI": "${redondeo6Decimales(it.precioUnitarioPEN.$numberDecimal / (1 + porcentaje / 100))}",
   // 				"valorVentaItemQxBI": "${redondeo2Decimales(
-  //           it.cantidadEquivalencia.$numberDecimal * redondeo6Decimales(it.precioPEN.$numberDecimal / (1 + porcentaje / 100))
+  //           it.cantidadEquivalencia.$numberDecimal * redondeo6Decimales(it.precioUnitarioPEN.$numberDecimal / (1 + porcentaje / 100))
   //         )}",
   // 				"montoTotalImpuestoItem": "${redondeo2Decimales(monto)}"${cadenaAddIMPUESTO}
   //         \t}`;
@@ -297,32 +314,57 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
   //     // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
   //     // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
   //     // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-  //     // console.log('first xml');
+  //     // //console.log('first xml');
   //   });
   //#endregion CREAR Y DOWNLOAD JSON
 
+  //#region CREAR Y DOWNLOAD XML
+  const createAndDownloadFileXML = $((nameFile: string, xmlString: string) => {
+    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    // const texto = 'hOLA A TODOS';
+
+    const filename = nameFile; ///'file.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([xmlString], { type: 'text/xml' });
+
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    // pom.setAttribute('download', filename);
+    pom.setAttribute('download', filename + '.xml');
+
+    pom.dataset.downloadurl = ['text/xml', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
+
+    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+    //console.log(`first xml ${nameFile}\n`, xmlString);
+  });
+  //#endregion CREAR Y DOWNLOAD XML
   return (
     <>
       <Resource
         value={lasVentas}
         onPending={() => {
-          console.log('onPending 🍉🍉🍉🍉');
+          //console.log('onPending 🍉🍉🍉🍉');
           //
           return <div>Cargando...</div>;
         }}
         onRejected={() => {
-          console.log('onRejected 🍍🍍🍍🍍');
+          //console.log('onRejected 🍍🍍🍍🍍');
           // props.buscarVentas = false;
           ctx_index_venta.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(ventas) => {
-          console.log('onResolved 🍓🍓🍓🍓', ventas);
+          console.log('onResolved 🍓🍓🍓🍓g', ventas);
           const { data } = ventas; //{ status, data, message }
           const misVentas: IReporteVenta[] = data;
           ctx_index_venta.miscVts = misVentas;
           ctx_index_venta.mostrarSpinner = false;
-          // console.log(misVentas);
+          // //console.log(misVentas);
           // props.buscarVentas = false;
           return (
             <>
@@ -359,12 +401,12 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
                         tot = venta.totalPEN.$numberDecimal ? venta.totalPEN.$numberDecimal : venta.totalPEN;
 
                         // const aMod: any = venta.ganancias.find((element: any) => element.tipo === 'MERCADERIA');
-                        // // console.log('aMod', aMod);
+                        // // //console.log('aMod', aMod);
                         // if (typeof aMod !== 'undefined') {
                         //   mer = aMod.gan.$numberDecimal ? aMod.gan.$numberDecimal : aMod.gan;
                         // }
                         // const aSod: any = venta.ganancias.find((element: any) => element.tipo === 'SERVICIO');
-                        // // console.log('aSod', aSod);
+                        // // //console.log('aSod', aSod);
                         // if (typeof aSod !== 'undefined') {
                         //   ser = aSod.gan.$numberDecimal ? aSod.gan.$numberDecimal : aSod.gan;
                         // }
@@ -384,7 +426,8 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
                               {venta.clienteVentasVarias ? 'Cliente ventas varias' : venta.razonSocialNombre}
                             </td>
                             <td data-label="Fecha" class="comoCadena">
-                              {formatoDDMMYYYY_PEN(venta.fecha)}
+                              {/* {venta.fechaLocal.substring(8, 10) + '/' + venta.fechaLocal.substring(5, 7) + '/' + venta.fechaLocal.substring(0, 4)} */}
+                              {venta.fechaLocal.substring(0, 2) + '/' + venta.fechaLocal.substring(3, 5) + '/' + venta.fechaLocal.substring(6, 10)}
                             </td>
                             <td data-label="Ser-Nro" class="comoCadena">
                               {venta.serie + ' - ' + cerosALaIzquierda(venta.numero, 8)}
@@ -434,38 +477,176 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
                               })}
                             </td>
                             <td data-label="Acciones" class="acciones">
-                              {venta.proveedor_estatus ? (
-                                <input
-                                  // id="in_BuscarDetraccion"
-                                  type="image"
-                                  src={images.pdf}
-                                  title="Ver pdf"
-                                  height={14}
-                                  width={14}
-                                  style={{ marginRight: '4px' }}
-                                  // onFocusin$={() => console.log('☪☪☪☪☪☪')}
-                                  onClick$={async () => {
-                                    ctx_index_venta.mostrarSpinner = true;
-                                    // ventaSeleccionada.value = venta;
-                                    // clickPDF.value++;
-                                    const DescarArchi = await descargaArchivoVenta({
-                                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                                      idEmpresa: parametrosGlobales.idEmpresa,
-                                      idVenta: venta._id,
-                                      tipo: 'PDF',
-                                    });
-                                    console.log('DescarArchi', DescarArchi);
-                                    console.log('DescarArchi.data.archivo', DescarArchi.data.archivo);
+                              {venta.proveedor_estatus || venta.sunat_estatus ? (
+                                !venta.sunat_estatusAnulacion ? (
+                                  <>
+                                    <input
+                                      // id="in_BuscarDetraccion"
+                                      type="image"
+                                      src={images.pdf}
+                                      title={`Ver pdf ${venta.serie + '-' + venta.numero}`}
+                                      height={14}
+                                      width={14}
+                                      style={{ marginRight: '4px' }}
+                                      onClick$={async () => {
+                                        ctx_index_venta.mostrarSpinner = true;
+                                        if (venta.sunat_estatus) {
+                                          idVentaSeleccionada.value = venta._id;
+                                          clickPDF.value++;
+                                        } else {
+                                          const DescarArchi = await descargaArchivoVenta({
+                                            idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                            idEmpresa: parametrosGlobales.idEmpresa,
+                                            idVenta: venta._id,
+                                            tipo: 'PDF',
+                                          });
+                                          //console.log('DescarArchi', DescarArchi);
+                                          //console.log('DescarArchi.data.archivo', DescarArchi.data.archivo);
 
-                                    const linkSource = `data:application/pdf;base64,${DescarArchi.data.archivo}`;
-                                    const downloadLink = document.createElement('a');
-                                    const fileName = 'abc.pdf';
-                                    downloadLink.href = linkSource;
-                                    downloadLink.download = fileName;
-                                    downloadLink.click();
-                                    ctx_index_venta.mostrarSpinner = false;
-                                  }}
-                                />
+                                          const linkSource = `data:application/pdf;base64,${DescarArchi.data.archivo}`;
+                                          const downloadLink = document.createElement('a');
+                                          const fileName = 'abc.pdf';
+                                          downloadLink.href = linkSource;
+                                          downloadLink.download = fileName;
+                                          downloadLink.click();
+                                        }
+                                        ctx_index_venta.mostrarSpinner = false;
+                                      }}
+                                    />
+                                    <input
+                                      // id="in_BuscarDetraccion"
+                                      type="image"
+                                      src={images.xml}
+                                      title={`Ver xml ${venta.serie + '-' + venta.numero}`}
+                                      height={14}
+                                      width={14}
+                                      style={{ marginRight: '4px' }}
+                                      // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                      onClick$={async () => {
+                                        ctx_index_venta.mostrarSpinner = true;
+
+                                        const elXML = await getXml({
+                                          idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                          idEmpresa: parametrosGlobales.idEmpresa,
+                                          idVenta: venta._id,
+                                        });
+                                        // console.log('elXML', elXML.data[0].xml);
+
+                                        createAndDownloadFileXML(
+                                          `${venta.ruc + '-' + venta.codigoTipoComprobantePago + '-' + venta.serie + '-' + venta.numero}`,
+                                          elXML.data[0].xml
+                                        );
+
+                                        ctx_index_venta.mostrarSpinner = false;
+                                      }}
+                                    />
+                                    <input
+                                      // id="in_BuscarDetraccion"
+                                      type="image"
+                                      src={images.cdr}
+                                      title={`Ver cdr ${venta.serie + '-' + venta.numero}`}
+                                      height={14}
+                                      width={14}
+                                      style={{ marginRight: '4px' }}
+                                      // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                      onClick$={async () => {
+                                        ctx_index_venta.mostrarSpinner = true;
+
+                                        const elSunatCDRXML = await getSunatCDRXml({
+                                          idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                          idEmpresa: parametrosGlobales.idEmpresa,
+                                          idVenta: venta._id,
+                                        });
+                                        // console.log('elXML', elSunatCDRXML.data[0].sunat_CDR_Xml);
+                                        createAndDownloadFileXML(
+                                          `${'R-' + venta.ruc + '-' + venta.codigoTipoComprobantePago + '-' + venta.serie + '-' + venta.numero}`,
+                                          elSunatCDRXML.data[0].sunat_CDR_Xml
+                                        );
+
+                                        // const DescarArchi = await descargaArchivoVenta({
+                                        //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                        //   idEmpresa: parametrosGlobales.idEmpresa,
+                                        //   idVenta: venta._id,
+                                        //   tipo: 'XML',
+                                        // });
+                                        // //console.log('DescarArchi', DescarArchi);
+                                        // //console.log('DescarArchi.data.archivo', DescarArchi.data.archivo);
+
+                                        // const linkSource = `data:application/xml;${venta.xml}`;
+                                        // // const linkSource = venta.xml;
+                                        // const downloadLink = document.createElement('a');
+                                        // const fileName = `${venta.serie + '-' + cerosALaIzquierda(venta.numero, 8)}.xml`; // 'abc.pdf';
+                                        // downloadLink.href = linkSource;
+                                        // downloadLink.download = fileName;
+                                        // downloadLink.click();
+                                        ctx_index_venta.mostrarSpinner = false;
+                                      }}
+                                    />
+                                    <input
+                                      // id="in_BuscarDetraccion"
+                                      type="image"
+                                      src={images.cancelDoc}
+                                      title={`Dar de baja ${venta.serie + '-' + venta.numero}`}
+                                      height={14}
+                                      width={14}
+                                      style={{ marginRight: '4px' }}
+                                      onClick$={async () => {
+                                        //
+                                        ctx_index_venta.darDeBajaID = venta._id;
+                                        ctx_index_venta.darDeBajaRUC = parametrosGlobales.RUC;
+                                        ctx_index_venta.darDeBajaEMPRESA = parametrosGlobales.RazonSocial;
+                                        ctx_index_venta.darDeBajaFECHA_DOCUMENTO = venta.fechaLocal;
+                                        ctx_index_venta.darDeBajaTIPO = venta.codigoTipoComprobantePago;
+                                        ctx_index_venta.darDeBajaSERIE = venta.serie;
+                                        ctx_index_venta.darDeBajaNUMERO = venta.numero;
+                                        ctx_index_venta.darDeBajaCLIENTE = venta.razonSocialNombre;
+                                        ctx_index_venta.darDeBajaFacturaJSON = venta.facturaJSON;
+                                        ctx_index_venta.darDeBajaFacturaXML = venta.facturaXML;
+                                        ctx_index_venta.mostrarPanelDarDeBajaDocumentoVenta = true;
+                                        // console.log('💨💨💨 ctx_index_venta', ctx_index_venta);
+                                        // ctx_index_venta.mostrarSpinner = true;
+                                        // const elXML = await getXml({
+                                        //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                        //   idEmpresa: parametrosGlobales.idEmpresa,
+                                        //   idVenta: venta._id,
+                                        // });
+                                        // // console.log('elXML', elXML.data[0].xml);
+                                        // createAndDownloadFileXML(
+                                        //   `${venta.ruc + '-' + venta.codigoTipoComprobantePago + '-' + venta.serie + '-' + venta.numero}`,
+                                        //   elXML.data[0].xml
+                                        // );
+                                        // ctx_index_venta.mostrarSpinner = false;
+                                      }}
+                                    />
+                                  </>
+                                ) : (
+                                  <input
+                                    // id="in_BuscarDetraccion"
+                                    type="image"
+                                    src={images.cdr}
+                                    title={`Ver cdr ${venta.serie + '-' + venta.numero}`}
+                                    height={14}
+                                    width={14}
+                                    style={{ marginRight: '4px' }}
+                                    // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                    onClick$={async () => {
+                                      ctx_index_venta.mostrarSpinner = true;
+
+                                      // const elSunatCDRXML = await getSunatCDRXml({
+                                      //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                      //   idEmpresa: parametrosGlobales.idEmpresa,
+                                      //   idVenta: venta._id,
+                                      // });
+                                      // // console.log('elXML', elSunatCDRXML.data[0].sunat_CDR_Xml);
+                                      // createAndDownloadFileXML(
+                                      //   `${'R-' + venta.ruc + '-' + venta.codigoTipoComprobantePago + '-' + venta.serie + '-' + venta.numero}`,
+                                      //   elSunatCDRXML.data[0].sunat_CDR_Xml
+                                      // );
+
+                                      ctx_index_venta.mostrarSpinner = false;
+                                    }}
+                                  />
+                                )
                               ) : (
                                 <input
                                   type="image"
@@ -475,17 +656,65 @@ export default component$((props: { parametrosBusqueda: any; facturacionElectron
                                   width={14}
                                   style={{ marginRight: '4px' }}
                                   onClick$={async () => {
+                                    if (parametrosGlobales.facturacionElectronica === false || parametrosGlobales.facturacionElectronicaAutomatica === false) {
+                                      alert('No existe permiso para el envio de Factura Electrónica');
+                                      return;
+                                    }
                                     ctx_index_venta.mostrarSpinner = true;
-                                    await reenviarDocumentoVenta({
-                                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                                      idEmpresa: parametrosGlobales.idEmpresa,
-                                      idVenta: venta._id,
-                                    });
+                                    if (parametrosGlobales.facturaJSON) {
+                                      await reenviarDocumentoVentaJSON({
+                                        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                        idEmpresa: parametrosGlobales.idEmpresa,
+                                        idVenta: venta._id,
+                                      });
+                                    }
+                                    if (parametrosGlobales.facturaXML) {
+                                      await reenviarDocumentoVentaXML({
+                                        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                        idEmpresa: parametrosGlobales.idEmpresa,
+                                        idVenta: venta._id,
+                                      });
+                                    }
+
                                     ctx_index_venta.buscarVentas++;
                                     // ctx_index_venta.mostrarSpinner = false;
                                   }}
                                 />
                               )}
+                              {/* <input
+                                type="image"
+                                src={images.resendEmail}
+                                title="Reenviar documento"
+                                height={14}
+                                width={14}
+                                style={{ marginRight: '4px' }}
+                                onClick$={async () => {
+                                  if (parametrosGlobales.facturacionElectronica === false || parametrosGlobales.facturacionElectronicaAutomatica === false) {
+                                    alert('No existe permiso para el envio de Factura Electrónica');
+                                    28008;
+                                    return;
+                                  }
+                                  ctx_index_venta.mostrarSpinner = true;
+                                  if (parametrosGlobales.facturaJSON) {
+                                    await reenviarDocumentoVentaJSON({
+                                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                      idEmpresa: parametrosGlobales.idEmpresa,
+                                      idVenta: venta._id,
+                                    });
+                                  }
+                                  if (parametrosGlobales.facturaXML) {
+                                    await reenviarDocumentoVentaXML({
+                                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                      idEmpresa: parametrosGlobales.idEmpresa,
+                                      idVenta: venta._id,
+                                    });
+                                  }
+
+                                  // ctx_index_venta.buscarVentas++;
+
+                                  ctx_index_venta.mostrarSpinner = false;
+                                }}
+                              /> */}
                             </td>
                           </tr>
                         );

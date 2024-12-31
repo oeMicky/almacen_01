@@ -33,14 +33,14 @@ export default component$((props: { lineaTipoSelecc: any }) => {
       return;
     }
 
-    const lT = await inUpLineaTipoMercaderia({
+    await inUpLineaTipoMercaderia({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
       idLineaTipoMercaderia: definicion_CTX_LINEA_TIPO.id,
       lineaTipoMercaderia: definicion_CTX_LINEA_TIPO.lineaTipo,
     });
 
-    console.log('lT.data', lT.data);
+    //console.log('lT.data', lT.data);
 
     ctx_new_edit_mercaderia_in.grabo_lineaTipo = true;
     ctx_new_edit_mercaderia_in.mostrarPanelNewEditLineaTipoIN = false;

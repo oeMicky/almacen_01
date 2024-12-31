@@ -52,7 +52,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.mercaINSelecci', props.mercaINSelecci);
+            //console.log('props.mercaINSelecci', props.mercaINSelecci);
           })}
         />
       </div>
@@ -64,15 +64,9 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
         <div style={{ marginBottom: '8px' }}>
           {/* MERCADERIA */}
           <div style={{ fontSize: '0.8rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
-              Código:{` ${props.mercaINSelecci.codigo} `}
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
-              Descripción:{` ${props.mercaINSelecci.descripcion}`}
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
-              Linea/Tipo:{` ${props.mercaINSelecci.lineaTipo}`}
-            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>Código:{` ${props.mercaINSelecci.codigo} `}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>Descripción:{` ${props.mercaINSelecci.descripcion}`}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>Linea/Tipo:{` ${props.mercaINSelecci.lineaTipo}`}</div>
           </div>
         </div>
         {/*  tabla KARDEXS  */}
@@ -108,9 +102,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
                         : '_'}
                     </td>
                     <td data-label="Stock" style={{ textAlign: 'end' }}>
-                      {iTKardexsIN.cantidadSaldo.$numberDecimal
-                        ? iTKardexsIN.cantidadSaldo.$numberDecimal
-                        : iTKardexsIN.cantidadSaldo}
+                      {iTKardexsIN.cantidadSaldo.$numberDecimal ? iTKardexsIN.cantidadSaldo.$numberDecimal : iTKardexsIN.cantidadSaldo}
                     </td>
                     <td data-label="Uni">{props.mercaINSelecci.unidad}</td>
 
@@ -123,13 +115,13 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
                         height={14}
                         width={14}
                         style={{ padding: '2px' }}
-                        onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                        // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                         onClick$={() => {
                           ctx_index_kardex.mM = props.mercaINSelecci;
                           ctx_index_kardex.kK = props.mercaINSelecci.KARDEXS[index];
                           // definicion_CTX_KARDEXS_IN.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = true;
-                          console.log('la mercade seleccionada ', ctx_index_kardex.mM);
-                          console.log('la mercade seleccionada -  KARDEX', ctx_index_kardex.kK);
+                          //console.log('la mercade seleccionada ', ctx_index_kardex.mM);
+                          //console.log('la mercade seleccionada -  KARDEX', ctx_index_kardex.kK);
 
                           definicion_CTX_KARDEXS.mostrarPanelKARDEX = true;
                         }}

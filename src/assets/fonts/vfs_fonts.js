@@ -11,9 +11,9 @@ const vfs = {
   'Roboto-Regular.ttf': robotoRegular['Roboto-Regular.ttf'],
 };
 
-// console.log('vfs 🍄', vfs);
-// console.log('robotoItalic 🍧', robotoItalic['Roboto-Italic.ttf']);
-// console.log('robotoMedium 🍫', robotoMedium['Roboto-Medium.ttf']);
-// console.log('robotoMediumItalic 🧃', robotoMediumItalic['Roboto-MediumItalic.ttf']);
-// console.log('robotoRegular 🍾', robotoRegular['Roboto-Regular.ttf']);
+// //console.log('vfs 🍄', vfs);
+// //console.log('robotoItalic 🍧', robotoItalic['Roboto-Italic.ttf']);
+// //console.log('robotoMedium 🍫', robotoMedium['Roboto-Medium.ttf']);
+// //console.log('robotoMediumItalic 🧃', robotoMediumItalic['Roboto-MediumItalic.ttf']);
+// //console.log('robotoRegular 🍾', robotoRegular['Roboto-Regular.ttf']);
 export default vfs;

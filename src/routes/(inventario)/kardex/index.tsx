@@ -1,4 +1,5 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
 import Kardex from '~/components/kardex/kardex';
 import Kardexs from '~/components/kardex/kardexs';
@@ -24,6 +25,7 @@ export default component$(() => {
   //#endregion CTX_INDEX_KARDEX
 
   //#region INICIALIZANDO
+  const navegarA = useNavigate();
   const buscarMercaderiasKARDEX = useSignal(0);
 
   const parametrosBusqueda = useStore({
@@ -101,24 +103,26 @@ export default component$(() => {
           type="image"
           src={images.searchPLUS}
           alt="Icono de buscar de mercadería"
-          height={16}
-          width={16}
+          height={21.5}
+          width={21.5}
           title="Buscar datos de mercadería"
           onClick$={() => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
             localizarMercaderiasKARDEX();
           }}
         />
-        <div style={{ margin: '0 5px' }}>
-          {/* <ImgButton
-              // style={{ display: 'flex', justifyContent: 'start' }}
-              src={icons.searchPLUS.default}
-              alt="Icono de buscar de mercadería"
-              height={16}
-              width={16}
-              title="Buscar datos de mercadería"
-              onClick={localizar}
-            /> */}
-        </div>
+        <br />
+        <div style={{ margin: '0 5px' }}></div>
+      </div>
+      <div>
+        <label style={{ marginRight: '4px' }}>Leyenda:</label>
+        <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
+        <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px' }}>No facturable</label>
       </div>
       {/*  tabla  MERCADERIAS LOCALIZADOS */}
       <div class="form-control" style={{ margin: '10px 0' }}>

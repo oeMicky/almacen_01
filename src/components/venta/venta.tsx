@@ -1,7 +1,7 @@
 import { component$, Resource, useResource$, useSignal } from '@builder.io/qwik';
 
 export default component$(() => {
-  console.log('🎁🎀🎁🎁');
+  //console.log('🎁🎀🎁🎁');
   const name = useSignal<string>();
 
   const ageResource = useResource$<{
@@ -12,11 +12,11 @@ export default component$(() => {
     track(() => name.value);
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
-    console.log(`https://api.agify.io?name=${name.value}`);
+    //console.log(`https://api.agify.io?name=${name.value}`);
     const res = await fetch(`https://api.agify.io?name=${name.value}`, {
       signal: abortController.signal,
     });
-    // console.log('fecth:::', res.json());
+    // //console.log('fecth:::', res.json());
     return res.json();
   });
 

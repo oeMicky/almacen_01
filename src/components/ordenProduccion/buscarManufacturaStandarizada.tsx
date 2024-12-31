@@ -28,19 +28,19 @@ export default component$(() => {
       idEmpresa: parametrosGlobales.idEmpresa,
     });
     parametros = parametros.data;
-    console.log('para Manufaurta TTT', parametros);
+    //console.log('para Manufaurta TTT', parametros);
     lasMS.value = parametros[0].manufacturasUnitarias;
-    console.log('para Manufaurta lasMS.value', lasMS.value);
+    //console.log('para Manufaurta lasMS.value', lasMS.value);
     // const cross = parametros.data;
-    // console.log("para Manufactura", cross);
+    // //console.log("para Manufactura", cross);
     // definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.idParametrosManufactura = cross[0]._id;
     // if (cross.length === 1) {
-    //   console.log("para Manufaurta  parametros === 1", cross);
+    //   //console.log("para Manufaurta  parametros === 1", cross);
     //   definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.totalCostosDirectos = cross[0].totalCostosDirectos.$numberDecimal;
     //   definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.losCD = cross[0].costosDirectos;
     //   definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.lasMU = cross[0].manufacturasUnitarias;
     // } else {
-    //   console.log("para Manufaurta  parametros === 0");
+    //   //console.log("para Manufaurta  parametros === 0");
     //   definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.totalCostosDirectos = 0;
     //   definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.losCD = [];
     //   definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.lasMU = [];

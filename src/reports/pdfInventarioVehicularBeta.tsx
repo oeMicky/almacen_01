@@ -14,7 +14,7 @@ import vehiculoInventario from '../assets/base64/vehiculoInventario.js';
 async function pdfOs_InventarioVehicularBeta(os: any) {
   pdfMake.vfs = pdfFonts;
 
-  console.log('os PDF', os);
+  //console.log('os PDF', os);
 
   const LOGO_EMPRESA = await import(`../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
 
@@ -25,7 +25,7 @@ async function pdfOs_InventarioVehicularBeta(os: any) {
   //#region FUNCION PIE DE PAGINA
   // margin: [izq, top, der, button],
   const d = new Date(); //.toUTCString(); //.toISOString();
-  // console.log('d', d);
+  // //console.log('d', d);
   function Pie(currentPage: number, pageCount: number) {
     return [
       {

@@ -18,15 +18,15 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
   // switch (props.contexto) {
   //   case 'orden servicio':
   //     ctx = useContext(CTX_DOCS_ORDEN_SERVICIO);
-  //     console.log('swicth.......useContext(CTX_DOCS_ORDEN_SERVICIO)');
+  //     //console.log('swicth.......useContext(CTX_DOCS_ORDEN_SERVICIO)');
   //     break;
   //   case 'venta':
   //     ctx = useContext(CTX_INDEX_VENTA);
-  //     console.log('swicth.......useContext(CTX_INDEX_VENTA)');
+  //     //console.log('swicth.......useContext(CTX_INDEX_VENTA)');
   //     break;
   //   case 'cotizacion':
   //     ctx = useContext(CTX_DOCS_COTIZACION);
-  //     console.log('swicth.......useContext(CTX_DOCS_COTIZACION)');
+  //     //console.log('swicth.......useContext(CTX_DOCS_COTIZACION)');
   //     break;
   // }
   const ctx_buscar_servicio = useContext(CTX_BUSCAR_SERVICIO);
@@ -39,7 +39,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda', props.parametrosBusqueda);
+    //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/servicio/getServiciosPorDescripcion', {
       // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
@@ -58,15 +58,15 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
     <Resource
       value={losServicios}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
+        //console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
+        //console.log('onRejected 🍍🍍🍍🍍');
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(servicios) => {
-        console.log('onResolved 🍓🍓🍓🍓', servicios);
+        // console.log('onResolved 🍓🍓🍓🍓', servicios);
         const { data } = servicios; //{ status, data, message }
         const misServicios: IServicio[] = data;
         return (
@@ -79,6 +79,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                       {/* <th>Ítem</th> */}
                       <th>Código</th>
                       <th>Descripción</th>
+                      <th>Impuesto</th>
                       <th>Precio PEN</th>
                       <th>Acc</th>
                     </tr>
@@ -87,7 +88,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                     {/* aqui "nace el nuevo" json  */}
                     {misServicios.map((serviLocali) => {
                       //, index
-                      const { _id, codigo, descripcion, precioPEN } = serviLocali;
+                      const { _id, codigo, descripcion, tipoImpuesto, tipoAfectacionDelImpuesto, precioUnitarioPEN } = serviLocali;
                       // const indexItem = index + 1;
                       return (
                         <tr key={_id}>
@@ -96,9 +97,12 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                           </td> */}
                           <td data-label="Código">{codigo ? codigo : '_'}</td>
                           <td data-label="Descripción">{descripcion}</td>
+                          <td data-label="Impuesto" class="acciones" title={tipoAfectacionDelImpuesto}>
+                            {tipoImpuesto[1]}
+                          </td>
                           <td data-label="Precio PEN">
-                            {serviLocali.precioPEN
-                              ? parseFloat(precioPEN.$numberDecimal).toLocaleString('en-PE', {
+                            {serviLocali.precioUnitarioPEN
+                              ? parseFloat(precioUnitarioPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
                                   currency: 'PEN',
                                   minimumFractionDigits: 2,
@@ -115,7 +119,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                               height={12}
                               width={12}
                               style={{ marginRight: '6px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_servicio.sS = serviLocali;
                                 ctx_buscar_servicio.mostrarPanelServicioSeleccionado = true;
@@ -129,7 +133,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                               height={12}
                               width={12}
                               // style={{ padding: '2px' }}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_servicio.sS = serviLocali;
                                 ctx_buscar_servicio.mostrarPanelNewEditServicio = true;

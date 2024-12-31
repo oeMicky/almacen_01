@@ -62,8 +62,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    // console.log('FETCH->: ', `http://localhost:4000/api/cotizacion/obtenerCotizacionesEntreFechas`);
-    console.log('FETCH->: ', `${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`);
+    // //console.log('FETCH->: ', `http://localhost:4000/api/cotizacion/obtenerCotizacionesEntreFechas`);
+    //console.log('FETCH->: ', `${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`);
     const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`, {
       method: 'POST',
       headers: {
@@ -78,15 +78,15 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
 
   //#region VISUZALIZAR PDF
   const verPDF = $((cotizacion: any) => {
-    console.log('a pdfFactura98', cotizacion.untrackedValue); //venta !== null &&
+    //console.log('a pdfFactura98', cotizacion.untrackedValue); //venta !== null &&
     if (typeof cotizacion.untrackedValue !== 'undefined') {
-      console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion.untrackedValue);
+      //console.log('imprimiendo ... imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion.untrackedValue);
       //-------- pdfCotizacion98(cotizacion.untrackedValue);
     }
   });
   useTask$(async ({ track }) => {
     track(() => clickPDF.value);
-    console.log('a useTask useTask useTask useTask:', clickPDF.value);
+    //console.log('a useTask useTask useTask useTask:', clickPDF.value);
     await verPDF(cotizacionSeleccionada);
   });
   //#endregion VISUZALIZAR PDF
@@ -99,17 +99,17 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     <Resource
       value={lasCotizaciones}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
+        //console.log('onPending 🍉🍉🍉🍉');
         //
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
+        //console.log('onRejected 🍍🍍🍍🍍');
         // props.buscarVentas = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(cotizaciones) => {
-        console.log('onResolved 🍓🍓🍓🍓', cotizaciones);
+        //console.log('onResolved 🍓🍓🍓🍓', cotizaciones);
         const { data } = cotizaciones; //{ status, data, message }
         const misCotizaciones: ICotizacion[] = data;
         // props.buscarVentas = false;
@@ -158,9 +158,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   height={14}
                                   width={14}
                                   style={{ marginRight: '4px' }}
-                                  onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                  // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
-                                    console.log('seleccionar cotizacion', COT);
+                                    //console.log('seleccionar cotizacion', COT);
                                     ctx_f_b_nc_nd.idCotizacion = COT._id;
                                     ctx_f_b_nc_nd.serieCotizacion = COT.serie;
                                     ctx_f_b_nc_nd.numeroCotizacion = COT.numero;
@@ -181,7 +181,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                     ctx_f_b_nc_nd.itemsVenta = [];
                                     let newItem = 1;
                                     COT.servicios.map((ser: any) => {
-                                      console.log('ser', ser);
+                                      //console.log('ser', ser);
                                       ctx_f_b_nc_nd.itemsVenta.push({
                                         idAuxiliar: parseInt(elIdAuxiliar()),
                                         idMercaderia: null,
@@ -194,6 +194,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         tipoImpuesto: ser.tipoImpuesto,
                                         tipoAfectacionDelImpuesto: ser.tipoAfectacionDelImpuesto,
                                         porcentaje: parseFloat(ser.porcentaje.$numberDecimal),
+
+                                        tipoPrecioVentaUnitario: ser.tipoPrecioVentaUnitario,
 
                                         codigo: ser.codigo ? ser.codigo : '_',
 
@@ -209,11 +211,11 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         costoUnitarioPEN: ser.costoUnitarioPEN.$numberDecimal,
                                         costoUnitarioEquivalenciaPEN: ser.costoUnitarioEquivalenciaPEN.$numberDecimal,
 
-                                        precioPEN: ser.precioPEN.$numberDecimal,
+                                        precioUnitarioPEN: ser.precioUnitarioPEN.$numberDecimal,
 
                                         ventaPEN: ser.ventaPEN.$numberDecimal,
 
-                                        precioUSD: 0,
+                                        precioUnitarioUSD: 0,
                                         ventaUSD: 0,
 
                                         codigoContableVenta: ser.codigoContableVenta,
@@ -235,6 +237,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         tipoAfectacionDelImpuesto: rep.tipoAfectacionDelImpuesto,
                                         porcentaje: parseFloat(rep.porcentaje.$numberDecimal),
 
+                                        tipoPrecioVentaUnitario: rep.tipoPrecioVentaUnitario,
+
                                         codigo: rep.codigo ? rep.codigo : '_',
 
                                         descripcion: rep.descripcion,
@@ -249,11 +253,11 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                         costoUnitarioPEN: rep.costoUnitarioPEN.$numberDecimal,
                                         costoUnitarioEquivalenciaPEN: rep.costoUnitarioEquivalenciaPEN.$numberDecimal,
 
-                                        precioPEN: rep.precioPEN.$numberDecimal,
+                                        precioUnitarioPEN: rep.precioUnitarioPEN.$numberDecimal,
 
                                         ventaPEN: rep.ventaPEN.$numberDecimal,
 
-                                        precioUSD: 0,
+                                        precioUnitarioUSD: 0,
                                         ventaUSD: 0,
 
                                         tipoEquivalencia: rep.tipoEquivalencia,
@@ -284,7 +288,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 height={14}
                                 width={14}
                                 style={{ marginRight: '4px' }}
-                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               />
                             )}
                             <input
@@ -294,7 +298,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               title="Ver pdf"
                               height={14}
                               width={14}
-                              onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 pdfCotizacionMG(COT);
                               }}
@@ -306,9 +310,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               title="Ver COT "
                               height={14}
                               width={14}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
-                                console.log('COT', COT);
+                                //console.log('COT', COT);
                               }}
                             />
                           </td>

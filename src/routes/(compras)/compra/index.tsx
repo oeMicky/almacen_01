@@ -1,4 +1,5 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { useNavigate } from '@builder.io/qwik-city';
 // import { getIDLibroDiario } from '~/apis/libroDiario.api';
 import { images } from '~/assets';
 // import { getIgvsCompra } from '~/apis/compra.api';
@@ -11,7 +12,7 @@ import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 // import ImgButton from '~/components/system/imgButton';
 import Spinner from '~/components/system/spinner';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+// import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -39,6 +40,7 @@ export default component$(() => {
   //#endregion CONTEXTO
 
   //#region INICIALIZACION
+  const navegarA = useNavigate();
   const buscarCompras = useSignal(0);
   // const losPeriodos = useStore({ idPeriodo: '', periodo: '' });
   // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
@@ -63,39 +65,39 @@ export default component$(() => {
   //#region ACTUALIZAR TABLA COMPRAS
   useTask$(({ track }) => {
     track(() => definicion_CTX_INDEX_COMPRA.grabo_Compra);
-    // console.log('GRABO COMPRA');
+    // //console.log('GRABO COMPRA');
     if (definicion_CTX_INDEX_COMPRA.grabo_Compra) {
       //actualizar TABLA ORDENES SERVICIO
-      // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
+      // //console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
       buscarCompras.value++;
       definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
-      console.log('GRABO COMPRA in');
+      //console.log('GRABO COMPRA in');
       definicion_CTX_INDEX_COMPRA.grabo_Compra = false;
     }
   });
 
   // useTask$(({ track }) => {
   //   track(() => definicion_CTX_INDEX_COMPRA.insert_Compra);
-  //   console.log('INSERT COMPRA');
+  //   //console.log('INSERT COMPRA');
   //   if (definicion_CTX_INDEX_COMPRA.insert_Compra) {
   //     //actualizar TABLA ORDENES SERVICIO
-  //     // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
+  //     // //console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
   //     // buscarCompras.value++;
   //     // definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
-  //     console.log('INSERT COMPRA in');
+  //     //console.log('INSERT COMPRA in');
   //     definicion_CTX_INDEX_COMPRA.insert_Compra = false;
   //   }
   // });
 
   // useTask$(({ track }) => {
   //   track(() => definicion_CTX_INDEX_COMPRA.update_Compra);
-  //   console.log('UPDATE COMPRA');
+  //   //console.log('UPDATE COMPRA');
   //   if (definicion_CTX_INDEX_COMPRA.update_Compra) {
   //     //actualizar TABLA ORDENES SERVICIO
-  //     // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
+  //     // //console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
   //     // buscarCompras.value++;
   //     definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
-  //     console.log('UPDATE COMPRA in');
+  //     //console.log('UPDATE COMPRA in');
   //     definicion_CTX_INDEX_COMPRA.update_Compra = false;
   //   }
   // });
@@ -108,10 +110,10 @@ export default component$(() => {
   //     idEmpresa: parametrosGlobales.idEmpresa,
   //     bandera: 'Compras',
   //   });
-  //   console.log('losPeri', losPeri);
+  //   //console.log('losPeri', losPeri);
   //   losPeriodosCargados.value = losPeri.data;
-  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-  //   // console.log('a cargar periodos');
+  //   //console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // //console.log('a cargar periodos');
   // });
 
   // useTask$(({ track }) => {
@@ -122,29 +124,29 @@ export default component$(() => {
   //#endregion OBTENER PERIODOS
 
   //#region CREAR Y DOWNLOAD TXT
-  const createAndDownloadFile = $((nameFile: string, texto: string) => {
-    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
-    // const texto = 'hOLA A TODOS';
+  // const createAndDownloadFile = $((nameFile: string, texto: string) => {
+  //   // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+  //   // const texto = 'hOLA A TODOS';
 
-    const filename = nameFile; ///'file.xml';
-    const pom = document.createElement('a');
-    const bb = new Blob([texto], { type: 'text/plain' });
+  //   const filename = nameFile; ///'file.xml';
+  //   const pom = document.createElement('a');
+  //   const bb = new Blob([texto], { type: 'text/plain' });
 
-    pom.setAttribute('href', window.URL.createObjectURL(bb));
-    // pom.setAttribute('download', filename);
-    pom.setAttribute('download', filename + '.txt');
+  //   pom.setAttribute('href', window.URL.createObjectURL(bb));
+  //   // pom.setAttribute('download', filename);
+  //   pom.setAttribute('download', filename + '.txt');
 
-    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
-    pom.draggable = true;
-    pom.classList.add('dragout');
+  //   pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+  //   pom.draggable = true;
+  //   pom.classList.add('dragout');
 
-    pom.click();
+  //   pom.click();
 
-    // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
-    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
-    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-    console.log('first txt');
-  });
+  //   // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+  //   // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+  //   // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+  //   //console.log('first txt');
+  // });
   //#endregion CREAR Y DOWNLOAD TXT
 
   return (
@@ -163,7 +165,7 @@ export default component$(() => {
           {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
-      {/* <button onClick$={() => console.log('param', parametrosGlobales)}>para</button> */}
+      {/* <button onClick$={() => //console.log('param', parametrosGlobales)}>para</button> */}
       <h4 style={{ margin: '8px 0 4px 2px' }}>
         <u>Compras</u>
       </h4>
@@ -173,7 +175,14 @@ export default component$(() => {
         <ElButton
           name="ADD COMPRA"
           title="Add compra"
+          style={{ cursor: 'pointer' }}
           onClick={$(async () => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
             //validar PERIODO
             if (periodo.idPeriodo === '') {
               alert('Seleccione el periodo.');
@@ -188,7 +197,7 @@ export default component$(() => {
             //       idEmpresa: parametrosGlobales.idEmpresa,
             //       ejercicio: parseInt(periodo.periodo.substring(0, 4)),
             //     });
-            //     console.log('LD.data', LD.data);
+            //     //console.log('LD.data', LD.data);
             //     if (LD.data.length === 1) {
             //       elID_LD.value = LD.data[0]._id;
             //     } else {
@@ -198,7 +207,7 @@ export default component$(() => {
             //     }
             //   } else {
             //     elID_LD.value = parametrosGlobales.idLibroDiario;
-            //     console.log('elID_LD.value ', elID_LD.value);
+            //     //console.log('elID_LD.value ', elID_LD.value);
             //   }
             // }
 
@@ -215,10 +224,10 @@ export default component$(() => {
           registroTEXT={'periodo'}
           seleccione={'-- Selecc. periodo --'}
           onChange={$(() => {
-            // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+            // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
             const elSelec = document.getElementById('se_periodo_COMPRA') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
-            // console.log('?', elIdx, elSelec[elIdx].id);
+            // //console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
             if (periodo.idPeriodo === '') {
               periodo.periodo = '';
@@ -228,8 +237,8 @@ export default component$(() => {
               elEjercicio.value = parseInt(elSelec.value.substring(0, 4));
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-              // console.log('💨💨💨💨💨💨first', periodo);
-              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+              // //console.log('💨💨💨💨💨💨first', periodo);
+              // //console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
               buscarCompras.value++;
 
               definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
@@ -249,7 +258,7 @@ export default component$(() => {
           height={16}
           width={16}
           style={{ marginLeft: '2px' }}
-          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+          // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
           onClick$={() => {
             if (parametrosBusqueda.idPeriodo === '') {
               alert('Debe seleccionar el periodo');
@@ -261,17 +270,17 @@ export default component$(() => {
             definicion_CTX_INDEX_COMPRA.mostrarSpinner = true;
           }}
         />
-        <button type="button" onClick$={() => console.log('miscCs', definicion_CTX_INDEX_COMPRA.miscCs)}>
+        {/* <button type="button" onClick$={() => //console.log('miscCs', definicion_CTX_INDEX_COMPRA.miscCs)}>
           miscCs
-        </button>
-        <input
+        </button> */}
+        {/* <input
           // id="in_BuscarDetraccion"
           type="button"
           // src={images.searchPLUS}
           value="pre PLE"
           title="PLE de compras"
           style={{ marginLeft: '16px' }}
-          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+          // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
           onClick$={() => {
             //validar PERIODO
             if (periodo.idPeriodo === '') {
@@ -280,7 +289,7 @@ export default component$(() => {
               // ini.value++;
               return;
             }
-            // console.log('definicion_CTX_INDEX_COMPRA.miscCs', definicion_CTX_INDEX_COMPRA.miscCs);
+            // //console.log('definicion_CTX_INDEX_COMPRA.miscCs', definicion_CTX_INDEX_COMPRA.miscCs);
             if (definicion_CTX_INDEX_COMPRA.miscCs.length === 0) {
               alert('El PLE del presente periodo no presenta datos para exportar.');
               document.getElementById('se_periodo_COMPRA')?.focus();
@@ -374,8 +383,8 @@ export default component$(() => {
             // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
             createAndDownloadFile('elPLE_COMPRA_' + periodo.periodo, aExportar);
           }}
-        />
-        {/* <button onClick$={() => console.log('parametrosGlobales', parametrosGlobales)}>paratere</button> */}
+        /> */}
+        {/* <button onClick$={() => //console.log('parametrosGlobales', parametrosGlobales)}>paratere</button> */}
         {definicion_CTX_INDEX_COMPRA.mostrarPanelCompra && (
           <div class="modal">
             <NewEditCompra
@@ -395,11 +404,7 @@ export default component$(() => {
       </div>
       {/* TABLA COMPRAS */}
       <div id="ventassss" style={{ margin: '10px 0' }}>
-        {buscarCompras.value > 0 ? (
-          <TablaCompras buscarCompras={buscarCompras.value} parametrosBusqueda={parametrosBusqueda} />
-        ) : (
-          ''
-        )}
+        {buscarCompras.value > 0 ? <TablaCompras buscarCompras={buscarCompras.value} parametrosBusqueda={parametrosBusqueda} /> : ''}
       </div>
       {/* MOSTRAR SPINNER */}
       {definicion_CTX_INDEX_COMPRA.mostrarSpinner && (
@@ -455,7 +460,7 @@ export default component$(() => {
                 document.getElementById('in_fechaDesde')?.focus();
                 return;
               }
-              console.log('click en lupa: parametrosBusqueda ', parametrosBusqueda);
+              //console.log('click en lupa: parametrosBusqueda ', parametrosBusqueda);
 
               buscarCompras.value++;
 

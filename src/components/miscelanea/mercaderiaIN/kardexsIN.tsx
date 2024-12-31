@@ -52,7 +52,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.mercaINSelecci', props.mercaINSelecci);
+            //console.log('props.mercaINSelecci', props.mercaINSelecci);
           })}
         />
       </div>
@@ -115,12 +115,12 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
                         height={14}
                         width={14}
                         style={{ padding: '2px' }}
-                        onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                        // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                         onClick$={() => {
                           ctx_buscar_mercaderia_in.mM = props.mercaINSelecci;
                           ctx_buscar_mercaderia_in.kK = props.mercaINSelecci.KARDEXS[index];
                           definicion_CTX_KARDEXS_IN.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = true;
-                          console.log('la mercade seleccionada IN --INDIRECTA', ctx_buscar_mercaderia_in.mM);
+                          //console.log('la mercade seleccionada IN --INDIRECTA', ctx_buscar_mercaderia_in.mM);
                         }}
                       />
                     </td>

@@ -252,7 +252,7 @@ OBSERVACIÓN(ES):
           descripcionEquivalencia: requi.descripcionEquivalencia,
           cantidad: requi.cantidad,
           unidadEquivalencia: requi.unidadEquivalencia,
-          precioPEN: requi.precioPEN,
+          precioUnitarioPEN: requi.precioUnitarioPEN,
           ventaPEN: requi.ventaPEN,
           tipoEquivalencia: requi.tipoEquivalencia,
           factor: requi.factor,
@@ -380,24 +380,34 @@ OBSERVACIÓN(ES):
   //#region ELIMINAR REQUISICION DE LA MERCADERIA
   useTask$(async ({ track }) => {
     track(() => definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion);
-
+    // console.log('🍕');
     if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion > 0) {
       //verificar si ya se a DESPACHADO
+      // console.log('🍔');
       if (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion !== '') {
-        console.log(
-          'definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion definicion_CTX_O_S.requisiciones.length',
-          definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion,
-          definicion_CTX_O_S.requisiciones.length
-        );
+        //console.log(
+        //   'definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion definicion_CTX_O_S.requisiciones.length',
+        //   definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion,
+        //   definicion_CTX_O_S.requisiciones.length
+        // );
+        // console.log('🍔🍔', definicion_CTX_O_S.requisiciones, definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion);
         if (definicion_CTX_O_S.requisiciones.length > 0) {
+          // console.log('🥚');
           const despachos: any = definicion_CTX_O_S.requisiciones.filter(
             (despa: any) => despa.idKardex === definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion
           );
-
-          if (despachos[0].cantidadDespachada.$numberDecimal - despachos[0].cantidadReingresada.$numberDecimal > 0) {
-            alert('El artículo no puede ser eliminado debido a que ha sido despachado por almacén.');
-            return;
+          // console.log('🥚🥚', despachos[0]);
+          // console.log('🍔🍔🍔', despachos[0].cantidadDespachada.$numberDecimal, despachos[0].cantidadReingresada.$numberDecimal);
+          if (typeof despachos[0].cantidadDespachada !== 'undefined' && typeof despachos[0].cantidadReingresada !== 'undefined') {
+            // console.log('🍛');
+            if (despachos[0].cantidadDespachada.$numberDecimal - despachos[0].cantidadReingresada.$numberDecimal > 0) {
+              alert('El artículo no puede ser eliminado debido a que ha sido despachado por almacén.');
+              return;
+            }
+            // console.log('🍛🍛');
           }
+
+          // console.log('🍔🍔🍔🍔');
           //  else {
           //   await borrarRequisicionOS({
           //     idGrupoEmpresarial: definicion_CTX_O_S.idGrupoEmpresarial,
@@ -408,6 +418,7 @@ OBSERVACIÓN(ES):
           // }
         }
       }
+      // console.log('🍕🍕');
 
       //borrar en la BD
 
@@ -423,18 +434,18 @@ OBSERVACIÓN(ES):
           idRequisicionOS: definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idRequisicionOS,
         });
       }
+      // console.log('🍕🍕🍕');
       //borrar en la App
       const newItems: any = definicion_CTX_O_S.requisiciones.filter(
         (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion
       );
       definicion_CTX_O_S.requisiciones = newItems;
-
+      // console.log('🍕🍕🍕🍕');
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idRequisicionOS = '';
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idKardexRequisicion = '';
       definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.borrar_idAuxiliarRequisicion = 0;
     }
   });
-
   //#endregion ELIMINAR REQUISICION DE LA MERCADERIA
 
   //#region ON SUBMIT
@@ -614,6 +625,14 @@ OBSERVACIÓN(ES):
           //   border: '1px solid green',
         }}
       >
+        {/* <ImgButton
+          src={images.see}
+          alt="imagen de cerrar"
+          height={16}
+          width={16}
+          title="Ver datos"
+          onClick={$(() => console.log('definicion_CTX_O_S', definicion_CTX_O_S))}
+        /> */}
         <ImgButton
           src={images.x}
           alt="imagen de cerrar"
@@ -624,14 +643,6 @@ OBSERVACIÓN(ES):
             // ctx_index_orden_servicio.grabo_OS = grabo.value;
             ctx_index_orden_servicio.mostrarPanelNewEditOrdenServicio = false;
           })}
-        />
-        <ImgButton
-          src={images.see}
-          alt="imagen de cerrar"
-          height={16}
-          width={16}
-          title="Ver datos"
-          onClick={$(() => console.log('definicion_CTX_O_S', definicion_CTX_O_S))}
         />
         {/* <ImgButton
           src={images.see}
@@ -769,12 +780,60 @@ OBSERVACIÓN(ES):
               <div class="form-control form-agrupado">
                 <select
                   id="selectEstado"
-                  // value={oS.estado}
+                  value={definicion_CTX_O_S.estado}
                   onChange$={(e) => {
+                    const a1 = definicion_CTX_O_S.requisiciones;
+                    const a2 = repuestosDespachados.value;
+                    // console.log('LOS ARRAYs A1......', a1);
+                    // console.log('LOS ARRAYs A2......', a2);
+
+                    if ((e.target as HTMLSelectElement).value === 'TERMINADO') {
+                      // If length is not equal
+                      if (a1.length !== a2.length) {
+                        alert('Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad.');
+                        definicion_CTX_O_S.estado = '';
+                        return;
+                      } else {
+                        // Comparing each element of array
+                        for (let i = 0; i < a1.length; i++) {
+                          // console.log(
+                          //   'cantidades',
+                          //   parseFloat(a1[i].cantidadEquivalencia.$numberDecimal ? a1[i].cantidadEquivalencia.$numberDecimal : a1[i].cantidadEquivalencia),
+                          //   parseFloat(a2[i].cantidadDespachada.$numberDecimal ? a2[i].cantidadDespachada.$numberDecimal : a2[i].cantidadDespachada)
+                          // );
+
+                          if (
+                            parseFloat(a1[i].cantidadEquivalencia.$numberDecimal ? a1[i].cantidadEquivalencia.$numberDecimal : a1[i].cantidadEquivalencia) !==
+                            parseFloat(a2[i].cantidadDespachada.$numberDecimal ? a2[i].cantidadDespachada.$numberDecimal : a2[i].cantidadDespachada)
+                          ) {
+                            alert(
+                              'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique cantidad.'
+                            );
+                            definicion_CTX_O_S.estado = '';
+                            return;
+                          }
+                          if (a1[i].idMercaderia !== a2[i].idMercaderia) {
+                            alert(
+                              'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique (mercadería).'
+                            );
+                            definicion_CTX_O_S.estado = '';
+                            return;
+                          }
+                          if (a1[i].idEquivalencia !== a2[i].idEquivalencia) {
+                            alert(
+                              'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique (equivalencia).'
+                            );
+                            definicion_CTX_O_S.estado = '';
+                            return;
+                          }
+                        }
+                      }
+                    }
                     definicion_CTX_O_S.estado = (e.target as HTMLSelectElement).value;
                   }}
                   style={{ width: '100%' }}
                 >
+                  <option value="">-- Seleccione el estado --</option>
                   <option value={'TERMINADO'} selected={definicion_CTX_O_S.estado === 'TERMINADO'}>
                     TERMINADO
                   </option>
@@ -1158,6 +1217,7 @@ OBSERVACIÓN(ES):
                 style={{ maxWidth: '100%' }}
                 disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                 cols={90}
+                rows={4}
                 value={definicion_CTX_O_S.observacionesCliente}
                 onChange$={(e) => {
                   definicion_CTX_O_S.observacionesCliente = (e.target as HTMLTextAreaElement).value;
@@ -1227,16 +1287,16 @@ OBSERVACIÓN(ES):
                     const indexItemServi = index + 1;
                     const porc = iTSer.porcentaje.$numberDecimal ? parseFloat(iTSer.porcentaje.$numberDecimal) : parseFloat(iTSer.porcentaje);
                     const vent = iTSer.ventaPEN.$numberDecimal ? parseFloat(iTSer.ventaPEN.$numberDecimal) : parseFloat(iTSer.ventaPEN);
-                    // console.log('OS SERVI: indexItemServi  porc  vent', indexItemServi, porc, vent);
+                    // //console.log('OS SERVI: indexItemServi  porc  vent', indexItemServi, porc, vent);
 
                     sumaTOTAL_servicios = sumaTOTAL_servicios + redondeo6Decimales(vent);
-                    // console.log('OS SERVI: sumaTOTAL_servicios', sumaTOTAL_servicios);
+                    // //console.log('OS SERVI: sumaTOTAL_servicios', sumaTOTAL_servicios);
 
                     subTOTAL_servicios = redondeo6Decimales((sumaTOTAL_servicios * 100) / (100 + porc));
-                    // console.log('OS SERVI: subTOTAL_servicios', subTOTAL_servicios);
+                    // //console.log('OS SERVI: subTOTAL_servicios', subTOTAL_servicios);
 
                     igvTOTAL_servicios = redondeo6Decimales(sumaTOTAL_servicios - subTOTAL_servicios);
-                    // console.log('OS SERVI: igvTOTAL_servicios', igvTOTAL_servicios);
+                    // //console.log('OS SERVI: igvTOTAL_servicios', igvTOTAL_servicios);
 
                     // if (index + 1 === definicion_CTX_O_S.servicios.length) {
                     //
@@ -1265,7 +1325,7 @@ OBSERVACIÓN(ES):
 
                               iTSer.ventaPEN =
                                 (iTSer.cantidadEquivalencia.$numberDecimal ? iTSer.cantidadEquivalencia.$numberDecimal : iTSer.cantidadEquivalencia) *
-                                (iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN);
+                                (iTSer.precioUnitarioPEN.$numberDecimal ? iTSer.precioUnitarioPEN.$numberDecimal : iTSer.precioUnitarioPEN);
                             }}
                           />
                         </td>
@@ -1277,17 +1337,17 @@ OBSERVACIÓN(ES):
                             type="number"
                             disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             style={{ width: '60px', textAlign: 'end' }}
-                            value={iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN}
+                            value={iTSer.precioUnitarioPEN.$numberDecimal ? iTSer.precioUnitarioPEN.$numberDecimal : iTSer.precioUnitarioPEN}
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
-                              console.log('.........precio', precio);
-                              iTSer.precioPEN = precio;
-                              console.log('.........iTSer.precioPEN ', iTSer.precioPEN, iTSer.cantidadEquivalencia);
+                              //console.log('.........precio', precio);
+                              iTSer.precioUnitarioPEN = precio;
+                              //console.log('.........iTSer.precioUnitarioPEN ', iTSer.precioUnitarioPEN, iTSer.cantidadEquivalencia);
                               const K = iTSer.cantidadEquivalencia.$numberDecimal
                                 ? parseFloat(iTSer.cantidadEquivalencia.$numberDecimal)
                                 : parseFloat(iTSer.cantidadEquivalencia);
-                              console.log('K', K);
-                              iTSer.ventaPEN = K * (iTSer.precioPEN.$numberDecimal ? iTSer.precioPEN.$numberDecimal : iTSer.precioPEN);
+                              //console.log('K', K);
+                              iTSer.ventaPEN = K * (iTSer.precioUnitarioPEN.$numberDecimal ? iTSer.precioUnitarioPEN.$numberDecimal : iTSer.precioUnitarioPEN);
                             }}
                           />
                         </td>
@@ -1446,17 +1506,17 @@ OBSERVACIÓN(ES):
                   {definicion_CTX_O_S.requisiciones.map((iTRequi: any, index: any) => {
                     const indexItemRequi = index + 1;
                     const porc = iTRequi.porcentaje.$numberDecimal ? parseFloat(iTRequi.porcentaje.$numberDecimal) : parseFloat(iTRequi.porcentaje);
-                    // console.log('OS REQUI: indexItemRequi  porc', indexItemRequi, porc);
+                    // //console.log('OS REQUI: indexItemRequi  porc', indexItemRequi, porc);
 
                     sumaTOTAL_requisiciones =
                       sumaTOTAL_requisiciones + redondeo6Decimales(iTRequi.ventaPEN.$numberDecimal ? iTRequi.ventaPEN.$numberDecimal : iTRequi.ventaPEN);
-                    // console.log('OS REQUI: sumaTOTAL_requisiciones', sumaTOTAL_requisiciones);
+                    // //console.log('OS REQUI: sumaTOTAL_requisiciones', sumaTOTAL_requisiciones);
 
                     subTOTAL_requisiciones = redondeo6Decimales((sumaTOTAL_requisiciones * 100) / (100 + porc));
-                    // console.log('OS REQUI: subTOTAL_requisiciones', subTOTAL_requisiciones);
+                    // //console.log('OS REQUI: subTOTAL_requisiciones', subTOTAL_requisiciones);
 
                     igvTOTAL_requisiciones = redondeo6Decimales(sumaTOTAL_requisiciones - subTOTAL_requisiciones);
-                    // console.log('OS REQUI: igvTOTAL_requisiciones', igvTOTAL_requisiciones);
+                    // //console.log('OS REQUI: igvTOTAL_requisiciones', igvTOTAL_requisiciones);
 
                     return (
                       <tr key={iTRequi.idAuxiliar}>
@@ -1477,7 +1537,7 @@ OBSERVACIÓN(ES):
                             style={{ width: '60px', textAlign: 'end' }}
                             value={iTRequi.cantidadEquivalencia.$numberDecimal ? iTRequi.cantidadEquivalencia.$numberDecimal : iTRequi.cantidadEquivalencia}
                             // onInput$={(e) => {
-                            //   console.log('.......firts...onInput....');
+                            //   //console.log('.......firts...onInput....');
                             //   if (
                             //     parseFloat((e.target as HTMLInputElement).value) <
                             //     iTRequi.cantidadDespachada.$numberDecimal - iTRequi.cantidadReingresada.$numberDecimal
@@ -1491,13 +1551,13 @@ OBSERVACIÓN(ES):
                             //   }
                             // }}
                             onChange$={(e) => {
-                              // console.log('.......firts...onChange....');
+                              // //console.log('.......firts...onChange....');
 
                               iTRequi.cantidadEquivalencia = parseFloat((e.target as HTMLInputElement).value);
 
                               iTRequi.ventaPEN =
                                 (iTRequi.cantidadEquivalencia.$numberDecimal ? iTRequi.cantidadEquivalencia.$numberDecimal : iTRequi.cantidadEquivalencia) *
-                                (iTRequi.precioPEN.$numberDecimal ? iTRequi.precioPEN.$numberDecimal : iTRequi.precioPEN);
+                                (iTRequi.precioUnitarioPEN.$numberDecimal ? iTRequi.precioUnitarioPEN.$numberDecimal : iTRequi.precioUnitarioPEN);
                             }}
                           />
                         </td>
@@ -1509,15 +1569,15 @@ OBSERVACIÓN(ES):
                             type="number"
                             disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                             style={{ width: '60px', textAlign: 'end' }}
-                            value={iTRequi.precioPEN.$numberDecimal ? iTRequi.precioPEN.$numberDecimal : iTRequi.precioPEN}
+                            value={iTRequi.precioUnitarioPEN.$numberDecimal ? iTRequi.precioUnitarioPEN.$numberDecimal : iTRequi.precioUnitarioPEN}
                             onChange$={(e) => {
                               const precio = parseFloat((e.target as HTMLInputElement).value);
 
-                              iTRequi.precioPEN = precio;
+                              iTRequi.precioUnitarioPEN = precio;
 
                               iTRequi.ventaPEN =
                                 (iTRequi.cantidadEquivalencia.$numberDecimal ? iTRequi.cantidadEquivalencia.$numberDecimal : iTRequi.cantidadEquivalencia) *
-                                (iTRequi.precioPEN.$numberDecimal ? iTRequi.precioPEN.$numberDecimal : iTRequi.precioPEN);
+                                (iTRequi.precioUnitarioPEN.$numberDecimal ? iTRequi.precioUnitarioPEN.$numberDecimal : iTRequi.precioUnitarioPEN);
                             }}
                           />
                         </td>
@@ -1640,7 +1700,7 @@ OBSERVACIÓN(ES):
                       <th>Kx</th>
                       <th>Código</th>
                       <th>Descripción</th>
-                      <th>Cantidad Despachada</th>
+                      <th>Cantidad Despach</th>
                       <th>Uni</th>
                       <th>Precio Uni</th>
                       <th>Venta </th>
@@ -1656,7 +1716,9 @@ OBSERVACIÓN(ES):
                         (iTRepuDespachado.cantidadDespachada.$numberDecimal
                           ? iTRepuDespachado.cantidadDespachada.$numberDecimal
                           : iTRepuDespachado.cantidadDespachada) *
-                          (iTRepuDespachado.precioPEN.$numberDecimal ? iTRepuDespachado.precioPEN.$numberDecimal : iTRepuDespachado.precioPEN);
+                          (iTRepuDespachado.precioUnitarioPEN.$numberDecimal
+                            ? iTRepuDespachado.precioUnitarioPEN.$numberDecimal
+                            : iTRepuDespachado.precioUnitarioPEN);
                       // subTOTAL_repuestosDespachados = redondeo2Decimales((sumaTOTAL_repuestosDespachados * 100) / (100 + definicion_CTX_O_S.igv));
                       // igvTOTAL_repuestosDespachados = redondeo2Decimales(sumaTOTAL_repuestosDespachados - subTOTAL_repuestosDespachados);
 
@@ -1674,7 +1736,7 @@ OBSERVACIÓN(ES):
                           <td data-label="Descripción" class="comoCadena">
                             {iTRepuDespachado.descripcionEquivalencia}
                           </td>
-                          <td data-label="Cantidad despachada" class="comoNumero">
+                          <td data-label="Cantidad despach" class="comoNumero">
                             {iTRepuDespachado.cantidadDespachada.$numberDecimal
                               ? iTRepuDespachado.cantidadDespachada.$numberDecimal
                               : iTRepuDespachado.cantidadDespachada}
@@ -1683,13 +1745,17 @@ OBSERVACIÓN(ES):
                             {iTRepuDespachado.unidadEquivalencia}
                           </td>
                           <td data-label="Precio Uni" style={{ textAlign: 'end' }}>
-                            {iTRepuDespachado.precioPEN.$numberDecimal ? iTRepuDespachado.precioPEN.$numberDecimal : iTRepuDespachado.precioPEN}
+                            {iTRepuDespachado.precioUnitarioPEN.$numberDecimal
+                              ? iTRepuDespachado.precioUnitarioPEN.$numberDecimal
+                              : iTRepuDespachado.precioUnitarioPEN}
                           </td>
                           <td data-label="Venta" class="comoNumero">
                             {(iTRepuDespachado.cantidadDespachada.$numberDecimal
                               ? iTRepuDespachado.cantidadDespachada.$numberDecimal
                               : iTRepuDespachado.cantidadDespachada) *
-                              (iTRepuDespachado.precioPEN.$numberDecimal ? iTRepuDespachado.precioPEN.$numberDecimal : iTRepuDespachado.precioPEN)}
+                              (iTRepuDespachado.precioUnitarioPEN.$numberDecimal
+                                ? iTRepuDespachado.precioUnitarioPEN.$numberDecimal
+                                : iTRepuDespachado.precioUnitarioPEN)}
                           </td>
                           <td data-label="Acciones" class="acciones"></td>
                         </tr>
@@ -1749,6 +1815,7 @@ OBSERVACIÓN(ES):
           type="button"
           // disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
           value={definicion_CTX_O_S.numero === 0 ? 'Aperturar orden de servicio' : `Grabar`}
+          style={{ cursor: 'pointer', height: '40px' }}
           class="btn-centro"
           // onClick={(e) => onSubmit(e)}
           onClick$={() => {

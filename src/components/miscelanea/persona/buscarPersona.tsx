@@ -17,10 +17,11 @@ import EditarPersona from './editarPersona';
 import type { IPersonaEdit } from '~/interfaces/iPersona';
 import VentasClienteVentasVarios from './ventasClienteVentasVarios';
 import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
+import { CTX_BUSCAR_TRANSPORTISTA } from '../transportista/buscarTransportista';
 
 export const CTX_BUSCAR_PERSONA = createContextId<any>('buscar_persona');
 
-export default component$((props: { seleccionar?: string; soloPersonasNaturales: boolean; contexto?: any; rol: string; motivo?: boolean }) => {
+export default component$((props: { seleccionar?: string; soloPersonasNaturales: boolean; contexto: string; rol: string; motivo?: boolean }) => {
   //#region DEFINICION CTX_BUSCAR_PERSONA
   const definicion_CTX_BUSCAR_PERSONA = useStore({
     pP: [],
@@ -32,7 +33,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
     mostrarPanelNewEditPersona: false,
 
     mostrarPanelEditPersona: false,
-    personaEDITADA: { _id: '', razonSocialNombre: '', email: '', telefono: '', cuentasCorrientes: [] },
+    personaEDITADA: { _id: '', razonSocialNombre: '', direccion: '', email: '', telefono: '', cuentasCorrientes: [] },
   });
   useContextProvider(CTX_BUSCAR_PERSONA, definicion_CTX_BUSCAR_PERSONA);
   //#endregion DEFINICION CTX_BUSCAR_PERSONA
@@ -60,15 +61,21 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
       break;
     case 'new_edit_guiaRemision':
       ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
+      //console.log('sw ctx...°°°°°°°......CTX_NEW_EDIT_GUIA_REMISION');
+      if (props.rol === 'transportista') {
+        //console.log('sw context buscar_transportista...CTX_BUSCAR_TRANSPORTISTA');
+        ctx = useContext(CTX_BUSCAR_TRANSPORTISTA);
+      }
+      if (props.rol === 'chofer') {
+        //console.log('sw context buscar_chofer...CTX_BUSCAR_CHOFER');
+        ctx = useContext(CTX_BUSCAR_CHOFER);
+      }
       break;
     case 'new_edit_compra':
       ctx = useContext(CTX_NEW_EDIT_COMPRA);
       break;
     case 'buscar_tecnico':
       ctx = useContext(CTX_BUSCAR_TECNICO);
-      break;
-    case 'buscar_chofer':
-      ctx = useContext(CTX_BUSCAR_CHOFER);
       break;
   }
   //#endregion CONTEXTOS
@@ -79,7 +86,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
   document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
   // useTask$(({ track }) => {
   //   track(() => ini.value);
-  //   console.log('inicializando...');
+  //   //console.log('inicializando...');
   //   document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
   // });
   //#endregion INICIALIZACION
@@ -112,13 +119,14 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
     if (definicion_CTX_BUSCAR_PERSONA.grabo_Persona) {
       // (definicion_CTX_BUSCAR_PERSONA.buscarPor = 'DNI / RUC'),
       //   (definicion_CTX_BUSCAR_PERSONA.cadenaABuscar = definicion_CTX_BUSCAR_PERSONA.conceptoABuscar),
-      console.log('BBPP: definicion_CTX_BUSCAR_PERSONA.personaEDITADA', definicion_CTX_BUSCAR_PERSONA.personaEDITADA);
+      //console.log('BBPP: definicion_CTX_BUSCAR_PERSONA.personaEDITADA', definicion_CTX_BUSCAR_PERSONA.personaEDITADA);
       // buscarPersona.value++;
       if (definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id !== '') {
         const KKK: IPersonaEdit[] = definicion_CTX_BUSCAR_PERSONA.misPersonas.filter(
           (pers: any) => pers._id === definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id
         );
         KKK[0].razonSocialNombre = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.razonSocialNombre;
+        KKK[0].direccion = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.direccion;
         KKK[0].email = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.email;
         KKK[0].telefono = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.telefono;
         KKK[0].cuentasCorrientes = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.cuentasCorrientes;
@@ -152,6 +160,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
+            //console.log('xxxxxxxxxxxxxx', props.contexto, props.rol);
             if (props.contexto === 'new_out_almacen') {
               if (props.rol === 'cliente') {
                 ctx.mostrarPanelBuscarPersona_Venta = false;
@@ -159,17 +168,19 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 ctx.mostrarPanelBuscarPersona = false;
               }
             } else if (props.contexto === 'new_edit_guiaRemision') {
+              //console.log('new_edit_guiaRemision');
               if (props.rol === 'remitente') {
-                ctx.mostrarPanelBuscarPersonaRemitente = false;
+                ctx.mostrarPanelBuscarRemitente = false;
               }
               if (props.rol === 'destinatario') {
-                ctx.mostrarPanelBuscarPersonaDestinatario = false;
+                ctx.mostrarPanelBuscarDestinatario = false;
               }
               if (props.rol === 'transportista') {
-                ctx.mostrarPanelBuscarPersonaTransportista = false;
+                //console.log('transportista');
+                ctx.mostrarPanelBuscarTransportista = false;
               }
               if (props.rol === 'chofer') {
-                ctx.mostrarPanelBuscarPersonaChofer = false;
+                ctx.mostrarPanelBuscarPersona = false;
               }
             } else {
               ctx.mostrarPanelBuscarPersona = false;
@@ -185,8 +196,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('definicion_CTX_BUSCAR_PERSONA', definicion_CTX_BUSCAR_PERSONA);
-            // console.log('parametrosBusqueda', parametrosBusqueda);
+            //console.log('definicion_CTX_BUSCAR_PERSONA', definicion_CTX_BUSCAR_PERSONA);
+            // //console.log('parametrosBusqueda', parametrosBusqueda);
           })}
         />
         <ImgButton
@@ -196,8 +207,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
-            // console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);
+            //console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+            // //console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);
           })}
         />
       </div>
@@ -242,22 +253,22 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 }}
                 // onChange$={(e) => {
                 //   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
-                //   // console.log('onChange---', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                //   // //console.log('onChange---', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 // }}
                 onKeyDown$={(e) => {
-                  // console.log('🚐🚐🚐🚐🚌🚐🚐🚌🚌🚐🚐🚐🚐🚌🚐🚐first', e);
+                  // //console.log('🚐🚐🚐🚐🚌🚐🚐🚌🚌🚐🚐🚐🚐🚌🚐🚐first', e);
 
                   if (e.key === 'Escape') {
-                    // console.log('🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧first', e);
+                    // //console.log('🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧first', e);
                     document.getElementById('se_buscarPor_PERSONA')?.focus();
                   }
                   if (e.key === 'Enter') {
-                    // console.log('⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽first', e);
+                    // //console.log('⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽first', e);
                     document.getElementById('in_BuscarPersona')?.focus();
                   }
                 }}
                 // onKeyUp$={(e) => {
-                //   console.log('⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽first', e);
+                //   //console.log('⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽⛽first', e);
                 // }}
                 // onKeyPress$={(e) => {
                 //   // alert('🚧🚧🚧🚧🚧');
@@ -279,7 +290,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 height={16}
                 width={16}
                 style={{ margin: '0px 4px' }}
-                // onFocusin$={() => console.log('🎁🎁🎁🎁🎁')}
+                // onFocusin$={() => //console.log('🎁🎁🎁🎁🎁')}
                 onClick$={() => localizarPersonas()}
               />
               <input
@@ -289,7 +300,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 height={16}
                 width={16}
                 style={{ marginRight: '2px' }}
-                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                 onClick$={() => {
                   definicion_CTX_BUSCAR_PERSONA.pP = [];
                   definicion_CTX_BUSCAR_PERSONA.mostrarPanelNewEditPersona = true;

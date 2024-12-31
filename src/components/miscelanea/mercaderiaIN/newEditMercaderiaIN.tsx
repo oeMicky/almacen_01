@@ -17,6 +17,9 @@ import NewEditMarcaIN from './newEditMarcaIN';
 import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import BuscarUnidadSUNAT from './buscarUnidadSUNAT';
 import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from '../ordenProduccionTerminado/registroProductosTerminados';
+import SelectTipoImpuesto from '~/components/system/selectTipoImpuesto';
+import SelectTipoAfectacionDelImpuesto from '~/components/system/selectTipoAfectacionDelImpuesto';
+import { getPorcentajesUtilidad } from '~/apis/grupoEmpresarial.api';
 
 export const CTX_NEW_EDIT_MERCADERIA_IN = createContextId<any>('new_edit_mercaderia_IN');
 
@@ -57,11 +60,20 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   const definicion_CTX_MERCADERIA_IN = useStore<IMercaderiaIN>({
     _id: props.mercaSeleccio._id ? props.mercaSeleccio._id : '',
 
+    noFacturar: typeof props.mercaSeleccio.noFacturar === 'undefined' ? false : props.mercaSeleccio.noFacturar,
+
     activo: typeof props.mercaSeleccio.activo === 'undefined' ? true : props.mercaSeleccio.activo,
     codigo: props.mercaSeleccio.codigo ? props.mercaSeleccio.codigo : '',
     descripcion: props.mercaSeleccio.descripcion ? props.mercaSeleccio.descripcion : '',
     aplicacion: props.mercaSeleccio.aplicacion ? props.mercaSeleccio.aplicacion : '',
     UNSPSC: props.mercaSeleccio.UNSPSC ? props.mercaSeleccio.UNSPSC : '',
+
+    ubigeo: props.mercaSeleccio.ubigeo ? props.mercaSeleccio.ubigeo : '',
+
+    porcentajeUtilidadXDefecto: typeof props.mercaSeleccio.porcentajeUtilidadXDefecto === 'undefined' ? true : props.mercaSeleccio.porcentajeUtilidadXDefecto,
+    // porcentajeUtilidad: props.mercaSeleccio.porcentajeUtilidad.$numberDecimal ? props.mercaSeleccio.porcentajeUtilidad.$numberDecimal : 0,
+    porcentajeUtilidad: props.mercaSeleccio.porcentajeUtilidad ? props.mercaSeleccio.porcentajeUtilidad.$numberDecimal : 0,
+
     conLote: typeof props.mercaSeleccio.conLote === 'undefined' ? (typeof props.conLote === 'undefined' ? false : props.conLote) : props.mercaSeleccio.conLote,
     conFechaProduccion:
       typeof props.mercaSeleccio.conFechaProduccion === 'undefined'
@@ -87,9 +99,11 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     idUnidad: props.mercaSeleccio.idUnidad ? props.mercaSeleccio.idUnidad : '',
     unidad: props.mercaSeleccio.unidad ? props.mercaSeleccio.unidad : '',
 
-    tipoImpuesto: props.mercaSeleccio.tipoImpuesto ? props.mercaSeleccio.tipoImpuesto : 'IGV',
+    tipoImpuesto: props.mercaSeleccio.tipoImpuesto ? props.mercaSeleccio.tipoImpuesto : '1000 IGV VAT',
     tipoAfectacionDelImpuesto: props.mercaSeleccio.tipoAfectacionDelImpuesto ? props.mercaSeleccio.tipoAfectacionDelImpuesto : '10',
     porcentaje: props.mercaSeleccio.porcentaje ? props.mercaSeleccio.porcentaje : '18',
+
+    stockMinimo: props.mercaSeleccio.stockMinimo ? props.mercaSeleccio.stockMinimo : 2,
 
     kardex: props.mercaSeleccio.kardex ? props.mercaSeleccio.kardex : '',
     KARDEXS: props.mercaSeleccio.kardexs ? props.mercaSeleccio.kardexs : '',
@@ -107,7 +121,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     costoDeInicioPEN: props.mercaSeleccio.costoDeInicioPEN ? props.mercaSeleccio.costoDeInicioPEN : 0,
     costoPEN: props.mercaSeleccio.costoPEN ? props.mercaSeleccio.costoPEN : 0,
 
-    precioPEN: props.mercaSeleccio.precioPEN ? props.mercaSeleccio.precioPEN : 0,
+    precioUnitarioPEN: props.mercaSeleccio.precioUnitarioPEN ? props.mercaSeleccio.precioUnitarioPEN : 0,
   });
   useContextProvider(CTX_MERCADERIA_IN, definicion_CTX_MERCADERIA_IN);
   //#endregion DEFINICION MERCADERIA
@@ -136,6 +150,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   const lasUnidades = useSignal<any>([]);
   const lasUnidadesEquivalencias = useSignal<any>([]);
   const lasMarcas = useSignal([]);
+  const losPorcentajesUtilidad = useSignal([]);
+  // const ESTRELLA_MAX = useSignal(0);
 
   const insertarEquivalencia = useSignal(false);
   const laEquivalencia = useSignal([]);
@@ -143,17 +159,16 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   const lTSelecionado = useStore({ id: '', lt: '' });
   const marSelecionado = useStore({ id: '', mar: '' });
   const uniSelecionado = useStore({ id: '', uni: '' });
-
   //#endregion INICIALIZANDO
 
   //#region OBTENER MARCAS DE MERCADERIAS
   const obtenerMarcas = $((idLineaTipo: string) => {
-    console.log('entro a obtenerMarcas - idLineaTipo', idLineaTipo);
+    //console.log('entro a obtenerMarcas - idLineaTipo', idLineaTipo);
     const auxLineaTipo: any = lasLineasTipos.value.filter(({ _id }) => _id === idLineaTipo);
     const mars = auxLineaTipo[0].marcas;
     //  auxLineaTipo[0].unidades;
-    console.log('first - auxLineaTipo', auxLineaTipo[0]);
-    console.log('first - unis', mars.sort());
+    //console.log('first - auxLineaTipo', auxLineaTipo[0]);
+    //console.log('first - unis', mars.sort());
     //ORDENANDO UNIDADES
     const marsOrde: any = mars.sort((a: any, b: any) => {
       const marA = a.marca.toUpperCase(); // ignore upper and lowercase
@@ -167,18 +182,18 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       // names must be equal
       return 0;
     });
-    console.log('first - marsOrde', marsOrde);
+    //console.log('first - marsOrde', marsOrde);
     lasMarcas.value = marsOrde;
   });
   //#endregion OBTENER MARCAS DE MERCADERIAS
 
   //#region OBTENER UNIDADES DE MERCADERIAS
   const obtenerUnidades = $((idLineaTipo: string) => {
-    console.log('entro a obtenerUnidades - idLineaTipo', idLineaTipo);
+    //console.log('entro a obtenerUnidades - idLineaTipo', idLineaTipo);
     const auxLineaTipo: any = lasLineasTipos.value.filter(({ _id }) => _id === idLineaTipo);
     const unis = auxLineaTipo[0].unidades;
-    console.log('first - auxLineaTipo', auxLineaTipo[0]);
-    console.log('first - unis', unis.sort());
+    //console.log('first - auxLineaTipo', auxLineaTipo[0]);
+    //console.log('first - unis', unis.sort());
     //ORDENANDO UNIDADES
     const unisOrde: any = unis.sort((a: any, b: any) => {
       const uniA = a.unidad.toUpperCase(); // ignore upper and lowercase
@@ -192,7 +207,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       // names must be equal
       return 0;
     });
-    console.log('first - unisOrde', unisOrde);
+    //console.log('first - unisOrde', unisOrde);
     lasUnidades.value = unisOrde;
 
     const unisEqui = auxLineaTipo[0].unidadesEquivalencias;
@@ -209,7 +224,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       // names must be equal
       return 0;
     });
-    console.log('first - unisEquiOrde', unisEquiOrde);
+    //console.log('first - unisEquiOrde', unisEquiOrde);
     lasUnidadesEquivalencias.value = unisEquiOrde;
     definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE = unisEquiOrde;
   });
@@ -217,12 +232,12 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
   //#region OBTENER LINEAS / TIPOS DE MERCADERIAS
   const obtenerLineasTipos = $(async () => {
-    // console.log('enotro a obtenerLineasTipos');
+    // //console.log('enotro a obtenerLineasTipos');
     const listaLineasTipos = await getLineasTipos({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
     });
-    console.log('listaLineasTipos.data', listaLineasTipos.data);
+    //console.log('listaLineasTipos.data', listaLineasTipos.data);
 
     lasLineasTipos.value = listaLineasTipos.data;
     if (definicion_CTX_MERCADERIA_IN.idLineaTipo !== '') {
@@ -230,7 +245,6 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       obtenerMarcas(definicion_CTX_MERCADERIA_IN.idLineaTipo);
     }
   });
-
   //#endregion OBTENER LINEAS / TIPOS DE MERCADERIAS
 
   //#region ACTUALIZAR LINEA / TIPO
@@ -249,10 +263,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_marca) {
       //ORDENAR MARCAS
       const uno: any = definicion_CTX_NEW_EDIT_MERCADERIA_IN.laLineaTipo;
-      console.log('uno marca', uno);
+      //console.log('uno marca', uno);
       // const dos: any = uno.marcas;
       const dos: any = uno.marcas;
-      console.log('dos marca', dos);
+      //console.log('dos marca', dos);
       //ORDENANDO MARCAS EQUIVALENCIAS
       const marsOrde: any = dos.sort((a: any, b: any) => {
         const marA = a.marca.toUpperCase(); // ignore upper and lowercase
@@ -266,7 +280,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
         // names must be equal
         return 0;
       });
-      console.log('first - marsOrde', marsOrde);
+      //console.log('first - marsOrde', marsOrde);
       lasMarcas.value = marsOrde;
 
       definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_marca = false;
@@ -280,7 +294,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidad) {
       //ORDENAR UNIDADES
       const uno: any = definicion_CTX_NEW_EDIT_MERCADERIA_IN.laLineaTipo;
-      console.log('uno unidad', uno);
+      //console.log('uno unidad', uno);
       const dos: any = uno.unidades;
       //ORDENANDO UNIDADES EQUIVALENCIAS
       const unisOrde: any = dos.sort((a: any, b: any) => {
@@ -295,7 +309,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
         // names must be equal
         return 0;
       });
-      console.log('first - unisOrde', unisOrde);
+      //console.log('first - unisOrde', unisOrde);
       lasUnidades.value = unisOrde;
 
       definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidad = false;
@@ -306,13 +320,13 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   //#region ACTUALIZAR UNIDAD SUNAT
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadSUNAT);
-    console.log('definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit', definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit);
+    //console.log('definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit', definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit);
     if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadSUNAT) {
-      console.log('first');
+      //console.log('first');
       const LINE: any = lasLineasTipos.value.filter((LT: any) => LT._id === definicion_CTX_NEW_EDIT_MERCADERIA_IN.idLT);
-      console.log('second LINE', LINE, definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit.unidad);
+      //console.log('second LINE', LINE, definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit.unidad);
       const laUNIDAD = LINE[0].unidades.filter((lasUNIS: any) => lasUNIS.unidad === definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit.unidad);
-      console.log('tree laUNIDAD', laUNIDAD);
+      //console.log('tree laUNIDAD', laUNIDAD);
       if (laUNIDAD.length === 0) {
         LINE[0].unidades.push(definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit);
         LINE[0].unidades.sort((a: any, b: any) => {
@@ -327,7 +341,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           // names must be equal
           return 0;
         });
-        console.log('ford LINE[0]', LINE[0]);
+        //console.log('ford LINE[0]', LINE[0]);
       }
       if (laUNIDAD.length === 1) {
         laUNIDAD[0]._id = definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNInewedit._id;
@@ -347,11 +361,11 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadEquivalenciaSUNAT);
 
-    console.log('definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit', definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit);
+    //console.log('definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit', definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit);
     if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadEquivalenciaSUNAT) {
-      console.log('firstEQ');
+      //console.log('firstEQ');
       const LINE: any = lasLineasTipos.value.filter((LT: any) => LT._id === definicion_CTX_NEW_EDIT_MERCADERIA_IN.idLT);
-      console.log('secondEQ LINE', LINE, definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit.unidadEquivalencia);
+      //console.log('secondEQ LINE', LINE, definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit.unidadEquivalencia);
       const laUNIDADEQUI = LINE[0].unidadesEquivalencias.filter(
         (lasUNIS: any) => lasUNIS.unidadEquivalencia === definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit.unidadEquivalencia
       );
@@ -371,10 +385,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
         });
         definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE = LINE[0].unidadesEquivalencias;
         definicion_CTX_NEW_EDIT_MERCADERIA_IN.actualizarLasUE = true;
-        console.log('treeEQ definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE', definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE);
-        console.log('fordEQ LINE[0]', LINE[0]);
+        //console.log('treeEQ definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE', definicion_CTX_NEW_EDIT_MERCADERIA_IN.lasUE);
+        //console.log('fordEQ LINE[0]', LINE[0]);
       }
-      // console.log('treeEQ laUNIDADEQUI', laUNIDADEQUI);
+      // //console.log('treeEQ laUNIDADEQUI', laUNIDADEQUI);
       definicion_CTX_NEW_EDIT_MERCADERIA_IN.idLT = '';
       definicion_CTX_NEW_EDIT_MERCADERIA_IN.laUNIEQUInewedit = { _id: '', unidadEquivalencia: '', descripcion: '' };
       definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_unidadEquivalenciaSUNAT = false;
@@ -382,13 +396,29 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   });
   //#endregion ACTUALIZAR UNIDAD EQUIVALENCIA SUNAT
 
+  //#region OBTENER PORCENTAJES DE UTILIDAD
+  const obtenerPorcentajesUtilidad = $(async () => {
+    const obtPorcentajes = await getPorcentajesUtilidad({
+      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+      idEmpresa: parametrosGlobales.idEmpresa,
+    });
+
+    losPorcentajesUtilidad.value = obtPorcentajes.data;
+
+    // losPorcentajesUtilidad.value.map((elem: any) => {
+    //   if (ESTRELLA_MAX.value < elem.estrellas) {
+    //     ESTRELLA_MAX.value = elem.estrellas;
+    //   }
+    // });
+    // //console.log('losPorcentajesUtilidad.value', losPorcentajesUtilidad.value);
+  });
+  //#endregion OBTENER PORCENTAJES DE UTILIDAD
+
   useTask$(({ track }) => {
     track(() => ini.value);
-    console.log('entro a useTask');
+    //console.log('entro a useTask');
     obtenerLineasTipos();
-    // if (definicion_CTX_MERCADERIA_IN.idLineaTipo !== '') {
-    //   obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
-    // }
+    obtenerPorcentajesUtilidad();
   });
 
   //#region REGISTRAR MERCADERIA
@@ -414,9 +444,16 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       return;
     }
     if (definicion_CTX_MERCADERIA_IN.idUnidad === '') {
-      alert('Ingrese la descripción');
+      alert('Ingrese la unidad');
       document.getElementById('se_unidad_MERCADERIA_IN')?.focus();
       return;
+    }
+    if (definicion_CTX_MERCADERIA_IN.porcentajeUtilidadXDefecto) {
+      if (definicion_CTX_MERCADERIA_IN.porcentajeUtilidad === '' || definicion_CTX_MERCADERIA_IN.porcentajeUtilidad === 0) {
+        alert('Seleccione un porcentaje de utilidad');
+        document.getElementById('se_porcentajeUtilidad_MERCADERIA_IN')?.focus();
+        return;
+      }
     }
     if (definicion_CTX_MERCADERIA_IN.equivalencias.length < 1) {
       alert('Ingrese al menos una equivalencia');
@@ -430,6 +467,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       idEmpresa: parametrosGlobales.idEmpresa,
       idAlmacenOrigen: parametrosGlobales.idAlmacen,
       idMercaderia: definicion_CTX_MERCADERIA_IN._id,
+
+      noFacturar: definicion_CTX_MERCADERIA_IN.noFacturar,
 
       activo: definicion_CTX_MERCADERIA_IN.activo,
       codigo: definicion_CTX_MERCADERIA_IN.codigo,
@@ -448,6 +487,14 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       marca: definicion_CTX_MERCADERIA_IN.marca,
       idUnidad: definicion_CTX_MERCADERIA_IN.idUnidad,
       unidad: definicion_CTX_MERCADERIA_IN.unidad,
+
+      ubigeo: definicion_CTX_MERCADERIA_IN.ubigeo,
+
+      porcentajeUtilidadXDefecto: definicion_CTX_MERCADERIA_IN.porcentajeUtilidadXDefecto,
+      porcentajeUtilidad: definicion_CTX_MERCADERIA_IN.porcentajeUtilidad,
+
+      stockMinimo: definicion_CTX_MERCADERIA_IN.stockMinimo,
+
       // kardex: props.mercaSeleccio.kardex ? props.mercaSeleccio.kardex : '',
       // kardexs: props.mercaSeleccio.kardexs ? props.mercaSeleccio.kardexs : '',
       tipoImpuesto: definicion_CTX_MERCADERIA_IN.tipoImpuesto,
@@ -463,10 +510,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       costoDeInicioPEN: definicion_CTX_MERCADERIA_IN.costoDeInicioPEN,
       // totalCantidadSaldo: props.mercaSeleccio.totalCantidadSaldo ? props.mercaSeleccio.totalCantidadSaldo : '',
       // costoPEN: props.mercaSeleccio.costoPEN ? props.mercaSeleccio.costoPEN : 0,
-      // precioPEN: props.mercaSeleccio.precioPEN ? props.mercaSeleccio.precioPEN : 0,
+      // precioUnitarioPEN: props.mercaSeleccio.precioUnitarioPEN ? props.mercaSeleccio.precioUnitarioPEN : 0,
     });
 
-    console.log('merca', merca);
+    //console.log('merca', merca);
 
     ctx.abuscar = merca.data.descripcion;
     ctx.grabo_mercaderiaIN = true;
@@ -486,14 +533,14 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de persona"
           height={16}
           width={16}
           title="Ver props.mercaSeleccio"
           onClick={$(() => {
-            console.log('props.mercaSeleccio', props.mercaSeleccio);
+            //console.log('props.mercaSeleccio', props.mercaSeleccio);
           })}
         />
         <ImgButton
@@ -503,19 +550,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           width={16}
           title="Ver props.mercaSeleccio.conLote"
           onClick={$(() => {
-            console.log('props.mercaSeleccio.conLote', props.mercaSeleccio.conLote);
+            //console.log('props.mercaSeleccio.conLote', props.mercaSeleccio.conLote);
           })}
         />
-        <ImgButton
-          src={images.see}
-          alt="Icono de persona"
-          height={16}
-          width={16}
-          title="Ver definicion_CTX_MERCADERIA_IN"
-          onClick={$(() => {
-            console.log('definicion_CTX_MERCADERIA_IN', definicion_CTX_MERCADERIA_IN);
-          })}
-        />
+       
         <ImgButton
           src={images.see}
           alt="Icono de persona"
@@ -523,9 +561,30 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           width={16}
           title="Ver lasLineasTipos.value"
           onClick={$(() => {
-            console.log('lasLineasTipos.value', lasLineasTipos.value);
+            //console.log('lasLineasTipos.value', lasLineasTipos.value);
           })}
-        />{' '}
+        /> */}
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de persona"
+          height={16}
+          width={16}
+          title="Ver definicion_CTX_MERCADERIA_IN"
+          onClick={$(() => {
+            console.log('mercaSeleccio', props.mercaSeleccio);
+            //console.log('definicion_CTX_MERCADERIA_IN', definicion_CTX_MERCADERIA_IN);
+          })}
+        /> */}
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de persona"
+          height={16}
+          width={16}
+          title="Ver losPorcentajesUtilidad.value"
+          onClick={$(() => {
+            //console.log('losPorcentajesUtilidad.value', losPorcentajesUtilidad.value);
+          })}
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -538,16 +597,62 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Registro de mercadería</h3>
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: '#666666' }}>Registro de mercadería</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         <div>
+          {/* ----------------------------------------------------- */}
+          {/* BOTONES */}
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+              <div>
+                <input
+                  id="in_activo_MERCADERIA_IN"
+                  type="checkbox"
+                  checked={definicion_CTX_MERCADERIA_IN.activo}
+                  onChange$={(e) => {
+                    definicion_CTX_MERCADERIA_IN.activo = (e.target as HTMLInputElement).checked;
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('in_noFacturar_MERCADERIA_IN')?.focus();
+                    }
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                />
+                <label for="in_activo_MERCADERIA_IN">Activo</label>
+              </div>
+              <div>
+                <input
+                  id="in_noFacturar_MERCADERIA_IN"
+                  type="checkbox"
+                  checked={definicion_CTX_MERCADERIA_IN.noFacturar}
+                  onChange$={(e) => {
+                    definicion_CTX_MERCADERIA_IN.noFacturar = (e.target as HTMLInputElement).checked;
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('se_descripcion_MERCADERIA_IN')?.focus();
+                    }
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                />
+                <label for="in_noFacturar_MERCADERIA_IN">No Facturar</label>
+              </div>
+            </div>
+            <br />
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
+          </div>
           {/* Código */}
-          <div class="form-control">
+          {/* <div class="form-control">
             <input
               id="se_codigo_MERCADERIA_IN"
               style={{ width: '100%' }}
-              disabled
+              // disabled
               maxLength={13}
               type="text"
               placeholder="Código"
@@ -555,20 +660,16 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
               onChange$={(e) => {
                 definicion_CTX_MERCADERIA_IN.codigo = (e.target as HTMLInputElement).value.trim().toUpperCase();
               }}
-              //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
               onKeyPress$={(e) => {
                 if (e.key === 'Enter') {
                   document.getElementById('se_descripcion_MERCADERIA_IN')?.focus();
                 }
-                // if (e.key === 'Escape') {
-                //   document.getElementById('tipoDocumentoIdentidad')?.focus();
-                // }
               }}
               onFocusin$={(e) => {
                 (e.target as HTMLInputElement).select();
               }}
             />
-          </div>
+          </div> */}
           {/* Descripción */}
           <div class="form-control">
             <div class="form-control form-agrupado">
@@ -662,10 +763,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 registroTEXT={'lineaTipoMercaderia'}
                 seleccione={'-- Seleccione linea / tipo --'}
                 onChange={$(() => {
-                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  // console.log('?', elIdx, elSelec[elIdx].id);
+                  // //console.log('?', elIdx, elSelec[elIdx].id);
                   definicion_CTX_MERCADERIA_IN.idLineaTipo = elSelec[elIdx].id;
                   if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
                     definicion_CTX_MERCADERIA_IN.lineaTipo = '';
@@ -701,10 +802,10 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 registroTEXT={'marca'}
                 seleccione={'-- Seleccione marca --'}
                 onChange={$(() => {
-                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  // console.log('?', elIdx, elSelec[elIdx].id);
+                  // //console.log('?', elIdx, elSelec[elIdx].id);
                   definicion_CTX_MERCADERIA_IN.idMarca = elSelec[elIdx].id;
                   if (definicion_CTX_MERCADERIA_IN.idMarca === '') {
                     definicion_CTX_MERCADERIA_IN.marca = '';
@@ -748,8 +849,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 onClick$={() => {
                   const elSelec = document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
+                  //console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  //console.log('elSelec.value', elSelec.value);
                   if (elSelec[elIdx].id === '') {
                     alert('Seleccione la marca.');
                     elSelec.focus();
@@ -789,7 +890,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 registroTEXT={'unidad'}
                 seleccione={'-- Seleccione unidad --'}
                 onChange={$(() => {
-                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   definicion_CTX_MERCADERIA_IN.idUnidad = elSelec[elIdx].id;
@@ -854,8 +955,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 onClick$={() => {
                   const elSelec = document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
+                  //console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  //console.log('elSelec.value', elSelec.value);
                   if (elSelec[elIdx].id === '') {
                     alert('Seleccione la unidad.');
                     elSelec.focus();
@@ -887,6 +988,111 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
               </div>
             )} */}
           </div>
+          <br />
+          {/* Ubigeo */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <input
+                id="se_ubigeo_MERCADERIA_IN"
+                style={{ width: '100%' }}
+                type="text"
+                placeholder="Ubigeo"
+                title="Ubigeo Ej: 1A83 (1:Piso, A:Sección, 8:Columna, 3:Fila)"
+                value={definicion_CTX_MERCADERIA_IN.ubigeo}
+                onChange$={(e) => {
+                  definicion_CTX_MERCADERIA_IN.ubigeo = (e.target as HTMLInputElement).value.trim();
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('se_UNSPSC_MERCADERIA_IN')?.focus();
+                  }
+                }}
+              />
+            </div>
+          </div>
+          {/* Ejm Ubigeo */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <label style={{ color: '#666666' }}>Ejm: 1A83 (1:Piso, A:Sección, 8:Columna, 3:Fila)</label>
+            </div>
+          </div>
+          {/* PORCENTAJE DE UTILIDAD x DEFECTO */}
+          <div>
+            <div>
+              <input
+                id="in_porcentajeUtilidadXDefecto_MERCADERIA_IN"
+                type="checkbox"
+                checked={definicion_CTX_MERCADERIA_IN.porcentajeUtilidadXDefecto}
+                onChange$={(e) => {
+                  definicion_CTX_MERCADERIA_IN.porcentajeUtilidadXDefecto = (e.target as HTMLInputElement).checked;
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('in_inafecto_MERCADERIA_IN')?.focus();
+                  }
+                }}
+                onFocusin$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
+              />
+              <label for="in_porcentajeUtilidadXDefecto_MERCADERIA_IN">Porcentaje Utilidad x Defecto</label>
+            </div>
+          </div>
+          {/* PORCENTAJE UTILIDAD    */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <select
+                id="se_porcentajeUtilidad_MERCADERIA_IN"
+                hidden={!definicion_CTX_MERCADERIA_IN.porcentajeUtilidadXDefecto}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const elSelect = e.target as HTMLSelectElement;
+                  const elOption = elSelect[idx];
+
+                  if (elOption.id === '') {
+                    definicion_CTX_MERCADERIA_IN.porcentajeUtilidad = 0;
+                  } else {
+                    definicion_CTX_MERCADERIA_IN.porcentajeUtilidad = Number((e.target as HTMLSelectElement).value);
+                  }
+                }}
+              >
+                <option value="">-- Seleccionar porcentaje utilidad --</option>
+                {losPorcentajesUtilidad.value.map((elem: any) => {
+                  return (
+                    <option
+                      id={elem._id}
+                      value={elem.porcentajeUtilidad.$numberDecimal}
+                      selected={definicion_CTX_MERCADERIA_IN.porcentajeUtilidad === elem.porcentajeUtilidad.$numberDecimal}
+                    >
+                      {elem.porcentajeUtilidad.$numberDecimal}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+          {/* STOCK MINIMO */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <input
+                id="se_stockMinimo_MERCADERIA_IN"
+                style={{ width: '100%' }}
+                type="number"
+                placeholder="Stock minimo"
+                title="Stock minimo"
+                value={definicion_CTX_MERCADERIA_IN.stockMinimo}
+                onChange$={(e) => {
+                  definicion_CTX_MERCADERIA_IN.stockMinimo = (e.target as HTMLInputElement).value.trim();
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('in_conLote_MERCADERIA_IN')?.focus();
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <br />
           {/* GRUPO CAMPOS => con Fecha Vencimiento / Lote - Inafecto - Exonerado - Sujeto a percepción */}
           {/* <fieldset style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}> */}
           <fieldset class="servicios">
@@ -1040,7 +1246,25 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
             {/* TIPO IMPUESTO */}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                <select
+                <SelectTipoImpuesto
+                  elId="se_tipoImpuesto_MERCADERIA_IN"
+                  tipoImpuesto={
+                    definicion_CTX_MERCADERIA_IN.tipoImpuesto[0] +
+                    ' ' +
+                    definicion_CTX_MERCADERIA_IN.tipoImpuesto[1] +
+                    ' ' +
+                    definicion_CTX_MERCADERIA_IN.tipoImpuesto[2]
+                  }
+                  onChange={$((e: any) => {
+                    definicion_CTX_MERCADERIA_IN.tipoImpuesto = (e.target as HTMLSelectElement).value;
+                  })}
+                  onKeyPress={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('se_tipoAfectacionDelImpuesto_MERCADERIA_IN')?.focus();
+                    }
+                  })}
+                />
+                {/* <select
                   id="se_tipoImpuesto_MERCADERIA_IN"
                   // style={{ width: "288px" }}
                   // style={{ width: "inherit" }}
@@ -1072,13 +1296,25 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                   <option value="otrosTributos" selected={definicion_CTX_MERCADERIA_IN.tipoImpuesto === 'otrosTributos'}>
                     otrosTributos
                   </option>
-                </select>
+                </select> */}
               </div>
             </div>
             {/* TIPO DE AFECTACION DEL IMPUESTO */}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                <select
+                <SelectTipoAfectacionDelImpuesto
+                  elId="se_tipoAfectacionDelImpuesto_MERCADERIA_IN"
+                  tipoAfectacionDelImpuesto={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto}
+                  onChange={$((e: any) => {
+                    definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto = (e.target as HTMLSelectElement).value;
+                  })}
+                  onKeyPress={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('btn_add_equivalencia_MERCADERIA_IN')?.focus();
+                    }
+                  })}
+                />
+                {/* <select
                   id="se_tipoAfectacionDelImpuesto_MERCADERIA_IN"
                   // style={{ width: "288px" }}
                   style={{ width: '100%' }}
@@ -1143,10 +1379,11 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                   <option value="40" selected={definicion_CTX_MERCADERIA_IN.tipoAfectacionDelImpuesto === '40'}>
                     Exportación de Bienes o Servicios
                   </option>
-                </select>
+                </select> */}
               </div>
             </div>
           </fieldset>
+          <br />
           {/* EQUIVALENCIAS */}
           <div>
             <div
@@ -1252,6 +1489,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
             )}*/}
             </div>
           </div>
+          <br />
         </div>
 
         {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción*/}
@@ -1259,6 +1497,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           id="btn_registrar_mercaderia_MERCADERIA_IN"
           type="submit"
           value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          style={{ height: '40px' }}
           class="btn-centro"
           onClick$={() => {
             registrarMercaderia();

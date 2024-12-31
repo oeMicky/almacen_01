@@ -23,7 +23,8 @@ export interface IModeloVehicular {
 }
 
 export interface IUnidadTransporte {
-  _id: string;
+  idUnidadTransporte: string;
+  idVehiculo: string;
   idGrupoEmpresarial: string;
   idEmpresa: string;
   placa: string;

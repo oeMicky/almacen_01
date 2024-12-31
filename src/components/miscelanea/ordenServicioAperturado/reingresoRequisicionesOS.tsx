@@ -21,11 +21,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
   const losReingresos = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // track(() => props.buscarOrdenesServicio.valueOf());
     track(() => ini.value);
-    console.log('parametrosBusqueda losReingresos ini.value', ini.value);
+    //console.log('parametrosBusqueda losReingresos ini.value', ini.value);
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda losReingresos', props.osSeleccionada._id);
+    //console.log('parametrosBusqueda losReingresos', props.osSeleccionada._id);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getReingresoRequisiciones', {
       method: 'POST',
@@ -91,15 +91,15 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           <Resource
             value={losReingresos}
             onPending={() => {
-              console.log('onPending 🍉🍉🍉🍉');
+              //console.log('onPending 🍉🍉🍉🍉');
               return <div>Cargando...</div>;
             }}
             onRejected={() => {
-              console.log('onRejected 🍍🍍🍍🍍');
+              //console.log('onRejected 🍍🍍🍍🍍');
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(requisiciones) => {
-              console.log('onResolved 🍓🍓🍓🍓', requisiciones);
+              //console.log('onResolved 🍓🍓🍓🍓', requisiciones);
               const { data } = requisiciones; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misReingresos.value = data;
@@ -148,7 +148,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                                     value={reingresoLocali.aReingresar}
                                     onChange$={(e) => {
                                       const a_Reingresar = parseFloat((e.target as HTMLInputElement).value);
-                                      console.log('a_Reingresar', a_Reingresar);
+                                      //console.log('a_Reingresar', a_Reingresar);
                                       reingresoLocali.aReingresar = a_Reingresar;
                                     }}
                                     onFocusin$={(e) => {
@@ -180,8 +180,8 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           value="Reingresar"
           class="btn-centro"
           onClick$={() => {
-            console.log('losReingresos', losReingresos);
-            console.log('mis misReingresos', misReingresos.value);
+            //console.log('losReingresos', losReingresos);
+            //console.log('mis misReingresos', misReingresos.value);
 
             //VERIFICAR montos a REINGRESAR
             let todoCorrecto = true;
@@ -224,7 +224,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               //     parseFloat(reingresoLocali.stock.$numberDecimal) / parseFloat(reingresoLocali.laEquivalencia.$numberDecimal);
               // }
 
-              // console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, rein);
+              // //console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, rein);
               // if (rein > stockEQUIVALENTE) {
               //   alert(
               //     `ATENCIÓN: Desea despachar mayor cantidad ( ${rein} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`
@@ -233,7 +233,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
               //   break;
               // }
 
-              console.log('despachado - reingresado - aReingre', despachado, reingresado, aReingre);
+              //console.log('despachado - reingresado - aReingre', despachado, reingresado, aReingre);
               if (aReingre > despachado - reingresado) {
                 alert(
                   `ATENCIÓN: La cantidad que puede ser reingresada ( D - R = ${
@@ -248,7 +248,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             if (!todoCorrecto) {
               return;
             }
-            console.log('paso VERIFICACION de CANTIDADES A REINGRESAR');
+            //console.log('paso VERIFICACION de CANTIDADES A REINGRESAR');
             ////// copiar los datos al panel de EGRESO
 
             //ID DE LA ORDEN SERVICIO
@@ -283,10 +283,10 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             for (const reingresoLocali of misReingresos.value) {
               const rein = reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar;
 
-              console.log('rein', rein);
+              //console.log('rein', rein);
               if (rein > 0) {
                 let IGVCalculado = 0;
-                console.log('reingresoLocali.igv', reingresoLocali.igv, reingresoLocali.igv.$numberDecimal);
+                //console.log('reingresoLocali.igv', reingresoLocali.igv, reingresoLocali.igv.$numberDecimal);
                 const elIGV = reingresoLocali.igv.$numberDecimal ? reingresoLocali.igv.$numberDecimal : reingresoLocali.igv;
                 if (elIGV === 0) {
                   IGVCalculado = 0;
@@ -299,7 +299,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 } else {
                   costo = reingresoLocali.costoUnitarioPEN.$numberDecimal * reingresoLocali.factor;
                 }
-                console.log('IGVCalculado -- costo', IGVCalculado, costo);
+                //console.log('IGVCalculado -- costo', IGVCalculado, costo);
                 documento.itemsMercaderias.push({
                   idAuxiliar: reingresoLocali.idAuxiliar, //parseInt(elIdAuxiliar()),
                   idMercaderia: reingresoLocali.idMercaderia,

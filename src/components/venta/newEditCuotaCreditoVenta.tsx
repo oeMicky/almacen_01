@@ -48,14 +48,14 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
           title="Cerrar formulario"
           onClick={$(() => (ctx_add_venta.mostrarPanelCuotasCredito = false))}
         />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de see"
           height={16}
           width={16}
           title="imprimir see"
-          onClick={$(() => console.log('cuota.idAuxiliar', props.cuota.idAuxiliar))}
-        />
+          onClick={$(() => //console.log('cuota.idAuxiliar', props.cuota.idAuxiliar))}
+        /> */}
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.8rem' }}>Cuota</h3>

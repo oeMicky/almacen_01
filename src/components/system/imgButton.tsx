@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useSignal } from '@builder.io/qwik';
 
 interface IImgButton {
   id?: string;
@@ -15,7 +15,8 @@ interface IImgButton {
 
 export default component$((props: IImgButton) => {
   // const clikeado = useSignal(false);
-  // console.log('🎈🎈🎈🎈🎈🎈clikeado');
+  // //console.log('🎈🎈🎈🎈🎈🎈clikeado');
+  const enfocado = useSignal(false);
   return (
     <img
       id={props.id}
@@ -25,19 +26,43 @@ export default component$((props: IImgButton) => {
       width={props.width}
       title={props.title}
       hidden={props.hidden}
-      style={{
-        marginLeft: '4px',
-        marginRight: '4px',
-        marginTop: '1px',
-        cursor: 'pointer',
-        // borderRadius: '50%',
-        // padding: '2px 2px',
-        // filter: 'invert(1)',
-        // border: ' 1px solid red',
-      }}
+      style={
+        enfocado.value
+          ? {
+              marginLeft: '4px',
+              marginRight: '4px',
+              marginTop: '1px',
+              cursor: 'pointer',
+              borderRadius: '4px',
+              // borderRadius: '50%',
+              // padding: '2px 2px',
+              // filter: 'invert(1)',
+              // border: ' 1px solid red',
+              // backgroundColor: 'gold',
+              backgroundColor: '#CCCCCC',
+            }
+          : {
+              marginLeft: '4px',
+              marginRight: '4px',
+              marginTop: '1px',
+              cursor: 'pointer',
+              borderRadius: '4px',
+              // borderRadius: '50%',
+              // padding: '2px 2px',
+              // filter: 'invert(1)',
+              // border: ' 1px solid red',
+              // backgroundColor: 'gold',
+              // backgroundColor: '#CCCCCC',
+            }
+      }
       onClick$={props.onClick}
-      onFocusin$={props.onFocusin}
-      onFocus$={props.onFocus}
+      onMouseEnter$={() => (enfocado.value = true)}
+      onMouseLeave$={() => (enfocado.value = false)}
+      // onFocusin$={props.onFocusin}
+      // onFocus$={() => alert('ojo')}
+      // onFocusin$={() => (enfocado.value = true)}
+      // onFocusout$$={() => (enfocado.value = false)}
+      // window:onFocusin$={() => (enfocado.value = true)}
     />
     // <img
     //   style={{

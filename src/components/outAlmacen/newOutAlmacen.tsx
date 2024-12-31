@@ -176,9 +176,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
     });
-    // console.log('losMotivos', losMotivos);
+    // //console.log('losMotivos', losMotivos);
     losMotivosCargados.value = losMotivos.data;
-    // console.log(' losMotivosCargados.value', losMotivosCargados.value);
+    // //console.log(' losMotivosCargados.value', losMotivosCargados.value);
   });
 
   useTask$(({ track }) => {
@@ -208,7 +208,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliarDoc);
     if (definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliarDoc > 0) {
-      console.log('borrando...', definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliarDoc);
+      //console.log('borrando...', definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliarDoc);
       const newItems: any = definicion_CTX_OUT_ALMACEN.documentosAdjuntos.filter(
         (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliarDoc
       );
@@ -222,7 +222,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliar);
     if (definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliar > 0) {
-      console.log('borrando...', definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliar);
+      //console.log('borrando...', definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliar);
       const newItems: any = definicion_CTX_OUT_ALMACEN.itemsMercaderias.filter(
         (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_OUT_ALMACEN.borrarIdAuxiliar
       );
@@ -235,7 +235,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   //#region REGISTRAR_EGRESO
   const registrarEgreso = $(async () => {
     //periodo FISMA idMotivoEgresoAlmacen
-    console.log(' //periodo FISMA idMotivoEgresoAlmacen');
+    //console.log(' //periodo FISMA idMotivoEgresoAlmacen');
     if (definicion_CTX_OUT_ALMACEN.idAlmacen === '' || typeof definicion_CTX_OUT_ALMACEN.idAlmacen === 'undefined') {
       alert('No se identificado el almacén, por favor verifique.');
       // document.getElementById('se_motivoIngreso')?.focus();
@@ -257,12 +257,12 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       return;
     }
     //DESTINATARIO
-    console.log(
-      ' //DESTINATARIO',
-      definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
-      definicion_CTX_OUT_ALMACEN.numeroIdentidad,
-      definicion_CTX_OUT_ALMACEN.razonSocialNombre
-    );
+    //console.log(
+    //   ' //DESTINATARIO',
+    //   definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
+    //   definicion_CTX_OUT_ALMACEN.numeroIdentidad,
+    //   definicion_CTX_OUT_ALMACEN.razonSocialNombre
+    // );
     if (definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === '' || typeof definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === 'undefined') {
       alert('Identifique al destinatario');
       document.getElementById('img_buscarDESTINATARIO')?.focus();
@@ -284,14 +284,14 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     //   return;
     // }
     //documentosAdjuntos
-    console.log(' //documentosAdjuntos');
+    //console.log(' //documentosAdjuntos');
     if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
       alert('Agregue al menos un documento');
       document.getElementById('btn_Add_Documento')?.focus();
       return;
     }
     //itemsMercaderias
-    console.log(' //itemsMercaderias');
+    //console.log(' //itemsMercaderias');
     if (definicion_CTX_OUT_ALMACEN.itemsMercaderias.length < 1) {
       alert('Agregue al menos una mercadería');
       document.getElementById('btn_Add_Mercaderia')?.focus();
@@ -326,12 +326,13 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         razonSocialNombre: definicion_CTX_OUT_ALMACEN.razonSocialNombre,
 
         documentosAdjuntos: definicion_CTX_OUT_ALMACEN.documentosAdjuntos,
+
         itemsMercaderias: definicion_CTX_OUT_ALMACEN.itemsMercaderias,
 
         usuario: parametrosGlobales.usuario,
       });
 
-      console.log('Grabó el egreso de almacén - outAlma: ', outAlma);
+      //console.log('Grabó el egreso de almacén - outAlma: ', outAlma);
 
       if (outAlma.status === 400) {
         alert('Falla al registrar la outAlmacen. ' + outAlma.message);
@@ -342,7 +343,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       ctx_index_out_almacen.mostrarPanelNewOutAlmacen = false;
       ctx_index_out_almacen.mostrarSpinner = false;
     } catch (error) {
-      console.log('ERROR - outAlma: ', error);
+      //console.log('ERROR - outAlma: ', error);
       ctx_index_out_almacen.mostrarSpinner = false;
     }
   });
@@ -365,16 +366,16 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           justifyContent: 'end',
         }}
       >
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
           title="definicion_CTX_OUT_ALMACEN"
           onClick={$(() => {
-            console.log('definicion_CTX_OUT_ALMACEN', definicion_CTX_OUT_ALMACEN);
+            //console.log('definicion_CTX_OUT_ALMACEN', definicion_CTX_OUT_ALMACEN);
           })}
-        />
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -465,10 +466,10 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   seleccione={'-- Seleccione motivo egreso --'}
                   disabled={definicion_CTX_OUT_ALMACEN.itemsMercaderias.length === 0 ? false : true}
                   onChange={$(() => {
-                    // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                    // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                     const elSelec = document.getElementById('se_motivoEgreso') as HTMLSelectElement;
                     const elIdx = elSelec.selectedIndex;
-                    // console.log('??', elIdx, elSelec[elIdx].id);
+                    // //console.log('??', elIdx, elSelec[elIdx].id);
                     definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen = elSelec[elIdx].id;
                     if (definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === '') {
                       definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen = '';
@@ -544,9 +545,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     const idx = (e.target as HTMLSelectElement).selectedIndex;
                     const rere = e.target as HTMLSelectElement;
                     const elOption = rere[idx];
-                    console.log('elOption', elOption.id);
+                    //console.log('elOption', elOption.id);
                     //
-                    // console.log('idx', idx.item.arguments(id));
+                    // //console.log('idx', idx.item.arguments(id));
                     // const csd = (e.target as HTMLSelectElement).current[idx];
                     // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
                     definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad = elOption.id;
@@ -867,10 +868,10 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                             )}
                             onChange$={(e) => {
                               const costo = parseFloat((e.target as HTMLInputElement).value);
-                              console.log('el costo modificado', costo);
+                              //console.log('el costo modificado', costo);
                               iTMercaOUT.costoUnitarioEquivalenciaPEN = costo;
 
-                              console.log('el costo modificado, cant', iTMercaOUT.costoUnitarioEquivalenciaPEN, iTMercaOUT.cantidadSacadaEquivalencia);
+                              //console.log('el costo modificado, cant', iTMercaOUT.costoUnitarioEquivalenciaPEN, iTMercaOUT.cantidadSacadaEquivalencia);
                               iTMercaOUT.subTotalPEN =
                                 (iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
                                   ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
@@ -928,7 +929,11 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         </div>
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}
-        {definicion_CTX_OUT_ALMACEN._id === '' ? <input type="button" value="Grabar" class="btn-centro" onClick$={() => registrarEgreso()} /> : ''}
+        {definicion_CTX_OUT_ALMACEN._id === '' ? (
+          <input type="button" value="Grabar" style={{ cursor: 'pointer', height: '40px' }} class="btn-centro" onClick$={() => registrarEgreso()} />
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );

@@ -35,6 +35,8 @@ export default component$((props: { dGR: any }) => {
     idDistrito: props.dGR.idDistrito ? props.dGR.idDistrito : '',
     distrito: props.dGR.distrito ? props.dGR.distrito : '',
     ubigeo: props.dGR.ubigeo ? props.dGR.ubigeo : '',
+
+    codEstablecimiento: props.dGR.codEstablecimiento ? props.dGR.codEstablecimiento : '',
   });
   // useContextProvider(
   //   CTX_DIRECCION_GR,
@@ -63,9 +65,16 @@ export default component$((props: { dGR: any }) => {
       document.getElementById('in_UbigeoSUNAT_GR')?.focus();
       return;
     }
+    if (definicion_CTX_DIRECCION_GR.codEstablecimiento.trim() !== '') {
+      if (definicion_CTX_DIRECCION_GR.codEstablecimiento.trim().length > 4) {
+        alert('El código de establecimiento no puede tener mas de 4 digitos.');
+        document.getElementById('in_CodEstablecimiento_GR')?.focus();
+        return;
+      }
+    }
 
     ctx_buscar_Direccion_GR.mostrarSpinner = true;
-    const direc = await inUpDireccionGR({
+    await inUpDireccionGR({
       idDireccionGR: definicion_CTX_DIRECCION_GR._id,
 
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -82,10 +91,12 @@ export default component$((props: { dGR: any }) => {
       distrito: definicion_CTX_DIRECCION_GR.distrito,
       ubigeo: definicion_CTX_DIRECCION_GR.ubigeo,
 
+      codEstablecimiento: definicion_CTX_DIRECCION_GR.codEstablecimiento,
+
       usuario: parametrosGlobales.usuario,
     });
 
-    console.log('direc.data.direccion', direc.data.direccion);
+    //console.log('direc.data.direccion', direc.data.direccion);
     // ctx_buscar_Direccion_GR.conceptoABuscar = direc.data.direccion;
     ctx_buscar_Direccion_GR.conceptoABuscar = definicion_CTX_DIRECCION_GR.direccion;
     // ctx_buscar_Direccion_GR.solo_Direccion = true;
@@ -114,7 +125,7 @@ export default component$((props: { dGR: any }) => {
           width={18}
           title="Ceverrrar el formulario"
           onClick={$(() => {
-            console.log('definicion_CTX_DIRECCION_GR', definicion_CTX_DIRECCION_GR);
+            //console.log('definicion_CTX_DIRECCION_GR', definicion_CTX_DIRECCION_GR);
           })}
         />
         <ImgButton
@@ -139,7 +150,6 @@ export default component$((props: { dGR: any }) => {
             <input
               id="in_Direccion_GR"
               style={{ width: '100%' }}
-              autoFocus
               type="text"
               placeholder="Dirección de Partida / LLegada"
               value={definicion_CTX_DIRECCION_GR.direccion}
@@ -193,6 +203,31 @@ export default component$((props: { dGR: any }) => {
                 // mostrarSpinner.value = true;
                 definicion_CTX_NEW_EDIT_DIRECCION_GR.mostrarPanelSeleccionarUbigeoSUNAT = true;
               }}
+            />
+          </div>
+        </div>
+        {/* CodEstablecimiento  */}
+        <div class="form-control">
+          <div class="form-control form-agrupado">
+            <input
+              id="in_CodEstablecimiento_GR"
+              style={{ width: '100%' }}
+              minLength={4}
+              maxLength={4}
+              type="text"
+              placeholder="Código de establecimiento (SUNAT)"
+              value={definicion_CTX_DIRECCION_GR.codEstablecimiento}
+              onChange$={(e) => {
+                definicion_CTX_DIRECCION_GR.codEstablecimiento = (e.target as HTMLInputElement).value.trim().toUpperCase();
+              }}
+              onKeyUp$={(e) => {
+                if (e.key === 'Enter') {
+                  document.getElementById('btn_grabar_Direccion_GR')?.focus();
+                }
+              }}
+              // onFocusin$={(e) => {
+              //   (e.target as HTMLInputElement).select();
+              // }}
             />
           </div>
         </div>

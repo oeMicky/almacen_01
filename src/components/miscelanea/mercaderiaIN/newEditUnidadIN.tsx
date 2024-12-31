@@ -33,12 +33,12 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
       unidad: unidad.uni,
     });
 
-    console.log('lt - unidad', lt);
-    console.log('lt.data - unidad', lt.data);
+    //console.log('lt - unidad', lt);
+    //console.log('lt.data - unidad', lt.data);
 
-    // console.log('graboooooo laLinea', laLinea);
+    // //console.log('graboooooo laLinea', laLinea);
     // laLinea = laLinea.data;
-    // console.log('graboooooo laLinea.data', laLinea);
+    // //console.log('graboooooo laLinea.data', laLinea);
 
     ctx_new_edit_mercaderia_in.grabo_unidad = true;
     ctx_new_edit_mercaderia_in.laLineaTipo = lt.data;

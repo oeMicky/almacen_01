@@ -1,5 +1,9 @@
 export interface IMercaderiaOUT {
   _id: string;
+
+  noFacturar: boolean;
+
+  activo: boolean;
   codigo: string;
   conFechaVencimientoLote: boolean;
   descripcion: string;
@@ -24,7 +28,7 @@ export interface IMercaderiaOUT {
 
   costoPEN: any;
 
-  precioPEN: any;
+  precioUnitarioPEN: any;
 }
 
 export interface IMercaderiaOUT_Seleccionada {
@@ -46,12 +50,20 @@ export interface IMercaEquivalenciaOUT {
 export interface IMercaderiaIN {
   _id: string;
 
+  noFacturar: boolean;
+
   activo: boolean;
   codigo: string;
   descripcion: string;
   aplicacion: string;
 
   UNSPSC: string;
+
+  ubigeo: string;
+
+  porcentajeUtilidadXDefecto: boolean;
+  porcentajeUtilidad: any;
+
   conLote: boolean;
   conFechaProduccion: boolean;
   conFechaVencimiento: boolean;
@@ -68,9 +80,11 @@ export interface IMercaderiaIN {
   idUnidad: string;
   unidad: string;
 
-  tipoImpuesto: string;
+  tipoImpuesto: any;
   tipoAfectacionDelImpuesto: string;
   porcentaje: any;
+
+  stockMinimo: any;
 
   kardex: any;
   KARDEXS: any;
@@ -88,7 +102,7 @@ export interface IMercaderiaIN {
   costoPEN: any;
 
   costoDeInicioPEN: any;
-  precioPEN: any;
+  precioUnitarioPEN: any;
 }
 
 export interface IMercaEquivalenciaIN {

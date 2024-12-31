@@ -47,9 +47,9 @@ export default component$((props: { bienSeleccio: any }) => {
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
       });
-      console.log('unidds', unidds);
+      //console.log('unidds', unidds);
       lasUnidades.value = unidds.data;
-      console.log('lasUnidades.value', lasUnidades.value);
+      //console.log('lasUnidades.value', lasUnidades.value);
     }
   });
   //#endregion INICIALIZACION
@@ -63,9 +63,9 @@ export default component$((props: { bienSeleccio: any }) => {
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
       });
-      console.log('unidds', unidds);
+      //console.log('unidds', unidds);
       lasUnidades.value = unidds.data;
-      console.log('lasUnidades.value', lasUnidades.value);
+      //console.log('lasUnidades.value', lasUnidades.value);
 
       definicion_CTX_NEW_EDIT_REGISTRO_BIEN_GR.grabo_unidadSUNAT = false;
     }
@@ -173,10 +173,10 @@ export default component$((props: { bienSeleccio: any }) => {
                 registroTEXT={'unidad'}
                 seleccione={'-- Seleccione unidad --'}
                 // onChange={$(() => {
-                //   // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                //   // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                 //   const elSelec = document.getElementById('se_unidad_REGISTRO_BIEN_GR') as HTMLSelectElement;
                 //   const elIdx = elSelec.selectedIndex;
-                //   // console.log('?', elIdx, elSelec[elIdx].id);
+                //   // //console.log('?', elIdx, elSelec[elIdx].id);
                 //   definicion_CTX_ADD_REGISTRO_BIEN_GR.idUnidadBienGR = elSelec[elIdx].id;
                 //   if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
                 //     definicion_CTX_ADD_REGISTRO_BIEN_GR.unidad = '';

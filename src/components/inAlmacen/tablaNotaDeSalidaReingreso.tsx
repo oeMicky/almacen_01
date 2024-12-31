@@ -16,21 +16,18 @@ export default component$((props: { buscarNotasDeSalidaReingreso: number; parame
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda', props.parametrosBusqueda);
+    //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
     if (props.parametrosBusqueda.BuscarPor === 'Por destinatario') {
       if (props.parametrosBusqueda.PorNombre_RUCDNI === 'DNI / RUC') {
-        const res = await fetch(
-          import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getNotasDeSalidaReingresoPorDestinatarioPorRUCDNI',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(props.parametrosBusqueda),
-            signal: abortController.signal,
-          }
-        );
+        const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getNotasDeSalidaReingresoPorDestinatarioPorRUCDNI', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(props.parametrosBusqueda),
+          signal: abortController.signal,
+        });
         return res.json();
       }
       if (props.parametrosBusqueda.PorNombre_RUCDNI === 'Nombre / Razón social') {
@@ -74,15 +71,15 @@ export default component$((props: { buscarNotasDeSalidaReingreso: number; parame
     <Resource
       value={lasNotasDeSalida}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
+        //console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
+        //console.log('onRejected 🍍🍍🍍🍍');
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(notasDeSalida) => {
-        console.log('onResolved 🍓🍓🍓🍓', notasDeSalida);
+        //console.log('onResolved 🍓🍓🍓🍓', notasDeSalida);
         const { data } = notasDeSalida; //{ status, data, message }
         const misNotasDeSalida: INotaSalidaReingreso[] = data;
         return (
@@ -121,7 +118,7 @@ export default component$((props: { buscarNotasDeSalidaReingreso: number; parame
                               alt="incono buscar"
                               height={14}
                               width={14}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_nota_salida_reingreso.nS = notaSaliLocali;
                                 ctx_buscar_nota_salida_reingreso.mostrarPanelNotaDeSalidaReingreso = true;

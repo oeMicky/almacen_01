@@ -14,11 +14,11 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
   let ctx: any = [];
   switch (props.contexto) {
     case 'index_kardexs':
-      console.log('contexto::a: index_kardexs');
+      //console.log('contexto::a: index_kardexs');
       ctx = useContext(CTX_INDEX_KARDEX);
       break;
     case 'kardexs':
-      console.log('contexto::a: kardexs');
+      //console.log('contexto::a: kardexs');
       ctx = useContext(CTX_KARDEXS);
       break;
   }
@@ -35,7 +35,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    // console.log('parametrosBusqueda', props.parametrosBusqueda);
+    // //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/kardex/obtener100Movimientos', {
       // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
@@ -83,8 +83,8 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.mercaSelecci', props.mercaSelecci);
-            console.log('props.kardex', props.kardex);
+            //console.log('props.mercaSelecci', props.mercaSelecci);
+            //console.log('props.kardex', props.kardex);
           })}
         />
       </div>
@@ -117,15 +117,15 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
         <Resource
           value={losMovimientos}
           onPending={() => {
-            console.log('onPending 🍉🍉🍉🍉');
+            //console.log('onPending 🍉🍉🍉🍉');
             return <div>Cargando...</div>;
           }}
           onRejected={() => {
-            console.log('onRejected 🍍🍍🍍🍍');
+            //console.log('onRejected 🍍🍍🍍🍍');
             return <div>Fallo en la carga de datos</div>;
           }}
           onResolved={(kardexs) => {
-            console.log('onResolved 🍓🍓🍓🍓', kardexs);
+            //console.log('onResolved 🍓🍓🍓🍓', kardexs);
             const { data } = kardexs; //{ status, data, message }
             const misMovimientos: IMovimientoKARDEX[] = data;
             return (
@@ -177,13 +177,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                               </td>
                               <td
                                 data-label="Cnt.Entrada"
-                                title={
-                                  IS
-                                    ? cantidadOrigenEquivalencia
-                                      ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia
-                                      : ''
-                                    : ''
-                                }
+                                title={IS ? (cantidadOrigenEquivalencia ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia : '') : ''}
                                 class="comoNumero"
                               >
                                 {cantidadIngresada.$numberDecimal
@@ -192,23 +186,13 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                               </td>
                               <td
                                 data-label="Cnt.Salida"
-                                title={
-                                  IS
-                                    ? ''
-                                    : cantidadOrigenEquivalencia
-                                    ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia
-                                    : ''
-                                }
+                                title={IS ? '' : cantidadOrigenEquivalencia ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia : ''}
                                 class="comoNumero"
                               >
-                                {cantidadSacada.$numberDecimal
-                                  ? formatear_4Decimales(cantidadSacada.$numberDecimal)
-                                  : formatear_4Decimales(cantidadSacada)}
+                                {cantidadSacada.$numberDecimal ? formatear_4Decimales(cantidadSacada.$numberDecimal) : formatear_4Decimales(cantidadSacada)}
                               </td>
                               <td data-label="Cnt.Saldo" style={{ textAlign: 'right' }}>
-                                {cantidadSaldo.$numberDecimal
-                                  ? formatear_4Decimales(cantidadSaldo.$numberDecimal)
-                                  : formatear_4Decimales(cantidadSaldo)}
+                                {cantidadSaldo.$numberDecimal ? formatear_4Decimales(cantidadSaldo.$numberDecimal) : formatear_4Decimales(cantidadSaldo)}
                               </td>
                               <td data-label="Uni" class="acciones">
                                 {props.mercaSelecci.unidad}
@@ -220,19 +204,13 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                                 {costoUnitarioMovil.$numberDecimal ? costoUnitarioMovil.$numberDecimal : costoUnitarioMovil}
                               </td>
                               <td data-label="Costo Entrada" class="comoNumero">
-                                {costoIngreso.$numberDecimal
-                                  ? formatear_6Decimales(costoIngreso.$numberDecimal)
-                                  : formatear_6Decimales(costoIngreso)}
+                                {costoIngreso.$numberDecimal ? formatear_6Decimales(costoIngreso.$numberDecimal) : formatear_6Decimales(costoIngreso)}
                               </td>
                               <td data-label="Costo Salida" class="comoNumero">
-                                {costoSalida.$numberDecimal
-                                  ? formatear_6Decimales(costoSalida.$numberDecimal)
-                                  : formatear_6Decimales(costoSalida)}
+                                {costoSalida.$numberDecimal ? formatear_6Decimales(costoSalida.$numberDecimal) : formatear_6Decimales(costoSalida)}
                               </td>
                               <td data-label="Costo Saldo" class="comoNumero">
-                                {costoSaldo.$numberDecimal
-                                  ? formatear_6Decimales(costoSaldo.$numberDecimal)
-                                  : formatear_6Decimales(costoSaldo)}
+                                {costoSaldo.$numberDecimal ? formatear_6Decimales(costoSaldo.$numberDecimal) : formatear_6Decimales(costoSaldo)}
                               </td>
 
                               {/* <td data-label="Acciones" class="acciones">

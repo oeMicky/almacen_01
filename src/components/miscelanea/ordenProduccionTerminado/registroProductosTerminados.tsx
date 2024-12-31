@@ -83,7 +83,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
           descripcionEquivalencia: requi.descripcionEquivalencia,
           cantidad: requi.cantidad,
           unidadEquivalencia: requi.unidadEquivalencia,
-          // precioPEN: requi.precioPEN,
+          // precioUnitarioPEN: requi.precioUnitarioPEN,
           // ventaPEN: requi.ventaPEN,
           tipoEquivalencia: requi.tipoEquivalencia,
           factor: requi.factor,
@@ -111,9 +111,9 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
 
     laOP.value = await getOrdenProduccion({ idOrdenProduccion: props.opSeleccionada._id });
 
-    console.log('laOP.value 1', laOP.value);
+    //console.log('laOP.value 1', laOP.value);
     laOP.value = laOP.value.data;
-    console.log('laOP.value 2', laOP.value);
+    //console.log('laOP.value 2', laOP.value);
 
     sumaTOTAL_manufacturas.value = await calcularSumatoriaManufacturas(laOP.value);
     sumaTOTAL_suministrosDespachados.value = await calcularSumatoriaSuministrosDespachados(laOP.value);

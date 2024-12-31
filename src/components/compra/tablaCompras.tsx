@@ -24,10 +24,10 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
   //#region BUSCANDO REGISTROS
   const lasCompras = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // ctx_index_compra.miscCs = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    // console.log('tablaCompras ->->-> parameBusqueda', props.parametrosBusqueda);
+    // //console.log('tablaCompras ->->-> parameBusqueda', props.parametrosBusqueda);
     track(() => props.buscarCompras.valueOf());
 
-    // console.log('props.buscarCompras.valueOf', props.buscarCompras.valueOf());
+    // //console.log('props.buscarCompras.valueOf', props.buscarCompras.valueOf());
     // if (props.buscarVentas.valueOf()) {
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
@@ -57,24 +57,24 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
       <Resource
         value={lasCompras}
         onPending={() => {
-          console.log('onPending 🍉🍉🍉🍉');
+          //console.log('onPending 🍉🍉🍉🍉');
           //
           return <div>Cargando...</div>;
         }}
         onRejected={() => {
-          console.log('onRejected 🍍🍍🍍🍍');
+          //console.log('onRejected 🍍🍍🍍🍍');
           // props.buscarVentas = false;
           ctx_index_compra.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(compras: any) => {
-          console.log('onResolved 🍓🍓🍓🍓', compras);
+          //console.log('onResolved 🍓🍓🍓🍓', compras);
           const { data } = compras; //{ status, data, message }
           // const misCompras: ICompra[] = data;
           ctx_index_compra.miscCs = data;
           // props.buscarVentas = false;
           ctx_index_compra.mostrarSpinner = false;
-          // console.log('misCompras', misCompras);
+          // //console.log('misCompras', misCompras);
           return (
             <>
               {ctx_index_compra.miscCs.length > 0 ? (
@@ -230,7 +230,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                 height={12}
                                 width={12}
                                 onClick$={() => {
-                                  console.log('ctx_index_compra.miscCs:::', ctx_index_compra.miscCs);
+                                  //console.log('ctx_index_compra.miscCs:::', ctx_index_compra.miscCs);
 
                                   // ctx_index_compra.cC = compra;
                                   // ctx_index_compra.mostrarPanelCompra = true;
@@ -245,7 +245,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                 // onClick={$(() => {
                                 //   ventaSeleccionada.value = value;
                                 //   createAndDownloadFile(value.serie + '-' + value.numeroDocumento);
-                                //   console.log('xml', ventaSeleccionada.value);
+                                //   //console.log('xml', ventaSeleccionada.value);
                                 // })}
                               /> */}
                             </td>

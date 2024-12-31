@@ -36,7 +36,7 @@ export default component$((props: { borrarUnidadTransporte: any }) => {
         <div style={{ marginBottom: '8px' }}>
           <label>¿Desea eliminar la unidad transporte?</label>
           <br />
-          <p>
+          <p style={{ padding: '0 8px' }}>
             <label>{props.borrarUnidadTransporte.placa}</label>
             <br />
             <label>

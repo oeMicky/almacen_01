@@ -15,6 +15,7 @@ export default component$(() => {
   const navegarA = useNavigate();
   const mostrarSpinner = useSignal(false);
   const lasSucursales = useSignal<any>(parametrosGlobales.sucursalesAdjuntas);
+  //console.log('🌼🌼🌼🌼🌷🌼', lasSucursales);
   //#endregion INICIALIZAR
 
   // const definicion_CTX_LISTADO_SUCURSALES = useStore({
@@ -27,9 +28,9 @@ export default component$(() => {
 
   // useTask$(({ track }) => {
   //   track(() => ini.value);
-  //   // console.log('ingreso a INI', sessionStorage.getItem('SUCURSALES'));
+  //   // //console.log('ingreso a INI', sessionStorage.getItem('SUCURSALES'));
   //   lasSucursales.value = JSON.parse(sessionStorage.SUCURSALES);
-  //   console.log('first lasSucursales.value ', lasSucursales.value);
+  //   //console.log('first lasSucursales.value ', lasSucursales.value);
   // });
   //#endregion INICIAIZACION
   return (
@@ -72,7 +73,7 @@ export default component$(() => {
                       height={14}
                       width={14}
                       // style={{ padding: '2px' }}
-                      onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                      // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                       onClick$={async () => {
                         let activo = await getActivoGEEMPSUCUR({
                           idGrupoEmpresarial: sucur.idGrupoEmpresarial,
@@ -80,7 +81,7 @@ export default component$(() => {
                           idSucursal: sucur.idSucursal,
                         });
                         activo = activo.data;
-                        console.log('🎫🎫🎫activo', activo);
+                        // //console.log('🎫🎫🎫activo', activo);
                         if (!activo[0].activoGE) {
                           alert(`El grupo empresarial ${sucur.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`);
                           return;
@@ -93,9 +94,10 @@ export default component$(() => {
                           alert(`La sucursal ${sucur.sucursal} esta inactiva. Pongase en contacto con el administrador.`);
                           return;
                         }
-                        console.log('**VARIAS SUCURSALES**');
+                        //console.log('**VARIAS SUCURSALES**');
                         parametrosGlobales.idSucursal = sucur.idSucursal;
                         parametrosGlobales.sucursal = sucur.sucursal;
+                        parametrosGlobales.sucursalDireccion = sucur.sucursalDireccion;
                         parametrosGlobales.idAlmacen = sucur.idSucursal; //******* */
                         parametrosGlobales.idGrupoEmpresarial = sucur.idGrupoEmpresarial;
                         parametrosGlobales.nombreGrupoEmpresarial = sucur.grupoEmpresarial;
@@ -105,6 +107,10 @@ export default component$(() => {
 
                         parametrosGlobales.RUC = sucur.numeroIdentidad;
                         parametrosGlobales.Direccion = sucur.direccion;
+                        parametrosGlobales.departamento = sucur.departamento;
+                        parametrosGlobales.provincia = sucur.provincia;
+                        parametrosGlobales.distrito = sucur.distrito;
+                        parametrosGlobales.ubigeo = sucur.ubigeo;
 
                         parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
                         parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;
@@ -119,6 +125,8 @@ export default component$(() => {
                         parametrosGlobales.verificarObservacionVenta = activo[0].verificarObservacionVenta;
                         parametrosGlobales.guiaRemisionElectronica = activo[0].guiaRemisionElectronica;
                         parametrosGlobales.guiaRemisionElectronicaAutomatica = activo[0].guiaRemisionElectronicaAutomatica;
+                        parametrosGlobales.guiaRemisionJSON = activo[0].guiaRemisionJSON;
+                        parametrosGlobales.guiaRemisionXML = activo[0].guiaRemisionXML;
                         parametrosGlobales.verificarObservacionGR = activo[0].verificarObservacionGR;
                         parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
                         parametrosGlobales.planesContables = activo[0].planesContables;
@@ -175,7 +183,8 @@ export default component$(() => {
         </table>
         <br />
         <button
-          style={{ marginLeft: '16px', padding: '20px 40px', borderRadius: '8px' }}
+          class="boton-principal"
+          style={{ cursor: 'pointer', marginLeft: '16px', padding: '0px 40px', borderRadius: '8px', height: '40px' }}
           onClick$={() => {
             navegarA('/');
           }}
@@ -184,7 +193,7 @@ export default component$(() => {
         </button>
         {/* <button
           onClick$={() => {
-            console.log('ppp', parametrosGlobales);
+            //console.log('ppp', parametrosGlobales);
           }}
         >
           ppppppppp

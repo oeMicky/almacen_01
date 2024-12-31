@@ -27,7 +27,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
       document.getElementById('in_codigoDescripcion_BUSCAR_UNIDAD_EQUIVALENCIA_SUNAT')?.focus();
       return;
     }
-    console.log('buscarndo');
+    //console.log('buscarndo');
     buscarUnidadesEquivalenciaSUNAT.value++;
   });
   //#endregion BUSCAR
@@ -77,9 +77,9 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
                   (e.target as HTMLInputElement).select();
                 }}
                 onKeyPress$={(e) => {
-                  console.log('onKeyPress', parametrosBusqueda.cadenaABuscar);
+                  //console.log('onKeyPress', parametrosBusqueda.cadenaABuscar);
                   if (e.key === 'Enter') {
-                    console.log('onKeyPress - ENTER');
+                    //console.log('onKeyPress - ENTER');
                     localizarUnidadEquivalenciaSUNAT();
                   }
                 }}

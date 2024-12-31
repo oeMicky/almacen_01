@@ -1,4 +1,5 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { useNavigate } from '@builder.io/qwik-city';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 import { getIgvVenta } from '~/apis/venta.api';
 import { images } from '~/assets';
@@ -71,6 +72,7 @@ export default component$(() => {
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
+  const navegarA = useNavigate();
   const ini = useSignal(0);
   const buscarOrdenesServicio = useSignal(0);
   const igv = useSignal(0);
@@ -104,14 +106,14 @@ export default component$(() => {
   //#region ACTUALIZAR TABLA ORDENES DE SERVICIO
   useTask$(({ track }) => {
     track(() => definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarPanelNewEditOrdenServicio);
-    // console.log(
+    // //console.log(
     //   ' definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarPanelNewEditOrdenServicio - grabo_OS',
     //   definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarPanelNewEditOrdenServicio,
     //   definicion_CTX_INDEX_ORDEN_SERVICIO.grabo_OS
     // );
     if (definicion_CTX_INDEX_ORDEN_SERVICIO.grabo_OS) {
       //actualizar TABLA ORDENES SERVICIO
-      // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
+      // //console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
       buscarOrdenesServicio.value++;
       definicion_CTX_INDEX_ORDEN_SERVICIO.grabo_OS = false;
     }
@@ -125,10 +127,10 @@ export default component$(() => {
   //     idEmpresa: parametrosGlobales.idEmpresa,
   //     bandera: 'Compras',
   //   });
-  //   console.log('losPeri', losPeri);
+  //   //console.log('losPeri', losPeri);
   //   losPeriodosCargados.value = losPeri.data;
-  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-  //   // console.log('a cargar periodos');
+  //   //console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // //console.log('a cargar periodos');
   // });
 
   // useTask$(({ track }) => {
@@ -203,8 +205,8 @@ export default component$(() => {
             width={16}
             title="Buscar ordenes de servicios"
             onClick={$(() => {
-              // console.log('inicio', parametrosBusqueda.fechaInicio);
-              // console.log('final', parametrosBusqueda.fechaFinal);
+              // //console.log('inicio', parametrosBusqueda.fechaInicio);
+              // //console.log('final', parametrosBusqueda.fechaFinal);
               if (parametrosBusqueda.fechaInicio.trim() === '') {
                 alert('Verifique la fecha inicial');
                 document.getElementById('fechaDesde')?.focus();
@@ -221,7 +223,7 @@ export default component$(() => {
                 return;
               }
               buscarOrdenesServicio.value++;
-              console.log('buscarOrdenesServicio.value', buscarOrdenesServicio.value);
+              //console.log('buscarOrdenesServicio.value', buscarOrdenesServicio.value);
             })}
             // style={{ marginTop: '3px' }}
             // onClick={buscarOrdenesServiciosPorFechas}
@@ -229,10 +231,10 @@ export default component$(() => {
         </div>
       </div> */}
       {/*  BOTONES */}
-      <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
+      <div style={{ display: 'inline-flex', marginBottom: '10px', paddingLeft: '3px' }}>
         {/* <button
           onClick$={() => {
-            console.log('ctx_0.compania', ctx_0.compania);
+            //console.log('ctx_0.compania', ctx_0.compania);
           }}
         >
           compaÑia
@@ -243,6 +245,12 @@ export default component$(() => {
           // onClick={mostrarPanelOrdenServicio}
           title="Add una orden de servicio"
           onClick={$(async () => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
             //validar PERIODO
             if (periodo.idPeriodo === '') {
               alert('Seleccione el periodo.');
@@ -253,9 +261,9 @@ export default component$(() => {
             //
             let elIgv = await getIgvVenta(parametrosGlobales);
             elIgv = elIgv.data;
-            console.log('elIgv', elIgv);
+            //console.log('elIgv', elIgv);
             igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-            // console.log('igv.value::', igv.value);
+            // //console.log('igv.value::', igv.value);
             definicion_CTX_INDEX_ORDEN_SERVICIO.oO = [];
             definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarPanelNewEditOrdenServicio = true;
 
@@ -273,10 +281,10 @@ export default component$(() => {
           registroTEXT={'periodo'}
           seleccione={'-- Seleccione periodo --'}
           onChange={$(() => {
-            // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+            // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
             const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
-            // console.log('?', elIdx, elSelec[elIdx].id);
+            // //console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
             if (periodo.idPeriodo === '') {
               periodo.periodo = '';
@@ -284,8 +292,8 @@ export default component$(() => {
               periodo.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-              // console.log('💨💨💨💨💨💨first', periodo);
-              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+              // //console.log('💨💨💨💨💨💨first', periodo);
+              // //console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
               buscarOrdenesServicio.value++;
 
               definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarSpinner = true;
@@ -301,9 +309,9 @@ export default component$(() => {
           type="image"
           title="Buscar ordenes de servicio"
           alt="icono buscar"
-          height={16}
-          width={16}
-          style={{ marginLeft: '2px' }}
+          height={21.5}
+          width={21.5}
+          style={{ marginLeft: '4px' }}
           src={images.searchPLUS}
           onClick$={() => {
             if (periodo.idPeriodo === '') {
@@ -315,7 +323,7 @@ export default component$(() => {
             definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarSpinner = true;
           }}
         />
-        {/* <button onClick$={() => console.log("param", parametrosGlobales)}>param</button> */}
+        {/* <button onClick$={() => //console.log("param", parametrosGlobales)}>param</button> */}
         {/* {showAddOrdenServicio.value && ( */}
         {definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarPanelNewEditOrdenServicio && (
           <div class="modal">

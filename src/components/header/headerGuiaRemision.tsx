@@ -8,9 +8,7 @@ export default component$(() => {
   useStyles$(style);
   const navegarA = useNavigate();
   return (
-    <header
-      style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}
-    >
+    <header style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
       <div class="container-header">
         <div class="main-logo">
           <Link href="/">
@@ -24,12 +22,7 @@ export default component$(() => {
             </label>
           </div>
           <input type="checkbox" class="toggle-menu__checkbox" id="toggle-menu-checkbox" />
-          <ul
-            class="main-menu"
-            style={
-              parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''
-            }
-          >
+          <ul class="main-menu" style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
             <li
               class="main-menu__item"
               onClick$={() => {
@@ -53,6 +46,7 @@ export default component$(() => {
             </li>
             <li
               class="main-menu__item"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 sessionStorage.removeItem('usuario');

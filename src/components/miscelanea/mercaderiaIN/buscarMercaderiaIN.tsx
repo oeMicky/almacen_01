@@ -13,7 +13,7 @@ import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGui
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
 
-export default component$((props: { contexto: string; esAlmacen: boolean; igv: number; motivo?: string }) => {
+export default component$((props: { contexto: string; esAlmacen: boolean; enDolares: boolean; tipoCambio: any; igv: number; motivo?: string }) => {
   //#region DEFINICION CTX_BUSCAR_MERCADERIA_IN - para eDITAR - para sELECCIONAR
   const definicion_CTX_BUSCAR_MERCADERIA_IN = useStore({
     mM: [],
@@ -117,6 +117,16 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            //console.log(props.tipoCambio);
+          })}
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -140,7 +150,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
               <input
                 id="in_codigoDescripcion_BUSCAR_MERCADERIA_IN"
                 autoFocus
-                style={{ width: '100%', marginRight: '4px' }}
+                style={{ width: '100%' }}
                 type="text"
                 placeholder="Ingrese la mercadería a buscar"
                 value={parametrosBusqueda.cadenaABuscar}
@@ -163,7 +173,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 alt="icono buscar"
                 height={16}
                 width={16}
-                style={{ marginRight: '2px' }}
+                style={{ margin: '0 4px' }}
                 onClick$={() => {
                   localizarMercaderiasIN();
                 }}
@@ -266,6 +276,11 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
               <label for="in_verLineaMarca_BUSCAR_MERCADERIA_IN">Ver Linea / Marca</label>
             </div>
           </div>
+          <div style={{ marginTop: '6px', display: 'flex' }}>
+            <label style={{ marginRight: '8px' }}>Leyenda:</label>
+            <label style={{ background: '#272727', color: 'white', marginRight: '8px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
+            <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px' }}>No facturable</label>
+          </div>
         </div>
         {/*  tabla LOCALIZADOS ITEMS MERCADERIAS  */}
         <div class="form-control">
@@ -276,6 +291,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
               // contexto={props.contexto}
               contextoInmediato={'buscar_mercaderia_in'}
               esAlmacen={props.esAlmacen}
+              enDolares={props.enDolares}
+              tipoCambio={props.tipoCambio}
               verAplicacion={verAplicacion.value}
               verLineaMarca={verLineaMarca.value}
               motivo={props.motivo}
@@ -292,6 +309,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; igv: n
                 mercaINSelecci={definicion_CTX_BUSCAR_MERCADERIA_IN.mM}
                 elKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.kK}
                 esAlmacen={true}
+                enDolares={props.enDolares}
+                tipoCambio={props.tipoCambio}
                 contextoInmediato={'buscar_mercaderia_in'}
                 contextoParaDocumento={props.contexto}
                 igv={props.igv}

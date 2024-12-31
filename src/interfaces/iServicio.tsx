@@ -3,8 +3,8 @@ export interface IServicio {
   activo: string;
   codigo: string;
   descripcion: string;
-  precioPEN: any;
-  tipoImpuesto: string;
+  precioUnitarioPEN: any;
+  tipoImpuesto: any;
   tipoAfectacionDelImpuesto: string;
   codigoContableVenta: string;
   descripcionContableVenta: string;

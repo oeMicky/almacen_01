@@ -1,14 +1,14 @@
-const API = import.meta.env.VITE_URL + "/api/usuario";
+const API = import.meta.env.VITE_URL + '/api/usuario';
 // const API = 'https://backendalmacen-production.up.railway.app/api/usuario';
 // backendalmacen02 - production.up.railway.app;
 
 export const getUsuarioPanel = async (parametros) => {
-  // console.log('//////api////////******************obtener a getUsuario');
-  // console.log('parametros getUsuario', parametros);
-  const res = await fetch(API + "/obtenerUsuarioPanel", {
-    method: "POST",
+  // //console.log('//////api////////******************obtener a getUsuario');
+  // //console.log('parametros getUsuario', parametros);
+  const res = await fetch(API + '/obtenerUsuarioPanel', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(parametros),
   });
@@ -16,12 +16,12 @@ export const getUsuarioPanel = async (parametros) => {
 };
 
 export const getSucursalesAdjuntasUsuario = async (parametros) => {
-  // console.log('//////api////////******************obtener a getUsuario');
-  // console.log('parametros getUsuario', parametros);
-  const res = await fetch(API + "/obtenerSucursalesAdjuntasUsuario", {
-    method: "POST",
+  // //console.log('//////api////////******************obtener a getUsuario');
+  // //console.log('parametros getUsuario', parametros);
+  const res = await fetch(API + '/obtenerSucursalesAdjuntasUsuario', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(parametros),
   });
@@ -29,12 +29,12 @@ export const getSucursalesAdjuntasUsuario = async (parametros) => {
 };
 
 export const upCambioClaveUsuario = async (parametros) => {
-  // console.log('//////api////////******************obtener a getUsuario');
-  // console.log('parametros getUsuario', parametros);
-  const res = await fetch(API + "/cambioClaveUsuario", {
-    method: "POST",
+  // //console.log('//////api////////******************obtener a getUsuario');
+  // //console.log('parametros getUsuario', parametros);
+  const res = await fetch(API + '/cambioClaveUsuario', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(parametros),
   });

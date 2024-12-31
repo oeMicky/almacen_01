@@ -10,7 +10,7 @@ import Spinner from '~/components/system/spinner';
 //
 //parametrosGlobales:any
 export const registrarPersona = $(async (persona: any) => {
-  console.log('persona....', persona);
+  //console.log('persona....', persona);
   const registro = await inUpPersona({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
@@ -30,8 +30,8 @@ export const registrarPersona = $(async (persona: any) => {
 
     usuario: parametrosGlobales.usuario,
   });
-  console.log('registro GRABADO:', registro);
-  console.log('registro GRABADO-statu:', registro.status);
+  //console.log('registro GRABADO:', registro);
+  //console.log('registro GRABADO-statu:', registro.status);
   return registro;
 });
 
@@ -64,20 +64,20 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
     });
     if (persona._id === '') {
       //INSERTANDO
-      console.log('//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
+      //console.log('//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
       if (props.soloPersonaNatural) {
-        console.log('//dni//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
+        //console.log('//dni//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
         persona.codigoTipoDocumentoIdentidad = '1';
         persona.tipoDocumentoIdentidad = 'DNI';
       } else {
-        console.log('//ruc//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
+        //console.log('//ruc//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
         persona.codigoTipoDocumentoIdentidad = '6';
         persona.tipoDocumentoIdentidad = 'RUC';
       }
     }
     // else {
     //   //EDITANDO
-    //   console.log('//EDITANDO//EDITANDO//EDITANDO//EDITANDO');
+    //   //console.log('//EDITANDO//EDITANDO//EDITANDO//EDITANDO');
     //   persona.codigoTipoDocumentoIdentidad = props.personaSeleccio.codigoTipoDocumentoIdentidad;
     //   persona.tipoDocumentoIdentidad = props.personaSeleccio.tipoDocumentoIdentidad;
     // }
@@ -97,14 +97,14 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
     mostrarSpinner.value = true;
     if (persona.codigoTipoDocumentoIdentidad === '6') {
       const laIdentidad = await getRUC(persona.numeroIdentidad);
-      console.log('laIdentidad - RUC:', laIdentidad);
+      //console.log('laIdentidad - RUC:', laIdentidad);
       const laData = laIdentidad.data;
       persona.razonSocialNombre = laData.nombre;
       condicion.value = laData.condicion;
     } else {
       if (persona.codigoTipoDocumentoIdentidad === '1') {
         const laIdentidad = await getDNI(persona.numeroIdentidad);
-        console.log('laIdentidad - DNI:', laIdentidad);
+        //console.log('laIdentidad - DNI:', laIdentidad);
         const laData = laIdentidad.data;
         persona.nombre = laData.nombres;
         persona.paterno = laData.apellidoPaterno;
@@ -151,11 +151,11 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       }
       persona.razonSocialNombre = '';
     }
-    console.log('persona...', persona);
+    //console.log('persona...', persona);
     // let resultPersona;
     if (persona.codigoTipoDocumentoIdentidad === '6') {
       // resultPersona =
-      console.log('//RUC');
+      //console.log('//RUC');
       //RUC
       await registrarPersona({
         idPersona: persona._id,
@@ -168,7 +168,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       });
     } else {
       // resultPersona =
-      console.log('//DNI');
+      //console.log('//DNI');
       //DNI
       await registrarPersona({
         idPersona: persona._id,
@@ -221,7 +221,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
           width={16}
           title="Ver persona"
           onClick={$(() => {
-            console.log('persona', persona);
+            //console.log('persona', persona);
           })}
         />
       </div>
@@ -245,16 +245,16 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   id="se_tipoDocumentoIdentidad_PERSONA"
                   style={{ width: '100%' }}
                   onChange$={(e) => {
-                    console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
+                    //console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                     persona.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                     persona.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
                     document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
-                    console.log(
-                      'soloPersonaNatural, cTDI, tDI',
-                      props.soloPersonaNatural,
-                      persona.codigoTipoDocumentoIdentidad,
-                      persona.tipoDocumentoIdentidad
-                    );
+                    //console.log(
+                    //   'soloPersonaNatural, cTDI, tDI',
+                    //   props.soloPersonaNatural,
+                    //   persona.codigoTipoDocumentoIdentidad,
+                    //   persona.tipoDocumentoIdentidad
+                    // );
                   }}
                 >
                   <option value={'1'} selected={persona.codigoTipoDocumentoIdentidad === '1'}>
@@ -271,16 +271,16 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   // value={persona.codigoTipoDocumentoIdentidad}
                   // value={'1'}
                   onChange$={(e) => {
-                    console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
+                    //console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                     persona.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                     persona.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
                     document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
-                    console.log(
-                      'soloPersonaNatural, cTDI, tDI',
-                      props.soloPersonaNatural,
-                      persona.codigoTipoDocumentoIdentidad,
-                      persona.tipoDocumentoIdentidad
-                    );
+                    //console.log(
+                    //   'soloPersonaNatural, cTDI, tDI',
+                    //   props.soloPersonaNatural,
+                    //   persona.codigoTipoDocumentoIdentidad,
+                    //   persona.tipoDocumentoIdentidad
+                    // );
                   }}
                 >
                   <option value={'6'} selected={persona.codigoTipoDocumentoIdentidad === '6'}>
@@ -307,19 +307,19 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 placeholder="Número identidad"
                 value={persona.numeroIdentidad}
                 onChange$={(e) => {
-                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
+                  //console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
                   persona.numeroIdentidad = (e.target as HTMLInputElement).value.trim().toUpperCase();
-                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
+                  //console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', persona.numeroIdentidad);
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e: any) => {
                   // alert(`onKeyPress... ${event}`);
-                  // console.log('onKeyPress-1-1-1-1-1-1', event.key);
+                  // //console.log('onKeyPress-1-1-1-1-1-1', event.key);
                   if (e.key === 'Enter') {
-                    // console.log('55555555', persona.numeroIdentidad);
+                    // //console.log('55555555', persona.numeroIdentidad);
                     // buscarPersonaEnAPIExterna();
                     if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
-                      // console.log('6666666');
+                      // //console.log('6666666');
                       document.getElementById('in_razonSocial_PERSONA')?.focus();
                     } else {
                       //   alert('Ingrese un valor a buscar');
@@ -329,13 +329,13 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 }}
                 // onKeyUp$={(e) => {
                 //   // alert(`onKeyUp... ${e}`);
-                //   // console.log('onKeyUp-3333', e.key);
+                //   // //console.log('onKeyUp-3333', e.key);
                 //   // if (e.key === 'Enter' || e.key === 'Tab' || e.key === 'Next' || e.key === 'Done' || e.key === 'Go') {
                 //   //   alert('KeyUp - Enter - Tab - Next');
-                //   //   console.log('4444444', persona.numeroIdentidad);
-                //   //   // console.log('das', (document.getElementById('tipoDocumentoIdentidad') as HTMLSelectElement).value);
+                //   //   //console.log('4444444', persona.numeroIdentidad);
+                //   //   // //console.log('das', (document.getElementById('tipoDocumentoIdentidad') as HTMLSelectElement).value);
                 //   //   if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
-                //   //     console.log('6666666');
+                //   //     //console.log('6666666');
                 //   //     buscarPersonaEnAPIExterna();
                 //   //     document.getElementById('in_razonSocial_PERSONA')?.focus();
                 //   //   } else {
@@ -349,7 +349,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 // }}
                 // onKeyDown$={(e) => {
                 //   alert(`onKeyDown... ${e}`);
-                //   console.log('onKeyDown000000000000', e.key);
+                //   //console.log('onKeyDown000000000000', e.key);
                 // }}
                 onFocusin$={(e) => {
                   (e.target as HTMLInputElement).select();
@@ -363,7 +363,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 width={16}
                 title="Buscar datos de persona"
                 style={{ margin: '0 4px' }}
-                // onFocusin$={() => console.log('🎁🎁🎁🎁🎁')}
+                // onFocusin$={() => //console.log('🎁🎁🎁🎁🎁')}
                 // onClick$={() => localizarPersonas()}
                 onClick$={() => buscarPersonaEnAPIExterna()}
                 // onClick={$(() => )}
@@ -385,27 +385,27 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   }}
                   onKeyPress$={(e: any) => {
                     // alert(`onKeyPress... ${event}`);
-                    // console.log('onKeyPress-1-1-1-1-1-1', event.key);
+                    // //console.log('onKeyPress-1-1-1-1-1-1', event.key);
                     if (e.key === 'Enter') {
-                      // console.log('55555555', persona.numeroIdentidad);
+                      // //console.log('55555555', persona.numeroIdentidad);
                       // buscarPersonaEnAPIExterna();
                       // if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
-                      // console.log('6666666');
+                      // //console.log('6666666');
                       document.getElementById('btn_grabar_PERSONA')?.focus();
                     }
                   }}
                   // onKeyUp$={(e) => {
                   //   if (e.key === 'Enter') {
-                  //     console.log('$$$$$$$$$$$$$$$$$$$$$$');
+                  //     //console.log('$$$$$$$$$$$$$$$$$$$$$$');
                   //     document.getElementById('btn_grabar_PERSONA')?.focus();
                   //   }
                   //   if (e.key === 'Escape') {
                   //     document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                   //   }
                   // }}
-                  onFocusin$={(e) => {
+                  onFocusin$={() => {
                     // alert(`INGRESO... ${e}`);
-                    console.log('INGRESO-', e);
+                    //console.log('INGRESO-', e);
                     buscarPersonaEnAPIExterna();
                   }}
                 />
@@ -434,9 +434,9 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                         document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
                       }
                     }}
-                    onFocusin$={(e) => {
+                    onFocusin$={() => {
                       // alert(`INGRESO... ${e}`);
-                      console.log('INGRESO-', e);
+                      //console.log('INGRESO-', e);
                       buscarPersonaEnAPIExterna();
                     }}
                   />
@@ -479,7 +479,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        console.log('###############');
+                        //console.log('###############');
                         document.getElementById('btn_grabar_PERSONA')?.focus();
                       }
                       if (e.key === 'Escape') {

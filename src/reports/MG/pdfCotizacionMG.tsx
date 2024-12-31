@@ -19,17 +19,17 @@ import { parametrosGlobales } from '~/routes/login';
 async function pdfCotizacionMG(cotizacion: any) {
   pdfMake.vfs = pdfFonts;
 
-  // console.log('cotizacion PDF', cotizacion);
+  // //console.log('cotizacion PDF', cotizacion);
 
   // const KKK = `20602683321`;
   // const rutaDelLogo = `../../assets/logosEmpresas/module-${KKK}.js`; // '../../assets/logosEmpresas/' + parametrosGlobales.RUC + '.js';
   // const rutaDelLogo = `module-20602683321`;
   // const rutaDelLogo = `20602683321`;
-  // console.log('rutaDelLogo', rutaDelLogo);
+  // //console.log('rutaDelLogo', rutaDelLogo);
   const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
   // const EL_LOGO = await import(`./pres/${rutaDelLogo}.js`);
-  // console.log('EL_LOGO', EL_LOGO.default);
-  // console.log('EL_LOGO.logo', EL_LOGO.logo);
+  // //console.log('EL_LOGO', EL_LOGO.default);
+  // //console.log('EL_LOGO.logo', EL_LOGO.logo);
 
   const servicios = cotizacion.servicios;
   const repuestosLubri = cotizacion.repuestosLubri;
@@ -39,10 +39,10 @@ async function pdfCotizacionMG(cotizacion: any) {
   const reportTitle: any = [];
   // const details = [];
   // const rodape = [];
-  console.log('servoc', servicios);
+  //console.log('servoc', servicios);
 
   const losServicios = servicios.map((ser: any, index: number) => {
-    const { tipo, descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
+    const { tipo, descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioUnitarioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
     if (tipo === 'SERVICIO') {
       totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
@@ -58,7 +58,7 @@ async function pdfCotizacionMG(cotizacion: any) {
       },
       { text: unidadEquivalencia, style: 'tableBody' },
       {
-        text: tipo === 'SERVICIO' ? formatearMonedaPEN(precioPEN.$numberDecimal) : '',
+        text: tipo === 'SERVICIO' ? formatearMonedaPEN(precioUnitarioPEN.$numberDecimal) : '',
         style: 'tableBody',
       },
       {
@@ -69,7 +69,7 @@ async function pdfCotizacionMG(cotizacion: any) {
   });
 
   const losRepuestos = repuestosLubri.map((repu: any, index: number) => {
-    const { codigo, descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = repu;
+    const { codigo, descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioUnitarioPEN, ventaPEN } = repu;
     const indexItem = index + 1;
     totalRepuestos = totalRepuestos + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
@@ -82,7 +82,7 @@ async function pdfCotizacionMG(cotizacion: any) {
       },
       { text: unidadEquivalencia, style: 'tableBody' },
       {
-        text: formatearMonedaPEN(precioPEN.$numberDecimal),
+        text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
         style: 'tableBody',
       },
       {
@@ -150,17 +150,7 @@ async function pdfCotizacionMG(cotizacion: any) {
               headerRows: 0,
               widths: ['*'],
 
-              body: [
-                [
-                  'R U C N° ' +
-                    cotizacion.ruc +
-                    '\n\nCOTIZACIÓN\n\n' +
-                    cotizacion.serie +
-                    ' - ' +
-                    cerosALaIzquierda(cotizacion.numero, 8) +
-                    '\n',
-                ],
-              ],
+              body: [['R U C N° ' + cotizacion.ruc + '\n\nCOTIZACIÓN\n\n' + cotizacion.serie + ' - ' + cerosALaIzquierda(cotizacion.numero, 8) + '\n']],
             },
             // text: [
             //   { text: 'R U C N° 20602683321\n', style: 'textoBold10' },

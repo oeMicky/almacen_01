@@ -40,7 +40,7 @@ export default component$((props: { borrarItemMercaIN: any }) => {
         <div style={{ marginBottom: '10px' }}>
           <label>¿Desea eliminar el ítem?</label>
           <br />
-          <p>
+          <p style={{ margin: '8px 8px' }}>
             {/* <label>{cerosALaIzquierda(props.borrarItemMerca.item, 3)}</label>
             <br /> */}
             <label>{props.borrarItemMercaIN.codigo}</label>
@@ -53,10 +53,10 @@ export default component$((props: { borrarItemMercaIN: any }) => {
               style={{ width: '60px' }}
               onClick$={() => {
                 // borrar_idAuxiliar = props.borrarItemMerca.idAuxiliar;
-                // console.log('- documentos', documentos);
-                // console.log('props.borrarItemMerca.idAuxiliar', props.borrarItemMerca.idAuxiliar);
+                // //console.log('- documentos', documentos);
+                // //console.log('props.borrarItemMerca.idAuxiliar', props.borrarItemMerca.idAuxiliar);
                 // const aMod: any = documentos.filter((docs: any) => docs.idAuxiliar !== props.borrarItemMerca.idAuxiliar);
-                // console.log('- aMod', aMod);
+                // //console.log('- aMod', aMod);
                 // documentos = aMod;
                 ctx_new_in_almacen.borrarIdAuxiliar = props.borrarItemMercaIN.idAuxiliar;
                 ctx_new_in_almacen.mostrarPanelDeleteItemMercaderiaIN = false;

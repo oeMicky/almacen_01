@@ -12,7 +12,7 @@ import { parametrosGlobales } from '~/routes/login';
 export const CTX_EDIT_PERSONA = createContextId<any>('edit_persona__');
 export const CTX_PERSONA = createContextId<any>('persona__');
 
-export default component$((props: { soloPersonaNatural: boolean; personaSeleccio: any; contexto: string }) => {
+export default component$((props: { soloPersonaNatural: boolean; personaSeleccio: any; contexto?: string }) => {
   useStyles$(style);
 
   //#region DEFINICION CTX_EDIT_PERSONA
@@ -39,6 +39,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
     materno: props.personaSeleccio.materno ? props.personaSeleccio.materno : '',
     activo: props.personaSeleccio.activo ? props.personaSeleccio.activo : true,
 
+    direccion: props.personaSeleccio.direccion ? props.personaSeleccio.direccion : '',
     email: props.personaSeleccio.email ? props.personaSeleccio.email : '',
     telefono: props.personaSeleccio.telefono ? props.personaSeleccio.telefono : '',
     cuentasCorrientes: props.personaSeleccio.cuentasCorrientes ? props.personaSeleccio.cuentasCorrientes : [],
@@ -60,13 +61,13 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   //     });
   //     if (persona._id === '') {
   //       //INSERTANDO
-  //       console.log('//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
+  //       //console.log('//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
   //       if (props.soloPersonaNatural) {
-  //         console.log('//dni//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
+  //         //console.log('//dni//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
   //         persona.codigoTipoDocumentoIdentidad = '1';
   //         persona.tipoDocumentoIdentidad = 'DNI';
   //       } else {
-  //         console.log('//ruc//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
+  //         //console.log('//ruc//INSERTANDO//INSERTANDO//INSERTANDO//INSERTANDO');
   //         persona.codigoTipoDocumentoIdentidad = '6';
   //         persona.tipoDocumentoIdentidad = 'RUC';
   //       }
@@ -77,23 +78,23 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   //#region EDITAR CUENTA CORRIENTE
   useTask$(({ track }) => {
     track(() => definicion_CTX_EDIT_PERSONA.grabo_cuentaCorriente);
-    console.log('first');
+    //console.log('first');
     if (definicion_CTX_EDIT_PERSONA.grabo_cuentaCorriente && definicion_CTX_EDIT_PERSONA.editar_idAuxiliarCuentaCorri > 0) {
-      console.log('first true');
+      //console.log('first true');
       let laFila = definicion_CTX_PERSONA.cuentasCorrientes.filter(
         (elemento: any) => elemento.idAuxiliar === definicion_CTX_EDIT_PERSONA.editar_idAuxiliarCuentaCorri
       );
       laFila = laFila[0];
-      console.log('first true 2');
+      //console.log('first true 2');
       const { idAuxiliar, banco, moneda, cuentaCorriente, cci } = definicion_CTX_EDIT_PERSONA.cuentaCorrienteSeleccionado;
-      console.log('first true 2-1');
+      //console.log('first true 2-1');
       laFila.idAuxiliar = idAuxiliar;
-      console.log('first true 2-2');
+      //console.log('first true 2-2');
       laFila.banco = banco;
       laFila.moneda = moneda;
       laFila.cuentaCorriente = cuentaCorriente;
       laFila.cci = cci;
-      console.log('first true 3');
+      //console.log('first true 3');
 
       definicion_CTX_EDIT_PERSONA.cuentaCorrienteSeleccionado = {
         _id: '',
@@ -154,20 +155,21 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       paterno: definicion_CTX_PERSONA.paterno,
       materno: definicion_CTX_PERSONA.materno,
 
+      direccion: definicion_CTX_PERSONA.direccion,
       email: definicion_CTX_PERSONA.email,
       telefono: definicion_CTX_PERSONA.telefono,
       cuentasCorrientes: definicion_CTX_PERSONA.cuentasCorrientes,
 
       usuario: parametrosGlobales.usuario,
     });
-    console.log('LAS PASO.............');
+    //console.log('LAS PASO.............');
     if (persoActuli.status === 400) {
       alert('Falla al registrar la persona. ' + persoActuli.message);
       mostrarSpinner.value = false;
       return;
     }
 
-    console.log('persoActuli', persoActuli);
+    //console.log('persoActuli', persoActuli);
     mostrarSpinner.value = false;
     ctx_buscar_persona.grabo_Persona = true;
     ctx_buscar_persona.personaEDITADA = persoActuli.data;
@@ -228,16 +230,16 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   style={{ width: '100%' }}
                   disabled
                   onChange$={(e) => {
-                    console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
+                    //console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                     definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                     definicion_CTX_PERSONA.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
                     document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
-                    console.log(
-                      'soloPersonaNatural, cTDI, tDI',
-                      props.soloPersonaNatural,
-                      definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad,
-                      definicion_CTX_PERSONA.tipoDocumentoIdentidad
-                    );
+                    //console.log(
+                    //   'soloPersonaNatural, cTDI, tDI',
+                    //   props.soloPersonaNatural,
+                    //   definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad,
+                    //   definicion_CTX_PERSONA.tipoDocumentoIdentidad
+                    // );
                   }}
                 >
                   <option value={'1'} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '1'}>
@@ -255,16 +257,16 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                   // value={persona.codigoTipoDocumentoIdentidad}
                   // value={'1'}
                   onChange$={(e) => {
-                    console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
+                    //console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                     definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
                     definicion_CTX_PERSONA.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
                     document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
-                    console.log(
-                      'soloPersonaNatural, cTDI, tDI',
-                      props.soloPersonaNatural,
-                      definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad,
-                      definicion_CTX_PERSONA.tipoDocumentoIdentidad
-                    );
+                    //console.log(
+                    //   'soloPersonaNatural, cTDI, tDI',
+                    //   props.soloPersonaNatural,
+                    //   definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad,
+                    //   definicion_CTX_PERSONA.tipoDocumentoIdentidad
+                    // );
                   }}
                 >
                   <option value={'6'} selected={definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad === '6'}>
@@ -291,19 +293,19 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 placeholder="Número identidad"
                 value={definicion_CTX_PERSONA.numeroIdentidad}
                 onChange$={(e) => {
-                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', definicion_CTX_PERSONA.numeroIdentidad);
+                  //console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', definicion_CTX_PERSONA.numeroIdentidad);
                   definicion_CTX_PERSONA.numeroIdentidad = (e.target as HTMLInputElement).value.trim().toUpperCase();
-                  console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', definicion_CTX_PERSONA.numeroIdentidad);
+                  //console.log('CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...CHANGE...', definicion_CTX_PERSONA.numeroIdentidad);
                 }}
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e: any) => {
                   // alert(`onKeyPress... ${event}`);
-                  // console.log('onKeyPress-1-1-1-1-1-1', event.key);
+                  // //console.log('onKeyPress-1-1-1-1-1-1', event.key);
                   if (e.key === 'Enter') {
-                    // console.log('55555555', persona.numeroIdentidad);
+                    // //console.log('55555555', persona.numeroIdentidad);
                     // buscarPersonaEnAPIExterna();
                     if ((document.getElementById('se_tipoDocumentoIdentidad_PERSONA') as HTMLSelectElement).value === '6') {
-                      // console.log('6666666');
+                      // //console.log('6666666');
                       document.getElementById('in_razonSocial_PERSONA')?.focus();
                     } else {
                       //   alert('Ingrese un valor a buscar');
@@ -323,7 +325,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 width={16}
                 title="Buscar datos de persona"
                 style={{ margin: '2px 2px' }}
-                // onFocusin$={() => console.log('🎁🎁🎁🎁🎁')}
+                // onFocusin$={() => //console.log('🎁🎁🎁🎁🎁')}
                 // onClick$={() => localizarPersonas()}
                 onClick$={() => buscarPersonaEnAPIExterna()}
                 // onClick={$(() => )}
@@ -351,7 +353,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
 
                   //   onFocusin$={(e) => {
 
-                  //     console.log('INGRESO-', e);
+                  //     //console.log('INGRESO-', e);
                   //     buscarPersonaEnAPIExterna();
                   //   }}
                 />
@@ -384,7 +386,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     }}
                     // onFocusin$={(e) => {
                     //   // alert(`INGRESO... ${e}`);
-                    //   console.log('INGRESO-', e);
+                    //   //console.log('INGRESO-', e);
                     //   buscarPersonaEnAPIExterna();
                     // }}
                   />
@@ -427,7 +429,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        console.log('###############');
+                        //console.log('###############');
                         document.getElementById('in_email_PERSONA')?.focus();
                       }
                       if (e.key === 'Escape') {
@@ -439,6 +441,30 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
               </div>
             </>
           )}
+          {/* //Dirección */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <input
+                id="in_direccion_PERSONA"
+                style={{ width: '100%' }}
+                type="text"
+                placeholder="Dirección"
+                value={definicion_CTX_PERSONA.direccion}
+                onChange$={(e) => {
+                  definicion_CTX_PERSONA.direccion = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    //console.log('###############');
+                    document.getElementById('in_email_PERSONA')?.focus();
+                  }
+                  if (e.key === 'Escape') {
+                    document.getElementById('in_apellidoMaterno_PERSONA')?.focus();
+                  }
+                }}
+              />
+            </div>
+          </div>
           {/* //Email */}
           <div class="form-control">
             <div class="form-control form-agrupado">
@@ -453,7 +479,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 }}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    console.log('###############');
+                    //console.log('###############');
                     document.getElementById('btn_grabar_PERSONA')?.focus();
                   }
                   if (e.key === 'Escape') {
@@ -477,7 +503,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                 }}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    console.log('###############');
+                    //console.log('###############');
                     document.getElementById('btn_grabar_PERSONA')?.focus();
                   }
                   if (e.key === 'Escape') {
@@ -567,10 +593,10 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
                                   let clipText: any;
                                   navigator.clipboard.readText().then((clipText) => {
                                     clipText += document.getElementById('ta_CuentasCorrientes')?.innerText;
-                                    // console.log('first', clipText);
+                                    // //console.log('first', clipText);
                                     // document.querySelector('.ta_CuentasCorrientes').innerText += clipText;
                                   });
-                                  console.log(clipText);
+                                  //console.log(clipText);
                                   // definicion_CTX_NEW_EDIT_EMPRESA.motivoIngresoSeleccionado = iTMotiIngreso;
                                   // definicion_CTX_NEW_EDIT_EMPRESA.editar_idAuxiliarMotivoIngreso = iTMotiIngreso.idAuxiliar;
                                   // definicion_CTX_NEW_EDIT_EMPRESA.mostrarPanelAdicionarMotivoIngresoAlmacen = true;

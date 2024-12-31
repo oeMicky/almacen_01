@@ -8,9 +8,7 @@ export default component$(() => {
   useStyles$(style);
   const navegarA = useNavigate();
   return (
-    <header
-      style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}
-    >
+    <header style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
       <div class="container-header">
         <div class="main-logo">
           <Link href="/">
@@ -26,35 +24,35 @@ export default component$(() => {
           </div>
           <input type="checkbox" class="toggle-menu__checkbox" id="toggle-menu-checkbox" />
           {/* <li style={{ cursor: 'pointer', margin: '0px 5px', padding: '10px 10px', borderRadius: '5px' }}> */}
-          <ul
-            class="main-menu"
-            style={
-              parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''
-            }
-          >
+          <ul class="main-menu" style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
             <li
               class="main-menu__item"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                navegarA('/ordenServicio');
               }}
             >
-              <Link href="/ordenServicio/">
-                <img src={images.Os} style={{ width: '30px' }} />
-              </Link>
+              {/* <Link href="/ordenServicio/"> */}
+              <img src={images.Os} style={{ width: '30px' }} />
+              {/* </Link> */}
             </li>
             <li
               class="main-menu__item"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                navegarA('/seleccionarServicio');
               }}
             >
-              <Link href="/seleccionarServicio/">
-                <img src={images.multiWeb} style={{ width: '30px' }} />
-              </Link>
+              {/* <Link href="/seleccionarServicio/"> */}
+              <img src={images.multiWeb} style={{ width: '30px' }} />
+              {/* </Link> */}
             </li>
 
             <li
               class="main-menu__item"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 sessionStorage.removeItem('usuario');

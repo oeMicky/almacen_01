@@ -36,7 +36,7 @@ export default component$(() => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('borrarServicio', ctx_new_edit_cotizacion.borrarServicio);
+            //console.log('borrarServicio', ctx_new_edit_cotizacion.borrarServicio);
           })}
         />
       </div>

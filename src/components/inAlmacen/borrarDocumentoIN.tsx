@@ -2,6 +2,7 @@ import { $, component$, useContext } from '@builder.io/qwik';
 import { CTX_NEW_IN_ALMACEN } from './newInAlmacen';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
+import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 
 export default component$((props: { borrarDocumento: any }) => {
   //#region CONTEXTO
@@ -40,9 +41,9 @@ export default component$((props: { borrarDocumento: any }) => {
         <div style={{ marginBottom: '8px' }}>
           <label>¿Desea eliminar el documento?</label>
           <br />
-          <p>
+          <p style={{ margin: '8px 8px' }}>
             <label>
-              {props.borrarDocumento.fecha} - {props.borrarDocumento.descripcionTCP}
+              {formatoDDMMYYYY_PEN(props.borrarDocumento.fecha)} - {props.borrarDocumento.descripcionTCP}
             </label>
             <br />
             <label>

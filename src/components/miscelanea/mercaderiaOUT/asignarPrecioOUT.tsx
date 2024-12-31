@@ -10,7 +10,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
   const ctx_buscar_mercaderia_out = useContext(CTX_BUSCAR_MERCADERIA_OUT);
   //#endregion CONTEXTOS
 
-  const precio = useSignal<any>(props.mercaOUTSelecci.precioPEN ? props.mercaOUTSelecci.precioPEN.$numberDecimal : 0);
+  const precio = useSignal<any>(props.mercaOUTSelecci.precioUnitarioPEN ? props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal : 0);
 
   //#region ON SUBMIT
   const grabarPrecio_MICE = $(async () => {
@@ -19,18 +19,18 @@ export default component$((props: { mercaOUTSelecci: any }) => {
       document.getElementById('inputPrecio_MICE')?.focus();
       return;
     }
-    console.log('on......Submit');
-    const enviarDatos = await grabarPrecio({
+    //console.log('on......Submit');
+    await grabarPrecio({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
       idMercaderia: props.mercaOUTSelecci._id,
       usuario: parametrosGlobales.usuario,
 
-      precioPEN: precio.value,
+      precioUnitarioPEN: precio.value,
       //   precio: parseFloat((document.getElementById('inputPrecio_MICE') as HTMLInputElement)?.value.trim()),
       //document.getElementById('inputPrecio')?.value,
     });
-    console.log('enviarDatos:', enviarDatos);
+    //console.log('enviarDatos:', enviarDatos);
     ctx_buscar_mercaderia_out.grabo_PrecioOUT = true;
     ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = false;
   });
@@ -39,7 +39,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 500px)',
+        width: 'clamp(330px, 86%, 380px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -58,39 +58,37 @@ export default component$((props: { mercaOUTSelecci: any }) => {
             ctx_buscar_mercaderia_out.mostrarPanelAsignarPrecioOUT = false;
           })}
         />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.mercaOUTSelecci', props.mercaOUTSelecci);
+            //console.log('props.mercaOUTSelecci', props.mercaOUTSelecci);
           })}
-        />
+        /> */}
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* DATOS */}
-        <div style={{ fontSize: 'small', fontWeight: 'lighter' }}>
+        <div>
           {/* Descripcion */}
           <div class="form-control">
-            <strong>
-              Descripción: <i>{props.mercaOUTSelecci.descripcion}</i>
-            </strong>
+            <label style={{ color: '#777' }}>Descripción:</label>
+            <label style={{ color: '#666' }}>{props.mercaOUTSelecci.descripcion}</label>
           </div>
           {/* Linea / Tipo */}
           <div class="form-control">
-            <strong>
-              Linea/Tipo: <i>{props.mercaOUTSelecci.lineaTipo}</i>
-            </strong>
+            <label style={{ color: '#777' }}>Linea / Tipo:</label>
+            <label style={{ color: '#666' }}>{props.mercaOUTSelecci.lineaTipo}</label>
           </div>
           {/* Unidad */}
           <div class="form-control">
-            <strong>
-              Unidad: <i>{props.mercaOUTSelecci.unidad}</i>
-            </strong>
+            <label style={{ color: '#777' }}>Unidad:</label>
+            <label style={{ color: '#666' }}>{props.mercaOUTSelecci.unidad}</label>
           </div>
+
           {/* Costo */}
           {/* <div class="form-control">
             <label>Costo</label>
@@ -143,6 +141,7 @@ export default component$((props: { mercaOUTSelecci: any }) => {
               />
             </div>
           </div>
+          <br />
         </div>
         {/* GRABAR */}
         <input

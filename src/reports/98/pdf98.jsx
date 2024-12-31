@@ -1,23 +1,16 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import {
-  formatoDDMMYYYY_PEN,
-  cerosALaIzquierda,
-  formatearMonedaPEN,
-  formatearMonedaUSD,
-  formatear_4Decimales,
-  literal,
-} from '../functions/funcionesGlobales';
+import { formatoDDMMYYYY_PEN, cerosALaIzquierda, formatearMonedaPEN, formatearMonedaUSD, formatear_4Decimales, literal } from '../functions/funcionesGlobales';
 
 async function pdfFactura98(venta) {
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
-  console.log('venta PDF', venta);
-  console.log('venta PDF venta.itemsVenta', venta.itemsVenta);
+  //console.log('venta PDF', venta);
+  //console.log('venta PDF venta.itemsVenta', venta.itemsVenta);
   const items = venta.itemsVenta;
-  console.log('venta PDF items', items);
+  //console.log('venta PDF items', items);
 
   const losItems = items.map((it) => {
-    const { codigo, descripcionEquivalencia, cantidad, unidadEquivalencia, precioPEN, ventaPEN, precioUSD, ventaUSD } = it;
+    const { codigo, descripcionEquivalencia, cantidad, unidadEquivalencia, precioUnitarioPEN, ventaPEN, precioUnitarioUSD, ventaUSD } = it;
     return [
       { text: codigo, style: 'tableBody' },
       { text: descripcionEquivalencia, style: 'tableBody' },
@@ -28,18 +21,12 @@ async function pdfFactura98(venta) {
       },
       { text: unidadEquivalencia, style: 'tableBody' },
       {
-        text:
-          venta.moneda === 'PEN'
-            ? formatearMonedaPEN(precioPEN.$numberDecimal)
-            : 'USD ' + formatearMonedaUSD(precioUSD.$numberDecimal),
+        text: venta.moneda === 'PEN' ? formatearMonedaPEN(precioUnitarioPEN.$numberDecimal) : 'USD ' + formatearMonedaUSD(precioUnitarioUSD.$numberDecimal),
         style: 'tableBody',
         // border: [false, false, false, true],
       },
       {
-        text:
-          venta.moneda === 'PEN'
-            ? formatearMonedaPEN(ventaPEN.$numberDecimal)
-            : 'USD ' + formatearMonedaUSD(ventaUSD.$numberDecimal),
+        text: venta.moneda === 'PEN' ? formatearMonedaPEN(ventaPEN.$numberDecimal) : 'USD ' + formatearMonedaUSD(ventaUSD.$numberDecimal),
         style: 'tableBody',
       },
     ];
@@ -264,10 +251,7 @@ async function pdfFactura98(venta) {
             text: [
               { text: 'Monto en letra: ', style: 'texto' },
               {
-                text:
-                  venta.moneda === 'PEN'
-                    ? literal(venta.montoTotalPEN.$numberDecimal, 'PEN')
-                    : literal(venta.montoTotalUSD.$numberDecimal, 'USD'),
+                text: venta.moneda === 'PEN' ? literal(venta.montoTotalPEN.$numberDecimal, 'PEN') : literal(venta.montoTotalUSD.$numberDecimal, 'USD'),
                 style: 'textoBold',
               },
             ],

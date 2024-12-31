@@ -43,7 +43,7 @@ export default component$((props: { choferSeleccionado: any }) => {
       idEmpresa: parametrosGlobales.idEmpresa,
       idPersona: elChofer.idPersona,
       activo: elChofer.activo,
-      licencia: elChofer.licencia.trim(),
+      licencia: elChofer.licencia.trim().toUpperCase(),
 
       usuario: parametrosGlobales.usuario,
     });
@@ -81,7 +81,7 @@ export default component$((props: { choferSeleccionado: any }) => {
           height={18}
           width={18}
           onClick={$(() => {
-            console.log('props.choferSeleccionado', props.choferSeleccionado);
+            //console.log('props.choferSeleccionado', props.choferSeleccionado);
           })}
         />
       </div>
@@ -142,7 +142,7 @@ export default component$((props: { choferSeleccionado: any }) => {
                 width={16}
                 // style={{ marginLeft: '2px', marginTop: '2px' }}
                 style={{ margin: '2px' }}
-                onClick$={() => (ctx.mostrarPanelBuscarPersonaChofer = true)}
+                onClick$={() => (ctx.mostrarPanelBuscarChofer = true)}
               /> */}
             </div>
           </div>

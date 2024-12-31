@@ -1,22 +1,22 @@
-import { component$, useSignal } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
+import { component$, useSignal } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
 
 export default component$(() => {
   //#region INICIALIZACION
-  const elemento = useSignal("");
+  const elemento = useSignal('');
   //#endregion INICIALIZACION
 
   return (
     <div
       style={{
-        width: "clamp(386px, 86%, 600px)",
-        padding: "2px",
+        width: 'clamp(386px, 86%, 600px)',
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -29,7 +29,7 @@ export default component$(() => {
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: "0.8rem" }}>Registro de documento</h3>
+      <h3 style={{ fontSize: '0.8rem' }}>Registro de documento</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* TCP */}
@@ -37,14 +37,14 @@ export default component$(() => {
           <div class="form-control form-agrupado">
             <select
               id="se_ElementoContable"
-              style={{ width: "70%" }}
+              style={{ width: '70%' }}
               onChange$={() => {
                 // elemento.value = (e.target as HTMLSelectElement).value;
-                const elSelec = document.getElementById("se_ElementoContable") as HTMLSelectElement;
+                const elSelec = document.getElementById('se_ElementoContable') as HTMLSelectElement;
                 // const elIdx = elSelec.selectedIndex;
 
                 elemento.value = elSelec.value;
-                // console.log('elemento.value ', elemento.value);
+                // //console.log('elemento.value ', elemento.value);
                 // if (definicion_CTX_COMPRA.codigoTCP === '') {
                 //   definicion_CTX_COMPRA.descripcionTCP = '';
                 // } else {
@@ -64,11 +64,11 @@ export default component$(() => {
               <option value="9">9 - CONTABILIDAD ANALÍTICA DE EXPLOTACIÓN</option>
             </select>
             <button
-              style={{ width: "30%" }}
+              style={{ width: '30%' }}
               onClick$={() => {
-                if (elemento.value === "0" || elemento.value === "") {
-                  alert("Debe seleccionar un elemento");
-                  document.getElementById("se_ElementoContable")?.focus();
+                if (elemento.value === '0' || elemento.value === '') {
+                  alert('Debe seleccionar un elemento');
+                  document.getElementById('se_ElementoContable')?.focus();
                   return;
                 }
               }}

@@ -33,7 +33,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    // console.log('parametrosBusqueda', props.parametrosBusqueda);
+    // //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicioPorPeriodo', {
       // const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getOrdenesServicioEntreFechas', {
@@ -50,18 +50,18 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
 
   //#region VISUZALIZAR PDF OS
   const verPDF_OS_Vehiculo = $((os: any) => {
-    console.log('a pdfOsMG', os); //venta !== null &&
+    //console.log('a pdfOsMG', os); //venta !== null &&
     if (typeof os !== 'undefined') {
-      console.log('imprimiendo ... imprimiendo ... verPDF_OS_Vehiculo ...', os);
+      //console.log('imprimiendo ... imprimiendo ... verPDF_OS_Vehiculo ...', os);
       // pdfCotizacion98(cotizacion);
       pdfOsMG_ConVehiculo(os);
     }
   });
 
   const verPDF_OS = $((os: any) => {
-    console.log('a pdfOsMG', os); //venta !== null &&
+    //console.log('a pdfOsMG', os); //venta !== null &&
     if (typeof os !== 'undefined') {
-      console.log('imprimiendo ... imprimiendo ... verPDF_OS ...', os);
+      //console.log('imprimiendo ... imprimiendo ... verPDF_OS ...', os);
       // pdfCotizacion98(cotizacion);
       pdfOsMG(os);
     }
@@ -69,7 +69,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
 
   useTask$(async ({ track }) => {
     track(() => clickPDF.value);
-    console.log('a osSeleccionada.value:', osSeleccionada.value);
+    //console.log('a osSeleccionada.value:', osSeleccionada.value);
     if (osSeleccionada.value?.osConRegistroDeVehiculo) {
       await verPDF_OS_Vehiculo(osSeleccionada.value);
     } else {
@@ -80,9 +80,9 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
 
   //#region VISUALIZAR PDF INV VEHICULAR
   const verPDF_InventarioVehicular = $((os: any) => {
-    console.log('a pdfOsMG', os); //venta !== null &&
+    //console.log('a pdfOsMG', os); //venta !== null &&
     if (typeof os !== 'undefined') {
-      console.log('imprimiendo ... imprimiendo ... verPDF_INVENTARIO ALFA ...', os);
+      //console.log('imprimiendo ... imprimiendo ... verPDF_INVENTARIO ALFA ...', os);
       // pdfCotizacion98(cotizacion);
       pdfInventarioVehicularAlfa(os);
     }
@@ -91,7 +91,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
   useTask$(async ({ track }) => {
     track(() => clickPDFInventario.value);
 
-    console.log('a osSeleccionada.value:', osSeleccionada.value);
+    //console.log('a osSeleccionada.value:', osSeleccionada.value);
 
     await verPDF_InventarioVehicular(osSeleccionada.value);
   });
@@ -99,9 +99,9 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
 
   //#region VISUALIZAR PDF INV VEHICULAR 2
   const verPDF_InventarioVehicular2 = $((os: any) => {
-    console.log('a pdfOsMG', os); //venta !== null &&
+    //console.log('a pdfOsMG', os); //venta !== null &&
     if (typeof os !== 'undefined') {
-      console.log('imprimiendo ... imprimiendo ... verPDF_INVENTARIO BETA ...', os);
+      //console.log('imprimiendo ... imprimiendo ... verPDF_INVENTARIO BETA ...', os);
       // pdfCotizacion98(cotizacion);
       pdfOs_InventarioVehicularBeta(os);
     }
@@ -110,7 +110,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
   useTask$(async ({ track }) => {
     track(() => clickPDFInventario2.value);
 
-    console.log('a osSeleccionada.value:', osSeleccionada.value);
+    //console.log('a osSeleccionada.value:', osSeleccionada.value);
 
     await verPDF_InventarioVehicular2(osSeleccionada.value);
   });
@@ -120,16 +120,16 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
     <Resource
       value={lasOrdenesServicio}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
+        //console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
+        //console.log('onRejected 🍍🍍🍍🍍');
         ctx_index_orden_servicio.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ordenesServicio) => {
-        console.log('onResolved 🍓🍓🍓🍓');
+        //console.log('onResolved 🍓🍓🍓🍓');
         const { data } = ordenesServicio; //{ status, data, message }
         const misOrdenesServicio: IOrdenServicio[] = data;
         ctx_index_orden_servicio.mostrarSpinner = false;
@@ -186,7 +186,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                               height={14}
                               width={14}
                               style={{ marginRight: '8px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_index_orden_servicio.oO = ordServiLocali;
                                 ctx_index_orden_servicio.mostrarPanelNewEditOrdenServicio = true;
@@ -205,7 +205,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                                 clickPDFInventario.value++;
                               }}
                             />
-                            <input
+                            {/* <input
                               // id="in_BuscarDetraccion"
                               type="image"
                               src={images.Inv}
@@ -217,7 +217,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                                 osSeleccionada.value = ordServiLocali;
                                 clickPDFInventario2.value++;
                               }}
-                            />
+                            /> */}
                             <input
                               // id="in_BuscarDetraccion"
                               type="image"
@@ -226,7 +226,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                               height={14}
                               width={14}
                               // style={{ padding: '2px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 osSeleccionada.value = ordServiLocali;
                                 clickPDF.value++;

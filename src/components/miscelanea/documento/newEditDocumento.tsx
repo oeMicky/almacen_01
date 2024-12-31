@@ -53,9 +53,9 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   //#region CARGAR LOS TCP
   const cargarLosTCP = $(async () => {
     const losTCP = await loadTiposComprobantePago();
-    console.log('losTCP', losTCP);
+    //console.log('losTCP', losTCP);
     LosTCPcargados.value = losTCP.data;
-    console.log(' LosTCPcargados.value', LosTCPcargados.value);
+    //console.log(' LosTCPcargados.value', LosTCPcargados.value);
   });
 
   useTask$(({ track }) => {
@@ -103,7 +103,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
       ctx.mostrarPanelAdjuntarDocumento = false;
     } else {
       const aMod: any = ctxDocumentosAdjuntos.find((docs: any) => docs.idAuxiliar === documentoIN.idAuxiliar);
-      console.log('aMod', aMod);
+      //console.log('aMod', aMod);
 
       aMod.codigoTCP = documentoIN.codigoTCP;
       aMod.descripcionTCP = documentoIN.descripcionTCP;
@@ -112,6 +112,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
       aMod.numero = documentoIN.numero;
       aMod.lote = documentoIN.lote;
 
+      ctx.graboDocumento = true;
       ctx.mostrarPanelAdjuntarDocumento = false;
 
       // (aMod.descripcionEquivalencia = equivalenciaIN.descripcionEquivalencia),
@@ -164,10 +165,10 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
                 registroTEXT={'descripcion'}
                 seleccione={'-- Seleccione TCP --'}
                 onChange={$(() => {
-                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_tcpIN_DOCUMENTO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  // console.log('?', elIdx, elSelec[elIdx].id);
+                  // //console.log('?', elIdx, elSelec[elIdx].id);
                   documentoIN.codigoTCP = elSelec[elIdx].id;
                   if (documentoIN.codigoTCP === '') {
                     documentoIN.descripcionTCP = '';
@@ -256,9 +257,9 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
                 style={{ width: '100%' }}
                 type="text"
                 placeholder="Add lote"
-                // value={servicio.precioPEN}
+                // value={servicio.precioUnitarioPEN}
                 // onChange$={(e) => {
-                //   servicio.precioPEN = parseFloat((e.target as HTMLInputElement).value.trim());
+                //   servicio.precioUnitarioPEN = parseFloat((e.target as HTMLInputElement).value.trim());
                 // }}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {

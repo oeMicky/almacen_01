@@ -1,4 +1,5 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
 import NewEditGuiaRemision from '~/components/guiaRemision/newEditGuiaRemision';
 import TablaGuiasRemision from '~/components/guiaRemision/tablaGuiasRemision';
@@ -24,6 +25,7 @@ export default component$(() => {
   //#endregion DEFINICION CTX_INDEX_GUIA_REMISION
 
   //#region INICIALIZACION
+  const navegarA = useNavigate();
   // const ini = useSignal(0);
   // const buscarGuiasRemision = useSignal(0);
 
@@ -73,6 +75,12 @@ export default component$(() => {
           name="ADD G.R."
           title="Add Guía remisión"
           onClick={$(async () => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
             //validar PERIODO
             if (periodo.idPeriodo === '') {
               alert('Seleccione el periodo.');
@@ -94,10 +102,10 @@ export default component$(() => {
           registroTEXT={'periodo'}
           seleccione={'-- Selecc. periodo --'}
           onChange={$(() => {
-            // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+            // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
             const elSelec = document.getElementById('se_periodo_GR') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
-            // console.log('?', elIdx, elSelec[elIdx].id);
+            // //console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
             if (periodo.idPeriodo === '') {
               periodo.periodo = '';
@@ -105,8 +113,8 @@ export default component$(() => {
               periodo.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-              // console.log('💨💨💨💨💨💨first', periodo);
-              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+              // //console.log('💨💨💨💨💨💨first', periodo);
+              // //console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
               definicion_CTX_INDEX_GUIA_REMISION.buscarGuiasRemision++;
 
               definicion_CTX_INDEX_GUIA_REMISION.mostrarSpinner = true;
@@ -122,7 +130,7 @@ export default component$(() => {
           id="in_BuscarGR_EnPeriodo"
           type="image"
           src={images.searchPLUS}
-          title="Refrescar ventas"
+          title="Refrescar guias de remisión"
           height={16}
           width={16}
           style={{ marginLeft: '2px', marginTop: '2px' }}
@@ -140,7 +148,7 @@ export default component$(() => {
           }}
         />
 
-        {/* <button onClick$={() => console.log('parametrosGlobales', parametrosGlobales)}>paratere</button> */}
+        {/* <button onClick$={() => //console.log('parametrosGlobales', parametrosGlobales)}>paratere</button> */}
         {definicion_CTX_INDEX_GUIA_REMISION.mostrarPanelGuiaRemision && (
           <div class="modal">
             <NewEditGuiaRemision

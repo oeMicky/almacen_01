@@ -25,15 +25,15 @@ export default component$((props: { marcaVehicularSelecci: any }) => {
       document.getElementById('inputRegistrarMarca_MICE')?.focus();
       return;
     }
-    let marvaVehi = await inUpVehiculoMarca({
+    await inUpVehiculoMarca({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
       idVehiculoMarca: marcaVehicular._id,
       vehiculoMarca: marcaVehicular.vehiculoMarca,
     });
-    console.log('graboooooo marvaVehi', marvaVehi);
-    marvaVehi = marvaVehi.data;
-    console.log('graboooooo marvaVehi.data', marvaVehi);
+    //console.log('graboooooo marvaVehi', marvaVehi);
+    // marvaVehi = marvaVehi.data;
+    //console.log('graboooooo marvaVehi.data', marvaVehi);
 
     ctx_new_edit_vehiculo.grabo_marca = true;
     ctx_new_edit_vehiculo.mostrarPanelNewEditMarcaVehicular = false;

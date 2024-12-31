@@ -1,4 +1,5 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { useNavigate } from '@builder.io/qwik-city';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 import { getIgvVenta } from '~/apis/venta.api';
 import { images } from '~/assets';
@@ -26,6 +27,7 @@ export default component$(() => {
   //#endregion DEFINICION CTX_INDEX_OUT_ALMACEN
 
   //#region INICIALIZACION
+  const navegarA = useNavigate();
   const ini = useSignal(0);
   const buscarOUTAlmacen = useSignal(0);
   // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
@@ -52,10 +54,10 @@ export default component$(() => {
   //     idEmpresa: parametrosGlobales.idEmpresa,
   //     bandera: 'outAlmacen',
   //   });
-  //   console.log('losPeri', losPeri);
+  //   //console.log('losPeri', losPeri);
   //   losPeriodosCargados.value = losPeri.data;
-  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-  //   // console.log('a cargar periodos');
+  //   //console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // //console.log('a cargar periodos');
   // });
 
   // useTask$(({ track }) => {
@@ -102,7 +104,7 @@ export default component$(() => {
           width={'21'}
           height={'21'}
           style={{ marginRight: '2px ', left: 0 }}
-          // onClick={() => console.log('ingreso')}
+          // onClick={() => //console.log('ingreso')}
         ></img>
         <label>Egresos de mercaderías</label>
       </h4>
@@ -145,19 +147,25 @@ export default component$(() => {
               }
               porFechasT_porPeriodoF.value = true;
               buscarOUTAlmacen.value++;
-              // console.log('buscarCotizaciones.value', buscarCotizaciones.value);
+              // //console.log('buscarCotizaciones.value', buscarCotizaciones.value);
             })}
             // onClick={buscarCotizacionesEntreFechas}
           />
         </div>
       </div> */}
       {/* ADD EGRESO DE MERCADERIAS */}
-      <div>
+      <div style={{ display: 'inline-flex' }}>
         <ElButton
           name="ADD EGRESO DE MERCADERÍAS"
           title="Add un nuevo egreso de mercaderías"
-          style={{ marginLeft: '5px' }}
+          style={{ cursor: 'pointer', marginLeft: '5px' }}
           onClick={$(async () => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
             //validar PERIODO
             if (periodo.idPeriodo === '') {
               alert('Seleccione el periodo.');
@@ -168,9 +176,9 @@ export default component$(() => {
             //
             let elIgv = await getIgvVenta(parametrosGlobales);
             elIgv = elIgv.data;
-            // console.log('elIgv', elIgv);
+            // //console.log('elIgv', elIgv);
             igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-            // console.log('igv.value::', igv.value);
+            // //console.log('igv.value::', igv.value);
             // showAddCotizacion.value = true;
             definicion_CTX_INDEX_OUT_ALMACEN.oNS = [];
             definicion_CTX_INDEX_OUT_ALMACEN.mostrarPanelNewOutAlmacen = true;
@@ -179,16 +187,16 @@ export default component$(() => {
         <ElSelect
           id={'se_periodo_OUT_ALMACEN'}
           // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
-          estilos={{ width: '203px', marginLeft: '4px' }}
+          estilos={{ cursor: 'pointer', width: '203px', marginLeft: '4px' }}
           registros={losPeriodosCargados.value}
           registroID={'_id'}
           registroTEXT={'periodo'}
           seleccione={'-- Seleccione periodo --'}
           onChange={$(() => {
-            // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+            // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
             const elSelec = document.getElementById('se_periodo_OUT_ALMACEN') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
-            // console.log('?', elIdx, elSelec[elIdx].id);
+            // //console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
             if (periodo.idPeriodo === '') {
               periodo.periodo = '';
@@ -196,8 +204,8 @@ export default component$(() => {
               periodo.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-              // console.log('💨💨💨💨💨💨first', periodo);
-              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+              // //console.log('💨💨💨💨💨💨first', periodo);
+              // //console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
               buscarOUTAlmacen.value++;
 
               definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner = true;
@@ -213,10 +221,10 @@ export default component$(() => {
           type="image"
           title="Buscar egresos"
           alt="icono buscar"
-          height={16}
-          width={16}
+          height={21.5}
+          width={21.5}
           src={images.searchPLUS}
-          style={{ marginLeft: '2px' }}
+          style={{ marginLeft: '4px' }}
           onClick$={() => {
             if (periodo.idPeriodo === '') {
               alert('Seleccione un periodo');
@@ -229,7 +237,7 @@ export default component$(() => {
         />
         {/* <button
           onClick$={() =>
-            console.log('parametrosGlobales.periodos outAlmacen - ini.value', parametrosGlobales.periodos, ini.value)
+            //console.log('parametrosGlobales.periodos outAlmacen - ini.value', parametrosGlobales.periodos, ini.value)
           }
         >
           los

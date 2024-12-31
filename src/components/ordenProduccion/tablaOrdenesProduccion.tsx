@@ -1,12 +1,12 @@
-import { $, Resource, component$, useContext, useResource$, useSignal, useStyles$, useTask$ } from "@builder.io/qwik";
+import { $, Resource, component$, useContext, useResource$, useSignal, useStyles$, useTask$ } from '@builder.io/qwik';
 
-import style from "../tabla/tabla.css?inline";
+import style from '../tabla/tabla.css?inline';
 
-import { images } from "~/assets";
-import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from "~/functions/comunes";
-import { CTX_INDEX_ORDEN_PRODUCCION } from "~/routes/(ordenesProduccion)/ordenProduccion";
-import type { IOrdenProduccion } from "~/interfaces/iOrdenProduccion";
-import pdfOrdenProduccion from "~/reports/pdfOrdenProduccion";
+import { images } from '~/assets';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { CTX_INDEX_ORDEN_PRODUCCION } from '~/routes/(ordenesProduccion)/ordenProduccion';
+import type { IOrdenProduccion } from '~/interfaces/iOrdenProduccion';
+import pdfOrdenProduccion from '~/reports/pdfOrdenProduccion';
 // import pdfOsMG from "~/reports/MG/pdfOsMG";
 // import pdfOsMG_ConVehiculo from "~/reports/MG/pdfOsMG_ConVehiculo";
 
@@ -27,12 +27,12 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
     track(() => props.buscarOrdenesProduccion.valueOf());
 
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
-    const res = await fetch(import.meta.env.VITE_URL + "/api/ordenProduccion/getOrdenesProduccionPorPeriodo", {
-      method: "POST",
+    const res = await fetch(import.meta.env.VITE_URL + '/api/ordenProduccion/getOrdenesProduccionPorPeriodo', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(props.parametrosBusqueda),
       signal: abortController.signal,
@@ -43,18 +43,18 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
 
   //#region VISUZALIZAR PDF
   //   const verPDF_OS_Vehiculo = $((os: any) => {
-  //     console.log("a pdfOsMG", os); //venta !== null &&
+  //     //console.log("a pdfOsMG", os); //venta !== null &&
   //     if (typeof os !== "undefined") {
-  //       console.log("imprimiendo ... imprimiendo ... verPDF_OS_Vehiculo ...", os);
+  //       //console.log("imprimiendo ... imprimiendo ... verPDF_OS_Vehiculo ...", os);
   //       // pdfCotizacion98(cotizacion);
   //       pdfOsMG_ConVehiculo(os);
   //     }
   //   });
 
   const verPDF_OP = $((op: any) => {
-    console.log("a pdfOrdenProduccion", op); //venta !== null &&
-    if (typeof op !== "undefined") {
-      console.log("imprimiendo ... imprimiendo ... verPDF_OP ...", op);
+    //console.log("a pdfOrdenProduccion", op); //venta !== null &&
+    if (typeof op !== 'undefined') {
+      //console.log("imprimiendo ... imprimiendo ... verPDF_OP ...", op);
       // pdfCotizacion98(cotizacion);
       pdfOrdenProduccion(op);
     }
@@ -62,7 +62,7 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
 
   useTask$(async ({ track }) => {
     track(() => clickPDF.value);
-    console.log("a opSeleccionada.value:", opSeleccionada.value);
+    //console.log("a opSeleccionada.value:", opSeleccionada.value);
     // if (opSeleccionada.value?.osConRegistroDeVehiculo) {
     //   await verPDF_OS_Vehiculo(opSeleccionada.value);
     // } else {
@@ -75,16 +75,16 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
     <Resource
       value={lasOrdenesProduccion}
       onPending={() => {
-        console.log("onPending 🍉🍉🍉🍉");
+        //console.log("onPending 🍉🍉🍉🍉");
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log("onRejected 🍍🍍🍍🍍");
+        //console.log("onRejected 🍍🍍🍍🍍");
         ctx_index_orden_produccion.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ordenesProduccion) => {
-        console.log("onResolved 🍓🍓🍓🍓");
+        //console.log("onResolved 🍓🍓🍓🍓");
         const { data } = ordenesProduccion; //{ status, data, message }
         const misOrdenesProduccion: IOrdenProduccion[] = data;
         ctx_index_orden_produccion.mostrarSpinner = false;
@@ -92,7 +92,7 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
           <>
             {misOrdenesProduccion.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter", padding: "4px" }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', padding: '4px' }}>
                   <thead>
                     <tr>
                       <th>OP</th>
@@ -111,22 +111,22 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
                       return (
                         <tr key={_id}>
                           <td data-label="OS" class="comoCadena">
-                            {serie + " - " + cerosALaIzquierda(numero, 8)}
+                            {serie + ' - ' + cerosALaIzquierda(numero, 8)}
                           </td>
                           <td data-label="Fecha" class="comoCadena">
-                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : "_"}
+                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}
                           </td>
                           <td data-label="Cliente" class="comoCadena">
-                            {ordProdLocali.clienteVentasVarias ? "Cliente ventas varias" : razonSocialNombreCliente}
+                            {ordProdLocali.clienteVentasVarias ? 'Cliente ventas varias' : razonSocialNombreCliente}
                           </td>
-                          <td data-label="Requerimiento" class="comoCadena" style={estado === "APERTURADO" ? { color: "#9103aa" } : {}}>
+                          <td data-label="Requerimiento" class="comoCadena" style={estado === 'APERTURADO' ? { color: '#9103aa' } : {}}>
                             {ordProdLocali.requerimientosCliente}
                           </td>
-                          <td data-label="Estado" class="comoCadena" style={estado === "APERTURADO" ? { color: "#9103aa" } : {}}>
-                            {estado ? estado : "_"}
+                          <td data-label="Estado" class="comoCadena" style={estado === 'APERTURADO' ? { color: '#9103aa' } : {}}>
+                            {estado ? estado : '_'}
                           </td>
                           <td data-label="Tipo" class="comoCadena">
-                            {tipo ? tipo : "_"}
+                            {tipo ? tipo : '_'}
                           </td>
                           <td data-label="Acciones" class="acciones">
                             <input
@@ -134,12 +134,12 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
                               type="image"
                               src={images.edit}
                               title="Editar orden de producción"
-                              disabled={estado === "FACTURADO"}
+                              disabled={estado === 'FACTURADO'}
                               height={14}
                               width={14}
-                              style={{ marginRight: "8px" }}
+                              style={{ marginRight: '8px' }}
                               onClick$={() => {
-                                console.log("ordProdLocali", ordProdLocali);
+                                //console.log("ordProdLocali", ordProdLocali);
                                 ctx_index_orden_produccion.oP = ordProdLocali;
                                 ctx_index_orden_produccion.mostrarPanelNewEditOrdenProduccion = true;
                               }}
@@ -165,7 +165,7 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
               </>
             ) : (
               <div>
-                <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

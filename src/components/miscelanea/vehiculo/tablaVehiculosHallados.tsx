@@ -1,13 +1,13 @@
-import { Resource, component$, useContext, useResource$, useStyles$ } from "@builder.io/qwik";
-import style from "../../tabla/tabla.css?inline";
-import { CTX_BUSCAR_VEHICULO } from "./buscarVehiculo";
-import type { IVehiculo } from "~/interfaces/iVehiculo";
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
+import style from '../../tabla/tabla.css?inline';
+import { CTX_BUSCAR_VEHICULO } from './buscarVehiculo';
+import type { IVehiculo } from '~/interfaces/iVehiculo';
 // import ImgButton from '~/components/system/imgButton';
-import { images } from "~/assets";
-import { CTX_NEW_EDIT_ORDEN_SERVICIO, CTX_O_S } from "~/components/ordenServicio/newEditOrdenServicio";
-import { CTX_COTIZACION, CTX_NEW_EDIT_COTIZACION } from "~/components/cotizacion/newEditCotizacion";
+import { images } from '~/assets';
+import { CTX_NEW_EDIT_ORDEN_SERVICIO, CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
+import { CTX_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 // import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
-import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from "../unidadTransporte/buscarUnidadTransporte";
+import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from '../unidadTransporte/buscarUnidadTransporte';
 
 export default component$((props: { buscarVehiculos: number; parametrosBusqueda: any; contexto: string }) => {
   useStyles$(style);
@@ -16,18 +16,18 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
   let ctx: any = [];
   let documento: any = [];
   switch (props.contexto) {
-    case "orden_servicio":
+    case 'orden_servicio':
       ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       documento = useContext(CTX_O_S);
-      console.log("swicth.......useContext(CTX_NEW_EDIT_ORDEN_SERVICIO)");
+      //console.log("swicth.......useContext(CTX_NEW_EDIT_ORDEN_SERVICIO)");
       break;
 
-    case "cotizacion":
+    case 'cotizacion':
       ctx = useContext(CTX_NEW_EDIT_COTIZACION);
       documento = useContext(CTX_COTIZACION);
-      console.log("swicth.......useContext(CTX_NEW_EDIT_COTIZACION)");
+      //console.log("swicth.......useContext(CTX_NEW_EDIT_COTIZACION)");
       break;
-    case "buscar_unidadTransporte":
+    case 'buscar_unidadTransporte':
       ctx = useContext(CTX_BUSCAR_UNIDAD_TRANSPORTE);
       break;
   }
@@ -40,52 +40,52 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
     track(() => props.buscarVehiculos.valueOf());
 
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
-    console.log("parametrosBusqueda", props.parametrosBusqueda);
+    //console.log("parametrosBusqueda", props.parametrosBusqueda);
 
-    if (props.parametrosBusqueda.buscarPor === "Placa") {
-      console.log("...................Placa");
-      const res = await fetch(import.meta.env.VITE_URL + "/api/vehiculo/obtenerVehiculosPorPlaca", {
-        method: "POST",
+    if (props.parametrosBusqueda.buscarPor === 'Placa') {
+      //console.log("...................Placa");
+      const res = await fetch(import.meta.env.VITE_URL + '/api/vehiculo/obtenerVehiculosPorPlaca', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(props.parametrosBusqueda),
         signal: abortController.signal,
       });
       return res.json();
     }
-    if (props.parametrosBusqueda.buscarPor === "Marca") {
-      console.log("...................Marca");
-      const res = await fetch(import.meta.env.VITE_URL + "/api/vehiculo/obtenerVehiculosPorMarca", {
-        method: "POST",
+    if (props.parametrosBusqueda.buscarPor === 'Marca') {
+      //console.log("...................Marca");
+      const res = await fetch(import.meta.env.VITE_URL + '/api/vehiculo/obtenerVehiculosPorMarca', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(props.parametrosBusqueda),
         signal: abortController.signal,
       });
       return res.json();
     }
-    if (props.parametrosBusqueda.buscarPor === "Modelo") {
-      console.log("...................Modelo");
-      const res = await fetch(import.meta.env.VITE_URL + "/api/vehiculo/obtenerVehiculosPorModelo", {
-        method: "POST",
+    if (props.parametrosBusqueda.buscarPor === 'Modelo') {
+      //console.log("...................Modelo");
+      const res = await fetch(import.meta.env.VITE_URL + '/api/vehiculo/obtenerVehiculosPorModelo', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(props.parametrosBusqueda),
         signal: abortController.signal,
       });
       return res.json();
     }
-    if (props.parametrosBusqueda.buscarPor === "VIN") {
-      console.log("...................VIN");
-      const res = await fetch(import.meta.env.VITE_URL + "/api/vehiculo/obtenerVehiculosPorVIN", {
-        method: "POST",
+    if (props.parametrosBusqueda.buscarPor === 'VIN') {
+      //console.log("...................VIN");
+      const res = await fetch(import.meta.env.VITE_URL + '/api/vehiculo/obtenerVehiculosPorVIN', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(props.parametrosBusqueda),
         signal: abortController.signal,
@@ -99,22 +99,22 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
     <Resource
       value={losVehiculos}
       onPending={() => {
-        console.log("onPending 🍉🍉🍉🍉");
+        //console.log("onPending 🍉🍉🍉🍉");
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log("onRejected 🍍🍍🍍🍍");
+        //console.log("onRejected 🍍🍍🍍🍍");
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(vehiculos) => {
-        console.log("onResolved 🍓🍓🍓🍓");
+        //console.log("onResolved 🍓🍓🍓🍓");
         const { data } = vehiculos; //{ status, data, message }
         const misVehiculos: IVehiculo[] = data;
         return (
           <>
             {misVehiculos.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter " }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -134,9 +134,9 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                         <tr key={_id}>
                           <td data-label="Ítem">{indexItem}</td>
                           <td data-label="Placa">{placa}</td>
-                          <td data-label="Marca">{vehiculoMarca ? vehiculoMarca : "_"}</td>
-                          <td data-label="Modelo">{vehiculoModelo ? vehiculoModelo : "_"}</td>
-                          <td data-label="VIN">{vin ? vin : "_"}</td>
+                          <td data-label="Marca">{vehiculoMarca ? vehiculoMarca : '_'}</td>
+                          <td data-label="Modelo">{vehiculoModelo ? vehiculoModelo : '_'}</td>
+                          <td data-label="VIN">{vin ? vin : '_'}</td>
                           <td data-label="Acciones" class="acciones">
                             <input
                               // id="in_BuscarDetraccion"
@@ -145,8 +145,8 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                               title="Seleccionar persona"
                               height={14}
                               width={14}
-                              style={{ marginRight: "4px" }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              style={{ marginRight: '4px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 documento.idVehiculo = _id;
                                 documento.placa = placa;
@@ -155,7 +155,7 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                                 documento.idVehiculoModelo = idVehiculoModelo;
                                 documento.vehiculoModelo = vehiculoModelo;
                                 documento.vin = vin;
-                                console.log("ctx_rol", documento);
+                                //console.log("ctx_rol", documento);
 
                                 ctx.selecciono_Vehiculo = true;
                                 ctx.idVehiculo = _id;
@@ -170,10 +170,10 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                               height={14}
                               width={14}
                               // style={{ padding: '2px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_vehiculo.vV = vehiLocali;
-                                console.log("desde tablVehiuclosHallados", ctx_buscar_vehiculo.vV);
+                                //console.log("desde tablVehiuclosHallados", ctx_buscar_vehiculo.vV);
                                 ctx_buscar_vehiculo.mostrarPanelNewEditVehiculo = true;
                               }}
                             />
@@ -186,7 +186,7 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
               </>
             ) : (
               <div>
-                <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

@@ -69,6 +69,9 @@ export interface ICompra {
   referenciaSerie: string;
   referenciaNumero: number;
 
+  aCredito: boolean;
+  letras: any;
+
   contabilizarOperaciones: boolean;
   asientoContableObligatorio: boolean;
   asientoContable: any;

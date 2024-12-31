@@ -7,6 +7,11 @@ import { getActivoGEEMPSUCUR, getPeriodos } from '~/apis/grupoEmpresarial.api';
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
 
+// import { FileReadOptions } from 'fs/promises';
+// import fs from 'fs'
+// import { SignedXml } from 'xml-crypto';
+// import { readFileSync, writeFileSync } from 'fs';
+
 // export const CTX_CONFIGURACION = createContextId<any>('__configuracion');
 
 //--nombre: 'Grupo Empresarial nro 1';
@@ -34,6 +39,10 @@ export const parametrosGlobales = {
   osConRegistroDeVehiculo: false,
   Direccion: '', //'ARKANZAS NRO 354',
   RUC: '', //'99999999999',
+  departamento: '',
+  provincia: '',
+  distrito: '',
+  ubigeo: '',
   agenteRetencion: false,
   agentePercepcion: false,
   //Sucursal
@@ -51,6 +60,8 @@ export const parametrosGlobales = {
   //
   ingreso: false,
   periodos: [],
+  //
+  idMotivosSalidaDelAlmacen_NV: '',
   // mostrarSpinner: false,
   facturacionElectronica: false,
   facturacionElectronicaAutomatica: false,
@@ -59,6 +70,8 @@ export const parametrosGlobales = {
   verificarObservacionVenta: false,
   guiaRemisionElectronica: false,
   guiaRemisionElectronicaAutomatica: false,
+  guiaRemisionJSON: false,
+  guiaRemisionXML: false,
   verificarObservacionGR: false,
   contabilizarOperaciones: false,
   planesContables: [],
@@ -108,21 +121,21 @@ export default component$(() => {
 
   const definicion_CTX_LOGEO = useStore({
     mostrarSpinner: false,
-
-    email: '',
     // email: 'mvizconde@msn.com',
     // email: 'carlos@merma.com',
-    // email: 'mvizconde@cao.com',
+    email: 'mvizconde@cao.com',
     // email: "paolo@cao.com",
     // email: 'joseluis@cao.com',
     // email: 'keymar0@cao.com',
+    // email: '',
+
+    // email: "",
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
-
-    // contrasena: '12345678',
-    contrasena: '',
+    contrasena: '12345678',
+    // contrasena: '',
   });
   //#endregion INICIALIZACION
 
@@ -154,21 +167,21 @@ export default component$(() => {
 
   //#region ANALISIS DEL LOGEO
   const analisisDeLogeo = $(async (logeado: string, usuario: string) => {
-    console.log('analisisDeLogeo -> logeado', logeado);
+    // //console.log('analisisDeLogeo -> logeado', logeado);
     const sucursales = await getSucursalesAdjuntasUsuario({ idUsuario: logeado });
-    console.log('analisisDeLogeo -> sucursales', sucursales.data);
+    //console.log('analisisDeLogeo -> sucursales', sucursales.data);
 
     parametrosGlobales.usuario = usuario;
     parametrosGlobales.sucursalesAdjuntas = sucursales.data;
 
     //CERO SUCURSAL
     if (sucursales.data.length === 0) {
-      console.log('sucursales.data.length === 0');
+      // //console.log('sucursales.data.length === 0');
       alert('No existe una sucursal adjunta.');
     }
     //UNA SUCURSAL
     if (sucursales.data.length === 1) {
-      console.log('sucursales.data.length === 1');
+      // //console.log('sucursales.data.length === 1');
 
       let activo = await getActivoGEEMPSUCUR({
         idGrupoEmpresarial: sucursales.data[0].idGrupoEmpresarial,
@@ -189,10 +202,11 @@ export default component$(() => {
         alert(`La sucursal ${sucursales.data[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`);
         return;
       }
-      console.log('🧧🧧🧧activo', activo);
-      console.log('**UNA SUCURSAL**');
+      //console.log('🧧🧧🧧activo', activo);
+      //console.log('**UNA SUCURSAL**');
       parametrosGlobales.idSucursal = sucursales.data[0].idSucursal;
       parametrosGlobales.sucursal = sucursales.data[0].sucursal;
+      parametrosGlobales.sucursalDireccion = sucursales.data[0].sucursalDireccion;
       parametrosGlobales.idAlmacen = sucursales.data[0].idSucursal; //******* */
       parametrosGlobales.idGrupoEmpresarial = sucursales.data[0].idGrupoEmpresarial;
       parametrosGlobales.nombreGrupoEmpresarial = sucursales.data[0].grupoEmpresarial;
@@ -202,6 +216,10 @@ export default component$(() => {
 
       parametrosGlobales.RUC = sucursales.data[0].numeroIdentidad;
       parametrosGlobales.Direccion = sucursales.data[0].direccion;
+      parametrosGlobales.departamento = sucursales.data[0].departamento;
+      parametrosGlobales.provincia = sucursales.data[0].provincia;
+      parametrosGlobales.distrito = sucursales.data[0].distrito;
+      parametrosGlobales.ubigeo = sucursales.data[0].ubigeo;
 
       parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
       parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;
@@ -216,6 +234,8 @@ export default component$(() => {
       parametrosGlobales.verificarObservacionVenta = activo[0].verificarObservacionVenta;
       parametrosGlobales.guiaRemisionElectronica = activo[0].guiaRemisionElectronica;
       parametrosGlobales.guiaRemisionElectronicaAutomatica = activo[0].guiaRemisionElectronicaAutomatica;
+      parametrosGlobales.guiaRemisionJSON = activo[0].guiaRemisionJSON;
+      parametrosGlobales.guiaRemisionXML = activo[0].guiaRemisionXML;
       parametrosGlobales.verificarObservacionGR = activo[0].verificarObservacionGR;
       parametrosGlobales.contabilizarOperaciones = activo[0].contabilizarOperaciones;
       parametrosGlobales.planesContables = activo[0].planesContables;
@@ -264,22 +284,22 @@ export default component$(() => {
     }
     //MAS DE UNA SUCURSAL
     if (sucursales.data.length > 1) {
-      console.log('sucursales.data.length > 1');
+      // //console.log('sucursales.data.length > 1');
       navegarA('/listadoSucursales');
     }
     definicion_CTX_LOGEO.mostrarSpinner = false;
   });
   // const analisisDeLogeo = $(async (logeo: any) => {
   //   // localStorage.setItem('ID', logeo._id);
-  //   console.log('***-->logeo', logeo);
+  //   //console.log('***-->logeo', logeo);
   //   if (typeof logeo.sucursalesAdjuntas === 'undefined' || logeo.sucursalesAdjuntas.length === 0) {
   //     navegarA('/ningunaEmpresa');
   //   } else {
   //     if (logeo.sucursalesAdjuntas.length === 1) {
   //       //UNA EMPRESA
-  //       console.log('UNA EMPRESA*');
+  //       //console.log('UNA EMPRESA*');
   //       if (logeo.sucursalesAdjuntas[0].todasLasSucursales === true) {
-  //         console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === true');
+  //         //console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === true');
   //         if (
   //           typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
   //           logeo.sucursalesAdjuntas[0].sucursales.length === 0
@@ -287,7 +307,7 @@ export default component$(() => {
   //           navegarA('/ningunaSucursal');
   //         } else {
   //           if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
-  //             console.log('UNA EMPRESA --> UNA SUCURSAL');
+  //             //console.log('UNA EMPRESA --> UNA SUCURSAL');
   //             //UNA SUCURSAL
   //             let activo = await getActivoGEEMPSUCUR({
   //               idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -325,7 +345,7 @@ export default component$(() => {
   //             // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
   //             // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
   //             // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
-  //             console.log('**PAPASECA**');
+  //             //console.log('**PAPASECA**');
   //             parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
   //             parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
   //             parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -359,7 +379,7 @@ export default component$(() => {
   //               bandera: '',
   //             });
   //             parametrosGlobales.periodos = losPeri.data;
-  //             // console.log('json_', losPeri.data);
+  //             // //console.log('json_', losPeri.data);
   //             // localStorage.setItem('periodos', losPeri.data);
   //             //PAGINA DE INICIO
   //             if (parametrosGlobales.almacenActivo) {
@@ -378,7 +398,7 @@ export default component$(() => {
 
   //             // Object.freeze(parametrosGlobales);
   //           } else {
-  //             console.log('UNA EMPRESA --> VARIAS SUCURSALES');
+  //             //console.log('UNA EMPRESA --> VARIAS SUCURSALES');
   //             //VARIAS SUCURSALES
   //             let activo = await getActivoGEEMP({
   //               idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -405,7 +425,7 @@ export default component$(() => {
   //             // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
   //             // localStorage.setItem('usuario', logeo.usuario);
   //             // localStorage.setItem('SUCURSALES', JSON.stringify(logeo.sucursalesAdjuntas[0].sucursales));
-  //             console.log('**MONDONGO**');
+  //             //console.log('**MONDONGO**');
   //             parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
   //             parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
   //             parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -436,7 +456,7 @@ export default component$(() => {
   //           }
   //         }
   //       } else {
-  //         console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === false');
+  //         //console.log('logeo.sucursalesAdjuntas[0].todasLasSucursales === false');
   //         if (
   //           typeof logeo.sucursalesAdjuntas[0].sucursales === 'undefined' ||
   //           logeo.sucursalesAdjuntas[0].sucursales.length === 0
@@ -444,7 +464,7 @@ export default component$(() => {
   //           navegarA('/ningunaSucursal');
   //         } else {
   //           if (logeo.sucursalesAdjuntas[0].sucursales.length === 1) {
-  //             console.log('logeo.sucursalesAdjuntas[0].sucursales.length === 1 -->> va por: getActivoGEEMPSUCUR');
+  //             //console.log('logeo.sucursalesAdjuntas[0].sucursales.length === 1 -->> va por: getActivoGEEMPSUCUR');
   //             //UNA SUCURSAL
   //             let activo = await getActivoGEEMPSUCUR({
   //               idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -482,7 +502,7 @@ export default component$(() => {
   //             // localStorage.setItem('idSucursal', logeo.sucursalesAdjuntas[0].sucursales[0].idSucursal);
   //             // localStorage.setItem('sucursal', logeo.sucursalesAdjuntas[0].sucursales[0].sucursal);
   //             // localStorage.setItem('almacenActivo', activo[0].almacenActivo);
-  //             console.log(
+  //             //console.log(
   //               '**AJI**',
   //               logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
   //               logeo.sucursalesAdjuntas[0].grupoEmpresarial
@@ -523,7 +543,7 @@ export default component$(() => {
   //               bandera: '',
   //             });
   //             parametrosGlobales.periodos = losPeri.data;
-  //             // console.log('json_b', JSON.stringify(losPeri.data));
+  //             // //console.log('json_b', JSON.stringify(losPeri.data));
   //             // localStorage.setItem('periodos', JSON.stringify(losPeri.data));
   //             //PAGINA DE INICIO
   //             if (parametrosGlobales.almacenActivo) {
@@ -541,7 +561,7 @@ export default component$(() => {
   //             }
   //             // Object.freeze(parametrosGlobales);
   //           } else {
-  //             console.log('logeo.sucursalesAdjuntas[0].sucursales.length !== 1');
+  //             //console.log('logeo.sucursalesAdjuntas[0].sucursales.length !== 1');
   //             //VARIAS SUCURSALES
   //             let activo = await getActivoGEEMP({
   //               idGrupoEmpresarial: logeo.sucursalesAdjuntas[0].idGrupoEmpresarial,
@@ -567,7 +587,7 @@ export default component$(() => {
   //             // localStorage.setItem('empresa', logeo.sucursalesAdjuntas[0].empresa);
   //             // localStorage.setItem('numeroIdentidad', logeo.sucursalesAdjuntas[0].numeroIdentidad);
   //             // localStorage.setItem('usuario', logeo.usuario);
-  //             console.log('**CHILE**');
+  //             //console.log('**CHILE**');
   //             parametrosGlobales.idGrupoEmpresarial = logeo.sucursalesAdjuntas[0].idGrupoEmpresarial;
   //             parametrosGlobales.nombreGrupoEmpresarial = logeo.sucursalesAdjuntas[0].grupoEmpresarial;
   //             parametrosGlobales.idEmpresa = logeo.sucursalesAdjuntas[0].idEmpresa;
@@ -599,7 +619,7 @@ export default component$(() => {
   //       }
   //     } else {
   //       //VARIAS EMPRESA
-  //       console.log('VARIAS EMPRESA');
+  //       //console.log('VARIAS EMPRESA');
 
   //       // localStorage.setItem('usuario', logeo.usuario);
   //       parametrosGlobales.usuario = logeo.usuario;
@@ -626,13 +646,13 @@ export default component$(() => {
 
     definicion_CTX_LOGEO.mostrarSpinner = true;
     // parametrosGlobales.mostrarSpinner = true;
-    // console.log('pasooooooooooo!!!');
+    // //console.log('pasooooooooooo!!!');
     let elLogeo = await getUsuarioPanel({
       usuario: definicion_CTX_LOGEO.email.trim(),
       clave: definicion_CTX_LOGEO.contrasena.trim(),
     });
     elLogeo = elLogeo.data;
-    console.log('********--elLogeo--******', elLogeo);
+    // //console.log('********--elLogeo--******', elLogeo);
     if (elLogeo.length === 1) {
       if (elLogeo[0].activo) {
         analisisDeLogeo(elLogeo[0]._id, elLogeo[0].usuario);
@@ -689,6 +709,24 @@ export default component$(() => {
   });
   //#endregion INGRESAR AL SISTEMA
 
+  //#region FIRMAR XML
+  // const firmarXML = $(() => {
+  //   const xml = '<library>' + '<book>' + '<name>Harry Potter</name>' + '</book>' + '</library>';
+
+  //   const sig = new SignedXml({ privateKey: readFileSync('certificado.p12') });
+  //   sig.addReference({
+  //     xpath: "//*[local-name(.)='book']",
+  //     digestAlgorithm: 'http://www.w3.org/2000/09/xmldsig#sha1',
+  //     transforms: ['http://www.w3.org/2001/10/xml-exc-c14n#'],
+  //   });
+  //   sig.canonicalizationAlgorithm = 'http://www.w3.org/2001/10/xml-exc-c14n#';
+  //   sig.signatureAlgorithm = 'http://www.w3.org/2000/09/xmldsig#rsa-sha1';
+  //   sig.computeSignature(xml);
+  //   //console.log('🎎🎎🎎🎎');
+  //   writeFileSync('signed.xml', sig.getSignedXml());
+  //   //console.log('🎎🎎🎎🎎🎎🎎🎎🎎');
+  // });
+  //#endregion FIRMAR XML
   return (
     <>
       <div class="container" style={{ background: '#eee' }}>
@@ -705,58 +743,63 @@ export default component$(() => {
           {/* <Form action={login}>            
           </Form> */}
           <form style={{ width: '300px' }}>
-            <div class="linea-formulario">
-              <label>Usuario</label>
-              <input
-                id="inputUsuario_LOGIN"
-                autoFocus
-                name="usuario"
-                type="email"
-                placeholder="Email"
-                class="input-formulario"
-                value={definicion_CTX_LOGEO.email}
-                onChange$={(e) => (definicion_CTX_LOGEO.email = (e.target as HTMLInputElement).value)}
-                onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('inputClave_LOGIN') as HTMLInputElement)?.focus();
-                  }
-                }}
-              />
-            </div>
-            <div class="linea-formulario">
-              <label>Clave</label>
-              <div style={{ position: 'relative', left: '12px' }}>
+            <div>
+              <div class="linea-formulario">
+                <label>Usuario</label>
                 <input
-                  id="inputClave_LOGIN"
-                  name="clave"
-                  type={passwordTF.value ? 'password' : 'text'}
-                  placeholder="Clave"
+                  id="inputUsuario_LOGIN"
+                  autoFocus
+                  name="usuario"
+                  type="email"
+                  placeholder="Email"
                   class="input-formulario"
-                  value={definicion_CTX_LOGEO.contrasena}
-                  onChange$={(e) => (definicion_CTX_LOGEO.contrasena = (e.target as HTMLInputElement).value)}
+                  value={definicion_CTX_LOGEO.email}
+                  onChange$={(e) => (definicion_CTX_LOGEO.email = (e.target as HTMLInputElement).value)}
                   onKeyPress$={(e) => {
                     if (e.key === 'Enter') {
-                      (document.getElementById('buttonLogearse_LOGIN') as HTMLInputElement)?.focus();
+                      (document.getElementById('inputClave_LOGIN') as HTMLInputElement)?.focus();
                     }
                   }}
                 />
-                <img
-                  src={passwordTF.value ? images.eye : images.eyePassword}
-                  height={12}
-                  width={12}
-                  style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
-                  onClick$={() => {
-                    passwordTF.value = !passwordTF.value;
-                  }}
-                />
               </div>
+              <div class="linea-formulario">
+                <label>Clave</label>
+                <div style={{ position: 'relative', left: '12px' }}>
+                  <input
+                    id="inputClave_LOGIN"
+                    name="clave"
+                    type={passwordTF.value ? 'password' : 'text'}
+                    placeholder="Clave"
+                    class="input-formulario"
+                    value={definicion_CTX_LOGEO.contrasena}
+                    onChange$={(e) => (definicion_CTX_LOGEO.contrasena = (e.target as HTMLInputElement).value)}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        (document.getElementById('buttonLogearse_LOGIN') as HTMLInputElement)?.focus();
+                      }
+                    }}
+                  />
+                  <img
+                    src={passwordTF.value ? images.eye : images.eyePassword}
+                    height={12}
+                    width={12}
+                    style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
+                    onClick$={() => {
+                      passwordTF.value = !passwordTF.value;
+                    }}
+                  />
+                </div>
+              </div>
+              <br />
             </div>
+
             {/* <button>Registrar</button> */}
             <input
               id="buttonLogearse_LOGIN"
               class="boton-formulario"
               type="button"
               value="Logearse"
+              style={{ height: '40px' }}
               onClick$={() => {
                 //
                 enviar();
@@ -765,6 +808,15 @@ export default component$(() => {
                 // alert(`fraude-- {usu}`);
               }}
             />
+            {/* <input
+              id="btn_Sign_LOGIN"
+              class="boton-formulario"
+              type="button"
+              value="Sign"
+              onClick$={() => {
+                firmarXML();
+              }}
+            /> */}
           </form>
           {/* <div>
             <Link class="desea-suscribirse" href="#">

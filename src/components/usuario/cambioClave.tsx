@@ -1,19 +1,19 @@
-import { $, component$, useContext, useSignal, useStore } from "@builder.io/qwik";
+import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
 // import { CTX_ADD_VENTA } from './addVenta';
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
 // import { CTX_SELECCIONAR_SERVICI } from "~/routes/(bienvenida)/listadoSucursales";
-import { parametrosGlobales } from "~/routes/login";
-import { upCambioClaveUsuario } from "~/apis/usuario.api";
-import { CTX_SELECCIONAR_SERVICIO } from "~/routes/(bienvenida)/seleccionarServicio";
+import { parametrosGlobales } from '~/routes/login';
+import { upCambioClaveUsuario } from '~/apis/usuario.api';
+import { CTX_SELECCIONAR_SERVICIO } from '~/routes/(bienvenida)/seleccionarServicio';
 // import { CTX_NEW_EDIT_COMPRA } from './newEditCompra';
 
 export default component$(() => {
   //#region definicion_CTX_CAMBIO_CLAVE
   const definicion_CTX_CAMBIO_CLAVE = useStore({
-    claveAnterior: "",
-    claveNuevaA: "",
-    claveNuevaB: "",
+    claveAnterior: '',
+    claveNuevaA: '',
+    claveNuevaB: '',
   });
   //#endregion definicion_CTX_CAMBIO_CLAVE
 
@@ -29,35 +29,35 @@ export default component$(() => {
 
   //#region GRABAR
   const grabarCambioClave = $(async () => {
-    if (definicion_CTX_CAMBIO_CLAVE.claveAnterior.trim() === "") {
-      alert("Ingrese la clave anterior");
-      document.getElementById("in_ClaveAnterior_USUARIO")?.focus();
+    if (definicion_CTX_CAMBIO_CLAVE.claveAnterior.trim() === '') {
+      alert('Ingrese la clave anterior');
+      document.getElementById('in_ClaveAnterior_USUARIO')?.focus();
       return;
     }
-    if (definicion_CTX_CAMBIO_CLAVE.claveNuevaA.trim() === "") {
-      alert("Ingrese la clave nueva");
-      document.getElementById("in_NuevaA_USUARIO")?.focus();
+    if (definicion_CTX_CAMBIO_CLAVE.claveNuevaA.trim() === '') {
+      alert('Ingrese la clave nueva');
+      document.getElementById('in_NuevaA_USUARIO')?.focus();
       return;
     }
     if (definicion_CTX_CAMBIO_CLAVE.claveNuevaA.length < 8) {
-      alert("La clave nueva debe tener 8 o más caracteres.");
-      document.getElementById("in_NuevaA_USUARIO")?.focus();
+      alert('La clave nueva debe tener 8 o más caracteres.');
+      document.getElementById('in_NuevaA_USUARIO')?.focus();
       return;
     }
-    if (definicion_CTX_CAMBIO_CLAVE.claveNuevaB.trim() === "") {
-      alert("Repetir la clave nueva");
-      document.getElementById("in_NuevaB_USUARIO")?.focus();
+    if (definicion_CTX_CAMBIO_CLAVE.claveNuevaB.trim() === '') {
+      alert('Repetir la clave nueva');
+      document.getElementById('in_NuevaB_USUARIO')?.focus();
       return;
     }
 
     if (definicion_CTX_CAMBIO_CLAVE.claveAnterior.trim() === definicion_CTX_CAMBIO_CLAVE.claveNuevaA.trim()) {
-      alert("La nueva clave no puede ser identica a la anterior clave, corriga.");
-      document.getElementById("in_NuevaA_USUARIO")?.focus();
+      alert('La nueva clave no puede ser identica a la anterior clave, corriga.');
+      document.getElementById('in_NuevaA_USUARIO')?.focus();
       return;
     }
     if (definicion_CTX_CAMBIO_CLAVE.claveNuevaA.trim() !== definicion_CTX_CAMBIO_CLAVE.claveNuevaB.trim()) {
-      alert("Las nuevas claves no coinciden, corriga.");
-      document.getElementById("in_NuevaA_USUARIO")?.focus();
+      alert('Las nuevas claves no coinciden, corriga.');
+      document.getElementById('in_NuevaA_USUARIO')?.focus();
       return;
     }
 
@@ -66,19 +66,19 @@ export default component$(() => {
       clave: definicion_CTX_CAMBIO_CLAVE.claveAnterior,
       claveNueva: definicion_CTX_CAMBIO_CLAVE.claveNuevaA,
     });
-    console.log("contra", contra);
+    //console.log("contra", contra);
     contra = contra.data;
-    console.log("🥽🥽🥽🥽🥽🥽", contra, contra[0]);
+    //console.log("🥽🥽🥽🥽🥽🥽", contra, contra[0]);
     //
     // if (typeof contra.ok !== "undefined") {
-    //   console.log("🧨🧨🧨🧨🧨🧨");
+    //   //console.log("🧨🧨🧨🧨🧨🧨");
     if (contra.ok === -1) {
-      alert("La contraseña ingresada no es la correcta, verifique.");
-      document.getElementById("in_ClaveAnterior_USUARIO")?.focus;
+      alert('La contraseña ingresada no es la correcta, verifique.');
+      document.getElementById('in_ClaveAnterior_USUARIO')?.focus;
       return;
       // }
     } else {
-      console.log("🎇🎇🎇🎇🎇🎇");
+      //console.log("🎇🎇🎇🎇🎇🎇");
       ctx_seleccionar_servicio.actualizo_Contrasena = true;
       ctx_seleccionar_servicio.mostrarPanelCambiarClave = false;
     }
@@ -88,15 +88,15 @@ export default component$(() => {
   return (
     <div
       style={{
-        width: "clamp(330px, 86%, 360px)",
+        width: 'clamp(330px, 86%, 360px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -114,7 +114,7 @@ export default component$(() => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log("itemVenta", props.borrarCuentaContable);
+            //console.log("itemVenta", props.borrarCuentaContable);
           })}
         /> */}
       </div>
@@ -133,27 +133,27 @@ export default component$(() => {
             value={parametrosGlobales.usuario}
             // onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
             onKeyPress$={(e) => {
-              if (e.key === "Enter") {
-                (document.getElementById("in_ClaveAnterior_USUARIO") as HTMLInputElement)?.focus();
+              if (e.key === 'Enter') {
+                (document.getElementById('in_ClaveAnterior_USUARIO') as HTMLInputElement)?.focus();
               }
             }}
           />
         </div>
         <div class="linea-formulario">
           <label>Clave anterior</label>
-          <div style={{ position: "relative", left: "12px" }}>
+          <div style={{ position: 'relative', left: '12px' }}>
             <input
               id="in_ClaveAnterior_USUARIO"
               autoFocus
               name="usuario"
-              type={passwordClaveAnteriorTF.value ? "password" : "text"}
+              type={passwordClaveAnteriorTF.value ? 'password' : 'text'}
               placeholder="Clave anterior"
               class="input-formulario-usuario"
               value={definicion_CTX_CAMBIO_CLAVE.claveAnterior}
               onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("in_NuevaA_USUARIO") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('in_NuevaA_USUARIO') as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -161,7 +161,7 @@ export default component$(() => {
               src={passwordClaveAnteriorTF.value ? images.eye : images.eyePassword}
               height={12}
               width={12}
-              style={{ cursor: "pointer", position: "relative", left: "-16px" }}
+              style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
               onClick$={() => {
                 passwordClaveAnteriorTF.value = !passwordClaveAnteriorTF.value;
               }}
@@ -170,18 +170,18 @@ export default component$(() => {
         </div>
         <div class="linea-formulario">
           <label>Clave nueva</label>
-          <div style={{ position: "relative", left: "12px" }}>
+          <div style={{ position: 'relative', left: '12px' }}>
             <input
               id="in_NuevaA_USUARIO"
               name="clave"
-              type={passwordClaveNuevaTF.value ? "password" : "text"}
+              type={passwordClaveNuevaTF.value ? 'password' : 'text'}
               placeholder="Clave nueva"
               class="input-formulario-usuario"
               value={definicion_CTX_CAMBIO_CLAVE.claveNuevaA}
               onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveNuevaA = (e.target as HTMLInputElement).value)}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("in_NuevaB_USUARIO") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('in_NuevaB_USUARIO') as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -189,7 +189,7 @@ export default component$(() => {
               src={passwordClaveNuevaTF.value ? images.eye : images.eyePassword}
               height={12}
               width={12}
-              style={{ cursor: "pointer", position: "relative", left: "-16px" }}
+              style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
               onClick$={() => {
                 passwordClaveNuevaTF.value = !passwordClaveNuevaTF.value;
               }}
@@ -198,18 +198,18 @@ export default component$(() => {
         </div>
         <div class="linea-formulario">
           <label>Repetir clave</label>
-          <div style={{ position: "relative", left: "12px" }}>
+          <div style={{ position: 'relative', left: '12px' }}>
             <input
               id="in_NuevaB_USUARIO"
               name="clave"
-              type={passwordRepetirClaveNuevaTF.value ? "password" : "text"}
+              type={passwordRepetirClaveNuevaTF.value ? 'password' : 'text'}
               placeholder="Repetir clave nueva"
               class="input-formulario-usuario"
               value={definicion_CTX_CAMBIO_CLAVE.claveNuevaB}
               onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveNuevaB = (e.target as HTMLInputElement).value)}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("in_btn_Grabar_USUARIO") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('in_btn_Grabar_USUARIO') as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -217,7 +217,7 @@ export default component$(() => {
               src={passwordRepetirClaveNuevaTF.value ? images.eye : images.eyePassword}
               height={12}
               width={12}
-              style={{ cursor: "pointer", position: "relative", left: "-16px" }}
+              style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
               onClick$={() => {
                 passwordRepetirClaveNuevaTF.value = !passwordRepetirClaveNuevaTF.value;
               }}

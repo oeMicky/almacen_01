@@ -16,10 +16,10 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda', props.parametrosBusqueda);
+    //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
     if (props.parametrosBusqueda.PorDestinatario_EntreFechas === 'Entre fechas') {
-      console.log('Entre fechas');
+      //console.log('Entre fechas');
       const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getVentaDespachadaReingresoEntreFechas', {
         method: 'POST',
         headers: {
@@ -32,22 +32,19 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
     }
     if (props.parametrosBusqueda.PorDestinatario_EntreFechas === 'Por cliente / destinatario') {
       if (props.parametrosBusqueda.PorNombre_RUCDNI === 'DNI / RUC') {
-        console.log('DNI / RUC');
-        const res = await fetch(
-          import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getVentaDespachadaReingresoPorDestinatarioPorRUCDNI',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(props.parametrosBusqueda),
-            signal: abortController.signal,
-          }
-        );
+        //console.log('DNI / RUC');
+        const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getVentaDespachadaReingresoPorDestinatarioPorRUCDNI', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(props.parametrosBusqueda),
+          signal: abortController.signal,
+        });
         return res.json();
       }
       if (props.parametrosBusqueda.PorNombre_RUCDNI === 'Nombre / Razón social') {
-        console.log('Nombre / Razón social');
+        //console.log('Nombre / Razón social');
         const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getVentaDespachadaReingresoPorDestinatario', {
           method: 'POST',
           headers: {
@@ -66,15 +63,15 @@ export default component$((props: { buscarVentaDespachadaReingreso: number; para
     <Resource
       value={lasVentasDespachadas}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
+        //console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
+        //console.log('onRejected 🍍🍍🍍🍍');
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(ventasDespachadas) => {
-        console.log('onResolved 🍓🍓🍓🍓', ventasDespachadas);
+        //console.log('onResolved 🍓🍓🍓🍓', ventasDespachadas);
         const { data } = ventasDespachadas; //{ status, data, message }
         const misVentasDespachadas: INotaSalidaReingreso[] = data;
         return (

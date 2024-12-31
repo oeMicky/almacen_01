@@ -1,12 +1,12 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import { CTX_NEW_OUT_ALMACEN } from "~/components/outAlmacen/newOutAlmacen";
-import ImgButton from "~/components/system/imgButton";
-import TablaVentas100 from "./tablaVentas100";
-import { parametrosGlobales } from "~/routes/login";
-import DespachoVenta from "./despachoVenta";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import ImgButton from '~/components/system/imgButton';
+import TablaVentas100 from './tablaVentas100';
+import { parametrosGlobales } from '~/routes/login';
+import DespachoVenta from './despachoVenta';
 
-export const CTX_VENTAS_CLIENTE = createContextId<any>("ventas_cliente");
+export const CTX_VENTAS_CLIENTE = createContextId<any>('ventas_cliente');
 
 export default component$((props: { contexto: string; cliente: any }) => {
   //#region DEFINICIO CTX_BUSCAR_ORDEN_SERVICIO
@@ -20,7 +20,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
   //#region CONTEXTO
   let ctx: any = [];
   switch (props.contexto) {
-    case "new_out_almacen":
+    case 'new_out_almacen':
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
       break;
     // case 'new_venta':
@@ -49,7 +49,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
   useTask$(({ track }) => {
     track(() => ini);
     localizar100Ventas();
-    // console.log(' buscarVentas100.value.......................', buscarVentas100.value);
+    // //console.log(' buscarVentas100.value.......................', buscarVentas100.value);
   });
   //#endregion BUSCAR VENTAS
 
@@ -57,14 +57,14 @@ export default component$((props: { contexto: string; cliente: any }) => {
     <div
       class="container-modal"
       style={{
-        width: "clamp(330px, 86%, 700px)",
+        width: 'clamp(330px, 86%, 700px)',
         // width: 'auto',
-        border: "1px solid red",
-        padding: "2px",
+        border: '1px solid red',
+        padding: '2px',
       }}
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -73,7 +73,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
           title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelVentasCliente = false;
-            // console.log('VENTAS_CLIENTE: es falso.....');
+            // //console.log('VENTAS_CLIENTE: es falso.....');
           })}
         />
         <ImgButton
@@ -83,7 +83,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log("cliente", props.cliente);
+            //console.log('cliente', props.cliente);
           })}
         />
       </div>
@@ -92,12 +92,12 @@ export default component$((props: { contexto: string; cliente: any }) => {
         <h3>Ventas del cliente</h3>
         {/* EL CLIENTE */}
         <div>
-          <strong>{props.cliente.tipoDocumentoIdentidad + ": " + props.cliente.numeroIdentidad}</strong>
+          <strong>{props.cliente.tipoDocumentoIdentidad + ': ' + props.cliente.numeroIdentidad}</strong>
           <br />
           <strong>{props.cliente.razonSocialNombre}</strong>
         </div>
         {/* TABLA VENTAS DE CLIENTE */}
-        <div style={{ marginTop: "16px" }}>
+        <div style={{ marginTop: '16px' }}>
           {buscarVentas100.value > 0 ? (
             <TablaVentas100
               buscarVentas100={buscarVentas100.value}
@@ -107,7 +107,7 @@ export default component$((props: { contexto: string; cliente: any }) => {
               esAlmacen={true}
             />
           ) : (
-            ""
+            ''
           )}
         </div>
         {ctx.mostrarPanelDespachoVenta && (

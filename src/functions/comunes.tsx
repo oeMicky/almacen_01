@@ -176,12 +176,14 @@ export const formatearNumeroINT = (num: number) => {
 };
 
 export const literal = (importe: any, moneda: string) => {
-  if (importe < 0 || importe >= 1000000) {
+  //console.log('literal........', importe, moneda);
+  if (importe < 0 || importe > 999999999) {
     return '';
   }
-  if (importe === '0') {
+  if (importe === 0) {
     return moneda === 'PEN' ? 'CERO y 00/100 SOLES' : 'CERO y 00/100 DOLARES AMERICANOS';
   } else {
+    //console.log('🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻');
     //
     let LITERAL_DEL_ENTERO = '';
     let LITERAL_DEL_DECIMAL = '';
@@ -194,38 +196,46 @@ export const literal = (importe: any, moneda: string) => {
     //importe en CADENA
     const CADENA = ENTERO.toString();
     //longitud de la CADENA
-    const LONGITUD = CADENA.length;
+    const LONGITUD_DEL_ENTERO = CADENA.length;
+    //console.log('🐧🐧🐧🐧LONGITUD de ENTERO', LONGITUD_DEL_ENTERO);
     //descomponiendo para componer el ENTERO
     let CIEN_DECENAS = '';
     let cd_15_14_13_12_11 = '';
-    for (let INDICE = LONGITUD; 0 < INDICE; INDICE--) {
+    let composicion654 = '';
+    for (let INDICE = LONGITUD_DEL_ENTERO; 0 < INDICE; INDICE--) {
       let DIGITO = '';
-      if (INDICE === 6 || INDICE === 3) {
+      if (INDICE === 9 || INDICE === 6 || INDICE === 3) {
         //hallando el DIGITO
-        DIGITO = CADENA.substring(LONGITUD - INDICE, LONGITUD - INDICE + 1);
+        DIGITO = CADENA.substring(LONGITUD_DEL_ENTERO - INDICE, LONGITUD_DEL_ENTERO - INDICE + 1);
         //
-        CIEN_DECENAS = CADENA.substring(LONGITUD - INDICE, LONGITUD - INDICE + 3);
+        CIEN_DECENAS = CADENA.substring(LONGITUD_DEL_ENTERO - INDICE, LONGITUD_DEL_ENTERO - INDICE + 3);
       }
-      if (INDICE === 5 || INDICE === 2) {
+      if (INDICE === 8 || INDICE === 5 || INDICE === 2) {
         //hallando el DIGITO
-        DIGITO = CADENA.substring(LONGITUD - INDICE, LONGITUD - INDICE + 1);
+        DIGITO = CADENA.substring(LONGITUD_DEL_ENTERO - INDICE, LONGITUD_DEL_ENTERO - INDICE + 1);
         //
-        CIEN_DECENAS = CADENA.substring(LONGITUD - INDICE, LONGITUD - INDICE + 2);
+        CIEN_DECENAS = CADENA.substring(LONGITUD_DEL_ENTERO - INDICE, LONGITUD_DEL_ENTERO - INDICE + 2);
         if (CIEN_DECENAS === '15' || CIEN_DECENAS === '14' || CIEN_DECENAS === '13' || CIEN_DECENAS === '12' || CIEN_DECENAS === '11') {
           cd_15_14_13_12_11 = CIEN_DECENAS;
         } else {
           cd_15_14_13_12_11 = '';
         }
       }
-      if (INDICE === 4 || INDICE === 1) {
+      if (INDICE === 7 || INDICE === 4 || INDICE === 1) {
         //hallando el DIGITO
-        DIGITO = CADENA.substring(LONGITUD - INDICE, LONGITUD - INDICE + 1);
+        DIGITO = CADENA.substring(LONGITUD_DEL_ENTERO - INDICE, LONGITUD_DEL_ENTERO - INDICE + 1);
         //
         CIEN_DECENAS = cd_15_14_13_12_11 !== '' ? cd_15_14_13_12_11 : '';
       }
-
+      if (INDICE === 6 || INDICE === 5 || INDICE === 4) {
+        composicion654 = composicion654 + DIGITO;
+      }
       //
-      LITERAL_DEL_ENTERO = LITERAL_DEL_ENTERO + componiendoLiteral_ENTERO(INDICE, DIGITO, CIEN_DECENAS);
+      if (composicion654 === '000' && INDICE === 4) {
+        LITERAL_DEL_ENTERO;
+      } else {
+        LITERAL_DEL_ENTERO = LITERAL_DEL_ENTERO + componiendoLiteral_ENTERO(LONGITUD_DEL_ENTERO, INDICE, DIGITO, CIEN_DECENAS);
+      }
     }
     // componiendo el DECIMAL
 
@@ -236,23 +246,39 @@ export const literal = (importe: any, moneda: string) => {
   }
 };
 
-const componiendoLiteral_ENTERO = (indice: number, digito: string, cien_decenas: string) => {
+const componiendoLiteral_ENTERO = (longitud_d_entero: number, indice: number, digito: string, cien_decenas: string) => {
+  // //console.log('componiendoLiteral_ENTERO', indice, digito, cien_decenas);
+  //console.log({ longitud_d_entero: longitud_d_entero, indice: indice, digito: digito, cien_decenas: cien_decenas });
   let valor = '';
-  if (indice === 6 || indice === 5 || indice === 4) {
+
+  if (indice === 9 || indice === 8 || indice === 7) {
+    if (indice === 7) {
+      if (longitud_d_entero === indice && indice === 7 && digito === '1') {
+        valor = componer_centenas_decenas_unidades(longitud_d_entero, indice, digito, cien_decenas) + 'MILLÓN ';
+      } else {
+        valor = componer_centenas_decenas_unidades(longitud_d_entero, indice, digito, cien_decenas) + 'MILLONES ';
+      }
+    } else {
+      valor = componer_centenas_decenas_unidades(longitud_d_entero, indice, digito, cien_decenas);
+    }
+    return valor;
+  } else if (indice === 6 || indice === 5 || indice === 4) {
     valor =
       indice === 4
-        ? componer_centenas_decenas_unidades(indice, digito, cien_decenas) + 'MIL '
-        : componer_centenas_decenas_unidades(indice, digito, cien_decenas);
+        ? componer_centenas_decenas_unidades(longitud_d_entero, indice, digito, cien_decenas) + 'MIL '
+        : componer_centenas_decenas_unidades(longitud_d_entero, indice, digito, cien_decenas);
     return valor;
   } else {
-    return componer_centenas_decenas_unidades(indice, digito, cien_decenas);
+    return componer_centenas_decenas_unidades(longitud_d_entero, indice, digito, cien_decenas);
   }
 };
 
-const componer_centenas_decenas_unidades = (indice: number, digito: string, cien_decenas: string) => {
+const componer_centenas_decenas_unidades = (longitud_d_entero: number, indice: number, digito: string, cien_decenas: string) => {
+  // //console.log('componer_centenas_decenas_unidades', indice, digito, cien_decenas);
+  //console.log({ longitud_d_entero: longitud_d_entero, indice: indice, digito: digito, cien_decenas: cien_decenas });
   let valor = '';
   let esCERO = '';
-  if (indice === 6 || indice === 3) {
+  if (indice === 9 || indice === 6 || indice === 3) {
     valor =
       digito === '9'
         ? 'NOVECIENTOS '
@@ -279,7 +305,7 @@ const componer_centenas_decenas_unidades = (indice: number, digito: string, cien
       }
     }
   }
-  if (indice === 5 || indice === 2) {
+  if (indice === 8 || indice === 5 || indice === 2) {
     valor =
       digito === '9'
         ? 'NOVENTA '
@@ -316,7 +342,7 @@ const componer_centenas_decenas_unidades = (indice: number, digito: string, cien
         valor = digito === '1' ? 'DIEZ ' : '';
         //el digito siguiente es CERO???
         esCERO = cien_decenas.substring(1);
-        if (esCERO !== '0') {
+        if (esCERO.trim() !== '' && esCERO.trim() !== '0') {
           valor = valor + 'Y ';
         }
       }
@@ -324,15 +350,15 @@ const componer_centenas_decenas_unidades = (indice: number, digito: string, cien
       if (digito !== '0') {
         //el digito siguiente es CERO???
         esCERO = cien_decenas.substring(1);
-        if (esCERO !== '0') {
+        if (esCERO.trim() !== '' && esCERO.trim() !== '0') {
           valor = valor + 'Y ';
         }
       }
     }
   }
-  if (indice === 4 || indice === 1) {
+  if (indice === 7 || indice === 4 || indice === 1) {
     if (cien_decenas === '11' || cien_decenas === '12' || cien_decenas === '13' || cien_decenas === '14' || cien_decenas === '15') {
-      console.log('nada');
+      //console.log('nada');
     } else {
       valor =
         digito === '9'
@@ -354,9 +380,19 @@ const componer_centenas_decenas_unidades = (indice: number, digito: string, cien
           : digito === '1'
           ? 'UNO '
           : '';
+      if (longitud_d_entero === indice && indice === 4 && digito === '1') {
+        valor = '';
+      }
+      if (longitud_d_entero === indice && indice === 7 && digito === '1') {
+        valor = '';
+        valor = 'UN ';
+      }
+      // //console.log('...cien_decenas', cien_decenas);
       //el digito siguiente es CERO???
       esCERO = cien_decenas.substring(1);
-      if (esCERO !== '0') {
+      // //console.log('...esCERO', esCERO);
+      if (esCERO.trim() !== '' && esCERO.trim() !== '0') {
+        // //console.log('...esCER...');
         valor = valor + 'Y ';
       }
     }

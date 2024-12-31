@@ -90,9 +90,9 @@ export interface IItemServicio {
   cantidad: number;
   unidadEquivalencia: string;
   costo: number;
-  precioPEN: number;
+  precioUnitarioPEN: number;
   ventaPEN: number;
-  precioUSD: number;
+  precioUnitarioUSD: number;
   ventaUSD: number;
 }
 
@@ -104,9 +104,9 @@ export interface IItemRequisicion {
   cantidad: number;
   unidadEquivalencia: string;
   costo: number;
-  precioPEN: number;
+  precioUnitarioPEN: number;
   ventaPEN: number;
-  precioUSD: number;
+  precioUnitarioUSD: number;
   ventaUSD: number;
 }
 
@@ -118,8 +118,8 @@ export interface IItemRepuestoDespachdo {
   cantidad: number;
   unidadEquivalencia: string;
   costo: number;
-  precioPEN: number;
+  precioUnitarioPEN: number;
   ventaPEN: number;
-  precioUSD: number;
+  precioUnitarioUSD: number;
   ventaUSD: number;
 }

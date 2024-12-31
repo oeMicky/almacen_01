@@ -2,6 +2,7 @@ import {
   component$,
   createContextId,
   useContextProvider,
+  // $,
   // useResource$,
   useSignal,
   useStore,
@@ -15,13 +16,16 @@ import {
 import TablaVentas from '~/components/venta/tablaVentas';
 // import Modal from '~/components/system/elModal';
 import AddVenta from '~/components/venta/addVenta';
-import { getIgvVenta } from '~/apis/venta.api';
+import { getIgvVenta, upDarDeBaja } from '~/apis/venta.api';
 // import style from './index.css?inline';
 import { parametrosGlobales } from '../../login/index';
 // import ElSelect from '~/components/system/elSelect';  formatoDDMMYYYY_PEN
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
-import { cerosALaIzquierda, hoy, menosXdiasHoy } from '~/functions/comunes';
+import { cerosALaIzquierda, hoy } from '~/functions/comunes';
+import DarDeBajaDocumentoVenta from '~/components/venta/darDeBajaDocumentoVenta';
+import { useNavigate } from '@builder.io/qwik-city';
+// import { exit } from 'process';
 // import pdfReporteVenta from '~/reports/MG/pdfReporteVenta';
 
 // import { CTX_HEADER_ALMACEN } from '~/components/header/headerAlmacen';
@@ -66,6 +70,20 @@ export default component$(() => {
 
     mostrarSpinner: false,
     // mostrarSpinner: parametrosGlobales.mostrarSpinner, //false,
+    darDeBajaID: '',
+    darDeBajaRUC: '',
+    darDeBajaEMPRESA: '',
+    darDeBajaFECHA: '',
+    darDeBajaFECHA_DOCUMENTO: '',
+    darDeBajaTIPO: '',
+    darDeBajaSERIE: '',
+    darDeBajaNUMERO: '',
+    darDeBajaCLIENTE: '',
+    darDeBajaMOTIVO: '',
+    darDeBajaFacturaJSON: false,
+    darDeBajaFacturaXML: false,
+    siDarDeBajaID: '',
+    mostrarPanelDarDeBajaDocumentoVenta: false,
   });
   useContextProvider(CTX_INDEX_VENTA, definicion_CTX_INDEX_VENTA);
   //#endregion DEFINICION CTX_INDEX_VENTA
@@ -75,6 +93,7 @@ export default component$(() => {
   //#endregion CONTEXTO
 
   //#region INICIALIZACION
+  const navegarA = useNavigate();
   const ini = useSignal(0);
   // const buscarVentas = useSignal(0);
   const igv = useSignal(0);
@@ -107,7 +126,7 @@ export default component$(() => {
   //   track(() => ini.value);
 
   //   parametrosGlobales.mostrarSpinner = false;
-  //   console.log('ini venta parametrosGlobales.mostrarSpinner ', parametrosGlobales.mostrarSpinner);
+  //   //console.log('ini venta parametrosGlobales.mostrarSpinner ', parametrosGlobales.mostrarSpinner);
   // });
 
   // useTask$(({ track }) => {
@@ -169,14 +188,14 @@ export default component$(() => {
   //#region REFRESCAR REGISTROS
   useTask$(({ track }) => {
     track(() => definicion_CTX_INDEX_VENTA.grabo_Venta);
-    // console.log('0 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
+    // //console.log('0 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
     // const BO = definicion_CTX_INDEX_VENTA.grabo_Venta;
     if (definicion_CTX_INDEX_VENTA.grabo_Venta) {
       definicion_CTX_INDEX_VENTA.buscarVentas++;
-      // console.log('1 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
+      // //console.log('1 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
       definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
       definicion_CTX_INDEX_VENTA.grabo_Venta = false;
-      // console.log('2 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
+      // //console.log('2 definicion_CTX_INDEX_VENTA.grabo_Venta', definicion_CTX_INDEX_VENTA.grabo_Venta);
     }
   });
   //#endregion REFRESCAR REGISTROS
@@ -203,9 +222,50 @@ export default component$(() => {
   //   // var stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
   //   // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
   //   // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
-  //   console.log('first txt');
+  //   //console.log('first txt');
   // });
   //#endregion CREAR Y DOWNLOAD TXT
+
+  //#region DAR DE BAJA
+  useTask$(async ({ track }) => {
+    track(() => definicion_CTX_INDEX_VENTA.siDarDeBajaID);
+
+    if (definicion_CTX_INDEX_VENTA.siDarDeBajaID !== '') {
+      // console.log('🔽🔽⏬');
+      const respuesta = await upDarDeBaja({
+        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+        idEmpresa: parametrosGlobales.idEmpresa,
+        idVenta: definicion_CTX_INDEX_VENTA.siDarDeBajaID,
+        darDeBajaRUC: definicion_CTX_INDEX_VENTA.darDeBajaRUC,
+        darDeBajaEMPRESA: definicion_CTX_INDEX_VENTA.darDeBajaEMPRESA,
+        darDeBajaFECHA: hoy(),
+        darDeBajaFECHA_DOCUMENTO: definicion_CTX_INDEX_VENTA.darDeBajaFECHA_DOCUMENTO,
+        darDeBajaTIPO: definicion_CTX_INDEX_VENTA.darDeBajaTIPO,
+        darDeBajaSERIE: definicion_CTX_INDEX_VENTA.darDeBajaSERIE,
+        darDeBajaNUMERO: definicion_CTX_INDEX_VENTA.darDeBajaNUMERO,
+        darDeBajaCLIENTE: definicion_CTX_INDEX_VENTA.darDeBajaCLIENTE,
+        darDeBajaMOTIVO: definicion_CTX_INDEX_VENTA.darDeBajaMOTIVO,
+        darDeBajaFacturaJSON: definicion_CTX_INDEX_VENTA.darDeBajaFacturaJSON,
+        darDeBajaFacturaXML: definicion_CTX_INDEX_VENTA.darDeBajaFacturaXML,
+        usuario: parametrosGlobales.usuario,
+      });
+      console.log('respuesta', respuesta);
+      definicion_CTX_INDEX_VENTA.darDeBajaID = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaRUC = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaEMPRESA = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaFECHA = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaFECHA_DOCUMENTO = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaTIPO = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaSERIE = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaNUMERO = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaCLIENTE = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaMOTIVO = '';
+      definicion_CTX_INDEX_VENTA.darDeBajaFacturaJSON = false;
+      definicion_CTX_INDEX_VENTA.darDeBajaFacturaXML = false;
+      definicion_CTX_INDEX_VENTA.siDarDeBajaID = '';
+    }
+  });
+  //#endregion DAR DE BAJA
 
   return (
     // <main>
@@ -226,7 +286,7 @@ export default component$(() => {
       </div>
       {/* <button
         onClick$={() => {
-          console.log('PARAMETROS GLOABLES', parametrosGlobales);
+          //console.log('PARAMETROS GLOABLES', parametrosGlobales);
         }}
       >
         parametros
@@ -281,20 +341,28 @@ export default component$(() => {
           </div>
         </div> */}
       {/*  BOTONES   */}
-      <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
+      {/* <div style={{ marginBottom: '10px', paddingLeft: '3px' }}> */}
+      <div style={{ display: 'flex' }}>
         <button
           title="Adiciona venta"
+          style={{ cursor: 'pointer' }}
           onClick$={async () => {
-            const elHoy = new Date();
-            const elANIO = elHoy.getFullYear();
-            console.log(elANIO);
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
+            // const elHoy = new Date();
+            // const elANIO = elHoy.getFullYear();
+            //console.log(elANIO);
             //validar PERIODO
             let anioAnterior = '';
             let mesAnterior = '';
             const anio = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(0, 4);
             const mes = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(5, 7);
-            console.log(anio);
-            // console.log('la fechitaaaa', anio + mes);
+            //console.log(anio);
+            // //console.log('la fechitaaaa', anio + mes);
             const periodoActual = anio + mes;
             const PPP = losPeriodosCargados.value;
             if (parseInt(mes) === 1) {
@@ -305,11 +373,11 @@ export default component$(() => {
               mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
             }
             const periodoANTE = anioAnterior + mesAnterior;
-            console.log(periodoANTE);
-            // console.log('mas', mas);
-            // console.log('PPP', PPP);
+            //console.log(periodoANTE);
+            // //console.log('mas', mas);
+            // //console.log('PPP', PPP);
             const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
-            console.log('⚠ elPeriodo', elPeriodo);
+            //console.log('⚠ elPeriodo', elPeriodo);
             if (typeof elPeriodo === 'undefined') {
               alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
               return;
@@ -371,27 +439,53 @@ export default component$(() => {
           id="in_laFechaHoyVenta"
           type="date"
           max={hoy()}
-          min={menosXdiasHoy(2)}
+          // min={menosXdiasHoy(2)}
           value={parametrosBusqueda.fechaInicio}
           style={{ marginLeft: '4px' }}
           onChange$={(e) => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
+            // console.log(parametrosGlobales.idGrupoEmpresarial, parametrosGlobales.idEmpresa, parametrosGlobales.idSucursal, parametrosGlobales.periodos);
             parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
             parametrosBusqueda.fechaFinal = (e.target as HTMLInputElement).value;
-          }}
-        />
-        {/*   <input id="in_laFechaHoyVenta" type="date" disabled value={'2024-04-09'} style={{ marginLeft: '4px' }} />*/}
-        <input
-          type="image"
-          height={16}
-          width={16}
-          src={images.searchPLUS}
-          style={{ marginLeft: '2px' }}
-          onClick$={() => {
+
             definicion_CTX_INDEX_VENTA.buscarVentas++;
 
             definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
           }}
         />
+        {/*   <input id="in_laFechaHoyVenta" type="date" disabled value={'2024-04-09'} style={{ marginLeft: '4px' }} />*/}
+        <input
+          type="image"
+          title="Buscar ventas"
+          alt="icon busqueda"
+          src={images.searchPLUS}
+          height={21.5}
+          width={21.5}
+          style={{ marginLeft: '4px' }}
+          onClick$={() => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
+            definicion_CTX_INDEX_VENTA.buscarVentas++;
+
+            definicion_CTX_INDEX_VENTA.mostrarSpinner = true;
+          }}
+        />
+        {/* <button
+          onClick$={$(async () => {
+            await ejcutarCreacionXML({ idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial, idEmpresa: parametrosGlobales.idEmpresa, });
+          })}
+        >
+          XMLVenta
+        </button> */}
         {/* <button onClick$={() => alert(Date())}>hora actual</button>
         <button
           onClick$={() => {
@@ -562,7 +656,7 @@ export default component$(() => {
         /> */}
         {definicion_CTX_INDEX_VENTA.mostrarPanelVenta && (
           <div class="modal">
-            <AddVenta addPeriodo={periodo} igv={igv.value} addPeriodoAnterior={periodoAnterior} />
+            <AddVenta addPeriodo={periodo} igv={igv.value} addPeriodoAnterior={periodoAnterior} contexto="venta" notaDeVenta={[]} />
           </div>
         )}
         {/* <input
@@ -574,13 +668,13 @@ export default component$(() => {
           width={16}
           style={{ marginLeft: '12px' }}
           onClick$={() => {
-            console.log('ver reporte');
+            //console.log('ver reporte');
             // verReporte.value++;
             if (definicion_CTX_INDEX_VENTA.miscVts.length === 0) {
               alert('No existen datos para el reporte');
             } else {
               // alert('SIIIIIII existen datos para el reporte');
-              // console.log(definicion_CTX_INDEX_VENTA.miscVts);
+              // //console.log(definicion_CTX_INDEX_VENTA.miscVts);
               pdfReporteVenta(definicion_CTX_INDEX_VENTA.miscVts);
             }
           }}
@@ -598,6 +692,12 @@ export default component$(() => {
           ''
         )}
       </div>
+      {/* DAR DE BAJA  */}
+      {definicion_CTX_INDEX_VENTA.mostrarPanelDarDeBajaDocumentoVenta && (
+        <div class="modal">
+          <DarDeBajaDocumentoVenta />
+        </div>
+      )}
       {/* MOSTRAR SPINNER */}
       {definicion_CTX_INDEX_VENTA.mostrarSpinner && (
         <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

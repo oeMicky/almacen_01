@@ -1,12 +1,12 @@
-import { $, component$, createContextId, useContextProvider, useSignal, useStore } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city";
-import { images } from "~/assets";
-import Servicio2024 from "~/components/indexPrincipal/servicio2024";
-import Spinner from "~/components/system/spinner";
-import { parametrosGlobales } from "~/routes/login";
-import CambioClave from "~/components/usuario/cambioClave";
+import { $, component$, createContextId, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import { useNavigate } from '@builder.io/qwik-city';
+import { images } from '~/assets';
+import Servicio2024 from '~/components/indexPrincipal/servicio2024';
+import Spinner from '~/components/system/spinner';
+import { parametrosGlobales } from '~/routes/login';
+import CambioClave from '~/components/usuario/cambioClave';
 
-export const CTX_SELECCIONAR_SERVICIO = createContextId<any>("__seleccionar_servicio");
+export const CTX_SELECCIONAR_SERVICIO = createContextId<any>('__seleccionar_servicio');
 
 export default component$(() => {
   //#region definicion_CTX_SELECCIONAR_SERVICIO
@@ -26,18 +26,18 @@ export default component$(() => {
     <div class="container">
       {/* <button
         onClick$={() => {
-          console.log('parametros globales', parametrosGlobales);
+          //console.log('parametros globales', parametrosGlobales);
         }}
       >
         paramtre
       </button> */}
-      <h2 style={{ paddingLeft: "16px" }}>BIENVENIDO AL SISTEMA</h2>
-      <b style={{ paddingLeft: "24px" }}>
-        <img src={images.user} width={16} height={16} style={{ marginRight: "8px" }} />
-        <label style={{ marginRight: "8px" }}>{parametrosGlobales.usuario}</label>
+      <h2 style={{ paddingLeft: '16px' }}>BIENVENIDO AL SISTEMA</h2>
+      <b style={{ paddingLeft: '24px' }}>
+        <img src={images.user} width={16} height={16} style={{ marginRight: '8px' }} />
+        <label style={{ marginRight: '8px' }}>{parametrosGlobales.usuario}</label>
         <button
           onClick$={() => {
-            if (parametrosGlobales.usuario !== "") {
+            if (parametrosGlobales.usuario !== '') {
               definicion_CTX_SELECCIONAR_SERVICIO.mostrarPanelCambiarClave = true;
             }
           }}
@@ -50,17 +50,17 @@ export default component$(() => {
           <CambioClave />
         </div>
       )}
-      <p style={{ paddingLeft: "24px", fontSize: "0.8rem" }}>
-        <img src={images.buildings} width={16} height={16} style={{ marginRight: "8px" }} />
+      <p title="Empresa" style={{ paddingLeft: '24px', fontSize: '0.8rem' }}>
+        <img src={images.buildings} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.RazonSocial}
       </p>
-      <p style={{ paddingLeft: "24px", fontSize: "0.8rem" }}>
-        <img src={images.sucursal} width={16} height={16} style={{ marginRight: "8px" }} />
+      <p title="Sucursal" style={{ paddingLeft: '24px', fontSize: '0.8rem' }}>
+        <img src={images.sucursal} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.sucursal}
       </p>
       {/* SERVICIOS <img src={images.facturas} width={16} height={16}></img> */}
       <section id="servicios" class="seccion-servicios">
-        <h2 style={{ marginLeft: "16px" }}>SERVICIOS</h2>
+        <h2 style={{ marginLeft: '16px' }}>SERVICIOS</h2>
         <div class="servicios">
           {/* <input type="button">
             <label>gsdf</label>
@@ -73,7 +73,7 @@ export default component$(() => {
             cursorMano={parametrosGlobales.facturaElectronica}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              navegarA("/venta");
+              navegarA('/notaVenta');
             })}
           />
           <Servicio2024
@@ -84,7 +84,7 @@ export default component$(() => {
             cursorMano={parametrosGlobales.guiaElectronica}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              navegarA("/guiaRemision");
+              navegarA('/guiaRemision');
             })}
           />
           <Servicio2024
@@ -105,7 +105,7 @@ export default component$(() => {
             cursorMano={parametrosGlobales.compras}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              navegarA("/compra");
+              navegarA('/compra');
             })}
           />
           <Servicio2024
@@ -116,7 +116,7 @@ export default component$(() => {
             cursorMano={parametrosGlobales.inventario}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              navegarA("/inAlmacen");
+              navegarA('/inAlmacen');
             })}
           />
           <Servicio2024
@@ -127,7 +127,7 @@ export default component$(() => {
             cursorMano={parametrosGlobales.ordenesProduccion}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              navegarA("/ordenProduccion");
+              navegarA('/ordenProduccion');
             })}
           />
           <Servicio2024
@@ -138,7 +138,7 @@ export default component$(() => {
             cursorMano={parametrosGlobales.ordenesServicio}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              navegarA("/ordenServicio");
+              navegarA('/ordenServicio');
             })}
           />
           <Servicio2024
@@ -178,16 +178,17 @@ export default component$(() => {
 
       <br />
       <button
-        style={{ padding: "20px 40px", borderRadius: "8px", marginLeft: "16px", marginBottom: "16px" }}
+        class="boton-principal"
+        style={{ padding: '20px 40px', borderRadius: '8px', marginLeft: '16px', marginBottom: '16px' }}
         onClick$={() => {
-          navegarA("/");
+          navegarA('/');
         }}
       >
         Logout
       </button>
       {/* MOSTRAR SPINNER */}
       {mostrarSpinner.value && (
-        <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>
       )}

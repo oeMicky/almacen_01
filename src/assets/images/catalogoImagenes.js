@@ -23,6 +23,7 @@ import Gr256 from '../images/Gr256.webp';
 import Gr128 from '../images/Gr128.webp';
 import Logout from '../images/Logout.webp';
 import Rp from '../images/Rp.webp';
+import Nv from '../images/notaVenta.svg';
 
 import caoSLinealDark from '../images/CAO-S-Lineal-dark.svg';
 import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
@@ -31,11 +32,14 @@ import add from '../images/add.svg';
 import adjunto from '../images/adjunto.svg';
 import arrowUp from '../images/arrow-up.svg';
 import arrowDown from '../images/arrow-down.svg';
+import arrowRight from '../images/arrow-right.svg';
 import bancosClaro from '../images/bancosClaro.svg';
 import bancosOscuro from '../images/bancosOscuro.svg';
 import bancosDisable from '../images/bancosDisable.svg';
 import basedatos from '../images/basedatos.svg';
 import buildings from '../images/buildings.svg';
+import cancelDoc from '../images/cancelDoc.svg';
+import cdr from '../images/CDR.svg';
 import check from '../images/check.svg';
 import check32 from '../images/check32.svg';
 import comprasClaro from '../images/comprasClaro.svg';
@@ -45,6 +49,8 @@ import copy from '../images/copy.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
 import equal from '../images/equal.svg';
+import estrella128 from '../images/estrella128.svg';
+import estrella128Contorno from '../images/estrella128Contorno.svg';
 import eye from '../images/eye.svg';
 import eyePassword from '../images/eye password.svg';
 import facturasClaro from '../images/FACelec_IIClaro.svg';
@@ -128,6 +134,7 @@ export default {
   Gr128,
   Logout,
   Rp,
+  Nv,
 
   caoSLinealDark,
   caoSLinealLight,
@@ -136,11 +143,14 @@ export default {
   adjunto,
   arrowUp,
   arrowDown,
+  arrowRight,
   bancosClaro,
   bancosOscuro,
   bancosDisable,
   basedatos,
   buildings,
+  cancelDoc,
+  cdr,
   check,
   check32,
   comprasClaro,
@@ -150,6 +160,8 @@ export default {
   download,
   edit,
   equal,
+  estrella128,
+  estrella128Contorno,
   eye,
   eyePassword,
   facturasClaro,

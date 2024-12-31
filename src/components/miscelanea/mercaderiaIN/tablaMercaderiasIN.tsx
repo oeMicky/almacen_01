@@ -13,6 +13,8 @@ export default component$(
     parametrosBusqueda: any;
     contextoInmediato: string;
     esAlmacen: boolean;
+    enDolares?: boolean;
+    tipoCambio?: any;
     verAplicacion: boolean;
     verLineaMarca: boolean;
     motivo?: string;
@@ -48,7 +50,7 @@ export default component$(
       const abortController = new AbortController();
       cleanup(() => abortController.abort('cleanup'));
 
-      console.log('parametrosBusqueda', props.parametrosBusqueda);
+      //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
       if (props.parametrosBusqueda.buscarPor === 'Descripción') {
         const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
@@ -81,16 +83,16 @@ export default component$(
       <Resource
         value={lasMercaderiasIN}
         onPending={() => {
-          console.log('onPending 🍉🍉🍉🍉');
+          //console.log('onPending 🍉🍉🍉🍉');
           return <div>Cargando...</div>;
         }}
         onRejected={() => {
-          console.log('onRejected 🍍🍍🍍🍍');
+          //console.log('onRejected 🍍🍍🍍🍍');
           ctx.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercaderiasIN) => {
-          console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
+          //console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
           const { data } = mercaderiasIN; //{ status, data, message }
           const misMercaderiasIN: IMercaderiaIN[] = data;
           ctx.mostrarSpinner = false;
@@ -132,19 +134,30 @@ export default component$(
                           totalCantidadSaldo,
                           unidad,
                           costoDeInicioPEN,
-                          precioPEN,
+                          precioUnitarioPEN,
                           promedioCostoUnitarioMovil,
                           KARDEXS,
+                          activo,
+                          noFacturar,
                         } = mercaINLocali;
 
                         return (
                           <tr
                             key={_id}
                             style={
-                              (totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo) === 0
+                              !activo
+                                ? { background: '#272727', color: 'white' }
+                                : noFacturar
+                                ? { background: '#ff5aff' }
+                                : (totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo) === 0
                                 ? { color: 'red' }
-                                : { color: '' }
+                                : {}
                             }
+                            // style={
+                            //   (totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo) === 0
+                            //     ? { color: 'red' }
+                            //     : { color: '' }
+                            // }
                           >
                             <td data-label="Descripción">{descripcion}</td>
                             <td data-label="Aplicación" style={props.verAplicacion ? '' : { display: 'none' }}>
@@ -178,10 +191,10 @@ export default component$(
                               )
                             ) : (
                               <td data-label="Precio PEN" class="comoNumero">
-                                {typeof precioPEN !== 'undefined' && precioPEN !== null
-                                  ? precioPEN.$numberDecimal
-                                    ? formatear_6Decimales(precioPEN.$numberDecimal)
-                                    : precioPEN
+                                {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                  ? precioUnitarioPEN.$numberDecimal
+                                    ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                    : precioUnitarioPEN
                                   : '_'}
                               </td>
                             )}
@@ -197,24 +210,24 @@ export default component$(
                                 height={12}
                                 width={12}
                                 style={{ marginRight: '6px' }}
-                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
-                                  console.log('mercaINLocali', mercaINLocali);
+                                  //console.log('mercaINLocali', mercaINLocali);
                                   if (mercaINLocali.KARDEXS.length === 0) {
                                     ctx.mM = mercaINLocali;
                                     ctx.mostrarPanelMercaderiaINSeleccionada = true;
-                                    console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                    //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
                                   }
                                   if (mercaINLocali.KARDEXS.length === 1) {
                                     ctx.mM = mercaINLocali;
                                     ctx.kK = mercaINLocali.KARDEXS[0];
                                     ctx.mostrarPanelMercaderiaINSeleccionada = true;
-                                    console.log('la mercaSeleccionada IN DIRECTA', ctx.mM);
+                                    //console.log('la mercaSeleccionada IN DIRECTA', ctx.mM);
                                   }
                                   if (mercaINLocali.KARDEXS.length > 1) {
                                     ctx.mM = mercaINLocali;
                                     ctx.mostrarPanelKardexsIN = true;
-                                    console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);
+                                    //console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);
                                   }
                                 }}
                               />
@@ -227,7 +240,7 @@ export default component$(
                                   height={12}
                                   width={12}
                                   style={{ marginRight: '6px' }}
-                                  onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                  // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
                                     alert(aplicacion);
                                   }}
@@ -241,11 +254,11 @@ export default component$(
                                 height={12}
                                 width={12}
                                 style={{ marginRight: '2px' }}
-                                onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   ctx.mM = mercaINLocali;
                                   ctx.mostrarPanelNewEditMercaderiaIN = true;
-                                  console.log('la merca A Editar IN', ctx.mM);
+                                  //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />
                             </td>

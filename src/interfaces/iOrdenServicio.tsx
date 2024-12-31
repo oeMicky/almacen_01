@@ -44,6 +44,8 @@ export interface IOrdenServicio {
   requerimientosCliente: string;
   observacionesCliente: string;
 
+  // soloServicios: boolean;
+  // soloSuministros: boolean;
   servicios: any;
   requisiciones: any;
   // repuestosDespachados: any;
@@ -96,9 +98,9 @@ export interface IItemServicio {
   cantidad: number;
   unidadEquivalencia: string;
   costo: number;
-  precioPEN: number;
+  precioUnitarioPEN: number;
   ventaPEN: number;
-  precioUSD: number;
+  precioUnitarioUSD: number;
   ventaUSD: number;
 }
 
@@ -110,9 +112,9 @@ export interface IItemRequisicion {
   cantidad: number;
   unidadEquivalencia: string;
   costo: number;
-  precioPEN: number;
+  precioUnitarioPEN: number;
   ventaPEN: number;
-  precioUSD: number;
+  precioUnitarioUSD: number;
   ventaUSD: number;
 }
 
@@ -124,8 +126,29 @@ export interface IItemRepuestoDespachdo {
   cantidad: number;
   unidadEquivalencia: string;
   costo: number;
-  precioPEN: number;
+  precioUnitarioPEN: number;
   ventaPEN: number;
-  precioUSD: number;
+  precioUnitarioUSD: number;
   ventaUSD: number;
+}
+
+export interface IOrdenServicio_Terminado {
+  _id: string;
+  fechaInicio: string;
+  serie: string;
+  numero: number;
+
+  clienteVentasVarias: boolean;
+  idCliente: string;
+  codigoTipoDocumentoIdentidad: string;
+  tipoDocumentoIdentidad: string;
+  numeroIdentidad: string;
+  razonSocialNombreCliente: string;
+  ventaPEN_SERVICIOS: any;
+  ventaPEN_SERVICIOS_paraTOTAL: any;
+  ventaPEN_REQUISICIONES: any;
+  ventaPEN_REQUISICIONES_paraTOTAL: any;
+
+  servicios: any;
+  requisiciones: any;
 }

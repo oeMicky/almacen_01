@@ -51,10 +51,10 @@ export default component$((props: { borrarItemMerca: any }) => {
               style={{ width: '60px' }}
               onClick$={() => {
                 // borrar_idAuxiliar = props.borrarItemMerca.idAuxiliar;
-                // console.log('- documentos', documentos);
-                // console.log('props.borrarItemMerca.idAuxiliar', props.borrarItemMerca.idAuxiliar);
+                // //console.log('- documentos', documentos);
+                // //console.log('props.borrarItemMerca.idAuxiliar', props.borrarItemMerca.idAuxiliar);
                 // const aMod: any = documentos.filter((docs: any) => docs.idAuxiliar !== props.borrarItemMerca.idAuxiliar);
-                // console.log('- aMod', aMod);
+                // //console.log('- aMod', aMod);
                 // documentos = aMod;
                 ctx_new_out_almacen.borrarIdAuxiliar = props.borrarItemMerca.idAuxiliar;
                 ctx_new_out_almacen.mostrarPanelDeleteItemMercaderiaOUT = false;

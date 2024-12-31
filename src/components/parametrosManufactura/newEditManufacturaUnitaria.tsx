@@ -1,20 +1,20 @@
-import { component$, useContext, useStore, $ } from "@builder.io/qwik";
+import { component$, useContext, useStore, $ } from '@builder.io/qwik';
 // import { loadTiposComprobantePago } from "~/apis/sunat.api";
-import { images } from "~/assets";
-import ImgButton from "~/components/system/imgButton";
+import { images } from '~/assets';
+import ImgButton from '~/components/system/imgButton';
 // import  { IDocumento } from "~/interfaces/iDocumento";
-import type { IManufacturaUnitaria } from "~/interfaces/iParametrosManufactura";
-import { CTX_INDEX_PARAMETROS_MANUFACTURA } from "~/routes/(ordenesProduccion)/parametrosManufactura";
+import type { IManufacturaUnitaria } from '~/interfaces/iParametrosManufactura';
+import { CTX_INDEX_PARAMETROS_MANUFACTURA } from '~/routes/(ordenesProduccion)/parametrosManufactura';
 // import styleFormulario from "../../css/formulario.css?inline";
-import { inUpManufacturaUnitaria } from "~/apis/parametrosManufactura.api";
-import { parametrosGlobales } from "~/routes/login";
+import { inUpManufacturaUnitaria } from '~/apis/parametrosManufactura.api';
+import { parametrosGlobales } from '~/routes/login';
 
 export default component$((props: { manuUnitaSelecci: any; idParametrosManufactura: string; totalCostosDirectos: any }) => {
   // useStyles$(styleFormulario);
   //#region definicion_CTX_MANUFACTURA_UNITARIA
   const definicion_CTX_MANUFACTURA_UNITARIA = useStore<IManufacturaUnitaria>({
-    _id: props.manuUnitaSelecci._id ? props.manuUnitaSelecci._id : "",
-    manufacturaUnitaria: props.manuUnitaSelecci.manufacturaUnitaria ? props.manuUnitaSelecci.manufacturaUnitaria : "",
+    _id: props.manuUnitaSelecci._id ? props.manuUnitaSelecci._id : '',
+    manufacturaUnitaria: props.manuUnitaSelecci.manufacturaUnitaria ? props.manuUnitaSelecci.manufacturaUnitaria : '',
     tiempoManufacturaUnitariaPorHora: props.manuUnitaSelecci.tiempoManufacturaUnitariaPorHora
       ? props.manuUnitaSelecci.tiempoManufacturaUnitariaPorHora.$numberDecimal
         ? props.manuUnitaSelecci.tiempoManufacturaUnitariaPorHora.$numberDecimal
@@ -40,17 +40,17 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
 
   //#region REGISTRAR MANUFACTURA UNITARIA
   const registrarManufacturaUnitaria = $(async () => {
-    if (definicion_CTX_MANUFACTURA_UNITARIA.manufacturaUnitaria.trim() === "") {
-      alert("Ingrese la manufactura unitaria.");
-      document.getElementById("in_ManufacturaUnitaria_MANUFACTURA_UNITARIA")?.focus();
+    if (definicion_CTX_MANUFACTURA_UNITARIA.manufacturaUnitaria.trim() === '') {
+      alert('Ingrese la manufactura unitaria.');
+      document.getElementById('in_ManufacturaUnitaria_MANUFACTURA_UNITARIA')?.focus();
       return;
     }
-    if (definicion_CTX_MANUFACTURA_UNITARIA.tiempoManufacturaUnitariaPorHora === "") {
-      alert("Ingrese el tiempo de manufactura unitaria por hora.");
-      document.getElementById("in_TiempoManufacturaUnitariaPorHora_MANUFACTURA_UNITARIA")?.focus();
+    if (definicion_CTX_MANUFACTURA_UNITARIA.tiempoManufacturaUnitariaPorHora === '') {
+      alert('Ingrese el tiempo de manufactura unitaria por hora.');
+      document.getElementById('in_TiempoManufacturaUnitariaPorHora_MANUFACTURA_UNITARIA')?.focus();
       return;
     }
-    const manufactu = await inUpManufacturaUnitaria({
+    await inUpManufacturaUnitaria({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
       idParametrosManufactura: props.idParametrosManufactura,
@@ -63,7 +63,7 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
       usuario: parametrosGlobales.usuario,
     });
 
-    console.log("manufactu", manufactu);
+    //console.log("manufactu", manufactu);
 
     ctx.grabo_ManufacturaUnitaria = true;
     ctx.mostrarPanelNewEditManufacturaUnitaria = false;
@@ -73,14 +73,14 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
   return (
     <div
       style={{
-        width: "clamp(386px, 86%, 500px)",
+        width: 'clamp(386px, 86%, 500px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
-      <div style={{ display: "flex", justifyContent: "end" }}>
+      <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
           src={images.see}
           alt="Icono de cerrar"
@@ -88,9 +88,9 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log("manuUnitaSelecci", props.manuUnitaSelecci);
-            console.log("idParametrosManufactura", props.idParametrosManufactura);
-            console.log("totalCostosDirectos", props.totalCostosDirectos);
+            //console.log("manuUnitaSelecci", props.manuUnitaSelecci);
+            //console.log("idParametrosManufactura", props.idParametrosManufactura);
+            //console.log("totalCostosDirectos", props.totalCostosDirectos);
           })}
         />
         <ImgButton
@@ -105,7 +105,7 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ fontSize: "0.8rem" }}>Registro de manufactura unitaria</h3>
+      <h3 style={{ fontSize: '0.8rem' }}>Registro de manufactura unitaria</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
@@ -115,7 +115,7 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
             <label>Manufactura unitaria </label>
             <input
               id="in_ManufacturaUnitaria_MANUFACTURA_UNITARIA"
-              style={{ width: "250px" }}
+              style={{ width: '250px' }}
               type="text"
               placeholder="Add manufactura unitaria"
               value={definicion_CTX_MANUFACTURA_UNITARIA.manufacturaUnitaria}
@@ -123,8 +123,8 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
                 definicion_CTX_MANUFACTURA_UNITARIA.manufacturaUnitaria = (e.target as HTMLInputElement).value.trim().toUpperCase();
               }}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("in_TiempoManufacturaUnitariaPorHora_MANUFACTURA_UNITARIA") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('in_TiempoManufacturaUnitariaPorHora_MANUFACTURA_UNITARIA') as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -134,7 +134,7 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
             <label>tiempo manufactura unitaria x hora</label>
             <input
               id="in_TiempoManufacturaUnitariaPorHora_MANUFACTURA_UNITARIA"
-              style={{ width: "250px" }}
+              style={{ width: '250px' }}
               type="number"
               placeholder="Add tiempo manufactura unitaria x hora"
               value={definicion_CTX_MANUFACTURA_UNITARIA.tiempoManufacturaUnitariaPorHora}
@@ -142,8 +142,8 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
                 definicion_CTX_MANUFACTURA_UNITARIA.tiempoManufacturaUnitariaPorHora = (e.target as HTMLInputElement).value.trim().toUpperCase();
               }}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("in_TotalCostosDirectos_MANUFACTURA_UNITARIA") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('in_TotalCostosDirectos_MANUFACTURA_UNITARIA') as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -153,7 +153,7 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
             <label>Total costos directos PEN</label>
             <input
               id="in_TotalCostosDirectos_MANUFACTURA_UNITARIA"
-              style={{ width: "250px" }}
+              style={{ width: '250px' }}
               type="number"
               readOnly
               // disabled
@@ -163,8 +163,8 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
               //   definicion_CTX_MANUFACTURA_UNITARIA.totalCostosDirectos = (e.target as HTMLInputElement).value.trim().toUpperCase();
               // }}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("in_CostoManufacturaUnitario_MANUFACTURA_UNITARIA") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('in_CostoManufacturaUnitario_MANUFACTURA_UNITARIA') as HTMLInputElement)?.focus();
                 }
               }}
             />
@@ -174,7 +174,7 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
             <label>Costo manufactura unitario PEN</label>
             <input
               id="in_CostoManufacturaUnitario_MANUFACTURA_UNITARIA"
-              style={{ width: "250px" }}
+              style={{ width: '250px' }}
               type="number"
               readOnly
               placeholder="Add costo manufactura unitario"
@@ -183,8 +183,8 @@ export default component$((props: { manuUnitaSelecci: any; idParametrosManufactu
               //   definicion_CTX_MANUFACTURA_UNITARIA.costoManufacturaUnitario = (e.target as HTMLInputElement).value.trim().toUpperCase();
               // }}
               onKeyPress$={(e) => {
-                if (e.key === "Enter") {
-                  (document.getElementById("btn_ManufacturaUnitaria_MANUFACTURA_UNITARIA") as HTMLInputElement)?.focus();
+                if (e.key === 'Enter') {
+                  (document.getElementById('btn_ManufacturaUnitaria_MANUFACTURA_UNITARIA') as HTMLInputElement)?.focus();
                 }
               }}
             />

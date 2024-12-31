@@ -68,11 +68,11 @@ export default component$(() => {
             onChange$={(e) => {
               numeroOFecha.value = (e.target as HTMLSelectElement).value;
               if (numeroOFecha.value === 'Número') {
-                console.log('first');
+                //console.log('first');
                 document.getElementById('inputNumeroCotizacion')?.focus();
               }
               if (numeroOFecha.value === 'Entre fechas') {
-                console.log('second');
+                //console.log('second');
                 document.getElementById('fechaDesdeBusqueda')?.focus();
               }
             }}
@@ -137,7 +137,7 @@ export default component$(() => {
                 document.getElementById('fechaDesdeBusqueda')?.focus();
                 return;
               }
-              // console.log('click en lupa: parameBusqueda ', parameBusqueda);
+              // //console.log('click en lupa: parameBusqueda ', parameBusqueda);
 
               buscarCotizaciones.value++;
             }}

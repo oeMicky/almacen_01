@@ -27,7 +27,7 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
       document.getElementById('inputModelo_MICE')?.focus();
       return;
     }
-    let modeloVehi = await inUpVehiculoMarcaModelo({
+    await inUpVehiculoMarcaModelo({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
       idVehiculoMarca: modeloVehicular.idVehiculoMarca,
@@ -35,9 +35,9 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
       idVehiculoModelo: modeloVehicular.idVehiculoModelo,
       vehiculoModelo: modeloVehicular.vehiculoModelo,
     });
-    console.log('graboooooo modeloVehi', modeloVehi);
-    modeloVehi = modeloVehi.data;
-    console.log('graboooooo modeloVehi.data', modeloVehi);
+    //console.log('graboooooo modeloVehi', modeloVehi);
+    // modeloVehi = modeloVehi.data;
+    //console.log('graboooooo modeloVehi.data', modeloVehi);
 
     ctx_new_edit_vehiculo.grabo_modelo = true;
     ctx_new_edit_vehiculo.mostrarPanelNewEditModeloVehicular = false;
@@ -73,7 +73,7 @@ export default component$((props: { modeloVehicularSelecci: any }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('modeloVehicularSelecci', props.modeloVehicularSelecci);
+            //console.log('modeloVehicularSelecci', props.modeloVehicularSelecci);
           })}
         />
       </div>

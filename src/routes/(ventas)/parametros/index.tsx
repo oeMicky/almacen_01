@@ -63,9 +63,9 @@ export default component$(() => {
           onClick={$(async () => {
             let elIgv = await getIgvVenta(parametrosGlobales);
             elIgv = elIgv.data;
-            console.log('elIgv', elIgv);
+            //console.log('elIgv', elIgv);
             igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-            console.log('igv.value::', igv.value);
+            //console.log('igv.value::', igv.value);
             definicion_CTX_INDEX_IN_ALMACEN.iNS = [];
             definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen = true;
           })}

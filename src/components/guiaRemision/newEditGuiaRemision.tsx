@@ -6,52 +6,62 @@ import { parametrosGlobales } from '~/routes/login';
 import { CTX_INDEX_GUIA_REMISION } from '~/routes/(guiasRemision)/guiaRemision';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import type { IPersona } from '~/interfaces/iPersona';
-import { cerosALaIzquierda, hoy, menosXdiasHoy } from '~/functions/comunes';
-// import BuscarMercaderiaIN from '../miscelanea/mercaderiaIN/buscarMercaderiaIN';  ultimoDiaDelPeriodoX
+import { cerosALaIzquierda, hoy, menosXdiasHoy, redondeo3Decimales } from '~/functions/comunes';
+
 import ElButton from '../system/elButton';
 import BorrarChofer from './borrarChofer';
 import BorrarUnidadTransporte from './borrarUnidadTransporte';
-// import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
-// import NewEditUnidadTransporte from './newEditUnidadTransporte';
-// import NewEditChofer from './newEditChofer';
+
 import BuscarChofer from '../miscelanea/chofer/buscarChofer';
-import BuscarUnidadTransporte from '../miscelanea/unidadTransporte/buscarUnidadTransporte';
+// import BuscarUnidadTransporte from '../miscelanea/unidadTransporte/buscarUnidadTransporte';
+
 import BuscarDireccionGR from './buscarDireccionGR';
 import RegistroBienesGR from './newEditRegistroBienGR';
 import VerificarObservación from './verificarObservacion';
 import { getSeriesGuiasRemisionActivasEnSucursal, inUpGuiaRemision } from '~/apis/guiaRemision.api';
 import BorrarItemGuiaRemision from './borrarItemGuiaRemision';
+import BuscarTransportista from '../miscelanea/transportista/buscarTransportista';
+import BorrarTransportista from './borrarTransportista';
+import BuscarUnidadTransporte from '../miscelanea/unidadTransporte/buscarUnidadTransporte';
 
 export const CTX_NEW_EDIT_GUIA_REMISION = createContextId<any>('__new_edit_guia_remision');
 export const CTX_GUIA_REMISION = createContextId<IGuiaRemision>('__guia_remision');
 export const CTX_DESTINATARIO_GR = createContextId<any>('__destinatario');
+export const CTX_TRANSPORTISTA_GR = createContextId<any>('__transportista');
 
 export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: any }) => {
   //#region DEFINICION CTX_NEW_EDIT_GUIA_REMISION
   const definicion_CTX_NEW_EDIT_GUIA_REMISION = useStore({
     // mostrarPanelCuotasCredito: false,
     // grabo_CuotaCredito: false,
-    // mostrarVerAlmacen: false,
+    // mostrarVerAlmacen: false,mostrarPanelBuscarChofer
 
     mostrarPanelBuscarPuntoPartida: false,
     mostrarPanelBuscarPuntoLlegada: false,
 
     rol_Persona: '',
     selecciono_Persona: false,
-    mostrarPanelBuscarPersonaRemitente: false,
+    mostrarPanelBuscarRemitente: false,
     mostrarPanelBuscarServicio: false,
 
-    mostrarPanelBuscarPersonaDestinatario: false,
+    mostrarPanelBuscarDestinatario: false,
 
-    mostrarPanelBuscarPersonaTransportista: false,
+    // mostrarPanelBuscarTransportista: false,
 
-    mostrarPanelBuscarChofer: false,
-    selecciono_Chofer: false,
-    mostrarPanelDeleteChofer: false,
-    borrarIdAuxiliarChofer: 0,
-    mostrarPanelBuscarPersonaChofer: false,
+    mostrarPanelBuscarTransportista: false,
+    selecciono_Transportista: false,
+    mostrarPanelDeleteTransportista: false,
+    borrarIdAuxiliarTransportista: 0,
+    mostrarPanelBuscarPersonaTransportistar: false,
 
-    mostrarPanelBuscarUnidadTransporte: false,
+    mostrarPanelBuscarConductor: false,
+    selecciono_Conductor: false,
+    mostrarPanelDeleteConductor: false,
+    borrarIdAuxiliarConductor: 0,
+    // mostrarPanelBuscarChofer: false,
+
+    mostrarPanelBuscarUnidadTransportePrincipal: false,
+    mostrarPanelBuscarUnidadTransporteSecundario: false,
     selecciono_UnidadTransporte: false,
     mostrarPanelUnidadTransporte: false,
     borrarIdAuxiliarUnidadTransporte: 0,
@@ -91,27 +101,45 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       empresa: parametrosGlobales.RazonSocial,
       sucursal: parametrosGlobales.sucursal,
       direccion: parametrosGlobales.Direccion,
+      departamento: typeof parametrosGlobales.departamento === 'undefined' ? '' : parametrosGlobales.departamento,
+      provincia: typeof parametrosGlobales.provincia === 'undefined' ? '' : parametrosGlobales.provincia,
+      distrito: typeof parametrosGlobales.distrito === 'undefined' ? '' : parametrosGlobales.distrito,
+      ubigeo: typeof parametrosGlobales.ubigeo === 'undefined' ? '' : parametrosGlobales.ubigeo,
 
-      guiaRemisionElectronica: parametrosGlobales.guiaRemisionElectronica,
-      guiaRemisionElectronicaAutomatica: parametrosGlobales.guiaRemisionElectronicaAutomatica,
+      guiaRemisionElectronica: typeof parametrosGlobales.guiaRemisionElectronica === 'undefined' ? false : parametrosGlobales.guiaRemisionElectronica,
+      guiaRemisionElectronicaAutomatica:
+        typeof parametrosGlobales.guiaRemisionElectronicaAutomatica === 'undefined' ? false : parametrosGlobales.guiaRemisionElectronicaAutomatica,
+      guiaRemisionJSON: typeof parametrosGlobales.guiaRemisionJSON === 'undefined' ? false : parametrosGlobales.guiaRemisionJSON,
+      guiaRemisionXML: typeof parametrosGlobales.guiaRemisionXML === 'undefined' ? false : parametrosGlobales.guiaRemisionXML,
       verificarObservacionGR: parametrosGlobales.verificarObservacionGR,
 
+      codigoTipoComprobantePago: '09',
+      tipoComprobantePago: 'REMITENTE',
       idSerieGuiaRemision: '',
       serie: '',
       numero: 0,
 
       fechaEmision: '',
+      fechaEmisionFechaLocal: '',
+      fechaEmisionHoraLocal: '',
+      fHree: '',
       fechaInicioTraslado: '',
 
       puntoPartida: '',
       ubigeoPartida: '',
+      codEstablecimientoPartida: '',
+      RUCAsociadoPtoPartida: '',
       puntoLlegada: '',
       ubigeoLlegada: '',
+      codEstablecimientoLlegada: '',
+      RUCAsociadoPtoLlegada: '',
 
       idModalidadTraslado: '',
       modalidadTraslado: '',
       idMotivoTraslado: '',
       motivoTraslado: '',
+
+      // notificar: false,
 
       idRemitente: parametrosGlobales.idPersona,
       codigoTipoDocumentoIdentidadRemitente: '6',
@@ -126,23 +154,35 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       razonSocialNombreDestinatario: '',
       direccionDestinatario: '',
       emailDestinatario: '',
-      notificarDestinatario: false,
+      notificar: false,
 
-      idTransportista: '',
-      codigoTipoDocumentoIdentidadTransportista: '',
-      tipoDocumentoIdentidadTransportista: 'RUC',
-      numeroIdentidadTransportista: '',
-      razonSocialNombreTransportista: '',
+      transportistas: [],
+      conductores: [],
+
+      // idTransportista: '',
+      // codigoTipoDocumentoIdentidadTransportista: '',
+      // tipoDocumentoIdentidadTransportista: 'RUC',
+      // numeroIdentidadTransportista: '',
+      // razonSocialNombreTransportista: '',
+      // registroMTC: '',
+
+      idVehiculoPrincipal: '',
+      emisorAutorizacionEspecial: '',
+      numeroAutorizacionEspecial: '',
+      numeroPlaca: '',
+      tarjetaCirculacionOCertificadoHabilitacion: '',
+
+      vehiculosSecundarios: [],
 
       numeroBultosPallets: '',
-      pesoBrutoTotal: '',
-
-      choferes: [],
-      unidadesTransporte: [],
+      pesoBrutoTotal: 0,
 
       observacion: '',
 
       itemsGuiaRemision: [],
+
+      // proveedor_estatus: false,
+      // proveedor_mensaje: '',
     },
     { deep: true }
   );
@@ -164,6 +204,21 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
   useContextProvider(CTX_DESTINATARIO_GR, definicion_CTX_DESTINATARIO_GR);
   //#endregion DEFINICION CTX_DESTINATARIO_GR
 
+  //#region DEFINICION CTX_TRANSPORTISTA_GR
+  const definicion_CTX_TRANSPORTISTA_GR = useStore<IPersona>({
+    _id: '',
+    codigoTipoDocumentoIdentidad: '',
+    tipoDocumentoIdentidad: '',
+    numeroIdentidad: '',
+    razonSocialNombre: '',
+    nombre: '',
+    paterno: '',
+    materno: '',
+    activo: true,
+  });
+  useContextProvider(CTX_TRANSPORTISTA_GR, definicion_CTX_TRANSPORTISTA_GR);
+  //#endregion DEFINICION CTX_TRANSPORTISTA_GR
+
   //#region CONTEXTOS
   const ctx_index_guia_remision = useContext(CTX_INDEX_GUIA_REMISION);
   //#endregion CONTEXTOS
@@ -173,10 +228,17 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
   const dataSerie: any = useSignal([]);
   // const grabo = useSignal(false);
 
-  const elChofSelecionado = useSignal([]);
-  const laUniSelecionada = useSignal([]);
+  const elTranspSelecionado = useSignal([]);
+  const elConducSelecionado = useSignal([]);
+  const laUniSecundaSelecionada = useSignal([]);
 
-  const borrarChofer = useStore({
+  const borrarTransportista = useStore({
+    idAuxiliar: '',
+    numeroIdentidad: '',
+    razonSocialNombre: '',
+    registroMTC: '',
+  });
+  const borrarConductor = useStore({
     idAuxiliar: '',
     numeroIdentidad: '',
     razonSocialNombre: '',
@@ -197,7 +259,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
 
   useTask$(async ({ track }) => {
     track(() => ini.value);
-
+    // //console.log('🚕🚕🚕🚕');
     let laSerie;
     const parametros = {
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -207,14 +269,16 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
     if (ini.value === 0) {
       //cargar LAS SERIES DE GUIAS DE REMISON
       laSerie = await getSeriesGuiasRemisionActivasEnSucursal(parametros);
-      // console.log('laSerie', laSerie);
+      // //console.log('laSerie', laSerie);
       //
       dataSerie.value = laSerie.data;
-      // console.log('dataSerie.value ', dataSerie.value);
+      // //console.log('🚕🚕🚕🚕dataSerie.value ', dataSerie.value);
       if (dataSerie.value.length === 1) {
         definicion_CTX_GUIA_REMISION.idSerieGuiaRemision = dataSerie.value[0]._id;
         definicion_CTX_GUIA_REMISION.serie = dataSerie.value[0].serie;
-        // console.log('solo UNO', dataSerie.value[0], dataSerie.value[0]._id, dataSerie.value[0].serie);
+        definicion_CTX_GUIA_REMISION.codigoTipoComprobantePago = dataSerie.value[0].codigoTipo;
+        definicion_CTX_GUIA_REMISION.tipoComprobantePago = dataSerie.value[0].tipo;
+        // //console.log('solo UNO', dataSerie.value[0], dataSerie.value[0]._id, dataSerie.value[0].serie);
       }
 
       ini.value++;
@@ -256,38 +320,37 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
   });
   //#endregion DESTINATARIO
 
-  //#region TRANSPORTISTA
+  //#region BORRAR TRANSPORTISTA
   useTask$(({ track }) => {
-    track(() => definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona);
-    if (definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona && definicion_CTX_NEW_EDIT_GUIA_REMISION.rol_Persona === 'transportista') {
-      // alert('evalua a la persona');
-      definicion_CTX_GUIA_REMISION.idTransportista = definicion_CTX_DESTINATARIO_GR._id;
-      definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadTransportista = definicion_CTX_DESTINATARIO_GR.codigoTipoDocumentoIdentidad;
-      definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista = definicion_CTX_DESTINATARIO_GR.tipoDocumentoIdentidad;
-      definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista = definicion_CTX_DESTINATARIO_GR.numeroIdentidad;
-      definicion_CTX_GUIA_REMISION.razonSocialNombreTransportista = definicion_CTX_DESTINATARIO_GR.razonSocialNombre;
+    track(() => definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarTransportista);
 
-      definicion_CTX_NEW_EDIT_GUIA_REMISION.rol_Persona = '';
-      definicion_CTX_NEW_EDIT_GUIA_REMISION.selecciono_Persona = false;
-    }
-  });
-  //#endregion TRANSPORTISTA
-
-  //#region BORRAR CHOFER
-  useTask$(({ track }) => {
-    track(() => definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarChofer);
-
-    if (definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarChofer > 0) {
+    if (definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarTransportista > 0) {
       //
-      const newItems: any = definicion_CTX_GUIA_REMISION.choferes.filter(
-        (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarChofer
+      const newItems: any = definicion_CTX_GUIA_REMISION.transportistas.filter(
+        (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarTransportista
       );
-      definicion_CTX_GUIA_REMISION.choferes = newItems;
+      definicion_CTX_GUIA_REMISION.transportistas = newItems;
 
-      definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarChofer = 0;
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarTransportista = 0;
     }
   });
-  //#endregion BORRAR CHOFER
+  //#endregion BORRAR TRANSPORTISTA
+
+  //#region BORRAR CONDUCTORES
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarConductor);
+
+    if (definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarConductor > 0) {
+      //
+      const newItems: any = definicion_CTX_GUIA_REMISION.conductores.filter(
+        (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarConductor
+      );
+      definicion_CTX_GUIA_REMISION.conductores = newItems;
+
+      definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarConductor = 0;
+    }
+  });
+  //#endregion BORRAR CONDUCTORES
 
   //#region BORRAR UNIDAD TRANSPORTE
   useTask$(({ track }) => {
@@ -295,10 +358,10 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
 
     if (definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarUnidadTransporte > 0) {
       //
-      const newItems: any = definicion_CTX_GUIA_REMISION.unidadesTransporte.filter(
+      const newItems: any = definicion_CTX_GUIA_REMISION.vehiculosSecundarios.filter(
         (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarUnidadTransporte
       );
-      definicion_CTX_GUIA_REMISION.unidadesTransporte = newItems;
+      definicion_CTX_GUIA_REMISION.vehiculosSecundarios = newItems;
 
       definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarUnidadTransporte = 0;
     }
@@ -311,7 +374,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
 
     if (definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarItemGuiaRemision > 0) {
       //
-      console.log('borrando.......', definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarItemGuiaRemision);
+      //console.log('borrando.......', definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarItemGuiaRemision);
       const newItems: any = definicion_CTX_GUIA_REMISION.itemsGuiaRemision.filter(
         (docs: any) => docs.idAuxiliar !== definicion_CTX_NEW_EDIT_GUIA_REMISION.borrarIdAuxiliarItemGuiaRemision
       );
@@ -328,7 +391,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
 
   //   if (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion_RESPUESTA) {
   //     definicion_CTX_GUIA_REMISION.verificarObservacionGR = false;
-  //     // console.log('ok');
+  //     // //console.log('ok');
   //   } else {
   //     // definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion_RESPUESTA = false;
   //     return;
@@ -341,7 +404,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
     //
     // VERIFICAR OBSERVACION
     // if (definicion_CTX_GUIA_REMISION.verificarObservacionGR) {
-    //   console.log('verificarObservacionGuiaRemision');
+    //   //console.log('verificarObservacionGuiaRemision');
     //   if (definicion_CTX_GUIA_REMISION.observacion.trim() === '') {
     //     // alert('Verifique la observación');
     //     // document.getElementById('in_Observacion')?.focus();
@@ -349,18 +412,18 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
 
     //     definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion = true;
     //     // continue
-    //     // console.log('silka');
+    //     // //console.log('silka');
     //     // if (definicion_CTX_GUIA_REMISION.verificarObservacionGR) {
     //     //   // definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion_RESPUESTA = false;
-    //     //   console.log('ok');
+    //     //   //console.log('ok');
     //     // } else {
     //     //   // definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion_RESPUESTA = false;
-    //     //   console.log('return');
+    //     //   //console.log('return');
     //     //   return;
     //     // }
     //   }
     // }
-    // console.log('ESLOVAQUIA');
+    // //console.log('ESLOVAQUIA');
     //
     if (definicion_CTX_GUIA_REMISION.serie === '') {
       alert('Seleccione la serie');
@@ -397,6 +460,36 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       document.getElementById('select_MotivoTraslado_GR')?.focus();
       return;
     }
+    if (definicion_CTX_GUIA_REMISION.idMotivoTraslado === '04') {
+      if (definicion_CTX_GUIA_REMISION.numeroIdentidadRemitente !== definicion_CTX_GUIA_REMISION.numeroIdentidadDestinatario) {
+        alert('Para traslado entre establecimientos, el destinatario debe ser igual que el remitente.');
+        document.getElementById('select_MotivoTraslado_GR')?.focus();
+        return;
+      }
+      if (definicion_CTX_GUIA_REMISION.codEstablecimientoPartida === '') {
+        alert('El código de establecimiento de partida es requerido.');
+        document.getElementById('in_BuscarPuntoPartida_GR')?.focus();
+        return;
+      }
+      if (definicion_CTX_GUIA_REMISION.RUCAsociadoPtoPartida === '') {
+        definicion_CTX_GUIA_REMISION.RUCAsociadoPtoPartida = definicion_CTX_GUIA_REMISION.numeroIdentidadRemitente;
+        // alert('El RUC Asociado al punto de partida es requerido.');
+        // document.getElementById('select_MotivoTraslado_GR')?.focus();
+        // return;
+      }
+      if (definicion_CTX_GUIA_REMISION.codEstablecimientoLlegada === '') {
+        alert('El código de establecimiento de llegada es requerido.');
+        document.getElementById('in_BuscarPuntoLlegada_GR')?.focus();
+        return;
+      }
+      if (definicion_CTX_GUIA_REMISION.RUCAsociadoPtoLlegada === '') {
+        definicion_CTX_GUIA_REMISION.RUCAsociadoPtoLlegada = definicion_CTX_GUIA_REMISION.numeroIdentidadDestinatario;
+        // alert('El RUC Asociado al punto de partida es requerido.');
+        // document.getElementById('select_MotivoTraslado_GR')?.focus();
+        // return;
+      }
+    }
+
     //REMITENTE
     if (definicion_CTX_GUIA_REMISION.numeroIdentidadRemitente === '') {
       alert('Seleccione el número de identidad del remitente.');
@@ -421,27 +514,37 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
     }
     //TRANSPORTISTA
     if (definicion_CTX_GUIA_REMISION.modalidadTraslado === 'TRANSPORTE PUBLICO') {
-      if (definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista === '') {
-        alert('Seleccione el número de identidad del destinatario.');
-        document.getElementById('in_BuscarTransportista_GR')?.focus();
+      if (definicion_CTX_GUIA_REMISION.transportistas.length === 0) {
+        alert('Ingrese el ingrese un trasnportista.');
+        document.getElementById('btn_Add_Transportista_GR')?.focus();
         return;
       }
-      if (definicion_CTX_GUIA_REMISION.razonSocialNombreTransportista === '') {
-        alert('Seleccione la razón social / nombre del destinatario.');
-        document.getElementById('in_BuscarTransportista_GR')?.focus();
-        return;
-      }
+      // if (definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista === '') {
+      //   alert('Seleccione el número de identidad del destinatario.');
+      //   document.getElementById('in_BuscarTransportista_GR')?.focus();
+      //   return;
+      // }
+      // if (definicion_CTX_GUIA_REMISION.razonSocialNombreTransportista === '') {
+      //   alert('Seleccione la razón social / nombre del destinatario.');
+      //   document.getElementById('in_BuscarTransportista_GR')?.focus();
+      //   return;
+      // }
+      // if (definicion_CTX_GUIA_REMISION.registroMTC === '') {
+      //   alert('Ingrese el registro del MTC.');
+      //   document.getElementById('in_registroMTC_GR')?.focus();
+      //   return;
+      // }
     }
-    //CHOFER / S
-    if (definicion_CTX_GUIA_REMISION.choferes.length === 0) {
-      alert('Ingrese el chofer.');
-      document.getElementById('btn_Add_Chofer_GR')?.focus();
+    // CHOFER / S
+    if (definicion_CTX_GUIA_REMISION.conductores.length === 0) {
+      alert('Ingrese el conductor (es).');
+      document.getElementById('btn_Add_Conductores_GR')?.focus();
       return;
     }
-    //UNIDADES DE TRANSPORTE
-    if (definicion_CTX_GUIA_REMISION.unidadesTransporte.length === 0) {
-      alert('Ingrese la unidad de transporte.');
-      document.getElementById('btn_Add_UnidadTransporte_GR')?.focus();
+    //VEHICULO PRINCIPAL
+    if (definicion_CTX_GUIA_REMISION.numeroPlaca.trim() === '') {
+      alert('Ingrese el vehículo principal.');
+      document.getElementById('in_BuscarVehiculoPrincipal_GR')?.focus();
       return;
     }
     //NÚMERO DE BULTOS
@@ -456,19 +559,24 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       document.getElementById('input_PesoBrutoTotal_GR')?.focus();
       return;
     }
+    if (definicion_CTX_GUIA_REMISION.pesoBrutoTotal === 0) {
+      alert('El peso bruto total no puede ser cero (0).');
+      document.getElementById('input_PesoBrutoTotal_GR')?.focus();
+      return;
+    }
     // VERIFICAR OBSERVACION
     if (definicion_CTX_GUIA_REMISION.verificarObservacionGR) {
-      console.log('verificarObservacionGuiaRemision');
+      //console.log('verificarObservacionGuiaRemision');
       if (definicion_CTX_GUIA_REMISION.observacion.trim() === '') {
         alert('Verifique la observación');
         document.getElementById('in_Observacion')?.focus();
         return;
         // definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion = true;
         // continue
-        // console.log('silka');
+        // //console.log('silka');
         // if (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion_RESPUESTA) {
         //   definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion_RESPUESTA = false;
-        //   console.log('ok');
+        //   //console.log('ok');
         // } else {
         //   definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelVerificarObservacion_RESPUESTA = false;
         //   // return;
@@ -482,7 +590,24 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       return;
     }
     //
-    console.log('PASO A GUIA R.....');
+    //console.log('PASO A GUIA R.....');
+    //
+    ctx_index_guia_remision.mostrarSpinner = true;
+    //FECHA HORA LOCAL
+    // const ffffDate: any = new Date(definicion_CTX_GUIA_REMISION.fechaEmision);
+    // const fechaLocal =
+    //   cerosALaIzquierda(ffffDate.getFullYear(), 4) + '-' + cerosALaIzquierda(ffffDate.getMonth() + 1, 2) + '-' + cerosALaIzquierda(ffffDate.getDate() + 1, 2);
+    const fechaLocal =
+      definicion_CTX_GUIA_REMISION.fechaEmision.substring(8, 10) +
+      '-' +
+      definicion_CTX_GUIA_REMISION.fechaEmision.substring(5, 7) +
+      '-' +
+      definicion_CTX_GUIA_REMISION.fechaEmision.substring(0, 4);
+
+    const hhhhDate = new Date();
+    const horaLocal =
+      cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+
     //
     const grGRABADA = await inUpGuiaRemision({
       idGrupoEmpresarial: definicion_CTX_GUIA_REMISION.idGrupoEmpresarial,
@@ -495,22 +620,37 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       empresa: definicion_CTX_GUIA_REMISION.empresa,
       sucursal: definicion_CTX_GUIA_REMISION.sucursal,
       direccion: definicion_CTX_GUIA_REMISION.direccion,
+      departamento: definicion_CTX_GUIA_REMISION.departamento,
+      provincia: definicion_CTX_GUIA_REMISION.provincia,
+      distrito: definicion_CTX_GUIA_REMISION.distrito,
+      ubigeo: definicion_CTX_GUIA_REMISION.ubigeo,
 
       guiaRemisionElectronica: definicion_CTX_GUIA_REMISION.guiaRemisionElectronica,
       guiaRemisionElectronicaAutomatica: definicion_CTX_GUIA_REMISION.guiaRemisionElectronicaAutomatica,
+      guiaRemisionJSON: definicion_CTX_GUIA_REMISION.guiaRemisionJSON,
+      guiaRemisionXML: definicion_CTX_GUIA_REMISION.guiaRemisionXML,
+
       verificarObservacionGR: definicion_CTX_GUIA_REMISION.verificarObservacionGR,
 
+      codigoTipoComprobantePago: definicion_CTX_GUIA_REMISION.codigoTipoComprobantePago,
+      tipoComprobantePago: definicion_CTX_GUIA_REMISION.tipoComprobantePago,
       idSerieGuiaRemision: definicion_CTX_GUIA_REMISION.idSerieGuiaRemision,
       serie: definicion_CTX_GUIA_REMISION.serie,
       // numero: definicion_CTX_GUIA_REMISION.numero,
 
       fechaEmision: definicion_CTX_GUIA_REMISION.fechaEmision,
+      fechaEmisionFechaLocal: fechaLocal,
+      fechaEmisionHoraLocal: horaLocal,
       fechaInicioTraslado: definicion_CTX_GUIA_REMISION.fechaInicioTraslado,
 
       puntoPartida: definicion_CTX_GUIA_REMISION.puntoPartida,
       ubigeoPartida: definicion_CTX_GUIA_REMISION.ubigeoPartida,
+      codEstablecimientoPartida: definicion_CTX_GUIA_REMISION.codEstablecimientoPartida,
+      RUCAsociadoPtoPartida: definicion_CTX_GUIA_REMISION.RUCAsociadoPtoPartida,
       puntoLlegada: definicion_CTX_GUIA_REMISION.puntoLlegada,
       ubigeoLlegada: definicion_CTX_GUIA_REMISION.ubigeoLlegada,
+      codEstablecimientoLlegada: definicion_CTX_GUIA_REMISION.codEstablecimientoLlegada,
+      RUCAsociadoPtoLlegada: definicion_CTX_GUIA_REMISION.RUCAsociadoPtoLlegada,
 
       idModalidadTraslado: definicion_CTX_GUIA_REMISION.idModalidadTraslado,
       modalidadTraslado: definicion_CTX_GUIA_REMISION.modalidadTraslado,
@@ -528,15 +668,28 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       tipoDocumentoIdentidadDestinatario: definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadDestinatario,
       numeroIdentidadDestinatario: definicion_CTX_GUIA_REMISION.numeroIdentidadDestinatario,
       razonSocialNombreDestinatario: definicion_CTX_GUIA_REMISION.razonSocialNombreDestinatario,
+      direccionDestinatario: definicion_CTX_GUIA_REMISION.direccionDestinatario,
+      emailDestinatario: definicion_CTX_GUIA_REMISION.emailDestinatario,
 
-      idTransportista: definicion_CTX_GUIA_REMISION.idTransportista,
-      codigoTipoDocumentoIdentidadTransportista: definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadTransportista,
-      tipoDocumentoIdentidadTransportista: definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista,
-      numeroIdentidadTransportista: definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista,
-      razonSocialNombreTransportista: definicion_CTX_GUIA_REMISION.razonSocialNombreTransportista,
+      notificar: definicion_CTX_GUIA_REMISION.notificar,
 
-      choferes: definicion_CTX_GUIA_REMISION.choferes,
-      unidadesTransporte: definicion_CTX_GUIA_REMISION.unidadesTransporte,
+      transportistas: definicion_CTX_GUIA_REMISION.transportistas,
+      conductores: definicion_CTX_GUIA_REMISION.conductores,
+
+      // idTransportista: definicion_CTX_GUIA_REMISION.idTransportista,
+      // codigoTipoDocumentoIdentidadTransportista: definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadTransportista,
+      // tipoDocumentoIdentidadTransportista: definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista,
+      // numeroIdentidadTransportista: definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista,
+      // razonSocialNombreTransportista: definicion_CTX_GUIA_REMISION.razonSocialNombreTransportista,
+      // registroMTC: definicion_CTX_GUIA_REMISION.registroMTC,
+
+      idVehiculoPrincipal: definicion_CTX_GUIA_REMISION.idVehiculoPrincipal,
+      emisorAutorizacionEspecial: definicion_CTX_GUIA_REMISION.emisorAutorizacionEspecial,
+      numeroAutorizacionEspecial: definicion_CTX_GUIA_REMISION.numeroAutorizacionEspecial,
+      numeroPlaca: definicion_CTX_GUIA_REMISION.numeroPlaca,
+      tarjetaCirculacionOCertificadoHabilitacion: definicion_CTX_GUIA_REMISION.tarjetaCirculacionOCertificadoHabilitacion,
+
+      vehiculosSecundarios: definicion_CTX_GUIA_REMISION.vehiculosSecundarios,
 
       numeroBultosPallets: definicion_CTX_GUIA_REMISION.numeroBultosPallets,
       pesoBrutoTotal: definicion_CTX_GUIA_REMISION.pesoBrutoTotal,
@@ -552,10 +705,13 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       return;
     }
 
-    // console.log('guiita', grGRABADA.);
-    alert('✅✅✅ Registro satisfactorio de la guía de remisión');
+    // //console.log('guiita', grGRABADA.);
+
+    ctx_index_guia_remision.mostrarSpinner = false;
     ctx_index_guia_remision.grabo_GuiaRemision = true; //grabo.value;
     ctx_index_guia_remision.mostrarPanelGuiaRemision = false;
+
+    alert('✅✅✅ Registro satisfactorio de la guía de remisión');
   });
   //#endregion REGISTRAR GUA REMISION
 
@@ -581,9 +737,38 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           alt="Icono de cerrar"
           height={18}
           width={18}
+          title="ver  definicion_CTX_GUIA_REMISION.fechaEmision"
+          onClick={$(() => {
+            //console.log('definicion_CTX_GUIA_REMISION.fechaEmision', definicion_CTX_GUIA_REMISION.fechaEmision);
+            if (definicion_CTX_GUIA_REMISION.fechaEmision !== '') {
+              const fHree: any = new Date(definicion_CTX_GUIA_REMISION.fechaEmision);
+              const laHoraActual = new Date();
+              //console.log('fHree', fHree);
+              //console.log('fHree.getMonth()', fHree.getMonth());
+              //console.log('fHree.getDate()', fHree.getDate());
+              //console.log('fHree.getFullYear()', fHree.getFullYear());
+              //console.log('fHree.getHours()', fHree.getHours());
+              //console.log('fHree.getMinutes()', fHree.getMinutes());
+              //console.log('fHree.getSeconds()', fHree.getSeconds());
+              //console.log('laHoraActual', laHoraActual);
+              //console.log('laHoraActual.getMonth()', laHoraActual.getMonth());
+              //console.log('laHoraActual.getDate()', laHoraActual.getDate());
+              //console.log('laHoraActual.getFullYear()', laHoraActual.getFullYear());
+              //console.log('laHoraActual.getHours()', laHoraActual.getHours());
+              //console.log('laHoraActual.getMinutes()', laHoraActual.getMinutes());
+              //console.log('laHoraActual.getSeconds()', laHoraActual.getSeconds());
+              // const fe: number = fHree + 1;
+            }
+          })}
+        />
+        <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
           title="ver parametrosGlobales"
           onClick={$(() => {
-            console.log('parametrosGlobales', parametrosGlobales);
+            //console.log('parametrosGlobales', parametrosGlobales);
           })}
         />
         <ImgButton
@@ -593,7 +778,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           width={18}
           title="ver definicion_CTX_GUIA_REMISION"
           onClick={$(() => {
-            console.log('definicion_CTX_GUIA_REMISION', definicion_CTX_GUIA_REMISION);
+            //console.log('definicion_CTX_GUIA_REMISION', definicion_CTX_GUIA_REMISION);
           })}
         /> */}
         <ImgButton
@@ -610,7 +795,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.8rem' }}>
-        Guía de remisión - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+        Guía de remisión - {definicion_CTX_GUIA_REMISION.tipoComprobantePago} - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
       </h3>
       {/* FORMULARIO */}
       <div class="add-form">
@@ -640,6 +825,11 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                   } else {
                     definicion_CTX_GUIA_REMISION.idSerieGuiaRemision = elOption.id;
                     definicion_CTX_GUIA_REMISION.serie = (e.target as HTMLSelectElement).value;
+
+                    const laNewSeleccion = dataSerie.value.find((elemt: any) => elemt._id === definicion_CTX_GUIA_REMISION.idSerieGuiaRemision);
+                    definicion_CTX_GUIA_REMISION.codigoTipoComprobantePago = laNewSeleccion.codigoTipo;
+                    definicion_CTX_GUIA_REMISION.tipoComprobantePago = laNewSeleccion.tipo;
+
                     document.getElementById('in_Fecha_Emision_GR')?.focus();
                   }
                 }}
@@ -734,9 +924,32 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 id="in_UbigeoPartido_GR"
                 type="text"
                 disabled
+                placeholder="UBIGEO"
                 value={definicion_CTX_GUIA_REMISION.ubigeoPartida}
                 onChange$={(e) => {
                   definicion_CTX_GUIA_REMISION.ubigeoPartida = (e.target as HTMLInputElement).value;
+                }}
+                style={{ width: '60px' }}
+              />
+              <input
+                id="in_CodEstablecimientoPartido_GR"
+                type="text"
+                disabled
+                placeholder="COD"
+                value={definicion_CTX_GUIA_REMISION.codEstablecimientoPartida}
+                onChange$={(e) => {
+                  definicion_CTX_GUIA_REMISION.codEstablecimientoPartida = (e.target as HTMLInputElement).value;
+                }}
+                style={{ width: '60px' }}
+              />
+              <input
+                id="in_RUCAsociadoPtoPartida_GR"
+                type="text"
+                disabled
+                placeholder="RUC"
+                value={definicion_CTX_GUIA_REMISION.RUCAsociadoPtoPartida}
+                onChange$={(e) => {
+                  definicion_CTX_GUIA_REMISION.RUCAsociadoPtoPartida = (e.target as HTMLInputElement).value;
                 }}
                 style={{ width: '60px' }}
               />
@@ -777,9 +990,32 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 id="in_UbigeoLlegada_GR"
                 type="text"
                 disabled
+                placeholder="UBIDEO"
                 value={definicion_CTX_GUIA_REMISION.ubigeoLlegada}
                 onChange$={(e) => {
                   definicion_CTX_GUIA_REMISION.ubigeoLlegada = (e.target as HTMLInputElement).value;
+                }}
+                style={{ width: '60px' }}
+              />
+              <input
+                id="in_CodEstablecimientoLlegada_GR"
+                type="text"
+                disabled
+                placeholder="COD"
+                value={definicion_CTX_GUIA_REMISION.codEstablecimientoLlegada}
+                onChange$={(e) => {
+                  definicion_CTX_GUIA_REMISION.codEstablecimientoLlegada = (e.target as HTMLInputElement).value;
+                }}
+                style={{ width: '60px' }}
+              />
+              <input
+                id="in_RUCAsociadoPtoLlegada_GR"
+                type="text"
+                disabled
+                placeholder="RUC"
+                value={definicion_CTX_GUIA_REMISION.RUCAsociadoPtoLlegada}
+                onChange$={(e) => {
+                  definicion_CTX_GUIA_REMISION.RUCAsociadoPtoLlegada = (e.target as HTMLInputElement).value;
                 }}
                 style={{ width: '60px' }}
               />
@@ -804,7 +1040,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           <br />
         </div>
         {/* ----------------------------------------------------- */}
-        {/* MODALIDA - MOTIVO */}
+        {/* MODALIDAD - MOTIVO */}
         <div>
           <div class="form-control">
             <div class="form-control form-agrupado">
@@ -819,14 +1055,24 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
 
                   definicion_CTX_GUIA_REMISION.idModalidadTraslado = elOption.id;
                   definicion_CTX_GUIA_REMISION.modalidadTraslado = (e.target as HTMLSelectElement).value;
-                  console.log('modalida', definicion_CTX_GUIA_REMISION.idModalidadTraslado, definicion_CTX_GUIA_REMISION.modalidadTraslado);
+                  //console.log('modalida', definicion_CTX_GUIA_REMISION.idModalidadTraslado, definicion_CTX_GUIA_REMISION.modalidadTraslado);
                 }}
               >
                 <option value="">-- Seleccionar modalidad traslado --</option>
-                <option id="01" value="TRANSPORTE PÚBLICO" selected={definicion_CTX_GUIA_REMISION.modalidadTraslado === 'TRANSPORTE PÚBLICO'}>
+                <option
+                  id="01"
+                  value="TRANSPORTE PÚBLICO"
+                  title="Usar un tercero para el traslado del bien"
+                  selected={definicion_CTX_GUIA_REMISION.modalidadTraslado === 'TRANSPORTE PÚBLICO'}
+                >
                   TRANSPORTE PÚBLICO
                 </option>
-                <option id="02" value="TRANSPORTE PRIVADO" selected={definicion_CTX_GUIA_REMISION.modalidadTraslado === 'TRANSPORTE PRIVADO'}>
+                <option
+                  id="02"
+                  value="TRANSPORTE PRIVADO"
+                  title="Usar recursos propios para el traslado del bien"
+                  selected={definicion_CTX_GUIA_REMISION.modalidadTraslado === 'TRANSPORTE PRIVADO'}
+                >
                   TRANSPORTE PRIVADO
                 </option>
               </select>
@@ -888,8 +1134,8 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 </option>
                 <option
                   id="14"
-                  value="VENTA SUJETA A CONFIRMACIÓN DEL COMPRADOR   "
-                  selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'VENTA SUJETA A CONFIRMACIÓN DEL COMPRADOR   '}
+                  value="VENTA SUJETA A CONFIRMACIÓN DEL COMPRADOR"
+                  selected={definicion_CTX_GUIA_REMISION.motivoTraslado === 'VENTA SUJETA A CONFIRMACIÓN DEL COMPRADOR'}
                 >
                   VENTA SUJETA A CONFIRMACIÓN DEL COMPRADOR
                 </option>
@@ -953,11 +1199,11 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 width={16}
                 // style={{ marginLeft: '2px', marginTop: '2px' }}
                 // style={{ margin: '2px' }}
-                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaRemitente = true)}
+                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarRemitente = true)}
               />
             </div>
           </div>
-          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaRemitente && (
+          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarRemitente && (
             <div class="modal">
               <BuscarPersona soloPersonasNaturales={false} seleccionar="remitente" contexto="new_edit_guiaRemision" rol="remitente" />
             </div>
@@ -1032,11 +1278,11 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 width={16}
                 // style={{ marginLeft: '2px', marginTop: '2px' }}
                 // style={{ margin: '2px' }}
-                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaDestinatario = true)}
+                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarDestinatario = true)}
               />
             </div>
           </div>
-          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaDestinatario && (
+          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarDestinatario && (
             <div class="modal">
               <BuscarPersona soloPersonasNaturales={false} seleccionar="destinatario" contexto="new_edit_guiaRemision" rol="destinatario" />
             </div>
@@ -1068,89 +1314,116 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
               />
             </div>
           </div>
-          <br />
-        </div>
-        {/* -------------------------------------------style={{ marginRight: '8px' }}---------- */}
-        {/* GENERALES DEL TRANSPORTISTA */}
-        <div>
-          {/* tipo de documento identidad*/}
-          <div>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              <label>TRANSPORTISTA</label>
-              <select
-                id="select_TipoDocumentoLiteral_TRANSPORTISTA"
-                disabled
-                style={{ width: '100%' }}
-                // value={6}
-                value={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista}
-                onChange$={(e) => {
-                  const idx = (e.target as HTMLSelectElement).selectedIndex;
-                  const rere = e.target as HTMLSelectElement;
-                  const elOption = rere[idx];
-
-                  definicion_CTX_GUIA_REMISION.codigoTipoDocumentoIdentidadTransportista = elOption.id;
-                  definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista = (e.target as HTMLSelectElement).value;
-                }}
-              >
-                <option id="1" value="DNI" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista === 'DNI'}>
-                  DNI
-                </option>
-                <option id="6" value="RUC" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista === 'RUC'}>
-                  RUC
-                </option>
-                <option id="4" value="C.EXT" selected={definicion_CTX_GUIA_REMISION.tipoDocumentoIdentidadTransportista === 'C.EXT'}>
-                  C.EXT
-                </option>
-              </select>
-              <input
-                id="in_BuscarTransportista_GR"
-                type="image"
-                src={images.searchPLUS}
-                title="Buscar datos de identidad"
-                height={16}
-                width={16}
-                // style={{ marginLeft: '2px', marginTop: '2px' }}
-                // style={{ margin: '2px' }}
-                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaTransportista = true)}
-              />
-            </div>
-          </div>
-          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarPersonaTransportista && (
-            <div class="modal">
-              <BuscarPersona soloPersonasNaturales={false} seleccionar="transportista" contexto="new_edit_guiaRemision" rol="transportista" />
-            </div>
-          )}
-          {/* numero identidad*/}
+          {/* Direccion DESTINATARIO */}
           <div class="form-control">
             <div class="form-control form-agrupado">
               <input
-                id="input_NumeroDocumentoIdentidad_TRANSPORTISTA"
-                type="number"
-                placeholder="Número Identidad Transportista"
-                disabled
-                style={{ width: '100%' }}
-                value={definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista}
-                onChange$={(e) => (definicion_CTX_GUIA_REMISION.numeroIdentidadTransportista = (e.target as HTMLInputElement).value)}
-              />
-            </div>
-          </div>
-          {/* Razon Social / Nombre */}
-          <div class="form-control">
-            <div class="form-control form-agrupado">
-              <input
-                id="input_Nombre_TRANSPORTISTA"
+                id="input_Direccion_DESTINATARIO"
                 type="text"
-                placeholder="Razón social / Nombre Transportista"
+                placeholder="Dirección Destinatario"
                 disabled
                 style={{ width: '100%' }}
-                value={definicion_CTX_GUIA_REMISION.razonSocialNombreTransportista}
+                value={definicion_CTX_GUIA_REMISION.direccionDestinatario}
               />
             </div>
           </div>
           <br />
         </div>
         {/* ----------------------------------------------------- */}
-        {/* CHOFERES */}
+        {/* TRANSPORTISTA */}
+        <div hidden={definicion_CTX_GUIA_REMISION.modalidadTraslado === 'TRANSPORTE PRIVADO'}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              margin: '4px 0',
+            }}
+          >
+            <div style={{ marginBottom: '4px' }}>
+              <ElButton
+                id="btn_Add_Transportista_GR"
+                class="btn"
+                name="Add transportista"
+                title="Add transportista"
+                onClick={$(() => {
+                  elTranspSelecionado.value = [];
+                  definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarTransportista = true;
+                })}
+              />
+            </div>
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarTransportista && (
+              <div class="modal">
+                <BuscarTransportista contexto="new_edit_guiaRemision" />
+              </div>
+            )}
+            {/* TABLA TRANSPORTISTAS   */}
+            {definicion_CTX_GUIA_REMISION.transportistas.length > 0 ? (
+              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
+                <thead>
+                  <tr>
+                    <th>Ítem</th>
+                    <th>Doc</th>
+                    <th>Número</th>
+                    <th>Transportista</th>
+                    <th>MTC</th>
+                    <th>Acc</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {definicion_CTX_GUIA_REMISION.transportistas.map((iTTransp: any, index: number) => {
+                    const indexItemTrans = index + 1;
+
+                    return (
+                      <tr key={iTTransp.idAuxiliar}>
+                        <td data-label="Ítem">{indexItemTrans}</td>
+                        <td data-label="Doc">{iTTransp.tipoDocumentoIdentidad}</td>
+                        <td data-label="Número">{iTTransp.numeroIdentidad}</td>
+                        <td data-label="Transportista">{iTTransp.razonSocialNombre}</td>
+                        <td data-label="MTC">{iTTransp.registroMTC}</td>
+                        <td data-label="Acc" class="accionesLeft">
+                          <input
+                            type="image"
+                            src={images.trash}
+                            title="Eliminar ítem"
+                            alt="icono de eliminar"
+                            height={14}
+                            width={14}
+                            onClick$={() => {
+                              borrarTransportista.idAuxiliar = iTTransp.idAuxiliar;
+                              borrarTransportista.numeroIdentidad = iTTransp.numeroIdentidad;
+                              borrarTransportista.razonSocialNombre = iTTransp.razonSocialNombre;
+                              borrarTransportista.registroMTC = iTTransp.registroMTC;
+
+                              definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteTransportista = true;
+                            }}
+                            // onClick$={() => {
+                            //   borrarTransportista.idAuxiliar = iTTransp.idAuxiliar;
+                            //   borrarTransportista.placa = iTTransp.placa;
+                            //   borrarTransportista.vehiculoMarca = iTTransp.vehiculoMarca;
+                            //   borrarTransportista.vehiculoModelo = iTTransp.vehiculoModelo;
+                            //   definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteTransportista = true;
+                            // }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <i style={{ fontSize: '0.8rem' }}>No existen ningún transportista</i>
+            )}
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteTransportista && (
+              <div class="modal">
+                <BorrarTransportista borrarTransportista={borrarTransportista} />
+              </div>
+            )}
+          </div>
+          <br />
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* CONDUCTORES */}
         <div>
           <div
             style={{
@@ -1162,28 +1435,26 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           >
             <div style={{ marginBottom: '4px' }}>
               <ElButton
-                id="btn_Add_Chofer_GR"
+                id="btn_Add_Conductores_GR"
                 class="btn"
-                name="Add chofer"
-                title="Add chofer"
+                name="Add conductor"
+                title="Add conductor"
                 onClick={$(() => {
-                  elChofSelecionado.value = [];
-                  definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarChofer = true;
+                  elConducSelecionado.value = [];
+                  definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarConductor = true;
                 })}
               />
             </div>
-            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarChofer && (
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarConductor && (
               <div class="modal">
                 <BuscarChofer contexto="new_edit_guiaRemision" />
-                {/* <NewEditChofer choferSeleccionado={elChofSelecionado.value} /> */}
               </div>
             )}
-            {/* TABLA CHOFERES   */}
-            {definicion_CTX_GUIA_REMISION.choferes.length > 0 ? (
+            {/* TABLA CONDUCTORES   */}
+            {definicion_CTX_GUIA_REMISION.conductores.length > 0 ? (
               <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
-                    {/* <th>idAuxiliar</th> */}
                     <th>Ítem</th>
                     <th>Doc</th>
                     <th>Número</th>
@@ -1194,12 +1465,11 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                   </tr>
                 </thead>
                 <tbody>
-                  {definicion_CTX_GUIA_REMISION.choferes.map((iTChof: any, index: number) => {
+                  {definicion_CTX_GUIA_REMISION.conductores.map((iTChof: any, index: number) => {
                     const indexItemChof = index + 1;
 
                     return (
                       <tr key={iTChof.idAuxiliar}>
-                        {/* <td data-label="idAuxiliar">{iTChof.idAuxiliar}</td> */}
                         <td data-label="Ítem">{cerosALaIzquierda(indexItemChof, 3)}</td>
                         <td data-label="Doc">{iTChof.tipoDocumentoIdentidad}</td>
                         <td data-label="Número">{iTChof.numeroIdentidad}</td>
@@ -1208,27 +1478,13 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                         <td data-label="Tipo" class="acciones">
                           <input
                             type="button"
-                            value={iTChof.tipo === true ? 'PRIMARIO' : 'SECUNARIO'}
+                            value={iTChof.tipo === true ? 'PRINCIPAL' : 'SECUNDARIO'}
                             onClick$={() => {
                               iTChof.tipo = !iTChof.tipo;
                             }}
                           />
                         </td>
                         <td data-label="Acc" class="accionesLeft">
-                          {/* <input
-                            type="image"
-                            src={images.edit}
-                            title="Editar ítem"
-                            alt="icono de editar"
-                            disabled
-                            height={14}
-                            width={14}
-                            style={{ marginRight: '4px' }}
-                            // onClick$={() => {
-                            //   elChofSelecionado.value = iTChof;
-                            //   definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelChofer = true;
-                            // }}
-                          /> */}
                           <input
                             type="image"
                             src={images.trash}
@@ -1238,13 +1494,13 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                             width={14}
                             onClick$={() => {
                               // borrarChofer = iTChof;
-                              borrarChofer.idAuxiliar = iTChof.idAuxiliar;
-                              borrarChofer.numeroIdentidad = iTChof.numeroIdentidad;
-                              borrarChofer.razonSocialNombre = iTChof.razonSocialNombre;
-                              borrarChofer.licencia = iTChof.licencia;
+                              borrarConductor.idAuxiliar = iTChof.idAuxiliar;
+                              borrarConductor.numeroIdentidad = iTChof.numeroIdentidad;
+                              borrarConductor.razonSocialNombre = iTChof.razonSocialNombre;
+                              borrarConductor.licencia = iTChof.licencia;
                               // borrarChofer.serie = iTChof.serie;
                               // borrarChofer.numero = iTChof.numero;
-                              definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteChofer = true;
+                              definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteConductor = true;
                             }}
                           />
                         </td>
@@ -1254,18 +1510,94 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 </tbody>
               </table>
             ) : (
-              <i style={{ fontSize: '0.8rem' }}>No existen ningún chofer</i>
+              <i style={{ fontSize: '0.8rem' }}>No existen ningún conductor</i>
             )}
-            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteChofer && (
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteConductor && (
               <div class="modal">
-                <BorrarChofer borrarChofer={borrarChofer} />
+                <BorrarChofer borrarChofer={borrarConductor} />
               </div>
             )}
           </div>
           <br />
         </div>
+        {/* --------------------------------------style={{ marginRight: '8px' }}--------------- */}
+        {/* VEHICULO PRINCIPAL */}
+        <div>
+          {/* placa*/}
+          <div>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              <input
+                id="input_NumeroPlaca_VEHICULO_PRINCIPAL"
+                type="text"
+                placeholder="Vehículo Principal"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.numeroPlaca}
+                onChange$={(e) => (definicion_CTX_GUIA_REMISION.numeroPlaca = (e.target as HTMLInputElement).value)}
+              />
+              <input
+                id="in_BuscarVehiculoPrincipal_GR"
+                type="image"
+                src={images.searchPLUS}
+                title="Buscar datos de identidad"
+                height={16}
+                width={16}
+                // style={{ marginLeft: '2px', marginTop: '2px' }}
+                // style={{ margin: '2px' }}
+                onClick$={() => (definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarUnidadTransportePrincipal = true)}
+              />
+            </div>
+          </div>
+          {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarUnidadTransportePrincipal && (
+            <div class="modal">
+              <BuscarUnidadTransporte contexto="new_edit_guiaRemision" tipo="principal" />
+            </div>
+          )}
+
+          {/* tarjetaCirculacionOCertificadoHabilitacion */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <input
+                id="input_tarjetaCirculacionOCertificadoHabilitacion_VEHICULO_PRINCIPAL"
+                type="text"
+                placeholder="Tarjeta Circulación O Certificado Habilitación"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.tarjetaCirculacionOCertificadoHabilitacion}
+                onChange$={(e) => (definicion_CTX_GUIA_REMISION.tarjetaCirculacionOCertificadoHabilitacion = (e.target as HTMLInputElement).value)}
+              />
+            </div>
+          </div>
+          {/* numeroAutorizacionEspecial */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <input
+                id="input_numeroAutorizacionEspecial_VEHICULO_PRINCIPAL"
+                type="text"
+                placeholder="Número Autorización Especial"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.numeroAutorizacionEspecial}
+              />
+            </div>
+          </div>
+          {/* EmisorAutorizacionEspecial */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <input
+                id="input_EmisorAutorizacionEspecial_VEHICULO_PRINCIPAL"
+                type="text"
+                placeholder="Emisor Autorización Especial"
+                disabled
+                style={{ width: '100%' }}
+                value={definicion_CTX_GUIA_REMISION.emisorAutorizacionEspecial}
+              />
+            </div>
+          </div>
+          <br />
+        </div>
         {/* ----------------------------------------------------- */}
-        {/* UNIDADES DE TRANSPORTE */}
+        {/* UNIDADES DE TRANSPORTE - VEHICULOS SECUNDARIOS */}
         <div>
           <div
             style={{
@@ -1277,23 +1609,23 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           >
             <div style={{ marginBottom: '4px' }}>
               <ElButton
-                id="btn_Add_UnidadTransporte_GR"
+                id="btn_Add_UnidadTransporteSecundario_GR"
                 class="btn"
-                name="Add unidad de transporte"
-                title="Add unidad de transporte"
+                name="Add unidad de transporte secundaria"
+                title="Add unidad de transporte secundaria"
                 onClick={$(() => {
-                  laUniSelecionada.value = [];
-                  definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarUnidadTransporte = true;
+                  laUniSecundaSelecionada.value = [];
+                  definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarUnidadTransporteSecundario = true;
                 })}
               />
             </div>
-            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarUnidadTransporte && (
+            {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarUnidadTransporteSecundario && (
               <div class="modal">
-                <BuscarUnidadTransporte contexto="new_edit_guiaRemision" />
+                <BuscarUnidadTransporte contexto="new_edit_guiaRemision" tipo="secundario" />
               </div>
             )}
             {/* TABLA UNIDADES DE TRANSPORTE   */}
-            {definicion_CTX_GUIA_REMISION.unidadesTransporte.length > 0 ? (
+            {definicion_CTX_GUIA_REMISION.vehiculosSecundarios.length > 0 ? (
               <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
@@ -1302,22 +1634,22 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Tarj.Circul./Certif.Habilit.</th>
-                    <th>Tipo</th>
+                    {/* <th>Tipo</th> */}
                     <th>Acc</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {definicion_CTX_GUIA_REMISION.unidadesTransporte.map((iTUnidadTra: any, index: number) => {
+                  {definicion_CTX_GUIA_REMISION.vehiculosSecundarios.map((iTUnidadTranspSecun: any, index: number) => {
                     const indexItemUT = index + 1;
 
                     return (
-                      <tr key={iTUnidadTra.idAuxiliar}>
+                      <tr key={iTUnidadTranspSecun.idAuxiliar}>
                         <td data-label="Ítem">{indexItemUT}</td>
-                        <td data-label="Placa">{iTUnidadTra.placa}</td>
-                        <td data-label="Marca">{iTUnidadTra.vehiculoMarca}</td>
-                        <td data-label="Modelo">{iTUnidadTra.vehiculoModelo}</td>
-                        <td data-label="Tarj.Circul./Certif.Habilit.">{iTUnidadTra.tarjetaCirculacionCertificadoHabilitacion}</td>
-                        <td data-label="Tipo" class="acciones">
+                        <td data-label="Placa">{iTUnidadTranspSecun.placa}</td>
+                        <td data-label="Marca">{iTUnidadTranspSecun.vehiculoMarca}</td>
+                        <td data-label="Modelo">{iTUnidadTranspSecun.vehiculoModelo}</td>
+                        <td data-label="Tarj.Circul./Certif.Habilit.">{iTUnidadTranspSecun.tarjetaCirculacionCertificadoHabilitacion}</td>
+                        {/* <td data-label="Tipo" class="acciones">
                           <input
                             type="button"
                             value={iTUnidadTra.tipo === true ? 'PRIMARIO' : 'SECUNARIO'}
@@ -1325,33 +1657,20 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                               iTUnidadTra.tipo = !iTUnidadTra.tipo;
                             }}
                           />
-                        </td>
+                        </td> */}
                         <td data-label="Acc" class="accionesLeft">
-                          {/* <input
-                            type="image"
-                            src={images.edit}
-                            title="Editar ítem"
-                            alt="icono de editar"
-                            height={14}
-                            width={14}
-                            style={{ marginRight: '4px' }}
-                            onClick$={() => {
-                              laUniSelecionada.value = iTUnidadTra;
-                              definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelEditarUnidadTransporte = true;
-                            }}
-                          /> */}
                           <input
                             type="image"
                             src={images.trash}
-                            title="Eliminar ítem"
+                            title="Eliminar vehículo secundario"
                             alt="icono de eliminar"
                             height={14}
                             width={14}
                             onClick$={() => {
-                              borrarUnidadTransporte.idAuxiliar = iTUnidadTra.idAuxiliar;
-                              borrarUnidadTransporte.placa = iTUnidadTra.placa;
-                              borrarUnidadTransporte.vehiculoMarca = iTUnidadTra.vehiculoMarca;
-                              borrarUnidadTransporte.vehiculoModelo = iTUnidadTra.vehiculoModelo;
+                              borrarUnidadTransporte.idAuxiliar = iTUnidadTranspSecun.idAuxiliar;
+                              borrarUnidadTransporte.placa = iTUnidadTranspSecun.placa;
+                              borrarUnidadTransporte.vehiculoMarca = iTUnidadTranspSecun.vehiculoMarca;
+                              borrarUnidadTransporte.vehiculoModelo = iTUnidadTranspSecun.vehiculoModelo;
                               definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteUnidadTransporte = true;
                             }}
                           />
@@ -1362,7 +1681,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 </tbody>
               </table>
             ) : (
-              <i style={{ fontSize: '0.8rem' }}>No existen ninguna unidad de transporte</i>
+              <i style={{ fontSize: '0.8rem' }}>No existen ninguna unidad de transporte secundaria</i>
             )}
             {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelDeleteUnidadTransporte && (
               <div class="modal">
@@ -1398,7 +1717,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 placeholder="Peso bruto total"
                 style={{ width: '100%' }}
                 value={definicion_CTX_GUIA_REMISION.pesoBrutoTotal}
-                onChange$={(e) => (definicion_CTX_GUIA_REMISION.pesoBrutoTotal = (e.target as HTMLInputElement).value)}
+                onChange$={(e) => (definicion_CTX_GUIA_REMISION.pesoBrutoTotal = redondeo3Decimales((e.target as HTMLInputElement).value))}
               />
               <label>KGM</label>
             </div>
@@ -1444,7 +1763,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                 id="in_Observacion"
                 value={definicion_CTX_GUIA_REMISION.observacion}
                 style={{ width: '100%', background: 'yellow' }}
-                placeholder="Observación"
+                // placeholder="Observación"
                 onChange$={(e) => {
                   definicion_CTX_GUIA_REMISION.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
                 }}
@@ -1535,7 +1854,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
                               height={14}
                               width={14}
                               style={{ margin: '2px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 borrarItemGuiaRemision.idAuxiliar = iTGR.idAuxiliar;
                                 borrarItemGuiaRemision.cantidad = iTGR.cantidad;
@@ -1566,7 +1885,7 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
             <br />
           </div>
         }
-        <input type="button" value="Grabar Guía de Remisión" class="btn-centro" onClick$={() => registrarGuiaRemision()} />
+        <input type="button" value="Grabar Guía de Remisión" class="btn-centro" style={{ height: '40px' }} onClick$={() => registrarGuiaRemision()} />
         {/* *************** */}
       </div>
     </div>

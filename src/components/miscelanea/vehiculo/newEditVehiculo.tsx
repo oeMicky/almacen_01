@@ -78,27 +78,27 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
 
   //***** obtener MARCAS Y MODELOS VEHICULARES
   const obtenerMarcasVehiculares = $(async () => {
-    console.log('first first first 🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖', vehiculo.vehiculoMarca, vehiculo.vehiculoModelo);
+    //console.log('first first first 🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖🥖', vehiculo.vehiculoMarca, vehiculo.vehiculoModelo);
     const mars = await getMarcasVehiculares({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
     });
-    console.log('mars.data', mars.data);
+    //console.log('mars.data', mars.data);
     lasMarcas.value = mars.data;
 
     if (ini.value === 0 && vehiculo._id !== '') {
-      console.log('********---ES EDICION---*******');
+      //console.log('********---ES EDICION---*******');
       const tre: any = lasMarcas.value.find(({ _id }) => _id === vehiculo.idVehiculoMarca);
-      console.log('tre', tre.modelos);
+      //console.log('tre', tre.modelos);
       losModelos.value = tre.modelos;
     }
     //*
     // losModelos.value = lasMarcas.value.find(({ _id }) => _id === vehiculo.idVehiculoMarca);
     // tomy.value = lasMarcas.value.find(({ _id }) => _id === vehiculo.idVehiculoMarca);
     // // // losModelos.value =
-    // console.log('first [}', vehiculo.idVehiculoMarca, lasMarcas.value, tomy.value);
+    // //console.log('first [}', vehiculo.idVehiculoMarca, lasMarcas.value, tomy.value);
 
-    // console.log('tomy', tomy.value);
+    // //console.log('tomy', tomy.value);
     //*
     // definicion_CTX_NEW_EDIT_VEHICULO.grabo_modelo = true;
   });
@@ -106,10 +106,10 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
 
   useTask$(({ track }) => {
     track(() => ini.value);
-    console.log('obtenerMarcasVehiculares()', ini.value);
+    //console.log('obtenerMarcasVehiculares()', ini.value);
     obtenerMarcasVehiculares();
     //
-    console.log('first', vehiculo.idVehiculoModelo, vehiculo.vehiculoModelo);
+    //console.log('first', vehiculo.idVehiculoModelo, vehiculo.vehiculoModelo);
     // (document.getElementById('se_modelo_VEHICULO') as HTMLSelectElement).value = 'MAZDA 3'; //vehiculo.vehiculoModelo;
   });
   //#endregion INICIALIZAR
@@ -133,7 +133,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
       idEmpresa: parametrosGlobales.idEmpresa,
       idMarca: vehiculo.idVehiculoMarca,
     });
-    console.log('modelos', mods.data);
+    //console.log('modelos', mods.data);
     losModelos.value = mods.data;
   });
   //#endregion MODELO
@@ -168,7 +168,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
       return;
     }
 
-    let vehi = await inUpVehiculo({
+    await inUpVehiculo({
       idVehiculo: vehiculo._id,
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
@@ -181,9 +181,9 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
       usuario: parametrosGlobales.usuario,
     });
 
-    console.log('graboooooo marvaVehi', vehi);
-    vehi = vehi.data;
-    console.log('graboooooo marvaVehi.data', vehi);
+    //console.log('graboooooo marvaVehi', vehi);
+    // vehi = vehi.data;
+    //console.log('graboooooo marvaVehi.data', vehi);
 
     ctx_buscar_vehiculo.grabo_vehiculo = true;
     ctx_buscar_vehiculo.mostrarPanelNewEditVehiculo = false;
@@ -234,7 +234,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
           width={16}
           title="Ver vehículo"
           onClick={$(() => {
-            console.log('vehículo', vehiculo);
+            //console.log('vehículo', vehiculo);
           })}
         />
         <ImgButton
@@ -244,7 +244,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
           width={16}
           title="Ver vehículo"
           onClick={$(() => {
-            console.log('ini.value', ini.value);
+            //console.log('ini.value', ini.value);
           })}
         />
       </div>
@@ -269,11 +269,11 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 value={vehiculo.placa}
                 // onKeyDown$={(e) => {
                 //   // vehiculo.placa = (e.target as HTMLInputElement).value.trim().toUpperCase();
-                //   // console.log('onKeyDown$', e.key, e.keyCode, e);
+                //   // //console.log('onKeyDown$', e.key, e.keyCode, e);
                 //   // return false;
                 //   // e.key.includes
-                //   // if (patron.test(e.key)) {   //   console.log('onKeyDown$', e.key, e.keyCode, e);
-                //   // } else {   //   console.log('onKeyDown$--stopPropagation', e.key, e.keyCode, e);
+                //   // if (patron.test(e.key)) {   //   //console.log('onKeyDown$', e.key, e.keyCode, e);
+                //   // } else {   //   //console.log('onKeyDown$--stopPropagation', e.key, e.keyCode, e);
                 //   // }
                 // }}
                 onChange$={(e) => {
@@ -285,7 +285,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                   }
                 }}
                 // onKeyPress$={(e) => {
-                //   console.log('onKeyPress$', e.key, e.keyCode, e);
+                //   //console.log('onKeyPress$', e.key, e.keyCode, e);
                 //   const patron = /[A-Za-z0-9]/;
                 //   if (patron.test(e.key)) {
                 //     //A-a-0
@@ -294,37 +294,37 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 //       (e.keyCode >= 65 && e.keyCode <= 90) ||
                 //       (e.keyCode >= 48 && e.keyCode <= 57)
                 //     ) {
-                //       console.log('VERDADEROOOOOO', e.key, e.keyCode, e);
+                //       //console.log('VERDADEROOOOOO', e.key, e.keyCode, e);
                 //       valido.value = true;
                 //       // vehiculo.placa = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 //       // vehiculo.placa = vehiculo.placa + e.key.toUpperCase();
                 //     } else {
-                //       console.log('FALSOOOOOOOOOO confir', e.key, e.keyCode, e);
+                //       //console.log('FALSOOOOOOOOOO confir', e.key, e.keyCode, e);
                 //       valido.value = false;
                 //       if (e.key === 'Escape') {
-                //         console.log('Escape');
+                //         //console.log('Escape');
                 //         document.getElementById('inputMarca')?.focus();
 
                 //         return false;
                 //       }
                 //     }
                 //   } else {
-                //     console.log('FALSOOOOOOOOOO', e.key, e.keyCode, e);
+                //     //console.log('FALSOOOOOOOOOO', e.key, e.keyCode, e);
                 //     valido.value = false;
                 //   }
                 //   // if (!valido.value) {
-                //   //   console.log('return$');
+                //   //   //console.log('return$');
                 //   //   e.target.removeEventListener;
                 //   //   return false;
                 //   // }
                 // }}
                 // onKeyUp$={(e) => {
-                //   console.log('onKeyUp$', e.key, e.keyCode, e);
+                //   //console.log('onKeyUp$', e.key, e.keyCode, e);
                 //   e.key.replace('*', '');
                 //   return false;
                 // }}
                 // onChange$={(e) => {
-                //   console.log('onChange$', e);
+                //   //console.log('onChange$', e);
                 //   // e.cancelable;
                 //   // e.stopPropagation();
                 // }}
@@ -342,7 +342,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 registroTEXT={'vehiculoMarca'}
                 seleccione={'-- Seleccione marca --'}
                 onChange={$(() => {
-                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   vehiculo.idVehiculoMarca = elSelec[elIdx].id;
@@ -383,8 +383,8 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 onClick$={() => {
                   const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
+                  //console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  //console.log('elSelec.value', elSelec.value);
                   if (elSelec[elIdx].id === '') {
                     alert('Selecione la marca del vehículo');
                     elSelec.focus();
@@ -413,7 +413,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 registroTEXT={'modelo'}
                 seleccione={'-- Seleccione modelo --'}
                 onChange={$(() => {
-                  console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢👓👓');
+                  //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢👓👓');
                   const elSelec = document.getElementById('se_modelo_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   vehiculo.idVehiculoModelo = elSelec[elIdx].id;
@@ -440,8 +440,8 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 onClick$={() => {
                   const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
+                  //console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  //console.log('elSelec.value', elSelec.value);
                   if (elSelec[elIdx].id === '') {
                     alert('Seleccione la marca del vehículo');
                     elSelec.focus();
@@ -466,8 +466,8 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
                 onClick$={() => {
                   const elSelec = document.getElementById('se_marca_VEHICULO') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
+                  //console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  //console.log('elSelec.value', elSelec.value);
                   if (elSelec[elIdx].id === '') {
                     alert('Seleccione la marca del vehículo');
                     elSelec.focus();

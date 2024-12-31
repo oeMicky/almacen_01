@@ -7,7 +7,7 @@ import { parametrosGlobales } from '~/routes/login';
 async function pdfReporteVenta(ventas: any) {
   pdfMake.vfs = pdfFonts;
 
-  console.log('ventas PDF', ventas);
+  //console.log('ventas PDF', ventas);
 
   const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
 

@@ -63,7 +63,7 @@ export default component$(() => {
     track(() => definicion_CTX_INDEX_COTIZACION.mostrarPanelNewEditCotizacion);
     if (definicion_CTX_INDEX_COTIZACION.grabo_Cotizacion) {
       //actualizar TABLA ORDENES SERVICIO
-      // console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
+      // //console.log('actualizar TABLA ORDENES SERVICIO', defini_CTX_DOCS_ORDEN_SERVICIO.actualizoOS);
       buscarCotizaciones.value++;
       definicion_CTX_INDEX_COTIZACION.mostrarSpinner = true;
       definicion_CTX_INDEX_COTIZACION.grabo_Cotizacion = false;
@@ -78,10 +78,10 @@ export default component$(() => {
   //     idEmpresa: parametrosGlobales.idEmpresa,
   //     bandera: 'Cotizaciones',
   //   });
-  //   console.log('losPeri', losPeri);
+  //   //console.log('losPeri', losPeri);
   //   losPeriodosCargados.value = losPeri.data;
-  //   console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
-  //   // console.log('a cargar periodos');
+  //   //console.log(' losPeriodosCargados.value', losPeriodosCargados.value);
+  //   // //console.log('a cargar periodos');
   // });
 
   // useTask$(({ track }) => {
@@ -149,17 +149,18 @@ export default component$(() => {
                   return;
                 }
                 buscarCotizaciones.value++;
-                console.log('buscarCotizaciones.value', buscarCotizaciones.value);
+                //console.log('buscarCotizaciones.value', buscarCotizaciones.value);
               })}
             />
           </div>
         </div> */}
-        {/* <button onClick$={() => console.log('parametros', parametrosGlobales)}>ver param</button> */}
+        {/* <button onClick$={() => //console.log('parametros', parametrosGlobales)}>ver param</button> */}
         {/*  BOTONES */}
-        <div style={{ marginBottom: '8px', paddingLeft: '2px' }}>
+        <div style={{ display: 'inline-flex', marginBottom: '8px', paddingLeft: '2px' }}>
           <ElButton
             name="ADD COTIZACION"
             title="Add una cotización"
+            style={{ cursor: 'pointer' }}
             onClick={$(async () => {
               //validar PERIODO
               if (periodo.idPeriodo === '') {
@@ -174,9 +175,9 @@ export default component$(() => {
                 idEmpresa: parametrosGlobales.idEmpresa,
               });
               elIgv = elIgv.data;
-              console.log('elIgv', elIgv);
+              //console.log('elIgv', elIgv);
               igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-              console.log('igv.value::', igv.value);
+              //console.log('igv.value::', igv.value);
 
               definicion_CTX_INDEX_COTIZACION.cC = [];
               definicion_CTX_INDEX_COTIZACION.mostrarPanelNewEditCotizacion = true;
@@ -190,10 +191,10 @@ export default component$(() => {
             registroTEXT={'periodo'}
             seleccione={'-- Seleccione periodo --'}
             onChange={$(() => {
-              // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+              // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
               const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
               const elIdx = elSelec.selectedIndex;
-              // console.log('?', elIdx, elSelec[elIdx].id);
+              // //console.log('?', elIdx, elSelec[elIdx].id);
               periodo.idPeriodo = elSelec[elIdx].id;
               if (periodo.idPeriodo === '') {
                 periodo.periodo = '';
@@ -201,8 +202,8 @@ export default component$(() => {
                 periodo.periodo = elSelec.value;
 
                 parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-                // console.log('💨💨💨💨💨💨first', periodo);
-                // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+                // //console.log('💨💨💨💨💨💨first', periodo);
+                // //console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
                 buscarCotizaciones.value++;
 
                 definicion_CTX_INDEX_COTIZACION.mostrarSpinner = true;
@@ -218,9 +219,9 @@ export default component$(() => {
             type="image"
             title="Buscar cotizaciones"
             alt="icono buscar"
-            height={16}
-            width={16}
-            style={{ marginLeft: '2px' }}
+            height={21.5}
+            width={21.5}
+            style={{ marginLeft: '4px' }}
             src={images.searchPLUS}
             onClick$={() => {
               if (periodo.idPeriodo === '') {
@@ -234,7 +235,7 @@ export default component$(() => {
           />
           {/* <button
             onClick$={() => {
-              console.log('button losPeriodosCargados.value', losPeriodosCargados.value);
+              //console.log('button losPeriodosCargados.value', losPeriodosCargados.value);
             }}
           >
             losPeriodosCargados.value

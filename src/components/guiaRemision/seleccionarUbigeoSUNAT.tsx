@@ -41,7 +41,7 @@ export default component$((props: { elUbi: any }) => {
     // mostrarSpinner.value = true;
     // ctx_new_edit_direccion_gr.mostrarSpinner = true;
     const Dep = await obtenerUbigeoSUNAT();
-    console.log('UBIGEOS', Dep.data);
+    //console.log('UBIGEOS', Dep.data);
     losDepartamentos.value = Dep.data;
     //ordenar
     losDepartamentos.value = losDepartamentos.value.sort((a: any, b: any) => {
@@ -64,9 +64,9 @@ export default component$((props: { elUbi: any }) => {
 
   //#region OBTENER PROVINCIAS
   const obtenerProvincias = $((idDepa: string) => {
-    console.log('idDepa', idDepa);
+    //console.log('idDepa', idDepa);
     const ppp: any = losDepartamentos.value.filter((depas: any) => depas._id === idDepa);
-    console.log('ppp', ppp);
+    //console.log('ppp', ppp);
     lasProvincias.value = ppp[0].provincias;
     //ordenar
     lasProvincias.value = lasProvincias.value.sort((a: any, b: any) => {
@@ -81,15 +81,15 @@ export default component$((props: { elUbi: any }) => {
       // names must be equal
       return 0;
     });
-    console.log('lasProvincias.value', lasProvincias.value);
+    //console.log('lasProvincias.value', lasProvincias.value);
   });
   //#endregion OBTENER PROVINCIAS
 
   //#region OBTENER DISTRITOS
   const obtenerDistritos = $((idProv: string) => {
-    console.log('idProv', idProv);
+    //console.log('idProv', idProv);
     const ddd: any = lasProvincias.value.filter((provs: any) => provs._id === idProv);
-    console.log('ddd', ddd);
+    //console.log('ddd', ddd);
     losDistritos.value = ddd[0].distritos;
     //ordenar
     losDistritos.value = losDistritos.value.sort((a: any, b: any) => {
@@ -104,7 +104,7 @@ export default component$((props: { elUbi: any }) => {
       // names must be equal
       return 0;
     });
-    console.log('losDistritos.value', losDistritos.value);
+    //console.log('losDistritos.value', losDistritos.value);
   });
   //#endregion OBTENER DISTRITOS
 
@@ -222,9 +222,9 @@ export default component$((props: { elUbi: any }) => {
                 } else {
                   definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.distrito = elSelec.value;
                   // obtenerUbigeo()
-                  console.log('definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito', definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito);
+                  //console.log('definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito', definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito);
                   const sele: any = losDistritos.value.find((kkk: any) => kkk._id === definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.idDistrito);
-                  console.log('sele', sele);
+                  //console.log('sele', sele);
                   definicion_CTX_SELECCIONAR_UBIGEO_SUNAT.ubigeo = sele.ubigeo;
                 }
               })}

@@ -62,7 +62,7 @@ export default component$((props: { contexto: string }) => {
     track(() => definicion_CTX_BUSCAR_CHOFER.selecciono_Persona);
     if (definicion_CTX_BUSCAR_CHOFER.selecciono_Persona) {
       //insertando/actualizando -> ACTIVO: TRUE
-      const chofer = await inUpChofer({
+      await inUpChofer({
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
         idPersona: definicion_CTX_BUSCAR_CHOFER.idPersona,
@@ -71,7 +71,7 @@ export default component$((props: { contexto: string }) => {
         usuario: parametrosGlobales.usuario,
       });
 
-      console.log('el chofer creado/actualizado', chofer);
+      //console.log('el chofer creado/actualizado', chofer);
       //buscando al CHOFER
       definicion_CTX_BUSCAR_CHOFER.buscarPor = 'DNI / RUC';
       localizarChoferes();
@@ -98,7 +98,7 @@ export default component$((props: { contexto: string }) => {
       <div
         style={{
           // width: props.ancho + 'px',
-          width: 'clamp(330px, 86%, 700px)',
+          width: 'clamp(330px, 86%, 680px)',
           // width: 'auto',
           padding: '2px',
         }}
@@ -118,7 +118,7 @@ export default component$((props: { contexto: string }) => {
             width={18}
             title="Cerrar el formulario"
             onClick={$(() => {
-              ctx.mostrarPanelBuscarChofer = false;
+              ctx.mostrarPanelBuscarConductor = false;
               ctx.selecciono_Chofer = false;
             })}
           />
@@ -126,7 +126,7 @@ export default component$((props: { contexto: string }) => {
         {/* FORMULARIO */}
         <div class="add-form">
           {/* TITULO */}
-          <h3 style={{ marginBottom: '10px' }}>Buscar chofer</h3>
+          <h3 style={{ marginBottom: '10px' }}>Buscar conductor</h3>
           {/* ZONA DE BUSQUEDA */}
           <div>
             {/* Buscar por */}
@@ -164,7 +164,7 @@ export default component$((props: { contexto: string }) => {
                   onKeyPress$={(e) => {
                     if (e.key === 'Enter') {
                       if (definicion_CTX_BUSCAR_CHOFER.conceptoABuscar === '') {
-                        console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?', definicion_CTX_BUSCAR_CHOFER.conceptoABuscar);
+                        //console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?', definicion_CTX_BUSCAR_CHOFER.conceptoABuscar);
                         alert('Ingrese un valor para su busqueda.{.{.');
                         document.getElementById('in_conceptoABuscar_CHOFER')?.focus();
                         return;
@@ -208,7 +208,7 @@ export default component$((props: { contexto: string }) => {
           </div>
           {definicion_CTX_BUSCAR_CHOFER.mostrarPanelBuscarPersona && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={true} seleccionar="persona" contexto="buscar_chofer" rol="persona" />
+              <BuscarPersona soloPersonasNaturales={true} seleccionar="persona" contexto="new_edit_guiaRemision" rol="chofer" />
             </div>
           )}
           {definicion_CTX_BUSCAR_CHOFER.mostrarPanelEditChofer && (

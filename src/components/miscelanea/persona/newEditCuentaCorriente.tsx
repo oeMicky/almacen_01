@@ -21,7 +21,7 @@ export default component$((props: { cuentaCorriSelec: any }) => {
 
     lasEntidadesFinancieras.value = enti.data;
 
-    console.log('lasEntidadesFinancieras.value :::: ', lasEntidadesFinancieras.value);
+    //console.log('lasEntidadesFinancieras.value :::: ', lasEntidadesFinancieras.value);
   });
   //#endregion INICIALIZAR
 
@@ -63,18 +63,18 @@ export default component$((props: { cuentaCorriSelec: any }) => {
           <div class="form-control">
             <div class="form-control form-agrupado">
               {/* {lasEntidadesFinancieras.value.map((enti: any) => {
-                return console.log('enti', enti);
+                return //console.log('enti', enti);
                 // return <option value={enti.entidadFinanciera}>{enti.entidadFinanciera}</option>;
               })} */}
               <select
                 id="se_banco_CUENTACORRIENTE"
                 style={{ width: '100%' }}
                 onChange$={(e) => {
-                  console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
+                  //console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                   props.cuentaCorriSelec.banco = (e.target as HTMLSelectElement).value;
                   // persona.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
                   // document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
-                  // console.log(
+                  // //console.log(
                   //   'soloPersonaNatural, cTDI, tDI',
                   //   props.soloPersonaNatural,
                   //   persona.codigoTipoDocumentoIdentidad,
@@ -101,11 +101,11 @@ export default component$((props: { cuentaCorriSelec: any }) => {
                 id="se_moneda_CUENTACORRIENTE"
                 style={{ width: '100%' }}
                 onChange$={(e) => {
-                  console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
+                  //console.log('🥓🥓🥓(e.target as HTMLSelectElement).value', (e.target as HTMLSelectElement).value);
                   props.cuentaCorriSelec.moneda = (e.target as HTMLSelectElement).value;
                   // persona.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
                   // document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
-                  // console.log(
+                  // //console.log(
                   //   'soloPersonaNatural, cTDI, tDI',
                   //   props.soloPersonaNatural,
                   //   persona.codigoTipoDocumentoIdentidad,
@@ -144,7 +144,7 @@ export default component$((props: { cuentaCorriSelec: any }) => {
                 // }}
                 // onFocusin$={(e) => {
                 //   // alert(`INGRESO... ${e}`);
-                //   console.log('INGRESO-', e);
+                //   //console.log('INGRESO-', e);
                 //   buscarPersonaEnAPIExterna();
                 // }}
               />
@@ -172,7 +172,7 @@ export default component$((props: { cuentaCorriSelec: any }) => {
                 // }}
                 // onFocusin$={(e) => {
                 //   // alert(`INGRESO... ${e}`);
-                //   console.log('INGRESO-', e);
+                //   //console.log('INGRESO-', e);
                 //   buscarPersonaEnAPIExterna();
                 // }}
               />

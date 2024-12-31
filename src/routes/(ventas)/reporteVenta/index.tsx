@@ -132,12 +132,12 @@ export default component$(() => {
                 type="image"
                 title="Buscar ventas"
                 alt="icon busqueda"
+                src={images.searchPLUS}
                 height={16}
                 width={16}
                 style={{ marginLeft: '2px' }}
-                src={images.searchPLUS}
                 onClick$={() => {
-                  // console.log('libro azuñ', parametrosBusqueda.fechaInicio, parametrosBusqueda.fechaFinal);
+                  // //console.log('libro azuñ', parametrosBusqueda.fechaInicio, parametrosBusqueda.fechaFinal);
                   if (parametrosBusqueda.fechaInicio > parametrosBusqueda.fechaFinal) {
                     alert('Verifique las fechas de busqueda');
                     document.getElementById('fechaDesde')?.focus();
@@ -265,7 +265,7 @@ export default component$(() => {
           height={16}
           width={16}
           style={{ marginLeft: '2px' }}
-          // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+          // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
           // onClick$={() => {
           //   if (parametrosBusqueda.idPeriodo === '') {
           //     alert('Debe seleccionar el periodo');
@@ -280,11 +280,7 @@ export default component$(() => {
       </div>
       {/* TABLA VENTAS */}
       <div id="ventassss" style={{ margin: '10px 0' }}>
-        {buscarReporteVentas.value > 0 ? (
-          <TablaReporteVenta buscarReporteVentas={buscarReporteVentas.value} parametrosBusqueda={parametrosBusqueda} />
-        ) : (
-          ''
-        )}
+        {buscarReporteVentas.value > 0 ? <TablaReporteVenta buscarReporteVentas={buscarReporteVentas.value} parametrosBusqueda={parametrosBusqueda} /> : ''}
       </div>
       {/* <br></br> */}
       {/* MOSTRAR SPINNER */}

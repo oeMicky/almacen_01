@@ -1,20 +1,20 @@
-import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { loadParametrosManufactura } from "~/apis/parametrosManufactura.api";
-import { images } from "~/assets";
-import NewEditCostoDirecto from "~/components/parametrosManufactura/newEditCostoDirecto";
-import NewEditManufacturaUnitaria from "~/components/parametrosManufactura/newEditManufacturaUnitaria";
+import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { loadParametrosManufactura } from '~/apis/parametrosManufactura.api';
+import { images } from '~/assets';
+import NewEditCostoDirecto from '~/components/parametrosManufactura/newEditCostoDirecto';
+import NewEditManufacturaUnitaria from '~/components/parametrosManufactura/newEditManufacturaUnitaria';
 // import TablaCostosDirectos from "~/components/parametrosManufactura/tablaCostosDirectos";
 // import TablaManufacturasUnitarias from "~/components/parametrosManufactura/tablaManufacturasUnitarias";
-import ElButton from "~/components/system/elButton";
+import ElButton from '~/components/system/elButton';
 
-import { parametrosGlobales } from "~/routes/login";
+import { parametrosGlobales } from '~/routes/login';
 
-export const CTX_INDEX_PARAMETROS_MANUFACTURA = createContextId<any>("__index_parametros_manufactura");
+export const CTX_INDEX_PARAMETROS_MANUFACTURA = createContextId<any>('__index_parametros_manufactura');
 
 export default component$(() => {
   //#region CTX_INDEX_PARAMETROS_MANUFACTURA
   const definicion_CTX_INDEX_PARAMETROS_MANUFACTURA = useStore<any>({
-    idParametrosManufactura: "",
+    idParametrosManufactura: '',
     totalCostosDirectos: 0,
 
     losCD: [],
@@ -54,11 +54,11 @@ export default component$(() => {
   const calcularSumatoriaCostosDirectos = $(() => {
     let summm = 0;
     definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.losCD.map((costo: any) => {
-      console.log("costo", costo);
-      console.log("costo.costoPEN", costo.costoPEN);
+      //console.log("costo", costo);
+      //console.log("costo.costoPEN", costo.costoPEN);
       summm = summm + parseFloat(costo.costoPEN.$numberDecimal);
     });
-    console.log("summm", summm);
+    //console.log("summm", summm);
     definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.totalCostosDirectos = summm;
   });
   //#endregion CALCULAR SUMATORIA DE COSTOS DIRECTOS
@@ -67,25 +67,25 @@ export default component$(() => {
   useTask$(async ({ track }) => {
     track(() => ini.value);
 
-    if (parametrosGlobales.idGrupoEmpresarial.trim() !== "" && parametrosGlobales.idEmpresa.trim() !== "") {
+    if (parametrosGlobales.idGrupoEmpresarial.trim() !== '' && parametrosGlobales.idEmpresa.trim() !== '') {
       const parametros: any = await loadParametrosManufactura({
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
       });
-      console.log("para Manufaurta TTT", parametros);
+      //console.log("para Manufaurta TTT", parametros);
       const cross: any = parametros.data;
-      console.log("para Manufaurta", cross);
+      //console.log("para Manufaurta", cross);
       definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.idParametrosManufactura = cross[0]._id.toString();
 
       if (cross.length === 1) {
-        console.log("para Manufaurta  parametros === 1", cross);
+        //console.log("para Manufaurta  parametros === 1", cross);
         definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.totalCostosDirectos = cross[0].totalCostosDirectos.$numberDecimal;
         definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.losCD = cross[0].costosDirectos;
         definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.lasMU = cross[0].manufacturasUnitarias;
 
         calcularSumatoriaCostosDirectos();
       } else {
-        console.log("para Manufaurta  parametros === 0");
+        //console.log("para Manufaurta  parametros === 0");
         definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.totalCostosDirectos = 0;
         definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.losCD = [];
         definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.lasMU = [];
@@ -120,22 +120,22 @@ export default component$(() => {
     <div class="container">
       {/*  IDENTIFICACION  */}
 
-      <div style={{ background: "#00778F" }}>
-        <label style={{ color: "#ccc", fontWeight: "bold", fontSize: "0.8rem", paddingLeft: "2px" }}>
+      <div style={{ background: '#00778F' }}>
+        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.8rem', paddingLeft: '2px' }}>
           {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
-      <h4 style={{ margin: "8px 0 4px 2px" }}>
+      <h4 style={{ margin: '8px 0 4px 2px' }}>
         <u>Parametros de manufactura</u>
       </h4>
-      <h4 style={{ fontSize: "0.8rem", margin: "8px 0 4px 2px" }}>
+      <h4 style={{ fontSize: '0.8rem', margin: '8px 0 4px 2px' }}>
         <u>Costos directos</u>
-        {/* <button onClick$={() => console.log("deficnicon", definicion_CTX_INDEX_PARAMETROS_MANUFACTURA)}>definicon</button> */}
+        {/* <button onClick$={() => //console.log("deficnicon", definicion_CTX_INDEX_PARAMETROS_MANUFACTURA)}>definicon</button> */}
       </h4>
-      <p style={{ fontSize: "0.7rem" }}>Costo de mano de obra, costo de energia, etc. No se incluyen los costos de suministros.</p>
-      <p style={{ fontSize: "0.7rem" }}>Total Costos Directos: {definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.totalCostosDirectos}</p>
+      <p style={{ fontSize: '0.7rem' }}>Costo de mano de obra, costo de energia, etc. No se incluyen los costos de suministros.</p>
+      <p style={{ fontSize: '0.7rem' }}>Total Costos Directos: {definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.totalCostosDirectos}</p>
       {/*  BOTON: COSTO DIRECTO */}
-      <div style={{ marginBottom: "8px", paddingLeft: "4px" }}>
+      <div style={{ marginBottom: '8px', paddingLeft: '4px' }}>
         <ElButton
           // class="btn"
           name="ADD COSTO DIRECTO"
@@ -148,7 +148,7 @@ export default component$(() => {
         />
         {/* <button
           onClick$={() => {
-            console.log("definicion_CTX_INDEX_PARAMETROS_MANUFACTURA", definicion_CTX_INDEX_PARAMETROS_MANUFACTURA);
+            //console.log("definicion_CTX_INDEX_PARAMETROS_MANUFACTURA", definicion_CTX_INDEX_PARAMETROS_MANUFACTURA);
           }}
         >
           para
@@ -167,7 +167,7 @@ export default component$(() => {
         <TablaCostosDirectos buscarCostosDirectos={buscarCostosDirectos.value} /> : ""}</div> */}
       {definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.losCD.length > 0 ? (
         <>
-          <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+          <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
             <thead>
               <tr>
                 <th>Costo directo</th>
@@ -186,12 +186,12 @@ export default component$(() => {
                     </td>
                     <td data-label="Costo PEN" class="comoNumero">
                       {costDir.costoPEN
-                        ? parseFloat(costDir.costoPEN.$numberDecimal).toLocaleString("en-PE", {
+                        ? parseFloat(costDir.costoPEN.$numberDecimal).toLocaleString('en-PE', {
                             // style: 'currency',
-                            currency: "PEN",
+                            currency: 'PEN',
                             minimumFractionDigits: 2,
                           })
-                        : ""}
+                        : ''}
                     </td>
                     <td data-label="Acciones" class="acciones">
                       <input
@@ -201,10 +201,10 @@ export default component$(() => {
                         title="Editar costo directo"
                         height={14}
                         width={14}
-                        style={{ marginRight: "8px" }}
-                        // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                        style={{ marginRight: '8px' }}
+                        // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                         onClick$={() => {
-                          console.log("costo directo", costDir);
+                          //console.log("costo directo", costDir);
                           definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.cD = costDir;
                           definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.mostrarPanelNewEditCostoDirecto = true;
                         }}
@@ -218,16 +218,16 @@ export default component$(() => {
         </>
       ) : (
         <div>
-          <i style={{ fontSize: "0.8rem" }}>No se encontraron costos directos</i>
+          <i style={{ fontSize: '0.8rem' }}>No se encontraron costos directos</i>
         </div>
       )}
       <br />
-      <h4 style={{ fontSize: "0.8rem", margin: "8px 0 4px 2px" }}>
+      <h4 style={{ fontSize: '0.8rem', margin: '8px 0 4px 2px' }}>
         <u>Manufacturas unitarias</u>
       </h4>
-      <p style={{ fontSize: "0.7rem" }}>Registrar las manufacturas unitarias que luego seran cargadas en las ordenes de producción.</p>
+      <p style={{ fontSize: '0.7rem' }}>Registrar las manufacturas unitarias que luego seran cargadas en las ordenes de producción.</p>
       {/*  BOTON: MANUFACTURA UNITARIA */}
-      <div style={{ marginBottom: "8px", paddingLeft: "4px" }}>
+      <div style={{ marginBottom: '8px', paddingLeft: '4px' }}>
         <ElButton
           // class="btn"
           name="ADD MANUFACTURA UNITARIA STANDARIZADA"
@@ -255,7 +255,7 @@ export default component$(() => {
       </div> */}
       {definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.lasMU.length > 0 ? (
         <>
-          <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+          <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
             <thead>
               <tr>
                 <th>Manufactura unitaria standarizada</th>
@@ -276,32 +276,32 @@ export default component$(() => {
                     </td>
                     <td data-label="Tiempo manufactura unitaria x hora" class="comoNumero">
                       {manuUnit.tiempoManufacturaUnitariaPorHora
-                        ? parseFloat(manuUnit.tiempoManufacturaUnitariaPorHora.$numberDecimal).toLocaleString("en-PE", {
+                        ? parseFloat(manuUnit.tiempoManufacturaUnitariaPorHora.$numberDecimal).toLocaleString('en-PE', {
                             // style: 'currency',
-                            currency: "PEN",
+                            currency: 'PEN',
                             minimumFractionDigits: 2,
                           })
-                        : ""}
+                        : ''}
                     </td>
                     <td data-label="Total costos directos PEN" class="comoNumero">
                       {manuUnit.totalCostosDirectos
-                        ? parseFloat(manuUnit.totalCostosDirectos.$numberDecimal).toLocaleString("en-PE", {
+                        ? parseFloat(manuUnit.totalCostosDirectos.$numberDecimal).toLocaleString('en-PE', {
                             // style: 'currency',
-                            currency: "PEN",
+                            currency: 'PEN',
                             minimumFractionDigits: 2,
                           })
-                        : ""}
+                        : ''}
                     </td>
                     <td data-label="Costo manufactura unitaria PEN" class="comoNumero">
                       {manuUnit.totalCostosDirectos
                         ? (
                             parseFloat(manuUnit.tiempoManufacturaUnitariaPorHora.$numberDecimal) * parseFloat(manuUnit.totalCostosDirectos.$numberDecimal)
-                          ).toLocaleString("en-PE", {
+                          ).toLocaleString('en-PE', {
                             // style: 'currency',
-                            currency: "PEN",
+                            currency: 'PEN',
                             minimumFractionDigits: 2,
                           })
-                        : ""}
+                        : ''}
                     </td>
                     <td data-label="Acciones" class="acciones">
                       <input
@@ -311,10 +311,10 @@ export default component$(() => {
                         title="Editar venta"
                         height={14}
                         width={14}
-                        style={{ marginRight: "8px" }}
-                        // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                        style={{ marginRight: '8px' }}
+                        // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                         onClick$={() => {
-                          console.log("ManufacturaUnitaria stadarizada", manuUnit);
+                          //console.log("ManufacturaUnitaria stadarizada", manuUnit);
                           definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.mU = manuUnit;
                           definicion_CTX_INDEX_PARAMETROS_MANUFACTURA.mostrarPanelNewEditManufacturaUnitaria = true;
                         }}
@@ -328,7 +328,7 @@ export default component$(() => {
         </>
       ) : (
         <div>
-          <i style={{ fontSize: "0.8rem" }}>No se encontraron manufacturas unitarias</i>
+          <i style={{ fontSize: '0.8rem' }}>No se encontraron manufacturas unitarias</i>
         </div>
       )}
       <br />

@@ -8,6 +8,9 @@ import type { IServicio } from '~/interfaces/iServicio';
 // import { CTX_INDEX_ORDEN_SERVICIO } from '~/routes/(almacen)/ordenServicio';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_SERVICIO } from './buscarServicio';
+import SelectTipoImpuesto from '~/components/system/selectTipoImpuesto';
+import SelectTipoAfectacionDelImpuesto from '~/components/system/selectTipoAfectacionDelImpuesto';
+import Spinner from '~/components/system/spinner';
 // import { CTX_SERVICIO } from './seleccionarServicio';
 
 export default component$((props: { serviSelecci: any; contexto: any }) => {
@@ -17,8 +20,8 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
     activo: props.serviSelecci.activo ? props.serviSelecci.activo : true,
     codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '',
     descripcion: props.serviSelecci.descripcion ? props.serviSelecci.descripcion : '',
-    precioPEN: props.serviSelecci.precioPEN ? props.serviSelecci.precioPEN : 0,
-    tipoImpuesto: props.serviSelecci.tipoImpuesto ? props.serviSelecci.tipoImpuesto : 'IGV',
+    precioUnitarioPEN: props.serviSelecci.precioUnitarioPEN ? props.serviSelecci.precioUnitarioPEN : 0,
+    tipoImpuesto: props.serviSelecci.tipoImpuesto ? props.serviSelecci.tipoImpuesto : '1000 IGV VAT',
     tipoAfectacionDelImpuesto: props.serviSelecci.tipoAfectacionDelImpuesto ? props.serviSelecci.tipoAfectacionDelImpuesto : '10',
 
     codigoContableVenta: props.serviSelecci.codigoContableVenta ? props.serviSelecci.codigoContableVenta : parametrosGlobales.codigoContableVentaServicio || '',
@@ -47,6 +50,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
   //#region INICIALIZACION
   const ini = useSignal(0);
   const codDes = useSignal('');
+  const mostrarSpinner = useSignal(false);
 
   useTask$(({ track }) => {
     track(() => ini.value);
@@ -67,7 +71,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
       (document.getElementById('in_descripcion_SERVICIO') as HTMLInputElement)?.focus();
       return;
     }
-    if (servicio.precioPEN === '') {
+    if (servicio.precioUnitarioPEN === '') {
       alert('Ingrese el preccio (PEN) del servicio.');
       (document.getElementById('in_precio_SERVICIO') as HTMLInputElement)?.focus();
       return;
@@ -90,9 +94,9 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
       }
     }
 
-    console.log('servicio', servicio);
-
-    const servicioGrabado = await inUpServicio({
+    //console.log('servicio', servicio);
+    mostrarSpinner.value = true;
+    await inUpServicio({
       idServicio: servicio._id,
 
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -101,7 +105,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
 
       codigo: servicio.codigo.toUpperCase(),
       descripcion: servicio.descripcion.toUpperCase(),
-      precioPEN: servicio.precioPEN,
+      precioUnitarioPEN: servicio.precioUnitarioPEN,
       unidad: 'NIU',
 
       tipoImpuesto: servicio.tipoImpuesto,
@@ -112,8 +116,8 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
 
       usuario: parametrosGlobales.usuario,
     });
-    console.log('servicioGrabado', servicioGrabado);
-
+    //console.log('servicioGrabado', servicioGrabado);
+    mostrarSpinner.value = false;
     // ctx_docs_venta.mostrarAddNewEditServicio = false;
     ctx_buscar_servicio.grabo_Servicio = true;
 
@@ -124,7 +128,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 700px)',
+        width: 'clamp(386px, 86%, 540px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -132,6 +136,26 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('servicio ', servicio.tipoImpuesto);
+          })}
+        />
+        <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('servicio ', servicio);
+          })}
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -142,14 +166,14 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
             ctx_buscar_servicio.mostrarPanelNewEditServicio = false;
           })}
         />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log(
+            //console.log(
               'parametrosGlobales.codigoContableVentaServicio ',
               parametrosGlobales.codigoContableVentaServicio,
               parametrosGlobales.descripcionContableVentaServicio
@@ -163,9 +187,9 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('servicio.codigoContableVenta  ', servicio.codigoContableVenta, servicio.descripcionContableVenta);
+            //console.log('servicio.codigoContableVenta  ', servicio.codigoContableVenta, servicio.descripcionContableVenta);
           })}
-        />
+        /> */}
       </div>
       {/* TITULO */}
       <h3>Registro de servicio</h3>
@@ -220,14 +244,14 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
                 style={{ width: '100%' }}
                 type="number"
                 placeholder="Add precio (PEN)"
-                value={servicio.precioPEN}
+                value={servicio.precioUnitarioPEN}
                 onChange$={(e) => {
-                  servicio.precioPEN = parseFloat((e.target as HTMLInputElement).value.trim());
+                  servicio.precioUnitarioPEN = parseFloat((e.target as HTMLInputElement).value.trim());
                 }}
                 // onChange={(e) => setPrecioPEN(e.target.value.trim())}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    (document.getElementById('btn_registrar_SERVICIO') as HTMLInputElement)?.focus();
+                    (document.getElementById('se_tipoImpuesto_SERVICIO') as HTMLInputElement)?.focus();
                   }
                 }}
               />
@@ -235,47 +259,42 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
           </div>
           {/* para la VENTA */}
           <fieldset>
-            {/* TIPO IMPUESTO */}
+            {/* TIPO IMPUESTO 
+            //['1000', 'IGV', 'VAT']  ['1016', 'IVAP', 'VAT']  ['2000', 'ISC', 'EXC']  ['7152', 'ICBPER', 'OTH']  ['9995', 'EXP', 'FRE']
+            //['9996', 'GRA', 'FRE']  ['9997', 'EXO', 'VAT']  ['9998', 'INA', 'FRE']  ['9999', 'OTROS', 'OTH']
+            */}
             <div class="form-control">
-              <div class="form-control ">
-                <select
-                  id="se_tipoImpuesto_SERVICIO"
-                  style={{ width: '288px' }}
-                  onChange$={(e) => {
+              <div class="form-control form-agrupado">
+                <SelectTipoImpuesto
+                  elId="se_tipoImpuesto_SERVICIO"
+                  tipoImpuesto={servicio.tipoImpuesto}
+                  onChange={$((e: any) => {
                     servicio.tipoImpuesto = (e.target as HTMLSelectElement).value;
-                  }}
-                >
-                  <option value="IGV" selected={servicio.tipoImpuesto === 'IGV'}>
-                    IGV
-                  </option>
-                  <option value="ISC" selected={servicio.tipoImpuesto === 'ISC'}>
-                    ISC
-                  </option>
-                  <option value="IVAP" selected={servicio.tipoImpuesto === 'IVAP'}>
-                    IVAP
-                  </option>
-                  <option value="exoneradas" selected={servicio.tipoImpuesto === 'exoneradas'}>
-                    exoneradas
-                  </option>
-                  <option value="exportación" selected={servicio.tipoImpuesto === 'exportación'}>
-                    exportación
-                  </option>
-                  <option value="gratuitas" selected={servicio.tipoImpuesto === 'gratuitas'}>
-                    gratuitas
-                  </option>
-                  <option value="inafecta" selected={servicio.tipoImpuesto === 'inafecta'}>
-                    inafecta
-                  </option>
-                  <option value="otrosTributos" selected={servicio.tipoImpuesto === 'otrosTributos'}>
-                    otrosTributos
-                  </option>
-                </select>
+                  })}
+                  onKeyPress={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('se_tipoAfectacionDelImpuesto_SERVICIO') as HTMLInputElement)?.focus();
+                    }
+                  })}
+                />
               </div>
             </div>
-            {/* TIPO DE AFECTACION DEL IMPUESTO */}
+            {/* TIPO DE AFECTACION DEL IMPUESTO: 10, 11, 12, 13, 14, 15, 16, 17, 20, 21, 30, 31, 32, 33, 34, 35, 36, 37, 40 */}
             <div class="form-control">
-              <div class="form-control ">
-                <select
+              <div class="form-control form-agrupado ">
+                <SelectTipoAfectacionDelImpuesto
+                  elId="se_tipoAfectacionDelImpuesto_SERVICIO"
+                  tipoAfectacionDelImpuesto={servicio.tipoAfectacionDelImpuesto}
+                  onChange={$((e: any) => {
+                    servicio.tipoAfectacionDelImpuesto = (e.target as HTMLSelectElement).value;
+                  })}
+                  onKeyPress={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('ima_BuscarCuentaContable_SERVICIO') as HTMLInputElement)?.focus();
+                    }
+                  })}
+                />
+                {/* <select
                   id="se_tipoAfectacionDelImpuesto_SERVICIO"
                   style={{ width: '288px' }}
                   onChange$={(e) => {
@@ -339,7 +358,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
                   <option value="40" selected={servicio.tipoAfectacionDelImpuesto === '40'}>
                     Exportación de Bienes o Servicios
                   </option>
-                </select>
+                </select> */}
               </div>
             </div>
           </fieldset>
@@ -355,7 +374,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
                   placeholder="Add codigo - descripción cuenta contable para venta"
                   value={codDes.value}
                   // onChange$={(e) => {
-                  //   servicio.precioPEN = parseFloat((e.target as HTMLInputElement).value.trim());
+                  //   servicio.precioUnitarioPEN = parseFloat((e.target as HTMLInputElement).value.trim());
                   // }}
                   // onChange={(e) => setPrecioPEN(e.target.value.trim())}
                   onKeyPress$={(e) => {
@@ -383,6 +402,7 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
         <input
           id="btn_registrar_SERVICIO"
           type="button"
+          style={{ cursor: 'pointer', height: '40px' }}
           value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           // value={botonGrabar === '' ? 'Grabar' : `${botonGrabar}`}
           class="btn-centro"
@@ -390,6 +410,12 @@ export default component$((props: { serviSelecci: any; contexto: any }) => {
           //   onClick={(e) => onSubmit(e)}
         />
       </div>
+      {/* MOSTRAR SPINNER */}
+      {mostrarSpinner.value && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 });

@@ -10,7 +10,7 @@ import { inUpUnidadTransporte } from '~/apis/unidadTransporte.api';
 
 export const CTX_BUSCAR_UNIDAD_TRANSPORTE = createContextId<any>('buscar_unidad_transporte');
 
-export default component$((props: { contexto: string }) => {
+export default component$((props: { contexto: string; tipo: string }) => {
   //#region DEFINICION CTX_BUSCAR_UNIDAD_TRASNPORTE
   const definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE = useStore({
     uT: [],
@@ -52,7 +52,7 @@ export default component$((props: { contexto: string }) => {
     track(() => definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.selecciono_Vehiculo);
     if (definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.selecciono_Vehiculo) {
       //insertando/actualizando -> ACTIVO: TRUE
-      const uniTransp = await inUpUnidadTransporte({
+      await inUpUnidadTransporte({
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
         idVehiculo: definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.idVehiculo,
@@ -61,7 +61,7 @@ export default component$((props: { contexto: string }) => {
         usuario: parametrosGlobales.usuario,
       });
 
-      console.log('la uniTransp creado/actualizado', uniTransp);
+      //console.log('la uniTransp creado/actualizado', uniTransp);
       //buscando al CHOFER
       definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.buscarPor = 'Placa';
       localizarUnidadesTransporte();
@@ -107,8 +107,13 @@ export default component$((props: { contexto: string }) => {
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx.mostrarPanelBuscarUnidadTransporte = false;
-            ctx.selecciono_Chofer = false;
+            if (props.tipo === 'principal') {
+              ctx.mostrarPanelBuscarUnidadTransportePrincipal = false;
+            } else {
+              ctx.mostrarPanelBuscarUnidadTransporteSecundario = false;
+            }
+
+            ctx.selecciono_Conductor = false;
           })}
         />
       </div>
@@ -153,7 +158,7 @@ export default component$((props: { contexto: string }) => {
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
                     if (definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar === '') {
-                      console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?', definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar);
+                      //console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?', definicion_CTX_BUSCAR_UNIDAD_TRANSPORTE.conceptoABuscar);
                       alert('Ingrese un valor para su busqueda.{.{.');
                       document.getElementById('in_conceptoABuscar_CHOFER')?.focus();
                       return;
@@ -207,7 +212,11 @@ export default component$((props: { contexto: string }) => {
         )}
         {/* TABLA DE CHOFERES HALLADOS*/}
         <div class="form-control">
-          {buscarUnidadTransporte.value > 0 ? <TablaUnidadesTransporte buscarUnidadTransporte={buscarUnidadTransporte.value} contexto={props.contexto} /> : ''}
+          {buscarUnidadTransporte.value > 0 ? (
+            <TablaUnidadesTransporte buscarUnidadTransporte={buscarUnidadTransporte.value} contexto={props.contexto} tipo={props.tipo} />
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </div>

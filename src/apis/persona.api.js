@@ -2,8 +2,8 @@ const API = import.meta.env.VITE_URL + '/api/persona';
 // const API = 'https://backendalmacen-production.up.railway.app/api/persona';
 
 export const inUpPersona = async (parametros) => {
-  // console.log('//////api////////////******************inser/update en inUpPersona');
-  // console.log('parametros inUpPersona->', parametros);
+  // //console.log('//////api////////////******************inser/update en inUpPersona');
+  // //console.log('parametros inUpPersona->', parametros);
   const res = await fetch(API + '/inUpPersona', {
     method: 'POST',
     headers: {
@@ -15,8 +15,8 @@ export const inUpPersona = async (parametros) => {
 };
 
 export const getPersonaPorId_RazonSocialNombre = async (parametros) => {
-  // console.log('//////api////////////****************** en getPersonaPorId_RazonSocialNombre');
-  // console.log('parametros getPersonaPorIdRazonSocialNombre', parametros);
+  // //console.log('//////api////////////****************** en getPersonaPorId_RazonSocialNombre');
+  // //console.log('parametros getPersonaPorIdRazonSocialNombre', parametros);
   const res = await fetch(API + '/obtenerPersonaPorId_RazonSocialNombre', {
     method: 'POST',
     headers: {
@@ -28,8 +28,8 @@ export const getPersonaPorId_RazonSocialNombre = async (parametros) => {
 };
 
 export const getPersonaPorDniRuc = async (parametros) => {
-  // console.log('//////api////////////****************** en obtenerPersonasPorDniRuc');
-  // console.log('parametros obtenerPersonasPorDniRuc', parametros);
+  // //console.log('//////api////////////****************** en obtenerPersonasPorDniRuc');
+  // //console.log('parametros obtenerPersonasPorDniRuc', parametros);
   const res = await fetch(API + '/obtenerPersonasPorDniRuc', {
     method: 'POST',
     headers: {

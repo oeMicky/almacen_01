@@ -55,11 +55,11 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
   const losDespachos = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // track(() => props.buscarOrdenesProduccion.valueOf());
     track(() => ini.value);
-    console.log('parametrosBusqueda losDespachos ini.value', ini.value);
+    //console.log('parametrosBusqueda losDespachos ini.value', ini.value);
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda losDespachos requisiones', props.opSeleccionada._id);
+    //console.log('parametrosBusqueda losDespachos requisiones', props.opSeleccionada._id);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/ordenProduccion/getDespachoRequisicionesOP', {
       method: 'POST',
@@ -93,7 +93,7 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('opSeleccionada', props.opSeleccionada);
+            //console.log('opSeleccionada', props.opSeleccionada);
           })}
         />
         <ImgButton
@@ -103,7 +103,7 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('misDespachos', misDespachos.value);
+            //console.log('misDespachos', misDespachos.value);
           })}
         />{' '}
         <ImgButton
@@ -137,15 +137,15 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
           <Resource
             value={losDespachos}
             onPending={() => {
-              console.log('onPending 🍉🍉🍉🍉');
+              //console.log('onPending 🍉🍉🍉🍉');
               return <div>Cargando...</div>;
             }}
             onRejected={() => {
-              console.log('onRejected 🍍🍍🍍🍍');
+              //console.log('onRejected 🍍🍍🍍🍍');
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(ordenesProduccion) => {
-              console.log('onResolved ordenesProduccion 🍓🍓🍓🍓', ordenesProduccion);
+              //console.log('onResolved ordenesProduccion 🍓🍓🍓🍓', ordenesProduccion);
               const { data } = ordenesProduccion; //{ status, data, message }
               // const misDespachos: IOrdenProduccion_DespachoRequisicion[] = data;
               misDespachos.value = data;
@@ -218,7 +218,7 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
                                     value={despachoLocali.aDespachar}
                                     onChange$={(e) => {
                                       const a_Despachar = parseFloat((e.target as HTMLInputElement).value);
-                                      console.log('a_Despachar', a_Despachar);
+                                      //console.log('a_Despachar', a_Despachar);
                                       despachoLocali.aDespachar = a_Despachar;
                                     }}
                                     // onFocusin$={(e) => {
@@ -250,9 +250,9 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
           value="Despachar"
           class="btn-centro"
           onClick$={() => {
-            console.log('losDespachos', losDespachos);
-            console.log('mis despachos', misDespachos.value);
-            console.log('props.opSeleccionada', props.opSeleccionada);
+            //console.log('losDespachos', losDespachos);
+            //console.log('mis despachos', misDespachos.value);
+            //console.log('props.opSeleccionada', props.opSeleccionada);
 
             //VERIFICAR montos a DESPACHAR
             let todoCorrecto = true;
@@ -294,14 +294,14 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
                 stockEQUIVALENTE = parseFloat(despachoLocali.stock.$numberDecimal) / parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
               }
 
-              console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
+              //console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
               if (aDespa > stockEQUIVALENTE) {
                 alert(`ATENCIÓN: Desea despachar mayor cantidad ( ${aDespa} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`);
                 todoCorrecto = false;
                 break;
               }
 
-              console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
+              //console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
               if (despachado - reing + aDespa > canti) {
                 alert(
                   `ATENCIÓN: Se intenta despachar una cantidad mayor a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( Despachado-Reingresada = ${
@@ -315,7 +315,7 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
             if (!todoCorrecto) {
               return;
             }
-            console.log('paso VERIFICACION de CANTIDADES A DESPACHAR');
+            //console.log('paso VERIFICACION de CANTIDADES A DESPACHAR');
             //** copiar los datos al panel de EGRESO */
 
             //ID DE LA ORDEN PRODUCCION
@@ -349,11 +349,11 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
             //borra todos los elementos del array
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
-            console.log('🚍🚍🚍🚍🚍numeroMercaderias', numeroMercaderias);
+            //console.log('🚍🚍🚍🚍🚍numeroMercaderias', numeroMercaderias);
             for (const despachoLocali of misDespachos.value) {
               const despaEquiva = despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar;
-              console.log('🚍🚍🚍🚍🚍despaEquiva', despaEquiva);
-              console.log('despachoLocali', despachoLocali);
+              //console.log('🚍🚍🚍🚍🚍despaEquiva', despaEquiva);
+              //console.log('despachoLocali', despachoLocali);
               if (despaEquiva > 0) {
                 // let despa = 0;
 
@@ -382,7 +382,7 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
                   subPEN: despaEquiva * despachoLocali.costoUnitarioMovil.$numberDecimal,
                   subEquivalenciaPEN: despaEquiva * despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
 
-                  precioUSD: 0,
+                  precioUnitarioUSD: 0,
                   ventaUSD: 0,
 
                   tipoEquivalencia: despachoLocali.tipoEquivalencia,

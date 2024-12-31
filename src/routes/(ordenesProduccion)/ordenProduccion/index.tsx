@@ -1,20 +1,20 @@
-import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik"; //
+import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik'; //
 
-import { getIgvVenta } from "~/apis/venta.api";
-import { images } from "~/assets";
-import NewEditOrdenProduccion from "~/components/ordenProduccion/newEditOrdenProduccion";
-import TablaOrdenesProduccion from "~/components/ordenProduccion/tablaOrdenesProduccion";
+import { getIgvVenta } from '~/apis/venta.api';
+import { images } from '~/assets';
+import NewEditOrdenProduccion from '~/components/ordenProduccion/newEditOrdenProduccion';
+import TablaOrdenesProduccion from '~/components/ordenProduccion/tablaOrdenesProduccion';
 
 // import NewEditOrdenServicio from "~/components/ordenServicio/newEditOrdenServicio";
 // import TablaOrdenesServicio from "~/components/ordenServicio/tablaOrdenesServicio";
-import ElButton from "~/components/system/elButton";
-import ElSelect from "~/components/system/elSelect";
+import ElButton from '~/components/system/elButton';
+import ElSelect from '~/components/system/elSelect';
 
-import Spinner from "~/components/system/spinner";
+import Spinner from '~/components/system/spinner';
 
-import { parametrosGlobales } from "~/routes/login";
+import { parametrosGlobales } from '~/routes/login';
 
-export const CTX_INDEX_ORDEN_PRODUCCION = createContextId<any>("__index_orden_produccion");
+export const CTX_INDEX_ORDEN_PRODUCCION = createContextId<any>('__index_orden_produccion');
 
 export default component$(() => {
   //#region CTX_INDEX_ORDEN_PRODUCCION
@@ -33,13 +33,13 @@ export default component$(() => {
   const igv = useSignal(0);
 
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
-  const periodo = useStore({ idPeriodo: "", periodo: "" });
+  const periodo = useStore({ idPeriodo: '', periodo: '' });
 
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
-    idPeriodo: "",
+    idPeriodo: '',
   });
 
   //#endregion INICIALIZACION
@@ -59,17 +59,17 @@ export default component$(() => {
     <div class="container">
       {/*  IDENTIFICACION  */}
 
-      <div style={{ background: "#00778F" }}>
-        <label style={{ color: "#ccc", fontWeight: "bold", fontSize: "0.8rem", paddingLeft: "2px" }}>
+      <div style={{ background: '#00778F' }}>
+        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.8rem', paddingLeft: '2px' }}>
           {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
-      <h4 style={{ margin: "8px 0 4px 2px" }}>
+      <h4 style={{ margin: '8px 0 4px 2px' }}>
         <u>Ordenes de Producción</u>
       </h4>
 
       {/*  BOTONES */}
-      <div style={{ marginBottom: "10px", paddingLeft: "3px" }}>
+      <div style={{ marginBottom: '10px', paddingLeft: '3px' }}>
         <ElButton
           // class="btn"
           name="ADD ORDEN DE PRODUCCIÓN"
@@ -77,52 +77,52 @@ export default component$(() => {
           title="Add una orden de producción"
           onClick={$(async () => {
             //validar PERIODO
-            if (periodo.idPeriodo === "") {
-              alert("Seleccione el periodo.");
-              document.getElementById("se_periodo")?.focus();
+            if (periodo.idPeriodo === '') {
+              alert('Seleccione el periodo.');
+              document.getElementById('se_periodo')?.focus();
               ini.value++;
               return;
             }
             //
             let elIgv = await getIgvVenta(parametrosGlobales);
             elIgv = elIgv.data;
-            console.log("elIgv", elIgv);
+            //console.log("elIgv", elIgv);
             igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-            // console.log('igv.value::', igv.value);
+            // //console.log('igv.value::', igv.value);
             definicion_CTX_INDEX_ORDEN_PRODUCCION.oP = [];
             definicion_CTX_INDEX_ORDEN_PRODUCCION.mostrarPanelNewEditOrdenProduccion = true;
           })}
         />
         <ElSelect
-          id={"se_periodo"}
+          id={'se_periodo'}
           // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
-          estilos={{ width: "168px", marginLeft: "5px" }}
+          estilos={{ width: '168px', marginLeft: '5px' }}
           registros={losPeriodosCargados.value}
-          registroID={"_id"}
-          registroTEXT={"periodo"}
-          seleccione={"-- Seleccione periodo --"}
+          registroID={'_id'}
+          registroTEXT={'periodo'}
+          seleccione={'-- Seleccione periodo --'}
           onChange={$(() => {
-            // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-            const elSelec = document.getElementById("se_periodo") as HTMLSelectElement;
+            // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+            const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
             const elIdx = elSelec.selectedIndex;
-            // console.log('?', elIdx, elSelec[elIdx].id);
+            // //console.log('?', elIdx, elSelec[elIdx].id);
             periodo.idPeriodo = elSelec[elIdx].id;
-            if (periodo.idPeriodo === "") {
-              periodo.periodo = "";
+            if (periodo.idPeriodo === '') {
+              periodo.periodo = '';
             } else {
               periodo.periodo = elSelec.value;
               // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
               parametrosBusqueda.idPeriodo = periodo.idPeriodo;
-              // console.log('💨💨💨💨💨💨first', periodo);
-              // console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
+              // //console.log('💨💨💨💨💨💨first', periodo);
+              // //console.log('💨💨💨💨💨💨first', periodo.idPeriodo);
               buscarOrdenesProduccion.value++;
 
               definicion_CTX_INDEX_ORDEN_PRODUCCION.mostrarSpinner = true;
             }
           })}
           onKeyPress={$((e: any) => {
-            if (e.key === "Enter") {
-              (document.getElementById("in_Fecha_MICE") as HTMLSelectElement)?.focus();
+            if (e.key === 'Enter') {
+              (document.getElementById('in_Fecha_MICE') as HTMLSelectElement)?.focus();
             }
           })}
         />
@@ -132,12 +132,12 @@ export default component$(() => {
           alt="icono buscar"
           height={16}
           width={16}
-          style={{ marginLeft: "2px" }}
+          style={{ marginLeft: '2px' }}
           src={images.searchPLUS}
           onClick$={() => {
-            if (periodo.idPeriodo === "") {
-              alert("Seleccione un periodo");
-              document.getElementById("se_periodo")?.focus();
+            if (periodo.idPeriodo === '') {
+              alert('Seleccione un periodo');
+              document.getElementById('se_periodo')?.focus();
               return;
             }
             buscarOrdenesProduccion.value++;
@@ -152,16 +152,16 @@ export default component$(() => {
         )}
       </div>
       {/* TABLA ORDENES DE PRODUCCION */}
-      <div style={{ margin: "10px 0" }}>
+      <div style={{ margin: '10px 0' }}>
         {buscarOrdenesProduccion.value > 0 ? (
           <TablaOrdenesProduccion buscarOrdenesProduccion={buscarOrdenesProduccion.value} parametrosBusqueda={parametrosBusqueda} />
         ) : (
-          ""
+          ''
         )}
       </div>
       {/* MOSTRAR SPINNER */}
       {definicion_CTX_INDEX_ORDEN_PRODUCCION.mostrarSpinner && (
-        <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>
       )}

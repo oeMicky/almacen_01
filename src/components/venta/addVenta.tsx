@@ -13,7 +13,7 @@ import {
   // getIgvVenta,
 } from '~/apis/venta.api';
 //
-import { hoy, elIdAuxiliar, cerosALaIzquierda, redondeo2Decimales, formatoDDMMYYYY_PEN, menosXdiasHoy, redondeo6Decimales } from '~/functions/comunes';
+import { hoy, elIdAuxiliar, cerosALaIzquierda, redondeo2Decimales, formatoDDMMYYYY_PEN, menosXdiasHoy, redondeo6Decimales, literal } from '~/functions/comunes';
 // import SeleccionarPersona from '../miscelanea/persona/seleccionarPersona';
 import { CTX_INDEX_VENTA } from '~/routes/(ventas)/venta';
 import { getTipoCambio } from '~/apis/apisExternas.api';
@@ -33,6 +33,10 @@ import BuscarServicio from '../miscelanea/servicio/buscarServicio';
 import BorrarItemVenta from './borrarItemVenta';
 import EditarImpuesto from './editarImpuesto';
 // import verificarObservación from '../guiaRemision/verificarObservacion';
+import { getPorcentajesUtilidad } from '~/apis/grupoEmpresarial.api';
+import EditarPersonaDirecta from '../miscelanea/persona/editarPersonaDirecta';
+import { CTX_INDEX_NOTA_VENTA } from '~/routes/(ventas)/notaVenta';
+// import EditarPersona from '../miscelanea/persona/editarPersona';
 
 export const CTX_CLIENTE_VENTA = createContextId<IPersonaVenta>('cliente');
 export const CTX_F_B_NC_ND = createContextId<IVenta>('addVenta');
@@ -45,7 +49,7 @@ export const CTX_ADD_VENTA = createContextId<any>('add_venta');
 //   return false;
 // }
 
-export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnterior?: any }) => {
+export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnterior?: any; contexto: string; notaDeVenta: any }) => {
   useStyles$(styleTabla);
 
   //#region DEFINICION CTX_ADD_VENTA
@@ -61,6 +65,10 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
     mostrarPanelBuscarPersona: false,
     mostrarPanelBuscarServicio: false,
     mostrarPanelBuscarMercaderiaOUT: false,
+
+    mostrarPanelEditPersonaDirecta: false,
+    grabo_PersonaDirecta: false,
+    // personaDirectaEDITADA: { _id: '', razonSocialNombre: '', direccion: '', email: '', telefono: '', cuentasCorrientes: [] },
 
     mostrarAdjuntarOS: false,
     mostrarAdjuntarCotizacion: false,
@@ -81,12 +89,27 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
       idSucursal: parametrosGlobales.idSucursal,
+      sucursal: parametrosGlobales.sucursal,
+      sucursalDireccion: parametrosGlobales.sucursalDireccion,
       idPeriodo: props.addPeriodo.idPeriodo,
       periodo: props.addPeriodo.periodo,
 
       ruc: parametrosGlobales.RUC,
       empresa: parametrosGlobales.RazonSocial,
       direccion: parametrosGlobales.Direccion,
+      departamento: typeof parametrosGlobales.departamento === 'undefined' ? '' : parametrosGlobales.departamento,
+      provincia: typeof parametrosGlobales.provincia === 'undefined' ? '' : parametrosGlobales.provincia,
+      distrito: typeof parametrosGlobales.distrito === 'undefined' ? '' : parametrosGlobales.distrito,
+      ubigeo: typeof parametrosGlobales.ubigeo === 'undefined' ? '' : parametrosGlobales.ubigeo,
+
+      facturacionElectronica: typeof parametrosGlobales.facturacionElectronica === 'undefined' ? false : parametrosGlobales.facturacionElectronica,
+      facturacionElectronicaAutomatica:
+        typeof parametrosGlobales.facturacionElectronicaAutomatica === 'undefined' ? false : parametrosGlobales.facturacionElectronicaAutomatica,
+      facturaJSON: typeof parametrosGlobales.facturaJSON === 'undefined' ? false : parametrosGlobales.facturaJSON,
+      facturaXML: typeof parametrosGlobales.facturaXML === 'undefined' ? false : parametrosGlobales.facturaXML,
+
+      codigoTipoOperacion: '',
+      tipoOperacion: '',
 
       codigoTipoComprobantePago: '',
       tipoComprobantePago: '',
@@ -96,12 +119,18 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       fecha: hoy(), //'', //
       hora: '',
 
+      idNotaVenta: '',
+      serieNotaVenta: '',
+      numeroNotaVenta: 0,
+
       clienteVentasVarias: false,
+      estrellasCliente: 0,
       idCliente: '',
       codigoTipoDocumentoIdentidad: '6',
       tipoDocumentoIdentidad: 'RUC',
       numeroIdentidad: '',
       razonSocialNombre: '',
+      direccionCliente: '',
       email: '',
       telefono: '',
       actualizarEmailCliente: false,
@@ -131,9 +160,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       idOrdenServicio: '',
       serieOrdenServicio: '',
       numeroOrdenServicio: 0,
+      soloServicios: false,
+      soloSuministros: false,
 
       observacion: '',
 
+      impresionTipoFacturaBoleta: false,
       itemsVenta: [],
 
       baseImponiblePEN: 0,
@@ -154,13 +186,15 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       otrosUSD: 0,
       totalUSD: 0,
 
+      lite: '',
+
+      referenciaCodigo: '', //Codigo del motivo
+      referenciaDescripcion: '', //Descripción del motivo
       referenciaFecha: '',
-      referenciaTipo: '',
+      referenciaTipo: '', //TCP
       referenciaSerie: '',
       referenciaNumero: 0,
 
-      facturacionElectronica: parametrosGlobales.facturacionElectronica,
-      facturacionElectronicaAutomatica: parametrosGlobales.facturacionElectronicaAutomatica,
       verificarObservacionVenta: parametrosGlobales.verificarObservacionVenta,
 
       json: '',
@@ -202,6 +236,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
     paterno: '',
     materno: '',
     activo: true,
+    direccion: '',
     email: '',
     telefono: '',
   });
@@ -209,12 +244,24 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
   //#endregion DEFINICION CTX_CLIENTE_VENTA
 
   //#region CONTEXTOS
-  const ctx_index_venta = useContext(CTX_INDEX_VENTA);
+  let ctx_index_venta: any = [];
+  switch (props.contexto) {
+    case 'venta':
+      ctx_index_venta = useContext(CTX_INDEX_VENTA);
+      break;
+    case 'nota_venta':
+      ctx_index_venta = useContext(CTX_INDEX_NOTA_VENTA);
+
+      break;
+  }
+
   // ctx_index_venta.mostrarSpinner = false;
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
   const ini = useSignal(0);
+  const losPorcentajesUtilidad = useSignal([]);
+  const ESTRELLA_MAX = useSignal(0);
   const tipoDocumento = useSignal('01'); //01-FACTURA  //03-BOLETA
   // const idSerieDocumento = useSignal('');
   const serieDocumento = useSignal('');
@@ -266,25 +313,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
 
   let sumaTOTAL = 0;
 
-  // let arregloASIENTO = [];
-
-  // let subTOTAL = 0;
-  // let igvTOTAL = 0;
-
-  // const item = useStore<IItemVenta>({
-  //   idAuxiliar: 0, //parseInt(elIdAuxiliar()),
-  //   item: 0,
-  //   codigo: '',
-  //   descripcionEquivalencia: '',
-  //   cantidad: 0,
-  //   unidadEquivalencia: '',
-  //   costo: 0,
-  //   precioPEN: 0,
-  //   ventaPEN: 0,
-  //   precioUSD: 0,
-  //   ventaUSD: 0,
-  // });
-
   const cuota = useStore<ICuotaCreditoVenta>({
     idAuxiliar: 0,
     fechaCuota: hoy(),
@@ -298,6 +326,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
     tipoImpuesto: '',
     tipoAfectacionDelImpuesto: '',
   });
+
   const borrarItemVenta = useStore({
     idAuxiliar: '',
     item: '',
@@ -305,22 +334,63 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
     descripcion: '',
   });
 
+  //#region OBTENER PORCENTAJES DE UTILIDAD
+  const obtenerESTRELLA_MAXIMA = $(async () => {
+    const obtPorcentajes = await getPorcentajesUtilidad({
+      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+      idEmpresa: parametrosGlobales.idEmpresa,
+    });
+
+    losPorcentajesUtilidad.value = obtPorcentajes.data;
+
+    losPorcentajesUtilidad.value.map((elem: any) => {
+      if (ESTRELLA_MAX.value < elem.estrellas) {
+        ESTRELLA_MAX.value = elem.estrellas;
+      }
+    });
+    //console.log('losPorcentajesUtilidad.value', losPorcentajesUtilidad.value);
+  });
+  //#endregion OBTENER PORCENTAJES DE UTILIDAD
+
   useTask$(async ({ track }) => {
     track(() => ini.value);
 
     if (ini.value === 0) {
+      obtenerESTRELLA_MAXIMA();
       ctx_index_venta.mostrarSpinner = false;
+
+      if (props.contexto === 'nota_venta') {
+        definicion_CTX_F_B_NC_ND.idNotaVenta = props.notaDeVenta.idNotaVenta;
+        definicion_CTX_F_B_NC_ND.serieNotaVenta = props.notaDeVenta.serieNotaVenta;
+        definicion_CTX_F_B_NC_ND.numeroNotaVenta = props.notaDeVenta.numeroNotaVenta;
+
+        definicion_CTX_F_B_NC_ND.igv = props.notaDeVenta.igv;
+
+        definicion_CTX_F_B_NC_ND.observacion = definicion_CTX_F_B_NC_ND.serieNotaVenta + ' - ' + cerosALaIzquierda(definicion_CTX_F_B_NC_ND.numeroNotaVenta, 8);
+
+        for (let index = 0; index < props.notaDeVenta.detalle.length; index++) {
+          const element = props.notaDeVenta.detalle[index];
+
+          // console.log('element', element);
+          if (!element.noFacturar) {
+            definicion_CTX_F_B_NC_ND.itemsVenta.push(element);
+          }
+        }
+        //
+      }
+
+      // console.log('props.notaDeVenta', props.notaDeVenta);
 
       // //validar PERIODO
       // const anio = definicion_CTX_F_B_NC_ND.fecha;
       // const mes = definicion_CTX_F_B_NC_ND.fecha;
-      // // console.log('la fechitaaaa', anio + mes);
+      // // //console.log('la fechitaaaa', anio + mes);
       // const mas = anio + mes;
       // const PPP = losPeriodosCargados.value;
-      // // console.log('mas', mas);
-      // // console.log('PPP', PPP);
+      // // //console.log('mas', mas);
+      // // //console.log('PPP', PPP);
       // const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(mas));
-      // // console.log('elPeriodo', elPeriodo);
+      // // //console.log('elPeriodo', elPeriodo);
       // definicion_CTX_F_B_NC_ND.idPeriodo = elPeriodo._id;
       // definicion_CTX_F_B_NC_ND.periodo = elPeriodo.periodo;
 
@@ -343,11 +413,14 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
   useTask$(async ({ track }) => {
     track(() => tipoDocumento.value);
     // alert(`tretre a useTask ${documento.value}`);
+    //console.log('💚💚💚💚💚💚💚💚💚');
     let laSerie;
     const parametros = {
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
       idSucursal: parametrosGlobales.idSucursal,
+      sucursal: parametrosGlobales.sucursal,
+      sucursalDireccion: parametrosGlobales.sucursalDireccion,
       codigo: tipoDocumento.value,
     };
 
@@ -361,9 +434,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         dataSerie.value = laSerie.data;
         if (dataSerie.value.length === 1) {
           const SSS: any = dataSerie.value;
-          // console.log('SSS', SSS);
+          //console.log('💚💚💚SSS🍟🍟🍟🍟🍟', SSS);
+          definicion_CTX_F_B_NC_ND.codigoTipoOperacion = SSS[0].codigoTipoOperacionXDefault;
+          definicion_CTX_F_B_NC_ND.tipoOperacion = SSS[0].tipoOperacionXDefault;
           definicion_CTX_F_B_NC_ND.idSerieVenta = SSS[0]._id;
           definicion_CTX_F_B_NC_ND.serie = SSS[0].serie;
+          definicion_CTX_F_B_NC_ND.impresionTipoFacturaBoleta = SSS[0].impresionTipoFacturaBoleta;
           serieDocumento.value = SSS[0].serie;
         }
 
@@ -378,7 +454,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           // definicion_CTX_F_B_NC_ND.detraccionNumCuentaBancoNacion=parametrosGlobales.cuentaBancariaDetraccion;
           const losMediosPago = await getMediosPagoSUNAT();
           dataMedioPago.value = losMediosPago.data;
-          // console.log("dataMedioPago.value", dataMedioPago.value);
+          // //console.log("dataMedioPago.value", dataMedioPago.value);
 
           const losBienesServicios = await getDetraccionesBienesServiciosSUNAT();
           dataDetraccionBienServicioSUNAT.value = losBienesServicios.data;
@@ -389,17 +465,20 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         serieDocumento.value = '';
         // alert(`tretre a useTask BOLETA`);
         // laSerie = await getSeriesBoletaActivas(parametros);
-        console.log('SSS 03-BOLETA03-BOLETA03-BOLETA03-BOLETA03-BOLETA');
+        //console.log('SSS 03-BOLETA03-BOLETA03-BOLETA03-BOLETA03-BOLETA');
         laSerie = await getSeriesVentasActivasSegunTipo(parametros);
         // setSeries(laSerie.data);
         dataSerie.value = laSerie.data;
         if (dataSerie.value.length === 1) {
           const SSS: any = dataSerie.value;
-          console.log('SSS', SSS);
+          //console.log('💚💚💚SSS🍟🍟🍟🍟🍟', SSS);
+          definicion_CTX_F_B_NC_ND.codigoTipoOperacion = SSS[0].codigoTipoOperacionXDefault;
+          definicion_CTX_F_B_NC_ND.tipoOperacion = SSS[0].tipoOperacionXDefault;
           definicion_CTX_F_B_NC_ND.idSerieVenta = SSS[0]._id;
           definicion_CTX_F_B_NC_ND.serie = SSS[0].serie;
+          definicion_CTX_F_B_NC_ND.impresionTipoFacturaBoleta = SSS[0].impresionTipoFacturaBoleta;
           serieDocumento.value = SSS[0].serie;
-          console.log('SSS', definicion_CTX_F_B_NC_ND.idSerieVenta, definicion_CTX_F_B_NC_ND.serie);
+          //console.log('SSS', definicion_CTX_F_B_NC_ND.idSerieVenta, definicion_CTX_F_B_NC_ND.serie);
         }
 
         definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago = '03';
@@ -417,9 +496,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         dataSerie.value = laSerie.data;
         if (dataSerie.value.length === 1) {
           const SSS: any = dataSerie.value;
-          // console.log('SSS', SSS);
+          //console.log('💚💚💚SSS🍟🍟🍟🍟🍟', SSS);
+          definicion_CTX_F_B_NC_ND.codigoTipoOperacion = SSS[0].codigoTipoOperacionXDefault;
+          definicion_CTX_F_B_NC_ND.tipoOperacion = SSS[0].tipoOperacionXDefault;
           definicion_CTX_F_B_NC_ND.idSerieVenta = SSS[0]._id;
           definicion_CTX_F_B_NC_ND.serie = SSS[0].serie;
+          definicion_CTX_F_B_NC_ND.impresionTipoFacturaBoleta = SSS[0].impresionTipoFacturaBoleta;
           serieDocumento.value = SSS[0].serie;
         }
 
@@ -438,9 +520,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         dataSerie.value = laSerie.data;
         if (dataSerie.value.length === 1) {
           const SSS: any = dataSerie.value;
-          // console.log('SSS', SSS);
+          //console.log('💚💚💚SSS🍟🍟🍟🍟🍟', SSS);
+          definicion_CTX_F_B_NC_ND.codigoTipoOperacion = SSS[0].codigoTipoOperacionXDefault;
+          definicion_CTX_F_B_NC_ND.tipoOperacion = SSS[0].tipoOperacionXDefault;
           definicion_CTX_F_B_NC_ND.idSerieVenta = SSS[0]._id;
           definicion_CTX_F_B_NC_ND.serie = SSS[0].serie;
+          definicion_CTX_F_B_NC_ND.impresionTipoFacturaBoleta = SSS[0].impresionTipoFacturaBoleta;
           serieDocumento.value = SSS[0].serie;
         }
 
@@ -467,6 +552,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
   useTask$(({ track }) => {
     track(() => definicion_CTX_ADD_VENTA.selecciono_Persona);
     if (definicion_CTX_ADD_VENTA.selecciono_Persona && definicion_CTX_ADD_VENTA.rol_Persona === 'cliente') {
+      // console.log('defini_CTX_CLIENTE_VENTA', defini_CTX_CLIENTE_VENTA);
       // alert('evalua a la persona');
       definicion_CTX_F_B_NC_ND.clienteVentasVarias = false;
 
@@ -475,6 +561,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = defini_CTX_CLIENTE_VENTA.tipoDocumentoIdentidad;
       definicion_CTX_F_B_NC_ND.numeroIdentidad = defini_CTX_CLIENTE_VENTA.numeroIdentidad;
       definicion_CTX_F_B_NC_ND.razonSocialNombre = defini_CTX_CLIENTE_VENTA.razonSocialNombre;
+      definicion_CTX_F_B_NC_ND.direccionCliente = defini_CTX_CLIENTE_VENTA.direccion;
       definicion_CTX_F_B_NC_ND.email = defini_CTX_CLIENTE_VENTA.email;
       definicion_CTX_F_B_NC_ND.telefono = defini_CTX_CLIENTE_VENTA.telefono;
 
@@ -486,6 +573,32 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
     }
   });
   //#endregion CLIENTE
+
+  //#region PERSONA DIRECTA / CLIENTE
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_ADD_VENTA.grabo_PersonaDirecta);
+
+    if (definicion_CTX_ADD_VENTA.grabo_PersonaDirecta) {
+      // console.log('defini_CTX_CLIENTE_VENTA', defini_CTX_CLIENTE_VENTA);
+      // alert('evalua a la persona');
+      definicion_CTX_F_B_NC_ND.clienteVentasVarias = false;
+
+      // definicion_CTX_F_B_NC_ND.idCliente = personaDirectaEDITADA._id;
+      // // definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = defini_CTX_CLIENTE_VENTA.codigoTipoDocumentoIdentidad;
+      // // definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = defini_CTX_CLIENTE_VENTA.tipoDocumentoIdentidad;
+      // // definicion_CTX_F_B_NC_ND.numeroIdentidad = defini_CTX_CLIENTE_VENTA.numeroIdentidad;
+      definicion_CTX_F_B_NC_ND.razonSocialNombre = defini_CTX_CLIENTE_VENTA.razonSocialNombre;
+      definicion_CTX_F_B_NC_ND.direccionCliente = defini_CTX_CLIENTE_VENTA.direccion;
+      definicion_CTX_F_B_NC_ND.email = defini_CTX_CLIENTE_VENTA.email;
+      definicion_CTX_F_B_NC_ND.telefono = defini_CTX_CLIENTE_VENTA.telefono;
+
+      emailOrigen.value = defini_CTX_CLIENTE_VENTA.email;
+      telefonoOrigen.value = defini_CTX_CLIENTE_VENTA.telefono;
+
+      definicion_CTX_ADD_VENTA.grabo_PersonaDirecta = false;
+    }
+  });
+  //#endregion PERSONA DIRECTA / CLIENTE
 
   //#region TIPO CAMBIO
   const obtenerTipoCambio = $(async (e: HTMLInputElement) => {
@@ -505,8 +618,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       definicion_CTX_F_B_NC_ND.moneda = 'PEN';
       definicion_CTX_F_B_NC_ND.tipoCambio = 0;
       // itemsVenta.map((itemV, index) => {
-      //   let { cantidad, precioPEN } = itemV;
-      //   itemV['ventaPEN'] = redondeo2Decimales(itemV['precioPEN'] * cantidad);
+      //   let { cantidad, precioUnitarioPEN } = itemV;
+      //   itemV['ventaPEN'] = redondeo2Decimales(itemV['precioUnitarioPEN'] * cantidad);
       //   setItemsVenta([...itemsVenta.slice(0, index), itemV, ...itemsVenta.slice(index + 1, itemsVenta.length)]);
       // });
     }
@@ -530,6 +643,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
 
   //#region ITEMS VENTA
   const fijarMontos = $((e: any) => {
+    // console.log('fijarMontos........🚃🚃🚃');
     if (definicion_CTX_F_B_NC_ND.enDolares) {
       // definicion_CTX_F_B_NC_ND.baseImponibleUSD = e.subTOTAL;
       // definicion_CTX_F_B_NC_ND.igvUSD = e.igvTOTAL;
@@ -549,17 +663,17 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       definicion_CTX_F_B_NC_ND.otrosPEN = e.sumaTOTAL_OTROS;
       definicion_CTX_F_B_NC_ND.igvPEN = e.sumaTOTAL_IGV;
       definicion_CTX_F_B_NC_ND.totalPEN = e.sumaTOTAL;
-      console.log(
-        'first',
-        definicion_CTX_F_B_NC_ND.baseImponiblePEN,
-        definicion_CTX_F_B_NC_ND.exoneradoPEN,
-        definicion_CTX_F_B_NC_ND.inafectoPEN,
-        definicion_CTX_F_B_NC_ND.iscPEN,
-        definicion_CTX_F_B_NC_ND.exportPEN,
-        definicion_CTX_F_B_NC_ND.otrosPEN,
-        definicion_CTX_F_B_NC_ND.igvPEN,
-        definicion_CTX_F_B_NC_ND.totalPEN
-      );
+      //console.log(
+      //   'first',
+      //   definicion_CTX_F_B_NC_ND.baseImponiblePEN,
+      //   definicion_CTX_F_B_NC_ND.exoneradoPEN,
+      //   definicion_CTX_F_B_NC_ND.inafectoPEN,
+      //   definicion_CTX_F_B_NC_ND.iscPEN,
+      //   definicion_CTX_F_B_NC_ND.exportPEN,
+      //   definicion_CTX_F_B_NC_ND.otrosPEN,
+      //   definicion_CTX_F_B_NC_ND.igvPEN,
+      //   definicion_CTX_F_B_NC_ND.totalPEN
+      // );
       definicion_CTX_F_B_NC_ND.baseImponibleUSD = 0;
       definicion_CTX_F_B_NC_ND.exoneradoUSD = 0;
       definicion_CTX_F_B_NC_ND.inafectoUSD = 0;
@@ -569,37 +683,14 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       definicion_CTX_F_B_NC_ND.igvUSD = 0;
       definicion_CTX_F_B_NC_ND.totalUSD = 0;
     }
+    // console.log('fijando........🚖🚖🚖', definicion_CTX_F_B_NC_ND.moneda, definicion_CTX_F_B_NC_ND.totalPEN, definicion_CTX_F_B_NC_ND.totalUSD);
+    definicion_CTX_F_B_NC_ND.lite = '';
+    if (definicion_CTX_F_B_NC_ND.moneda === 'PEN') {
+      definicion_CTX_F_B_NC_ND.lite = literal(definicion_CTX_F_B_NC_ND.totalPEN, definicion_CTX_F_B_NC_ND.moneda);
+    } else {
+      definicion_CTX_F_B_NC_ND.lite = literal(definicion_CTX_F_B_NC_ND.totalUSD, definicion_CTX_F_B_NC_ND.moneda);
+    }
   });
-  // useTask$(({ track }) => {
-  //   track(() => ctx_PanelVenta.grabo_ItemsVenta);
-  //   if (ctx_PanelVenta.grabo_ItemsVenta) {
-  //
-  //     const elTarget = JSON.parse(JSON.stringify(item));
-  //
-  //     // venta.itemsVenta = [...venta.itemsVenta, elTarget];
-  //     ctx_PanelVenta.grabo_ItemsVenta = false;
-  //     //
-  //   }
-  // });
-  // const insertarItem = $(async () => {
-  //   return
-  // });
-  // useTask$(({ track }) => {
-  //   track(() => indexItemVenta.value);
-  //
-  // });
-  // useTask$(({ track }) => {
-  //   track(() => venta.itemsVenta);
-  //
-  // });
-  // useTask$(({ track }) => {
-  //   track(() => venta);
-  //
-  // });
-  // useTask$(({ track }) => {
-  //   track(() => venta.itemsVenta.length);
-  //
-  // });
   //#endregion ITEMS VENTA
 
   //#region ELIMINAR ITEM VENTA Y CUENTA CONTABLE
@@ -626,12 +717,26 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
     track(() => definicion_CTX_ADD_VENTA.grabo_EditarImpuesto);
 
     if (definicion_CTX_ADD_VENTA.grabo_EditarImpuesto) {
-      console.log('editarImpuesto_ItemVenta', editarImpuesto_ItemVenta);
+      //console.log('editarImpuesto_ItemVenta', editarImpuesto_ItemVenta);
       const aModificar = definicion_CTX_F_B_NC_ND.itemsVenta.filter((elIT: any) => elIT.idAuxiliar === editarImpuesto_ItemVenta.idAuxiliar);
-      console.log('aModificar 0', aModificar);
-      aModificar[0].tipoImpuesto = editarImpuesto_ItemVenta.tipoImpuesto;
+      //console.log('aModificar 0', aModificar);
+      aModificar[0].tipoImpuesto = editarImpuesto_ItemVenta.tipoImpuesto.split(' ');
       aModificar[0].tipoAfectacionDelImpuesto = editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto;
-      console.log('aModificar 1', aModificar);
+      if (
+        editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '10' ||
+        editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '11' ||
+        editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '12' ||
+        editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '13' ||
+        editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '14' ||
+        editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '15' ||
+        editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '16' ||
+        editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto === '17'
+      ) {
+        aModificar[0].tipoPrecioVentaUnitario = '01';
+      } else {
+        aModificar[0].tipoPrecioVentaUnitario = '02';
+      }
+      //console.log('aModificar 1', aModificar);
       definicion_CTX_ADD_VENTA.grabo_EditarImpuesto = false;
     }
   });
@@ -639,16 +744,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
 
   //#region SUBMIT
   const grabandoVenta = $(async () => {
-    if (definicion_CTX_F_B_NC_ND.serie === '') {
-      alert('Seleccione la serie.');
-      document.getElementById('selectSerieVenta')?.focus();
-      return;
-    }
-    if (definicion_CTX_F_B_NC_ND.fecha === '') {
-      alert('Ingrese la fecha');
-      document.getElementById('in_Fecha')?.focus();
-      return;
-    }
     //CLIENTE
     if (definicion_CTX_F_B_NC_ND.clienteVentasVarias) {
       if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago !== '03') {
@@ -659,7 +754,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
     } else {
       if (definicion_CTX_F_B_NC_ND.numeroIdentidad === '') {
         alert('Seleccione el número de identidad.');
-        document.getElementById('inputNumeroDocumentoIdentidad')?.focus();
+        // document.getElementById('inputNumeroDocumentoIdentidad')?.focus();
+        document.getElementById('ima_BuscarCliente_VENTA')?.focus();
         return;
       }
       if (definicion_CTX_F_B_NC_ND.razonSocialNombre === '') {
@@ -668,25 +764,43 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         return;
       }
     }
+    // SERIE - FECHA
+    if (definicion_CTX_F_B_NC_ND.serie === '') {
+      alert('Seleccione la serie.');
+      document.getElementById('selectSerieVenta')?.focus();
+      return;
+    }
+    if (definicion_CTX_F_B_NC_ND.fecha === '') {
+      alert('Ingrese la fecha');
+      document.getElementById('in_Fecha')?.focus();
+      return;
+    }
     //FACTURA
-    console.log(
-      'definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago - definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad',
-      definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago,
-      definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad
-    );
+    //console.log(
+    //   'definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago - definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad',
+    //   definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago,
+    //   definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad
+    // );
     if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '01') {
       if (definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad !== '6') {
         alert('La factura requiere el RUC del cliente.');
         document.getElementById('ima_BuscarCliente_VENTA')?.focus();
         return;
       }
+      // console.log('definicion_CTX_F_B_NC_ND.detraccion', definicion_CTX_F_B_NC_ND.detraccion);
+      // console.log('definicion_CTX_F_B_NC_ND.detraccionCodigo', definicion_CTX_F_B_NC_ND.detraccionCodigo);
+      // console.log('definicion_CTX_F_B_NC_ND.detraccionMedioPagoCodigo', definicion_CTX_F_B_NC_ND.detraccionMedioPagoCodigo);
+      // console.log('definicion_CTX_F_B_NC_ND.detraccionNumCuentaBancoNacion', definicion_CTX_F_B_NC_ND.detraccionNumCuentaBancoNacion);
+      // console.log('definicion_CTX_F_B_NC_ND.detraccionPorcentaje', definicion_CTX_F_B_NC_ND.detraccionPorcentaje);
+      // console.log('definicion_CTX_F_B_NC_ND.detraccionMontoPEN', definicion_CTX_F_B_NC_ND.detraccionMontoPEN);
+
       if (definicion_CTX_F_B_NC_ND.detraccion) {
-        if (definicion_CTX_F_B_NC_ND.detraccionCodigo) {
+        if (definicion_CTX_F_B_NC_ND.detraccionCodigo.trim() === '') {
           alert('Seleccione la detracción.');
           document.getElementById('select_Detraccion')?.focus();
           return;
         }
-        if (definicion_CTX_F_B_NC_ND.detraccionMedioPagoCodigo) {
+        if (definicion_CTX_F_B_NC_ND.detraccionMedioPagoCodigo.trim() === '') {
           alert('Seleccione el medio pago para la detracción.');
           document.getElementById('select_DetraccionMedioPago')?.focus();
           return;
@@ -759,7 +873,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         if (definicion_CTX_F_B_NC_ND.enDolares) {
           const TOT = definicion_CTX_F_B_NC_ND.totalUSD.$numberDecimal ? definicion_CTX_F_B_NC_ND.totalUSD.$numberDecimal : definicion_CTX_F_B_NC_ND.totalUSD;
           if (montoCONTADO_DOS_PARTES.value !== TOT) {
-            console.log('monto - total', montoCONTADO_DOS_PARTES.value, TOT);
+            //console.log('monto - total', montoCONTADO_DOS_PARTES.value, TOT);
             alert('La suma de los montos de al CONTADO no coincide con el TOTAL.');
             document.getElementById('inputMontoEnEfectivo')?.focus();
             return;
@@ -767,7 +881,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         } else {
           const TOT = definicion_CTX_F_B_NC_ND.totalPEN.$numberDecimal ? definicion_CTX_F_B_NC_ND.totalPEN.$numberDecimal : definicion_CTX_F_B_NC_ND.totalPEN;
           if (montoCONTADO_DOS_PARTES.value !== TOT) {
-            console.log('monto - total', montoCONTADO_DOS_PARTES.value, TOT);
+            //console.log('monto - total', montoCONTADO_DOS_PARTES.value, TOT);
             alert('La suma de los montos de al CONTADO no coincide con el TOTAL.');
             document.getElementById('inputMontoEnEfectivo')?.focus();
             return;
@@ -781,12 +895,20 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       document.getElementById('addCuota')?.focus();
       return;
     }
-    if (definicion_CTX_F_B_NC_ND.itemsVenta.length === 0) {
-      alert('Ingrese los ítems para la venta.');
-      document.getElementById('btnVerAlmacen')?.focus();
-      return;
-    }
+    //A  NC  -  ND
     if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '07' || definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '08') {
+      if (definicion_CTX_F_B_NC_ND.referenciaCodigo === '' || definicion_CTX_F_B_NC_ND.referenciaDescripcion === '') {
+        if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '07') {
+          alert('Seleccione el motivo de la N. de Crédito');
+          document.getElementById('select_Tipo_Nota_Credito')?.focus();
+          return;
+        }
+        if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '08') {
+          alert('Seleccione el motivo de la N. de Débito');
+          document.getElementById('select_Tipo_Nota_Debito')?.focus();
+          return;
+        }
+      }
       if (definicion_CTX_F_B_NC_ND.referenciaFecha === '') {
         alert('Ingrese la fecha de referencia de NC/ND');
         document.getElementById('in_VENTA_NC_ND_Fecha')?.focus();
@@ -794,7 +916,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       }
       if (definicion_CTX_F_B_NC_ND.referenciaTipo === '') {
         alert('Ingrese el tipo del documento referenciado');
-        document.getElementById('in_VENTA_NC_ND_TCP')?.focus();
+        document.getElementById('select_VENTA_NC_ND_TCP')?.focus();
         return;
       }
       if (definicion_CTX_F_B_NC_ND.referenciaSerie === '') {
@@ -807,60 +929,64 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         document.getElementById('in_VENTA_NC_ND_Numero')?.focus();
         return;
       }
-
-      //****************************************** */
-      //***************SOLES******************** */
-      definicion_CTX_F_B_NC_ND.baseImponiblePEN = definicion_CTX_F_B_NC_ND.baseImponiblePEN.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.baseImponiblePEN.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.baseImponiblePEN) * -1;
-      definicion_CTX_F_B_NC_ND.igvPEN = definicion_CTX_F_B_NC_ND.igvPEN.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.igvPEN.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.igvPEN) * -1;
-      definicion_CTX_F_B_NC_ND.exoneradoPEN = definicion_CTX_F_B_NC_ND.exoneradoPEN.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.exoneradoPEN.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.exoneradoPEN) * -1;
-      definicion_CTX_F_B_NC_ND.inafectoPEN = definicion_CTX_F_B_NC_ND.inafectoPEN.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.inafectoPEN.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.inafectoPEN) * -1;
-      definicion_CTX_F_B_NC_ND.iscPEN = definicion_CTX_F_B_NC_ND.iscPEN.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.iscPEN.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.iscPEN) * -1;
-      definicion_CTX_F_B_NC_ND.exportPEN = definicion_CTX_F_B_NC_ND.exportPEN.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.exportPEN.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.exportPEN) * -1;
-      definicion_CTX_F_B_NC_ND.otrosPEN = definicion_CTX_F_B_NC_ND.otrosPEN.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.otrosPEN.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.otrosPEN) * -1;
-      definicion_CTX_F_B_NC_ND.totalPEN = definicion_CTX_F_B_NC_ND.totalPEN.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.totalPEN.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.totalPEN) * -1;
-      //****************************************** */
-      //***************DOLARES******************** */
-      definicion_CTX_F_B_NC_ND.baseImponibleUSD = definicion_CTX_F_B_NC_ND.baseImponibleUSD.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.baseImponibleUSD.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.baseImponibleUSD) * -1;
-      definicion_CTX_F_B_NC_ND.igvUSD = definicion_CTX_F_B_NC_ND.igvUSD.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.igvUSD.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.igvUSD) * -1;
-      definicion_CTX_F_B_NC_ND.exoneradoUSD = definicion_CTX_F_B_NC_ND.exoneradoUSD.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.exoneradoUSD.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.exoneradoUSD) * -1;
-      definicion_CTX_F_B_NC_ND.inafectoUSD = definicion_CTX_F_B_NC_ND.inafectoUSD.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.inafectoUSD.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.inafectoUSD) * -1;
-      definicion_CTX_F_B_NC_ND.iscUSD = definicion_CTX_F_B_NC_ND.iscUSD.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.iscUSD.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.iscUSD) * -1;
-      definicion_CTX_F_B_NC_ND.exportUSD = definicion_CTX_F_B_NC_ND.exportUSD.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.exportUSD.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.exportUSD) * -1;
-      definicion_CTX_F_B_NC_ND.otrosUSD = definicion_CTX_F_B_NC_ND.otrosUSD.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.otrosUSD.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.otrosUSD) * -1;
-      definicion_CTX_F_B_NC_ND.totalUSD = definicion_CTX_F_B_NC_ND.totalUSD.$numberDecimal
-        ? Math.abs(definicion_CTX_F_B_NC_ND.totalUSD.$numberDecimal) * -1
-        : Math.abs(definicion_CTX_F_B_NC_ND.totalUSD) * -1;
+      //SOLO NOTAs DE CREDITOS
+      if (definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago === '07') {
+        //****************************************** */
+        //***************SOLES******************** */
+        definicion_CTX_F_B_NC_ND.baseImponiblePEN = definicion_CTX_F_B_NC_ND.baseImponiblePEN.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.baseImponiblePEN.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.baseImponiblePEN) * -1;
+        definicion_CTX_F_B_NC_ND.igvPEN = definicion_CTX_F_B_NC_ND.igvPEN.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.igvPEN.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.igvPEN) * -1;
+        definicion_CTX_F_B_NC_ND.exoneradoPEN = definicion_CTX_F_B_NC_ND.exoneradoPEN.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.exoneradoPEN.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.exoneradoPEN) * -1;
+        definicion_CTX_F_B_NC_ND.inafectoPEN = definicion_CTX_F_B_NC_ND.inafectoPEN.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.inafectoPEN.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.inafectoPEN) * -1;
+        definicion_CTX_F_B_NC_ND.iscPEN = definicion_CTX_F_B_NC_ND.iscPEN.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.iscPEN.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.iscPEN) * -1;
+        definicion_CTX_F_B_NC_ND.exportPEN = definicion_CTX_F_B_NC_ND.exportPEN.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.exportPEN.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.exportPEN) * -1;
+        definicion_CTX_F_B_NC_ND.otrosPEN = definicion_CTX_F_B_NC_ND.otrosPEN.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.otrosPEN.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.otrosPEN) * -1;
+        definicion_CTX_F_B_NC_ND.totalPEN = definicion_CTX_F_B_NC_ND.totalPEN.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.totalPEN.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.totalPEN) * -1;
+        //****************************************** */
+        //***************DOLARES******************** */
+        definicion_CTX_F_B_NC_ND.baseImponibleUSD = definicion_CTX_F_B_NC_ND.baseImponibleUSD.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.baseImponibleUSD.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.baseImponibleUSD) * -1;
+        definicion_CTX_F_B_NC_ND.igvUSD = definicion_CTX_F_B_NC_ND.igvUSD.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.igvUSD.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.igvUSD) * -1;
+        definicion_CTX_F_B_NC_ND.exoneradoUSD = definicion_CTX_F_B_NC_ND.exoneradoUSD.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.exoneradoUSD.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.exoneradoUSD) * -1;
+        definicion_CTX_F_B_NC_ND.inafectoUSD = definicion_CTX_F_B_NC_ND.inafectoUSD.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.inafectoUSD.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.inafectoUSD) * -1;
+        definicion_CTX_F_B_NC_ND.iscUSD = definicion_CTX_F_B_NC_ND.iscUSD.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.iscUSD.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.iscUSD) * -1;
+        definicion_CTX_F_B_NC_ND.exportUSD = definicion_CTX_F_B_NC_ND.exportUSD.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.exportUSD.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.exportUSD) * -1;
+        definicion_CTX_F_B_NC_ND.otrosUSD = definicion_CTX_F_B_NC_ND.otrosUSD.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.otrosUSD.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.otrosUSD) * -1;
+        definicion_CTX_F_B_NC_ND.totalUSD = definicion_CTX_F_B_NC_ND.totalUSD.$numberDecimal
+          ? Math.abs(definicion_CTX_F_B_NC_ND.totalUSD.$numberDecimal) * -1
+          : Math.abs(definicion_CTX_F_B_NC_ND.totalUSD) * -1;
+      }
     } else {
+      definicion_CTX_F_B_NC_ND.referenciaCodigo = ''; //Codigo del motivo
+      definicion_CTX_F_B_NC_ND.referenciaDescripcion = ''; //Descripción del motivo
       definicion_CTX_F_B_NC_ND.referenciaFecha = '';
       definicion_CTX_F_B_NC_ND.referenciaTipo = '';
       definicion_CTX_F_B_NC_ND.referenciaSerie = '';
@@ -878,6 +1004,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         definicion_CTX_F_B_NC_ND.actualizarEmailCliente = true;
       }
     }
+    //.......ITEMS .......
+    if (definicion_CTX_F_B_NC_ND.itemsVenta.length === 0) {
+      alert('Ingrese los ítems para la venta.');
+      document.getElementById('btnVerAlmacen')?.focus();
+      return;
+    }
     //CONTABIIZAR
     if (definicion_CTX_F_B_NC_ND.contabilizarOperaciones) {
       let total12: number = 0;
@@ -888,7 +1020,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       for (let index = 0; index < definicion_CTX_F_B_NC_ND.itemsVenta.length; index++) {
         const merca = definicion_CTX_F_B_NC_ND.itemsVenta[index];
         if (merca.codigoContableVenta !== '' && typeof merca.codigoContableVenta !== 'undefined') {
-          console.log('merca.ventaPEN merca.porcentaje', merca.ventaPEN, merca.porcentaje, 1 + merca.porcentaje / 100);
+          //console.log('merca.ventaPEN merca.porcentaje', merca.ventaPEN, merca.porcentaje, 1 + merca.porcentaje / 100);
           let prod = 0;
           total12 = total12 + parseFloat(merca.ventaPEN);
           if (merca.porcentaje === 0) {
@@ -898,7 +1030,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           }
           producto70 = producto70 + prod;
           impuesto40 = impuesto40 + (merca.ventaPEN - prod);
-          console.log('pro impu', prod, merca.ventaPEN - prod);
+          //console.log('pro impu', prod, merca.ventaPEN - prod);
           //construyendo el asiento
           definicion_CTX_F_B_NC_ND.asientoContable.push({
             idAuxiliar: parseInt(elIdAuxiliar()),
@@ -935,7 +1067,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         });
       }
 
-      console.log('total12 !== definicion_CTX_F_B_NC_ND.totalPEN', total12, definicion_CTX_F_B_NC_ND.totalPEN, impuesto40, producto70);
+      //console.log('total12 !== definicion_CTX_F_B_NC_ND.totalPEN', total12, definicion_CTX_F_B_NC_ND.totalPEN, impuesto40, producto70);
       //VACIAR ASIENTO CONTABLE si no hay PARTIDA DOBLE
       if (total12 !== definicion_CTX_F_B_NC_ND.totalPEN) {
         definicion_CTX_F_B_NC_ND.asientoContable = [];
@@ -962,30 +1094,67 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
         definicion_CTX_F_B_NC_ND.totalHaberPEN = total12;
       }
     }
-    console.log('definicion_CTX_F_B_NC_ND... despues del CALC A.C', definicion_CTX_F_B_NC_ND);
+    //console.log('definicion_CTX_F_B_NC_ND... despues del CALC A.C', definicion_CTX_F_B_NC_ND);
+    // let elLiteral = '';
+    // if (definicion_CTX_F_B_NC_ND.moneda === 'PEN') {
+    //   elLiteral = literal(definicion_CTX_F_B_NC_ND.totalPEN, definicion_CTX_F_B_NC_ND.moneda);
+    // } else {
+    //   elLiteral = literal(definicion_CTX_F_B_NC_ND.totalUSD, definicion_CTX_F_B_NC_ND.moneda);
+    // }
     ctx_index_venta.mostrarSpinner = true;
-    // const aGrabar =
-    const d = new Date();
+    //FECHA HORA LOCAL
+    // const ffffDate: any = new Date(definicion_CTX_F_B_NC_ND.fecha);
+    // //console.log('🧧🧧🧧🧧', definicion_CTX_F_B_NC_ND.fecha, ffffDate);
+    // //console.log('🧧🧧🧧🧧', ffffDate);
+    const fechaLocal =
+      definicion_CTX_F_B_NC_ND.fecha.substring(8, 10) +
+      '-' +
+      definicion_CTX_F_B_NC_ND.fecha.substring(5, 7) +
+      '-' +
+      definicion_CTX_F_B_NC_ND.fecha.substring(0, 4);
+    //console.log('🧧🧧🧧🧧', fechaLocal);
+    // cerosALaIzquierda(ffffDate.getDate(), 2) + '-' + cerosALaIzquierda(ffffDate.getMonth() + 1, 2) + '-' + cerosALaIzquierda(ffffDate.getFullYear(), 4);
+    // const al = hoy.getFullYear() + '-' + ('0' + (hoy.getMonth() + 1)).slice(-2) + '-' + ('0' + hoy.getDate()).slice(-2);
+
+    const hhhhDate = new Date();
+    const horaLocal =
+      cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+    //
     const ventaGRABADA = await inVenta({
       idLibroDiario: parametrosGlobales.idLibroDiario,
 
       idGrupoEmpresarial: definicion_CTX_F_B_NC_ND.idGrupoEmpresarial,
       idEmpresa: definicion_CTX_F_B_NC_ND.idEmpresa,
       idSucursal: definicion_CTX_F_B_NC_ND.idSucursal,
+      sucursal: definicion_CTX_F_B_NC_ND.sucursal,
+      sucursalDireccion: definicion_CTX_F_B_NC_ND.sucursalDireccion,
       idPeriodo: definicion_CTX_F_B_NC_ND.idPeriodo,
       periodo: definicion_CTX_F_B_NC_ND.periodo,
 
       ruc: definicion_CTX_F_B_NC_ND.ruc,
       empresa: definicion_CTX_F_B_NC_ND.empresa,
       direccion: definicion_CTX_F_B_NC_ND.direccion,
+      departamento: definicion_CTX_F_B_NC_ND.departamento,
+      provincia: definicion_CTX_F_B_NC_ND.provincia,
+      distrito: definicion_CTX_F_B_NC_ND.distrito,
+      ubigeo: definicion_CTX_F_B_NC_ND.ubigeo,
+
+      codigoTipoOperacion: definicion_CTX_F_B_NC_ND.codigoTipoOperacion,
+      tipoOperacion: definicion_CTX_F_B_NC_ND.tipoOperacion,
 
       codigoTipoComprobantePago: definicion_CTX_F_B_NC_ND.codigoTipoComprobantePago,
       tipoComprobantePago: definicion_CTX_F_B_NC_ND.tipoComprobantePago,
       idSerieVenta: definicion_CTX_F_B_NC_ND.idSerieVenta,
       serie: definicion_CTX_F_B_NC_ND.serie,
       // numero: definicion_CTX_F_B_NC_ND.numero,
-      fecha: definicion_CTX_F_B_NC_ND.fecha,
-      hora: cerosALaIzquierda(d.getHours(), 2) + ':' + cerosALaIzquierda(d.getMinutes(), 2) + ':' + cerosALaIzquierda(d.getSeconds(), 2),
+
+      idNotaVenta: definicion_CTX_F_B_NC_ND.idNotaVenta,
+      serieNotaVenta: definicion_CTX_F_B_NC_ND.serieNotaVenta,
+      numeroNotaVenta: definicion_CTX_F_B_NC_ND.numeroNotaVenta,
+
+      fecha: definicion_CTX_F_B_NC_ND.fecha, //YYYY-MM-DD
+      fechaLocal: fechaLocal, //DD-MM-YYYY
+      horaLocal: horaLocal,
 
       clienteVentasVarias: definicion_CTX_F_B_NC_ND.clienteVentasVarias,
       idCliente: definicion_CTX_F_B_NC_ND.idCliente,
@@ -1020,9 +1189,13 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       idOrdenServicio: definicion_CTX_F_B_NC_ND.idOrdenServicio,
       serieOrdenServicio: definicion_CTX_F_B_NC_ND.serieOrdenServicio,
       numeroOrdenServicio: definicion_CTX_F_B_NC_ND.numeroOrdenServicio,
+      soloServicios: definicion_CTX_F_B_NC_ND.soloServicios,
+      soloSuministros: definicion_CTX_F_B_NC_ND.soloSuministros,
 
+      verificarObservacionVenta: definicion_CTX_F_B_NC_ND.verificarObservacionVenta,
       observacion: definicion_CTX_F_B_NC_ND.observacion.toUpperCase(),
 
+      impresionTipoFacturaBoleta: definicion_CTX_F_B_NC_ND.impresionTipoFacturaBoleta,
       itemsVenta: definicion_CTX_F_B_NC_ND.itemsVenta,
 
       baseImponiblePEN: definicion_CTX_F_B_NC_ND.baseImponiblePEN,
@@ -1043,6 +1216,10 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       igvUSD: definicion_CTX_F_B_NC_ND.igvUSD,
       totalUSD: definicion_CTX_F_B_NC_ND.totalUSD,
 
+      literal: definicion_CTX_F_B_NC_ND.lite,
+
+      referenciaCodigo: definicion_CTX_F_B_NC_ND.referenciaCodigo,
+      referenciaDescripcion: definicion_CTX_F_B_NC_ND.referenciaDescripcion,
       referenciaFecha: definicion_CTX_F_B_NC_ND.referenciaFecha,
       referenciaTipo: definicion_CTX_F_B_NC_ND.referenciaTipo,
       referenciaSerie: definicion_CTX_F_B_NC_ND.referenciaSerie,
@@ -1050,7 +1227,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
 
       facturacionElectronica: definicion_CTX_F_B_NC_ND.facturacionElectronica,
       facturacionElectronicaAutomatica: definicion_CTX_F_B_NC_ND.facturacionElectronicaAutomatica,
-      verificarObservacionVenta: definicion_CTX_F_B_NC_ND.verificarObservacionVenta,
+      facturaJSON: parametrosGlobales.facturaJSON,
+      facturaXML: parametrosGlobales.facturaXML,
 
       contabilizarOperaciones: definicion_CTX_F_B_NC_ND.contabilizarOperaciones,
       asientoContable: definicion_CTX_F_B_NC_ND.asientoContable,
@@ -1119,6 +1297,10 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       definicion_CTX_F_B_NC_ND.cuotasCredito = [];
       definicion_CTX_F_B_NC_ND.importeTotalCuotasCredito = 0;
 
+      definicion_CTX_F_B_NC_ND.idNotaVenta = '';
+      definicion_CTX_F_B_NC_ND.serieNotaVenta = '';
+      definicion_CTX_F_B_NC_ND.numeroNotaVenta = 0;
+
       definicion_CTX_F_B_NC_ND.idCotizacion = '';
       definicion_CTX_F_B_NC_ND.serieCotizacion = '';
       definicion_CTX_F_B_NC_ND.numeroCotizacion = 0;
@@ -1126,6 +1308,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       definicion_CTX_F_B_NC_ND.idOrdenServicio = '';
       definicion_CTX_F_B_NC_ND.serieOrdenServicio = '';
       definicion_CTX_F_B_NC_ND.numeroOrdenServicio = 0;
+      definicion_CTX_F_B_NC_ND.soloServicios = false;
+      definicion_CTX_F_B_NC_ND.soloSuministros = false;
 
       definicion_CTX_F_B_NC_ND.observacion = '';
 
@@ -1149,6 +1333,10 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       definicion_CTX_F_B_NC_ND.otrosUSD = 0;
       definicion_CTX_F_B_NC_ND.totalUSD = 0;
 
+      definicion_CTX_F_B_NC_ND.lite = '';
+
+      definicion_CTX_F_B_NC_ND.referenciaCodigo = '';
+      definicion_CTX_F_B_NC_ND.referenciaDescripcion = '';
       definicion_CTX_F_B_NC_ND.referenciaFecha = '';
       definicion_CTX_F_B_NC_ND.referenciaTipo = '';
       definicion_CTX_F_B_NC_ND.referenciaSerie = '';
@@ -1170,7 +1358,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       definicion_CTX_F_B_NC_ND.detraccionDescripcion = '';
       definicion_CTX_F_B_NC_ND.detraccionMedioPagoCodigo = '';
       definicion_CTX_F_B_NC_ND.detraccionMedioPagoDescripcion = '';
-      definicion_CTX_F_B_NC_ND.detraccionNumCuentaBancoNacion = '';
+      // definicion_CTX_F_B_NC_ND.detraccionNumCuentaBancoNacion = '';
       definicion_CTX_F_B_NC_ND.detraccionPorcentaje = 0;
       definicion_CTX_F_B_NC_ND.detraccionMontoPEN = 0;
     }
@@ -1188,7 +1376,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
       class="container-modal"
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(330px, 86%, 1000px)',
+        width: 'clamp(330px, 96%, 1000px)',
         // width: 'auto',
         background: `${definicion_CTX_F_B_NC_ND.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : '#eee'}`,
         // border: '1px solid red',
@@ -1211,33 +1399,34 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           width={16}
           title="ver"
           onClick={$(() => {
-            console.log('parametrosGlobales', parametrosGlobales);
-            // console.log('grabo', grabo.value);
-            // console.log('ctx_index_venta', ctx_index_venta);
-          })}
-        />
-        <ImgButton
-          src={images.see}
-          alt="Icono de ver"
-          height={16}
-          width={16}
-          title="ver"
-          onClick={$(() => {
             console.log('definicion_CTX_F_B_NC_ND', definicion_CTX_F_B_NC_ND);
-            // console.log('grabo', grabo.value);
-            // console.log('ctx_index_venta', ctx_index_venta);
+            // //console.log('grabo', grabo.value);
+            // //console.log('ctx_index_venta', ctx_index_venta);
           })}
-        />
-        <ImgButton
+        /> */}
+        {/* <ImgButton
           src={images.see}
           alt="Icono de ver"
           height={16}
           width={16}
           title="ver"
           onClick={$(() => {
-            console.log('props.addPeriod, props.addPeriodoAnterior', props.addPeriodo, props.addPeriodoAnterior);
-            // console.log('grabo', grabo.value);
-            // console.log('ctx_index_venta', ctx_index_venta);
+            //console.log('parametrosGlobales', parametrosGlobales);
+            // //console.log('grabo', grabo.value);
+            // //console.log('ctx_index_venta', ctx_index_venta);
+          })}
+        /> */}
+
+        {/*   <ImgButton
+          src={images.see}
+          alt="Icono de ver"
+          height={16}
+          width={16}
+          title="ver"
+          onClick={$(() => {
+            //console.log('props.addPeriod, props.addPeriodoAnterior', props.addPeriodo, props.addPeriodoAnterior);
+            // //console.log('grabo', grabo.value);
+            // //console.log('ctx_index_venta', ctx_index_venta);
           })}
         /> */}
         <ImgButton
@@ -1259,15 +1448,15 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           width={16}
           title="props.addPeriodo"
           onClick={$(() => {
-            console.log('props.addPeriodo', props.addPeriodo);
-            // console.log('grabo', grabo.value);
-            // console.log('ctx_index_venta', ctx_index_venta);
+            //console.log('props.addPeriodo', props.addPeriodo);
+            // //console.log('grabo', grabo.value);
+            // //console.log('ctx_index_venta', ctx_index_venta);
           })}
         /> */}
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.9rem', marginLeft: '2px' }}>
-        Venta - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+        Venta - {parametrosGlobales.sucursal} - {parametrosGlobales.RazonSocial}
       </h3>
       {/* FORMULARIO */}
       <div class="add-form">
@@ -1306,7 +1495,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           <div>
             {/* cliente VENTAS VARIAS*/}
             <div>
-              {/* <label>Cliente Ventas Varias</label> */}
               <div>
                 <input
                   id="chk_clienteVentasVarias_VENTA"
@@ -1331,13 +1519,86 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 </label>
               </div>
             </div>
+            {/* estrellas */}
+            {/* <div style={{ margin: '8px 0' }} hidden={definicion_CTX_F_B_NC_ND.clienteVentasVarias}>
+              <img
+                id="e1"
+                src={definicion_CTX_F_B_NC_ND.estrellasCliente >= 1 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella 1"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 1}
+                title="Estrella 1"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+              <img
+                id="e2"
+                src={definicion_CTX_F_B_NC_ND.estrellasCliente >= 2 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella 2"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 2}
+                title="Estrella 2"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+              <img
+                id="e3"
+                src={definicion_CTX_F_B_NC_ND.estrellasCliente >= 3 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella 3"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 3}
+                title="Estrella 3"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+              <img
+                id="e4"
+                src={definicion_CTX_F_B_NC_ND.estrellasCliente >= 4 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella4"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 4}
+                title="Estrella 4"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+              <img
+                id="e5"
+                src={definicion_CTX_F_B_NC_ND.estrellasCliente === 5 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella 5"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 5}
+                title="Estrella 5"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+            </div> */}
             {/* tipo de documento identidad*/}
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <select
                   id="selectTipoDocumentoLiteral"
                   disabled
-                  // value={6}
+                  style={{ cursor: 'pointer' }}
                   value={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad}
                   // onChange={cambioTipoDocumento}
                   onChange$={(e) => {
@@ -1371,14 +1632,40 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   title="Buscar datos de identidad"
                   height={16}
                   width={16}
-                  style={{ margin: '2px' }}
+                  style={{ margin: '2px 4px 2px 4px' }}
                   onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true)}
+                />
+                <input
+                  // id="in_BuscarDetraccion"
+                  type="image"
+                  src={images.edit}
+                  title="Editar cliente"
+                  height={16}
+                  width={16}
+                  style={{ margin: '2px 0' }}
+                  disabled={definicion_CTX_F_B_NC_ND.idCliente === '' ? true : false}
+                  onClick$={() => {
+                    // console.log('japon');
+                    // ctx_buscar_persona.pP = persoLocali;
+                    // ctx_buscar_persona.mostrarPanelEditPersona = true;
+                    definicion_CTX_ADD_VENTA.mostrarPanelEditPersonaDirecta = true;
+                  }}
                 />
               </div>
             </div>
             {definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona && (
               <div class="modal">
                 <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="venta" rol="cliente" />
+              </div>
+            )}
+            {/* EDIT - PERSONA/CLIENTE */}
+            {definicion_CTX_ADD_VENTA.mostrarPanelEditPersonaDirecta && (
+              <div class="modal">
+                <EditarPersonaDirecta
+                  soloPersonaNatural={defini_CTX_CLIENTE_VENTA.codigoTipoDocumentoIdentidad === '6' ? false : true}
+                  personaSeleccio={defini_CTX_CLIENTE_VENTA}
+                  contexto={'add_venta'}
+                />
               </div>
             )}
             {/* numero identidad*/}
@@ -1410,8 +1697,22 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 />
               </div>
             </div>
-            {/* Email */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '4px 0' }}>
+            {/* Dirección Cliente */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="inputDireccionCliente"
+                  style={{ width: '100%' }}
+                  type="text"
+                  disabled
+                  placeholder="Direccion cliente"
+                  value={definicion_CTX_F_B_NC_ND.direccionCliente}
+                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
+                />
+              </div>
+            </div>
+            {/* Email - Telefono */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '4px 0', gap: '4px' }}>
               <input
                 id="inputEmail"
                 style={{ width: '100%' }}
@@ -1446,7 +1747,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
               <div class="form-control form-agrupado">
                 <select
                   id="selectDocumentoVenta"
-                  // style={{ width: '100%' }}
+                  style={{ cursor: 'pointer' }}
                   onChange$={(e) => {
                     tipoDocumento.value = (e.target as HTMLSelectElement).value;
                     // alert('eligio ' + tipoDocumento.value);
@@ -1473,10 +1774,19 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 {
                   <select
                     id="selectSerieVenta"
+                    style={{ cursor: 'pointer' }}
                     onChange$={(e) => {
                       const idx = (e.target as HTMLSelectElement).selectedIndex;
                       const elSelect = e.target as HTMLSelectElement;
                       const elOption = elSelect[idx];
+
+                      //console.log('❤❤❤ dataSerie.value ', dataSerie.value);
+                      const SSS: any = dataSerie.value;
+                      const der = SSS.find((ew: any) => ew._id === elOption.id);
+                      //console.log('❤❤❤ der ', der);
+                      definicion_CTX_F_B_NC_ND.codigoTipoOperacion = der.codigoTipoOperacionXDefault;
+                      definicion_CTX_F_B_NC_ND.tipoOperacion = der.tipoOperacionXDefault;
+                      definicion_CTX_F_B_NC_ND.impresionTipoFacturaBoleta = der.impresionTipoFacturaBoleta;
 
                       definicion_CTX_F_B_NC_ND.idSerieVenta = elOption.id;
                       definicion_CTX_F_B_NC_ND.serie = (e.target as HTMLSelectElement).value;
@@ -1512,13 +1822,13 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     //validar PERIODO
                     const anio = definicion_CTX_F_B_NC_ND.fecha;
                     const mes = definicion_CTX_F_B_NC_ND.fecha;
-                    // console.log('la fechitaaaa', anio + mes);
+                    // //console.log('la fechitaaaa', anio + mes);
                     const mas = anio + mes;
                     const PPP = losPeriodosCargados.value;
-                    // console.log('mas', mas);
-                    // console.log('PPP', PPP);
+                    // //console.log('mas', mas);
+                    // //console.log('PPP', PPP);
                     const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(mas));
-                    // console.log('elPeriodo', elPeriodo);
+                    // //console.log('elPeriodo', elPeriodo);
                     definicion_CTX_F_B_NC_ND.idPeriodo = elPeriodo._id;
                     definicion_CTX_F_B_NC_ND.periodo = elPeriodo.periodo;
                   }}
@@ -1532,11 +1842,121 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           {/* ----------------------------------------------------- */}
           {/* ***NC -- ND -- */}
           <div id="zona_NC_ND" style={{ background: 'grey' }} hidden={tipoDocumento.value === '07' || tipoDocumento.value === '08' ? false : true}>
+            {/* *** select -- */}
+            <div class="form-control">
+              <div class="form-control form-agrupado" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'left' }}>
+                <select
+                  id="select_Tipo_Nota_Credito"
+                  style={{ cursor: 'pointer', margin: '0 4px' }}
+                  hidden={tipoDocumento.value === '07' ? false : true}
+                  onChange$={(e) => {
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const elSelect = e.target as HTMLSelectElement;
+                    const elOption = elSelect[idx];
+                    // console.log('elOption', elOption.id);
+
+                    if (elOption.id === '') {
+                      definicion_CTX_F_B_NC_ND.referenciaCodigo = '';
+                      definicion_CTX_F_B_NC_ND.referenciaDescripcion = '';
+                    } else {
+                      definicion_CTX_F_B_NC_ND.referenciaCodigo = elOption.id;
+                      definicion_CTX_F_B_NC_ND.referenciaDescripcion = (e.target as HTMLSelectElement).value;
+                    }
+
+                    document.getElementById('in_VENTA_NC_ND_Fecha')?.focus();
+                  }}
+                >
+                  <option value="">-- Seleccione un motivo N.C. --</option>
+                  <option id="01" value="Anulación de la operación">
+                    Anulación de la operación
+                  </option>
+                  <option id="02" value="Anulación por error en el RUC">
+                    Anulación por error en el RUC
+                  </option>
+                  <option id="03" value="Corrección por error en la descripción o atención de reclamo respecto de bienes adquiridos o servicios prestados">
+                    Corrección por error en la descripción o atención de reclamo respecto de bienes adquiridos o servicios prestados
+                  </option>
+                  <option id="04" value="Descuento global">
+                    Descuento global
+                  </option>
+                  <option id="05" value="Descuento por ítem">
+                    Descuento por ítem
+                  </option>
+                  <option id="06" value="Devolución total">
+                    Devolución total
+                  </option>
+                  <option id="07" value="Devolución por ítem">
+                    Devolución por ítem
+                  </option>
+                  <option id="08" value="Bonificación">
+                    Bonificación
+                  </option>
+                  <option id="09" value="Disminución en el valor">
+                    Disminución en el valor
+                  </option>
+                  <option id="10" value="Otros Conceptos">
+                    Otros Conceptos
+                  </option>
+                  <option id="11" value="Ajustes de operaciones de exportación">
+                    Ajustes de operaciones de exportación
+                  </option>
+                  <option id="12" value="Ajustes afectos al IVAP">
+                    Ajustes afectos al IVAP
+                  </option>
+                  <option
+                    id="13"
+                    value="Corrección o modificación del monto neto pendiente de pago y/o la(s) fechas(s) de vencimiento del pago único o de las cuotas y/o los montos
+                    correspondientes a cada cuota, de ser el caso"
+                  >
+                    Corrección o modificación del monto neto pendiente de pago y/o la(s) fechas(s) de vencimiento del pago único o de las cuotas y/o los montos
+                    correspondientes a cada cuota, de ser el caso
+                  </option>
+                </select>
+                <select
+                  id="select_Tipo_Nota_Debito"
+                  style={{ cursor: 'pointer', margin: '0 4px' }}
+                  hidden={tipoDocumento.value === '08' ? false : true}
+                  onChange$={(e) => {
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const elSelect = e.target as HTMLSelectElement;
+                    const elOption = elSelect[idx];
+                    // console.log('elOption', elOption.id);
+
+                    if (elOption.id === '') {
+                      definicion_CTX_F_B_NC_ND.referenciaCodigo = '';
+                      definicion_CTX_F_B_NC_ND.referenciaDescripcion = '';
+                    } else {
+                      definicion_CTX_F_B_NC_ND.referenciaCodigo = elOption.id;
+                      definicion_CTX_F_B_NC_ND.referenciaDescripcion = (e.target as HTMLSelectElement).value;
+                    }
+                    document.getElementById('in_VENTA_NC_ND_Fecha')?.focus();
+                  }}
+                >
+                  <option value="">-- Seleccione un motivo N.D. --</option>
+                  <option id="01" value="Intereses por mora">
+                    Intereses por mora
+                  </option>
+                  <option id="02" value="Aumento en el valor">
+                    Aumento en el valor
+                  </option>
+                  <option id="03" value="Penalidades/ otros conceptos">
+                    Penalidades/ otros conceptos
+                  </option>
+                  <option id="11" value="Ajustes de operaciones de exportación">
+                    Ajustes de operaciones de exportación
+                  </option>
+                  <option id="12" value="Ajustes afectos al IVAP">
+                    Ajustes afectos al IVAP
+                  </option>
+                </select>
+              </div>
+            </div>
+            {/* *** datos -- */}
             <div class="form-control">
               <div class="form-control form-agrupado" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'left' }}>
                 <input
                   id="in_VENTA_NC_ND_Fecha"
-                  // style={{ width: '100%' }}
+                  style={{ marginLeft: '4px' }}
                   // disabled
                   type="date"
                   placeholder="Add NC/ND Fecha"
@@ -1544,7 +1964,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   onChange$={(e) => (definicion_CTX_F_B_NC_ND.referenciaFecha = (e.target as HTMLInputElement).value)}
                   // onChange={(e) => setNumeroIdentidad(e.target.value)}
                 />
-                <input
+                {/* <input
                   id="in_VENTA_NC_ND_TCP"
                   // style={{ width: '100%' }}
                   // disabled
@@ -1553,7 +1973,35 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   value={definicion_CTX_F_B_NC_ND.referenciaTipo}
                   onChange$={(e) => (definicion_CTX_F_B_NC_ND.referenciaTipo = (e.target as HTMLInputElement).value)}
                   // onChange={(e) => setNumeroIdentidad(e.target.value)}
-                />
+                /> */}
+                <select
+                  id="select_VENTA_NC_ND_TCP"
+                  style={{ cursor: 'pointer', width: '152px' }}
+                  onChange$={(e) => {
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const elSelect = e.target as HTMLSelectElement;
+                    const elOption = elSelect[idx];
+                    // console.log('elOption', elOption.id);
+
+                    if (elOption.id === '') {
+                      definicion_CTX_F_B_NC_ND.referenciaTipo = '';
+                    } else {
+                      definicion_CTX_F_B_NC_ND.referenciaTipo = elOption.id;
+                    }
+                    document.getElementById('in_VENTA_NC_ND_Serie')?.focus();
+                  }}
+                >
+                  <option value="">-- Seleccione el TCP --</option>
+                  <option id="01" value="Factura">
+                    Factura
+                  </option>
+                  <option id="03" value="Boleta de venta">
+                    Boleta de venta
+                  </option>
+                  <option id="12" value="Ticket de máquina registradora">
+                    Ticket de máquina registradora
+                  </option>
+                </select>
                 <input
                   id="in_VENTA_NC_ND_Serie"
                   // style={{ width: '100%' }}
@@ -1562,15 +2010,22 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   placeholder="Add NC/ND Serie"
                   value={definicion_CTX_F_B_NC_ND.referenciaSerie}
                   onChange$={(e) => (definicion_CTX_F_B_NC_ND.referenciaSerie = (e.target as HTMLInputElement).value.toUpperCase())}
-                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('in_VENTA_NC_ND_Numero')?.focus();
+                    }
+                  }}
                 />
                 <input
                   id="in_VENTA_NC_ND_Numero"
-                  // style={{ width: '100%' }}
+                  style={{ marginRight: '4px' }}
                   // disabled
                   type="number"
                   placeholder="Add NC/ND Numero"
                   value={definicion_CTX_F_B_NC_ND.referenciaNumero}
+                  onFocus$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
                   onChange$={(e) => (definicion_CTX_F_B_NC_ND.referenciaNumero = parseInt((e.target as HTMLInputElement).value.trim()))}
                   // onChange={(e) => setNumeroIdentidad(e.target.value)}
                 />
@@ -1594,9 +2049,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 <input
                   type="checkbox"
                   id="chbx_TipoCambio_Para_Venta"
-                  // onClick$={(e) => {
-                  //   venta.enDolares = (e.target as HTMLInputElement).checked;
-                  // }}
+                  style={{ cursor: 'pointer' }}
                   onClick$={(e) => {
                     if (definicion_CTX_F_B_NC_ND.fecha === '') {
                       alert('Ingrese la fecha para esta venta');
@@ -1663,11 +2116,10 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 <select
                   id="metodoPago"
                   value={definicion_CTX_F_B_NC_ND.metodoPago}
-                  // onChange={changeMetodoPago}
                   onChange$={() => {
                     definicion_CTX_F_B_NC_ND.verCuotasCredito = !definicion_CTX_F_B_NC_ND.verCuotasCredito;
                   }}
-                  style={definicion_CTX_F_B_NC_ND.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
+                  style={definicion_CTX_F_B_NC_ND.verCuotasCredito ? { cursor: 'pointer', width: '79%' } : { cursor: 'pointer', width: '100%' }}
                 >
                   <option value={'CONTADO'}>CONTADO</option>
                   <option value={'CRÉDITO'}>CRÉDITO</option>
@@ -1698,34 +2150,41 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   value="Todo en efectivo"
                   id="Todo en efectivo"
                   name="Contado"
+                  style={{ cursor: 'pointer' }}
                   checked={definicion_CTX_F_B_NC_ND.todoEnEfectivo}
                   onChange$={(e) => {
                     definicion_CTX_F_B_NC_ND.todoEnEfectivo = (e.target as HTMLInputElement).checked;
                     definicion_CTX_F_B_NC_ND.unaParteEnEfectivo = !definicion_CTX_F_B_NC_ND.todoEnEfectivo;
                   }}
                 />
-                <label for="Todo en efectivo">Todo en efectivo</label>
+                <label for="Todo en efectivo" style={{ cursor: 'pointer' }}>
+                  Todo en efectivo
+                </label>
                 <br />
                 {/* <div class="form-control form-agrupado" style={{ display: 'flex' }}> */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', margin: '6px 0' }}>
                   <div>
                     <input
                       type="radio"
                       value="Una parte en efectivo"
                       id="Una parte en efectivo"
                       name="Contado"
+                      style={{ cursor: 'pointer' }}
                       checked={definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
                       onChange$={(e) => {
                         definicion_CTX_F_B_NC_ND.unaParteEnEfectivo = (e.target as HTMLInputElement).checked;
                         definicion_CTX_F_B_NC_ND.todoEnEfectivo = !definicion_CTX_F_B_NC_ND.unaParteEnEfectivo;
                       }}
                     />
-                    <label for="Una parte en efectivo">Una parte en efectivo</label>
+                    <label for="Una parte en efectivo" style={{ cursor: 'pointer' }}>
+                      Una parte en efectivo
+                    </label>
                   </div>
                   <input
                     type="number"
                     id="inputMontoEnEfectivo"
                     placeholder="Efectivo"
+                    style={definicion_CTX_F_B_NC_ND.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
                     disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
                     value={definicion_CTX_F_B_NC_ND.montoEnEfectivo}
                     onChange$={(e) => (definicion_CTX_F_B_NC_ND.montoEnEfectivo = (e.target as HTMLInputElement).value)}
@@ -1736,9 +2195,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     }}
                   />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
                   <select
                     id="select_contado"
+                    style={
+                      definicion_CTX_F_B_NC_ND.unaParteEnEfectivo ? { cursor: 'pointer', background: 'white' } : { cursor: 'pointer', background: '#eeeeee' }
+                    }
                     disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
                     value={definicion_CTX_F_B_NC_ND.otroMedioPago}
                     onChange$={(e) => {
@@ -1761,6 +2223,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     type="number"
                     id="inputMontoOtroMedioPago"
                     placeholder="Otro medio"
+                    style={definicion_CTX_F_B_NC_ND.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
                     disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
                     value={definicion_CTX_F_B_NC_ND.montoOtroMedioPago}
                     onChange$={(e) => (definicion_CTX_F_B_NC_ND.montoOtroMedioPago = (e.target as HTMLInputElement).value)}
@@ -1892,8 +2355,9 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           </div>
           {/* ----------------------------------------------------- */}
           {/* BOTONES */}
-          <div>
+          <div hidden={props.contexto === 'nota_venta' ? true : false}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', backgroundColor: '#74a6ab' }}>
+              {/* //ver ALMACEN OUT */}
               <button
                 id="btnVerAlmacen"
                 disabled={definicion_CTX_ADD_VENTA.desabilitarAlmacenServicios}
@@ -1912,6 +2376,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   {/* <BusquedaMercaderiaOUT ancho={740} parametrosGlobales={props.parametrosGlobales} item1={item} /> */}
                 </div>
               )}
+              {/* //ver SERVICIO */}
               <button
                 id="btnAddServicio"
                 disabled={definicion_CTX_ADD_VENTA.desabilitarAlmacenServicios}
@@ -1928,7 +2393,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   />
                 </div>
               )}
-              <button id="btnAdjuntarOS" onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarOS = true)}>
+              {/* //ver ADJUNTAR OS */}
+              <button id="btnAdjuntarOS" style={{ cursor: 'pointer' }} onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarOS = true)}>
                 Adjuntar O.S.
               </button>
               {definicion_CTX_ADD_VENTA.mostrarAdjuntarOS && (
@@ -1936,6 +2402,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   <AdjuntarOrdenServicio />
                 </div>
               )}
+              {/* //ver ADJUNTAR COTIZACION */}
               <button id="btnAdjuntarCotizacion" onClick$={() => (definicion_CTX_ADD_VENTA.mostrarAdjuntarCotizacion = true)} style={{ cursor: 'pointer' }}>
                 Adjuntar cotización
               </button>
@@ -2008,30 +2475,38 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                       const t_isc = 0;
                       let t_export = 0;
                       let t_otros = 0;
+                      // console.log(indexItemVenta);
+
+                      //console.log('iTVen.tipoImpuesto[1]', iTVen.tipoImpuesto[1].toString());
                       //IGV, ISC, IVAP, exoneradas, exportación, gratuitas, inafecta, otrosTributos
+                      //['1000', 'IGV', 'VAT']  ['1016', 'IVAP', 'VAT']  ['2000', 'ISC', 'EXC']  ['7152', 'ICBPER', 'OTH']  ['9995', 'EXP', 'FRE']
+                      //['9996', 'GRA', 'FRE']  ['9997', 'EXO', 'VAT']  ['9998', 'INA', 'FRE']  ['9999', 'OTROS', 'OTH']
+
                       if (definicion_CTX_F_B_NC_ND.enDolares) {
-                        if (iTVen.tipoImpuesto === 'IGV') {
+                        // console.log('enDolares$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+                        if (iTVen.tipoImpuesto[1] === 'IGV') {
                           const vv = redondeo6Decimales(iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD);
-                          t_bi = redondeo6Decimales((vv * 100) / (100 + iTVen.porcentaje));
+                          const denominador = 100 + Number.parseFloat(iTVen.porcentaje.$numberDecimal ? iTVen.porcentaje.$numberDecimal : iTVen.porcentaje);
+                          t_bi = redondeo6Decimales((vv * 100) / denominador);
                           t_igv = redondeo6Decimales(vv - t_bi);
                         }
                         // if (iTVen.tipoImpuesto === 'ISC') {
                         // }
                         // if (iTVen.tipoImpuesto === 'IVAP') {
                         // }
-                        if (iTVen.tipoImpuesto === 'exoneradas') {
+                        if (iTVen.tipoImpuesto[1].toString() === 'EXO') {
                           t_exo = redondeo6Decimales(iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD);
                         }
-                        if (iTVen.tipoImpuesto === 'exportación') {
+                        if (iTVen.tipoImpuesto[1] === 'EXP') {
                           t_export = redondeo6Decimales(iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD);
                         }
-                        if (iTVen.tipoImpuesto === 'gratuitas') {
+                        if (iTVen.tipoImpuesto[1] === 'GRA') {
                           t_otros = redondeo6Decimales(iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD);
                         }
-                        if (iTVen.tipoImpuesto === 'inafecta') {
+                        if (iTVen.tipoImpuesto[1] === 'INA') {
                           t_ina = redondeo6Decimales(iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD);
                         }
-                        if (iTVen.tipoImpuesto === 'otrosTributos') {
+                        if (iTVen.tipoImpuesto[1] === 'OTROS') {
                           t_otros = redondeo6Decimales(iTVen.ventaUSD.$numberDecimal ? iTVen.ventaUSD.$numberDecimal : iTVen.ventaUSD);
                         }
                         // if (iTVen.exonerado) {
@@ -2052,36 +2527,49 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                         //   }
                         // }
                       } else {
-                        if (iTVen.tipoImpuesto === 'IGV') {
-                          console.log('iTVen.ventaPEN:::', iTVen.ventaPEN);
+                        // console.log('🈶🈶🈶🈶🈶');
+
+                        // if (iTVen.tipoImpuesto === 'IGV') {
+                        // console.log('PENPENPENPENPENPENPEmn', iTVen.tipoImpuesto);
+                        // console.log('PENPENPENPENPENPENPEmn', iTVen.tipoImpuesto[1]);
+
+                        if (iTVen.tipoImpuesto[1] === 'IGV') {
+                          // console.log('💚💚💚💚💚💚 IGV', iTVen.ventaPEN);
                           const vv = redondeo6Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
-                          console.log('vv', vv);
-                          console.log('iTVen.porcentaje', iTVen.porcentaje);
-                          t_bi = redondeo6Decimales((vv * 100) / (100 + iTVen.porcentaje));
+                          // console.log('vv', vv);
+                          // console.log('iTVen.porcentaje', iTVen.porcentaje);
+                          const denominador = 100 + Number.parseFloat(iTVen.porcentaje.$numberDecimal ? iTVen.porcentaje.$numberDecimal : iTVen.porcentaje);
+                          t_bi = redondeo6Decimales((vv * 100) / denominador);
                           t_igv = redondeo6Decimales(vv - t_bi);
-                          // console.log('t_bi -*', t_bi);
-                          // console.log('t_igv -*', t_igv);
                         }
+
                         // if (iTVen.tipoImpuesto === 'ISC') {
                         // }
                         // if (iTVen.tipoImpuesto === 'IVAP') {
                         // }
-                        if (iTVen.tipoImpuesto === 'exoneradas') {
+
+                        if (iTVen.tipoImpuesto[1] === 'EXO') {
+                          // console.log('💚💚💚💚💚💚 EXO', iTVen.ventaPEN);
                           t_exo = redondeo6Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
                         }
-                        if (iTVen.tipoImpuesto === 'exportación') {
+                        if (iTVen.tipoImpuesto[1] === 'EXP') {
+                          // console.log('💚💚💚💚💚💚 EXP', iTVen.ventaPEN);
                           t_export = redondeo6Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
                         }
-                        if (iTVen.tipoImpuesto === 'gratuitas') {
+                        if (iTVen.tipoImpuesto[1] === 'GRA') {
+                          // console.log('💚💚💚💚💚💚 GRA', iTVen.ventaPEN);
                           t_otros = redondeo6Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
                         }
-                        if (iTVen.tipoImpuesto === 'inafecta') {
+                        if (iTVen.tipoImpuesto[1] === 'INA') {
+                          // console.log('💚💚💚💚💚💚 INA', iTVen.ventaPEN);
                           t_ina = redondeo6Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
                         }
-                        if (iTVen.tipoImpuesto === 'otrosTributos') {
+                        if (iTVen.tipoImpuesto[1] === 'OTROS') {
+                          // console.log('💚💚💚💚💚💚 OTROS', iTVen.ventaPEN);
                           t_otros = redondeo6Decimales(iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN);
                         }
 
+                        //console.log('fin ...PENPENPENPENPENPENPEmn');
                         // if (iTVen.exonerado) {
                         //   t_exo = redondeo2Decimales(
                         //     iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
@@ -2099,7 +2587,9 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                         //     t_igv = redondeo2Decimales(vv - t_bi);
                         //   }
                         // }
+                        // console.log('🈶🈶🈶🈶🈶🈶🈶🈶🈶🈶');
                       }
+
                       sumaTOTAL = sumaTOTAL + t_bi + t_igv + t_exo + t_ina + t_isc + t_export + t_otros;
                       sumaTOTAL_BI = sumaTOTAL_BI + t_bi;
                       sumaTOTAL_IGV = sumaTOTAL_IGV + t_igv;
@@ -2108,19 +2598,25 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                       sumaTOTAL_ISC = sumaTOTAL_ISC + t_isc;
                       sumaTOTAL_EXPORT = sumaTOTAL_EXPORT + t_export;
                       sumaTOTAL_OTROS = sumaTOTAL_OTROS + t_otros;
-                      console.log(
-                        `valores ${index + 1} : `,
-                        sumaTOTAL,
-                        sumaTOTAL_BI,
-                        sumaTOTAL_IGV,
-                        sumaTOTAL_EXO,
-                        sumaTOTAL_INAFEC,
-                        sumaTOTAL_ISC,
-                        sumaTOTAL_EXPORT,
-                        sumaTOTAL_OTROS
-                      );
+
+                      //console.log(
+                      //   `valores ${index + 1} : `,
+                      //   sumaTOTAL,
+                      //   sumaTOTAL_BI,
+                      //   sumaTOTAL_IGV,
+                      //   sumaTOTAL_EXO,
+                      //   sumaTOTAL_INAFEC,
+                      //   sumaTOTAL_ISC,
+                      //   sumaTOTAL_EXPORT,
+                      //   sumaTOTAL_OTROS
+                      // );
                       //SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
+                      // console.log('🍟🍟🍟🍟🍟🍟🍟🍟🍟🍟🍟', t_bi, t_igv, t_exo, t_ina, t_isc, t_export, t_otros);
+                      // console.log('🍟🍟🍟🍟🍟🍟🍟🍟🍟🍟🍟', index + 1, definicion_CTX_F_B_NC_ND.itemsVenta.length);
+
                       if (index + 1 === definicion_CTX_F_B_NC_ND.itemsVenta.length) {
+                        // console.log('🛹🛹🛹🛹');
+
                         fijarMontos({
                           sumaTOTAL,
                           sumaTOTAL_BI,
@@ -2131,16 +2627,25 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                           sumaTOTAL_EXPORT,
                           sumaTOTAL_OTROS,
                         });
+                        // console.log(
+                        //   '🍟🍟🍟🍟🍟🍟🍟🍟🍟🍟🍟',
+                        //   sumaTOTAL,
+                        //   sumaTOTAL_BI,
+                        //   sumaTOTAL_IGV,
+                        //   sumaTOTAL_EXO,
+                        //   sumaTOTAL_INAFEC,
+                        //   sumaTOTAL_ISC,
+                        //   sumaTOTAL_EXPORT,
+                        //   sumaTOTAL_OTROS
+                        // );
                       }
-                      // if (iTVen.idAuxiliar > 0) {
-                      //   const tre = definicion_CTX_F_B_NC_ND.asientoContable.filter(
-                      //     (ele: any) => ele.idAuxiliar === iTVen.idAuxiliar
-                      //   );
-                      //   console.log('tre', tre);
-                      // }
+
+                      // console.log('😀😀😀😀😀', t_bi, t_igv, t_exo, t_ina, t_isc, t_export, t_otros);
                       return (
                         <tr key={iTVen.idAuxiliar}>
-                          <td data-label="Ítem" key={iTVen.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
+                          <td data-label="Ítem" class="comoCadena">
+                            {`${cerosALaIzquierda(indexItemVenta, 3)}`}
+                          </td>
                           <td data-label="Código" class="comoCadena">
                             {iTVen.codigo}
                           </td>
@@ -2151,18 +2656,19 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                           <td data-label="Cantidad" class="comoNumero">
                             <input
                               type="number"
+                              disabled={props.contexto === 'nota_venta' ? true : false}
                               style={{ width: '60px', textAlign: 'end' }}
                               value={iTVen.cantidadEquivalencia.$numberDecimal ? iTVen.cantidadEquivalencia.$numberDecimal : iTVen.cantidadEquivalencia}
                               onChange$={(e) => {
-                                console.log('ON CHANGE: Cantidad........');
+                                //console.log('ON CHANGE: Cantidad........');
                                 iTVen.cantidadEquivalencia = parseFloat((e.target as HTMLInputElement).value);
                                 if (definicion_CTX_F_B_NC_ND.enDolares) {
-                                  iTVen.ventaUSD = iTVen.cantidadEquivalencia * iTVen.precioUSD;
-                                  iTVen.ventaPEN = iTVen.cantidadEquivalencia * iTVen.precioPEN;
+                                  iTVen.ventaUSD = iTVen.cantidadEquivalencia * iTVen.precioUnitarioUSD;
+                                  iTVen.ventaPEN = iTVen.cantidadEquivalencia * iTVen.precioUnitarioPEN;
                                 } else {
                                   iTVen.ventaPEN =
                                     (iTVen.cantidadEquivalencia.$numberDecimal ? iTVen.cantidadEquivalencia.$numberDecimal : iTVen.cantidadEquivalencia) *
-                                    (iTVen.precioPEN.$numberDecimal ? iTVen.precioPEN.$numberDecimal : iTVen.precioPEN);
+                                    (iTVen.precioUnitarioPEN.$numberDecimal ? iTVen.precioUnitarioPEN.$numberDecimal : iTVen.precioUnitarioPEN);
                                 }
                               }}
                             />
@@ -2174,38 +2680,39 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                           <td data-label="Precio Uni" class="comoNumero">
                             <input
                               type="number"
+                              disabled={props.contexto === 'nota_venta' ? true : false}
                               style={{ width: '60px', textAlign: 'end' }}
                               value={
                                 definicion_CTX_F_B_NC_ND.enDolares
-                                  ? iTVen.precioUSD.$numberDecimal
-                                    ? iTVen.precioUSD.$numberDecimal
-                                    : iTVen.precioUSD
-                                  : iTVen.precioPEN.$numberDecimal
-                                  ? iTVen.precioPEN.$numberDecimal
-                                  : iTVen.precioPEN
+                                  ? iTVen.precioUnitarioUSD.$numberDecimal
+                                    ? iTVen.precioUnitarioUSD.$numberDecimal
+                                    : iTVen.precioUnitarioUSD
+                                  : iTVen.precioUnitarioPEN.$numberDecimal
+                                  ? iTVen.precioUnitarioPEN.$numberDecimal
+                                  : iTVen.precioUnitarioPEN
                               }
                               onChange$={(e) => {
-                                console.log('ON CHANGE: Precio Uni.........');
+                                //console.log('ON CHANGE: Precio Uni.........');
                                 const precio = parseFloat((e.target as HTMLInputElement).value);
 
                                 if (definicion_CTX_F_B_NC_ND.enDolares) {
-                                  iTVen.precioUSD = precio;
-                                  iTVen.ventaUSD = iTVen.cantidadEquivalencia * iTVen.precioUSD;
-                                  iTVen.ventaPEN = iTVen.cantidadEquivalencia * iTVen.precioPEN;
+                                  iTVen.precioUnitarioUSD = precio;
+                                  iTVen.ventaUSD = iTVen.cantidadEquivalencia * iTVen.precioUnitarioUSD;
+                                  iTVen.ventaPEN = iTVen.cantidadEquivalencia * iTVen.precioUnitarioPEN;
                                 } else {
-                                  iTVen.precioPEN = precio;
+                                  iTVen.precioUnitarioPEN = precio;
 
                                   iTVen.ventaPEN =
                                     (iTVen.cantidadEquivalencia.$numberDecimal ? iTVen.cantidadEquivalencia.$numberDecimal : iTVen.cantidadEquivalencia) *
-                                    (iTVen.precioPEN.$numberDecimal ? iTVen.precioPEN.$numberDecimal : iTVen.precioPEN);
+                                    (iTVen.precioUnitarioPEN.$numberDecimal ? iTVen.precioUnitarioPEN.$numberDecimal : iTVen.precioUnitarioPEN);
                                 }
                                 //actualizar COSTO UNITARIO - EQUIVALENTE -- SOLO SI ES SERVICIO
                                 if (iTVen.tipo === 'SERVICIO') {
                                   iTVen.costoUnitarioPEN = redondeo6Decimales(
-                                    iTVen.precioPEN.$numberDecimal ? iTVen.precioPEN.$numberDecimal : iTVen.precioPEN
+                                    iTVen.precioUnitarioPEN.$numberDecimal ? iTVen.precioUnitarioPEN.$numberDecimal : iTVen.precioUnitarioPEN
                                   );
                                   iTVen.costoUnitarioEquivalenciaPEN = redondeo6Decimales(
-                                    iTVen.precioPEN.$numberDecimal ? iTVen.precioPEN.$numberDecimal : iTVen.precioPEN
+                                    iTVen.precioUnitarioPEN.$numberDecimal ? iTVen.precioUnitarioPEN.$numberDecimal : iTVen.precioUnitarioPEN
                                   );
                                 }
                               }}
@@ -2213,7 +2720,6 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                           </td>
                           {/* ----------------------------------------------------- */}
                           <td data-label="Venta" class="comoNumero">
-                            {/* {iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN} */}
                             {definicion_CTX_F_B_NC_ND.enDolares
                               ? iTVen.ventaUSD.$numberDecimal
                                 ? redondeo6Decimales(iTVen.ventaUSD.$numberDecimal)
@@ -2223,10 +2729,10 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                               : redondeo2Decimales(iTVen.ventaPEN)}
                           </td>
                           <td data-label="%" class="acciones">
-                            {iTVen.porcentaje}
+                            {iTVen.porcentaje.$numberDecimal ? iTVen.porcentaje.$numberDecimal : iTVen.porcentaje}
                           </td>
-                          <td data-label="Imp" class="comoCadena">
-                            {iTVen.tipoImpuesto.substring(0, 6)}
+                          <td data-label="Imp" class="acciones">
+                            {iTVen.tipoImpuesto[1]}
                           </td>
                           <td data-label="Afec" class="acciones">
                             {iTVen.tipoAfectacionDelImpuesto}
@@ -2241,11 +2747,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                               height={12}
                               width={12}
                               style={{ marginRight: '2px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
+                                //console.log('iTVen.tipoImpuesto', iTVen.tipoImpuesto);
                                 editarImpuesto_ItemVenta.idAuxiliar = iTVen.idAuxiliar;
                                 editarImpuesto_ItemVenta.descripcion = iTVen.descripcionEquivalencia;
-                                editarImpuesto_ItemVenta.tipoImpuesto = iTVen.tipoImpuesto;
+                                editarImpuesto_ItemVenta.tipoImpuesto = iTVen.tipoImpuesto[0] + ' ' + iTVen.tipoImpuesto[1] + ' ' + iTVen.tipoImpuesto[2];
                                 editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto = iTVen.tipoAfectacionDelImpuesto;
                                 definicion_CTX_ADD_VENTA.mostrarPanelEditarImpuesto = true;
                               }}
@@ -2259,7 +2766,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                               height={12}
                               width={12}
                               // style={{ margin: '2px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 borrarItemVenta.idAuxiliar = iTVen.idAuxiliar;
                                 // borrarItemVenta.item = indexItemServi;
@@ -2367,6 +2874,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                       </td>
                       <td colSpan={3} />
                     </tr>
+                    <tr>
+                      <td colSpan={7} class="comoNumero" style={{ color: '#494641' }}>
+                        {definicion_CTX_F_B_NC_ND.lite}
+                      </td>
+                      <td colSpan={3} />
+                    </tr>
                   </tfoot>
                 </table>
               ) : (
@@ -2390,12 +2903,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           {parametrosGlobales.ventaConDetraccion && (
             <div>
               {/* CON DETRACCION */}
-              <div>
+              <div style={{ borderRadius: '2px', backgroundColor: '#999999' }}>
                 <input
                   type="checkbox"
                   id="chbx_ConDetraccion"
+                  style={{ cursor: 'pointer' }}
                   checked={definicion_CTX_F_B_NC_ND.detraccion}
-                  // style={{ width: "100%", background: "yellow" }}
                   title="Con Detracción"
                   alt="Alt Con Detracción"
                   placeholder="Con Detracción"
@@ -2403,18 +2916,20 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     definicion_CTX_F_B_NC_ND.detraccion = (e.target as HTMLInputElement).checked;
                   }}
                 />
-                <label for="chbx_ConDetraccion">Con detracción</label>
+                <label for="chbx_ConDetraccion" style={{ cursor: 'pointer' }}>
+                  Con detracción
+                </label>
               </div>
               <div id="zona_Detraccion" hidden={!definicion_CTX_F_B_NC_ND.detraccion}>
                 {/* Detracción Bienes Servicios */}
                 <div style={{ display: 'flex', margin: '4px 0px' }}>
                   <select
                     id="select_Detraccion"
-                    style={{ width: '100%' }}
+                    style={{ cursor: 'pointer', width: '100%' }}
                     onChange$={() => {
                       const elSelec = document.getElementById('select_Detraccion') as HTMLSelectElement;
                       const elIdx = elSelec.selectedIndex;
-                      // console.log('?', elIdx, elSelec[elIdx].id);
+                      // //console.log('?', elIdx, elSelec[elIdx].id);
                       definicion_CTX_F_B_NC_ND.detraccionCodigo = elSelec[elIdx].id;
                       // if (definicion_CTX_F_B_NC_ND.idDetraccion === "") {
                       //   definicion_CTX_F_B_NC_ND.detraccionCodigo = ""; // parseInt('');
@@ -2438,11 +2953,11 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 <div style={{ display: 'flex', margin: '4px 0px' }}>
                   <select
                     id="select_DetraccionMedioPago"
-                    style={{ width: '100%' }}
+                    style={{ cursor: 'pointer', width: '100%' }}
                     onChange$={() => {
                       const elSelec = document.getElementById('select_DetraccionMedioPago') as HTMLSelectElement;
                       const elIdx = elSelec.selectedIndex;
-                      // console.log('?', elIdx, elSelec[elIdx].id);
+                      // //console.log('?', elIdx, elSelec[elIdx].id);
                       definicion_CTX_F_B_NC_ND.detraccionMedioPagoCodigo = elSelec[elIdx].id;
                       // if (definicion_CTX_F_B_NC_ND.detraccionMedioPagoCodigo === "") {
                       //   definicion_CTX_F_B_NC_ND.detraccionCodigo = ""; // parseInt('');
@@ -2488,6 +3003,14 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     onChange$={(e) => {
                       definicion_CTX_F_B_NC_ND.detraccionPorcentaje = (e.target as HTMLInputElement).value.toUpperCase().trim();
                     }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        document.getElementById('in_MontoDetraccion')?.focus();
+                      }
+                    }}
+                    onFocus$={(e) => {
+                      (e.target as HTMLInputElement).select();
+                    }}
                   />
                 </div>
                 {/* Monto DETRACCION */}
@@ -2502,6 +3025,14 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     onChange$={(e) => {
                       definicion_CTX_F_B_NC_ND.detraccionMontoPEN = (e.target as HTMLInputElement).value.toUpperCase().trim();
                     }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        document.getElementById('btn_GrabarVenta')?.focus();
+                      }
+                    }}
+                    onFocus$={(e) => {
+                      (e.target as HTMLInputElement).select();
+                    }}
                   />
                 </div>
               </div>
@@ -2510,8 +3041,10 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           )}
         </div>
         <input
+          id="btn_GrabarVenta"
           type="submit"
           value={botonGrabar.value === '' ? 'Grabar' : `${botonGrabar.value}`}
+          style={{ height: '40px' }}
           class="btn-centro"
           onClick$={() => grabandoVenta()}
           // onClick={(e) => onSubmit(e)}

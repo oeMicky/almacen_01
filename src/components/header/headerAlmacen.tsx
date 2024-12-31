@@ -31,13 +31,11 @@ export default component$(() => {
 
   // useTask$(({ track }) => {
   //   track(() => definicion_CTX_HEADER_ALMACEN.mostrarSpinner);
-  //   console.log('definicion_CTX_HEADER_ALMACEN.mostrarSpinner', definicion_CTX_HEADER_ALMACEN.mostrarSpinner);
+  //   //console.log('definicion_CTX_HEADER_ALMACEN.mostrarSpinner', definicion_CTX_HEADER_ALMACEN.mostrarSpinner);
   // });
 
   return (
-    <header
-      style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}
-    >
+    <header style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
       <div class="container-header">
         <div class="main-logo">
           <Link href="/">
@@ -53,12 +51,7 @@ export default component$(() => {
           </div>
           <input type="checkbox" class="toggle-menu__checkbox" id="toggle-menu-checkbox" />
           {/* <li style={{ cursor: 'pointer', margin: '0px 5px', padding: '10px 10px', borderRadius: '5px' }}> */}
-          <ul
-            class="main-menu"
-            style={
-              parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''
-            }
-          >
+          <ul class="main-menu" style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
             <li
               class="main-menu__item"
               onClick$={() => {
@@ -192,6 +185,7 @@ export default component$(() => {
 
             <li
               class="main-menu__item"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 sessionStorage.removeItem('usuario');

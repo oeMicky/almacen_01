@@ -12,18 +12,45 @@ import {
 } from '~/functions/comunes';
 import logit from '../../assets/base64/imagesBase64.js';
 import { parametrosGlobales } from '~/routes/login';
+// import QRCode from 'qrcode';
 
 async function pdfOsMG_ConVehiculo(os: any) {
   pdfMake.vfs = pdfFonts;
 
-  console.log('os PDF', os);
+  //console.log('para QR2:', parametrosGlobales.RUC + '|' + os.serie + '|' + cerosALaIzquierda(os.numero, 8) + '|');
+  // let ELqr;
+
+  // QRCode.toString(
+  //   parametrosGlobales.RUC + '|' + os.serie + '|' + cerosALaIzquierda(os.numero, 8) + '|',
+  //   {
+  //     errorCorrectionLevel: 'H',
+  //     type: 'svg',
+  //   },
+  //   function (err, data) {
+  //     if (err) throw err;
+  //     pasarValorSVG(data);
+  //     // //console.log('🎇', data);
+  //   }
+  // );
+
+  // function pasarValorSVG(data: string) {
+  //   ELqr = data;
+  // }
+
+  // //console.log('🎄🎄🎄', ELqr);
+  // const TRE = qrcode -o out.svg parametrosGlobales.RUC + '|' + os.serie + '|' + cerosALaIzquierda(os.numero, 8) + '|';
+  // //console.log(
+  //   'SVG',
+  //   '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0 0 32 32" version="1.1"><g id="surface1"><path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 26.125 14.875 L 17.125 14.875 L 17.125 5.875 C 17.125 5.257812 16.617188 4.75 16 4.75 C 15.382812 4.75 14.875 5.257812 14.875 5.875 L 14.875 14.875 L 5.875 14.875 C 5.257812 14.875 4.75 15.382812 4.75 16 C 4.75 16.617188 5.257812 17.125 5.875 17.125 L 14.875 17.125 L 14.875 26.125 C 14.875 26.742188 15.382812 27.25 16 27.25 C 16.617188 27.25 17.125 26.742188 17.125 26.125 L 17.125 17.125 L 26.125 17.125 C 26.742188 17.125 27.25 16.617188 27.25 16 C 27.25 15.382812 26.742188 14.875 26.125 14.875 Z M 26.125 14.875 "/></g></svg>'
+  // );
+  //console.log('os PDF', os);
 
   const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
 
   const servicios = os.servicios;
   // let repuestosDespachados: any = [];
   const repuestosDespachados = os.requisiciones.filter((plot: any) => plot.cantidadDespachada.$numberDecimal > 0);
-  console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
+  //console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
   let totalServicios = 0;
   let totalRepuestos = 0;
 
@@ -32,8 +59,8 @@ async function pdfOsMG_ConVehiculo(os: any) {
   // const rodape = [];
 
   const losServicios = servicios.map((ser: any, index: number) => {
-    console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
-    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
+    //console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
+    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioUnitarioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
     totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
@@ -46,7 +73,7 @@ async function pdfOsMG_ConVehiculo(os: any) {
       },
       { text: unidadEquivalencia, style: 'tableBody' },
       {
-        text: formatearMonedaPEN(precioPEN.$numberDecimal),
+        text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
         style: 'tableBody',
       },
       {
@@ -57,12 +84,13 @@ async function pdfOsMG_ConVehiculo(os: any) {
   });
 
   const losRepuestos = repuestosDespachados.map((repu: any, index: number) => {
-    console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
-    const { codigo, descripcionEquivalencia, cantidadDespachada, cantidadReingresada, unidadEquivalencia, precioPEN } = repu;
-    console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
+    //console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
+    const { codigo, descripcionEquivalencia, cantidadDespachada, cantidadReingresada, unidadEquivalencia, precioUnitarioPEN } = repu;
+    //console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
     if (cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal > 0) {
       const indexItem = index + 1;
-      totalRepuestos = totalRepuestos + redondeo2Decimales((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal);
+      totalRepuestos =
+        totalRepuestos + redondeo2Decimales((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioUnitarioPEN.$numberDecimal);
       return [
         { text: indexItem, style: 'tableBody' },
         { text: codigo, style: 'tableBody' },
@@ -73,11 +101,11 @@ async function pdfOsMG_ConVehiculo(os: any) {
         },
         { text: unidadEquivalencia, style: 'tableBody' },
         {
-          text: formatearMonedaPEN(precioPEN.$numberDecimal),
+          text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
           style: 'tableBody',
         },
         {
-          text: formatearMonedaPEN((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal),
+          text: formatearMonedaPEN((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioUnitarioPEN.$numberDecimal),
           style: 'tableBody',
         },
       ];
@@ -87,7 +115,7 @@ async function pdfOsMG_ConVehiculo(os: any) {
   //#region FUNCION PIE DE PAGINA
   // margin: [izq, top, der, button],
   const d = new Date(); //.toUTCString(); //.toISOString();
-  // console.log('d', d);
+  // //console.log('d', d);
   function Pie(currentPage: number, pageCount: number) {
     return [
       {
@@ -346,7 +374,7 @@ async function pdfOsMG_ConVehiculo(os: any) {
             width: '100%',
             margin: [0, 0, 30, 0],
 
-            text: { text: 'SUBTOTAL ' + formatearMonedaPEN(totalServicios), style: 'tableBodyRight' },
+            text: { text: 'SUBTOTAL PEN ' + formatearMonedaPEN(totalServicios), style: 'tableBodyRight' },
             alignment: 'right',
           },
         ],
@@ -384,7 +412,7 @@ async function pdfOsMG_ConVehiculo(os: any) {
           {
             width: '100%',
             margin: [0, 0, 30, 0],
-            text: { text: 'SUBTOTAL ' + formatearMonedaPEN(totalRepuestos), style: 'tableBodyRight' },
+            text: { text: 'SUBTOTAL PEN ' + formatearMonedaPEN(totalRepuestos), style: 'tableBodyRight' },
             alignment: 'right',
           },
         ],
@@ -399,6 +427,24 @@ async function pdfOsMG_ConVehiculo(os: any) {
           },
         ],
       },
+      //QR
+      // {
+      //   // svg: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0 0 32 32" version="1.1"><g id="surface1"><path style=" stroke:none;fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;" d="M 26.125 14.875 L 17.125 14.875 L 17.125 5.875 C 17.125 5.257812 16.617188 4.75 16 4.75 C 15.382812 4.75 14.875 5.257812 14.875 5.875 L 14.875 14.875 L 5.875 14.875 C 5.257812 14.875 4.75 15.382812 4.75 16 C 4.75 16.617188 5.257812 17.125 5.875 17.125 L 14.875 17.125 L 14.875 26.125 C 14.875 26.742188 15.382812 27.25 16 27.25 C 16.617188 27.25 17.125 26.742188 17.125 26.125 L 17.125 17.125 L 26.125 17.125 C 26.742188 17.125 27.25 16.617188 27.25 16 C 27.25 15.382812 26.742188 14.875 26.125 14.875 Z M 26.125 14.875 "/></g></svg>',
+      //   // svg: QRCode.toString(
+      //   //   'Encode this text in QR code',
+      //   //   {
+      //   //     errorCorrectionLevel: 'H',
+      //   //     type: 'svg',
+      //   //   },
+      //   //   function (err, data) {
+      //   //     if (err) throw err;
+
+      //   //     //console.log(data);
+      //   //   }
+      //   // ),
+      //   // svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h41v41H0z"/><path stroke="#000000" d="M4 4.5h7m1 0h1m2 0h1m1 0h3m1 0h1m2 0h1m2 0h2m1 0h7M4 5.5h1m5 0h1m1 0h1m1 0h1m1 0h2m1 0h1m2 0h4m4 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h3m1 0h1m4 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h6m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m2 0h3m2 0h2m1 0h6m3 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m1 0h1m1 0h4m2 0h2m1 0h2m2 0h2m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h1m3 0h1m2 0h1m1 0h3m1 0h3M6 12.5h3m1 0h1m1 0h2m2 0h3m4 0h2m1 0h6m2 0h3M5 13.5h2m1 0h1m2 0h3m1 0h4m1 0h1m3 0h2m1 0h1m2 0h1m5 0h1M5 14.5h3m2 0h1m3 0h1m2 0h3m1 0h2m2 0h1m2 0h1m3 0h4M4 15.5h1m2 0h1m1 0h1m2 0h2m1 0h3m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h2M4 16.5h1m1 0h3m1 0h1m2 0h1m1 0h3m2 0h1m2 0h3m3 0h1m6 0h1M4 17.5h1m1 0h3m4 0h1m11 0h3m1 0h3m1 0h2M4 18.5h1m1 0h5m1 0h1m2 0h1m1 0h3m3 0h3m7 0h3M4 19.5h2m1 0h1m5 0h1m1 0h4m3 0h1m2 0h1m3 0h1m1 0h1m2 0h3M4 20.5h5m1 0h3m1 0h1m2 0h2m1 0h1m2 0h1m2 0h1m1 0h2m4 0h1m1 0h1M5 21.5h2m2 0h1m2 0h1m1 0h2m1 0h2m1 0h1m1 0h2m1 0h3m1 0h1m3 0h2m1 0h1M4 22.5h2m1 0h1m2 0h5m4 0h3m3 0h2m1 0h4m1 0h3M4 23.5h3m1 0h2m2 0h2m2 0h1m2 0h3m3 0h1m4 0h2m1 0h2M7 24.5h4m3 0h1m1 0h1m1 0h1m1 0h1m1 0h2m5 0h4m2 0h1M4 25.5h1m4 0h1m3 0h1m1 0h2m2 0h4m5 0h1m2 0h1m4 0h1M4 26.5h1m1 0h1m1 0h3m1 0h2m2 0h1m2 0h1m1 0h1m1 0h2m1 0h1m2 0h2m1 0h4M4 27.5h1m2 0h2m2 0h1m1 0h1m4 0h1m2 0h3m1 0h2m1 0h4m1 0h2M4 28.5h1m1 0h1m2 0h5m3 0h3m1 0h1m1 0h1m2 0h1m1 0h6M12 29.5h1m5 0h2m2 0h1m1 0h1m3 0h1m3 0h2m2 0h1M4 30.5h7m6 0h1m1 0h2m1 0h1m3 0h3m1 0h1m1 0h1m2 0h1M4 31.5h1m5 0h1m3 0h1m2 0h1m1 0h2m1 0h1m1 0h1m3 0h1m3 0h1m1 0h1M4 32.5h1m1 0h3m1 0h1m1 0h1m3 0h4m3 0h1m1 0h2m1 0h5m2 0h1M4 33.5h1m1 0h3m1 0h1m1 0h1m3 0h4m3 0h3m3 0h1m1 0h3m1 0h1M4 34.5h1m1 0h3m1 0h1m1 0h1m1 0h5m2 0h1m2 0h2m2 0h1m1 0h1M4 35.5h1m5 0h1m3 0h2m3 0h1m2 0h3m4 0h1m1 0h3M4 36.5h7m3 0h2m1 0h1m1 0h2m2 0h2m1 0h3m3 0h1m1 0h2"/></svg>',
+      //   svg: ELqr,
+      // },
     ],
     footer: Pie,
     // margin: [izq, top, der, button],

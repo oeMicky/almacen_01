@@ -122,7 +122,7 @@ export default component$(() => {
               }}
               onKeyPress$={(e) => {
                 if (e.key === 'Enter') {
-                  console.log('e', (e.target as HTMLInputElement).value);
+                  //console.log('e', (e.target as HTMLInputElement).value);
                   // (document.getElementById('btn_Buscar_Nombre_RUCDNI_NOTA_SALIDA_REINGRESO') as HTMLInputElement)?.focus();
                   if ((e.target as HTMLInputElement).value !== '') {
                     buscarNotaDeSalidaReingreso.value++;
@@ -207,7 +207,7 @@ export default component$(() => {
             }}
             onKeyPress$={(e) => {
               if (e.key === 'Enter') {
-                console.log('e', (e.target as HTMLInputElement).value);
+                //console.log('e', (e.target as HTMLInputElement).value);
                 // (document.getElementById('btn_Numero_NOTA_SALIDA_REINGRESO') as HTMLInputElement)?.focus();
                 if ((e.target as HTMLInputElement).value !== '') {
                   buscarNotaDeSalidaReingreso.value++;

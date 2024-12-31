@@ -1,10 +1,10 @@
-import { Resource, component$, useContext, useResource$, useStyles$ } from "@builder.io/qwik";
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 
-import style from "../tabla/tabla.css?inline";
-import { images } from "~/assets";
-import { CTX_INDEX_PARAMETROS_MANUFACTURA } from "~/routes/(ordenesProduccion)/parametrosManufactura";
-import type { IManufacturaUnitaria } from "~/interfaces/iParametrosManufactura";
-import { parametrosGlobales } from "~/routes/login";
+import style from '../tabla/tabla.css?inline';
+import { images } from '~/assets';
+import { CTX_INDEX_PARAMETROS_MANUFACTURA } from '~/routes/(ordenesProduccion)/parametrosManufactura';
+import type { IManufacturaUnitaria } from '~/interfaces/iParametrosManufactura';
+import { parametrosGlobales } from '~/routes/login';
 
 export default component$((props: { buscarManufacturasUnitarias: number }) => {
   //#region CONTEXTOS
@@ -22,14 +22,14 @@ export default component$((props: { buscarManufacturasUnitarias: number }) => {
     track(() => props.buscarManufacturasUnitarias.valueOf());
 
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
-    // console.log("parametrosBusqueda", props.parametrosBusqueda);
+    // //console.log("parametrosBusqueda", props.parametrosBusqueda);
     const res = await fetch(`${import.meta.env.VITE_URL}/api/parametrosManufactura/obtenerCostosDirectos`, {
       // const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial, idEmpresa: parametrosGlobales.idEmpresa }),
       signal: abortController.signal,
@@ -40,9 +40,9 @@ export default component$((props: { buscarManufacturasUnitarias: number }) => {
 
   //#region VISUZALIZAR PDF
   //   const verPDF = $((cotizacion: any) => {
-  //     // console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
+  //     // //console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
   //     if (typeof cotizacion !== "undefined") {
-  //       console.log("imprimiendo ... imprimiendo ... imprimiendo ...", cotizacion);
+  //       //console.log("imprimiendo ... imprimiendo ... imprimiendo ...", cotizacion);
   //       // pdfCotizacion98(cotizacion);
   //       pdfCotizacionMG(cotizacion);
   //     }
@@ -50,7 +50,7 @@ export default component$((props: { buscarManufacturasUnitarias: number }) => {
 
   //   useTask$(async ({ track }) => {
   //     track(() => clickPDF.value);
-  //     // console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
+  //     // //console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
   //     if (typeof cotizacionSeleccionada.value !== "undefined") {
   //       await verPDF(cotizacionSeleccionada.value);
   //     }
@@ -61,18 +61,18 @@ export default component$((props: { buscarManufacturasUnitarias: number }) => {
     <Resource
       value={lasManufacturasUnitarias}
       onPending={() => {
-        console.log("onPending 🍉🍉🍉🍉");
+        //console.log("onPending 🍉🍉🍉🍉");
         //
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log("onRejected 🍍🍍🍍🍍");
+        //console.log("onRejected 🍍🍍🍍🍍");
         // props.buscarVentas = false;
         ctx_index_parametros_manufactura.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(costosDirecctos) => {
-        console.log("onResolved 🍓🍓🍓🍓", costosDirecctos);
+        //console.log("onResolved 🍓🍓🍓🍓", costosDirecctos);
         const { data } = costosDirecctos; //{ status, data, message }
         const misManufacturasUnitarias: IManufacturaUnitaria[] = data;
         ctx_index_parametros_manufactura.mostrarSpinner = false;
@@ -81,7 +81,7 @@ export default component$((props: { buscarManufacturasUnitarias: number }) => {
           <>
             {misManufacturasUnitarias.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Manufactura unitaria</th>
@@ -102,21 +102,21 @@ export default component$((props: { buscarManufacturasUnitarias: number }) => {
                           </td>
                           <td data-label="Tiempo manufactura unitaria x hora" class="comoNumero">
                             {manuUnit.tiempoManufacturaUnitariaPorHora
-                              ? parseFloat(manuUnit.tiempoManufacturaUnitariaPorHora.$numberDecimal).toLocaleString("en-PE", {
+                              ? parseFloat(manuUnit.tiempoManufacturaUnitariaPorHora.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
-                                  currency: "PEN",
+                                  currency: 'PEN',
                                   minimumFractionDigits: 2,
                                 })
-                              : ""}
+                              : ''}
                           </td>
                           <td data-label="Total costos directos PEN" class="comoNumero">
                             {manuUnit.totalCostosDirectos
-                              ? parseFloat(manuUnit.totalCostosDirectos.$numberDecimal).toLocaleString("en-PE", {
+                              ? parseFloat(manuUnit.totalCostosDirectos.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
-                                  currency: "PEN",
+                                  currency: 'PEN',
                                   minimumFractionDigits: 2,
                                 })
-                              : ""}
+                              : ''}
                           </td>
                           <td data-label="Costo manufactura unitaria" class="comoNumero">
                             {/* {manuUnit.costoManufacturaUnitario
@@ -135,10 +135,10 @@ export default component$((props: { buscarManufacturasUnitarias: number }) => {
                               title="Editar venta"
                               height={14}
                               width={14}
-                              style={{ marginRight: "8px" }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              style={{ marginRight: '8px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               // onClick$={() => {
-                              //   console.log("cotizacion", value);
+                              //   //console.log("cotizacion", value);
                               //   ctx_index_cotizacion.cC = value;
                               //   ctx_index_cotizacion.mostrarPanelNewEditCotizacion = true;
                               // }}
@@ -152,7 +152,7 @@ export default component$((props: { buscarManufacturasUnitarias: number }) => {
               </>
             ) : (
               <div>
-                <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

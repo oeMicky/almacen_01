@@ -1,31 +1,15 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from '../../assets/fonts/vfs_fonts';
-import {
-  cerosALaIzquierda,
-  formatearMonedaPEN,
-  formatearMonedaUSD,
-  formatear_4Decimales,
-  formatoDDMMYYYY_PEN,
-  literal,
-} from '~/functions/comunes';
+import { cerosALaIzquierda, formatearMonedaPEN, formatearMonedaUSD, formatear_4Decimales, formatoDDMMYYYY_PEN, literal } from '~/functions/comunes';
 import logit from '../../assets/base64/imagesBase64.js';
 
 function pdfVentaMG(venta: any) {
   pdfMake.vfs = pdfFonts;
 
-  console.log('venta PDF', venta);
+  //console.log('venta PDF', venta);
   const items = venta.itemsVenta;
   const losItems = items.map((it: any) => {
-    const {
-      codigo,
-      descripcionEquivalencia,
-      cantidadEquivalencia,
-      unidadEquivalencia,
-      precioPEN,
-      ventaPEN,
-      precioUSD,
-      ventaUSD,
-    } = it;
+    const { codigo, descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioUnitarioPEN, ventaPEN, precioUnitarioUSD, ventaUSD } = it;
     return [
       { text: codigo, style: 'tableBody' },
       { text: descripcionEquivalencia, style: 'tableBody' },
@@ -36,18 +20,12 @@ function pdfVentaMG(venta: any) {
       },
       { text: unidadEquivalencia, style: 'tableBody' },
       {
-        text:
-          venta.moneda === 'PEN'
-            ? formatearMonedaPEN(precioPEN.$numberDecimal)
-            : 'USD ' + formatearMonedaUSD(precioUSD.$numberDecimal),
+        text: venta.moneda === 'PEN' ? formatearMonedaPEN(precioUnitarioPEN.$numberDecimal) : 'USD ' + formatearMonedaUSD(precioUnitarioUSD.$numberDecimal),
         style: 'tableBody',
         // border: [false, false, false, true],
       },
       {
-        text:
-          venta.moneda === 'PEN'
-            ? formatearMonedaPEN(ventaPEN.$numberDecimal)
-            : 'USD ' + formatearMonedaUSD(ventaUSD.$numberDecimal),
+        text: venta.moneda === 'PEN' ? formatearMonedaPEN(ventaPEN.$numberDecimal) : 'USD ' + formatearMonedaUSD(ventaUSD.$numberDecimal),
         style: 'tableBody',
       },
     ];
@@ -225,9 +203,7 @@ function pdfVentaMG(venta: any) {
                       'Total IGV ' +
                       venta.igv.$numberDecimal +
                       '%: ' +
-                      (venta.moneda === 'PEN'
-                        ? formatearMonedaPEN(venta.igvPEN.$numberDecimal)
-                        : 'USD ' + formatearMonedaUSD(venta.igvUSD.$numberDecimal)),
+                      (venta.moneda === 'PEN' ? formatearMonedaPEN(venta.igvPEN.$numberDecimal) : 'USD ' + formatearMonedaUSD(venta.igvUSD.$numberDecimal)),
                     style: 'textoBoldRight',
                   },
                 ],
@@ -244,10 +220,7 @@ function pdfVentaMG(venta: any) {
             text: [
               { text: 'Monto en letra: ', style: 'texto' },
               {
-                text:
-                  venta.moneda === 'PEN'
-                    ? literal(venta.totalPEN.$numberDecimal, 'PEN')
-                    : literal(venta.totalUSD.$numberDecimal, 'USD'),
+                text: venta.moneda === 'PEN' ? literal(venta.totalPEN.$numberDecimal, 'PEN') : literal(venta.totalUSD.$numberDecimal, 'USD'),
                 style: 'textoBold',
               },
             ],
@@ -278,9 +251,7 @@ function pdfVentaMG(venta: any) {
                         : 'USD ' + formatearMonedaUSD(venta.inafectoUSD.$numberDecimal)) +
                       '\n' +
                       'Importe total de la venta: ' +
-                      (venta.moneda === 'PEN'
-                        ? formatearMonedaPEN(venta.totalPEN.$numberDecimal)
-                        : 'USD ' + formatearMonedaUSD(venta.totalUSD.$numberDecimal)),
+                      (venta.moneda === 'PEN' ? formatearMonedaPEN(venta.totalPEN.$numberDecimal) : 'USD ' + formatearMonedaUSD(venta.totalUSD.$numberDecimal)),
                     style: 'textoBoldRight',
                   },
                 ],

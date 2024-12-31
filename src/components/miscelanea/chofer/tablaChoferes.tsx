@@ -18,23 +18,23 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
   switch (props.contexto) {
     case 'new_edit_guiaRemision':
       ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
-      documento = useContext(CTX_GUIA_REMISION).choferes;
+      documento = useContext(CTX_GUIA_REMISION).conductores;
       break;
   }
   const ctx_buscar_chofer = useContext(CTX_BUSCAR_CHOFER);
   //#endregion CONTEXTOS
 
   //#region BUSCANDO REGISTROS
-  const losChoferes = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
+  const losConductores = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     track(() => props.buscarChofer.valueOf());
 
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('buscarChofer:::...', props.buscarChofer);
+    //console.log('buscarChofer:::...', props.buscarChofer);
 
     if (ctx_buscar_chofer.buscarPor === 'Nombre / Razón social') {
-      console.log('Nombre:::...');
+      //console.log('Nombre:::...');
       const res = await fetch(import.meta.env.VITE_URL + '/api/chofer/obtenerChoferesPorNombre', {
         // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
         method: 'POST',
@@ -52,7 +52,7 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
       return res.json();
     }
     if (ctx_buscar_chofer.buscarPor === 'DNI / RUC') {
-      console.log('DNI:::...');
+      //console.log('DNI:::...');
       const res = await fetch(import.meta.env.VITE_URL + '/api/chofer/obtenerChoferesPorDni', {
         // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
         method: 'POST',
@@ -74,22 +74,22 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
 
   return (
     <Resource
-      value={losChoferes}
+      value={losConductores}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
+        //console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
+        //console.log('onRejected 🍍🍍🍍🍍');
         return <div>Fallo en la carga de datos</div>;
       }}
-      onResolved={(choferes) => {
-        console.log('onResolved 🍓🍓🍓🍓', choferes);
-        const { data } = choferes; //{ status, data, message }
-        const misChoferes: IChofer[] = data;
+      onResolved={(conductores) => {
+        //console.log('onResolved 🍓🍓🍓🍓', conductores);
+        const { data } = conductores; //{ status, data, message }
+        const misConductores: IChofer[] = data;
         return (
           <>
-            {misChoferes.length > 0 ? (
+            {misConductores.length > 0 ? (
               <>
                 <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
@@ -103,8 +103,18 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
                     </tr>
                   </thead>
                   <tbody>
-                    {misChoferes.map((persoLocali, index) => {
-                      const { _id, codigoTipoDocumentoIdentidad, tipoDocumentoIdentidad, numeroIdentidad, razonSocialNombre, licencia } = persoLocali;
+                    {misConductores.map((persoLocali, index) => {
+                      const {
+                        _id,
+                        codigoTipoDocumentoIdentidad,
+                        tipoDocumentoIdentidad,
+                        numeroIdentidad,
+                        razonSocialNombre,
+                        nombre,
+                        paterno,
+                        materno,
+                        licencia,
+                      } = persoLocali;
                       const indexItem = index + 1;
                       return (
                         <tr key={_id}>
@@ -122,9 +132,9 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
                               height={14}
                               width={14}
                               style={{ marginRight: '4px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
-                                if (typeof licencia === 'undefined' || licencia.trim() === '') {
+                                if (typeof licencia === 'undefined' || licencia === null || licencia === '') {
                                   alert('No presenta la licencia.');
                                   return;
                                 }
@@ -135,11 +145,14 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
                                   tipoDocumentoIdentidad: tipoDocumentoIdentidad,
                                   numeroIdentidad: numeroIdentidad,
                                   razonSocialNombre: razonSocialNombre,
+                                  nombre: nombre,
+                                  paterno: paterno,
+                                  materno: materno,
                                   licencia: licencia,
                                   tipo: true,
                                 });
-                                ctx.selecciono_Chofer = true;
-                                ctx.mostrarPanelBuscarChofer = false;
+                                ctx.selecciono_Conductor = true;
+                                ctx.mostrarPanelBuscarConductor = false;
                               }}
                             />
                             <input
@@ -150,12 +163,12 @@ export default component$((props: { buscarChofer: number; contexto: string }) =>
                               height={14}
                               width={14}
                               // style={{ padding: '2px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 // ctx_buscar_persona.pP = persoLocali;
                                 // ctx_buscar_persona.mostrarPanelNewEditPersona = true;
-                                console.log('ctx', ctx);
-                                console.log('selecion', persoLocali);
+                                //console.log('ctx', ctx);
+                                //console.log('selecion', persoLocali);
                                 ctx_buscar_chofer.cH = persoLocali;
                                 ctx_buscar_chofer.mostrarPanelEditChofer = true;
                               }}

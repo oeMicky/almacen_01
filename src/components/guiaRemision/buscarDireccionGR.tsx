@@ -1,15 +1,15 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import ImgButton from "../system/imgButton";
-import { images } from "~/assets";
-import { CTX_NEW_EDIT_GUIA_REMISION } from "./newEditGuiaRemision";
-import NewEditDireccionGR from "./newEditDireccionGR";
-import Spinner from "../system/spinner";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton';
+import { images } from '~/assets';
+import { CTX_NEW_EDIT_GUIA_REMISION } from './newEditGuiaRemision';
+import NewEditDireccionGR from './newEditDireccionGR';
+import Spinner from '../system/spinner';
 // import { obtenerDireccionesGR } from "~/apis/guiaRemision.api";
 // import { parametrosGlobales } from "~/routes/login";
-import TablaDireccionesGR from "./tablaDireccionesGR";
-import { parametrosGlobales } from "~/routes/login";
+import TablaDireccionesGR from './tablaDireccionesGR';
+import { parametrosGlobales } from '~/routes/login';
 
-export const CTX_BUSCAR_DIRECCION_GR = createContextId<any>("__buscar_direccion_GR");
+export const CTX_BUSCAR_DIRECCION_GR = createContextId<any>('__buscar_direccion_GR');
 
 export default component$((props: { sentido: string }) => {
   //#region definicion_CTX_BUSCAR_DIRECCION_GR
@@ -17,8 +17,8 @@ export default component$((props: { sentido: string }) => {
     dGR: [],
     misDireccionesGR: [],
     grabo_DireccionGR: false,
-    buscarPor: "dirección",
-    conceptoABuscar: "",
+    buscarPor: 'dirección',
+    conceptoABuscar: '',
     // solo_Direccion: false,
 
     mostrarPanelNewEditDireccionGR: false,
@@ -39,7 +39,7 @@ export default component$((props: { sentido: string }) => {
   //#region REFRESCAR grabo_DireccionGR
   useTask$(({ track }) => {
     track(() => definicion_CTX_BUSCAR_DIRECCION_GR.grabo_DireccionGR);
-    console.log("✨🧨🎇🎈🎈🎈", definicion_CTX_BUSCAR_DIRECCION_GR.grabo_DireccionGR);
+    //console.log("✨🧨🎇🎈🎈🎈", definicion_CTX_BUSCAR_DIRECCION_GR.grabo_DireccionGR);
     if (definicion_CTX_BUSCAR_DIRECCION_GR.grabo_DireccionGR) {
       buscarDireccionesGR.value++;
       // definicion_CTX_BUSCAR_DIRECCION_GR.mostrarSpinner = false;
@@ -51,9 +51,9 @@ export default component$((props: { sentido: string }) => {
 
   //#region BUSCAR DIRECCIONES GR
   const localizarDireccionesGR = $(async () => {
-    if (definicion_CTX_BUSCAR_DIRECCION_GR.conceptoABuscar.trim() === "") {
-      alert("Ingrese la dirección");
-      document.getElementById("in_conceptoABuscar_DIRECCION_GR")?.focus();
+    if (definicion_CTX_BUSCAR_DIRECCION_GR.conceptoABuscar.trim() === '') {
+      alert('Ingrese la dirección');
+      document.getElementById('in_conceptoABuscar_DIRECCION_GR')?.focus();
       return;
     }
     definicion_CTX_BUSCAR_DIRECCION_GR.mostrarSpinner = true;
@@ -72,17 +72,17 @@ export default component$((props: { sentido: string }) => {
     <div
       style={{
         // width: props.ancho + 'px',
-        width: "clamp(330px, 86%, 600px)",
+        width: 'clamp(330px, 86%, 600px)',
         // width: 'auto',
-        padding: "2px",
+        padding: '2px',
       }}
       class="container-modal"
     >
       {/* BOTONES DEL MARCO */}
       <div
         style={{
-          display: "flex",
-          justifyContent: "end",
+          display: 'flex',
+          justifyContent: 'end',
         }}
       >
         <ImgButton
@@ -92,10 +92,10 @@ export default component$((props: { sentido: string }) => {
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            if (props.sentido === "partida") {
+            if (props.sentido === 'partida') {
               ctx.mostrarPanelBuscarPuntoPartida = false;
             }
-            if (props.sentido === "llegada") {
+            if (props.sentido === 'llegada') {
               ctx.mostrarPanelBuscarPuntoLlegada = false;
             }
           })}
@@ -107,8 +107,8 @@ export default component$((props: { sentido: string }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('definicion_CTX_BUSCAR_PERSONA', definicion_CTX_BUSCAR_PERSONA);
-            // console.log('parametrosBusqueda', parametrosBusqueda);
+            //console.log('definicion_CTX_BUSCAR_PERSONA', definicion_CTX_BUSCAR_PERSONA);
+            // //console.log('parametrosBusqueda', parametrosBusqueda);
           })}
         />
         <ImgButton
@@ -118,33 +118,33 @@ export default component$((props: { sentido: string }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
-            // console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);
+            //console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+            // //console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);
           })}
         /> */}
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* TITULO */}
-        <h3 style={{ marginBottom: "12px" }}>Buscar dirección de {props.sentido}</h3>
+        <h3 style={{ marginBottom: '12px' }}>Buscar dirección de {props.sentido}</h3>
         {/* ZONA DE BUSQUEDA */}
-        <div style={{ marginBottom: "8px" }}>
+        <div style={{ marginBottom: '8px' }}>
           {/* CONCEPTO A BUSCAR  */}
           <div class="form-control">
             <div class="form-control form-agrupado">
               <input
                 id="in_conceptoABuscar_DIRECCION_GR"
-                style={{ width: "100%" }}
-                type={"text"}
+                style={{ width: '100%' }}
+                type={'text'}
                 value={definicion_CTX_BUSCAR_DIRECCION_GR.conceptoABuscar}
                 // onFocusout$={() => localizarPersonas()}
                 onInput$={(e) => {
                   definicion_CTX_BUSCAR_DIRECCION_GR.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                 }}
                 onKeyPress$={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === 'Enter') {
                     localizarDireccionesGR();
-                    document.getElementById("in_BuscarDireccionGR")?.focus();
+                    document.getElementById('in_BuscarDireccionGR')?.focus();
                   }
                 }}
                 // onKeyDown$={(e) => {
@@ -167,7 +167,7 @@ export default component$((props: { sentido: string }) => {
                 alt="buscar"
                 height={16}
                 width={16}
-                style={{ margin: "0px 4px" }}
+                style={{ margin: '0px 4px' }}
                 onClick$={() => localizarDireccionesGR()}
               />
               <input
@@ -178,8 +178,8 @@ export default component$((props: { sentido: string }) => {
                 alt="adicionar"
                 height={16}
                 width={16}
-                style={{ marginRight: "2px" }}
-                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                style={{ marginRight: '2px' }}
+                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                 onClick$={() => {
                   definicion_CTX_BUSCAR_DIRECCION_GR.dGR = [];
                   definicion_CTX_BUSCAR_DIRECCION_GR.mostrarPanelNewEditDireccionGR = true;
@@ -213,12 +213,12 @@ export default component$((props: { sentido: string }) => {
               }}
             />
           ) : (
-            ""
+            ''
           )}
         </div>
         {/* MOSTRAR SPINNER */}
         {definicion_CTX_BUSCAR_DIRECCION_GR.mostrarSpinner && (
-          <div class="modal" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Spinner />
           </div>
         )}

@@ -23,11 +23,11 @@ export default component$((props: { nsSeleccionada: any }) => {
   const losReingresos = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // track(() => props.buscarOrdenesServicio.valueOf());
     track(() => ini.value);
-    console.log('parametrosBusqueda losReingresos ini.value', ini.value);
+    //console.log('parametrosBusqueda losReingresos ini.value', ini.value);
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda losReingresos', props.nsSeleccionada._id);
+    //console.log('parametrosBusqueda losReingresos', props.nsSeleccionada._id);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/getItemsMercaderias', {
       method: 'POST',
@@ -91,15 +91,15 @@ export default component$((props: { nsSeleccionada: any }) => {
           <Resource
             value={losReingresos}
             onPending={() => {
-              console.log('onPending 🍉🍉🍉🍉');
+              //console.log('onPending 🍉🍉🍉🍉');
               return <div>Cargando...</div>;
             }}
             onRejected={() => {
-              console.log('onRejected 🍍🍍🍍🍍');
+              //console.log('onRejected 🍍🍍🍍🍍');
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(notasSalida) => {
-              console.log('onResolved 🍓🍓🍓🍓', notasSalida);
+              //console.log('onResolved 🍓🍓🍓🍓', notasSalida);
               const { data } = notasSalida; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misReingresos.value = data;
@@ -150,7 +150,7 @@ export default component$((props: { nsSeleccionada: any }) => {
                                     value={reingresoLocali.aReingresar}
                                     onChange$={(e) => {
                                       const a_Reingresar = parseFloat((e.target as HTMLInputElement).value);
-                                      console.log('a_Reingresar', a_Reingresar);
+                                      //console.log('a_Reingresar', a_Reingresar);
                                       reingresoLocali.aReingresar = a_Reingresar;
                                     }}
                                     onFocusin$={(e) => {
@@ -181,8 +181,8 @@ export default component$((props: { nsSeleccionada: any }) => {
           value="Reingresar"
           class="btn-centro"
           onClick$={() => {
-            console.log('losReingresos', losReingresos);
-            console.log('mis misReingresos', misReingresos.value);
+            //console.log('losReingresos', losReingresos);
+            //console.log('mis misReingresos', misReingresos.value);
 
             //VERIFICAR montos a REINGRESAR
             let todoCorrecto = true;
@@ -219,7 +219,7 @@ export default component$((props: { nsSeleccionada: any }) => {
                 reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar
               );
 
-              console.log('despa <=> reingre + Reingresada', despa, aReingre, Reingresada);
+              //console.log('despa <=> reingre + Reingresada', despa, aReingre, Reingresada);
               if (aReingre + Reingresada > despa) {
                 alert(
                   `ATENCIÓN: Se intenta reingresar una cantidad mayor a la despachada. La cantidad despachada ( ${despa} ) es menor a la cantidad a reingresar ( ${aReingre} ) más la ya reingresada ( ${Reingresada} ), y se encuetra en la posición # ${i}`
@@ -232,7 +232,7 @@ export default component$((props: { nsSeleccionada: any }) => {
             if (!todoCorrecto) {
               return;
             }
-            console.log('paso VERIFICACION de CANTIDADES A REINGRESAR');
+            //console.log('paso VERIFICACION de CANTIDADES A REINGRESAR');
             ////// copiar los datos al panel de EGRESO
 
             //ID DE LA NOTA DE SALIDA
@@ -267,12 +267,12 @@ export default component$((props: { nsSeleccionada: any }) => {
             for (const reingresoLocali of misReingresos.value) {
               const aRein = reingresoLocali.aReingresar.$numberDecimal ? reingresoLocali.aReingresar.$numberDecimal : reingresoLocali.aReingresar;
 
-              console.log('aRein', aRein);
+              //console.log('aRein', aRein);
               if (aRein > 0) {
-                const Reingresada = reingresoLocali.cantidadReingresada.$numberDecimal
-                  ? reingresoLocali.cantidadReingresada.$numberDecimal
-                  : reingresoLocali.cantidadReingresada;
-                console.log('Reingresada', Reingresada);
+                // const Reingresada = reingresoLocali.cantidadReingresada.$numberDecimal
+                //   ? reingresoLocali.cantidadReingresada.$numberDecimal
+                //   : reingresoLocali.cantidadReingresada;
+                //console.log('Reingresada', Reingresada);
 
                 // let IGVCalculado = 0;
                 const IGVCalculado = 0;
@@ -287,7 +287,7 @@ export default component$((props: { nsSeleccionada: any }) => {
                 // } else {
                 //   costo = reingresoLocali.costoUnitarioPEN.$numberDecimal * reingresoLocali.factor;
                 // }
-                console.log('pre push reingresoLocali', reingresoLocali);
+                //console.log('pre push reingresoLocali', reingresoLocali);
                 documento.itemsMercaderias.push({
                   idAuxiliar: reingresoLocali.idAuxiliar, //parseInt(elIdAuxiliar()),
                   idMercaderia: reingresoLocali.idMercaderia,

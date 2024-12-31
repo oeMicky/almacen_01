@@ -11,13 +11,13 @@
 
 // async function pdfFactura98(venta) {
 //   pdfMake.vfs = pdfFonts.pdfMake.vfs;
-//   console.log('venta PDF', venta);
-//   console.log('venta PDF venta.itemsVenta', venta.itemsVenta);
+//   //console.log('venta PDF', venta);
+//   //console.log('venta PDF venta.itemsVenta', venta.itemsVenta);
 //   const items = venta.itemsVenta;
-//   console.log('venta PDF items', items);
+//   //console.log('venta PDF items', items);
 
 //   const losItems = items.map((it) => {
-//     const { codigo, descripcionEquivalencia, cantidad, unidadEquivalencia, precioPEN, ventaPEN, precioUSD, ventaUSD } = it;
+//     const { codigo, descripcionEquivalencia, cantidad, unidadEquivalencia, precioUnitarioPEN, ventaPEN, precioUnitarioUSD, ventaUSD } = it;
 //     return [
 //       { text: codigo, style: 'tableBody' },
 //       { text: descripcionEquivalencia, style: 'tableBody' },
@@ -30,8 +30,8 @@
 //       {
 //         text:
 //           venta.moneda === 'PEN'
-//             ? formatearMonedaPEN(precioPEN.$numberDecimal)
-//             : 'USD ' + formatearMonedaUSD(precioUSD.$numberDecimal),
+//             ? formatearMonedaPEN(precioUnitarioPEN.$numberDecimal)
+//             : 'USD ' + formatearMonedaUSD(precioUnitarioUSD.$numberDecimal),
 //         style: 'tableBody',
 //         // border: [false, false, false, true],
 //       },

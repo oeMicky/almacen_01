@@ -29,7 +29,7 @@ export default component$((props: { borrarRequisicion: any }) => {
           width={18}
           title="Ver el props.borrarRequisicion"
           onClick={$(() => {
-            console.log('props.borrarRequisicion', props.borrarRequisicion);
+            //console.log('props.borrarRequisicion', props.borrarRequisicion);
           })}
         />
         <ImgButton

@@ -33,11 +33,11 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
   const losDespachos = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // track(() => props.buscarOrdenesServicio.valueOf());
     track(() => ini.value);
-    // console.log('parametrosBusqueda losDespachos ini.value', ini.value);
+    // //console.log('parametrosBusqueda losDespachos ini.value', ini.value);
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    // console.log('parametrosBusqueda losDespachos', props.ventaSeleccionada._id);
+    // //console.log('parametrosBusqueda losDespachos', props.ventaSeleccionada._id);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/venta/obtenerDespachoVenta', {
       method: 'POST',
@@ -81,7 +81,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.ventaSeleccionada', props.ventaSeleccionada);
+            //console.log('props.ventaSeleccionada', props.ventaSeleccionada);
           })}
         />
         <ImgButton
@@ -91,7 +91,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('misDespachos', misDespachos.value);
+            //console.log('misDespachos', misDespachos.value);
           })}
         />
       </div>
@@ -106,9 +106,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
             Cliente:
-            <b>{` ${
-              props.ventaSeleccionada.clienteVentasVarias ? 'Cliente ventas varias' : props.ventaSeleccionada.razonSocialNombre
-            }`}</b>
+            <b>{` ${props.ventaSeleccionada.clienteVentasVarias ? 'Cliente ventas varias' : props.ventaSeleccionada.razonSocialNombre}`}</b>
             {/* {props.ventaSeleccionada.clienteVentasVarias?(Cliente:<b>{` ${props.ventaSeleccionada.razonSocialNombre}`}</b>):()} */}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '72px 1fr', margin: '4px 0' }}>
@@ -120,15 +118,15 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           <Resource
             value={losDespachos}
             onPending={() => {
-              console.log('onPending 🍉🍉🍉🍉');
+              //console.log('onPending 🍉🍉🍉🍉');
               return <div>Cargando...</div>;
             }}
             onRejected={() => {
-              console.log('onRejected 🍍🍍🍍🍍');
+              //console.log('onRejected 🍍🍍🍍🍍');
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(itemsVenta) => {
-              console.log('onResolved itemsVenta🍓🍓🍓🍓🍓🍓🍓🍓', itemsVenta);
+              //console.log('onResolved itemsVenta🍓🍓🍓🍓🍓🍓🍓🍓', itemsVenta);
               const { data } = itemsVenta; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misDespachos.value = data;
@@ -188,14 +186,10 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
                                 <td data-label="Stock Equi" class="comoNumero">
                                   {despachoLocali.tipoEquivalencia
                                     ? despachoLocali.stock.$numberDecimal
-                                      ? formatear_6Decimales(
-                                          despachoLocali.stock.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal
-                                        )
+                                      ? formatear_6Decimales(despachoLocali.stock.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal)
                                       : formatear_6Decimales(despachoLocali.stock * despachoLocali.laEquivalencia.$numberDecimal)
                                     : despachoLocali.stock.$numberDecimal
-                                    ? formatear_6Decimales(
-                                        despachoLocali.stock.$numberDecimal / despachoLocali.laEquivalencia.$numberDecimal
-                                      )
+                                    ? formatear_6Decimales(despachoLocali.stock.$numberDecimal / despachoLocali.laEquivalencia.$numberDecimal)
                                     : formatear_6Decimales(despachoLocali.stock / despachoLocali.laEquivalencia.$numberDecimal)}
                                 </td>
                                 <td data-label="Uni" class="comoCadena">
@@ -222,7 +216,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
                                     value={despachoLocali.aDespachar}
                                     onChange$={(e) => {
                                       const a_Despachar = parseFloat((e.target as HTMLInputElement).value);
-                                      console.log('a_Despachar', a_Despachar);
+                                      //console.log('a_Despachar', a_Despachar);
                                       despachoLocali.aDespachar = a_Despachar;
                                     }}
                                     // onFocusin$={(e) => {
@@ -253,18 +247,16 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
           value="Despachar"
           class="btn-centro"
           onClick$={() => {
-            console.log('losDespachos', losDespachos);
-            console.log('mis despachos', misDespachos.value);
-            console.log('props.ventaSeleccionada', props.ventaSeleccionada);
+            //console.log('losDespachos', losDespachos);
+            //console.log('mis despachos', misDespachos.value);
+            //console.log('props.ventaSeleccionada', props.ventaSeleccionada);
 
             //VERIFICAR montos a DESPACHAR
             let todoCorrecto = true;
             let algunoMasQueCero = false;
             //VERIFICAR montos a DESPACHAR -> TODOS LOS MONTOS SON CEROS
             for (const despachoLocali of misDespachos.value) {
-              const despa = despachoLocali.aDespachar.$numberDecimal
-                ? despachoLocali.aDespachar.$numberDecimal
-                : despachoLocali.aDespachar;
+              const despa = despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar;
 
               if (despa > 0) {
                 algunoMasQueCero = true;
@@ -280,45 +272,33 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             for (const despachoLocali of misDespachos.value) {
               i++;
               const canti = parseFloat(
-                despachoLocali.cantidadEquivalencia.$numberDecimal
-                  ? despachoLocali.cantidadEquivalencia.$numberDecimal
-                  : despachoLocali.cantidadEquivalencia
+                despachoLocali.cantidadEquivalencia.$numberDecimal ? despachoLocali.cantidadEquivalencia.$numberDecimal : despachoLocali.cantidadEquivalencia
               );
 
               const despachado = parseFloat(
-                despachoLocali.cantidadDespachada.$numberDecimal
-                  ? despachoLocali.cantidadDespachada.$numberDecimal
-                  : despachoLocali.cantidadDespachada
+                despachoLocali.cantidadDespachada.$numberDecimal ? despachoLocali.cantidadDespachada.$numberDecimal : despachoLocali.cantidadDespachada
               );
               const reing = parseFloat(
-                despachoLocali.cantidadReingresada.$numberDecimal
-                  ? despachoLocali.cantidadReingresada.$numberDecimal
-                  : despachoLocali.cantidadReingresada
+                despachoLocali.cantidadReingresada.$numberDecimal ? despachoLocali.cantidadReingresada.$numberDecimal : despachoLocali.cantidadReingresada
               );
 
-              const aDespa = parseFloat(
-                despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar
-              );
+              const aDespa = parseFloat(despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar);
 
               let stockEQUIVALENTE = 0;
               if (despachoLocali.tipoEquivalencia) {
-                stockEQUIVALENTE =
-                  parseFloat(despachoLocali.stock.$numberDecimal) * parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
+                stockEQUIVALENTE = parseFloat(despachoLocali.stock.$numberDecimal) * parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
               } else {
-                stockEQUIVALENTE =
-                  parseFloat(despachoLocali.stock.$numberDecimal) / parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
+                stockEQUIVALENTE = parseFloat(despachoLocali.stock.$numberDecimal) / parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
               }
 
-              console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
+              //console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
               if (aDespa > stockEQUIVALENTE) {
-                alert(
-                  `ATENCIÓN: Desea despachar mayor cantidad ( ${aDespa} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`
-                );
+                alert(`ATENCIÓN: Desea despachar mayor cantidad ( ${aDespa} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`);
                 todoCorrecto = false;
                 break;
               }
 
-              console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
+              //console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
               if (despachado - reing + aDespa > canti) {
                 alert(
                   `ATENCIÓN: Se intenta despachar una cantidad mayor a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( Despachado-Reingresada = ${
@@ -333,7 +313,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             if (!todoCorrecto) {
               return;
             }
-            console.log('paso VERIFICACION de CANTIDADES A DESPACHAR');
+            //console.log('paso VERIFICACION de CANTIDADES A DESPACHAR');
             //** copiar los datos al panel de EGRESO */
 
             //ID DE LA VENTA
@@ -370,9 +350,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
             for (const despachoLocali of misDespachos.value) {
-              const despaEquiva = despachoLocali.aDespachar.$numberDecimal
-                ? despachoLocali.aDespachar.$numberDecimal
-                : despachoLocali.aDespachar;
+              const despaEquiva = despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar;
 
               if (despaEquiva > 0) {
                 documento.itemsMercaderias.push({
@@ -395,20 +373,17 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
                   unidadEquivalencia: despachoLocali.unidadEquivalencia,
                   /////////////////////////////////////////////////////////////////////
                   costoUnitarioPEN: despachoLocali.costoUnitarioMovil.$numberDecimal,
-                  costoUnitarioEquivalenciaPEN:
-                    despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
+                  costoUnitarioEquivalenciaPEN: despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
 
                   subPEN: despaEquiva * parseFloat(despachoLocali.costoUnitarioMovil.$numberDecimal),
                   subEquivalenciaPEN:
-                    despaEquiva *
-                    parseFloat(despachoLocali.costoUnitarioMovil.$numberDecimal) *
-                    parseFloat(despachoLocali.laEquivalencia.$numberDecimal),
+                    despaEquiva * parseFloat(despachoLocali.costoUnitarioMovil.$numberDecimal) * parseFloat(despachoLocali.laEquivalencia.$numberDecimal),
 
                   // // subTotalPEN:
                   // //   despa * props.elKardex.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
                   // costoUnitarioPEN: 66,
                   // subTotalPEN: despa * 66,
-                  // precioUSD: 0,
+                  // precioUnitarioUSD: 0,
                   // ventaUSD: 0,
 
                   tipoEquivalencia: despachoLocali.tipoEquivalencia,

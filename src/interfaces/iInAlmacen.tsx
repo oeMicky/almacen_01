@@ -24,6 +24,10 @@ export interface IIngresoAAlmacen {
   idElIgv: string;
   elIgv: any;
 
+  enDolares: boolean;
+  moneda: string;
+  tipoCambio: any;
+
   idRemitente: string;
   codigoTipoDocumentoIdentidad: string;
   tipoDocumentoIdentidad: string;
@@ -37,6 +41,10 @@ export interface IIngresoAAlmacen {
   montoSubTotalPEN: any;
   montoIGVPEN: any;
   montoTotalPEN: any;
+
+  montoSubTotalUSD: any;
+  montoIGVUSD: any;
+  montoTotalUSD: any;
 
   documentosAdjuntos: any;
   itemsMercaderias: any;

@@ -1,22 +1,24 @@
-import { Resource, component$, useContext, useResource$, useStyles$ } from "@builder.io/qwik";
-import style from "../../tabla/tabla.css?inline";
-import { CTX_GUIA_REMISION, CTX_NEW_EDIT_GUIA_REMISION } from "~/components/guiaRemision/newEditGuiaRemision";
-import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from "./buscarUnidadTransporte";
-import { parametrosGlobales } from "~/routes/login";
-import { images } from "~/assets";
-import type { IUnidadTransporte } from "~/interfaces/iVehiculo";
-import { elIdAuxiliar } from "~/functions/comunes";
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
+import style from '../../tabla/tabla.css?inline';
+import { CTX_GUIA_REMISION, CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
+import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from './buscarUnidadTransporte';
+import { parametrosGlobales } from '~/routes/login';
+import { images } from '~/assets';
+import type { IUnidadTransporte } from '~/interfaces/iVehiculo';
+import { elIdAuxiliar } from '~/functions/comunes';
 
-export default component$((props: { buscarUnidadTransporte: number; contexto: string }) => {
+export default component$((props: { buscarUnidadTransporte: number; contexto: string; tipo: string }) => {
   useStyles$(style);
 
   //#region CONTEXTOS
   let ctx: any = [];
-  let documento: any = [];
+  let vehiPrinci: any;
+  let vehiSecundarios: any = [];
   switch (props.contexto) {
-    case "new_edit_guiaRemision":
+    case 'new_edit_guiaRemision':
       ctx = useContext(CTX_NEW_EDIT_GUIA_REMISION);
-      documento = useContext(CTX_GUIA_REMISION).unidadesTransporte;
+      vehiPrinci = useContext(CTX_GUIA_REMISION);
+      vehiSecundarios = useContext(CTX_GUIA_REMISION).vehiculosSecundarios;
       break;
   }
   const ctx_buscar_unidad_transporte = useContext(CTX_BUSCAR_UNIDAD_TRANSPORTE);
@@ -27,17 +29,17 @@ export default component$((props: { buscarUnidadTransporte: number; contexto: st
     track(() => props.buscarUnidadTransporte.valueOf());
 
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
-    console.log("buscarUnidadTransporte:::...", props.buscarUnidadTransporte);
+    //console.log('buscarUnidadTransporte:::...', props.buscarUnidadTransporte);
 
-    if (ctx_buscar_unidad_transporte.buscarPor === "Placa") {
-      console.log("Placa:::...");
-      const res = await fetch(import.meta.env.VITE_URL + "/api/unidadTransporte/obtenerUnidadTransportePorPlaca", {
+    if (ctx_buscar_unidad_transporte.buscarPor === 'Placa') {
+      //console.log('Placa:::...');
+      const res = await fetch(import.meta.env.VITE_URL + '/api/unidadTransporte/obtenerUnidadTransportePorPlaca', {
         // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -49,13 +51,13 @@ export default component$((props: { buscarUnidadTransporte: number; contexto: st
       });
       return res.json();
     }
-    if (ctx_buscar_unidad_transporte.buscarPor === "Marca") {
-      console.log("Marca:::...");
-      const res = await fetch(import.meta.env.VITE_URL + "/api/unidadTransporte/obtenerUnidadTransportePorMarca", {
+    if (ctx_buscar_unidad_transporte.buscarPor === 'Marca') {
+      //console.log('Marca:::...');
+      const res = await fetch(import.meta.env.VITE_URL + '/api/unidadTransporte/obtenerUnidadTransportePorMarca', {
         // const res = await fetch('https://backendalmacen-production.up.railway.app/api/persona/obtenerPersonasPorDniRuc', {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -74,22 +76,22 @@ export default component$((props: { buscarUnidadTransporte: number; contexto: st
     <Resource
       value={lasUnidadesTransp}
       onPending={() => {
-        console.log("onPending 🍉🍉🍉🍉");
+        //console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log("onRejected 🍍🍍🍍🍍");
+        //console.log('onRejected 🍍🍍🍍🍍');
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(unidadesTransporte) => {
-        console.log("onResolved 🍓🍓🍓🍓", unidadesTransporte);
+        //console.log('onResolved 🍓🍓🍓🍓', unidadesTransporte);
         const { data } = unidadesTransporte; //{ status, data, message }
         const misUnidadesTransp: IUnidadTransporte[] = data;
         return (
           <>
             {misUnidadesTransp.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -103,7 +105,8 @@ export default component$((props: { buscarUnidadTransporte: number; contexto: st
                   <tbody>
                     {misUnidadesTransp.map((vehicuLocali, index) => {
                       const {
-                        _id,
+                        idUnidadTransporte,
+                        idVehiculo,
                         placa,
                         idVehiculoMarca,
                         vehiculoMarca,
@@ -114,7 +117,7 @@ export default component$((props: { buscarUnidadTransporte: number; contexto: st
                       } = vehicuLocali;
                       const indexItem = index + 1;
                       return (
-                        <tr key={_id}>
+                        <tr key={idVehiculo}>
                           <td data-label="Ítem">{indexItem}</td>
                           <td data-label="Placa">{placa}</td>
                           <td data-label="Marca">{vehiculoMarca}</td>
@@ -128,29 +131,41 @@ export default component$((props: { buscarUnidadTransporte: number; contexto: st
                               title="Seleccionar chofer"
                               height={14}
                               width={14}
-                              style={{ marginRight: "4px" }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              style={{ marginRight: '4px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 if (
-                                  typeof tarjetaCirculacionCertificadoHabilitacion === "undefined" ||
-                                  tarjetaCirculacionCertificadoHabilitacion.trim() === ""
+                                  typeof tarjetaCirculacionCertificadoHabilitacion === 'undefined' ||
+                                  tarjetaCirculacionCertificadoHabilitacion === null ||
+                                  tarjetaCirculacionCertificadoHabilitacion === ''
                                 ) {
-                                  alert("No presenta la Tarj. Circul./Certif. Habilit.");
+                                  alert('No presenta la Tarj. Circul./Certif. Habilit.');
                                   return;
                                 }
 
-                                documento.push({
-                                  idAuxiliar: elIdAuxiliar(),
-                                  placa: placa,
-                                  idVehiculoMarca: idVehiculoMarca,
-                                  vehiculoMarca: vehiculoMarca,
-                                  idVehiculoModelo: idVehiculoModelo,
-                                  vehiculoModelo: vehiculoModelo,
-                                  tarjetaCirculacionCertificadoHabilitacion: tarjetaCirculacionCertificadoHabilitacion,
-                                  tipo: true,
-                                });
-                                ctx.selecciono_UnidadTransporte = true;
-                                ctx.mostrarPanelBuscarUnidadTransporte = false;
+                                if (props.tipo === 'principal') {
+                                  //console.log('vehicuLocali', vehicuLocali);
+                                  vehiPrinci.idVehiculoPrincipal = idUnidadTransporte;
+                                  // emisorAutorizacionEspecial: '',
+                                  // numeroAutorizacionEspecial: '',
+                                  vehiPrinci.numeroPlaca = placa;
+                                  vehiPrinci.tarjetaCirculacionOCertificadoHabilitacion = tarjetaCirculacionCertificadoHabilitacion;
+
+                                  ctx.mostrarPanelBuscarUnidadTransportePrincipal = false;
+                                } else {
+                                  vehiSecundarios.push({
+                                    idAuxiliar: elIdAuxiliar(),
+                                    placa: placa,
+                                    idVehiculoMarca: idVehiculoMarca,
+                                    vehiculoMarca: vehiculoMarca,
+                                    idVehiculoModelo: idVehiculoModelo,
+                                    vehiculoModelo: vehiculoModelo,
+                                    tarjetaCirculacionCertificadoHabilitacion: tarjetaCirculacionCertificadoHabilitacion,
+                                    tipo: false,
+                                  });
+                                  ctx.selecciono_UnidadTransporte = true;
+                                  ctx.mostrarPanelBuscarUnidadTransporteSecundario = false;
+                                }
                               }}
                             />
                             <input
@@ -161,12 +176,12 @@ export default component$((props: { buscarUnidadTransporte: number; contexto: st
                               height={14}
                               width={14}
                               // style={{ padding: '2px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 // ctx_buscar_persona.pP = persoLocali;
                                 // ctx_buscar_persona.mostrarPanelNewEditPersona = true;
-                                console.log("ctx", ctx);
-                                console.log("selecion", vehicuLocali);
+                                //console.log('ctx', ctx);
+                                //console.log('selecion', vehicuLocali);
                                 ctx_buscar_unidad_transporte.uT = vehicuLocali;
                                 ctx_buscar_unidad_transporte.mostrarPanelEditUnidadTransporte = true;
                               }}
@@ -180,7 +195,7 @@ export default component$((props: { buscarUnidadTransporte: number; contexto: st
               </>
             ) : (
               <div>
-                <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

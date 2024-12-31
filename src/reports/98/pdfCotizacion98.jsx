@@ -1,13 +1,7 @@
 import pdfMake from 'pdfmake/build/pdfmake';
 // import pdfFonts from 'pdfmake/build/vfs_fonts';
 import pdfFonts from '../../assets/fonts/vfs_fonts';
-import {
-  formatoDDMMYYYY_PEN,
-  cerosALaIzquierda,
-  formatearMonedaPEN,
-  formatear_4Decimales,
-  redondeo2Decimales,
-} from '../../functions/comunes';
+import { formatoDDMMYYYY_PEN, cerosALaIzquierda, formatearMonedaPEN, formatear_4Decimales, redondeo2Decimales } from '../../functions/comunes';
 
 async function pdfCotizacion98(cotizacion) {
   //   pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -22,7 +16,7 @@ async function pdfCotizacion98(cotizacion) {
   const rodape = [];
 
   const losServicios = servicios.map((ser, index) => {
-    const { codigo, descripcion, cantidad, precioPEN, ventaPEN } = ser;
+    const { codigo, descripcion, cantidad, precioUnitarioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
     totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
@@ -35,7 +29,7 @@ async function pdfCotizacion98(cotizacion) {
       },
       { text: 'UNI', style: 'tableBody' },
       {
-        text: formatearMonedaPEN(precioPEN.$numberDecimal),
+        text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
         style: 'tableBody',
       },
       {
@@ -46,7 +40,7 @@ async function pdfCotizacion98(cotizacion) {
   });
 
   const losRepuestos = repuestosLubri.map((repu, index) => {
-    const { codigo, descripcionEquivalencia, cantidad, precioPEN, ventaPEN } = repu;
+    const { codigo, descripcionEquivalencia, cantidad, precioUnitarioPEN, ventaPEN } = repu;
     const indexItem = index + 1;
     totalRepuestos = totalRepuestos + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
@@ -59,7 +53,7 @@ async function pdfCotizacion98(cotizacion) {
       },
       { text: 'UNI', style: 'tableBody' },
       {
-        text: formatearMonedaPEN(precioPEN.$numberDecimal),
+        text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
         style: 'tableBody',
       },
       {

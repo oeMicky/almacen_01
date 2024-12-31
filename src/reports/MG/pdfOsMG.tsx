@@ -16,14 +16,15 @@ import { parametrosGlobales } from '~/routes/login';
 async function pdfOsMG(os: any) {
   pdfMake.vfs = pdfFonts;
 
-  console.log('os PDF', os);
+  //console.log('para QR:', parametrosGlobales.RUC + '|' + os.serie + '|' + cerosALaIzquierda(os.numero, 8) + '|');
+  //console.log('os PDF', os);
 
   const LOGO_EMPRESA = await import(`../../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
 
   const servicios = os.servicios;
   // let repuestosDespachados: any = [];
   const repuestosDespachados = os.requisiciones.filter((plot: any) => plot.cantidadDespachada.$numberDecimal > 0);
-  console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
+  //console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
   let totalServicios = 0;
   let totalRepuestos = 0;
 
@@ -32,8 +33,8 @@ async function pdfOsMG(os: any) {
   // const rodape = [];
 
   const losServicios = servicios.map((ser: any, index: number) => {
-    console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
-    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
+    //console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
+    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioUnitarioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
     totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
@@ -46,7 +47,7 @@ async function pdfOsMG(os: any) {
       },
       { text: unidadEquivalencia, style: 'tableBody' },
       {
-        text: formatearMonedaPEN(precioPEN.$numberDecimal),
+        text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
         style: 'tableBody',
       },
       {
@@ -57,12 +58,13 @@ async function pdfOsMG(os: any) {
   });
 
   const losRepuestos = repuestosDespachados.map((repu: any, index: number) => {
-    console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
-    const { codigo, descripcionEquivalencia, cantidadDespachada, cantidadReingresada, unidadEquivalencia, precioPEN } = repu;
-    console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
+    //console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
+    const { codigo, descripcionEquivalencia, cantidadDespachada, cantidadReingresada, unidadEquivalencia, precioUnitarioPEN } = repu;
+    //console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
     if (cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal > 0) {
       const indexItem = index + 1;
-      totalRepuestos = totalRepuestos + redondeo2Decimales((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal);
+      totalRepuestos =
+        totalRepuestos + redondeo2Decimales((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioUnitarioPEN.$numberDecimal);
       return [
         { text: indexItem, style: 'tableBody' },
         { text: codigo, style: 'tableBody' },
@@ -73,11 +75,11 @@ async function pdfOsMG(os: any) {
         },
         { text: unidadEquivalencia, style: 'tableBody' },
         {
-          text: formatearMonedaPEN(precioPEN.$numberDecimal),
+          text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
           style: 'tableBody',
         },
         {
-          text: formatearMonedaPEN((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal),
+          text: formatearMonedaPEN((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioUnitarioPEN.$numberDecimal),
           style: 'tableBody',
         },
       ];

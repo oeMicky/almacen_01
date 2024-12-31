@@ -39,7 +39,7 @@ export default component$((props: { borrarCuentaDestino: any }) => {
           width={16}
           title="Ver el borrarCuentaDestino"
           onClick={$(() => {
-            console.log('borrarCuentaDestino', props.borrarCuentaDestino);
+            //console.log('borrarCuentaDestino', props.borrarCuentaDestino);
           })}
         />
       </div>

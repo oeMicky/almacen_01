@@ -17,7 +17,7 @@ export default component$((props: { buscarSoloUnidadesSUNAT: number; cadenaABusc
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('cadenaABuscar...', props.cadenaABuscar);
+    //console.log('cadenaABuscar...', props.cadenaABuscar);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarUnidadesSUNATPorDescripcionSUNAT', {
       // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
@@ -36,15 +36,15 @@ export default component$((props: { buscarSoloUnidadesSUNAT: number; cadenaABusc
     <Resource
       value={lasUnidadesSUNAT}
       onPending={() => {
-        console.log('onPending 🍉🍉🍉🍉');
+        //console.log('onPending 🍉🍉🍉🍉');
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log('onRejected 🍍🍍🍍🍍');
+        //console.log('onRejected 🍍🍍🍍🍍');
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(unidadesSUNAT) => {
-        console.log('onResolved 🍓🍓🍓🍓');
+        //console.log('onResolved 🍓🍓🍓🍓');
         const { data } = unidadesSUNAT; //{ status, data, message }
         const misUnidadesSUNAT: IUnidadSUNAT[] = data;
         return (

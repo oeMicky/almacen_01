@@ -3,7 +3,7 @@ import { images } from '~/assets';
 import { CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { IVentaCLienteVentasVarias } from '~/interfaces/iVenta';
+import type { IVentaCLienteVentasVarias } from '~/interfaces/iVenta';
 import { parametrosGlobales } from '~/routes/login';
 import DespachoVenta from '../venta/despachoVenta';
 
@@ -19,10 +19,10 @@ export default component$((props: { contexto: string }) => {
 
   //#region BUSCANDO REGISTROS
   const lasVentas140 = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    // console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
+    // //console.log('tablaVentas ->->-> parameBusqueda', props.parametrosBusqueda);
     track(() => ini.value);
 
-    // console.log('props.buscarVentas.valueOf', props.buscarVentas.valueOf());
+    // //console.log('props.buscarVentas.valueOf', props.buscarVentas.valueOf());
     // if (props.buscarVentas.valueOf()) {
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
@@ -81,18 +81,18 @@ export default component$((props: { contexto: string }) => {
           <Resource
             value={lasVentas140}
             onPending={() => {
-              console.log('onPending 🍉🍉🍉🍉');
+              //console.log('onPending 🍉🍉🍉🍉');
               //
               return <div>Cargando...</div>;
             }}
             onRejected={() => {
-              console.log('onRejected 🍍🍍🍍🍍');
+              //console.log('onRejected 🍍🍍🍍🍍');
 
               // ctx_index_venta.mostrarSpinner = false;
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(ventas140) => {
-              console.log('onResolved 🍓🍓🍓🍓', ventas140);
+              //console.log('onResolved 🍓🍓🍓🍓', ventas140);
               const { data } = ventas140; //{ status, data, message }
               const misVentas140: IVentaCLienteVentasVarias[] = data;
               // ctx_index_venta.miscVts = misVentas;

@@ -1,8 +1,8 @@
 const API = import.meta.env.VITE_URL + '/api/servicio';
 
 export const inUpServicio = async (parametros) => {
-  // console.log('//////api////////////******************inser/update en inUpServicio');
-  // console.log('parametros inUpServicio', parametros);
+  // //console.log('//////api////////////******************inser/update en inUpServicio');
+  // //console.log('parametros inUpServicio', parametros);
   const res = await fetch(API + '/inUpServicio', {
     method: 'POST',
     headers: {
@@ -14,8 +14,8 @@ export const inUpServicio = async (parametros) => {
 };
 
 export const getServiciosPorDescripcion = async (parametros) => {
-  // console.log('//////api////////////******************get en getServiciosPorDescripcion');
-  // console.log('parametros getServiciosPorDescripcion', parametros);
+  // //console.log('//////api////////////******************get en getServiciosPorDescripcion');
+  // //console.log('parametros getServiciosPorDescripcion', parametros);
   const res = await fetch(API + '/getServiciosPorDescripcion', {
     method: 'POST',
     headers: {

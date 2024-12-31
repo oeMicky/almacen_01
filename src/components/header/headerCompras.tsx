@@ -8,9 +8,7 @@ export default component$(() => {
   useStyles$(style);
   const navegarA = useNavigate();
   return (
-    <header
-      style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}
-    >
+    <header style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
       <div class="container-header">
         <div class="main-logo">
           <Link href="/">
@@ -24,19 +22,14 @@ export default component$(() => {
             </label>
           </div>
           <input type="checkbox" class="toggle-menu__checkbox" id="toggle-menu-checkbox" />
-          <ul
-            class="main-menu"
-            style={
-              parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''
-            }
-          >
+          <ul class="main-menu" style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
             <li
               class="main-menu__item"
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
               }}
             >
-              <input
+              {/* <input
                 type="image"
                 src={images.Cp}
                 title="Ir a compras"
@@ -47,10 +40,10 @@ export default component$(() => {
                   navegarA('/compra/');
                   // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
                 }}
-              />
-              {/* <Link href="/compra/">
+              /> */}
+              <Link href="/compra/">
                 <img src={images.Cp} style={{ width: '30px' }} />
-              </Link> */}
+              </Link>
             </li>
             <li
               class="main-menu__item"
@@ -65,6 +58,7 @@ export default component$(() => {
 
             <li
               class="main-menu__item"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 sessionStorage.removeItem('usuario');

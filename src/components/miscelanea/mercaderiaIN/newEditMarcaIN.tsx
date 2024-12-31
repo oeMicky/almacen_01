@@ -33,8 +33,8 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string; idMa
       marca: marca.mar,
     });
 
-    console.log('lt - marca', lt);
-    console.log('lt.data - marca', lt.data);
+    //console.log('lt - marca', lt);
+    //console.log('lt.data - marca', lt.data);
 
     ctx_new_edit_mercaderia_in.grabo_marca = true;
     ctx_new_edit_mercaderia_in.laLineaTipo = lt.data;

@@ -1,8 +1,8 @@
-import { component$, useContext, useSignal } from '@builder.io/qwik';
+import { component$, useSignal } from '@builder.io/qwik';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN, redondeo2Decimales } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
-import { CTX_F_B_NC_ND } from './addVenta'; //ICuotaCreditoVenta
+// import { CTX_F_B_NC_ND } from './addVenta'; //ICuotaCreditoVenta
 
 // export interface ICuota {
 //   idAuxiliar: number;
@@ -11,14 +11,14 @@ import { CTX_F_B_NC_ND } from './addVenta'; //ICuotaCreditoVenta
 // }numeroFilas: number;
 
 export default component$((props: { registros: any[]; numero: number }) => {
-  const ctx_f_b_nc_nd = useContext(CTX_F_B_NC_ND);
+  // const ctx_f_b_nc_nd = useContext(CTX_F_B_NC_ND);
   const num_regi = useSignal(0);
 
   let sumaCuotas = 0; //useSignal(0);
 
   // useTask$(({ track }) => {
   //   track(() => ctx_add_venta_tabla);
-  //   console.log(
+  //   //console.log(
   //     'chequeoooooo .............................. ctx_add_venta_tabla.cuotasCredito',
   //     ctx_add_venta_tabla.cuotasCredito
   //   );
@@ -26,7 +26,7 @@ export default component$((props: { registros: any[]; numero: number }) => {
 
   // useTask$(({ track }) => {
   //   track(() => props.numeroFilas);
-  //   console.log('chequeoooooo .............................. ctx_add_venta_tabla.cuotasCredito', props.numeroFilas);
+  //   //console.log('chequeoooooo .............................. ctx_add_venta_tabla.cuotasCredito', props.numeroFilas);
   //   // sumaCuotas = sumaCuotas + redondeo2Decimales(cuota.importeCuotaPEN);
   // });
 
@@ -112,7 +112,7 @@ export default component$((props: { registros: any[]; numero: number }) => {
           <th>
             <button
               onClick$={() => {
-                console.log('ctx_add_venta_tabla.cuotasCredito', ctx_f_b_nc_nd.cuotasCredito);
+                //console.log('ctx_add_venta_tabla.cuotasCredito', ctx_f_b_nc_nd.cuotasCredito);
               }}
             >
               ver ctx

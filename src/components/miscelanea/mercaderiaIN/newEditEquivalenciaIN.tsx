@@ -72,7 +72,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
     }
     equivalenciaIN.laEquivalencia = equivalenciaIN.tipoEquivalencia ? equivalenciaIN.factor : 1 / equivalenciaIN.factor;
     if (props.insertar) {
-      console.log('insertado');
+      //console.log('insertado');
 
       ctxDocumento.push({
         // _id: props.equivaSelecci._id ? props.equivaSelecci._id : '',
@@ -86,13 +86,13 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
         factor: equivalenciaIN.factor,
         laEquivalencia: equivalenciaIN.laEquivalencia,
       });
-      console.log('equivalenciaIN enviado por INSERCION', equivalenciaIN);
+      //console.log('equivalenciaIN enviado por INSERCION', equivalenciaIN);
     } else {
-      console.log('editado - documento', ctxDocumento);
-      console.log('editado', ctxDocumento[0].idAuxiliar, equivalenciaIN.idAuxiliar);
+      //console.log('editado - documento', ctxDocumento);
+      //console.log('editado', ctxDocumento[0].idAuxiliar, equivalenciaIN.idAuxiliar);
       // documento.find(( idAuxiliar:any ) => idAuxiliar === equivalenciaIN.idAuxiliar);
       const aMod: any = ctxDocumento.find((docs: any) => docs.idAuxiliar === equivalenciaIN.idAuxiliar);
-      console.log('aMod', aMod);
+      //console.log('aMod', aMod);
 
       (aMod.descripcionEquivalencia = equivalenciaIN.descripcionEquivalencia),
         // : props.equivaSelecci._id ? props.equivaSelecci._id : '',
@@ -102,7 +102,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
         (aMod.tipoEquivalencia = equivalenciaIN.tipoEquivalencia),
         (aMod.factor = equivalenciaIN.factor),
         (aMod.laEquivalencia = equivalenciaIN.laEquivalencia);
-      console.log('equivalenciaIN enviado por EDICION', equivalenciaIN);
+      //console.log('equivalenciaIN enviado por EDICION', equivalenciaIN);
     }
 
     ctx_new_edit_mercaderia_in.mostrarPanelNewEditEquivalenciaIN = false;
@@ -116,7 +116,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
     if (definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.grabo_uniEq) {
       // lasUnidadesEquivalentes.value=definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.laLineaTipo[0].unidadesEquivalencias;
       const uno: any = definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.laLineaTipo;
-      console.log('uno', uno);
+      //console.log('uno', uno);
       const dos: any = uno.unidadesEquivalencias;
       //ORDENANDO UNIDADES EQUIVALENCIAS
       const unisEquiOrde: any = dos.sort((a: any, b: any) => {
@@ -131,7 +131,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
         // names must be equal
         return 0;
       });
-      console.log('first - unisEquiOrde', unisEquiOrde);
+      //console.log('first - unisEquiOrde', unisEquiOrde);
       lasUnidadesEquivalentes.value = unisEquiOrde;
 
       definicion_CTX_NEW_EDIT_EQUIVALENCIA_IN.grabo_uniEq = false;
@@ -177,14 +177,14 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
             ctx_new_edit_mercaderia_in.mostrarPanelNewEditEquivalenciaIN = false;
           })}
         />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.equivaSelecci', props.equivaSelecci);
+            //console.log('props.equivaSelecci', props.equivaSelecci);
           })}
         />
         <ImgButton
@@ -194,9 +194,9 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('equivalenciaIN', equivalenciaIN);
+            //console.log('equivalenciaIN', equivalenciaIN);
           })}
-        />
+        /> */}
       </div>
       {/* TITULO */}
       <h3>Registro de equivalencia</h3>
@@ -268,7 +268,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
                 registroTEXT={'unidadEquivalencia'}
                 seleccione={'-- Seleccione unidad equivalencia --'}
                 onChange={$(() => {
-                  // console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                  // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                   const elSelec = document.getElementById('se_unidadEquivalenciaIN_MICE') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
                   equivalenciaIN.idUnidadEquivalencia = elSelec[elIdx].id;
@@ -324,8 +324,8 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
                 onClick$={() => {
                   const elSelec = document.getElementById('se_unidadEquivalenciaIN_MICE') as HTMLSelectElement;
                   const elIdx = elSelec.selectedIndex;
-                  console.log('elSelec[elIdx].id', elSelec[elIdx].id);
-                  console.log('elSelec.value', elSelec.value);
+                  //console.log('elSelec[elIdx].id', elSelec[elIdx].id);
+                  //console.log('elSelec.value', elSelec.value);
                   if (elSelec[elIdx].id === '') {
                     alert('Selecione la unidad de equivalencia');
                     elSelec.focus();

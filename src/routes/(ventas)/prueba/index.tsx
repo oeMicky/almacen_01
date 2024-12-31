@@ -23,13 +23,13 @@ export default component$(() => {
   // const cargarPeriodos = $(async (parametros: any) => {
   //   const losPeri = await getPeriodos(parametros);
 
-  //   console.log('losPeri', losPeri);
+  //   //console.log('losPeri', losPeri);
   // });
 
   // useTask$(({ track }) => {
   //   track(() => ini.value);
 
-  //   console.log('first');
+  //   //console.log('first');
   //   cargarPeriodos({ idGrupoEmpresarial: '60f097ca53621708ecc4e781', idEmpresa: '60f097ca53621708ecc4e782', bandera: 'prueba' });
   // });
   //#endregion INICIALIZACION
@@ -89,7 +89,7 @@ export default component$(() => {
               //       return;
               //     }
               //     buscarCotizaciones.value++;
-              //     console.log('buscarCotizaciones.value', buscarCotizaciones.value);
+              //     //console.log('buscarCotizaciones.value', buscarCotizaciones.value);
               //   })}
             />
           </div>
@@ -110,9 +110,9 @@ export default component$(() => {
             //   //
             //   let elIgv = await getIgvVenta(parametrosGlobales);
             //   elIgv = elIgv.data;
-            //   console.log('elIgv', elIgv);
+            //   //console.log('elIgv', elIgv);
             //   igv.value = elIgv[0].igv;
-            //   console.log('igv.value::', igv.value);
+            //   //console.log('igv.value::', igv.value);
             //   definicion_CTX_INDEX_COTIZACION.cC = [];
             //   definicion_CTX_INDEX_COTIZACION.mostrarPanelNewEditCotizacion = true;
             // })}
@@ -125,10 +125,10 @@ export default component$(() => {
             registroTEXT={'periodo'}
             seleccione={'-- Seleccione periodo --'}
             // onChange={$(() => {
-            //   console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+            //   //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
             //   const elSelec = document.getElementById('se_periodo') as HTMLSelectElement;
             //   const elIdx = elSelec.selectedIndex;
-            //   console.log('?', elIdx, elSelec[elIdx].id);
+            //   //console.log('?', elIdx, elSelec[elIdx].id);
             //   periodo.idPeriodo = elSelec[elIdx].id;
             //   if (periodo.idPeriodo === '') {
             //     periodo.periodo = '';
@@ -144,7 +144,7 @@ export default component$(() => {
           /> */}
           {/* <button
             onClick$={() => {
-              console.log('button losPeriodosCargados.value', losPeriodosCargados.value);
+              //console.log('button losPeriodosCargados.value', losPeriodosCargados.value);
             }}
           >
             losPeriodosCargados.value

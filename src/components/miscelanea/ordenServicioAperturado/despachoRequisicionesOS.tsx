@@ -55,11 +55,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
   const losDespachos = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
     // track(() => props.buscarOrdenesServicio.valueOf());
     track(() => ini.value);
-    console.log('parametrosBusqueda losDespachos ini.value', ini.value);
+    //console.log('parametrosBusqueda losDespachos ini.value', ini.value);
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
 
-    console.log('parametrosBusqueda losDespachos requisiones', props.osSeleccionada._id);
+    //console.log('parametrosBusqueda losDespachos requisiones', props.osSeleccionada._id);
 
     const res = await fetch(import.meta.env.VITE_URL + '/api/ordenServicio/getDespachoRequisiciones', {
       method: 'POST',
@@ -86,6 +86,26 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            //console.log('osSeleccionada', props.osSeleccionada);
+          })}
+        />
+        <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            //console.log('misDespachos', misDespachos.value);
+          })}
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -96,45 +116,40 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             ctx.mostrarPanelDespachoRequisiciones = false;
           })}
         />
-        <ImgButton
-          src={images.see}
-          alt="Icono de cerrar"
-          height={16}
-          width={16}
-          title="Cerrar el formulario"
-          onClick={$(() => {
-            console.log('osSeleccionada', props.osSeleccionada);
-          })}
-        />
-        <ImgButton
-          src={images.see}
-          alt="Icono de cerrar"
-          height={16}
-          width={16}
-          title="Cerrar el formulario"
-          onClick={$(() => {
-            console.log('misDespachos', misDespachos.value);
-          })}
-        />
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3>Despacho de requisiciones OS</h3>
+        <h3 style={{ color: '#555' }}>Despacho de requisiciones OS</h3>
         {/* CLIENTE */}
         <div>
-          <div style={{ margin: '4px 0' }}>ID:{` ${props.osSeleccionada._id} `}</div>
-          <div style={{ margin: '4px 0' }}>
-            OS:<b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
+          <div style={{ display: 'flex', margin: '4px 0' }}>
+            <label style={{ color: '#777', width: '73px' }}>ID:</label>
+            {` ${props.osSeleccionada._id} `}
           </div>
-          <div style={{ margin: '4px 0' }}>
-            Cliente:
-            <b>{props.osSeleccionada.clienteVentasVarias ? ' Cliente ventas varias' : ` ${props.osSeleccionada.razonSocialNombreCliente}`}</b>
+          <div style={{ display: 'flex', margin: '4px 0' }}>
+            <label style={{ color: '#777', width: '73px' }}>OS:</label>
+            <label style={{ color: '#555' }}>
+              <b>{` ${props.osSeleccionada.serie + ' - ' + cerosALaIzquierda(props.osSeleccionada.numero, 8)} `}</b>
+            </label>
           </div>
-          <div style={{ margin: '4px 0' }}>
-            Placa:<b>{` ${props.osSeleccionada.placa} `}</b>
+          <div style={{ display: 'flex', margin: '4px 0' }}>
+            <label style={{ color: '#777', width: '73px' }}>Cliente:</label>
+            <label style={{ color: '#555' }}>
+              <b>{props.osSeleccionada.clienteVentasVarias ? ' Cliente ventas varias' : ` ${props.osSeleccionada.razonSocialNombreCliente}`}</b>
+            </label>
           </div>
-          <div style={{ margin: '4px 0' }}>
-            Kilometraje:<b>{` ${props.osSeleccionada.kilometraje}`}</b>
+          <div style={{ display: 'flex', margin: '4px 0' }}>
+            <label style={{ color: '#777', width: '73px' }}>Placa:</label>
+            <label style={{ color: '#555' }}>
+              <b>{` ${props.osSeleccionada.placa} `}</b>
+            </label>
+          </div>
+          <div style={{ display: 'flex', margin: '4px 0' }}>
+            <label style={{ color: '#777', width: '73px' }}>Kilometraje:</label>
+            <label style={{ color: '#555' }}>
+              {' '}
+              <b>{` ${props.osSeleccionada.kilometraje}`}</b>
+            </label>
           </div>
           <br />
         </div>
@@ -143,15 +158,15 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           <Resource
             value={losDespachos}
             onPending={() => {
-              console.log('onPending 🍉🍉🍉🍉');
+              //console.log('onPending 🍉🍉🍉🍉');
               return <div>Cargando...</div>;
             }}
             onRejected={() => {
-              console.log('onRejected 🍍🍍🍍🍍');
+              //console.log('onRejected 🍍🍍🍍🍍');
               return <div>Fallo en la carga de datos</div>;
             }}
             onResolved={(ordenesServicio) => {
-              console.log('onResolved ordenesServicio 🍓🍓🍓🍓', ordenesServicio);
+              //console.log('onResolved ordenesServicio 🍓🍓🍓🍓', ordenesServicio);
               const { data } = ordenesServicio; //{ status, data, message }
               // const misDespachos: IOrdenServicio_DespachoRequisicion[] = data;
               misDespachos.value = data;
@@ -239,9 +254,10 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                                   <input
                                     style={{ width: '80px', textAlign: 'end' }}
                                     value={despachoLocali.aDespachar}
+                                    onFocus$={(e) => (e.target as HTMLInputElement).select()}
                                     onChange$={(e) => {
                                       const a_Despachar = parseFloat((e.target as HTMLInputElement).value);
-                                      console.log('a_Despachar', a_Despachar);
+                                      //console.log('a_Despachar', a_Despachar);
                                       despachoLocali.aDespachar = a_Despachar;
                                     }}
                                     // onFocusin$={(e) => {
@@ -272,10 +288,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
           type="button"
           value="Despachar"
           class="btn-centro"
+          style={{ cursor: 'pointer', height: '40px' }}
           onClick$={() => {
-            console.log('losDespachos', losDespachos);
-            console.log('mis despachos', misDespachos.value);
-            console.log('props.osSeleccionadas', props.osSeleccionada);
+            //console.log('losDespachos', losDespachos);
+            //console.log('mis despachos', misDespachos.value);
+            //console.log('props.osSeleccionadas', props.osSeleccionada);
 
             //VERIFICAR montos a DESPACHAR
             let todoCorrecto = true;
@@ -317,14 +334,14 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                 stockEQUIVALENTE = parseFloat(despachoLocali.stock.$numberDecimal) / parseFloat(despachoLocali.laEquivalencia.$numberDecimal);
               }
 
-              console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
+              //console.log('stockEQUIVALENTE - por despa', stockEQUIVALENTE, aDespa);
               if (aDespa > stockEQUIVALENTE) {
                 alert(`ATENCIÓN: Desea despachar mayor cantidad ( ${aDespa} ) que el stock equivalente ( ${stockEQUIVALENTE} ). Posición # ${i}`);
                 todoCorrecto = false;
                 break;
               }
 
-              console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
+              //console.log('canti - despachado - reing - por aDespa', canti, despachado, reing, aDespa);
               if (despachado - reing + aDespa > canti) {
                 alert(
                   `ATENCIÓN: Se intenta despachar una cantidad mayor a la solicitada. La cantidad solicitada ( ${canti} ) es menor que la suma de lo ya despachado ( Despachado-Reingresada = ${
@@ -338,7 +355,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             if (!todoCorrecto) {
               return;
             }
-            console.log('paso VERIFICACION de CANTIDADES A DESPACHAR');
+            //console.log('paso VERIFICACION de CANTIDADES A DESPACHAR');
             //** copiar los datos al panel de EGRESO */
 
             //ID DE LA ORDEN SERVICIO
@@ -372,11 +389,11 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             //borra todos los elementos del array
             documento.itemsMercaderias.splice(0, numeroMercaderias);
             //inserta los elementos / mercaderias en el array
-            console.log('🚍🚍🚍🚍🚍numeroMercaderias', numeroMercaderias);
+            //console.log('🚍🚍🚍🚍🚍numeroMercaderias', numeroMercaderias);
             for (const despachoLocali of misDespachos.value) {
               const despaEquiva = despachoLocali.aDespachar.$numberDecimal ? despachoLocali.aDespachar.$numberDecimal : despachoLocali.aDespachar;
-              console.log('🚍🚍🚍🚍🚍despaEquiva', despaEquiva);
-              console.log('despachoLocali', despachoLocali);
+              //console.log('🚍🚍🚍🚍🚍despaEquiva', despaEquiva);
+              //console.log('despachoLocali', despachoLocali);
               if (despaEquiva > 0) {
                 // let despa = 0;
 
@@ -405,7 +422,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                   subPEN: despaEquiva * despachoLocali.costoUnitarioMovil.$numberDecimal,
                   subEquivalenciaPEN: despaEquiva * despachoLocali.costoUnitarioMovil.$numberDecimal * despachoLocali.laEquivalencia.$numberDecimal,
 
-                  precioUSD: 0,
+                  precioUnitarioUSD: 0,
                   ventaUSD: 0,
 
                   tipoEquivalencia: despachoLocali.tipoEquivalencia,
@@ -432,9 +449,9 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             //   cantidad: cantidad.value,
             //   unidadEquivalencia: equivalencia.unidadEquivalencia,
             //   costo: 0,
-            //   precioPEN: precioEquivalente.value,
+            //   precioUnitarioPEN: precioEquivalente.value,
             //   ventaPEN: cantidad.value * precioEquivalente.value,
-            //   precioUSD: 0,
+            //   precioUnitarioUSD: 0,
             //   ventaUSD: 0,
             //   tipoEquivalencia: equivalencia.tipoEquivalencia,
             //   factor: equivalencia.factor,

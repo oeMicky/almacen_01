@@ -11,7 +11,7 @@ export default component$((props: { borrarItemVenta: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 600px)',
+        width: 'clamp(330px, 86%, 500px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -31,16 +31,16 @@ export default component$((props: { borrarItemVenta: any }) => {
             ctx_add_venta.mostrarPanelBorrarItemVenta = false;
           })}
         />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('itemVenta', props.borrarItemVenta);
+            //console.log('itemVenta', props.borrarItemVenta);
           })}
-        />
+        /> */}
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
@@ -48,7 +48,7 @@ export default component$((props: { borrarItemVenta: any }) => {
         <div style={{ marginBottom: '8px' }}>
           <label>¿Desea eliminar el ítem?</label>
           <br />
-          <p style={{ fontSize: '0.8rem' }}>
+          <p style={{ fontSize: '0.8rem', margin: '8px 16px' }}>
             <strong>{props.borrarItemVenta.codigo}</strong>
             <br />
             <strong>{props.borrarItemVenta.descripcion}</strong>

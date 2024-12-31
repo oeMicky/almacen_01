@@ -1,14 +1,14 @@
-import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from "@builder.io/qwik";
-import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from "~/functions/comunes";
+import { $, Resource, component$, useContext, useResource$, useSignal, useStylesScoped$, useTask$ } from '@builder.io/qwik';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import style from '../tabla.css?inline';
-import style from "../tabla/tabla.css?inline";
+import style from '../tabla/tabla.css?inline';
 // import ImgButton from '../system/imgButton';
-import { images } from "~/assets";
+import { images } from '~/assets';
 // import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 // import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
-import type { ICotizacion } from "~/interfaces/iCotizacion";
-import { CTX_INDEX_COTIZACION } from "~/routes/(ventas)/cotizacion";
-import pdfCotizacionMG from "~/reports/MG/pdfCotizacionMG";
+import type { ICotizacion } from '~/interfaces/iCotizacion';
+import { CTX_INDEX_COTIZACION } from '~/routes/(ventas)/cotizacion';
+import pdfCotizacionMG from '~/reports/MG/pdfCotizacionMG';
 
 export default component$((props: { buscarCotizaciones: number; modoSeleccion: boolean; parametrosBusqueda: any }) => {
   //#region CONTEXTOS
@@ -26,14 +26,14 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     track(() => props.buscarCotizaciones.valueOf());
 
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
-    console.log("parametrosBusqueda", props.parametrosBusqueda);
+    //console.log('parametrosBusqueda', props.parametrosBusqueda);
     const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesPorPeriodo`, {
       // const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(props.parametrosBusqueda),
       signal: abortController.signal,
@@ -44,9 +44,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
 
   //#region VISUZALIZAR PDF
   const verPDF = $((cotizacion: any) => {
-    // console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
-    if (typeof cotizacion !== "undefined") {
-      console.log("imprimiendo ... imprimiendo ... imprimiendo ...", cotizacion);
+    // //console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
+    if (typeof cotizacion !== 'undefined') {
+      //console.log('imprimiendo ... imprimiendo ... imprimiendo ...', cotizacion);
       // pdfCotizacion98(cotizacion);
       pdfCotizacionMG(cotizacion);
     }
@@ -54,8 +54,8 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
 
   useTask$(async ({ track }) => {
     track(() => clickPDF.value);
-    // console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
-    if (typeof cotizacionSeleccionada.value !== "undefined") {
+    // //console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
+    if (typeof cotizacionSeleccionada.value !== 'undefined') {
       await verPDF(cotizacionSeleccionada.value);
     }
   });
@@ -65,18 +65,18 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
     <Resource
       value={lasCotizaciones}
       onPending={() => {
-        console.log("onPending 🍉🍉🍉🍉");
+        //console.log('onPending 🍉🍉🍉🍉');
         //
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log("onRejected 🍍🍍🍍🍍");
+        //console.log('onRejected 🍍🍍🍍🍍');
         // props.buscarVentas = false;
         ctx_index_cotizacion.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(cotizaciones) => {
-        console.log("onResolved 🍓🍓🍓🍓", cotizaciones);
+        //console.log('onResolved 🍓🍓🍓🍓', cotizaciones);
         const { data } = cotizaciones; //{ status, data, message }
         const misCotizaciones: ICotizacion[] = data;
         ctx_index_cotizacion.mostrarSpinner = false;
@@ -85,7 +85,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
           <>
             {misCotizaciones.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Cotización</th>
@@ -103,25 +103,25 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                       return (
                         <tr key={value._id}>
                           <td data-label="Cotización" class="comoCadena">
-                            {value.serie + " - " + cerosALaIzquierda(value.numero, 8)}
+                            {value.serie + ' - ' + cerosALaIzquierda(value.numero, 8)}
                           </td>
                           <td data-label="Fecha" class="comoCadena">
                             {formatoDDMMYYYY_PEN(value.fecha)}
                           </td>
                           <td data-label="Nro. Doc" class="comoCadena">
-                            {value.tipoDocumentoIdentidad + ": " + value.numeroIdentidad}
+                            {value.tipoDocumentoIdentidad + ': ' + value.numeroIdentidad}
                           </td>
                           <td data-label="Cliente" class="comoCadena">
                             {value.razonSocialNombre}
                           </td>
                           <td data-label="Importe PEN" class="comoNumero">
                             {value.montoTotalPEN
-                              ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString("en-PE", {
+                              ? parseFloat(value.montoTotalPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
-                                  currency: "PEN",
+                                  currency: 'PEN',
                                   minimumFractionDigits: 2,
                                 })
-                              : ""}
+                              : ''}
                           </td>
                           <td data-label="Acciones" class="acciones">
                             {props.modoSeleccion ? (
@@ -132,11 +132,11 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   src={images.check32}
                                   height={14}
                                   width={14}
-                                  style={{ marginRight: "8px" }}
+                                  style={{ marginRight: '8px' }}
                                   title="Selecionar cotización"
-                                  // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                  // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                   //   onClick={$(() => {
-                                  //     console.log('seleccionar cotiacion', value);
+                                  //     //console.log('seleccionar cotiacion', value);
                                   //     ctx_add_venta.cotizacion = value.correlativo;
                                   //     ctx_add_venta.idCliente = value.idCliente;
                                   //     ctx_add_venta.codigoTipoDocumentoIdentidad = parseInt(value.codigoTipoDocumentoIdentidad);
@@ -144,7 +144,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   //     ctx_add_venta.numeroIdentidad = value.numeroIdentidad;
                                   //     ctx_add_venta.razonSocialNombre = value.razonSocialNombreCliente;
                                   //     value.servicios.map((ser: any) => {
-                                  //       console.log('ser', ser);
+                                  //       //console.log('ser', ser);
                                   //       ctx_add_venta.itemsVenta.push({
                                   //         idAuxiliar: parseInt(elIdAuxiliar()),
                                   //         item: 0,
@@ -153,9 +153,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   //         cantidad: ser.cantidad.$numberDecimal,
                                   //         unidadEquivalencia: 'UNI',
                                   //         costo: 0,
-                                  //         precioPEN: ser.precioPEN.$numberDecimal,
-                                  //         ventaPEN: ser.cantidad.$numberDecimal * ser.precioPEN.$numberDecimal,
-                                  //         precioUSD: 0,
+                                  //         precioUnitarioPEN: ser.precioUnitarioPEN.$numberDecimal,
+                                  //         ventaPEN: ser.cantidad.$numberDecimal * ser.precioUnitarioPEN.$numberDecimal,
+                                  //         precioUnitarioUSD: 0,
                                   //         ventaUSD: 0,
                                   //       });
                                   //     });
@@ -168,9 +168,9 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                   //         cantidad: rep.cantidad.$numberDecimal,
                                   //         unidadEquivalencia: rep.unidadEquivalencia,
                                   //         costo: 0,
-                                  //         precioPEN: rep.precioPEN.$numberDecimal,
-                                  //         ventaPEN: rep.cantidad.$numberDecimal * rep.precioPEN.$numberDecimal,
-                                  //         precioUSD: 0,
+                                  //         precioUnitarioPEN: rep.precioUnitarioPEN.$numberDecimal,
+                                  //         ventaPEN: rep.cantidad.$numberDecimal * rep.precioUnitarioPEN.$numberDecimal,
+                                  //         precioUnitarioUSD: 0,
                                   //         ventaUSD: 0,
                                   //       });
                                   //     });
@@ -187,10 +187,10 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                                 title="Editar venta"
                                 height={14}
                                 width={14}
-                                style={{ marginRight: "8px" }}
-                                // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                                style={{ marginRight: '8px' }}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
-                                  console.log("cotizacion", value);
+                                  //console.log('cotizacion', value);
                                   ctx_index_cotizacion.cC = value;
                                   ctx_index_cotizacion.mostrarPanelNewEditCotizacion = true;
                                 }}
@@ -204,7 +204,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
                               height={14}
                               width={14}
                               // style={{ padding: '2px' }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 cotizacionSeleccionada.value = value;
                                 clickPDF.value++;
@@ -219,7 +219,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
               </>
             ) : (
               <div>
-                <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

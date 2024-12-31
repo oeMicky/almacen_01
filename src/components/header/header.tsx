@@ -1,13 +1,14 @@
-import { component$, useStylesScoped$ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import { component$, useStyles$ } from '@builder.io/qwik';
+// import { Link } from '@builder.io/qwik-city';
 // import { QwikLogo } from '../icons/qwik';
 import { CaoSLogo } from '../icons/cao-s';
 import styles from './header.css?inline';
 import { images } from '~/assets';
+import { useNavigate } from '@builder.io/qwik-city';
 
 export default component$(() => {
-  useStylesScoped$(styles);
-
+  useStyles$(styles);
+  const navegarA = useNavigate();
   return (
     <header>
       <div class="container-header">
@@ -34,15 +35,27 @@ export default component$(() => {
                 Portafolio
               </a>
             </li>
-            <li class="main-menu__item">
+            <li
+              class="main-menu__item"
+              style={{ cursor: 'pointer' }}
+              // onClick$={() => {
+              //   navegarA('#asociados');
+              // }}
+            >
               <a class="main-menu__link" href="#asociados" target="_blank">
                 Asociados
               </a>
             </li>
-            <li class="main-menu__item">
-              <Link style={{ color: '#eee', textDecoration: 'none' }} href="../login/">
-                Ingresar
-              </Link>
+            <li
+              class="main-menu__item"
+              style={{ cursor: 'pointer', color: 'white' }}
+              onClick$={() => {
+                navegarA('/login');
+              }}
+            >
+              {/* <Link style={{ color: '#eee', textDecoration: 'none' }} href="../login/"> */}
+              Ingresar
+              {/* </Link> */}
             </li>
           </ul>
         </nav>

@@ -3,14 +3,13 @@ import { Link, useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
 import { parametrosGlobales } from '~/routes/login';
 import style from '../header/headerAlmacen.css?inline';
+// import { existeMotivoNV } from '~/apis/egresosDeAlmacen.api';
 
 export default component$(() => {
   useStyles$(style);
   const navegarA = useNavigate();
   return (
-    <header
-      style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}
-    >
+    <header style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
       <div class="container-header">
         <div class="main-logo">
           <Link href="/">
@@ -24,19 +23,17 @@ export default component$(() => {
             </label>
           </div>
           <input type="checkbox" class="toggle-menu__checkbox" id="toggle-menu-checkbox" />
-          <ul
-            class="main-menu"
-            style={
-              parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''
-            }
-          >
+          <ul class="main-menu" style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
             <li
               class="main-menu__item"
+              title="Nota de venta"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                navegarA('/notaVenta');
               }}
             >
-              <input
+              {/* <input
                 type="image"
                 src={images.Fac}
                 title="Facturación electronica"
@@ -47,18 +44,46 @@ export default component$(() => {
                   navegarA('/venta/');
                   // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
                 }}
-              />
-              {/* <Link href="/venta/">
-                <img src={images.Fac} style={{ width: '30px' }} />
-              </Link> */}
+              /> */}
+              {/* <Link href="/notaVenta/"> */}
+              <img src={images.Nv} style={{ width: '30px' }} />
+              {/* </Link> */}
             </li>
             <li
               class="main-menu__item"
+              title="Facturación electrónica"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                navegarA('/venta');
               }}
             >
-              <input
+              {/* <input
+                type="image"
+                src={images.Fac}
+                title="Facturación electronica"
+                alt="Boton venta"
+                width={30}
+                height={30}
+                onClick$={() => {
+                  navegarA('/venta/');
+                  // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
+                }}
+              /> */}
+              {/* <Link href="/venta/"> */}
+              <img src={images.Fac} style={{ width: '30px' }} />
+              {/* </Link> */}
+            </li>
+            <li
+              class="main-menu__item"
+              title="Reporte de venta"
+              style={{ cursor: 'pointer' }}
+              onClick$={() => {
+                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                navegarA('/reporteVenta');
+              }}
+            >
+              {/* <input
                 type="image"
                 src={images.Rp}
                 title="Reporte ventas"
@@ -69,34 +94,41 @@ export default component$(() => {
                   navegarA('/reporteVenta/');
                   // definicion_CTX_HEADER_ALMACEN.mostrarSpinner = true;
                 }}
-              />
-              {/* <Link href="/reporteVenta/">
-                <img src={images.Rp} style={{ width: '30px' }} />
-              </Link> */}
+              /> */}
+              {/* <Link href="/reporteVenta/"> */}
+              <img src={images.Rp} style={{ width: '30px' }} />
+              {/* </Link> */}
             </li>
             <li
               class="main-menu__item"
+              title="Cotización"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                navegarA('/cotizacion');
               }}
             >
-              <Link href="/cotizacion/">
-                <img src={images.Ctz} style={{ width: '30px' }} />
-              </Link>
+              {/* <Link href="/cotizacion/"> */}
+              <img src={images.Ctz} style={{ width: '30px' }} />
+              {/* </Link> */}
             </li>
             <li
               class="main-menu__item"
+              title="Seleccionar servicio"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                navegarA('/seleccionarServicio');
               }}
             >
-              <Link href="/seleccionarServicio/">
-                <img src={images.multiWeb} style={{ width: '30px' }} />
-              </Link>
+              {/* <Link href="/seleccionarServicio/"> */}
+              <img src={images.multiWeb} style={{ width: '30px' }} />
+              {/* </Link> */}
             </li>
-
             <li
               class="main-menu__item"
+              title="Salir del sistema"
+              style={{ cursor: 'pointer' }}
               onClick$={() => {
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 sessionStorage.removeItem('usuario');

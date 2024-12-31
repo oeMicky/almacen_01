@@ -31,9 +31,9 @@ export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: s
       unidadEquivalencia: uniEquiIN.value,
     });
 
-    console.log('graboooooo laLinea', laLinea);
+    //console.log('graboooooo laLinea', laLinea);
     laLinea = laLinea.data;
-    console.log('graboooooo laLinea.data', laLinea);
+    //console.log('graboooooo laLinea.data', laLinea);
 
     ctx_new_edit_equivalencia_in.grabo_uniEq = true;
     ctx_new_edit_equivalencia_in.laLineaTipo = laLinea;

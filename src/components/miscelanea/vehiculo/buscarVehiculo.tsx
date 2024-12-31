@@ -54,7 +54,7 @@ export default component$((props: { contexto: string }) => {
 
   //#region BUSCAR VEHICULOS
   const localizarVehiculos = $(() => {
-    console.log('first***=>', parametrosBusqueda);
+    //console.log('first***=>', parametrosBusqueda);
     if (parametrosBusqueda.cadenaABuscar === '') {
       alert('Ingrese un valor para su busqueda 🦪' + parametrosBusqueda.cadenaABuscar + '**');
       //document.getElementById('inputBusquedaServicio_MICE')?.focus();
@@ -110,7 +110,7 @@ export default component$((props: { contexto: string }) => {
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('parametrosBusqueda', parametrosBusqueda);
+            //console.log('parametrosBusqueda', parametrosBusqueda);
           })}
         />
       </div>

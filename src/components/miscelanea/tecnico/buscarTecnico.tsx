@@ -1,25 +1,25 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from "@builder.io/qwik";
-import { images } from "~/assets";
-import { CTX_NEW_EDIT_ORDEN_SERVICIO } from "~/components/ordenServicio/newEditOrdenServicio";
-import ImgButton from "~/components/system/imgButton";
-import TablaTecnicos from "./tablaTecnicos";
-import BuscarPersona from "../persona/buscarPersona";
-import { inUpTecnico } from "~/apis/tecnico.api";
-import { parametrosGlobales } from "~/routes/login";
-import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from "~/components/ordenProduccion/newEditOrdenProduccion";
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { images } from '~/assets';
+import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
+import ImgButton from '~/components/system/imgButton';
+import TablaTecnicos from './tablaTecnicos';
+import BuscarPersona from '../persona/buscarPersona';
+import { inUpTecnico } from '~/apis/tecnico.api';
+import { parametrosGlobales } from '~/routes/login';
+import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
 
-export const CTX_BUSCAR_TECNICO = createContextId<any>("buscar_tecnico");
+export const CTX_BUSCAR_TECNICO = createContextId<any>('buscar_tecnico');
 
 export default component$((props: { contexto: string }) => {
   //#region DEFINICION CTX_BUSCAR_TECNICO
   const definicion_CTX_BUSCAR_TECNICO = useStore({
     tT: [],
     grabo_Tecnico: false,
-    buscarPor: "DNI / RUC",
-    conceptoABuscar: "",
+    buscarPor: 'DNI / RUC',
+    conceptoABuscar: '',
 
     mostrarPanelBuscarPersona: false,
-    idPersona: "",
+    idPersona: '',
     selecciono_Persona: false,
   });
   useContextProvider(CTX_BUSCAR_TECNICO, definicion_CTX_BUSCAR_TECNICO);
@@ -28,11 +28,11 @@ export default component$((props: { contexto: string }) => {
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
-    case "orden_servicio":
+    case 'orden_servicio':
       ctx = useContext(CTX_NEW_EDIT_ORDEN_SERVICIO);
       // documento = useContext(CTX_O_S);
       break;
-    case "orden_produccion":
+    case 'orden_produccion':
       ctx = useContext(CTX_NEW_EDIT_ORDEN_PRODUCCION);
       // documento = useContext(CTX_O_S);
       break;
@@ -45,9 +45,9 @@ export default component$((props: { contexto: string }) => {
 
   //#region BUSCAR TÉCNICOS
   const localizarTecnicos = $(() => {
-    if (definicion_CTX_BUSCAR_TECNICO.conceptoABuscar === "") {
-      alert("Ingrese un valor para su busqueda!!!");
-      document.getElementById("in_conceptoABuscar_TECNICO")?.focus();
+    if (definicion_CTX_BUSCAR_TECNICO.conceptoABuscar === '') {
+      alert('Ingrese un valor para su busqueda!!!');
+      document.getElementById('in_conceptoABuscar_TECNICO')?.focus();
       return;
     }
     buscarTecnico.value++;
@@ -59,7 +59,7 @@ export default component$((props: { contexto: string }) => {
     track(() => definicion_CTX_BUSCAR_TECNICO.selecciono_Persona);
     if (definicion_CTX_BUSCAR_TECNICO.selecciono_Persona) {
       //insertando/actualizando -> ACTIVO: TRUE
-      const tecni = await inUpTecnico({
+      await inUpTecnico({
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
         idPersona: definicion_CTX_BUSCAR_TECNICO.idPersona,
@@ -68,9 +68,9 @@ export default component$((props: { contexto: string }) => {
         usuario: parametrosGlobales.usuario,
       });
 
-      console.log("el tecnico creado/actualizado", tecni);
+      //console.log("el tecnico creado/actualizado", tecni);
       //buscando al TECNICO
-      definicion_CTX_BUSCAR_TECNICO.buscarPor = "DNI / RUC";
+      definicion_CTX_BUSCAR_TECNICO.buscarPor = 'DNI / RUC';
       localizarTecnicos();
       //
 
@@ -84,17 +84,17 @@ export default component$((props: { contexto: string }) => {
       <div
         style={{
           // width: props.ancho + 'px',
-          width: "clamp(330px, 86%, 700px)",
+          width: 'clamp(330px, 86%, 700px)',
           // width: 'auto',
-          padding: "2px",
+          padding: '2px',
         }}
         class="container-modal"
       >
         {/* BOTONES DEL MARCO */}
         <div
           style={{
-            display: "flex",
-            justifyContent: "end",
+            display: 'flex',
+            justifyContent: 'end',
           }}
         >
           <ImgButton
@@ -112,7 +112,7 @@ export default component$((props: { contexto: string }) => {
         {/* FORMULARIO */}
         <div class="add-form">
           {/* TITULO */}
-          <h3 style={{ marginBottom: "8px" }}>Buscar técnico</h3>
+          <h3 style={{ marginBottom: '8px' }}>Buscar técnico</h3>
           {/* ZONA DE BUSQUEDA */}
           <div>
             {/* Buscar por */}
@@ -120,16 +120,16 @@ export default component$((props: { contexto: string }) => {
               <div class="form-control form-agrupado">
                 <select
                   id="se_buscarPor_TECNICO"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   onChange$={(e) => {
                     definicion_CTX_BUSCAR_TECNICO.buscarPor = (e.target as HTMLSelectElement).value;
-                    document.getElementById("in_conceptoABuscar_TECNICO")?.focus();
+                    document.getElementById('in_conceptoABuscar_TECNICO')?.focus();
                   }}
                 >
-                  <option value={"DNI / RUC"} selected={definicion_CTX_BUSCAR_TECNICO.buscarPor === "DNI / RUC"}>
+                  <option value={'DNI / RUC'} selected={definicion_CTX_BUSCAR_TECNICO.buscarPor === 'DNI / RUC'}>
                     DNI / RUC
                   </option>
-                  <option value={"Nombre / Razón social"} selected={definicion_CTX_BUSCAR_TECNICO.buscarPor === "Nombre / Razón social"}>
+                  <option value={'Nombre / Razón social'} selected={definicion_CTX_BUSCAR_TECNICO.buscarPor === 'Nombre / Razón social'}>
                     Nombre / Razón social
                   </option>
                 </select>
@@ -140,7 +140,7 @@ export default component$((props: { contexto: string }) => {
               <div class="form-control form-agrupado">
                 <input
                   id="in_conceptoABuscar_TECNICO"
-                  style={{ width: "100%", marginRigth: "4px" }}
+                  style={{ width: '100%', marginRigth: '4px' }}
                   type="text"
                   autoFocus
                   value={definicion_CTX_BUSCAR_TECNICO.conceptoABuscar}
@@ -148,17 +148,17 @@ export default component$((props: { contexto: string }) => {
                     definicion_CTX_BUSCAR_TECNICO.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
                   }}
                   onKeyPress$={(e) => {
-                    if (e.key === "Enter") {
-                      if (definicion_CTX_BUSCAR_TECNICO.conceptoABuscar === "") {
-                        console.log("definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?", definicion_CTX_BUSCAR_TECNICO.conceptoABuscar);
-                        alert("Ingrese un valor para su busqueda.{.{.");
-                        document.getElementById("in_conceptoABuscar_TECNICO")?.focus();
+                    if (e.key === 'Enter') {
+                      if (definicion_CTX_BUSCAR_TECNICO.conceptoABuscar === '') {
+                        //console.log("definicion_CTX_BUSCAR_PERSONA.conceptoABuscar...esta mal?", definicion_CTX_BUSCAR_TECNICO.conceptoABuscar);
+                        alert('Ingrese un valor para su busqueda.{.{.');
+                        document.getElementById('in_conceptoABuscar_TECNICO')?.focus();
                         return;
                       }
                       buscarTecnico.value++;
                     }
-                    if (e.key === "Escape") {
-                      document.getElementById("se_buscarPor_TECNICO")?.focus();
+                    if (e.key === 'Escape') {
+                      document.getElementById('se_buscarPor_TECNICO')?.focus();
                     }
                   }}
                   onFocusin$={(e) => {
@@ -172,7 +172,7 @@ export default component$((props: { contexto: string }) => {
                   height={16}
                   width={16}
                   title="Buscar técnico"
-                  style={{ margin: "0px 4px" }}
+                  style={{ margin: '0px 4px' }}
                   onClick$={() => {
                     localizarTecnicos();
                   }}
@@ -198,7 +198,7 @@ export default component$((props: { contexto: string }) => {
             </div>
           )}
           {/* TABLA DE TÉCNICOS HALLADOS*/}
-          <div class="form-control">{buscarTecnico.value > 0 ? <TablaTecnicos buscarTecnico={buscarTecnico.value} contexto={props.contexto} /> : ""}</div>
+          <div class="form-control">{buscarTecnico.value > 0 ? <TablaTecnicos buscarTecnico={buscarTecnico.value} contexto={props.contexto} /> : ''}</div>
         </div>
       </div>
     </>

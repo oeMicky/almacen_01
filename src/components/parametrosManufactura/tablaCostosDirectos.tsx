@@ -1,16 +1,16 @@
-import { Resource, component$, useContext, useResource$, useStyles$ } from "@builder.io/qwik";
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 // import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from "~/functions/comunes";
 // import style from '../tabla.css?inline';
-import style from "../tabla/tabla.css?inline";
+import style from '../tabla/tabla.css?inline';
 // import ImgButton from '../system/imgButton';
-import { images } from "~/assets";
+import { images } from '~/assets';
 // import { ICotizacion } from '~/routes/(almacen)/cotizacion';
 // import pdfCotizacion98 from '~/reports/98/pdfCotizacion98';
 // import type { ICotizacion } from "~/interfaces/iCotizacion";
 // import pdfCotizacionMG from "~/reports/MG/pdfCotizacionMG";
-import { CTX_INDEX_PARAMETROS_MANUFACTURA } from "~/routes/(ordenesProduccion)/parametrosManufactura";
-import type { ICostoDirecto } from "~/interfaces/iParametrosManufactura";
-import { parametrosGlobales } from "~/routes/login";
+import { CTX_INDEX_PARAMETROS_MANUFACTURA } from '~/routes/(ordenesProduccion)/parametrosManufactura';
+import type { ICostoDirecto } from '~/interfaces/iParametrosManufactura';
+import { parametrosGlobales } from '~/routes/login';
 
 export default component$((props: { buscarCostosDirectos: number }) => {
   //#region CONTEXTOS
@@ -28,14 +28,14 @@ export default component$((props: { buscarCostosDirectos: number }) => {
     track(() => props.buscarCostosDirectos.valueOf());
 
     const abortController = new AbortController();
-    cleanup(() => abortController.abort("cleanup"));
+    cleanup(() => abortController.abort('cleanup'));
 
-    // console.log("parametrosBusqueda", props.parametrosBusqueda);
+    // //console.log("parametrosBusqueda", props.parametrosBusqueda);
     const res = await fetch(`${import.meta.env.VITE_URL}/api/parametrosManufactura/obtenerCostosDirectos`, {
       // const res = await fetch(`${import.meta.env.VITE_URL}/api/cotizacion/obtenerCotizacionesEntreFechas`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial, idEmpresa: parametrosGlobales.idEmpresa }),
       signal: abortController.signal,
@@ -46,9 +46,9 @@ export default component$((props: { buscarCostosDirectos: number }) => {
 
   //#region VISUZALIZAR PDF
   //   const verPDF = $((cotizacion: any) => {
-  //     // console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
+  //     // //console.log('a pdfCotizacionMG', cotizacion); //venta !== null &&
   //     if (typeof cotizacion !== "undefined") {
-  //       console.log("imprimiendo ... imprimiendo ... imprimiendo ...", cotizacion);
+  //       //console.log("imprimiendo ... imprimiendo ... imprimiendo ...", cotizacion);
   //       // pdfCotizacion98(cotizacion);
   //       pdfCotizacionMG(cotizacion);
   //     }
@@ -56,7 +56,7 @@ export default component$((props: { buscarCostosDirectos: number }) => {
 
   //   useTask$(async ({ track }) => {
   //     track(() => clickPDF.value);
-  //     // console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
+  //     // //console.log('a cotizacionSeleccionada.value:', cotizacionSeleccionada.value);
   //     if (typeof cotizacionSeleccionada.value !== "undefined") {
   //       await verPDF(cotizacionSeleccionada.value);
   //     }
@@ -67,18 +67,18 @@ export default component$((props: { buscarCostosDirectos: number }) => {
     <Resource
       value={losCostosDirectos}
       onPending={() => {
-        console.log("onPending 🍉🍉🍉🍉");
+        //console.log("onPending 🍉🍉🍉🍉");
         //
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
-        console.log("onRejected 🍍🍍🍍🍍");
+        //console.log("onRejected 🍍🍍🍍🍍");
         // props.buscarVentas = false;
         ctx_index_parametros_manufactura.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(costosDirecctos) => {
-        console.log("onResolved 🍓🍓🍓🍓", costosDirecctos);
+        //console.log("onResolved 🍓🍓🍓🍓", costosDirecctos);
         const { data } = costosDirecctos; //{ status, data, message }
         const misCostosDirectos: ICostoDirecto[] = data;
         ctx_index_parametros_manufactura.mostrarSpinner = false;
@@ -87,7 +87,7 @@ export default component$((props: { buscarCostosDirectos: number }) => {
           <>
             {misCostosDirectos.length > 0 ? (
               <>
-                <table style={{ fontSize: "0.8rem", fontWeight: "lighter" }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
                       <th>Costo directo</th>
@@ -106,12 +106,12 @@ export default component$((props: { buscarCostosDirectos: number }) => {
                           </td>
                           <td data-label="Costo PEN" class="comoNumero">
                             {value.costoPEN
-                              ? parseFloat(value.costoPEN.$numberDecimal).toLocaleString("en-PE", {
+                              ? parseFloat(value.costoPEN.$numberDecimal).toLocaleString('en-PE', {
                                   // style: 'currency',
-                                  currency: "PEN",
+                                  currency: 'PEN',
                                   minimumFractionDigits: 2,
                                 })
-                              : ""}
+                              : ''}
                           </td>
                           <td data-label="Acciones" class="acciones">
                             <input
@@ -121,10 +121,10 @@ export default component$((props: { buscarCostosDirectos: number }) => {
                               title="Editar venta"
                               height={14}
                               width={14}
-                              style={{ marginRight: "8px" }}
-                              // onFocusin$={() => console.log('☪☪☪☪☪☪')}
+                              style={{ marginRight: '8px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               // onClick$={() => {
-                              //   console.log("cotizacion", value);
+                              //   //console.log("cotizacion", value);
                               //   ctx_index_cotizacion.cC = value;
                               //   ctx_index_cotizacion.mostrarPanelNewEditCotizacion = true;
                               // }}
@@ -138,7 +138,7 @@ export default component$((props: { buscarCostosDirectos: number }) => {
               </>
             ) : (
               <div>
-                <i style={{ fontSize: "0.8rem" }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
               </div>
             )}
           </>

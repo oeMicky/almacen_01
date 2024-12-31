@@ -15,12 +15,12 @@ import logit from '../../assets/base64/imagesBase64.js';
 function pdfOsMG(os: any) {
   pdfMake.vfs = pdfFonts;
 
-  console.log('os PDF', os);
+  //console.log('os PDF', os);
 
   const servicios = os.servicios;
   // let repuestosDespachados: any = [];
   const repuestosDespachados = os.requisiciones.filter((plot: any) => plot.cantidadDespachada.$numberDecimal > 0);
-  console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
+  //console.log('repuestosDespachadosyyyyyyy', repuestosDespachados);
   let totalServicios = 0;
   let totalRepuestos = 0;
 
@@ -29,8 +29,8 @@ function pdfOsMG(os: any) {
   // const rodape = [];
 
   const losServicios = servicios.map((ser: any, index: number) => {
-    console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
-    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioPEN, ventaPEN } = ser;
+    //console.log('pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS..SER.pdfOS...');
+    const { descripcionEquivalencia, cantidadEquivalencia, unidadEquivalencia, precioUnitarioPEN, ventaPEN } = ser;
     const indexItem = index + 1;
     totalServicios = totalServicios + redondeo2Decimales(ventaPEN.$numberDecimal ? ventaPEN.$numberDecimal : ventaPEN);
     return [
@@ -43,7 +43,7 @@ function pdfOsMG(os: any) {
       },
       { text: unidadEquivalencia, style: 'tableBody' },
       {
-        text: formatearMonedaPEN(precioPEN.$numberDecimal),
+        text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
         style: 'tableBody',
       },
       {
@@ -54,14 +54,13 @@ function pdfOsMG(os: any) {
   });
 
   const losRepuestos = repuestosDespachados.map((repu: any, index: number) => {
-    console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
-    const { codigo, descripcionEquivalencia, cantidadDespachada, cantidadReingresada, unidadEquivalencia, precioPEN } = repu;
-    console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
+    //console.log('pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS..RT.pdfOS...');
+    const { codigo, descripcionEquivalencia, cantidadDespachada, cantidadReingresada, unidadEquivalencia, precioUnitarioPEN } = repu;
+    //console.log('cantidadDespachada - cantidadDespachada.$numberDecimal', cantidadDespachada, cantidadDespachada.$numberDecimal);
     if (cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal > 0) {
       const indexItem = index + 1;
       totalRepuestos =
-        totalRepuestos +
-        redondeo2Decimales((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal);
+        totalRepuestos + redondeo2Decimales((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioUnitarioPEN.$numberDecimal);
       return [
         { text: indexItem, style: 'tableBody' },
         { text: codigo, style: 'tableBody' },
@@ -72,13 +71,11 @@ function pdfOsMG(os: any) {
         },
         { text: unidadEquivalencia, style: 'tableBody' },
         {
-          text: formatearMonedaPEN(precioPEN.$numberDecimal),
+          text: formatearMonedaPEN(precioUnitarioPEN.$numberDecimal),
           style: 'tableBody',
         },
         {
-          text: formatearMonedaPEN(
-            (cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioPEN.$numberDecimal
-          ),
+          text: formatearMonedaPEN((cantidadDespachada.$numberDecimal - cantidadReingresada.$numberDecimal) * precioUnitarioPEN.$numberDecimal),
           style: 'tableBody',
         },
       ];
@@ -135,9 +132,7 @@ function pdfOsMG(os: any) {
               headerRows: 0,
               widths: ['*'],
 
-              body: [
-                ['R U C N° ' + os.ruc + '\n\nORDEN DE SERVICIO\n\n' + os.serie + ' - ' + cerosALaIzquierda(os.numero, 8) + '\n'],
-              ],
+              body: [['R U C N° ' + os.ruc + '\n\nORDEN DE SERVICIO\n\n' + os.serie + ' - ' + cerosALaIzquierda(os.numero, 8) + '\n']],
             },
             // text: [
             //   { text: 'R U C N° 20602683321\n', style: 'textoBold10' },
@@ -272,9 +267,7 @@ function pdfOsMG(os: any) {
       },
       //TRABAJOS REALIZADOS / OBSERVACIONES
       {
-        columns: [
-          { width: '100%', margin: [50, 10, 0, 0], text: { text: 'TRABAJOS REALIZADOS / OBSERVACIONES:', style: 'textoBold10' } },
-        ],
+        columns: [{ width: '100%', margin: [50, 10, 0, 0], text: { text: 'TRABAJOS REALIZADOS / OBSERVACIONES:', style: 'textoBold10' } }],
       },
       {
         columns: [{ width: '100%', margin: [50, 10, 0, 0], text: { text: os.observacionesCliente, style: 'texto' } }],

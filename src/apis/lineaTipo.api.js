@@ -2,8 +2,8 @@ const API = import.meta.env.VITE_URL + '/api/lineaTipoMercaderia';
 // const API = 'https://backendalmacen-production.up.railway.app/api/persona';
 
 export const inUpLineaTipoMercaderia = async (parametros) => {
-  // console.log('//////api////////////******************inser/update en inUpLineaTipoMercaderia');
-  // console.log('parametros inUpLineaTipoMercaderia->', parametros);
+  // //console.log('//////api////////////******************inser/update en inUpLineaTipoMercaderia');
+  // //console.log('parametros inUpLineaTipoMercaderia->', parametros);
   const res = await fetch(API + '/inUpLineaTipoMercaderia', {
     method: 'POST',
     headers: {
@@ -15,8 +15,8 @@ export const inUpLineaTipoMercaderia = async (parametros) => {
 };
 
 export const inUpMarca = async (parametros) => {
-  // console.log('//////api////////////******************inser/update en inUpMarca');
-  // console.log('parametros inUpMarca->', parametros);
+  // //console.log('//////api////////////******************inser/update en inUpMarca');
+  // //console.log('parametros inUpMarca->', parametros);
   const res = await fetch(API + '/inUpMarca', {
     method: 'POST',
     headers: {
@@ -28,8 +28,8 @@ export const inUpMarca = async (parametros) => {
 };
 
 export const inUpUnidad = async (parametros) => {
-  // console.log('//////api////////////******************inser/update en inUpUnidad');
-  // console.log('parametros inUpUnidad->', parametros);
+  // //console.log('//////api////////////******************inser/update en inUpUnidad');
+  // //console.log('parametros inUpUnidad->', parametros);
   const res = await fetch(API + '/inUpUnidad', {
     method: 'POST',
     headers: {
@@ -41,8 +41,8 @@ export const inUpUnidad = async (parametros) => {
 };
 
 export const inUpUnidadEquivalencia = async (parametros) => {
-  // console.log('//////api////////////******************inser/update en inUpUnidadEquivalencia');
-  // console.log('parametros inUpUnidadEquivalencia->', parametros);
+  // //console.log('//////api////////////******************inser/update en inUpUnidadEquivalencia');
+  // //console.log('parametros inUpUnidadEquivalencia->', parametros);
   const res = await fetch(API + '/inUpUnidadEquivalencia', {
     method: 'POST',
     headers: {
@@ -54,8 +54,8 @@ export const inUpUnidadEquivalencia = async (parametros) => {
 };
 
 export const getLineasTipos = async (parametros) => {
-  // console.log('//////api////////////****************** en getLineasTipos');
-  // console.log('parametros getLineasTipos', parametros);
+  // //console.log('//////api////////////****************** en getLineasTipos');
+  // //console.log('parametros getLineasTipos', parametros);
   const res = await fetch(API + '/listarLineasTipos', {
     method: 'POST',
     headers: {
@@ -67,8 +67,8 @@ export const getLineasTipos = async (parametros) => {
 };
 
 export const getLineaTipo = async (parametros) => {
-  // console.log('//////api////////////****************** en getLineaTipo');
-  // console.log('parametros getLineaTipo', parametros);
+  // //console.log('//////api////////////****************** en getLineaTipo');
+  // //console.log('parametros getLineaTipo', parametros);
   const res = await fetch(API + '/getLineaTipo', {
     method: 'POST',
     headers: {
@@ -80,8 +80,8 @@ export const getLineaTipo = async (parametros) => {
 };
 
 export const inUpUnidadDeSUNAT = async (parametros) => {
-  // console.log('//////api////////////******************inser/update en inUpUnidad');
-  // console.log('parametros inUpUnidad->', parametros);
+  // //console.log('//////api////////////******************inser/update en inUpUnidad');
+  // //console.log('parametros inUpUnidad->', parametros);
   const res = await fetch(API + '/inUpUnidadDeSUNAT', {
     method: 'POST',
     headers: {
@@ -93,8 +93,8 @@ export const inUpUnidadDeSUNAT = async (parametros) => {
 };
 
 export const inUpUnidadEquivalenciaDeSUNAT = async (parametros) => {
-  // console.log('//////api////////////******************inser/update en inUpUnidad');
-  // console.log('parametros inUpUnidad->', parametros);
+  // //console.log('//////api////////////******************inser/update en inUpUnidad');
+  // //console.log('parametros inUpUnidad->', parametros);
   const res = await fetch(API + '/inUpUnidadEquivalenciaDeSUNAT', {
     method: 'POST',
     headers: {

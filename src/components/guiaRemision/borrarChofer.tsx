@@ -26,7 +26,7 @@ export default component$((props: { borrarChofer: any }) => {
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('borrarChofer', props.borrarChofer);
+            //console.log('borrarChofer', props.borrarChofer);
           })}
         /> */}
         <ImgButton
@@ -36,7 +36,7 @@ export default component$((props: { borrarChofer: any }) => {
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_new_edit_GuiaRemision.mostrarPanelDeleteChofer = false;
+            ctx_new_edit_GuiaRemision.mostrarPanelDeleteConductor = false;
           })}
         />
       </div>
@@ -44,9 +44,9 @@ export default component$((props: { borrarChofer: any }) => {
       <div class="add-form">
         {/* ENCABEZADO */}
         <div style={{ marginBottom: '8px' }}>
-          <label>¿Desea eliminar el chofer?</label>
+          <label>¿Desea eliminar el conductor?</label>
           <br />
-          <p>
+          <p style={{ padding: '0 8px' }}>
             <label>{props.borrarChofer.numeroIdentidad}</label>
             <br />
             <label>{props.borrarChofer.razonSocialNombre}</label>
@@ -58,8 +58,8 @@ export default component$((props: { borrarChofer: any }) => {
             <button
               style={{ width: '60px' }}
               onClick$={() => {
-                ctx_new_edit_GuiaRemision.borrarIdAuxiliarChofer = props.borrarChofer.idAuxiliar;
-                ctx_new_edit_GuiaRemision.mostrarPanelDeleteChofer = false;
+                ctx_new_edit_GuiaRemision.borrarIdAuxiliarConductor = props.borrarChofer.idAuxiliar;
+                ctx_new_edit_GuiaRemision.mostrarPanelDeleteConductor = false;
               }}
             >
               SI
@@ -67,7 +67,7 @@ export default component$((props: { borrarChofer: any }) => {
             <button
               style={{ width: '60px' }}
               onClick$={() => {
-                ctx_new_edit_GuiaRemision.mostrarPanelDeleteChofer = false;
+                ctx_new_edit_GuiaRemision.mostrarPanelDeleteConductor = false;
               }}
             >
               NO
