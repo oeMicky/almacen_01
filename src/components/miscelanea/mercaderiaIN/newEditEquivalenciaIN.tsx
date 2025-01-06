@@ -262,6 +262,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
               <ElSelect
                 // estilos={{ width: '100%' }}
                 id={'se_unidadEquivalenciaIN_MICE'}
+                estilos={{ cursor: 'pointer' }}
                 valorSeleccionado={props.equivaSelecci.unidadEquivalencia}
                 registros={lasUnidadesEquivalentes.value}
                 registroID={'_id'}

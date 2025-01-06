@@ -6,7 +6,7 @@ import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 // import { CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 import ElButton from '~/components/system/elButton';
 import NewEditEquivalenciaIN from './newEditEquivalenciaIN';
-import ElSelect from '~/components/system/elSelect';
+// import ElSelect from '~/components/system/elSelect';
 import NewEditLineaTipoIN from './newEditLineaTipoIN';
 // import NewEditUnidadIN from './newEditUnidadIN';
 import { getLineasTipos } from '~/apis/lineaTipo.api';
@@ -20,6 +20,7 @@ import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from '../ordenProduccionTerminado/r
 import SelectTipoImpuesto from '~/components/system/selectTipoImpuesto';
 import SelectTipoAfectacionDelImpuesto from '~/components/system/selectTipoAfectacionDelImpuesto';
 import { getPorcentajesUtilidad } from '~/apis/grupoEmpresarial.api';
+import Spinner from '~/components/system/spinner';
 
 export const CTX_NEW_EDIT_MERCADERIA_IN = createContextId<any>('new_edit_mercaderia_IN');
 
@@ -145,7 +146,9 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
   //#region INICIALIZANDO
   const ini = useSignal(0);
+  const mostrarSpinner = useSignal(false);
   // const buscarLineasTipos = useSignal(0);
+  // const dataSerie = useSignal([]);
   const lasLineasTipos = useSignal([]);
   const lasUnidades = useSignal<any>([]);
   const lasUnidadesEquivalencias = useSignal<any>([]);
@@ -232,15 +235,17 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
   //#region OBTENER LINEAS / TIPOS DE MERCADERIAS
   const obtenerLineasTipos = $(async () => {
-    // //console.log('enotro a obtenerLineasTipos');
+    console.log('entro a obtenerLineasTipos');
     const listaLineasTipos = await getLineasTipos({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
     });
-    //console.log('listaLineasTipos.data', listaLineasTipos.data);
+    console.log('listaLineasTipos', listaLineasTipos);
 
     lasLineasTipos.value = listaLineasTipos.data;
+    console.log('lasLineasTipos.value', lasLineasTipos.value);
     if (definicion_CTX_MERCADERIA_IN.idLineaTipo !== '') {
+      console.log('definicion_CTX_MERCADERIA_IN.idLineaTipo', definicion_CTX_MERCADERIA_IN.idLineaTipo);
       obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
       obtenerMarcas(definicion_CTX_MERCADERIA_IN.idLineaTipo);
     }
@@ -251,6 +256,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_lineaTipo);
     if (definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_lineaTipo) {
+      console.log('🤍 entro a definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_lineaTipo');
       obtenerLineasTipos();
       definicion_CTX_NEW_EDIT_MERCADERIA_IN.grabo_lineaTipo = false;
     }
@@ -416,7 +422,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
   useTask$(({ track }) => {
     track(() => ini.value);
-    //console.log('entro a useTask');
+    console.log('🤍 entro a useTask INI');
     obtenerLineasTipos();
     obtenerPorcentajesUtilidad();
   });
@@ -461,7 +467,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       return;
     }
 
-    ctx.mostrarSpinner = true;
+    // ctx.mostrarSpinner = true;
+    mostrarSpinner.value = true;
     const merca = await inUpMercaderia({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
@@ -515,6 +522,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
     //console.log('merca', merca);
 
+    mostrarSpinner.value = false;
+
     ctx.abuscar = merca.data.descripcion;
     ctx.grabo_mercaderiaIN = true;
     ctx.mostrarPanelNewEditMercaderiaIN = false;
@@ -552,27 +561,27 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           onClick={$(() => {
             //console.log('props.mercaSeleccio.conLote', props.mercaSeleccio.conLote);
           })}
-        />
-       
-        <ImgButton
+        />*/}
+
+        {/* <ImgButton
           src={images.see}
           alt="Icono de persona"
           height={16}
           width={16}
           title="Ver lasLineasTipos.value"
           onClick={$(() => {
-            //console.log('lasLineasTipos.value', lasLineasTipos.value);
+            console.log('lasLineasTipos.value', lasLineasTipos.value);
           })}
-        /> */}
-        {/* <ImgButton
+        />
+        <ImgButton
           src={images.see}
           alt="Icono de persona"
           height={16}
           width={16}
           title="Ver definicion_CTX_MERCADERIA_IN"
           onClick={$(() => {
-            console.log('mercaSeleccio', props.mercaSeleccio);
-            //console.log('definicion_CTX_MERCADERIA_IN', definicion_CTX_MERCADERIA_IN);
+            // console.log('mercaSeleccio', props.mercaSeleccio);
+            console.log('definicion_CTX_MERCADERIA_IN', definicion_CTX_MERCADERIA_IN);
           })}
         /> */}
         {/* <ImgButton
@@ -597,18 +606,20 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: '#666666' }}>Registro de mercadería</h3>
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: '#666666' }}>Registro de mercadería / IN</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         <div>
           {/* ----------------------------------------------------- */}
-          {/* BOTONES */}
+          {/* CHECK BOX */}
           <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr  1fr' }}>
               <div>
                 <input
                   id="in_activo_MERCADERIA_IN"
+                  name="in_activo_MERCADERIA_IN"
                   type="checkbox"
+                  style={{ cursor: 'pointer' }}
                   checked={definicion_CTX_MERCADERIA_IN.activo}
                   onChange$={(e) => {
                     definicion_CTX_MERCADERIA_IN.activo = (e.target as HTMLInputElement).checked;
@@ -622,12 +633,16 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     (e.target as HTMLInputElement).select();
                   }}
                 />
-                <label for="in_activo_MERCADERIA_IN">Activo</label>
+                <label for="in_activo_MERCADERIA_IN" style={{ cursor: 'pointer' }}>
+                  Activo
+                </label>
               </div>
               <div>
                 <input
                   id="in_noFacturar_MERCADERIA_IN"
+                  name="in_noFacturar_MERCADERIA_IN"
                   type="checkbox"
+                  // style={{ cursor: 'pointer' }}
                   checked={definicion_CTX_MERCADERIA_IN.noFacturar}
                   onChange$={(e) => {
                     definicion_CTX_MERCADERIA_IN.noFacturar = (e.target as HTMLInputElement).checked;
@@ -641,7 +656,9 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     (e.target as HTMLInputElement).select();
                   }}
                 />
-                <label for="in_noFacturar_MERCADERIA_IN">No Facturar</label>
+                <label for="in_noFacturar_MERCADERIA_IN" style={{ cursor: 'pointer' }}>
+                  No Facturar
+                </label>
               </div>
             </div>
             <br />
@@ -685,7 +702,11 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    document.getElementById('se_aplicacion_MERCADERIA_IN')?.focus();
+                    console.log('💥💥💥💥💥 Enter => se_aplicacion_MERCADERIA_IN focus');
+                    (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).focus();
+                    (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).select();
+                    // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).style.border = '1px solid red';
+                    // document.getElementById('se_aplicacion_MERCADERIA_IN')?.focus();
                   }
                   // if (e.key === 'Escape') {
                   //   document.getElementById('tipoDocumentoIdentidad')?.focus();
@@ -712,15 +733,16 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 //   onChange={(e) => setNumeroIdentidad(e.target.value.trim())}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
+                    console.log('💥💥💥💥💥 Enter => se_UNSPSC_MERCADERIA_IN focus');
                     document.getElementById('se_UNSPSC_MERCADERIA_IN')?.focus();
                   }
                   // if (e.key === 'Escape') {
                   //   document.getElementById('tipoDocumentoIdentidad')?.focus();
                   // }
                 }}
-                // onFocusin$={(e) => {
-                //   (e.target as HTMLInputElement).select();
-                // }}
+                onFocus$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
               />
             </div>
           </div>
@@ -754,23 +776,71 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           {/* Linea / Tipo */}
           <div class="form-control">
             <div class="form-control form-agrupado">
-              <ElSelect
-                // estilos={{ width: '100%' }}
-                id={'se_lineaTipo_MERCADERIA_IN'}
-                valorSeleccionado={definicion_CTX_MERCADERIA_IN.lineaTipo}
-                registros={lasLineasTipos.value}
-                registroID={'_id'}
-                registroTEXT={'lineaTipoMercaderia'}
-                seleccione={'-- Seleccione linea / tipo --'}
-                onChange={$(() => {
-                  // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-                  const elSelec = document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement;
-                  const elIdx = elSelec.selectedIndex;
-                  // //console.log('?', elIdx, elSelec[elIdx].id);
-                  definicion_CTX_MERCADERIA_IN.idLineaTipo = elSelec[elIdx].id;
+              <select
+                id="se_lineaTipo_MERCADERIA_IN"
+                style={{ cursor: 'pointer' }}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const elSelect = e.target as HTMLSelectElement;
+                  const elOption = elSelect[idx];
+
+                  // //console.log('❤❤❤ dataSerie.value ', dataSerie.value);
+                  // const SSS: any = lasLineasTipos.value;
+                  // const der = SSS.find((ew: any) => ew._id === elOption.id);
+                  // console.log('❤❤❤ der ', der);
+                  // definicion_CTX_F_B_NC_ND.codigoTipoOperacion = der.codigoTipoOperacionXDefault;
+                  // definicion_CTX_F_B_NC_ND.tipoOperacion = der.tipoOperacionXDefault;
+                  // definicion_CTX_F_B_NC_ND.impresionTipoFacturaBoleta = der.impresionTipoFacturaBoleta;
+
+                  definicion_CTX_MERCADERIA_IN.idLineaTipo = elOption.id;
+                  definicion_CTX_MERCADERIA_IN.lineaTipo = (e.target as HTMLSelectElement).value;
+                  console.log('❤❤❤  ', definicion_CTX_MERCADERIA_IN.idLineaTipo, definicion_CTX_MERCADERIA_IN.lineaTipo);
+                  // document.getElementById('in_Fecha')?.focus();
                   if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
+                    console.log('💦💦💦💦💦💤💦');
                     definicion_CTX_MERCADERIA_IN.lineaTipo = '';
                   } else {
+                    console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                    // definicion_CTX_MERCADERIA_IN.lineaTipo = elSelec.value;
+                    obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                    obtenerMarcas(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                  }
+                }}
+              >
+                <option value="">-- Seleccione linea / tipo --</option>
+                {lasLineasTipos.value.map((linTip: any) => {
+                  return (
+                    <option id={linTip._id} value={linTip.lineaTipoMercaderia} selected={definicion_CTX_MERCADERIA_IN.lineaTipo === linTip.lineaTipoMercaderia}>
+                      {linTip.lineaTipoMercaderia}
+                    </option>
+                  );
+                })}
+              </select>
+              {/* <ElSelect
+                // estilos={{ width: '100%' }}
+                id="se_lineaTipo_MERCADERIA_IN"
+                valorSeleccionado={definicion_CTX_MERCADERIA_IN.lineaTipo}
+                registros={lasLineasTipos.value}
+                registroID="_id"
+                registroTEXT="lineaTipoMercaderia"
+                seleccione="-- Seleccione linea / tipo --"
+                onChange={$(() => {
+                  console.log('🎢🎢🎢🎢');
+                  const elSelec = document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement;
+                  console.log('elSelec', elSelec);
+                  console.log('elSelec.selectedIndex', elSelec.selectedIndex);
+                  const elIdx = elSelec.selectedIndex;
+                  console.log('?', elIdx, elSelec[elIdx].id);
+                  definicion_CTX_MERCADERIA_IN.idLineaTipo = elSelec[elIdx].id;
+
+                  // definicion_CTX_MERCADERIA_IN.idLineaTipo = (document.getElementById('se_lineaTipo_MERCADERIA_IN') as HTMLSelectElement).value;
+                  // console.log('?', definicion_CTX_MERCADERIA_IN.idLineaTipo);
+
+                  if (definicion_CTX_MERCADERIA_IN.idLineaTipo === '') {
+                    console.log('💦💦💦💦💦💤💦');
+                    definicion_CTX_MERCADERIA_IN.lineaTipo = '';
+                  } else {
+                    console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                     definicion_CTX_MERCADERIA_IN.lineaTipo = elSelec.value;
                     obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                     obtenerMarcas(definicion_CTX_MERCADERIA_IN.idLineaTipo);
@@ -781,7 +851,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     (document.getElementById('se_marca_MERCADERIA_IN') as HTMLSelectElement)?.focus();
                   }
                 })}
-              />
+              /> */}
             </div>
             {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarPanelNewEditLineaTipoIN && (
               <div class="modal">
@@ -793,7 +863,34 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           {/* Marca */}
           <div class="form-control">
             <div class="form-control form-agrupado">
-              <ElSelect
+              <select
+                id="se_marca_MERCADERIA_IN"
+                style={{ cursor: 'pointer' }}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const elSelect = e.target as HTMLSelectElement;
+                  const elOption = elSelect[idx];
+
+                  definicion_CTX_MERCADERIA_IN.idMarca = elOption.id;
+                  // document.getElementById('in_Fecha')?.focus();
+                  if (definicion_CTX_MERCADERIA_IN.idMarca === '') {
+                    definicion_CTX_MERCADERIA_IN.marca = '';
+                  } else {
+                    definicion_CTX_MERCADERIA_IN.marca = elSelect.value;
+                    //obtenerModelosVehiculares();
+                  }
+                }}
+              >
+                <option value="">-- Seleccione marca --</option>
+                {lasMarcas.value.map((marc: any) => {
+                  return (
+                    <option id={marc._id} value={marc.marca} selected={definicion_CTX_MERCADERIA_IN.marca === marc.marca}>
+                      {marc.marca}
+                    </option>
+                  );
+                })}
+              </select>
+              {/* <ElSelect
                 // estilos={{ width: '100%' }}
                 id={'se_marca_MERCADERIA_IN'}
                 valorSeleccionado={definicion_CTX_MERCADERIA_IN.marca}
@@ -819,7 +916,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     (document.getElementById('se_unidad_MERCADERIA_IN') as HTMLSelectElement)?.focus();
                   }
                 })}
-              />
+              />*/}
               <input
                 type="image"
                 src={images.add}
@@ -881,7 +978,34 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           {/* Unidad */}
           <div class="form-control">
             <div class="form-control form-agrupado">
-              <ElSelect
+              <select
+                id="se_unidad_MERCADERIA_IN"
+                style={{ cursor: 'pointer' }}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const elSelect = e.target as HTMLSelectElement;
+                  const elOption = elSelect[idx];
+
+                  definicion_CTX_MERCADERIA_IN.idUnidad = elOption.id;
+                  // document.getElementById('in_Fecha')?.focus();
+                  if (definicion_CTX_MERCADERIA_IN.idUnidad === '') {
+                    definicion_CTX_MERCADERIA_IN.unidad = '';
+                  } else {
+                    definicion_CTX_MERCADERIA_IN.unidad = elSelect.value;
+                    //obtenerModelosVehiculares();
+                  }
+                }}
+              >
+                <option value="">-- Seleccione unidad --</option>
+                {lasUnidades.value.map((unid: any) => {
+                  return (
+                    <option id={unid._id} value={unid.unidad} selected={definicion_CTX_MERCADERIA_IN.unidad === unid.unidad}>
+                      {unid.unidad}
+                    </option>
+                  );
+                })}
+              </select>
+              {/* <ElSelect
                 // estilos={{ width: '100%' }}
                 id={'se_unidad_MERCADERIA_IN'}
                 valorSeleccionado={definicion_CTX_MERCADERIA_IN.unidad}
@@ -906,7 +1030,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     (document.getElementById('in_conFechaVencimientoLote_MERCADERIA_IN') as HTMLSelectElement)?.focus();
                   }
                 })}
-              />
+              /> */}
               <input
                 type="image"
                 src={images.searchPLUS}
@@ -1043,6 +1167,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
             <div class="form-control form-agrupado">
               <select
                 id="se_porcentajeUtilidad_MERCADERIA_IN"
+                style={{ cursor: 'pointer' }}
                 hidden={!definicion_CTX_MERCADERIA_IN.porcentajeUtilidadXDefecto}
                 onChange$={(e) => {
                   const idx = (e.target as HTMLSelectElement).selectedIndex;
@@ -1504,6 +1629,12 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           }}
         />
       </div>
+      {/* MOSTRAR SPINNER */}
+      {mostrarSpinner.value && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 });

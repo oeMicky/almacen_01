@@ -20,6 +20,8 @@ export default component$(() => {
     // grabo_OS: false,
     mostrarPanelNewEditMercaderiaIN: false,
     grabo_mercaderiaIN: false,
+
+    // mostrarPanelNewEditMercaderiaIN: false,
   });
   useContextProvider(CTX_INDEX_KARDEX, definicion_CTX_INDEX_KARDEX);
   //#endregion CTX_INDEX_KARDEX
@@ -27,6 +29,7 @@ export default component$(() => {
   //#region INICIALIZANDO
   const navegarA = useNavigate();
   const buscarMercaderiasKARDEX = useSignal(0);
+  // const mercaderiaIN = useSignal(false);
 
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -59,6 +62,7 @@ export default component$(() => {
     }
   });
   //#endregion REFRESCAR TABLA MERCADERIAS IN
+
   return (
     <div class="container">
       {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem' }}>
@@ -116,6 +120,9 @@ export default component$(() => {
             localizarMercaderiasKARDEX();
           }}
         />
+        <button style={{ cursor: 'pointer', marginLeft: '4px' }} onClick$={() => (definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN = true)}>
+          ADD MERCADERÍA
+        </button>
         <br />
         <div style={{ margin: '0 5px' }}></div>
       </div>
@@ -124,6 +131,11 @@ export default component$(() => {
         <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
         <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px' }}>No facturable</label>
       </div>
+      {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN && (
+        <div class="modal">
+          <NewEditMercaderiaIN mercaSeleccio={[]} contexto={'index_kardexs'} />
+        </div>
+      )}
       {/*  tabla  MERCADERIAS LOCALIZADOS */}
       <div class="form-control" style={{ margin: '10px 0' }}>
         {buscarMercaderiasKARDEX.value > 0 ? (
