@@ -384,9 +384,9 @@ export default component$(
 
                   // precio.value = cantidad.value * costo.value;
                 }}
-                // onFocusin$={(e) => {
-                //   (e.target as HTMLInputElement).select();
-                // }}
+                onFocus$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
                     // (document.getElementById("in_CostoPEN_MICE") as HTMLInputElement).focus();

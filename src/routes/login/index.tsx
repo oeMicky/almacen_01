@@ -135,6 +135,7 @@ export default component$(() => {
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
     // contrasena: '12345678',
+    // contrasena: 'Cielo123',
     contrasena: '',
   });
   //#endregion INICIALIZACION

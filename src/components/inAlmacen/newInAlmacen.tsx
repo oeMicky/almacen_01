@@ -1028,25 +1028,32 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 <tbody>
                   {definicion_CTX_IN_ALMACEN.itemsMercaderias.map((iTMercaIN: any, index: number) => {
                     const indexItemMercaIN = index + 1;
-                    /////****** PEN */
+                    /////****** PEN
                     suma_SubPEN = suma_SubPEN + redondeo2Decimales(iTMercaIN.subPEN.$numberDecimal ? iTMercaIN.subPEN.$numberDecimal : iTMercaIN.subPEN);
 
                     suma_TotPEN = suma_TotPEN + redondeo2Decimales(iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN);
 
                     suma_IGVPEN = suma_TotPEN - suma_SubPEN;
-                    /////******USD */
-                    suma_SubUSD = suma_SubUSD + redondeo2Decimales(iTMercaIN.subUSD.$numberDecimal ? iTMercaIN.subUSD.$numberDecimal : iTMercaIN.subUSD);
+                    /////******USD
+                    if (typeof iTMercaIN.subUSD !== 'undefined') {
+                      console.log('iTMercaIN.subUSD', iTMercaIN.subUSD);
+                      suma_SubUSD = suma_SubUSD + redondeo2Decimales(iTMercaIN.subUSD.$numberDecimal ? iTMercaIN.subUSD.$numberDecimal : iTMercaIN.subUSD);
 
-                    suma_TotUSD = suma_TotUSD + redondeo2Decimales(iTMercaIN.totUSD.$numberDecimal ? iTMercaIN.totUSD.$numberDecimal : iTMercaIN.totUSD);
+                      suma_TotUSD = suma_TotUSD + redondeo2Decimales(iTMercaIN.totUSD.$numberDecimal ? iTMercaIN.totUSD.$numberDecimal : iTMercaIN.totUSD);
 
-                    suma_IGVUSD = suma_TotUSD - suma_SubUSD;
+                      suma_IGVUSD = suma_TotUSD - suma_SubUSD;
+                    } else {
+                      console.log('iTMercaIN.subUSD ==>> undefined');
+                    }
 
                     return (
                       <tr key={iTMercaIN.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar}>{`${cerosALaIzquierda(indexItemMercaIN, 3)}`}</td>
-                        <td data-label="Kx">{typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : ''}</td>
+                        <td data-label="Kx">{typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : '_'}</td>
                         <td data-label="Código">{iTMercaIN.codigo}</td>
-                        <td data-label="Descripción">{!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</td>
+                        <td data-label="Descripción">
+                          <strong> {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>
+                        </td>
                         <td data-label="IGV">{iTMercaIN.IGV.$numberDecimal ? iTMercaIN.IGV.$numberDecimal : iTMercaIN.IGV} %</td>
                         <td data-label="Cantidad" class="comoNumero">
                           <input
@@ -1102,7 +1109,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             }}
                           />
                         </td>
-                        <td data-label="Uni">{!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.unidad : iTMercaIN.unidadEquivalencia}</td>
+                        <td data-label="Uni" class="comoNumero">
+                          {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.unidad : iTMercaIN.unidadEquivalencia}
+                        </td>
                         <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'CostoUniUSD' : 'CostoUniPEN'} class="comoNumero">
                           <input
                             type="number"
@@ -1135,7 +1144,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                               let IGVCalculado;
                               let precio;
                               if (definicion_CTX_IN_ALMACEN.enDolares) {
-                                //******  USD */
+                                //******  USD
                                 iTMercaIN.costoUnitarioUSD = costo;
 
                                 if (iTMercaIN.IGV === 0) {
@@ -1176,7 +1185,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 //   iTMercaIN.totPEN
                                 // );
                               } else {
-                                //******  PEN */
+                                //******  PEN
                                 iTMercaIN.costoUnitarioPEN = costo;
 
                                 if (iTMercaIN.IGV === 0) {
@@ -1259,7 +1268,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                               let costo;
 
                               if (definicion_CTX_IN_ALMACEN.enDolares) {
-                                //******* USD *****/
+                                //******* USD *****
                                 iTMercaIN.valorUnitarioUSD = precio;
 
                                 if (iTMercaIN.IGV === 0) {
@@ -1278,7 +1287,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 iTMercaIN.subUSD =
                                   (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
                                   (iTMercaIN.costoUnitarioUSD ? iTMercaIN.costoUnitarioUSD : iTMercaIN.costoUnitarioUSD.$numberDecimal);
-                                //******* PEN *****/
+                                //******* PEN ****
                                 iTMercaIN.valorUnitarioPEN = precio * definicion_CTX_IN_ALMACEN.tipoCambio;
                                 iTMercaIN.costoUnitarioPEN = formatear_6Decimales(costo * definicion_CTX_IN_ALMACEN.tipoCambio);
                                 iTMercaIN.totPEN = iTMercaIN.totUSD * definicion_CTX_IN_ALMACEN.tipoCambio;

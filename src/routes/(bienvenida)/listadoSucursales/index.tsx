@@ -63,7 +63,9 @@ export default component$(() => {
                   <td data-label="Ítem" key={indexItemVenta}>{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
                   {/* <td data-label="Grupo Empresarial">{sucur.grupoEmpresarial}</td> */}
                   <td data-label="Empresa">{sucur.empresa}</td>
-                  <td data-label="Sucursal">{sucur.sucursal}</td>
+                  <td data-label="Sucursal" style={{ color: 'red' }}>
+                    {sucur.sucursal}
+                  </td>
                   <td data-label="Acciones" class="accionesLeft">
                     <input
                       // id="in_BuscarDetraccion"
