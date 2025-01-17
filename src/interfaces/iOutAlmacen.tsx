@@ -36,6 +36,9 @@ export interface IEgresoDeAlmacen {
 
   documentosAdjuntos: any;
   itemsMercaderias: any;
+
+  usuario: string;
+  creado: string;
 }
 
 export interface IMercaderiaOUT_Seleccionada {

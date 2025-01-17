@@ -72,7 +72,7 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                   <thead>
                     <tr>
                       {/* <th>Ítem</th> */}
-                      <th>Periodo</th>
+                      <th>ID</th>
                       <th>FISMA</th>
                       <th>Motivo</th>
                       <th>Doc</th>
@@ -81,14 +81,14 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                     </tr>
                   </thead>
                   <tbody>
-                    {misOutsAlmacen.map((outAlmaLocali) => {
-                      const { _id, periodo, FISMA, motivoEgresoAlmacen, numeroIdentidad, tipoDocumentoIdentidad, razonSocialNombre } = outAlmaLocali;
-                      // const indexItem = index + 1; , index
+                    {misOutsAlmacen.map((outAlmaLocali, index) => {
+                      const { _id, FISMA, motivoEgresoAlmacen, numeroIdentidad, tipoDocumentoIdentidad, razonSocialNombre } = outAlmaLocali;
+                      const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
-                          {/* <td data-label="Ítem">{indexItem}</td> */}
-                          <td data-label="Periodo" class="comoCadena">
-                            {periodo}
+                          <td data-label="Ítem">{indexItem}</td>
+                          <td data-label="ID" class="comoCadena">
+                            {_id}
                           </td>
                           <td data-label="FISMA" class="comoCadena">
                             {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}

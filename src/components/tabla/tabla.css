@@ -38,10 +38,12 @@ table td::before {
   /* border: 1px dashed #2b2a2a */
 }
 
-table tbody tr:nth-child(even) {
+/* table tbody tr:nth-child(even) { */
+table tbody tr:nth-child(odd) {
   /* background-color: #c9c9c9; */
   /* background-color: #d5d5d5; */
   /* background-color: #dcdcdc; */
+
   background-color: #e1e1e1;
   /* color: #9103aa; */
   /* background-color: #7f3b3b; */

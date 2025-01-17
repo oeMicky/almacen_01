@@ -144,6 +144,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       montoSubTotalUSD: props.inSelecci.montoSubTotalUSD ? props.inSelecci.montoSubTotalUSD : 0,
       montoIGVUSD: props.inSelecci.montoIGVUSD ? props.inSelecci.montoIGVUSD : 0,
       montoTotalUSD: props.inSelecci.montoTotalUSD ? props.inSelecci.montoTotalUSD : 0,
+
+      usuario: props.inSelecci.usuarioCrea ? props.inSelecci.usuarioCrea : '',
+      creado: props.inSelecci.createdAt ? props.inSelecci.createdAt : '',
     },
     { deep: true }
   );
@@ -473,7 +476,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           width={16}
           title="Cerrar el formulario"
           onClick={$(() => {
-            //console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
+            console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
           })}
         />
         <ImgButton
@@ -481,9 +484,9 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           alt="Icono de cerrar"
           height={16}
           width={16}
-          title="Cerrar el  props.igvCompraPorDefault"
+          title="Cerrar el  props.inSelecci"
           onClick={$(() => {
-            //console.log(' props.igvCompraPorDefault', props.igvCompraPorDefault);
+            console.log(' props.inSelecci', props.inSelecci);
           })}
         /> */}
         <ImgButton
@@ -508,24 +511,29 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE IN ALMACÉN */}
           <div>
-            {/* PERIODO */}
-            <div class="form-control">
+            {/* ID */}
+            <div class="form-control" hidden={definicion_CTX_IN_ALMACEN._id === ''}>
               <div class="form-control form-agrupado">
                 <input
-                  id="in_Periodo"
+                  id="in_ID"
                   style={{ width: '100%' }}
-                  type="number"
+                  type="text"
                   // autoFocus
                   disabled
-                  value={definicion_CTX_IN_ALMACEN.periodo}
-                  // onInput$={(e) => {
-                  //   definicion_CTX_COMPRA.anioDUAoDSI = parseInt((e.target as HTMLInputElement).value.trim());
-                  // }}
-                  // onKeyPress$={(e) => {
-                  //   if (e.key === 'Enter') {
-                  //     (document.getElementById('in_Serie') as HTMLInputElement)?.focus();
-                  //   }
-                  // }}
+                  value={definicion_CTX_IN_ALMACEN._id}
+                />
+              </div>
+            </div>
+            {/* USUARIO */}
+            <div class="form-control" hidden={definicion_CTX_IN_ALMACEN.usuario === ''}>
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_USUARIO_CREA"
+                  style={{ width: '100%' }}
+                  type="text"
+                  // autoFocus
+                  disabled
+                  value={definicion_CTX_IN_ALMACEN.usuario + '; ' + definicion_CTX_IN_ALMACEN.creado}
                 />
               </div>
             </div>
@@ -1027,14 +1035,26 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                 </thead>
                 <tbody>
                   {definicion_CTX_IN_ALMACEN.itemsMercaderias.map((iTMercaIN: any, index: number) => {
+                    console.log('DIMMMMMMMMMMMM');
                     const indexItemMercaIN = index + 1;
+
                     /////****** PEN
                     suma_SubPEN = suma_SubPEN + redondeo2Decimales(iTMercaIN.subPEN.$numberDecimal ? iTMercaIN.subPEN.$numberDecimal : iTMercaIN.subPEN);
 
                     suma_TotPEN = suma_TotPEN + redondeo2Decimales(iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN);
 
+                    // console.log('DoMMMMMMMMMMMM', !definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia);
+                    // console.log('definicion_CTX_IN_ALMACEN.enDolares ==>>', definicion_CTX_IN_ALMACEN.enDolares);
+                    // console.log('definicion_CTX_IN_ALMACEN.reingreso ==>>', definicion_CTX_IN_ALMACEN.reingreso);
+                    // if (typeof iTMercaIN.totPEN !== 'undefined') {
+                    //   console.log('iTMercaIN.totPEN ==>>', iTMercaIN.totPEN, formatear_6Decimales(iTMercaIN.totPEN));
+                    // } else {
+                    //   console.log('iTMercaIN.totPEN ==>> undefined');
+                    // }
+
                     suma_IGVPEN = suma_TotPEN - suma_SubPEN;
-                    /////******USD
+
+                    ///******USD
                     if (typeof iTMercaIN.subUSD !== 'undefined') {
                       console.log('iTMercaIN.subUSD', iTMercaIN.subUSD);
                       suma_SubUSD = suma_SubUSD + redondeo2Decimales(iTMercaIN.subUSD.$numberDecimal ? iTMercaIN.subUSD.$numberDecimal : iTMercaIN.subUSD);
@@ -1074,33 +1094,37 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 ? (iTMercaIN.cantidadIngresada = parseFloat((e.target as HTMLInputElement).value))
                                 : (iTMercaIN.cantidadIngresadaEquivalencia = parseFloat((e.target as HTMLInputElement).value));
                               if (definicion_CTX_IN_ALMACEN.enDolares) {
+                                console.log('cantidad 💚💚💚💚💚');
+
                                 ///  USD///
                                 iTMercaIN.subUSD =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.costoUnitarioUSD ? iTMercaIN.costoUnitarioUSD : iTMercaIN.costoUnitarioUSD.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.costoUnitarioUSD.$numberDecimal ? iTMercaIN.costoUnitarioUSD.$numberDecimal : iTMercaIN.costoUnitarioUSD);
 
                                 iTMercaIN.totUSD =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.valorUnitarioUSD ? iTMercaIN.valorUnitarioUSD : iTMercaIN.valorUnitarioUSD.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.valorUnitarioUSD.$numberDecimal ? iTMercaIN.valorUnitarioUSD.$numberDecimal : iTMercaIN.valorUnitarioUSD);
                                 ///  PEN///
                                 iTMercaIN.subPEN =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.costoUnitarioUSD ? iTMercaIN.costoUnitarioUSD : iTMercaIN.costoUnitarioUSD.$numberDecimal) *
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.costoUnitarioUSD.$numberDecimal ? iTMercaIN.costoUnitarioUSD.$numberDecimal : iTMercaIN.costoUnitarioUSD) *
                                   definicion_CTX_IN_ALMACEN.tipoCambio;
 
                                 iTMercaIN.totPEN =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.valorUnitarioUSD ? iTMercaIN.valorUnitarioUSD : iTMercaIN.valorUnitarioUSD.$numberDecimal) *
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.valorUnitarioUSD.$numberDecimal ? iTMercaIN.valorUnitarioUSD.$numberDecimal : iTMercaIN.valorUnitarioUSD) *
                                   definicion_CTX_IN_ALMACEN.tipoCambio;
                               } else {
+                                console.log('cantidad 💛💛💛💛💛');
                                 ///  PEN///
+
                                 iTMercaIN.subPEN =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.costoUnitarioPEN ? iTMercaIN.costoUnitarioPEN : iTMercaIN.costoUnitarioPEN.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.costoUnitarioPEN.$numberDecimal ? iTMercaIN.costoUnitarioPEN.$numberDecimal : iTMercaIN.costoUnitarioPEN);
 
                                 iTMercaIN.totPEN =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.valorUnitarioPEN ? iTMercaIN.valorUnitarioPEN : iTMercaIN.valorUnitarioPEN.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.valorUnitarioPEN.$numberDecimal ? iTMercaIN.valorUnitarioPEN.$numberDecimal : iTMercaIN.valorUnitarioPEN);
                               }
                               // const iv = itemsVentaK[index];
                             }}
@@ -1157,12 +1181,12 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 iTMercaIN.precioUniUSD = formatear_6Decimales(precio);
 
                                 iTMercaIN.subUSD =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.costoUnitarioUSD ? iTMercaIN.costoUnitarioUSD : iTMercaIN.costoUnitarioUSD.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.costoUnitarioUSD.$numberDecimal ? iTMercaIN.costoUnitarioUSD.$numberDecimal : iTMercaIN.costoUnitarioUSD);
 
                                 iTMercaIN.valorUnitarioUSD = precio;
                                 iTMercaIN.totUSD =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
                                   (iTMercaIN.valorUnitarioUSD.$numberDecimal ? iTMercaIN.valorUnitarioUSD.$numberDecimal : iTMercaIN.valorUnitarioUSD);
                                 //console.log(
                                 //   '🥪🥪🥪🥪🥪 iTMercaIN.cantidadIngresada - iTMercaIN.valorUnitarioUSD - iTMercaIN.valorUnitarioUSD.$numberDecimal',
@@ -1198,12 +1222,12 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 iTMercaIN.precioUniPEN = formatear_6Decimales(precio);
 
                                 iTMercaIN.subPEN =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.costoUnitarioPEN ? iTMercaIN.costoUnitarioPEN : iTMercaIN.costoUnitarioPEN.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.costoUnitarioPEN.$numberDecimal ? iTMercaIN.costoUnitarioPEN.$numberDecimal : iTMercaIN.costoUnitarioPEN);
 
                                 iTMercaIN.valorUnitarioPEN = precio;
                                 iTMercaIN.totPEN =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
                                   (iTMercaIN.valorUnitarioPEN.$numberDecimal ? iTMercaIN.valorUnitarioPEN.$numberDecimal : iTMercaIN.valorUnitarioPEN);
                                 //console.log(
                                 //   '🥪🥪🥪🥪🥪 iTMercaIN.cantidadIngresada - iTMercaIN.valorUnitarioPEN - iTMercaIN.valorUnitarioPEN.$numberDecimal',
@@ -1269,6 +1293,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
 
                               if (definicion_CTX_IN_ALMACEN.enDolares) {
                                 //******* USD *****
+                                console.log('💚💚💚💚💚');
                                 iTMercaIN.valorUnitarioUSD = precio;
 
                                 if (iTMercaIN.IGV === 0) {
@@ -1281,18 +1306,20 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 iTMercaIN.costoUnitarioUSD = formatear_6Decimales(costo);
 
                                 iTMercaIN.totUSD =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.valorUnitarioUSD ? iTMercaIN.valorUnitarioUSD : iTMercaIN.valorUnitarioUSD.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.valorUnitarioUSD.$numberDecimal ? iTMercaIN.valorUnitarioUSD.$numberDecimal : iTMercaIN.valorUnitarioUSD);
 
                                 iTMercaIN.subUSD =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.costoUnitarioUSD ? iTMercaIN.costoUnitarioUSD : iTMercaIN.costoUnitarioUSD.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.costoUnitarioUSD.$numberDecimal ? iTMercaIN.costoUnitarioUSD.$numberDecimal : iTMercaIN.costoUnitarioUSD);
                                 //******* PEN ****
                                 iTMercaIN.valorUnitarioPEN = precio * definicion_CTX_IN_ALMACEN.tipoCambio;
                                 iTMercaIN.costoUnitarioPEN = formatear_6Decimales(costo * definicion_CTX_IN_ALMACEN.tipoCambio);
                                 iTMercaIN.totPEN = iTMercaIN.totUSD * definicion_CTX_IN_ALMACEN.tipoCambio;
                                 iTMercaIN.subPEN = iTMercaIN.subUSD * definicion_CTX_IN_ALMACEN.tipoCambio;
                               } else {
+                                console.log('💛💛💛💛💛');
+
                                 iTMercaIN.valorUnitarioPEN = precio;
 
                                 if (iTMercaIN.IGV === 0) {
@@ -1305,12 +1332,12 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                                 iTMercaIN.costoUnitarioPEN = formatear_6Decimales(costo);
 
                                 iTMercaIN.totPEN =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.valorUnitarioPEN ? iTMercaIN.valorUnitarioPEN : iTMercaIN.valorUnitarioPEN.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.valorUnitarioPEN.$numberDecimal ? iTMercaIN.valorUnitarioPEN.$numberDecimal : iTMercaIN.valorUnitarioPEN);
 
                                 iTMercaIN.subPEN =
-                                  (iTMercaIN.cantidadIngresada ? iTMercaIN.cantidadIngresada : iTMercaIN.cantidadIngresada.$numberDecimal) *
-                                  (iTMercaIN.costoUnitarioPEN ? iTMercaIN.costoUnitarioPEN : iTMercaIN.costoUnitarioPEN.$numberDecimal);
+                                  (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
+                                  (iTMercaIN.costoUnitarioPEN.$numberDecimal ? iTMercaIN.costoUnitarioPEN.$numberDecimal : iTMercaIN.costoUnitarioPEN);
                               }
                             }}
                             onFocusin$={(e) => {
@@ -1318,7 +1345,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             }}
                           />
                         </td>
-                        <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'TotUSD' : 'TotPEN'} style={{ textAlign: 'end' }}>
+                        <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'TotUSD💚' : 'TotPEN💛'} style={{ textAlign: 'end' }}>
                           {definicion_CTX_IN_ALMACEN.enDolares
                             ? !definicion_CTX_IN_ALMACEN.reingreso
                               ? iTMercaIN.totUSD.$numberDecimal
@@ -1334,6 +1361,23 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             : iTMercaIN.totEquivalenciaPEN.$numberDecimal
                             ? formatear_6Decimales(iTMercaIN.totEquivalenciaPEN.$numberDecimal)
                             : formatear_6Decimales(iTMercaIN.totEquivalenciaPEN)}
+                          {/* {
+                            definicion_CTX_IN_ALMACEN.enDolares
+                              ? !definicion_CTX_IN_ALMACEN.reingreso
+                                ? iTMercaIN.totUSD.$numberDecimal
+                                  ? formatear_6Decimales(iTMercaIN.totUSD.$numberDecimal)
+                                  : formatear_6Decimales(iTMercaIN.totUSD)
+                                : iTMercaIN.totEquivalenciaUSD.$numberDecimal
+                                ? formatear_6Decimales(iTMercaIN.totEquivalenciaUSD.$numberDecimal)
+                                : formatear_6Decimales(iTMercaIN.totEquivalenciaUSD)
+                              : !definicion_CTX_IN_ALMACEN.reingreso
+                              ? "a" ///iTMercaIN.totPEN.$numberDecimal
+                                ? '-D|-RI|iTMercaIN.totPEN.$numberDecimal' ///formatear_6Decimales(iTMercaIN.totPEN.$numberDecimal)
+                                : '-D|-RI|iTMercaIN.totPEN' ///formatear_6Decimales(iTMercaIN.totPEN)
+                              : iTMercaIN.totEquivalenciaPEN.$numberDecimal
+                              ? '-D|-RI|iTMercaIN.totEquivalenciaPEN.$numberDecimal' ///formatear_6Decimales(iTMercaIN.totEquivalenciaPEN.$numberDecimal)
+                              : '-D|-RI|iTMercaIN.totEquivalenciaPEN' /// formatear_6Decimales(iTMercaIN.totEquivalenciaPEN)
+                          } */}
                         </td>
                         {definicion_CTX_IN_ALMACEN._id === '' ? (
                           <td data-label="Acc" class="acciones">

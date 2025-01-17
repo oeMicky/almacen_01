@@ -72,8 +72,8 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                 <table id="tablaInsAlmacen" style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
-                      {/* <th>Ítem</th> */}
-                      <th>Periodo</th>
+                      <th>Ítem</th>
+                      <th>ID</th>
                       <th>FISMA</th>
                       <th>Motivo</th>
                       <th>Doc</th>
@@ -82,22 +82,22 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                     </tr>
                   </thead>
                   <tbody>
-                    {misInsAlmacen.map((inAlmaLocali) => {
+                    {misInsAlmacen.map((inAlmaLocali, index) => {
                       const {
                         _id,
-                        periodo,
+                        // periodo,
                         FISMA,
                         motivoIngresoAlmacen,
                         tipoDocumentoIdentidad,
                         numeroIdentidad,
                         razonSocialNombre,
                       } = inAlmaLocali;
-                      // const indexItem = index + 1; , index
+                      const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
-                          {/* <td data-label="Ítem">{indexItem}</td> */}
-                          <td data-label="Periodo" class="comoCadena">
-                            {periodo}
+                          <td data-label="Ítem">{indexItem}</td>
+                          <td data-label="ID" class="comoCadena">
+                            {_id}
                           </td>
                           <td data-label="FISMA" class="comoCadena">
                             {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}
@@ -121,6 +121,8 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                               width={14}
                               title="Ver ingreso a almacén"
                               onClick$={() => {
+                                console.log('el INGRESO...', inAlmaLocali);
+
                                 ctx_index_in_almacen.iNS = inAlmaLocali;
                                 ctx_index_in_almacen.mostrarPanelNewInAlmacen = true;
                               }}

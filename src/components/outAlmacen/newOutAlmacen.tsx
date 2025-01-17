@@ -116,6 +116,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       //   montoSubTotalPEN: props.inSelecci.montoSubTotalPEN ? props.inSelecci.montoSubTotalPEN : 0,
       //   montoIGVPEN: props.inSelecci.montoIGVPEN ? props.inSelecci.montoIGVPEN : 0,
       //   montoTotalPEN: props.inSelecci.montoTotalPEN ? props.inSelecci.montoTotalPEN : 0,
+      usuario: props.outSelecci.usuarioCrea ? props.outSelecci.usuarioCrea : '',
+      creado: props.outSelecci.createdAt ? props.outSelecci.createdAt : '',
     },
     { deep: true }
   );
@@ -398,24 +400,29 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE OUT ALMACÉN */}
           <div>
-            {/* PERIODO */}
-            <div class="form-control">
+            {/* ID */}
+            <div class="form-control" hidden={definicion_CTX_OUT_ALMACEN._id === ''}>
               <div class="form-control form-agrupado">
                 <input
-                  id="in_Periodo"
+                  id="in_ID"
                   style={{ width: '100%' }}
-                  type="number"
+                  type="text"
                   // autoFocus
                   disabled
-                  value={definicion_CTX_OUT_ALMACEN.periodo}
-                  // onInput$={(e) => {
-                  //   definicion_CTX_COMPRA.anioDUAoDSI = parseInt((e.target as HTMLInputElement).value.trim());
-                  // }}
-                  // onKeyPress$={(e) => {
-                  //   if (e.key === 'Enter') {
-                  //     (document.getElementById('in_Serie') as HTMLInputElement)?.focus();
-                  //   }
-                  // }}
+                  value={definicion_CTX_OUT_ALMACEN._id}
+                />
+              </div>
+            </div>
+            {/* USUARIO */}
+            <div class="form-control" hidden={definicion_CTX_OUT_ALMACEN.usuario === ''}>
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_ID"
+                  style={{ width: '100%' }}
+                  type="text"
+                  // autoFocus
+                  disabled
+                  value={definicion_CTX_OUT_ALMACEN.usuario + '; ' + definicion_CTX_OUT_ALMACEN.creado}
                 />
               </div>
             </div>
@@ -843,10 +850,10 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                             onChange$={(e) => {
                               iTMercaOUT.cantidadSacadaEquivalencia = parseFloat((e.target as HTMLInputElement).value);
                               iTMercaOUT.subTotalPEN =
-                                (iTMercaOUT.cantidadSacadaEquivalencia
-                                  ? iTMercaOUT.cantidadSacadaEquivalencia
-                                  : iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal) *
-                                (iTMercaOUT.costoUnitarioPEN ? iTMercaOUT.costoUnitarioPEN : iTMercaOUT.costoUnitarioPEN.$numberDecimal);
+                                (iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                                  ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                                  : iTMercaOUT.cantidadSacadaEquivalencia) *
+                                (iTMercaOUT.costoUnitarioPEN.$numberDecimal ? iTMercaOUT.costoUnitarioPEN.$numberDecimal : iTMercaOUT.costoUnitarioPEN);
                             }}
                             // onFocusin$={(e) => {
                             //   (e.target as HTMLInputElement).select();
