@@ -401,7 +401,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           {/* GENERALES DE OUT ALMACÉN */}
           <div>
             {/* ID */}
-            <div class="form-control" hidden={definicion_CTX_OUT_ALMACEN._id === ''}>
+            <div class="form-control" hidden={definicion_CTX_OUT_ALMACEN._id === '' ? true : false}>
               <div class="form-control form-agrupado">
                 <input
                   id="in_ID"
@@ -414,7 +414,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               </div>
             </div>
             {/* USUARIO */}
-            <div class="form-control" hidden={definicion_CTX_OUT_ALMACEN.usuario === ''}>
+            <div class="form-control" hidden={definicion_CTX_OUT_ALMACEN.usuario === '' ? true : false}>
               <div class="form-control form-agrupado">
                 <input
                   id="in_ID"
