@@ -511,32 +511,35 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE IN ALMACÉN */}
           <div>
-            {/* ID */}
-            <div class="form-control" hidden={definicion_CTX_IN_ALMACEN._id === '' ? true : false}>
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_ID"
-                  style={{ width: '100%' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={definicion_CTX_IN_ALMACEN._id}
-                />
+            <div hidden={definicion_CTX_IN_ALMACEN._id === '' ? true : false}>
+              {/* ID */}
+              <div class="form-control">
+                <div class="form-control form-agrupado">
+                  <input
+                    id="in_ID"
+                    style={{ width: '100%' }}
+                    type="text"
+                    // autoFocus
+                    disabled
+                    value={definicion_CTX_IN_ALMACEN._id}
+                  />
+                </div>
+              </div>
+              {/* USUARIO */}
+              <div class="form-control">
+                <div class="form-control form-agrupado">
+                  <input
+                    id="in_USUARIO_CREA"
+                    style={{ width: '100%' }}
+                    type="text"
+                    // autoFocus
+                    disabled
+                    value={definicion_CTX_IN_ALMACEN.usuario + '; ' + definicion_CTX_IN_ALMACEN.creado}
+                  />
+                </div>
               </div>
             </div>
-            {/* USUARIO */}
-            <div class="form-control" hidden={definicion_CTX_IN_ALMACEN.usuario === '' ? true : false}>
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_USUARIO_CREA"
-                  style={{ width: '100%' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={definicion_CTX_IN_ALMACEN.usuario + '; ' + definicion_CTX_IN_ALMACEN.creado}
-                />
-              </div>
-            </div>
+
             {/* Numero de documento*/}
             <div class="form-control">
               {/* <label>Número</label>
