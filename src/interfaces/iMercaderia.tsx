@@ -16,6 +16,8 @@ export interface IMercaderiaOUT {
   kardex: any;
   KARDEXS: any;
 
+  ubigeo: string;
+
   lineaTipo: string;
   codigoContableVenta: string;
   descripcionContableVenta: string;
@@ -25,6 +27,8 @@ export interface IMercaderiaOUT {
   totalCantidadSaldo: any;
   promedioCostoUnitarioMovil: any;
   unidad: string;
+
+  porcentajeUtilidad: any;
 
   costoPEN: any;
 

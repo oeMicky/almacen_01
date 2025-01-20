@@ -22,6 +22,8 @@ export default component$(() => {
     grabo_mercaderiaIN: false,
 
     // mostrarPanelNewEditMercaderiaIN: false,
+    mostrarPanelVerInAlmacen: false,
+    mostrarPanelVerOutAlmacen: false,
   });
   useContextProvider(CTX_INDEX_KARDEX, definicion_CTX_INDEX_KARDEX);
   //#endregion CTX_INDEX_KARDEX

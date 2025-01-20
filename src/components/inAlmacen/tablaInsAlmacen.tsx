@@ -1,4 +1,4 @@
-import { Resource, component$, useContext, useResource$, useStylesScoped$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 import style from '../tabla/tabla.css?inline';
 import { CTX_INDEX_IN_ALMACEN } from '~/routes/(inventario)/inAlmacen';
 // import ImgButton from '../system/imgButton';
@@ -10,7 +10,7 @@ import { images } from '~/assets';
 // import { images } from '~/assets';
 
 export default component$((props: { buscarInAlmacen: number; porFechasT_porPeriodoF: boolean; parametrosBusqueda: any }) => {
-  useStylesScoped$(style);
+  useStyles$(style);
 
   //#region CONTEXTOS
   const ctx_index_in_almacen = useContext(CTX_INDEX_IN_ALMACEN);
@@ -63,6 +63,8 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
       }}
       onResolved={(ordenesServicio) => {
         const { data } = ordenesServicio; //{ status, data, message }
+        console.log('data', data);
+
         const misInsAlmacen: IIngresoAAlmacen[] = data;
         ctx_index_in_almacen.mostrarSpinner = false;
         return (
@@ -74,6 +76,7 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                     <tr>
                       <th>Ítem</th>
                       <th>ID</th>
+                      <th>Respon</th>
                       <th>FISMA</th>
                       <th>Motivo</th>
                       <th>Doc</th>
@@ -83,21 +86,16 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                   </thead>
                   <tbody>
                     {misInsAlmacen.map((inAlmaLocali, index) => {
-                      const {
-                        _id,
-                        // periodo,
-                        FISMA,
-                        motivoIngresoAlmacen,
-                        tipoDocumentoIdentidad,
-                        numeroIdentidad,
-                        razonSocialNombre,
-                      } = inAlmaLocali;
+                      const { _id, usuarioCrea, FISMA, motivoIngresoAlmacen, tipoDocumentoIdentidad, numeroIdentidad, razonSocialNombre } = inAlmaLocali;
                       const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
                           <td data-label="Ítem">{indexItem}</td>
                           <td data-label="ID" class="comoCadena">
                             {_id}
+                          </td>
+                          <td data-label="Respon" class="comoCadena">
+                            {usuarioCrea.substring(0, 10)}
                           </td>
                           <td data-label="FISMA" class="comoCadena">
                             {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}
@@ -124,7 +122,8 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                                 console.log('el INGRESO...', inAlmaLocali);
 
                                 ctx_index_in_almacen.iNS = inAlmaLocali;
-                                ctx_index_in_almacen.mostrarPanelNewInAlmacen = true;
+                                ctx_index_in_almacen.itemIndex = indexItem;
+                                ctx_index_in_almacen.mostrarPanelVerInAlmacen = true;
                               }}
                             />
                           </td>

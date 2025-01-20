@@ -216,6 +216,7 @@ export default component$(
                       <th style={props.verAplicacion ? '' : { display: 'none' }}>Aplicación</th>
                       <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
                       <th style={props.verLineaMarca ? '' : { display: 'none' }}>Marca</th>
+                      <th>Ubi</th>
                       <th>Stock</th>
                       <th>Uni</th>
                       {props.esAlmacen || props.esProduccion ? <th>Costo Promd.PEN</th> : <th>Precio PEN</th>}
@@ -240,6 +241,7 @@ export default component$(
                         KARDEXS,
                         activo,
                         noFacturar,
+                        ubigeo,
                       } = mercaOUTLocali;
                       // const indexItem = index + 1;   , costoUnitarioMovil, precio
                       return (
@@ -267,6 +269,7 @@ export default component$(
                           <td data-label="Marca" class="comoCadena" style={props.verLineaMarca ? '' : { display: 'none' }}>
                             {marca}
                           </td>
+                          <td data-label="Ubigeo">{ubigeo}</td>
                           <td data-label="Stock" class="comoNumero">
                             {totalCantidadSaldo.$numberDecimal
                               ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
@@ -311,6 +314,10 @@ export default component$(
                               onClick$={() => {
                                 if (!activo) {
                                   alert('El producto esta inactivo, no es seleccionable, consulte con el administrador.');
+                                  return;
+                                }
+                                if (typeof mercaOUTLocali.porcentajeUtilidad === 'undefined' || mercaOUTLocali.porcentajeUtilidad === null) {
+                                  alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
                                   return;
                                 }
                                 if (mercaOUTLocali.KARDEXS.length === 0) {

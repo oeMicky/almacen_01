@@ -5,6 +5,7 @@ import { getIgvsCompra } from '~/apis/compra.api';
 import { images } from '~/assets';
 import NewInAlmacen from '~/components/inAlmacen/newInAlmacen';
 import TablaInsAlmacen from '~/components/inAlmacen/tablaInsAlmacen';
+import VerInAlmacen from '~/components/inAlmacen/verInAlmacen';
 import ElButton from '~/components/system/elButton';
 import ElSelect from '~/components/system/elSelect';
 // import ImgButton from '~/components/system/imgButton';
@@ -20,6 +21,8 @@ export default component$(() => {
     iNS: [],
     mostrarPanelNewInAlmacen: false,
     grabo_InAlmacen: false,
+    mostrarPanelVerInAlmacen: false,
+    itemIndex: 0,
 
     mostrarSpinner: false,
   });
@@ -277,12 +280,19 @@ export default component$(() => {
             inSelecci={definicion_CTX_INDEX_IN_ALMACEN.iNS}
             losIgvsCompra={losIgvsCompra.value}
             igvCompraPorDefault={igvCompraPorDefault}
-            // contexto={CTX_COTIZACION}
+            indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} // contexto={CTX_COTIZACION}
             // ancho={'600px'}
             // parametrosGlobales={parametrosGlobales}
             // inicializacion={inicializacionCotizacion}
             // onCerrar={cerrarPanelCotizacion}
           />
+        </div>
+      )}
+      {definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelVerInAlmacen && (
+        <div class="modal">
+          {/* <VerInAlmacen indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} /> */}
+          {/* <VerInAlmacen contexto="index_in_almacen" indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} /> */}
+          <VerInAlmacen inSelecci={definicion_CTX_INDEX_IN_ALMACEN.iNS} contexto="index_in_almacen" indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} />
         </div>
       )}
       {/*  tabla INGRESOS DE MERCADERIA */}

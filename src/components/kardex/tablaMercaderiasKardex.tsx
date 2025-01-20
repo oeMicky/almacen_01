@@ -136,7 +136,12 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                   // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
                                   // //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
                                 }
+                                if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
+                                  alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
+                                  return;
+                                }
                                 if (mercaINLocali.KARDEXS.length === 1) {
+                                  console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥');
                                   ctx_index_kardex.mM = mercaINLocali;
                                   ctx_index_kardex.kK = mercaINLocali.KARDEXS[0];
                                   ctx_index_kardex.mostrarPanelKARDEX = true;

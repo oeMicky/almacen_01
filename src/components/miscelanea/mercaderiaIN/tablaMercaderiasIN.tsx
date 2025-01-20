@@ -92,7 +92,7 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercaderiasIN) => {
-          //console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
+          console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
           const { data } = mercaderiasIN; //{ status, data, message }
           const misMercaderiasIN: IMercaderiaIN[] = data;
           ctx.mostrarSpinner = false;
@@ -108,6 +108,7 @@ export default component$(
                         <th style={props.verAplicacion ? '' : { display: 'none' }}>Aplicación</th>
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Marca</th>
+                        <th>Ubi</th>
                         <th>Stock</th>
                         <th>Uni</th>
                         {props.esAlmacen ? (
@@ -139,6 +140,7 @@ export default component$(
                           KARDEXS,
                           activo,
                           noFacturar,
+                          ubigeo,
                         } = mercaINLocali;
 
                         return (
@@ -169,6 +171,7 @@ export default component$(
                             <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {marca}
                             </td>
+                            <td data-label="Ubigeo">{ubigeo}</td>
                             <td data-label="Stock">{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</td>
                             <td data-label="Uni">{unidad}</td>
                             {props.esAlmacen ? (
@@ -213,18 +216,28 @@ export default component$(
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   //console.log('mercaINLocali', mercaINLocali);
+                                  // if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
+                                  //   alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
+                                  //   return;
+                                  // }
+
                                   if (mercaINLocali.KARDEXS.length === 0) {
+                                    console.log('🍑🍑🍑 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
                                     ctx.mM = mercaINLocali;
+                                    ctx.kK = [];
                                     ctx.mostrarPanelMercaderiaINSeleccionada = true;
                                     //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
                                   }
+
                                   if (mercaINLocali.KARDEXS.length === 1) {
+                                    console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
                                     ctx.mM = mercaINLocali;
                                     ctx.kK = mercaINLocali.KARDEXS[0];
                                     ctx.mostrarPanelMercaderiaINSeleccionada = true;
                                     //console.log('la mercaSeleccionada IN DIRECTA', ctx.mM);
                                   }
                                   if (mercaINLocali.KARDEXS.length > 1) {
+                                    console.log('🥗🥗🥗🥗🥗 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
                                     ctx.mM = mercaINLocali;
                                     ctx.mostrarPanelKardexsIN = true;
                                     //console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);

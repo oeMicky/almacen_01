@@ -49,7 +49,7 @@ export interface IIngresoAAlmacen {
   documentosAdjuntos: any;
   itemsMercaderias: any;
 
-  usuario: string;
+  usuarioCrea: string;
   creado: string;
 }
 

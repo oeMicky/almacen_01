@@ -41,7 +41,7 @@ export const CTX_IN_ALMACEN = createContextId<IIngresoAAlmacen>('in_almacen');
 
 export const CTX_REMITENTE_IN_ALMACEN = createContextId<IPersona>('remitente_in_almacen');
 
-export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsCompra: any; igvCompraPorDefault: any }) => {
+export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCompra?: any; igvCompraPorDefault?: any; indexItem?: number }) => {
   useStyles$(style);
 
   //#region DEFINICION CTX_NEW_IN_ALMACEN
@@ -145,7 +145,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
       montoIGVUSD: props.inSelecci.montoIGVUSD ? props.inSelecci.montoIGVUSD : 0,
       montoTotalUSD: props.inSelecci.montoTotalUSD ? props.inSelecci.montoTotalUSD : 0,
 
-      usuario: props.inSelecci.usuarioCrea ? props.inSelecci.usuarioCrea : '',
+      usuarioCrea: props.inSelecci.usuarioCrea ? props.inSelecci.usuarioCrea : '',
       creado: props.inSelecci.createdAt ? props.inSelecci.createdAt : '',
     },
     { deep: true }
@@ -516,6 +516,19 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
               <div class="form-control">
                 <div class="form-control form-agrupado">
                   <input
+                    id="in_indexItem"
+                    style={{ width: '100%' }}
+                    type="text"
+                    // autoFocus
+                    disabled
+                    value={props.indexItem}
+                  />
+                </div>
+              </div>
+              {/* ID */}
+              <div class="form-control">
+                <div class="form-control form-agrupado">
+                  <input
                     id="in_ID"
                     style={{ width: '100%' }}
                     type="text"
@@ -534,7 +547,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                     type="text"
                     // autoFocus
                     disabled
-                    value={definicion_CTX_IN_ALMACEN.usuario + '; ' + definicion_CTX_IN_ALMACEN.creado}
+                    value={definicion_CTX_IN_ALMACEN.usuarioCrea + '; ' + definicion_CTX_IN_ALMACEN.creado}
                   />
                 </div>
               </div>
@@ -1348,7 +1361,7 @@ export default component$((props: { addPeriodo: any; inSelecci: any; losIgvsComp
                             }}
                           />
                         </td>
-                        <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'TotUSD💚' : 'TotPEN💛'} style={{ textAlign: 'end' }}>
+                        <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'TotUSD' : 'TotPEN'} style={{ textAlign: 'end' }}>
                           {definicion_CTX_IN_ALMACEN.enDolares
                             ? !definicion_CTX_IN_ALMACEN.reingreso
                               ? iTMercaIN.totUSD.$numberDecimal

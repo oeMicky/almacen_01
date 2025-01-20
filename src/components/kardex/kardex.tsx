@@ -1,5 +1,5 @@
-import { $, Resource, component$, useContext, useResource$, useSignal, useStyles$ } from '@builder.io/qwik';
-import ImgButton from '../system/imgButton';
+import { $, component$, createContextId, Resource, useContext, useContextProvider, useResource$, useSignal, useStore, useStyles$ } from '@builder.io/qwik';
+import ImgButton from '../system/imgButton'; // useResource$, useSignal,
 import { images } from '~/assets';
 import { CTX_KARDEXS } from './kardexs';
 import { parametrosGlobales } from '~/routes/login';
@@ -7,9 +7,27 @@ import type { IMovimientoKARDEX } from '~/interfaces/iKardex';
 import { formatear_4Decimales, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import styles from '../tabla/tabla.css?inline';
+import { getIngresoAAlmacen } from '~/apis/ingresosAAlmacen.api';
+import VerInAlmacen from '../inAlmacen/verInAlmacen';
+
+export const CTX_KARDEX = createContextId<any>('ctx_kardex__');
 
 export default component$((props: { mercaSelecci: any; kardex: any; contexto: string }) => {
   useStyles$(styles);
+
+  //#region DEFINICION CTX_KARDEX
+  const definicion_CTX_KARDEX = useStore({
+    iNS: [],
+    codigoMercaderia: '',
+    mostrarPanelVerInAlmacen: false,
+    // grabo_InAlmacen: false,
+    // itemIndex: 0,
+
+    mostrarSpinner: false,
+  });
+  useContextProvider(CTX_KARDEX, definicion_CTX_KARDEX);
+  //#endregion DEFINICION CTX_KARDEX
+
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
@@ -67,6 +85,17 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('props.mercaSelecci', props.mercaSelecci);
+            //console.log('props.kardex', props.kardex);
+          })}
+        />
+        <ImgButton
           src={images.x}
           alt="Icono de cerrar"
           height={18}
@@ -76,20 +105,15 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
             ctx.mostrarPanelKARDEX = false;
           })}
         />
-        <ImgButton
-          src={images.see}
-          alt="Icono de cerrar"
-          height={16}
-          width={16}
-          title="Cerrar el formulario"
-          onClick={$(() => {
-            //console.log('props.mercaSelecci', props.mercaSelecci);
-            //console.log('props.kardex', props.kardex);
-          })}
-        />
       </div>
+      {definicion_CTX_KARDEX.mostrarPanelVerInAlmacen && (
+        <div class="modal">
+          {/* <VerInAlmacen indexItem={1} /> */}
+          <VerInAlmacen inSelecci={definicion_CTX_KARDEX.iNS} contexto="kardex" indexItem={1} codigoMercaderia={definicion_CTX_KARDEX.codigoMercaderia} />
+        </div>
+      )}
       {/* TITULO */}
-      <h2 style={{ marginBottom: '8px', fontSize: '1rem' }}>Kardex</h2>
+      <h2 style={{ marginBottom: '8px', fontSize: '1rem' }}>Kardex: {props.kardex._id}</h2>
       {/* FORMULARIO */}
       <div class="add-form">
         {/* ENCABEZADO */}
@@ -111,6 +135,12 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
             <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
               Unidad:<strong> {` ${props.mercaSelecci.unidad}`}</strong>
             </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+              Ubigeo:<strong> {` ${props.mercaSelecci.ubigeo}`}</strong>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+              % Utilidad:<strong> {` ${props.mercaSelecci.porcentajeUtilidad.$numberDecimal + ' %'}`}</strong>
+            </div>
           </div>
         </div>
         {/*  tabla KARDEXS  */}
@@ -127,6 +157,8 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
           onResolved={(kardexs) => {
             //console.log('onResolved 🍓🍓🍓🍓', kardexs);
             const { data } = kardexs; //{ status, data, message }
+            console.log('data 🍓🍓🍓🍓🎇🎇🎇', data);
+
             const misMovimientos: IMovimientoKARDEX[] = data;
             return (
               <>
@@ -145,15 +177,15 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                           <th>Costo Entrada PEN</th>
                           <th>Costo Salida PEN</th>
                           <th>Costo Saldo PEN</th>
-                          {/* <th>Acc</th> */}
+                          <th>Acc</th>
                         </tr>
                       </thead>
                       <tbody>
                         {misMovimientos.map((movimiento) => {
                           const {
                             _id,
-                            // clave,
-                            // tabla,
+                            clave,
+                            tabla,
                             IS,
                             FISMA,
                             // fechaHoraMovimiento,
@@ -213,17 +245,33 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                                 {costoSaldo.$numberDecimal ? formatear_6Decimales(costoSaldo.$numberDecimal) : formatear_6Decimales(costoSaldo)}
                               </td>
 
-                              {/* <td data-label="Acciones" class="acciones">
+                              <td data-label="Acc" class="acciones">
                                 <input
                                   type="image"
                                   src={images.see}
-                                  disabled
-                                  alt="icono de adicionar"
+                                  // disabled
+                                  alt="icono de ver"
                                   height={12}
                                   width={12}
                                   title="Ver movimiento"
+                                  onClick$={async () => {
+                                    console.log('tabla, clave ', tabla, clave);
+                                    if (tabla === 'registroingresosaalmacenes') {
+                                      //
+                                      const elIN = await getIngresoAAlmacen({ idIngresoAAlmacen: clave });
+                                      console.log('elIN.data[0]', elIN.data[0]);
+                                      console.log('props.mercaSelecci.codigo', props.mercaSelecci.codigo);
+                                      console.log('💥💥💥💥💥💨💨💨💨💥💥💥💥💥💥');
+                                      definicion_CTX_KARDEX.iNS = elIN.data[0];
+                                      definicion_CTX_KARDEX.codigoMercaderia = props.mercaSelecci.codigo;
+                                      definicion_CTX_KARDEX.mostrarPanelVerInAlmacen = true;
+                                    }
+                                    // if (tabla === 'registroegresosdelalmacenes') {
+                                    //   //
+                                    // }
+                                  }}
                                 />
-                              </td> */}
+                              </td>
                             </tr>
                           );
                         })}

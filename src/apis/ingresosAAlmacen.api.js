@@ -25,3 +25,16 @@ export const inIngresoAAlmacen = async (parametros) => {
   });
   return res.json();
 };
+
+export const getIngresoAAlmacen = async (parametros) => {
+  console.log('//////api////////////****************** en getIngresoAAlmacen');
+  console.log('parametros getIngresoAAlmacen', parametros);
+  const res = await fetch(API + '/obtenerIngresoAAlmacen', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
