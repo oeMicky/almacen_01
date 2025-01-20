@@ -121,13 +121,13 @@ export default component$(() => {
 
   const definicion_CTX_LOGEO = useStore({
     mostrarSpinner: false,
-    email: 'mvizconde@msn.com',
+    // email: 'mvizconde@msn.com',
     // email: 'carlos@merma.com',
     // email: 'mvizconde@cao.com',
     // email: "paolo@cao.com",
     // email: 'joseluis@cao.com',
     // email: 'keymar0@cao.com',
-    // email: '',
+    email: '',
 
     // email: "",
     // email: 'taty@cao.com',
@@ -135,8 +135,8 @@ export default component$(() => {
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
     // contrasena: '12345678',
-    contrasena: 'Pamela123',
-    // contrasena: '',
+    // contrasena: 'Pamela123',
+    contrasena: '',
   });
   //#endregion INICIALIZACION
 
