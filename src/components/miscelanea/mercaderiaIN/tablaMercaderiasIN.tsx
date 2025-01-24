@@ -171,7 +171,7 @@ export default component$(
                             <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {marca}
                             </td>
-                            <td data-label="Ubigeo">{ubigeo}</td>
+                            <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}</td>
                             <td data-label="Stock">{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</td>
                             <td data-label="Uni">{unidad}</td>
                             {props.esAlmacen ? (
@@ -181,7 +181,7 @@ export default component$(
                                     ? costoDeInicioPEN.$numberDecimal
                                       ? formatear_6Decimales(costoDeInicioPEN.$numberDecimal)
                                       : costoDeInicioPEN
-                                    : '_'}
+                                    : '-'}
                                 </td>
                               ) : (
                                 <td data-label="Costo Promd PEN" class="comoNumero">
@@ -189,7 +189,7 @@ export default component$(
                                     ? promedioCostoUnitarioMovil.$numberDecimal
                                       ? formatear_6Decimales(promedioCostoUnitarioMovil.$numberDecimal)
                                       : promedioCostoUnitarioMovil
-                                    : '_'}
+                                    : '-'}
                                 </td>
                               )
                             ) : (
@@ -198,7 +198,7 @@ export default component$(
                                   ? precioUnitarioPEN.$numberDecimal
                                     ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
                                     : precioUnitarioPEN
-                                  : '_'}
+                                  : '-'}
                               </td>
                             )}
                             <td data-label="Kx" class="acciones">

@@ -1,14 +1,13 @@
 import { $, component$, useContext } from '@builder.io/qwik';
-import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import { CTX_NEW_IN_ALMACEN } from './newInAlmacen';
-// import { cerosALaIzquierda } from '~/functions/comunes';
+import ImgButton from '~/components/system/imgButton';
+import { CTX_INDEX_IN_ALMACEN } from '.';
 
-export default component$((props: { borrarItemMercaIN: any }) => {
+export default component$((props: { borrarINALMACEN: any }) => {
   //#region CONTEXTO
   // let documentos: any = [];
   // documentos = useContext(CTX_IN_ALMACEN).itemsMercaderias;
-  const ctx_new_in_almacen = useContext(CTX_NEW_IN_ALMACEN);
+  const ctx_index_in_almacen = useContext(CTX_INDEX_IN_ALMACEN);
   //#endregion CONTEXTO
   return (
     <div
@@ -24,13 +23,23 @@ export default component$((props: { borrarItemMercaIN: any }) => {
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('borrarINALMACEN', props.borrarINALMACEN);
+          })}
+        />
+        <ImgButton
           src={images.x}
           alt="Icono de cerrar"
           height={18}
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_new_in_almacen.mostrarPanelDeleteItemMercaderiaIN = false;
+            ctx_index_in_almacen.mostrarPanelDeleteINALMACEN = false;
           })}
         />
       </div>
@@ -38,14 +47,16 @@ export default component$((props: { borrarItemMercaIN: any }) => {
       <div class="add-form">
         {/* ENCABEZADO */}
         <div style={{ marginBottom: '10px' }}>
-          <label>¿Desea eliminar el ítem?</label>
+          <label>¿Desea eliminar el ingreso al almacén?</label>
           <br />
           <p style={{ margin: '8px 8px' }}>
             {/* <label>{cerosALaIzquierda(props.borrarItemMerca.item, 3)}</label>
-            <br /> */}
-            <label>{props.borrarItemMercaIN.codigo}</label>
+              <br /> */}
+            <label>{props.borrarINALMACEN.idINALMACEN}</label>
             <br />
-            <label>{props.borrarItemMercaIN.descripcion}</label>
+            <label>{props.borrarINALMACEN.fecha}</label>
+            <br />
+            <label>{props.borrarINALMACEN.descripcion}</label>
             <br />
           </p>
           <div style={{ display: 'flex', marginTop: '5px', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -58,8 +69,8 @@ export default component$((props: { borrarItemMercaIN: any }) => {
                 // const aMod: any = documentos.filter((docs: any) => docs.idAuxiliar !== props.borrarItemMerca.idAuxiliar);
                 // //console.log('- aMod', aMod);
                 // documentos = aMod;
-                ctx_new_in_almacen.borrarIdAuxiliar = props.borrarItemMercaIN.idAuxiliar;
-                ctx_new_in_almacen.mostrarPanelDeleteItemMercaderiaIN = false;
+                ctx_index_in_almacen.borrarIdInAlmacen = props.borrarINALMACEN.idINALMACEN;
+                ctx_index_in_almacen.mostrarPanelDeleteINALMACEN = false;
               }}
             >
               SI
@@ -67,7 +78,7 @@ export default component$((props: { borrarItemMercaIN: any }) => {
             <button
               style={{ width: '60px', cursor: 'pointer' }}
               onClick$={() => {
-                ctx_new_in_almacen.mostrarPanelDeleteItemMercaderiaIN = false;
+                ctx_index_in_almacen.mostrarPanelDeleteINALMACEN = false;
               }}
             >
               NO

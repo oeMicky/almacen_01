@@ -12,6 +12,7 @@ import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 // import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
+import BorrarInAlmacen from './borrarInAlmacen';
 
 export const CTX_INDEX_IN_ALMACEN = createContextId<any>('index_in_almacen');
 
@@ -23,6 +24,11 @@ export default component$(() => {
     grabo_InAlmacen: false,
     mostrarPanelVerInAlmacen: false,
     itemIndex: 0,
+
+    mostrarPanelDeleteINALMACEN: false,
+    seleccionadoINALMACEN: { idINALMACEN: '', fecha: '', descripcion: '' },
+    borrarIdInAlmacen: '',
+    eliminarIngreso: '',
 
     mostrarSpinner: false,
   });
@@ -49,6 +55,7 @@ export default component$(() => {
     periodo: '',
     idPeriodo: '',
   });
+
   //#endregion INICIALIZACION
 
   //#region OBTENER PERIODOS
@@ -82,6 +89,41 @@ export default component$(() => {
   });
   //#endregion ACTUALIZAR TABLA IN ALMACEN
 
+  //#region ELIMINAR INGRESO DE MERCADERIA
+  const eliminarIngreso = $(async (idIngreso: string) => {
+    const res = await fetch(import.meta.env.VITE_URL + '/api/ingresosAAlmacen/deIngresoAAlmacen', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+        idEmpresa: parametrosGlobales.idEmpresa,
+        idSucursal: parametrosGlobales.idSucursal,
+        idIngresoAAlmacen: idIngreso,
+        IS: false,
+      }),
+    });
+    const { status, data, message } = await res.json();
+    console.log('status', status, 'data', data, 'message', message);
+    if (status === 200) {
+      buscarInAlmacen.value++;
+    } else {
+      alert(message);
+    }
+  });
+
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_INDEX_IN_ALMACEN.borrarIdInAlmacen);
+    if (definicion_CTX_INDEX_IN_ALMACEN.borrarIdInAlmacen !== '') {
+      console.log('status 🍜🍜🍜🍜🍜🍜🍜🍜');
+      eliminarIngreso(definicion_CTX_INDEX_IN_ALMACEN.borrarIdInAlmacen);
+      definicion_CTX_INDEX_IN_ALMACEN.borrarIdInAlmacen = '';
+      buscarInAlmacen.value++;
+    }
+  });
+
+  //#endregion ELIMINAR INGRESO DE MERCADERIA
   return (
     <div class="container">
       {/*  IDENTIFICACION {parametrosGlobales.nombreAlmacen} */}
@@ -293,6 +335,13 @@ export default component$(() => {
           {/* <VerInAlmacen indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} /> */}
           {/* <VerInAlmacen contexto="index_in_almacen" indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} /> */}
           <VerInAlmacen inSelecci={definicion_CTX_INDEX_IN_ALMACEN.iNS} contexto="index_in_almacen" indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} />
+        </div>
+      )}
+      {definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelDeleteINALMACEN && (
+        <div class="modal">
+          {/* <VerInAlmacen indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} /> */}
+          {/* <VerInAlmacen contexto="index_in_almacen" indexItem={definicion_CTX_INDEX_IN_ALMACEN.itemIndex} /> */}
+          <BorrarInAlmacen borrarINALMACEN={definicion_CTX_INDEX_IN_ALMACEN.seleccionadoINALMACEN} />
         </div>
       )}
       {/*  tabla INGRESOS DE MERCADERIA */}

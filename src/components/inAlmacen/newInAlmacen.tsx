@@ -1085,7 +1085,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     return (
                       <tr key={iTMercaIN.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar}>{`${cerosALaIzquierda(indexItemMercaIN, 3)}`}</td>
-                        <td data-label="Kx">{typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : '_'}</td>
+                        <td data-label="Kx">{typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : '-'}</td>
                         <td data-label="Código">{iTMercaIN.codigo}</td>
                         <td data-label="Descripción">
                           <strong> {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>

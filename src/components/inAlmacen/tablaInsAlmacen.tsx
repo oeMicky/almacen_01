@@ -126,6 +126,24 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                                 ctx_index_in_almacen.mostrarPanelVerInAlmacen = true;
                               }}
                             />
+                            <input
+                              type="image"
+                              src={images.trash}
+                              alt="icono de ver"
+                              height={14}
+                              width={14}
+                              style={{ marginLeft: '4px' }}
+                              title="Ver ingreso a almacén"
+                              onClick$={() => {
+                                console.log('el ELIMINAR EL INGRESO...', _id, inAlmaLocali);
+
+                                ctx_index_in_almacen.seleccionadoINALMACEN.idINALMACEN = _id;
+                                ctx_index_in_almacen.seleccionadoINALMACEN.fecha = FISMA;
+                                ctx_index_in_almacen.seleccionadoINALMACEN.descripcion = usuarioCrea.substring(0, 10);
+                                // ctx_index_in_almacen.itemIndex = indexItem;
+                                ctx_index_in_almacen.mostrarPanelDeleteINALMACEN = true;
+                              }}
+                            />
                           </td>
                         </tr>
                       );

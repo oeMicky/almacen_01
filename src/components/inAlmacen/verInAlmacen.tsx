@@ -53,6 +53,16 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
         }}
       >
         <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('props.inSelecci', props.inSelecci);
+          })}
+        />
+        <ImgButton
           src={images.x}
           alt="Icono de cerrar"
           height={18}
@@ -288,7 +298,8 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                   <tr>
                     <th>Ítem</th>
                     <th>Kx</th>
-                    <th>Código</th>
+                    <th>idMerca</th>
+                    {/* <th>Código</th> */}
                     <th>Descripción</th>
                     <th>IGV</th>
                     <th>Cantidad</th>
@@ -331,11 +342,12 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                           style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}
                         >{`${cerosALaIzquierda(indexItemMercaIN, 3)}`}</td>
                         <td data-label="Kx" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
-                          {typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : '_'}
+                          {typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : '-'}
                         </td>
-                        <td data-label="Código" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
+                        <td data-label="idMerca">{iTMercaIN.idMercaderia}</td>
+                        {/* <td data-label="Código" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
                           {iTMercaIN.codigo}
-                        </td>
+                        </td> */}
                         <td data-label="Descripción" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
                           <strong>{!props.inSelecci.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>
                         </td>

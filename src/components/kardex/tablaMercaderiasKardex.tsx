@@ -59,6 +59,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                       <th>Descripción</th>
                       <th>Linea/Tipo</th>
                       <th>Marca</th>
+                      <th>Ubi</th>
                       <th>Stock</th>
                       <th>Uni</th>
                       {props.esAlmacen ? <th>Costo Promd.Uni PEN</th> : <th>Precio Uni PEN</th>}
@@ -80,6 +81,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                         KARDEXS,
                         noFacturar,
                         activo,
+                        ubigeo,
                       } = mercaINLocali;
 
                       return (
@@ -93,6 +95,9 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                           <td data-label="Marca" class="comoCadena">
                             {marca}
                           </td>
+                          <td data-label="Ubigeo" class="comoNumero">
+                            {typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}
+                          </td>
                           <td data-label="Stock" class="comoNumero">
                             {totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}
                           </td>
@@ -105,7 +110,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 ? promedioCostoUnitarioMovil.$numberDecimal
                                   ? formatear_2Decimales(promedioCostoUnitarioMovil.$numberDecimal)
                                   : formatear_2Decimales(promedioCostoUnitarioMovil)
-                                : '_'}
+                                : '-'}
                             </td>
                           ) : (
                             <td data-label="Precio PEN" class="comoNumero">
@@ -113,7 +118,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 ? precioUnitarioPEN.$numberDecimal
                                   ? precioUnitarioPEN.$numberDecimal
                                   : precioUnitarioPEN
-                                : '_'}
+                                : '-'}
                             </td>
                           )}
                           <td data-label="Kx" class="acciones">

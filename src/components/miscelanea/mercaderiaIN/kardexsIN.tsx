@@ -45,7 +45,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
             ctx_buscar_mercaderia_in.mostrarPanelKardexsIN = false;
           })}
         />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
@@ -54,7 +54,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
           onClick={$(() => {
             //console.log('props.mercaINSelecci', props.mercaINSelecci);
           })}
-        />
+        /> */}
       </div>
       {/* TITULO */}
       <h2 style={{ marginBottom: '8px', fontSize: '0.8rem' }}>Kardexs / IN</h2>
