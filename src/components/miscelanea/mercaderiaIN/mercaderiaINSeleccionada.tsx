@@ -171,11 +171,11 @@ export default component$(
           <div>
             <div class="linea-formulario12">
               <label>Kardex</label>
-              <b>{typeof props.elKardex._id !== 'undefined' ? ' ' + props.elKardex._id : ''}</b>
+              {typeof props.elKardex._id !== 'undefined' ? ' ' + props.elKardex._id : ''}
             </div>
             <div class="linea-formulario12">
               <label>Código</label>
-              <b>{props.mercaINSelecci.codigo}</b>
+              {props.mercaINSelecci.codigo}
             </div>
             <div class="linea-formulario12">
               <label>Descripción</label>

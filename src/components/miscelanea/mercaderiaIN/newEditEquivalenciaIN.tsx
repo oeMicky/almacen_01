@@ -392,6 +392,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
           type="button"
           value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
+          style={{ height: '40px' }}
           onClick$={() => {
             registrarEquivalencia();
           }}

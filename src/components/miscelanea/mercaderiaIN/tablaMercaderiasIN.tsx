@@ -212,7 +212,7 @@ export default component$(
                                 title="Seleccionar mercadería"
                                 height={12}
                                 width={12}
-                                style={{ marginRight: '6px' }}
+                                style={{ marginRight: '4px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   //console.log('mercaINLocali', mercaINLocali);
@@ -252,7 +252,7 @@ export default component$(
                                   title={aplicacion}
                                   height={12}
                                   width={12}
-                                  style={{ marginRight: '6px' }}
+                                  style={{ marginRight: '4px' }}
                                   // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
                                     alert(aplicacion);
@@ -262,11 +262,48 @@ export default component$(
                               <input
                                 // id="in_BuscarDetraccion"
                                 type="image"
+                                src={images.see}
+                                title="Ver kardex/s"
+                                height={12}
+                                width={12}
+                                style={{ marginRight: '4px' }}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
+                                  console.log('☪☪☪☪☪☪');
+                                  if (mercaINLocali.KARDEXS.length === 0) {
+                                    alert('No se localizan kardex/s');
+                                    // ctx_buscar_mercaderia_in.mM = mercaINLocali;
+                                    // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
+                                    // //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                  }
+                                  if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
+                                    alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
+                                    return;
+                                  }
+                                  if (mercaINLocali.KARDEXS.length === 1) {
+                                    console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥', mercaINLocali);
+                                    ctx.mM = mercaINLocali;
+                                    ctx.kK = mercaINLocali.KARDEXS[0];
+                                    ctx.mostrarPanelKARDEX = true;
+
+                                    //console.log('la mercaSeleccionada ', ctx_index_kardex.mM);
+                                    //console.log('la mercaSeleccionada KARDEX', ctx_index_kardex.kK);
+                                  }
+                                  if (mercaINLocali.KARDEXS.length > 1) {
+                                    ctx.mM = mercaINLocali;
+                                    ctx.mostrarPanelKARDEXS = true;
+                                    //console.log('la mercaSeleccionada KARDEXS', ctx_index_kardex.mM);
+                                  }
+                                }}
+                              />
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
                                 src={images.edit}
                                 title="Editar mercadería"
                                 height={12}
                                 width={12}
-                                style={{ marginRight: '2px' }}
+                                // style={{ marginRight: '2px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   ctx.mM = mercaINLocali;

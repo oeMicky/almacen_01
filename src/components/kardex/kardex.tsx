@@ -9,6 +9,7 @@ import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import styles from '../tabla/tabla.css?inline';
 import { getIngresoAAlmacen } from '~/apis/ingresosAAlmacen.api';
 import VerInAlmacen from '../inAlmacen/verInAlmacen';
+import { CTX_BUSCAR_MERCADERIA_IN } from '../miscelanea/mercaderiaIN/buscarMercaderiaIN';
 
 export const CTX_KARDEX = createContextId<any>('ctx_kardex__');
 
@@ -38,6 +39,10 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
     case 'kardexs':
       //console.log('contexto::a: kardexs');
       ctx = useContext(CTX_KARDEXS);
+      break;
+    case 'buscar_mercaderia_IN':
+      //console.log('contexto::a: kardexs');
+      ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
       break;
   }
   //#endregion CONTEXTOS

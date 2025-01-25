@@ -9,6 +9,8 @@ import NewEditMercaderiaIN from './newEditMercaderiaIN';
 import KardexsIN from './kardexsIN';
 import Spinner from '~/components/system/spinner';
 import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
+import Kardexs from '~/components/kardex/kardexs';
+import Kardex from '~/components/kardex/kardex';
 // import MercaderiaINSelec from "./mercaderiaINSelec";
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
@@ -24,6 +26,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
     grabo_mercaderiaIN: false,
 
     mostrarPanelKardexsIN: false,
+
+    mostrarPanelKARDEX: false,
+    mostrarPanelKARDEXS: false,
 
     mostrarPanelMercaderiaINSeleccionada: false,
     // mostrarPanelAsignarPrecio: false,
@@ -192,7 +197,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
             </div>
           </div>
           {/* Buscar por: Aplicacion */}
-          <div style={{ display: 'flex' }}>
+          <div style={{ marginTop: '8px', display: 'flex' }}>
             {/* <div style={{ margin: '0 auto' }}> */}
             <div>
               <input
@@ -276,7 +281,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
               <label for="in_verLineaMarca_BUSCAR_MERCADERIA_IN">Ver Linea / Marca</label>
             </div>
           </div>
-          <div style={{ marginTop: '6px', display: 'flex' }}>
+          <div style={{ marginTop: '8px', display: 'flex' }}>
             <label style={{ marginRight: '8px' }}>Leyenda:</label>
             <label style={{ background: '#272727', color: 'white', marginRight: '8px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
             <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px' }}>No facturable</label>
@@ -321,6 +326,29 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
           {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelKardexsIN && (
             <div class="modal">
               <KardexsIN mercaINSelecci={definicion_CTX_BUSCAR_MERCADERIA_IN.mM} esAlmacen={props.esAlmacen} contexto={props.contexto} igv={props.igv} />
+            </div>
+          )}
+          {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelKARDEXS && (
+            <div class="modal">
+              <Kardexs
+                mercaINSelecci={definicion_CTX_BUSCAR_MERCADERIA_IN.mM}
+                esAlmacen={true}
+                // contexto={props.contexto}
+                // igv={props.igv}
+              />
+            </div>
+          )}
+          {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelKARDEX && (
+            <div class="modal">
+              <Kardex
+                mercaSelecci={definicion_CTX_BUSCAR_MERCADERIA_IN.mM}
+                kardex={definicion_CTX_BUSCAR_MERCADERIA_IN.kK}
+                // esAlmacen={props.esAlmacen}
+                // esAlmacen={false}
+                contexto={'buscar_mercaderia_IN'}
+                // contextoParaDocumento={props.contexto}
+                // igv={props.igv}
+              />
             </div>
           )}
           {/*  ADICIONAR MERCADERIA IN  */}
