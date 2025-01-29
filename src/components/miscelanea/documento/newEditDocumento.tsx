@@ -53,7 +53,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   //#region CARGAR LOS TCP
   const cargarLosTCP = $(async () => {
     const losTCP = await loadTiposComprobantePago();
-    //console.log('losTCP', losTCP);
+    console.log('losTCP', losTCP);
     LosTCPcargados.value = losTCP.data;
     //console.log(' LosTCPcargados.value', LosTCPcargados.value);
   });

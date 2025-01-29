@@ -23,7 +23,7 @@ import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
 import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
 import BorrarItemMercaderiaOUT from './borrarItemMercaderiaOUT';
 import BorrarDocumentoOUT from './borrarDocumentoOUT';
-import { inEgresoDeAlmacen, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
+import { getSeriesDeNotaSalidaDeLaSucursal, inEgresoDeAlmacen, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
 import BuscarOrdenServicioAperturado from '../miscelanea/ordenServicioAperturado/buscarOrdenServicioAperturado';
 import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionAperturado/buscarOrdenProduccionAperturado';
 
@@ -40,6 +40,10 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   const definicion_CTX_NEW_OUT_ALMACEN = useStore({
     rol_Persona: '',
     selecciono_Persona: false,
+
+    mostrarSelectNotaSalida: false,
+    idSerieNotaSalida_porDefault: '',
+    serieNotaSalida_porDefault: '',
 
     mostrarPanelBuscarPersona: false,
     mostrarPanelAdjuntarDocumento: false,
@@ -84,6 +88,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       motivoEgresoAlmacen: props.outSelecci.motivoEgresoAlmacen ? props.outSelecci.motivoEgresoAlmacen : '',
       idDocumento: props.outSelecci.idDocumento ? props.outSelecci.idDocumento : '',
 
+      idSerieNotaSalida: props.outSelecci.idSerieNotaSalida ? props.outSelecci.idSerieNotaSalida : '',
+      serie: props.outSelecci.serie ? props.outSelecci.serie : '',
+
       // serie: props.inSelecci.serie ? props.inSelecci.serie : '',
       // numero: props.inSelecci.numero ? props.inSelecci.numero : 0,
       FISMA: props.outSelecci.FISMA ? props.outSelecci.FISMA.substring(0, 10) : hoy(),
@@ -116,7 +123,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       //   montoSubTotalPEN: props.inSelecci.montoSubTotalPEN ? props.inSelecci.montoSubTotalPEN : 0,
       //   montoIGVPEN: props.inSelecci.montoIGVPEN ? props.inSelecci.montoIGVPEN : 0,
       //   montoTotalPEN: props.inSelecci.montoTotalPEN ? props.inSelecci.montoTotalPEN : 0,
-      usuario: props.outSelecci.usuarioCrea ? props.outSelecci.usuarioCrea : '',
+      usuarioCrea: props.outSelecci.usuarioCrea ? props.outSelecci.usuarioCrea : '',
       creado: props.outSelecci.createdAt ? props.outSelecci.createdAt : '',
     },
     { deep: true }
@@ -149,7 +156,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   // let suma_SubPEN = 0;
   // let suma_IGVPEN = 0;
   // let suma_TotPEN = 0;
-
+  const seriesNotaSalida: any = useSignal([]);
   const elDocSelecionado: any = useSignal([]);
   const losMotivosCargados = useSignal([]);
 
@@ -171,6 +178,25 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
   // const
   //#endregion INICALIZACION
+
+  //#region CARGAR SERIES NOTA DE SALIDA - DE LA SUCURSAL
+  const cargarSeriesNotaSalida_DelaSucursal = $(async () => {
+    const tre = await getSeriesDeNotaSalidaDeLaSucursal({
+      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+      idEmpresa: parametrosGlobales.idEmpresa,
+      idSucursal: parametrosGlobales.idSucursal,
+    });
+    console.log('👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻👨‍💻 cargarSeriesNotaSalida_DelaSucursal', tre.data);
+    // definicion_CTX_SUCURSAL.seriesNotaSalida = tre.data;
+    seriesNotaSalida.value = tre.data;
+    if (seriesNotaSalida.value.length === 1) {
+      definicion_CTX_OUT_ALMACEN.idSerieNotaSalida = seriesNotaSalida.value[0].idSerieNotaSalida;
+      definicion_CTX_OUT_ALMACEN.serie = seriesNotaSalida.value[0].serie;
+      // definicion_CTX_NEW_OUT_ALMACEN.idSerieNotaSalida_porDefault = seriesNotaSalida.value[0]._id;
+      // definicion_CTX_NEW_OUT_ALMACEN.serieNotaSalida_porDefault = seriesNotaSalida.value[0].serie;
+    }
+  });
+  //#endregion CARGAR SERIES NOTA DE SALIDA - DE LA SUCURSAL
 
   //#region CARGAR MOTIVOS DE EGRESO
   const cargarMotivosEgreso = $(async () => {
@@ -285,13 +311,16 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     //   document.getElementById('in_IGV')?.focus();
     //   return;
     // }
-    //documentosAdjuntos
+    //DOCUMENTOS ADJUNTOS
     //console.log(' //documentosAdjuntos');
-    if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
-      alert('Agregue al menos un documento');
-      document.getElementById('btn_Add_Documento')?.focus();
-      return;
+    if (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'NOTA DE SALIDA') {
+      if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
+        alert('Agregue al menos un documento');
+        document.getElementById('btn_Add_Documento')?.focus();
+        return;
+      }
     }
+
     //itemsMercaderias
     //console.log(' //itemsMercaderias');
     if (definicion_CTX_OUT_ALMACEN.itemsMercaderias.length < 1) {
@@ -301,6 +330,18 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     }
 
     ctx_index_out_almacen.mostrarSpinner = true;
+    //FECHA HORA LOCAL
+    const fechaLocal =
+      definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10) +
+      '-' +
+      definicion_CTX_OUT_ALMACEN.FISMA.substring(5, 7) +
+      '-' +
+      definicion_CTX_OUT_ALMACEN.FISMA.substring(0, 4);
+
+    const hhhhDate = new Date();
+    const horaLocal =
+      cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+    //
     try {
       const outAlma = await inEgresoDeAlmacen({
         idEgresoDeAlmacen: definicion_CTX_OUT_ALMACEN._id,
@@ -318,7 +359,12 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         motivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen,
         idDocumento: definicion_CTX_OUT_ALMACEN.idDocumento,
 
+        idSerieNotaSalida: definicion_CTX_OUT_ALMACEN.idSerieNotaSalida,
+        serie: definicion_CTX_OUT_ALMACEN.serie,
+
         FISMA: definicion_CTX_OUT_ALMACEN.FISMA,
+        fechaLocal: fechaLocal, //DD-MM-YYYY
+        horaLocal: horaLocal,
         // idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
         // elIgv: definicion_CTX_IN_ALMACEN.elIgv,
         idDestinatario: definicion_CTX_OUT_ALMACEN.idDestinatario,
@@ -331,7 +377,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
         itemsMercaderias: definicion_CTX_OUT_ALMACEN.itemsMercaderias,
 
-        usuario: parametrosGlobales.usuario,
+        usuarioCrea: parametrosGlobales.usuario,
       });
 
       //console.log('Grabó el egreso de almacén - outAlma: ', outAlma);
@@ -368,16 +414,16 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           justifyContent: 'end',
         }}
       >
-        {/* <ImgButton
+        <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
           title="definicion_CTX_OUT_ALMACEN"
           onClick={$(() => {
-            //console.log('definicion_CTX_OUT_ALMACEN', definicion_CTX_OUT_ALMACEN);
+            console.log('definicion_CTX_OUT_ALMACEN', definicion_CTX_OUT_ALMACEN);
           })}
-        /> */}
+        />
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -423,7 +469,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     type="text"
                     // autoFocus
                     disabled
-                    value={definicion_CTX_OUT_ALMACEN.usuario + '; ' + definicion_CTX_OUT_ALMACEN.creado}
+                    value={definicion_CTX_OUT_ALMACEN.usuarioCrea + '; ' + definicion_CTX_OUT_ALMACEN.creado}
                   />
                 </div>
               </div>
@@ -449,7 +495,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   id="in_FISMA"
                   type="date"
                   disabled={definicion_CTX_OUT_ALMACEN._id !== ''}
-                  min={menosXdiasHoy(2)}
+                  min={menosXdiasHoy(7)}
                   max={hoy()}
                   // disabled
                   style={{ width: '100%' }}
@@ -468,7 +514,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <ElSelect
-                  id={'se_motivoEgreso'}
+                  id="se_motivoEgreso"
+                  estilos={{ cursor: 'pointer' }}
                   valorSeleccionado={definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen}
                   registros={losMotivosCargados.value}
                   registroID={'_id'}
@@ -483,29 +530,36 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen = elSelec[elIdx].id;
                     if (definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === '') {
                       definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen = '';
+                      definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                     } else {
                       definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen = elSelec.value;
                       // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                       switch (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen) {
                         case 'NOTA DE SALIDA':
+                          cargarSeriesNotaSalida_DelaSucursal();
+                          //
                           elDocSelecionado.value = {
                             codigoTCP: '00',
                             descripcionTCP: 'Otros',
                             serie: 'NS',
                             fecha: definicion_CTX_OUT_ALMACEN.FISMA,
                           };
-                          definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelAdjuntarDocumento = true;
+                          // definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelAdjuntarDocumento = true;
+                          definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = true;
                           break;
                         case 'ORDEN DE PRODUCCIÓN':
                           // alert('Elegio os');
+                          definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarOrdenProduccionAperturado = true;
                           break;
                         case 'ORDEN DE SERVICIO':
                           // alert('Elegio os');
+                          definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado = true;
                           break;
                         case 'VENTA':
                           //alert('Elegio venta');
+                          definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
                           break;
 
@@ -520,6 +574,44 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     }
                   })}
                 />
+              </div>
+            </div>
+            {/* select NOTA SALIDA */}
+            {/* Serie  class="form-control"*/}
+            <div hidden={!definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}>
+              <div class="form-control form-agrupado">
+                {
+                  <select
+                    id="se_SerieNotaSalida"
+                    style={{ cursor: 'pointer', width: '100%' }}
+                    onChange$={(e) => {
+                      const idx = (e.target as HTMLSelectElement).selectedIndex;
+                      const elSelect = e.target as HTMLSelectElement;
+                      const elOption = elSelect[idx];
+
+                      //console.log('❤❤❤ dataSerie.value ', dataSerie.value);
+                      // const SSS: any = seriesNotaSalida.value;
+                      // const der = SSS.find((ew: any) => ew._id === elOption.id);
+                      //console.log('❤❤❤ der ', der);
+                      // definicion_CTX_F_B_NC_ND.codigoTipoOperacion = der.codigoTipoOperacionXDefault;
+                      // definicion_CTX_F_B_NC_ND.tipoOperacion = der.tipoOperacionXDefault;
+                      // definicion_CTX_F_B_NC_ND.impresionTipoFacturaBoleta = der.impresionTipoFacturaBoleta;
+
+                      definicion_CTX_OUT_ALMACEN.idSerieNotaSalida = elOption.id;
+                      definicion_CTX_OUT_ALMACEN.serie = (e.target as HTMLSelectElement).value;
+                      document.getElementById('se_TipoDocumentoLiteral_DESTINATARIO')?.focus();
+                    }}
+                  >
+                    <option value="">-- Seleccione serie NS --</option>
+                    {seriesNotaSalida.value.map((ser: any) => {
+                      return (
+                        <option id={ser.idSerieNotaSalida} value={ser.serie} selected={ser.serie === definicion_CTX_OUT_ALMACEN.serie}>
+                          {ser.serie}
+                        </option>
+                      );
+                    })}
+                  </select>
+                }
               </div>
             </div>
             <br />
@@ -662,7 +754,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         </div>
         {/* ----------------------------------------------------- */}
         {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS */}
-        <div>
+        <div hidden={definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}>
           <div
             style={{
               display: 'flex',
@@ -817,7 +909,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 <thead>
                   <tr>
                     <th>Ítem</th>
-                    <th>Código</th>
+                    <th>idMerca</th>
                     <th>Descripción</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
@@ -833,8 +925,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     return (
                       <tr key={iTMercaOUT.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaOUT.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
-                        <td data-label="Código" class="comoCadena">
-                          {iTMercaOUT.codigo}
+                        <td data-label="idMerca" class="comoCadena">
+                          {iTMercaOUT.idMercaderia}
                         </td>
                         <td data-label="Descripción" class="comoCadena">
                           {iTMercaOUT.descripcionEquivalencia}
@@ -843,7 +935,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           <input
                             type="number"
                             style={{ width: '96px', textAlign: 'end' }}
-                            disabled
+                            // disabled
                             value={
                               iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
                                 ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
@@ -852,10 +944,17 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                             // value={iTMercaOUT.cantidadSacadaEquivalencia}
                             onChange$={(e) => {
                               iTMercaOUT.cantidadSacadaEquivalencia = parseFloat((e.target as HTMLInputElement).value);
-                              iTMercaOUT.subTotalPEN =
+                              iTMercaOUT.cantidadSacada =
+                                parseFloat((e.target as HTMLInputElement).value) *
+                                (iTMercaOUT.laEquivalencia.$numberDecimal ? iTMercaOUT.laEquivalencia.$numberDecimal : iTMercaOUT.laEquivalencia);
+                              //sub = k * cost
+                              iTMercaOUT.subEquivalenciaPEN =
                                 (iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
                                   ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
                                   : iTMercaOUT.cantidadSacadaEquivalencia) *
+                                (iTMercaOUT.costoUnitarioPEN.$numberDecimal ? iTMercaOUT.costoUnitarioPEN.$numberDecimal : iTMercaOUT.costoUnitarioPEN);
+                              iTMercaOUT.subPEN =
+                                (iTMercaOUT.cantidadSacada.$numberDecimal ? iTMercaOUT.cantidadSacada.$numberDecimal : iTMercaOUT.cantidadSacada) *
                                 (iTMercaOUT.costoUnitarioPEN.$numberDecimal ? iTMercaOUT.costoUnitarioPEN.$numberDecimal : iTMercaOUT.costoUnitarioPEN);
                             }}
                             // onFocusin$={(e) => {

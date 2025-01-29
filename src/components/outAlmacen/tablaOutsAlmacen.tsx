@@ -60,7 +60,7 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(egresosAlmacen) => {
-        //console.log("onResolved 🍓🍓🍓🍓");
+        console.log('onResolved 🍓🍓🍓🍓', egresosAlmacen);
         const { data } = egresosAlmacen; //{ status, data, message }
         const misOutsAlmacen: IEgresoDeAlmacen[] = data;
         ctx_index_out_almacen.mostrarSpinner = false;
@@ -71,8 +71,9 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                 <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                   <thead>
                     <tr>
-                      {/* <th>Ítem</th> */}
+                      <th>Ítem</th>
                       <th>ID</th>
+                      <th>Respon</th>
                       <th>FISMA</th>
                       <th>Motivo</th>
                       <th>Doc</th>
@@ -82,7 +83,7 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                   </thead>
                   <tbody>
                     {misOutsAlmacen.map((outAlmaLocali, index) => {
-                      const { _id, FISMA, motivoEgresoAlmacen, numeroIdentidad, tipoDocumentoIdentidad, razonSocialNombre } = outAlmaLocali;
+                      const { _id, usuarioCrea, FISMA, motivoEgresoAlmacen, numeroIdentidad, tipoDocumentoIdentidad, razonSocialNombre } = outAlmaLocali;
                       const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
@@ -90,17 +91,20 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                           <td data-label="ID" class="comoCadena">
                             {_id}
                           </td>
+                          <td data-label="Respon" class="comoCadena">
+                            {usuarioCrea.substring(0, 10)}
+                          </td>
                           <td data-label="FISMA" class="comoCadena">
-                            {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}
+                            {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '-'}
                           </td>
                           <td data-label="Motivo" class="comoCadena">
-                            {motivoEgresoAlmacen ? motivoEgresoAlmacen : '_'}
+                            {motivoEgresoAlmacen ? motivoEgresoAlmacen : '-'}
                           </td>
                           <td data-label="Doc" class="comoCadena">
-                            {numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '_'}
+                            {numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '-'}
                           </td>
                           <td data-label="Razón social" class="comoCadena">
-                            {razonSocialNombre ? razonSocialNombre : '_'}
+                            {razonSocialNombre ? razonSocialNombre : '-'}
                           </td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
                           <td data-label="Acciones" class="acciones">

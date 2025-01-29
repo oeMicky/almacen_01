@@ -83,7 +83,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: '', // 'acce 5', //cadena.value,
+    cadenaABuscar: '', // 'bls 838', // 'acce 5', //cadena.value,
   });
 
   useTask$(({ track }) => {
@@ -156,7 +156,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
       // console.log('🚨🚨🚨🚨🚨🚨🚨🚨🚨');
     } else {
       hallado.value = true;
-      // console.log('LOS ITEMS......', documento);
+      console.log('LOS ITEMS......', documento);
 
       const coincidentes = documento.filter(
         (ele: any) =>
@@ -164,8 +164,10 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
           ele.idEquivalencia === lasMercaderiasOUT[0].equivalencias[0]._id &&
           ele.idKardex === lasMercaderiasOUT[0].KARDEXS[0]._id
       );
-      // console.log('LOS ITEMS....coincidentes..', coincidentes);
+      console.log('LOS ITEMS....coincidentes..', coincidentes);
       if (coincidentes.length !== 0) {
+        console.log('🍜🍜🍜');
+
         ///////////////////////////////////////////////////////////////////////
         /////// new_out_almacen
         if (props.contexto === 'new_out_almacen') {
@@ -214,9 +216,18 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
           coincidentes[0].cantidadSacadaEquivalencia = cantiEqui + 1;
         }
       } else {
+        console.log('🥩🥩🥩');
         ///////////////////////////////////////////////////////////////////////
         /////// new_out_almacen
         if (props.contexto === 'new_out_almacen') {
+          console.log('🚍🚍🚍', lasMercaderiasOUT[0]);
+          //EXISTE KARDEX?
+          if (typeof lasMercaderiasOUT[0].KARDEXS === 'undefined' || lasMercaderiasOUT[0].KARDEXS.length === 0) {
+            alert('No se puede agregar este item, no tiene kardexs');
+            mostrarSpinner.value = false;
+            return;
+          }
+          //
           documento.push({
             idAuxiliar: parseInt(elIdAuxiliar()),
             idMercaderia: lasMercaderiasOUT[0]._id,
@@ -268,6 +279,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
           props.contexto === 'nota_venta' ||
           props.contexto === 'new_edit_cotizacion'
         ) {
+          console.log('🚅🚅🚅');
           let precioEquivalencia;
           // console.log('lasMercaderiasOUT[0].precioUnitarioPEN === null', lasMercaderiasOUT[0].precioUnitarioPEN);
           if (lasMercaderiasOUT[0].precioUnitarioPEN === null || typeof lasMercaderiasOUT[0].precioUnitarioPEN === 'undefined') {
@@ -279,6 +291,12 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                   ? lasMercaderiasOUT[0].precioUnitarioPEN.$numberDecimal
                   : lasMercaderiasOUT[0].precioUnitarioPEN
               ) * parseFloat(lasMercaderiasOUT[0].equivalencias[0].laEquivalencia.$numberDecimal);
+          }
+          //EXISTE KARDEX?
+          if (typeof lasMercaderiasOUT[0].KARDEXS === 'undefined' || lasMercaderiasOUT[0].KARDEXS.length === 0) {
+            alert('No se puede agregar este item, no tiene kardexs');
+            mostrarSpinner.value = false;
+            return;
           }
 
           //INSERTANDO EN EL PANEL

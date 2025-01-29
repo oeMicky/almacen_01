@@ -10,6 +10,8 @@ import styles from '../tabla/tabla.css?inline';
 import { getIngresoAAlmacen } from '~/apis/ingresosAAlmacen.api';
 import VerInAlmacen from '../inAlmacen/verInAlmacen';
 import { CTX_BUSCAR_MERCADERIA_IN } from '../miscelanea/mercaderiaIN/buscarMercaderiaIN';
+import { getEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
+import VerOutAlmacen from '../outAlmacen/verOutAlmacen';
 
 export const CTX_KARDEX = createContextId<any>('ctx_kardex__');
 
@@ -21,6 +23,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
     iNS: [],
     codigoMercaderia: '',
     mostrarPanelVerInAlmacen: false,
+    mostrarPanelVerOutAlmacen: false,
     // grabo_InAlmacen: false,
     // itemIndex: 0,
 
@@ -89,7 +92,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
@@ -99,7 +102,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
             console.log('props.mercaSelecci', props.mercaSelecci);
             //console.log('props.kardex', props.kardex);
           })}
-        />
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -115,6 +118,12 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
         <div class="modal">
           {/* <VerInAlmacen indexItem={1} /> */}
           <VerInAlmacen inSelecci={definicion_CTX_KARDEX.iNS} contexto="kardex" indexItem={1} codigoMercaderia={definicion_CTX_KARDEX.codigoMercaderia} />
+        </div>
+      )}
+      {definicion_CTX_KARDEX.mostrarPanelVerOutAlmacen && (
+        <div class="modal">
+          {/* <VerInAlmacen indexItem={1} /> */}
+          <VerOutAlmacen outSelecci={definicion_CTX_KARDEX.iNS} contexto="kardex" indexItem={1} codigoMercaderia={definicion_CTX_KARDEX.codigoMercaderia} />
         </div>
       )}
       {/* TITULO */}
@@ -273,9 +282,16 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                                       definicion_CTX_KARDEX.codigoMercaderia = props.mercaSelecci.codigo;
                                       definicion_CTX_KARDEX.mostrarPanelVerInAlmacen = true;
                                     }
-                                    // if (tabla === 'registroegresosdelalmacenes') {
-                                    //   //
-                                    // }
+                                    if (tabla === 'registrosalidasdealmacenes') {
+                                      //
+                                      const elOUT = await getEgresoDeAlmacen({ idEgresoDeAlmacen: clave });
+                                      console.log('elOUT.data[0]', elOUT.data[0]);
+                                      console.log('props.mercaSelecci.codigo', props.mercaSelecci.codigo);
+                                      console.log('💨💨💨💨💥💥💥💥💥💨💨💨💨💨');
+                                      definicion_CTX_KARDEX.iNS = elOUT.data[0];
+                                      definicion_CTX_KARDEX.codigoMercaderia = props.mercaSelecci.codigo;
+                                      definicion_CTX_KARDEX.mostrarPanelVerOutAlmacen = true;
+                                    }
                                   }}
                                 />
                               </td>

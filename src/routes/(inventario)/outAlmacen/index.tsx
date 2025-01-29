@@ -1,7 +1,6 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
-import { getIgvVenta } from '~/apis/venta.api';
 import { images } from '~/assets';
 import NewOutAlmacen from '~/components/outAlmacen/newOutAlmacen';
 import TablaOutsAlmacen from '~/components/outAlmacen/tablaOutsAlmacen';
@@ -11,6 +10,9 @@ import Spinner from '~/components/system/spinner';
 // import ImgButton from '~/components/system/imgButton';
 // import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
+
+import { getIgvVenta } from '~/apis/venta.api';
+import { existeMotivoNS } from '~/apis/egresosDeAlmacen.api';
 
 export const CTX_INDEX_OUT_ALMACEN = createContextId<any>('index_out_almacen');
 
@@ -165,6 +167,25 @@ export default component$(() => {
               alert('Faltan datos... vuelva a logearse..');
               navegarA('/login');
               return;
+            }
+            //ANALISIS MOTIVO SALIDA ALMACEN: NOTA DE SALIDA
+            if (typeof parametrosGlobales.idMotivosSalidaDelAlmacen_NS === 'undefined' || parametrosGlobales.idMotivosSalidaDelAlmacen_NS === '') {
+              // console.log('00000 parametrosGlobales.idMotivosSalidaDelAlmacen_NS', parametrosGlobales.idMotivosSalidaDelAlmacen_NS);
+              let existe = await existeMotivoNS({
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idEmpresa: parametrosGlobales.idEmpresa,
+              });
+              // console.log('................existe..0........', existe);
+              existe = existe.data;
+              // console.log('................existe..1........', existe);
+              // console.log('................existe..2........', existe[0]);
+              if (existe.length === 0) {
+                alert('No existe el motivo de salida de nota de venta en el almacén, pongase en contacto con el administrador.');
+                return;
+              } else {
+                parametrosGlobales.idMotivosSalidaDelAlmacen_NS = existe[0]._id;
+                // console.log('111 parametrosGlobales.idMotivosSalidaDelAlmacen_NV', parametrosGlobales.idMotivosSalidaDelAlmacen_NV);
+              }
             }
             //validar PERIODO
             if (periodo.idPeriodo === '') {

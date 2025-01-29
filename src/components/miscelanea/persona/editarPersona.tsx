@@ -630,7 +630,8 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
         <input
           id="btn_grabar_PERSONA"
           type="submit"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value="Registrar" //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          style={{ height: '40px' }}
           class="btn-centro"
           onClick$={() => {
             actualizarPersona();

@@ -1,4 +1,6 @@
 import { $, component$, useContext, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+// import { $, component$, useContext } from '@builder.io/qwik';
+// import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 
@@ -9,11 +11,11 @@ import { CTX_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
 import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 import { CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
-import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
-import { CTX_KARDEXS_OUT } from './kardexsOUT';
 import { CTX_O_P } from '~/components/ordenProduccion/newEditOrdenProduccion';
 import { CTX_NOTA_VENTA } from '~/components/notaVenta/addNotaVenta';
 
+import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
+import { CTX_KARDEXS_OUT } from './kardexsOUT';
 export default component$(
   (props: {
     mercaOUTSelecci: any;
@@ -104,7 +106,7 @@ export default component$(
           equivalencia.pesoKg = laEqui.pesoKg;
           equivalencia.factor = laEqui.factor;
           equivalencia.tipoEquivalencia = laEqui.tipoEquivalencia;
-          if (typeof props.mercaOUTSelecci.precioUnitarioPEN !== 'undefined') {
+          if (typeof props.mercaOUTSelecci.precioUnitarioPEN !== 'undefined' && props.mercaOUTSelecci.precioUnitarioPEN !== null) {
             //console.log(
             //   'laEquivalencia - factor - tipoEqui',
             //   parseFloat(laEqui.laEquivalencia.$numberDecimal),
@@ -139,7 +141,7 @@ export default component$(
         {/* BOTONES DEL MARCO */}
         <div style={{ display: 'flex', justifyContent: 'end' }}>
           {/* <Button name="T/C" onClick={tipoCambio} /> */}
-          <ImgButton
+          {/* <ImgButton
             src={images.see}
             alt="Icono de cerrar"
             height={14}
@@ -149,7 +151,7 @@ export default component$(
               console.log(' props.mercaOUTSelecci', props.mercaOUTSelecci);
               // //console.log('elKardex', props.elKardex);
             })}
-          />
+          /> */}
           <ImgButton
             src={images.x}
             alt="Icono de cerrar"
@@ -253,7 +255,6 @@ export default component$(
             </div>
           </div>
           <br />
-          {/* <hr style={{ margin: '5px 0 5px 0' }} color={'#aaa'}></hr> */}
           {/* -----------------------------------------------------------------------------------------------------*/}
           {/* -----------------------------------------------------------------------------------------------------*/}
           {/* -----------------------------------------------------------------------------------------------------*/}
@@ -371,7 +372,6 @@ export default component$(
                 />
               </div>
             </div>
-            {/* <hr style={{ margin: "5px 0 5px 0" }} color={"#aaa"}></hr> */}
 
             {/* ------------------------------------------------------------------------------ marginBottom: '5px'*/}
 
@@ -380,7 +380,6 @@ export default component$(
                 <div>
                   Stock equivalente:
                   <strong style={{ marginLeft: '2px', color: 'green' }}>
-                    {/* {equivalencia.tipoEquivalencia ? ():()} */}
                     {equivalencia.laEquivalencia.$numberDecimal === 0
                       ? ''
                       : equivalencia.idUnidadEquivalencia !== ''
@@ -389,12 +388,10 @@ export default component$(
                     {equivalencia.unidadEquivalencia !== null ? ` ${equivalencia.unidadEquivalencia}` : ``}
                   </strong>
                 </div>
-                {/* {props.mercaOUTSelecci.costoUnitarioMovil.$numberDecimal} */}
                 {props.esAlmacen || props.esProduccion ? (
                   <div>
                     Costo equiv. (PEN):
                     <strong style={{ marginLeft: '2px', color: 'green' }}>
-                      {/* {equivalencia.tipoEquivalencia ? ():()} */}
                       {equivalencia.laEquivalencia.$numberDecimal === 0
                         ? ''
                         : equivalencia.idUnidadEquivalencia !== ''

@@ -9,9 +9,10 @@ import {
 } from '@builder.io/qwik';
 
 // import TablaVentas from '~/components/venta/tablaVentas';
+import { parametrosGlobales } from '../../login/index';
 
 import { getIgvVenta, upDarDeBaja } from '~/apis/venta.api';
-import { parametrosGlobales } from '../../login/index';
+import { existeMotivoNV } from '~/apis/egresosDeAlmacen.api';
 
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
@@ -20,7 +21,6 @@ import DarDeBajaDocumentoVenta from '~/components/venta/darDeBajaDocumentoVenta'
 import { useNavigate } from '@builder.io/qwik-city';
 import AddNotaVenta from '~/components/notaVenta/addNotaVenta';
 import TablaNotasVentas from '~/components/notaVenta/tablaNotasVentas';
-import { existeMotivoNV } from '~/apis/egresosDeAlmacen.api';
 import AddVenta from '~/components/venta/addVenta';
 import PanelPrueba from '~/components/notaVenta/panelPrueba';
 

@@ -52,7 +52,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
           justifyContent: 'end',
         }}
       >
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={18}
@@ -61,7 +61,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
           onClick={$(() => {
             console.log('props.inSelecci', props.inSelecci);
           })}
-        />
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"

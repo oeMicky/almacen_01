@@ -38,3 +38,42 @@ export const existeMotivoNV = async (parametros) => {
   });
   return res.json();
 };
+
+export const existeMotivoNS = async (parametros) => {
+  // //console.log('//////api////////////****************** en existeMotivoNV');
+  // //console.log('parametros existeMotivoNV', parametros);
+  const res = await fetch(API + '/existeElMotivoNotaSalida', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
+export const getSeriesDeNotaSalidaDeLaSucursal = async (parametros) => {
+  // console.log('//////api////////////******************obtener a getSeriesDeNotaSalidaDeLaSucursal');
+  // console.log('parametros getSeriesDeNotaSalidaDeLaSucursal', parametros);
+  const res = await fetch(API + '/listarSeriesDeNotaSalidaDeLaSucursal', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
+export const getEgresoDeAlmacen = async (parametros) => {
+  console.log('//////api////////////****************** en getEgresoDeAlmacen');
+  console.log('parametros getEgresoDeAlmacen', parametros);
+  const res = await fetch(API + '/obtenerEgresoDeAlmacen', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

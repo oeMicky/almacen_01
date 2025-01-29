@@ -99,7 +99,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                             {typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}
                           </td>
                           <td data-label="Stock" class="comoNumero">
-                            {totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}
+                            <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
                           </td>
                           <td data-label="Uni" class="comoCadena">
                             {unidad}

@@ -62,6 +62,7 @@ export const parametrosGlobales = {
   periodos: [],
   //
   idMotivosSalidaDelAlmacen_NV: '',
+  idMotivosSalidaDelAlmacen_NS: '',
   // mostrarSpinner: false,
   facturacionElectronica: false,
   facturacionElectronicaAutomatica: false,

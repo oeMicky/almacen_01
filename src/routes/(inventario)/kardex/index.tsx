@@ -89,7 +89,8 @@ export default component$(() => {
         <label style={{ marginRight: '10px' }}>Buscar </label>
         <input
           id="in_CodigoDescripcion_KARDEX"
-          style={{ width: '157px', marginLeft: '4px', marginRight: '4px' }}
+          // style={{ width: '157px', marginLeft: '4px', marginRight: '4px' }}
+          style={{ width: 'clamp(157px, 90%, 375px)', marginLeft: '4px', marginRight: '4px' }}
           type="text"
           placeholder="Descripción"
           value={parametrosBusqueda.cadenaABuscar}

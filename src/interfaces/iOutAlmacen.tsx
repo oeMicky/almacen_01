@@ -15,7 +15,8 @@ export interface IEgresoDeAlmacen {
   motivoEgresoAlmacen: string;
   idDocumento: string;
 
-  // serie: string;
+  idSerieNotaSalida: string;
+  serie: string;
   // numero: number;
   FISMA: string;
   igv: any;
@@ -37,7 +38,7 @@ export interface IEgresoDeAlmacen {
   documentosAdjuntos: any;
   itemsMercaderias: any;
 
-  usuario: string;
+  usuarioCrea: string;
   creado: string;
 }
 

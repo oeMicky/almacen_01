@@ -2,10 +2,11 @@ import { $, component$, useContext } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
-import { parametrosGlobales } from '~/routes/login';
-import { cerosALaIzquierda, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { parametrosGlobales } from '~/routes/login'; //
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN, formatear_6Decimales } from '~/functions/comunes';
+import { CTX_KARDEX } from '../kardex/kardex';
 
-export default component$((props: { outSelecci: any; contexto: string; indexItem?: number }) => {
+export default component$((props: { outSelecci: any; contexto: string; indexItem?: number; codigoMercaderia?: string }) => {
   //#region CONTEXTO
   let ctx: any;
   switch (props.contexto) {
@@ -13,9 +14,9 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
       ctx = useContext(CTX_INDEX_OUT_ALMACEN);
       break;
 
-    // case 'kardex':
-    //   ctx = useContext(CTX_INDEX_IN_ALMACEN);
-    //   break;
+    case 'kardex':
+      ctx = useContext(CTX_KARDEX);
+      break;
   }
   //#endregion CONTEXTO
 
@@ -43,7 +44,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx.mostrarPanelNewOutAlmacen = false;
+            ctx.mostrarPanelVerOutAlmacen = false;
           })}
         />
       </div>
@@ -58,6 +59,19 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE OUT ALMACÉN */}
           <div>
+            {/* indexItem */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_indexItem"
+                  style={{ width: '100%', backgroundColor: '#c0f0f0' }}
+                  type="text"
+                  // autoFocus
+                  disabled
+                  value={props.indexItem}
+                />
+              </div>
+            </div>
             {/* ID */}
             <div class="form-control">
               <div class="form-control form-agrupado">
@@ -80,7 +94,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                   type="text"
                   // autoFocus
                   disabled
-                  value={props.outSelecci.usuario + '; ' + props.outSelecci.creado}
+                  value={props.outSelecci.usuarioCrea + '; ' + props.outSelecci.fechaLocal + ' ' + props.outSelecci.horaLocal}
                 />
               </div>
             </div>
@@ -103,6 +117,18 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                 />
               </div>
             </div>
+            {/* Nota de salida: serie - número */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_MotivoEgresoAlmacen"
+                  type="text"
+                  disabled={props.outSelecci._id !== ''}
+                  style={{ width: '100%' }}
+                  value={props.outSelecci.serie + ' - ' + cerosALaIzquierda(props.outSelecci.numero, 8)}
+                />
+              </div>
+            </div>
             <br />
           </div>
 
@@ -116,7 +142,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                   id="in_FISMA"
                   type="text"
                   disabled={props.outSelecci._id !== ''}
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', backgroundColor: '#c0f0f0' }}
                   value={props.outSelecci.tipoDocumentoIdentidad}
                 />
               </div>
@@ -155,11 +181,11 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
           {/* IGV - TC */}
           <div>
             {/* IGV */}
-            <div class="form-control">
+            {/* <div class="form-control">
               <div class="form-control form-agrupado">
                 <input type={'text'} id={'in_IGV'} style={{ width: '100%' }} disabled value={props.outSelecci.igv.$numberDecimal + ' %'} />
               </div>
-            </div>
+            </div> */}
             <br />
           </div>
           {/* ----------------------------------------------------- */}
@@ -232,7 +258,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                 <thead>
                   <tr>
                     <th>Ítem</th>
-                    <th>Código</th>
+                    <th>idMerca</th>
                     <th>Descripción</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
@@ -246,39 +272,33 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
 
                     return (
                       <tr key={iTMercaOUT.idAuxiliar}>
-                        <td data-label="Ítem" key={iTMercaOUT.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
-                        <td data-label="Código" class="comoCadena">
-                          {iTMercaOUT.codigo}
+                        <td
+                          data-label="Ítem"
+                          key={iTMercaOUT.idAuxiliar}
+                          style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}
+                        >{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
+                        <td data-label="idMerca" class="comoCadena" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
+                          {iTMercaOUT.idMercaderia}
                         </td>
-                        <td data-label="Descripción" class="comoCadena">
+                        <td data-label="Descripción" class="comoCadena" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
                           {iTMercaOUT.descripcionEquivalencia}
                         </td>
-                        <td data-label="Cantidad" class="comoNumero">
-                          <input
-                            type="number"
-                            style={{ width: '96px', textAlign: 'end' }}
-                            disabled
-                            value={
-                              iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
-                                ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
-                                : iTMercaOUT.cantidadSacadaEquivalencia
-                            }
-                          />
+                        <td data-label="Cantidad" class="comoNumero" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
+                          <strong>
+                            {iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                              ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                              : iTMercaOUT.cantidadSacadaEquivalencia}
+                          </strong>
                         </td>
                         <td data-label="Uni" class="comoCadena">
                           {iTMercaOUT.unidadEquivalencia}
                         </td>
                         <td data-label="Costo Unit PEN" class="comoNumero">
-                          <input
-                            type="number"
-                            style={{ width: '96px', textAlign: 'end' }}
-                            disabled
-                            value={formatear_6Decimales(
-                              iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
-                                ? iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
-                                : iTMercaOUT.costoUnitarioEquivalenciaPEN
-                            )}
-                          />
+                          {formatear_6Decimales(
+                            iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
+                              ? iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
+                              : iTMercaOUT.costoUnitarioEquivalenciaPEN
+                          )}
                         </td>
                         <td data-label="SubTotal PEN" style={{ textAlign: 'end' }}>
                           {iTMercaOUT.subEquivalenciaPEN.$numberDecimal
