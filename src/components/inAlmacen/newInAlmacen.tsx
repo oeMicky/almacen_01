@@ -399,7 +399,18 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     }
 
     ctx_index_in_almacen.mostrarSpinner = true;
+    //FECHA HORA LOCAL
+    const fechaLocal =
+      definicion_CTX_IN_ALMACEN.FISMA.substring(8, 10) +
+      '-' +
+      definicion_CTX_IN_ALMACEN.FISMA.substring(5, 7) +
+      '-' +
+      definicion_CTX_IN_ALMACEN.FISMA.substring(0, 4);
 
+    const hhhhDate = new Date();
+    const horaLocal =
+      cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+    //
     const inAlma = await inIngresoAAlmacen({
       idIngresoAAlmacen: definicion_CTX_IN_ALMACEN._id,
       idGrupoEmpresarial: definicion_CTX_IN_ALMACEN.idGrupoEmpresarial,
@@ -420,6 +431,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       // serie: definicion_CTX_IN_ALMACEN.serie,
       // numero: definicion_CTX_IN_ALMACEN.numero,
       FISMA: definicion_CTX_IN_ALMACEN.FISMA,
+      fechaLocal: fechaLocal, //DD-MM-YYYY
+      horaLocal: horaLocal,
       reingreso: definicion_CTX_IN_ALMACEN.reingreso,
 
       idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
