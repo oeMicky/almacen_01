@@ -16,6 +16,7 @@ import { CTX_ADD_NOTA_VENTA, CTX_NOTA_VENTA } from '~/components/notaVenta/addNo
 import { getBuscarMercaderiaPorAplicacion, getBuscarMercaderiaPorDescripion } from '~/apis/mercaderia.api';
 import Spinner from '~/components/system/spinner';
 import { elIdAuxiliar } from '~/functions/comunes';
+import NewEditMercaderiaIN from '../mercaderiaIN/newEditMercaderiaIN';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
 
@@ -24,6 +25,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
   const definicion_CTX_BUSCAR_MERCADERIA_OUT = useStore({
     mM: [],
     kK: [],
+
+    mostrarPanelNewEditMercaderiaIN: false,
+    grabo_mercaderiaIN: false,
 
     mostrarPanelKardexsOUT: false,
 
@@ -117,7 +121,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
   });
   //#endregion BUSCAR MERCADERIAS OUT
 
-  //#region REFRESCAR TABLA MERCADERIAS OUT
+  //#region REFRESCAR TABLA MERCADERIAS OUT x grabo_PrecioOUT
   useTask$(({ track }) => {
     track(() => {
       definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_PrecioOUT;
@@ -128,7 +132,20 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
       definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_PrecioOUT = false;
     }
   });
-  //#endregion REFRESCAR TABLA MERCADERIAS OUT
+  //#endregion REFRESCAR TABLA MERCADERIAS OUT x grabo_PrecioOUT
+
+  //#region REFRESCAR TABLA MERCADERIAS OUT x grabo_mercaderiaIN
+  useTask$(({ track }) => {
+    track(() => {
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_mercaderiaIN;
+    });
+
+    if (definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_mercaderiaIN) {
+      localizarMercaderiasOUT();
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_mercaderiaIN = false;
+    }
+  });
+  //#endregion REFRESCAR TABLA MERCADERIAS OUT x grabo_mercaderiaIN
 
   //#region BUSCAR MERCADERIAS OUT _EnAUTOMATICO
   const localizarMercaderiasOUT_EnAUTOMATICO = $(async () => {
@@ -504,7 +521,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               <input
                 id="in_ADD_AUTOMATICA_MICE"
                 type="checkbox"
-                checked
+                // checked
                 placeholder="Adición automática"
                 onChange$={(e) => {
                   if ((e.target as HTMLInputElement).checked) {
@@ -729,6 +746,12 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 contexto={props.contexto}
                 porcentaje={props.porcentaje}
               />
+            </div>
+          )}
+          {/*  EDITAR MERCADERIA IN  */}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelNewEditMercaderiaIN && (
+            <div class="modal">
+              <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM} contexto={props.contexto} />
             </div>
           )}
           {/* MOSTRAR SPINNER */}

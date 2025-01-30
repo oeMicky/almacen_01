@@ -21,6 +21,7 @@ import SelectTipoImpuesto from '~/components/system/selectTipoImpuesto';
 import SelectTipoAfectacionDelImpuesto from '~/components/system/selectTipoAfectacionDelImpuesto';
 import { getPorcentajesUtilidad } from '~/apis/grupoEmpresarial.api';
 import Spinner from '~/components/system/spinner';
+import { CTX_BUSCAR_MERCADERIA_OUT } from '../mercaderiaOUT/buscarMercaderiaOUT';
 
 export const CTX_NEW_EDIT_MERCADERIA_IN = createContextId<any>('new_edit_mercaderia_IN');
 
@@ -132,6 +133,9 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   switch (props.contexto) {
     case 'new_in_almacen':
       ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
+      break;
+    case 'new_out_almacen':
+      ctx = useContext(CTX_BUSCAR_MERCADERIA_OUT);
       break;
     case 'index_kardexs':
       ctx = useContext(CTX_INDEX_KARDEX);

@@ -378,6 +378,23 @@ export default component$(
                                   //console.log("mercaOUTLocali", mercaOUTLocali);
                                 }}
                               /> */}
+                            {props.esAlmacen && (
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
+                                src={images.edit}
+                                title="Editar mercadería"
+                                height={12}
+                                width={12}
+                                // style={{ marginRight: '2px' }}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
+                                  ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                  console.log('mercaOUTLocali', mercaOUTLocali);
+                                  ctx_buscar_mercaderia_out.mostrarPanelNewEditMercaderiaIN = true;
+                                }}
+                              />
+                            )}
                           </td>
                         </tr>
                       );
