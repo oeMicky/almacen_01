@@ -5,7 +5,7 @@ import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
 import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
 import { images } from '~/assets';
 
-export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeriodoF: boolean; parametrosBusqueda: any }) => {
+export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeriodoF?: boolean; parametrosBusqueda: any }) => {
   useStyles$(style);
 
   //#region CONTEXTOS
@@ -21,29 +21,29 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
 
     // //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
-    if (props.porFechasT_porPeriodoF) {
-      // //console.log('por Fechas OUT');
-      const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/obtenerEgresosDeAlmacenEntreFechas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(props.parametrosBusqueda),
-        signal: abortController.signal,
-      });
-      return res.json();
-    } else {
-      // //console.log('por Periodo OUT');
-      const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/buscarEgresosDeAlmacenPorPeriodo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(props.parametrosBusqueda),
-        signal: abortController.signal,
-      });
-      return res.json();
-    }
+    // if (props.porFechasT_porPeriodoF) {
+    // //console.log('por Fechas OUT');
+    const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/obtenerEgresosDeAlmacenEntreFechas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(props.parametrosBusqueda),
+      signal: abortController.signal,
+    });
+    return res.json();
+    // } else {
+    //   // //console.log('por Periodo OUT');
+    //   const res = await fetch(import.meta.env.VITE_URL + '/api/egresosDeAlmacen/buscarEgresosDeAlmacenPorPeriodo', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(props.parametrosBusqueda),
+    //     signal: abortController.signal,
+    //   });
+    //   return res.json();
+    // }
   });
   //#endregion BUSCANDO REGISTROS
 
@@ -117,7 +117,8 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                               title="Ver egreso"
                               onClick$={() => {
                                 ctx_index_out_almacen.oNS = outAlmaLocali;
-                                ctx_index_out_almacen.mostrarPanelNewOutAlmacen = true;
+                                ctx_index_out_almacen.itemIndex = indexItem;
+                                ctx_index_out_almacen.mostrarPanelVerOutAlmacen = true;
                               }}
                             />
                           </td>

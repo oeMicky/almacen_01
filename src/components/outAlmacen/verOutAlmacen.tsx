@@ -38,6 +38,18 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
         }}
       >
         <ImgButton
+          src={images.see}
+          alt="Icono de ver"
+          height={18}
+          width={18}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('props.outSelecci', props.outSelecci);
+
+            // ctx.mostrarPanelVerOutAlmacen = false;
+          })}
+        />
+        <ImgButton
           src={images.x}
           alt="Icono de cerrar"
           height={18}
@@ -118,17 +130,20 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
               </div>
             </div>
             {/* Nota de salida: serie - número */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_MotivoEgresoAlmacen"
-                  type="text"
-                  disabled={props.outSelecci._id !== ''}
-                  style={{ width: '100%' }}
-                  value={props.outSelecci.serie + ' - ' + cerosALaIzquierda(props.outSelecci.numero, 8)}
-                />
+            {props.outSelecci.numero && props.outSelecci.serie && (
+              <div class="form-control">
+                <div class="form-control form-agrupado">
+                  <input
+                    id="in_MotivoEgresoAlmacen"
+                    type="text"
+                    disabled={props.outSelecci._id !== ''}
+                    style={{ width: '100%' }}
+                    value={props.outSelecci.serie + ' - ' + cerosALaIzquierda(props.outSelecci.numero, 8)}
+                  />
+                </div>
               </div>
-            </div>
+            )}
+
             <br />
           </div>
 

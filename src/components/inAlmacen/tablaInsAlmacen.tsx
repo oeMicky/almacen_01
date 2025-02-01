@@ -9,7 +9,7 @@ import { images } from '~/assets';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
 
-export default component$((props: { buscarInAlmacen: number; porFechasT_porPeriodoF: boolean; parametrosBusqueda: any }) => {
+export default component$((props: { buscarInAlmacen: number; porFechasT_porPeriodoF?: boolean; parametrosBusqueda: any }) => {
   useStyles$(style);
 
   //#region CONTEXTOS
@@ -25,29 +25,29 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
 
     //
 
-    if (props.porFechasT_porPeriodoF) {
-      //
-      const res = await fetch(import.meta.env.VITE_URL + '/api/ingresosAAlmacen/obtenerIngresosAAlmacenEntreFechas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(props.parametrosBusqueda),
-        signal: abortController.signal,
-      });
-      return res.json();
-    } else {
-      //
-      const res = await fetch(import.meta.env.VITE_URL + '/api/ingresosAAlmacen/buscarIngresosAAlmacenPorPeriodo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(props.parametrosBusqueda),
-        signal: abortController.signal,
-      });
-      return res.json();
-    }
+    // if (props.porFechasT_porPeriodoF) {
+    //
+    const res = await fetch(import.meta.env.VITE_URL + '/api/ingresosAAlmacen/obtenerIngresosAAlmacenEntreFechas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(props.parametrosBusqueda),
+      signal: abortController.signal,
+    });
+    return res.json();
+    // } else {
+    //   //
+    //   const res = await fetch(import.meta.env.VITE_URL + '/api/ingresosAAlmacen/buscarIngresosAAlmacenPorPeriodo', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(props.parametrosBusqueda),
+    //     signal: abortController.signal,
+    //   });
+    //   return res.json();
+    // }
   });
   //#endregion BUSCANDO REGISTROS
 

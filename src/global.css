@@ -22,6 +22,10 @@
   /*****COLORES DEL LOGO*/
   --color-azul-claro:#00778F,
   --color-azul-oscuro:#013E62,
+
+  --color-celeste-claro:#C6EEF8,
+  --color-celeste-medio:#6FD5EE,
+  --color-celeste-oscuro:#1BB4DA,
 }
 
 body {
@@ -171,6 +175,33 @@ a.linkHeaderPrincipal:hover {
   display: inline-block;
   align-items: center;
   justify-content: space-around;
+}
+.btn-press {
+  background-color:#C6EEF8; /* rgb(19, 19, 19); /*var(--color-celeste-claro);*/
+  border-radius: 5px;
+   /* color:rgb(224, 224, 224);  */
+   /* border: none; */
+ /* 
+  padding: 2px 5px;
+  margin: 2px 2px;
+  text-align:  center;
+  display: inline-block;
+  align-items: center;
+  justify-content: space-around; */
+}
+.btn-press:hover {
+  background-color: #6FD5EE;/*  var(--color-celeste-medio); */
+  border-radius: 5px;
+   /* color: rgb(221, 255, 0); */
+   /* border: none; */
+ /* 
+  padding: 2px 5px;
+  margin: 2px 2px;
+  text-align: center;
+  font-weight: 600;
+  display: inline-block;
+  align-items: center;
+  justify-content: space-around; */
 }
 /************************************/
 /*********SECCION INICIO*************/

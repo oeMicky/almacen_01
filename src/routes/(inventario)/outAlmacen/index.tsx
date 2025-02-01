@@ -5,7 +5,7 @@ import { images } from '~/assets';
 import NewOutAlmacen from '~/components/outAlmacen/newOutAlmacen';
 import TablaOutsAlmacen from '~/components/outAlmacen/tablaOutsAlmacen';
 import ElButton from '~/components/system/elButton';
-import ElSelect from '~/components/system/elSelect';
+// import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 // import ImgButton from '~/components/system/imgButton';
 // import { hoy, primeroDelMes } from '~/functions/comunes';
@@ -13,6 +13,8 @@ import { parametrosGlobales } from '~/routes/login';
 
 import { getIgvVenta } from '~/apis/venta.api';
 import { existeMotivoNS } from '~/apis/egresosDeAlmacen.api';
+import { cerosALaIzquierda, hoy } from '~/functions/comunes';
+import VerOutAlmacen from '~/components/outAlmacen/verOutAlmacen';
 
 export const CTX_INDEX_OUT_ALMACEN = createContextId<any>('index_out_almacen');
 
@@ -22,6 +24,8 @@ export default component$(() => {
     oNS: [],
     mostrarPanelNewOutAlmacen: false,
     grabo_OutAlmacen: false,
+    mostrarPanelVerOutAlmacen: false,
+    itemIndex: 0,
 
     mostrarSpinner: false,
   });
@@ -32,20 +36,25 @@ export default component$(() => {
   const navegarA = useNavigate();
   const ini = useSignal(0);
   const buscarOUTAlmacen = useSignal(0);
-  // const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
+  const periodoAnterior = useStore({ idPeriodo: '', periodo: '' });
+
   const igv = useSignal(0);
   const porFechasT_porPeriodoF = useSignal(false);
 
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
-    idAlmacen: parametrosGlobales.idAlmacen,
-    // fechaInicio: primeroDelMes(), // '2023-01-01', // hoy(),
-    // fechaFinal: hoy(),
-    periodo: '',
-    idPeriodo: '',
+    idSucursal: parametrosGlobales.idSucursal,
+    fechaInicio: hoy(), // fechas.desde,
+    fechaFinal: hoy(), //fechas.hasta,
+
+    // idAlmacen: parametrosGlobales.idAlmacen,
+    // // fechaInicio: primeroDelMes(), // '2023-01-01', // hoy(),
+    // // fechaFinal: hoy(),
+    // periodo: '',
+    // idPeriodo: '',
   });
   //#endregion INICIALIZACION
 
@@ -188,6 +197,38 @@ export default component$(() => {
               }
             }
             //validar PERIODO
+            let anioAnterior = '';
+            let mesAnterior = '';
+            const anio = (document.getElementById('in_laFechaHoyOutAlmacen') as HTMLInputElement).value.substring(0, 4);
+            const mes = (document.getElementById('in_laFechaHoyOutAlmacen') as HTMLInputElement).value.substring(5, 7);
+            //console.log(anio);
+            // //console.log('la fechitaaaa', anio + mes);
+            const periodoActual = anio + mes;
+            const PPP = losPeriodosCargados.value;
+            if (parseInt(mes) === 1) {
+              anioAnterior = (parseInt(anio) - 1).toString();
+              mesAnterior = '12';
+            } else {
+              anioAnterior = anio;
+              mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
+            }
+            const periodoANTE = anioAnterior + mesAnterior;
+            //console.log(periodoANTE);
+            // //console.log('mas', mas);
+            // //console.log('PPP', PPP);
+            const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
+            //console.log('⚠ elPeriodo', elPeriodo);
+            if (typeof elPeriodo === 'undefined') {
+              alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
+              return;
+            }
+            periodo.idPeriodo = elPeriodo._id;
+            periodo.periodo = elPeriodo.periodo;
+            //************* */
+            const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
+            periodoAnterior.idPeriodo = elPeriodoAnterior._id;
+            periodoAnterior.periodo = elPeriodoAnterior.periodo;
+
             if (periodo.idPeriodo === '') {
               alert('Seleccione el periodo.');
               document.getElementById('se_periodo')?.focus();
@@ -205,7 +246,54 @@ export default component$(() => {
             definicion_CTX_INDEX_OUT_ALMACEN.mostrarPanelNewOutAlmacen = true;
           })}
         />
-        <ElSelect
+        {/* BUSCAR EGRESOS DE ALMACEN */}
+        <input
+          id="in_laFechaHoyOutAlmacen"
+          type="date"
+          max={hoy()}
+          // min={menosXdiasHoy(2)}
+          value={parametrosBusqueda.fechaInicio}
+          style={{ marginLeft: '4px' }}
+          onChange$={(e) => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
+            // console.log(parametrosGlobales.idGrupoEmpresarial, parametrosGlobales.idEmpresa, parametrosGlobales.idSucursal, parametrosGlobales.periodos);
+            parametrosBusqueda.fechaInicio = (e.target as HTMLInputElement).value;
+            parametrosBusqueda.fechaFinal = (e.target as HTMLInputElement).value;
+
+            // definicion_CTX_INDEX_VENTA.buscarVentas++;
+            buscarOUTAlmacen.value++;
+
+            definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner = true;
+          }}
+        />
+        {/*   <input id="in_laFechaHoyVenta" type="date" disabled value={'2024-04-09'} style={{ marginLeft: '4px' }} />*/}
+        <input
+          type="image"
+          title="Buscar OutAlmacen"
+          alt="icon busqueda"
+          src={images.searchPLUS}
+          height={21.5}
+          width={21.5}
+          style={{ marginLeft: '4px' }}
+          onClick$={() => {
+            if (parametrosGlobales.idGrupoEmpresarial === '') {
+              // console.log('estaVACIA');
+              alert('Faltan datos... vuelva a logearse..');
+              navegarA('/login');
+              return;
+            }
+            // definicion_CTX_INDEX_VENTA.buscarVentas++;
+            buscarOUTAlmacen.value++;
+
+            definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner = true;
+          }}
+        />
+        {/* <ElSelect
           id={'se_periodo_OUT_ALMACEN'}
           // valorSeleccionado={definicion_CTX_COMPRA.documentoCompra}
           estilos={{ cursor: 'pointer', width: '203px', marginLeft: '4px' }}
@@ -255,7 +343,7 @@ export default component$(() => {
             buscarOUTAlmacen.value++;
             definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner = true;
           }}
-        />
+        /> */}
         {/* <button
           onClick$={() =>
             //console.log('parametrosGlobales.periodos outAlmacen - ini.value', parametrosGlobales.periodos, ini.value)
@@ -268,13 +356,22 @@ export default component$(() => {
             <NewOutAlmacen addPeriodo={periodo} outSelecci={definicion_CTX_INDEX_OUT_ALMACEN.oNS} igv={igv.value} />
           </div>
         )}
+        {definicion_CTX_INDEX_OUT_ALMACEN.mostrarPanelVerOutAlmacen && (
+          <div class="modal">
+            <VerOutAlmacen
+              outSelecci={definicion_CTX_INDEX_OUT_ALMACEN.oNS}
+              contexto="index_out_almacen"
+              indexItem={definicion_CTX_INDEX_OUT_ALMACEN.itemIndex}
+            />
+          </div>
+        )}
       </div>
       {/*  tabla EGRESOS DE MERCADERIA */}
       <div style={{ margin: '10px 0' }}>
         {buscarOUTAlmacen.value > 0 ? (
           <TablaOutsAlmacen
             buscarOUTAlmacen={buscarOUTAlmacen.value}
-            porFechasT_porPeriodoF={porFechasT_porPeriodoF.value}
+            // porFechasT_porPeriodoF={porFechasT_porPeriodoF.value}
             parametrosBusqueda={parametrosBusqueda}
           />
         ) : (
