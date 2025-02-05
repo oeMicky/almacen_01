@@ -123,7 +123,13 @@ export default component$(() => {
             localizarMercaderiasKARDEX();
           }}
         />
-        <button style={{ cursor: 'pointer', marginLeft: '4px' }} onClick$={() => (definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN = true)}>
+        <button
+          style={{ cursor: 'pointer', marginLeft: '4px' }}
+          onClick$={() => {
+            definicion_CTX_INDEX_KARDEX.mM = [];
+            definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN = true;
+          }}
+        >
           ADD MERCADERÍA
         </button>
         <br />
@@ -136,7 +142,7 @@ export default component$(() => {
       </div>
       {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN && (
         <div class="modal">
-          <NewEditMercaderiaIN mercaSeleccio={[]} contexto={'index_kardexs'} />
+          <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_INDEX_KARDEX.mM} contexto={'index_kardexs'} />
         </div>
       )}
       {/*  tabla  MERCADERIAS LOCALIZADOS */}

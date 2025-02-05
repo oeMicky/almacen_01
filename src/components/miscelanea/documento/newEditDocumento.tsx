@@ -269,13 +269,15 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
               />
             </div>
           </div> */}
+          <br />
         </div>
 
         {/* GRABAR   onClick={(e) => onSubmit(e)}*/}
         <input
           id="bu_RegistrarDocumentoIN_DOCUMENTO"
           type="button"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value="Registrar" //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          style={{ height: '40px' }}
           // value={botonGrabar === '' ? 'Grabar' : `${botonGrabar}`}
           class="btn-centro"
           onClick$={() => registrarDocumentoIN()}

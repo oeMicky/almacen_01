@@ -216,10 +216,10 @@ export default component$(
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   //console.log('mercaINLocali', mercaINLocali);
-                                  // if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
-                                  //   alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
-                                  //   return;
-                                  // }
+                                  if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
+                                    alert('No se ha definido el porcentaje de utilidad para esta mercadería. Adicionelo para realizar cualquier operación.');
+                                    return;
+                                  }
 
                                   if (mercaINLocali.KARDEXS.length === 0) {
                                     console.log('🍑🍑🍑 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
@@ -308,6 +308,7 @@ export default component$(
                                 onClick$={() => {
                                   ctx.mM = mercaINLocali;
                                   ctx.mostrarPanelNewEditMercaderiaIN = true;
+                                  ctx.mostrarSpinner = true;
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />

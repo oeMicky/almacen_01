@@ -429,6 +429,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     console.log('🤍 entro a useTask INI');
     obtenerLineasTipos();
     obtenerPorcentajesUtilidad();
+    ctx.mostrarSpinner = false;
   });
 
   //#region REGISTRAR MERCADERIA
