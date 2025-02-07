@@ -109,6 +109,7 @@ export default component$(
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Marca</th>
                         <th>Ubi</th>
+
                         <th>Stock</th>
                         <th>Uni</th>
                         {props.esAlmacen ? (
@@ -121,6 +122,7 @@ export default component$(
                           <th>Precio Uni PEN</th>
                         )}
                         <th>Kx</th>
+                        <th style={props.verLineaMarca ? '' : { display: 'none' }}>Uti</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
@@ -137,6 +139,7 @@ export default component$(
                           costoDeInicioPEN,
                           precioUnitarioPEN,
                           promedioCostoUnitarioMovil,
+                          porcentajeUtilidad,
                           KARDEXS,
                           activo,
                           noFacturar,
@@ -168,11 +171,15 @@ export default component$(
                             <td data-label="Linea/Tipo" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {lineaTipo}
                             </td>
+
                             <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {marca}
                             </td>
                             <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}</td>
-                            <td data-label="Stock">{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</td>
+
+                            <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
+                              <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
+                            </td>
                             <td data-label="Uni">{unidad}</td>
                             {props.esAlmacen ? (
                               props.motivo === 'APERTURA DE INVENTARIO' ? (
@@ -203,6 +210,13 @@ export default component$(
                             )}
                             <td data-label="Kx" class="acciones">
                               {KARDEXS.length === 0 ? 'No' : 'Si'}
+                            </td>
+                            <td data-label="Uti" style={props.verLineaMarca ? '' : { display: 'none' }}>
+                              {typeof porcentajeUtilidad !== 'undefined' && porcentajeUtilidad !== null
+                                ? porcentajeUtilidad.$numberDecimal
+                                  ? porcentajeUtilidad.$numberDecimal
+                                  : porcentajeUtilidad
+                                : ''}
                             </td>
                             <td data-label="Acciones" class="acciones">
                               <input

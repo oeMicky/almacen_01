@@ -7,6 +7,7 @@ import type { IPersona } from '~/interfaces/iPersona';
 import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
 import {
   cerosALaIzquierda,
+  diaDeLaSemana,
   // elIdAuxiliar,
   formatear_6Decimales,
   formatoDDMMYYYY_PEN,
@@ -431,7 +432,16 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_index_out_almacen.mostrarPanelNewOutAlmacen = false;
+            if (definicion_CTX_OUT_ALMACEN.itemsMercaderias.length > 0) {
+              if (confirm('Hay mercaderías ingresadas, ¿Desea cerrar el formulario?')) {
+                ctx_index_out_almacen.mostrarPanelNewOutAlmacen = false;
+              }
+              //  else {
+              //   ctx_index_in_almacen.mostrarPanelNewInAlmacen = true;
+              // }
+            } else {
+              ctx_index_out_almacen.mostrarPanelNewOutAlmacen = false;
+            }
           })}
         />
       </div>
@@ -1039,7 +1049,13 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}
         {definicion_CTX_OUT_ALMACEN._id === '' ? (
-          <input type="button" value="Grabar" style={{ cursor: 'pointer', height: '40px' }} class="btn-centro" onClick$={() => registrarEgreso()} />
+          <input
+            type="button"
+            value={'Grabar EGRESO ' + diaDeLaSemana(definicion_CTX_OUT_ALMACEN.FISMA) + ' ' + definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10)}
+            style={{ cursor: 'pointer', height: '40px' }}
+            class="btn-centro"
+            onClick$={() => registrarEgreso()}
+          />
         ) : (
           ''
         )}

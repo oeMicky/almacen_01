@@ -106,13 +106,13 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
       style={
         verLineaMarca.value || verAplicacion.value
           ? {
-              width: 'clamp(330px, 86%, 1112px)',
+              width: 'clamp(320px, 100%, 1112px)',
               // width: 'auto',
               border: '1px solid red',
               padding: '2px',
             }
           : {
-              width: 'clamp(330px, 86%, 800px)',
+              width: 'clamp(320px, 100%, 800px)',
               // width: 'auto',
               border: '1px solid red',
               padding: '2px',

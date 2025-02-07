@@ -73,6 +73,10 @@ tfoot td {
   /* background: pink; */
   text-align: right;
 }
+.comoNumeroLeft {
+  /* background: pink; */
+  text-align: left;
+}
 .acciones {
   /* background: pink; */
   text-align: right;
@@ -150,6 +154,10 @@ tfoot td {
 
   .comoNumero {
     /* background: yellow; */
+    text-align: right;
+  }
+  .comoNumeroLeft {
+    /* background: pink; */
     text-align: right;
   }
   .acciones {

@@ -12,6 +12,22 @@ export const menosXdiasHoy = (xDias: number) => {
   return al;
 };
 
+export const diaDeLaSemana = (fecha: string) => {
+  const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  const fechaDate = new Date(fecha);
+  return dias[fechaDate.getDay()];
+};
+
+// export const numeroDiaDeLaFecha = (fecha: string) => {
+//   console.log('🥓🥓🥓🥓🥓🥓🥓', fecha);
+//   const laFecha = new Date(fecha);
+//   console.log('🥓🥓🥓🥓🥓🥓🥓', laFecha);
+
+//   // const dia = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+//   // const fechaDate = new Date(fecha);
+//   return laFecha.getDate();
+// };
+
 export const primeroDelMes = () => {
   const hoy = new Date();
   const al = hoy.getFullYear() + '-' + ('0' + (hoy.getMonth() + 1)).slice(-2) + '-01';

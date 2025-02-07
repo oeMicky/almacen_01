@@ -9,9 +9,11 @@ import NewEditDocumento from '../miscelanea/documento/newEditDocumento';
 import BuscarMercaderiaIN from '../miscelanea/mercaderiaIN/buscarMercaderiaIN';
 import {
   cerosALaIzquierda,
+  diaDeLaSemana,
   formatear_6Decimales,
   formatoDDMMYYYY_PEN,
   hoy,
+  // numeroDiaDeLaFecha,
   // menosXdiasHoy,
   // hoy,
   // primeroDelMes,
@@ -201,6 +203,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     codigo: '',
     descripcion: '',
   });
+
+  // const FISMAenDate = new Date(definicion_CTX_IN_ALMACEN.FISMA);
+  // const diaDelFISMA = FISMAenDate.getDay();
 
   // const
   //#endregion INICALIZACION
@@ -509,7 +514,16 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
+            if (definicion_CTX_IN_ALMACEN.itemsMercaderias.length > 0) {
+              if (confirm('Hay mercaderías ingresadas, ¿Desea cerrar el formulario?')) {
+                ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
+              }
+              //  else {
+              //   ctx_index_in_almacen.mostrarPanelNewInAlmacen = true;
+              // }
+            } else {
+              ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
+            }
           })}
         />
       </div>
@@ -1511,7 +1525,13 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}
         {definicion_CTX_IN_ALMACEN._id === '' ? (
-          <input type="button" value="Grabar INGRESO" class="btn-centro" style={{ cursor: 'pointer', height: '40px' }} onClick$={() => registrarIngreso()} />
+          <input
+            type="button"
+            value={'Grabar INGRESO ' + diaDeLaSemana(definicion_CTX_IN_ALMACEN.FISMA) + ' ' + definicion_CTX_IN_ALMACEN.FISMA.substring(8, 10)}
+            class="btn-centro"
+            style={{ cursor: 'pointer', height: '40px' }}
+            onClick$={() => registrarIngreso()}
+          />
         ) : (
           ''
         )}
