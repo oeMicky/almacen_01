@@ -336,6 +336,10 @@ export default component$(
                                 // style={{ marginRight: '2px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
+                                  if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
+                                    alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
+                                    return;
+                                  }
                                   ctx.idMercaderia = mercaINLocali._id;
                                   ctx.descripcion = mercaINLocali.descripcion;
                                   ctx.pUtilidad = mercaINLocali.porcentajeUtilidad.$numberDecimal;
