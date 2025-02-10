@@ -25,6 +25,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string; idMa
       return;
     }
 
+    ctx_new_edit_mercaderia_in.mostrarSpinner = true;
     const lt = await inUpMarca({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
@@ -35,7 +36,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string; idMa
 
     //console.log('lt - marca', lt);
     //console.log('lt.data - marca', lt.data);
-
+    ctx_new_edit_mercaderia_in.mostrarSpinner = false;
     ctx_new_edit_mercaderia_in.grabo_marca = true;
     ctx_new_edit_mercaderia_in.laLineaTipo = lt.data;
     ctx_new_edit_mercaderia_in.mostrarPanelNewEditMarcaIN = false;
@@ -70,29 +71,32 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string; idMa
       {/* FORMULARIO */}
 
       <div class="add-form">
-        {/* Marca  */}
-        <div class="form-control" style={{ margin: '8px 0' }}>
-          <div class="form-control form-agrupado">
-            <input
-              id="in_marca_MARCA_IN"
-              style={{ width: '100%', background: '#eee' }}
-              autoFocus
-              type="text"
-              placeholder="Marca"
-              value={marca.mar}
-              onChange$={(e) => {
-                marca.mar = (e.target as HTMLInputElement).value.trim().toUpperCase();
-              }}
-              onKeyUp$={(e) => {
-                if (e.key === 'Enter') {
-                  document.getElementById('btn_grabar_MARCA_IN')?.focus();
-                }
-              }}
-              onFocusin$={(e) => {
-                (e.target as HTMLInputElement).select();
-              }}
-            />
+        <div>
+          {/* Marca  */}
+          <div class="form-control" style={{ margin: '8px 0' }}>
+            <div class="form-control form-agrupado">
+              <input
+                id="in_marca_MARCA_IN"
+                style={{ width: '100%', background: '#fff' }}
+                autoFocus
+                type="text"
+                placeholder="Marca"
+                value={marca.mar}
+                onChange$={(e) => {
+                  marca.mar = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                }}
+                onKeyUp$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('btn_grabar_MARCA_IN')?.focus();
+                  }
+                }}
+                onFocusin$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
+              />
+            </div>
           </div>
+          <br />
         </div>
 
         {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción*/}
@@ -100,6 +104,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string; idMa
           id="btn_grabar_MARCA_IN"
           type="submit"
           value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          style={{ cursor: 'pointer', height: '40px' }}
           class="btn-centro"
           onClick$={() => {
             grabarMarca();

@@ -46,6 +46,7 @@ import comprasClaro from '../images/comprasClaro.svg';
 import comprasOscuro from '../images/comprasOscuro.svg';
 import comprasDisable from '../images/comprasDisable.svg';
 import copy from '../images/copy.svg';
+import dolar from '../images/dollar.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
 import equal from '../images/equal.svg';
@@ -157,6 +158,7 @@ export default {
   comprasOscuro,
   comprasDisable,
   copy,
+  dolar,
   download,
   edit,
   equal,

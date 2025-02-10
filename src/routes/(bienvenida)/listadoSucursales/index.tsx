@@ -83,7 +83,7 @@ export default component$(() => {
                           idSucursal: sucur.idSucursal,
                         });
                         activo = activo.data;
-                        // //console.log('🎫🎫🎫activo', activo);
+                        console.log('🎫🎫🎫activo', activo);
                         if (!activo[0].activoGE) {
                           alert(`El grupo empresarial ${sucur.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`);
                           return;
@@ -113,6 +113,9 @@ export default component$(() => {
                         parametrosGlobales.provincia = sucur.provincia;
                         parametrosGlobales.distrito = sucur.distrito;
                         parametrosGlobales.ubigeo = sucur.ubigeo;
+
+                        parametrosGlobales.editarTipoCambioManual = sucur.editarTipoCambioManual;
+                        parametrosGlobales.tipoCambioManual = activo[0].tipoCambioManual ? activo[0].tipoCambioManual.$numberDecimal : 0;
 
                         parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
                         parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;

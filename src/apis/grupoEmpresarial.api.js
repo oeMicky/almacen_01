@@ -1,5 +1,18 @@
 const API = import.meta.env.VITE_URL + '/api/grupoEmpresarial';
 
+export const upTipoCambioManual = async (parametros) => {
+  // //console.log('//////api////////////******************obtener a upTipoCambioManual');
+  // //console.log('parametros upTipoCambioManual', parametros);
+  const res = await fetch(API + '/upTipoCambioManual', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
 export const getPeriodos = async (parametros) => {
   // //console.log('//////api////////////******************obtener a getPeriodos');
   // //console.log('parametros getPeriodos', parametros);

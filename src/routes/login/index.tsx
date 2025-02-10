@@ -33,6 +33,8 @@ export const parametrosGlobales = {
   idPersona: '',
   idEmpresa: '', //'60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
   RazonSocial: '', //'CORPORACION ACME I',
+  editarTipoCambioManual: false,
+  tipoCambioManual: '',
   colorHeaderEmpresarial: '',
   ventaConDetraccion: false,
   cuentaBancariaDetraccion: '',
@@ -124,20 +126,20 @@ export default component$(() => {
     mostrarSpinner: false,
     // email: 'mvizconde@msn.com',
     // email: 'carlos@merma.com',
-    // email: 'mvizconde@cao.com',
+    email: 'mvizconde@cao.com',
     // email: "paolo@cao.com",
     // email: 'joseluis@cao.com',
     // email: 'keymar0@cao.com',
-    email: '',
+    // email: '',
 
     // email: "",
     // email: 'taty@cao.com',
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
-    // contrasena: '12345678',
+    contrasena: '12345678',
     // contrasena: 'Pamela123',
-    contrasena: '',
+    // contrasena: '',
   });
   //#endregion INICIALIZACION
 
@@ -171,7 +173,7 @@ export default component$(() => {
   const analisisDeLogeo = $(async (logeado: string, usuario: string) => {
     // //console.log('analisisDeLogeo -> logeado', logeado);
     const sucursales = await getSucursalesAdjuntasUsuario({ idUsuario: logeado });
-    //console.log('analisisDeLogeo -> sucursales', sucursales.data);
+    // console.log('analisisDeLogeo -> sucursales', sucursales.data);
 
     parametrosGlobales.usuario = usuario;
     parametrosGlobales.sucursalesAdjuntas = sucursales.data;
@@ -204,7 +206,7 @@ export default component$(() => {
         alert(`La sucursal ${sucursales.data[0].sucursal} esta inactiva. Pongase en contacto con el administrador.`);
         return;
       }
-      //console.log('🧧🧧🧧activo', activo);
+      console.log('🧧🧧🧧activo', activo);
       //console.log('**UNA SUCURSAL**');
       parametrosGlobales.idSucursal = sucursales.data[0].idSucursal;
       parametrosGlobales.sucursal = sucursales.data[0].sucursal;
@@ -222,6 +224,9 @@ export default component$(() => {
       parametrosGlobales.provincia = sucursales.data[0].provincia;
       parametrosGlobales.distrito = sucursales.data[0].distrito;
       parametrosGlobales.ubigeo = sucursales.data[0].ubigeo;
+
+      parametrosGlobales.editarTipoCambioManual = sucursales.data[0].editarTipoCambioManual;
+      parametrosGlobales.tipoCambioManual = activo[0].tipoCambioManual ? activo[0].tipoCambioManual.$numberDecimal : 0;
 
       parametrosGlobales.colorHeaderEmpresarial = activo[0].colorHeaderEmpresarial;
       parametrosGlobales.ventaConDetraccion = activo[0].ventaConDetraccion;

@@ -88,7 +88,7 @@ export default component$(() => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 360px)',
+        width: 'clamp(320px, 100%, 360px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -120,114 +120,119 @@ export default component$(() => {
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <div class="linea-formulario">
-          <label>Usuario</label>
-          <input
-            id="in_Usuario_USUARIO"
-            autoFocus
-            name="usuario"
-            type="email"
-            disabled
-            placeholder="Email"
-            class="input-formulario-usuario"
-            value={parametrosGlobales.usuario}
-            // onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
-            onKeyPress$={(e) => {
-              if (e.key === 'Enter') {
-                (document.getElementById('in_ClaveAnterior_USUARIO') as HTMLInputElement)?.focus();
-              }
-            }}
-          />
-        </div>
-        <div class="linea-formulario">
-          <label>Clave anterior</label>
-          <div style={{ position: 'relative', left: '12px' }}>
+        <div>
+          <div class="linea-formulario">
+            <label>Usuario</label>
             <input
-              id="in_ClaveAnterior_USUARIO"
+              id="in_Usuario_USUARIO"
               autoFocus
               name="usuario"
-              type={passwordClaveAnteriorTF.value ? 'password' : 'text'}
-              placeholder="Clave anterior"
+              type="email"
+              disabled
+              placeholder="Email"
               class="input-formulario-usuario"
-              value={definicion_CTX_CAMBIO_CLAVE.claveAnterior}
-              onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
+              value={parametrosGlobales.usuario}
+              // onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
               onKeyPress$={(e) => {
                 if (e.key === 'Enter') {
-                  (document.getElementById('in_NuevaA_USUARIO') as HTMLInputElement)?.focus();
+                  (document.getElementById('in_ClaveAnterior_USUARIO') as HTMLInputElement)?.focus();
                 }
               }}
             />
-            <img
-              src={passwordClaveAnteriorTF.value ? images.eye : images.eyePassword}
-              height={12}
-              width={12}
-              style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
-              onClick$={() => {
-                passwordClaveAnteriorTF.value = !passwordClaveAnteriorTF.value;
-              }}
-            />
           </div>
-        </div>
-        <div class="linea-formulario">
-          <label>Clave nueva</label>
-          <div style={{ position: 'relative', left: '12px' }}>
-            <input
-              id="in_NuevaA_USUARIO"
-              name="clave"
-              type={passwordClaveNuevaTF.value ? 'password' : 'text'}
-              placeholder="Clave nueva"
-              class="input-formulario-usuario"
-              value={definicion_CTX_CAMBIO_CLAVE.claveNuevaA}
-              onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveNuevaA = (e.target as HTMLInputElement).value)}
-              onKeyPress$={(e) => {
-                if (e.key === 'Enter') {
-                  (document.getElementById('in_NuevaB_USUARIO') as HTMLInputElement)?.focus();
-                }
-              }}
-            />
-            <img
-              src={passwordClaveNuevaTF.value ? images.eye : images.eyePassword}
-              height={12}
-              width={12}
-              style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
-              onClick$={() => {
-                passwordClaveNuevaTF.value = !passwordClaveNuevaTF.value;
-              }}
-            />
+          <div class="linea-formulario">
+            <label>Clave anterior</label>
+            <div style={{ position: 'relative', left: '12px' }}>
+              <input
+                id="in_ClaveAnterior_USUARIO"
+                autoFocus
+                name="usuario"
+                type={passwordClaveAnteriorTF.value ? 'password' : 'text'}
+                placeholder="Clave anterior"
+                class="input-formulario-usuario"
+                value={definicion_CTX_CAMBIO_CLAVE.claveAnterior}
+                onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_NuevaA_USUARIO') as HTMLInputElement)?.focus();
+                  }
+                }}
+              />
+              <img
+                src={passwordClaveAnteriorTF.value ? images.eye : images.eyePassword}
+                height={12}
+                width={12}
+                style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
+                onClick$={() => {
+                  passwordClaveAnteriorTF.value = !passwordClaveAnteriorTF.value;
+                }}
+              />
+            </div>
           </div>
-        </div>
-        <div class="linea-formulario">
-          <label>Repetir clave</label>
-          <div style={{ position: 'relative', left: '12px' }}>
-            <input
-              id="in_NuevaB_USUARIO"
-              name="clave"
-              type={passwordRepetirClaveNuevaTF.value ? 'password' : 'text'}
-              placeholder="Repetir clave nueva"
-              class="input-formulario-usuario"
-              value={definicion_CTX_CAMBIO_CLAVE.claveNuevaB}
-              onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveNuevaB = (e.target as HTMLInputElement).value)}
-              onKeyPress$={(e) => {
-                if (e.key === 'Enter') {
-                  (document.getElementById('in_btn_Grabar_USUARIO') as HTMLInputElement)?.focus();
-                }
-              }}
-            />
-            <img
-              src={passwordRepetirClaveNuevaTF.value ? images.eye : images.eyePassword}
-              height={12}
-              width={12}
-              style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
-              onClick$={() => {
-                passwordRepetirClaveNuevaTF.value = !passwordRepetirClaveNuevaTF.value;
-              }}
-            />
+          <div class="linea-formulario">
+            <label>Clave nueva</label>
+            <div style={{ position: 'relative', left: '12px' }}>
+              <input
+                id="in_NuevaA_USUARIO"
+                name="clave"
+                type={passwordClaveNuevaTF.value ? 'password' : 'text'}
+                placeholder="Clave nueva"
+                class="input-formulario-usuario"
+                value={definicion_CTX_CAMBIO_CLAVE.claveNuevaA}
+                onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveNuevaA = (e.target as HTMLInputElement).value)}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_NuevaB_USUARIO') as HTMLInputElement)?.focus();
+                  }
+                }}
+              />
+              <img
+                src={passwordClaveNuevaTF.value ? images.eye : images.eyePassword}
+                height={12}
+                width={12}
+                style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
+                onClick$={() => {
+                  passwordClaveNuevaTF.value = !passwordClaveNuevaTF.value;
+                }}
+              />
+            </div>
           </div>
+          <div class="linea-formulario">
+            <label>Repetir clave</label>
+            <div style={{ position: 'relative', left: '12px' }}>
+              <input
+                id="in_NuevaB_USUARIO"
+                name="clave"
+                type={passwordRepetirClaveNuevaTF.value ? 'password' : 'text'}
+                placeholder="Repetir clave nueva"
+                class="input-formulario-usuario"
+                value={definicion_CTX_CAMBIO_CLAVE.claveNuevaB}
+                onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveNuevaB = (e.target as HTMLInputElement).value)}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_btn_Grabar_USUARIO') as HTMLInputElement)?.focus();
+                  }
+                }}
+              />
+              <img
+                src={passwordRepetirClaveNuevaTF.value ? images.eye : images.eyePassword}
+                height={12}
+                width={12}
+                style={{ cursor: 'pointer', position: 'relative', left: '-16px' }}
+                onClick$={() => {
+                  passwordRepetirClaveNuevaTF.value = !passwordRepetirClaveNuevaTF.value;
+                }}
+              />
+            </div>
+          </div>
+          <br />
         </div>
+
         {/* <button>Registrar</button> */}
         <input
           id="in_btn_Grabar_USUARIO"
           class="boton-formulario"
+          style={{ height: '32px' }}
           type="button"
           value="Grabar"
           onClick$={() => {

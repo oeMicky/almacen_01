@@ -28,6 +28,9 @@ export interface IIngresoAAlmacen {
   moneda: string;
   tipoCambio: any;
 
+  enDolaresManual: boolean;
+  tipoCambioManual: any;
+
   idRemitente: string;
   codigoTipoDocumentoIdentidad: string;
   tipoDocumentoIdentidad: string;

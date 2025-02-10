@@ -11,6 +11,7 @@ import Spinner from '~/components/system/spinner';
 import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 import Kardexs from '~/components/kardex/kardexs';
 import Kardex from '~/components/kardex/kardex';
+import EditPrecioPublicoIN from './editPrecioPublicoIN';
 // import MercaderiaINSelec from "./mercaderiaINSelec";
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
@@ -18,6 +19,10 @@ export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_
 export default component$((props: { contexto: string; esAlmacen: boolean; enDolares: boolean; tipoCambio: any; igv: number; motivo?: string }) => {
   //#region DEFINICION CTX_BUSCAR_MERCADERIA_IN - para eDITAR - para sELECCIONAR
   const definicion_CTX_BUSCAR_MERCADERIA_IN = useStore({
+    idMercaderia: '',
+    descripcion: '',
+    pUtilidad: 0,
+
     mM: [],
     kK: [],
 
@@ -31,7 +36,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
     mostrarPanelKARDEXS: false,
 
     mostrarPanelMercaderiaINSeleccionada: false,
-    // mostrarPanelAsignarPrecio: false,
+
+    mostrarPanelEditPrecioPublicoIN: false,
+
     mostrarSpinner: false,
   });
   useContextProvider(CTX_BUSCAR_MERCADERIA_IN, definicion_CTX_BUSCAR_MERCADERIA_IN);
@@ -351,10 +358,20 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
               />
             </div>
           )}
-          {/*  ADICIONAR MERCADERIA IN  */}
+          {/*  ADICIONAR MERCADERIA IN  idMercaderia */}
           {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelNewEditMercaderiaIN && (
             <div class="modal">
               <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_BUSCAR_MERCADERIA_IN.mM} contexto={props.contexto} />
+            </div>
+          )}
+          {/*  EDITAR PRECIO PUBLICO IN  */}
+          {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelEditPrecioPublicoIN && (
+            <div class="modal">
+              <EditPrecioPublicoIN
+                idMercaderia={definicion_CTX_BUSCAR_MERCADERIA_IN.idMercaderia}
+                descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
+                pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
+              />
             </div>
           )}
           {/* MOSTRAR SPINNER */}

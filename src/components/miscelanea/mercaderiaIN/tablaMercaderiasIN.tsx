@@ -112,15 +112,15 @@ export default component$(
 
                         <th>Stock</th>
                         <th>Uni</th>
-                        {props.esAlmacen ? (
+                        {/* {props.esAlmacen ? (
                           props.motivo === 'APERTURA DE INVENTARIO' ? (
                             <th>Costo Inicio PEN</th>
                           ) : (
                             <th>Costo Promd PEN</th>
                           )
-                        ) : (
-                          <th>Precio Uni PEN</th>
-                        )}
+                        ) : ( */}
+                        <th>Precio Uni PEN</th>
+                        {/* )} */}
                         <th>Kx</th>
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Uti</th>
                         <th>Acciones</th>
@@ -136,9 +136,9 @@ export default component$(
                           marca,
                           totalCantidadSaldo,
                           unidad,
-                          costoDeInicioPEN,
+                          // costoDeInicioPEN,
                           precioUnitarioPEN,
-                          promedioCostoUnitarioMovil,
+                          // promedioCostoUnitarioMovil,
                           porcentajeUtilidad,
                           KARDEXS,
                           activo,
@@ -181,7 +181,7 @@ export default component$(
                               <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
                             </td>
                             <td data-label="Uni">{unidad}</td>
-                            {props.esAlmacen ? (
+                            {/* {props.esAlmacen ? (
                               props.motivo === 'APERTURA DE INVENTARIO' ? (
                                 <td data-label="Costo Inicio PEN" class="comoNumero">
                                   {typeof costoDeInicioPEN !== 'undefined' && costoDeInicioPEN !== null
@@ -199,15 +199,15 @@ export default component$(
                                     : '-'}
                                 </td>
                               )
-                            ) : (
-                              <td data-label="Precio PEN" class="comoNumero">
-                                {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                                  ? precioUnitarioPEN.$numberDecimal
-                                    ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
-                                    : precioUnitarioPEN
-                                  : '-'}
-                              </td>
-                            )}
+                            ) : ( */}
+                            <td data-label="Precio PEN" class="comoNumero">
+                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                ? precioUnitarioPEN.$numberDecimal
+                                  ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                  : precioUnitarioPEN
+                                : '-'}
+                            </td>
+                            {/* )} */}
                             <td data-label="Kx" class="acciones">
                               {KARDEXS.length === 0 ? 'No' : 'Si'}
                             </td>
@@ -317,12 +317,31 @@ export default component$(
                                 title="Editar mercadería"
                                 height={12}
                                 width={12}
-                                // style={{ marginRight: '2px' }}
+                                style={{ marginRight: '4px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   ctx.mM = mercaINLocali;
                                   ctx.mostrarPanelNewEditMercaderiaIN = true;
                                   ctx.mostrarSpinner = true;
+                                  //console.log('la merca A Editar IN', ctx.mM);
+                                }}
+                              />
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
+                                src={images.moneyBag}
+                                title="Editar precio público"
+                                height={12}
+                                width={12}
+                                // style={{ marginRight: '2px' }}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
+                                  ctx.idMercaderia = mercaINLocali._id;
+                                  ctx.descripcion = mercaINLocali.descripcion;
+                                  ctx.pUtilidad = mercaINLocali.porcentajeUtilidad.$numberDecimal;
+                                  ctx.mostrarPanelEditPrecioPublicoIN = true;
+                                  // ctx.mostrarSpinner = true;
+
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />

@@ -93,12 +93,13 @@ export default component$((props: { idLineaTipo: string; idUnidadEquivalencia: s
             />
           </div>
         </div>
-
+        <br />
         {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción*/}
         <input
           id="buttonGrabar_MI_P"
           type="submit"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value="Registrar" //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          style={{ cursor: 'pointer', height: '40px' }}
           class="btn-centro"
           onClick$={() => {
             grabarUnidadEquivalencia();

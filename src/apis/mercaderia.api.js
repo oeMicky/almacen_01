@@ -1,5 +1,18 @@
 const API = import.meta.env.VITE_URL + '/api/mercaderia';
 
+export const upPrecioPublicoPEN = async (parametros) => {
+  // //console.log('//////api////////////******************obtener a upPrecioPublicoPEN');
+  // //console.log('parametros upPrecioPublicoPEN', parametros);
+  const res = await fetch(API + '/upPrecioPublicoPEN', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
 export const inUpMercaderia = async (parametros) => {
   // //console.log('//////api////////////******************inser/update en inUpMercaderia');
   // //console.log('parametros inUpMercaderia->', parametros);

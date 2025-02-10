@@ -462,7 +462,7 @@ export default component$(
             id="btn_Registrar_MercaderiaIN_MICE"
             type="button"
             value="Grabar "
-            style={{ height: '40px' }}
+            style={{ cursor: 'pointer', height: '40px' }}
             class="btn-centro"
             onClick$={() => {
               if (typeof props.mercaINSelecci.conLote !== 'undefined' && props.mercaINSelecci.conLote) {

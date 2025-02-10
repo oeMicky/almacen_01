@@ -390,9 +390,9 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
           id="bu_Grabar_Equivalencia_IN_MI_P"
           // type="submit"
           type="button"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value="Registrar" //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
-          style={{ height: '40px' }}
+          style={{ cursor: 'pointer', height: '40px' }}
           onClick$={() => {
             registrarEquivalencia();
           }}

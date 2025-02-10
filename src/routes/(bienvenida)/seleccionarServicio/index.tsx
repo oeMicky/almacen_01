@@ -5,6 +5,7 @@ import Servicio2024 from '~/components/indexPrincipal/servicio2024';
 import Spinner from '~/components/system/spinner';
 import { parametrosGlobales } from '~/routes/login';
 import CambioClave from '~/components/usuario/cambioClave';
+import EditTipoCambioManual from './editTipoCambioManual';
 
 export const CTX_SELECCIONAR_SERVICIO = createContextId<any>('__seleccionar_servicio');
 
@@ -13,6 +14,9 @@ export default component$(() => {
   const definicion_CTX_SELECCIONAR_SERVICIO = useStore({
     actualizo_Contrasena: false,
     mostrarPanelCambiarClave: false,
+
+    actualizo_TipoCambioManual: false,
+    mostrarPanelCambiarTipoCambioManual: false,
   });
   useContextProvider(CTX_SELECCIONAR_SERVICIO, definicion_CTX_SELECCIONAR_SERVICIO);
   //#endregion definicion_CTX_SELECCIONAR_SERVICIO
@@ -50,6 +54,11 @@ export default component$(() => {
           <CambioClave />
         </div>
       )}
+      {definicion_CTX_SELECCIONAR_SERVICIO.mostrarPanelCambiarTipoCambioManual && (
+        <div class="modal">
+          <EditTipoCambioManual />
+        </div>
+      )}
       <p title="Empresa" style={{ paddingLeft: '24px', fontSize: '0.8rem' }}>
         <img src={images.buildings} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.RazonSocial}
@@ -57,6 +66,22 @@ export default component$(() => {
       <p title="Sucursal" style={{ paddingLeft: '24px', fontSize: '0.8rem' }}>
         <img src={images.sucursal} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.sucursal}
+      </p>
+      <p title="Tipo Cambio Manual" style={{ paddingLeft: '24px', fontSize: '0.8rem' }}>
+        <img src={images.dolar} width={16} height={16} style={{ marginRight: '8px' }} />
+        {parametrosGlobales.tipoCambioManual}
+        <button
+          hidden={!parametrosGlobales.editarTipoCambioManual}
+          style={{ marginLeft: '16px' }}
+          onClick$={() => {
+            if (parametrosGlobales.usuario !== '') {
+              definicion_CTX_SELECCIONAR_SERVICIO.mostrarPanelCambiarTipoCambioManual = true;
+            }
+          }}
+        >
+          Cambiar tipo cambio manual
+        </button>
+        {/* <button onClick$={() => console.log('parametrosGlobales', parametrosGlobales)}>parame</button> */}
       </p>
       {/* SERVICIOS <img src={images.facturas} width={16} height={16}></img> */}
       <section id="servicios" class="seccion-servicios">

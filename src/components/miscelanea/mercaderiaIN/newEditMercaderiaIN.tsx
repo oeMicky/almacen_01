@@ -32,6 +32,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
   //#region DEFINICION CTX_NEW_EDIT_MERCADERIA_IN
   const definicion_CTX_NEW_EDIT_MERCADERIA_IN = useStore({
+    mostrarSpinner: false,
+
     mostrarPanelNewEditLineaTipoIN: false,
     grabo_lineaTipo: false,
 
@@ -105,7 +107,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     tipoAfectacionDelImpuesto: props.mercaSeleccio.tipoAfectacionDelImpuesto ? props.mercaSeleccio.tipoAfectacionDelImpuesto : '10',
     porcentaje: props.mercaSeleccio.porcentaje ? props.mercaSeleccio.porcentaje : '18',
 
-    stockMinimo: props.mercaSeleccio.stockMinimo ? props.mercaSeleccio.stockMinimo : 2,
+    stockMinimo: props.mercaSeleccio.stockMinimo ? props.mercaSeleccio.stockMinimo.$numberDecimal : 2,
 
     kardex: props.mercaSeleccio.kardex ? props.mercaSeleccio.kardex : '',
     KARDEXS: props.mercaSeleccio.kardexs ? props.mercaSeleccio.kardexs : '',
@@ -150,7 +152,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
   //#region INICIALIZANDO
   const ini = useSignal(0);
-  const mostrarSpinner = useSignal(false);
+  // const mostrarSpinner = useSignal(false);
   // const buscarLineasTipos = useSignal(0);
   // const dataSerie = useSignal([]);
   const lasLineasTipos = useSignal([]);
@@ -473,7 +475,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     }
 
     // ctx.mostrarSpinner = true;
-    mostrarSpinner.value = true;
+    // mostrarSpinner.value = true;
+    definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarSpinner = true;
     const merca = await inUpMercaderia({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
@@ -527,7 +530,8 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
     //console.log('merca', merca);
 
-    mostrarSpinner.value = false;
+    // mostrarSpinner.value = false;
+    definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarSpinner = false;
 
     ctx.abuscar = merca.data.descripcion;
     ctx.grabo_mercaderiaIN = true;
@@ -538,7 +542,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 496px)',
+        width: 'clamp(320px, 100%, 496px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -1635,7 +1639,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
         />
       </div>
       {/* MOSTRAR SPINNER */}
-      {mostrarSpinner.value && (
+      {definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarSpinner && (
         <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>

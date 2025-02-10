@@ -104,7 +104,8 @@ export default component$((props: { lineaTipoSelecc: any }) => {
         <input
           id="bu_registrar_LineaTipo_MI_P"
           type="submit"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value="Registrar" //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          style={{ cursor: 'pointer', height: '40px' }}
           class="btn-centro"
           onClick$={() => {
             registrarLineaTipo();

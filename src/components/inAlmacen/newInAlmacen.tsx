@@ -115,6 +115,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       moneda: 'PEN',
       tipoCambio: 0,
 
+      enDolaresManual: false,
+      tipoCambioManual: props.inSelecci.tipoCambioManual ? props.inSelecci.tipoCambioManual : parametrosGlobales.tipoCambioManual,
+
       // correlativo: props.inSelecci.correlativo ? props.inSelecci.correlativo : 0,
 
       //   estado: props.inSelecci.estado ? props.inSelecci.estado : '',
@@ -268,6 +271,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     const checkTC = e.checked;
     if (checkTC) {
       definicion_CTX_IN_ALMACEN.enDolares = true;
+      definicion_CTX_IN_ALMACEN.enDolaresManual = false;
       //console.log('🎲🎰🎲🎰🎲🎰');
       // //console.log('🎲🎰🎲🎰🎲🎰', definicion_CTX_IN_ALMACEN.documentosAdjuntos[0].fecha);
       // //console.log('🎲🎰🎲🎰🎲🎰', definicion_CTX_IN_ALMACEN.FISMA);
@@ -292,6 +296,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
 
       definicion_CTX_IN_ALMACEN.moneda = elTipoCambio.moneda;
       definicion_CTX_IN_ALMACEN.tipoCambio = elTipoCambio.venta;
+
       // let itemsVVVVVV = await tablaItemsVentaADolares(elTipoCambio.venta);
       //
     } else {
@@ -301,6 +306,47 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     }
   });
   //#endregion TIPO CAMBIO
+
+  //#region TIPO CAMBIO MANUAL
+  const obtenerTipoCambioManual = $(async (e: HTMLInputElement) => {
+    const checkTC = e.checked;
+    console.log('😄😄😄😄😄', checkTC);
+    if (checkTC) {
+      definicion_CTX_IN_ALMACEN.enDolares = false;
+      definicion_CTX_IN_ALMACEN.enDolaresManual = true;
+      console.log('😄😄😄😄😄', definicion_CTX_IN_ALMACEN.enDolares, definicion_CTX_IN_ALMACEN.enDolaresManual);
+
+      // elTipoCambio = elTipoCambio.data;
+      //console.log('🎰🎰🎰', elTipoCambio);
+
+      // recalcularMontosEnDolares();
+
+      definicion_CTX_IN_ALMACEN.moneda = 'USD';
+      definicion_CTX_IN_ALMACEN.tipoCambioManual = parametrosGlobales.tipoCambioManual;
+      console.log('😄😄😄😄😄', definicion_CTX_IN_ALMACEN.moneda, definicion_CTX_IN_ALMACEN.tipoCambioManual);
+      if (definicion_CTX_IN_ALMACEN.itemsMercaderias.length > 0) {
+        definicion_CTX_IN_ALMACEN.itemsMercaderias.map((elemento: any) => {
+          if (definicion_CTX_IN_ALMACEN.tipoCambioManual !== 0) {
+            const IGVCalculado = 1 + Number(elemento.IGV) / 100;
+            elemento.costoUnitarioUSD = formatear_6Decimales(elemento.costoUnitarioPEN / definicion_CTX_IN_ALMACEN.tipoCambioManual);
+
+            // elemento.precioUniUSD = formatear_6Decimales(precio * definicion_CTX_IN_ALMACEN.tipoCambio);
+            elemento.subUSD = formatear_6Decimales(elemento.cantidadIngresada * (elemento.costoUnitarioPEN / definicion_CTX_IN_ALMACEN.tipoCambioManual));
+            elemento.valorUnitarioUSD = formatear_6Decimales(IGVCalculado * (elemento.costoUnitarioPEN / definicion_CTX_IN_ALMACEN.tipoCambioManual));
+            elemento.totUSD = formatear_6Decimales(
+              elemento.cantidadIngresada * (IGVCalculado * (elemento.costoUnitarioPEN / definicion_CTX_IN_ALMACEN.tipoCambioManual))
+            );
+          }
+        });
+      }
+    } else {
+      console.log('😥😥😥😥😥', checkTC);
+      definicion_CTX_IN_ALMACEN.enDolaresManual = false;
+      definicion_CTX_IN_ALMACEN.moneda = 'PEN';
+      definicion_CTX_IN_ALMACEN.tipoCambioManual = 0;
+    }
+  });
+  //#endregion TIPO CAMBIO MANUAL
 
   //#region ELIMINAR DOCUMENTO
   useTask$(({ track }) => {
@@ -328,7 +374,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
 
     if (definicion_CTX_NEW_IN_ALMACEN.graboDocumento) {
       if (definicion_CTX_IN_ALMACEN.enDolares) {
-        obtenerTipoCambio(document.getElementById('chbx_TipoCambio_IN_ALMACEN') as HTMLInputElement);
+        // obtenerTipoCambio(document.getElementById('chbx_TipoCambio_IN_ALMACEN') as HTMLInputElement);
       }
     }
     definicion_CTX_NEW_IN_ALMACEN.graboDocumento = false;
@@ -443,6 +489,13 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
       elIgv: definicion_CTX_IN_ALMACEN.elIgv,
 
+      enDolares: definicion_CTX_IN_ALMACEN.enDolares,
+      moneda: definicion_CTX_IN_ALMACEN.moneda,
+      tipoCambio: definicion_CTX_IN_ALMACEN.tipoCambio,
+
+      enDolaresManual: definicion_CTX_IN_ALMACEN.enDolaresManual,
+      tipoCambioManual: definicion_CTX_IN_ALMACEN.tipoCambioManual,
+
       idRemitente: definicion_CTX_IN_ALMACEN.idRemitente,
       codigoTipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad,
       tipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad,
@@ -455,6 +508,10 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       montoSubTotalPEN: definicion_CTX_IN_ALMACEN.montoSubTotalPEN,
       montoIGVPEN: definicion_CTX_IN_ALMACEN.montoIGVPEN,
       montoTotalPEN: definicion_CTX_IN_ALMACEN.montoTotalPEN,
+
+      montoSubTotalUSD: definicion_CTX_IN_ALMACEN.montoSubTotalUSD,
+      montoIGVUSD: definicion_CTX_IN_ALMACEN.montoIGVUSD,
+      montoTotalUSD: definicion_CTX_IN_ALMACEN.montoTotalUSD,
 
       usuario: parametrosGlobales.usuario,
     });
@@ -473,8 +530,10 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 96%, 1112px)',
-        background: `${definicion_CTX_IN_ALMACEN.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : '#eee'}`,
+        width: 'clamp(320px, 100%, 1112px)',
+        background: `${
+          definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : '#eee'
+        }`,
         // width: 'auto',
         padding: '2px',
         // background: '#eee',
@@ -487,7 +546,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           justifyContent: 'end',
         }}
       >
-        {/* <ImgButton
+        <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
@@ -497,7 +556,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
           })}
         />
-        <ImgButton
+        {/*  <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
@@ -618,12 +677,12 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <ElSelect
-                  id={'se_motivoIngreso'}
+                  id="se_motivoIngreso"
                   valorSeleccionado={definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen}
                   registros={losMotivosCargados.value}
-                  registroID={'_id'}
-                  registroTEXT={'motivoIngreso'}
-                  seleccione={'-- Seleccione motivo ingreso --'}
+                  registroID="_id"
+                  registroTEXT="motivoIngreso"
+                  seleccione="-- Seleccione motivo ingreso --"
                   disabled={definicion_CTX_IN_ALMACEN.itemsMercaderias.length === 0 ? false : true}
                   onChange={$(() => {
                     const elSelec = document.getElementById('se_motivoIngreso') as HTMLSelectElement;
@@ -634,7 +693,6 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                       definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen = '';
                     } else {
                       definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen = elSelec.value;
-                      // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                       switch (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen) {
                         case 'ORDEN DE PRODUCCIÓN TERMINADA':
                           // alert('Elegio os');
@@ -670,7 +728,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                           break;
                       }
                       if (definicion_CTX_IN_ALMACEN.enDolares) {
-                        obtenerTipoCambio(document.getElementById('chbx_TipoCambio_IN_ALMACEN') as HTMLInputElement);
+                        // obtenerTipoCambio(document.getElementById('chbx_TipoCambio_IN_ALMACEN') as HTMLInputElement);
                       }
                     }
                   })}
@@ -682,7 +740,6 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 />
               </div>
             </div>
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
             <br />
           </div>
           {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenProduccionTerminado && (
@@ -947,68 +1004,79 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
         </div>
         {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
         <div>
-          <div class="form-control">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '4px' }}>
-              <input
-                type="checkbox"
-                id="chbx_TipoCambio_IN_ALMACEN"
-                // value={definicion_CTX_IN_ALMACEN.enDolares}
-                onClick$={(e) => {
-                  if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen === 'APERTURA DE INVENTARIO') {
-                    obtenerTipoCambio(e.target as HTMLInputElement);
-                  } else {
-                    if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length === 0) {
-                      alert('Debe ingresar el documento adjunto de la cual se tomara la fecha de referencia para el calculo del tipo de cambio');
-                      (e.target as HTMLInputElement).checked = false;
-                      return;
-                    }
-                    // if (definicion_CTX_IN_ALMACEN.FISMA === '') {
-                    //   alert('Ingrese la fecha para esta venta');
-                    //   (e.target as HTMLInputElement).checked = false;
-                    //   document.getElementById('in_Fecha_Para_Venta')?.focus();
-                    //   return;
-                    // }
-                    obtenerTipoCambio(e.target as HTMLInputElement);
-                  }
-                }}
-              />
-              <label for="chbx_TipoCambio_IN_ALMACEN" style={{ marginRight: '4px' }}>
-                USD
-              </label>
-              {/*    <strong
-                  style={{ fontSize: '0.9rem', fontWeight: '400', cursor: 'pointer' }}
-                  onClick$={() => {
-                    if ((document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked === false) {
-                      if (definicion_CTX_F_B_NC_ND.fecha === '') {
-                        alert('Ingrese la fecha para esta venta');
-                        (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
-                        document.getElementById('in_Fecha_Para_Venta')?.focus();
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr  1fr', gap: '4px' }}>
+            {/* Tipo Cambio    SUNAT */}
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div>
+                <input
+                  type="checkbox"
+                  checked={definicion_CTX_IN_ALMACEN.enDolares}
+                  id="chbx_TipoCambio_IN_ALMACEN"
+                  onClick$={(e) => {
+                    console.log('click en chbx_TipoCambio_IN_ALMACEN');
+                    if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen === 'APERTURA DE INVENTARIO') {
+                      obtenerTipoCambio(e.target as HTMLInputElement);
+                    } else {
+                      if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length === 0) {
+                        alert('Debe ingresar el documento adjunto de la cual se tomara la fecha de referencia para el calculo del tipo de cambio');
+                        (e.target as HTMLInputElement).checked = false;
                         return;
                       }
-                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = true;
-                    } else {
-                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
+                      obtenerTipoCambio(e.target as HTMLInputElement);
                     }
-                    obtenerTipoCambio(document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement);
                   }}
-                > 
-                  USD
-                </strong> */}
+                />
+                <label for="chbx_TipoCambio_IN_ALMACEN" style={{ marginRight: '4px' }}>
+                  USD SUNAT
+                </label>
+              </div>
+              <div>
+                <input
+                  id="inputTipoCambio_IN_ALMACEN"
+                  type="text"
+                  value={
+                    definicion_CTX_IN_ALMACEN.tipoCambio.toString() +
+                    '  ' +
+                    (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length > 0
+                      ? '(' + formatoDDMMYYYY_PEN(definicion_CTX_IN_ALMACEN.documentosAdjuntos[0].fecha) + ')'
+                      : '')
+                  }
+                  disabled
+                  style={{ width: '100%' }}
+                />
+              </div>
             </div>
-            <div class="form-control form-agrupado">
-              <input
-                id="inputTipoCambio_IN_ALMACEN"
-                type="text"
-                value={
-                  definicion_CTX_IN_ALMACEN.tipoCambio.toString() +
-                  '  ' +
-                  (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length > 0
-                    ? '(' + formatoDDMMYYYY_PEN(definicion_CTX_IN_ALMACEN.documentosAdjuntos[0].fecha) + ')'
-                    : '')
-                }
-                disabled
-                style={{ width: '100%' }}
-              />
+            {/* Tipo Cambio    MANUAL */}
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div>
+                <input
+                  type="checkbox"
+                  checked={definicion_CTX_IN_ALMACEN.enDolaresManual}
+                  id="chbx_TipoCambio_MANUAL_IN_ALMACEN"
+                  onClick$={(e) => {
+                    console.log('click en chbx_TipoCambio_MANUAL_IN_ALMACEN');
+
+                    obtenerTipoCambioManual(e.target as HTMLInputElement);
+                  }}
+                />
+                <label for="chbx_TipoCambio_MANUAL_IN_ALMACEN" style={{ marginRight: '4px' }}>
+                  USD MANUAL
+                </label>
+              </div>
+              <div>
+                <input
+                  id="inputTipoCambio_MANUAL_IN_ALMACEN"
+                  type="number"
+                  style={{ width: '100%' }}
+                  disabled
+                  // disabled={!definicion_CTX_IN_ALMACEN.enDolaresManual}
+                  value={definicion_CTX_IN_ALMACEN.tipoCambioManual}
+                  onChange$={(e) => {
+                    definicion_CTX_IN_ALMACEN.tipoCambioManual = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                  }}
+                  // style={{ width: 'inherit' }}
+                />
+              </div>
             </div>
           </div>
           <br />
@@ -1038,6 +1106,19 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                       document.getElementById('se_motivoIngreso')?.focus();
                       return;
                     }
+                    console.log('definicion_CTX_IN_ALMACEN.enDolaresManual =', definicion_CTX_IN_ALMACEN.enDolaresManual);
+                    if (definicion_CTX_IN_ALMACEN.enDolaresManual) {
+                      console.log(
+                        'definicion_CTX_IN_ALMACEN.enDolaresManual => definicion_CTX_IN_ALMACEN.tipoCambioManual',
+                        definicion_CTX_IN_ALMACEN.tipoCambioManual
+                      );
+
+                      if (definicion_CTX_IN_ALMACEN.tipoCambioManual === 0) {
+                        alert('Ingrese el tipo de cambio manual.');
+                        document.getElementById('inputTipoCambio_MANUAL_IN_ALMACEN')?.focus();
+                        return;
+                      }
+                    }
                     definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarMercaderiaIN = true;
                   })}
                 />
@@ -1050,8 +1131,14 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 <BuscarMercaderiaIN
                   contexto="new_in_almacen"
                   esAlmacen={true}
-                  enDolares={definicion_CTX_IN_ALMACEN.enDolares}
-                  tipoCambio={definicion_CTX_IN_ALMACEN.tipoCambio}
+                  enDolares={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual}
+                  tipoCambio={
+                    definicion_CTX_IN_ALMACEN.enDolares
+                      ? definicion_CTX_IN_ALMACEN.tipoCambio
+                      : definicion_CTX_IN_ALMACEN.enDolaresManual
+                      ? definicion_CTX_IN_ALMACEN.tipoCambioManual
+                      : ''
+                  }
                   igv={definicion_CTX_IN_ALMACEN.elIgv}
                   motivo={definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen}
                 />
@@ -1069,10 +1156,10 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     <th>IGV</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
-                    <th>{definicion_CTX_IN_ALMACEN.enDolares ? 'CostoUniUSD' : 'CostoUniPEN'}</th>
-                    <th>{definicion_CTX_IN_ALMACEN.enDolares ? 'SubUSD' : 'SubPEN'}</th>
-                    <th>{definicion_CTX_IN_ALMACEN.enDolares ? 'ValorUniUSD' : 'ValorUniPEN'}</th>
-                    <th>{definicion_CTX_IN_ALMACEN.enDolares ? 'TotUSD' : 'TotPEN'}</th>
+                    <th>{definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'CostoUniUSD' : 'CostoUniPEN'}</th>
+                    <th>{definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'SubUSD' : 'SubPEN'}</th>
+                    <th>{definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'ValorUniUSD' : 'ValorUniPEN'}</th>
+                    <th>{definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'TotUSD' : 'TotPEN'}</th>
                     {definicion_CTX_IN_ALMACEN._id === '' ? <th>Acc</th> : ''}
                   </tr>
                 </thead>
@@ -1136,7 +1223,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                               !definicion_CTX_IN_ALMACEN.reingreso
                                 ? (iTMercaIN.cantidadIngresada = parseFloat((e.target as HTMLInputElement).value))
                                 : (iTMercaIN.cantidadIngresadaEquivalencia = parseFloat((e.target as HTMLInputElement).value));
-                              if (definicion_CTX_IN_ALMACEN.enDolares) {
+                              if (definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual) {
                                 console.log('cantidad 💚💚💚💚💚');
 
                                 ///  USD///
@@ -1179,13 +1266,16 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         <td data-label="Uni" class="comoNumero">
                           {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.unidad : iTMercaIN.unidadEquivalencia}
                         </td>
-                        <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'CostoUniUSD' : 'CostoUniPEN'} class="comoNumero">
+                        <td
+                          data-label={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'CostoUniUSD' : 'CostoUniPEN'}
+                          class="comoNumero"
+                        >
                           <input
                             type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
                             style={{ width: '70px', textAlign: 'end' }}
                             value={
-                              definicion_CTX_IN_ALMACEN.enDolares
+                              definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                                 ? formatear_6Decimales(
                                     !definicion_CTX_IN_ALMACEN.reingreso
                                       ? iTMercaIN.costoUnitarioUSD.$numberDecimal
@@ -1210,7 +1300,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
 
                               let IGVCalculado;
                               let precio;
-                              if (definicion_CTX_IN_ALMACEN.enDolares) {
+                              if (definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual) {
                                 //******  USD
                                 iTMercaIN.costoUnitarioUSD = costo;
 
@@ -1285,8 +1375,11 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                             }}
                           />
                         </td>
-                        <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'SubUSD' : 'SubPEN'} class="comoNumero">
-                          {definicion_CTX_IN_ALMACEN.enDolares
+                        <td
+                          data-label={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'SubUSD' : 'SubPEN'}
+                          class="comoNumero"
+                        >
+                          {definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                             ? !definicion_CTX_IN_ALMACEN.reingreso
                               ? iTMercaIN.subUSD.$numberDecimal
                                 ? formatear_6Decimales(iTMercaIN.subUSD.$numberDecimal)
@@ -1302,13 +1395,16 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                             ? formatear_6Decimales(iTMercaIN.subEquivalenciaPEN.$numberDecimal)
                             : formatear_6Decimales(iTMercaIN.subEquivalenciaPEN)}
                         </td>
-                        <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'ValorUniUSD' : 'ValorUniPEN'} class="comoNumero">
+                        <td
+                          data-label={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'ValorUniUSD' : 'ValorUniPEN'}
+                          class="comoNumero"
+                        >
                           <input
                             type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
                             style={{ width: '90px', textAlign: 'end' }}
                             value={
-                              definicion_CTX_IN_ALMACEN.enDolares
+                              definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                                 ? formatear_6Decimales(
                                     !definicion_CTX_IN_ALMACEN.reingreso
                                       ? iTMercaIN.valorUnitarioUSD.$numberDecimal
@@ -1334,7 +1430,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                               let IGVCalculado;
                               let costo;
 
-                              if (definicion_CTX_IN_ALMACEN.enDolares) {
+                              if (definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual) {
                                 //******* USD *****
                                 console.log('💚💚💚💚💚');
                                 iTMercaIN.valorUnitarioUSD = precio;
@@ -1388,8 +1484,11 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                             }}
                           />
                         </td>
-                        <td data-label={definicion_CTX_IN_ALMACEN.enDolares ? 'TotUSD' : 'TotPEN'} style={{ textAlign: 'end' }}>
-                          {definicion_CTX_IN_ALMACEN.enDolares
+                        <td
+                          data-label={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'TotUSD' : 'TotPEN'}
+                          style={{ textAlign: 'end' }}
+                        >
+                          {definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                             ? !definicion_CTX_IN_ALMACEN.reingreso
                               ? iTMercaIN.totUSD.$numberDecimal
                                 ? formatear_6Decimales(iTMercaIN.totUSD.$numberDecimal)
@@ -1452,7 +1551,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     <td colSpan={8} style={{ textAlign: 'end' }}></td>
                     <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                       {`${
-                        definicion_CTX_IN_ALMACEN.enDolares
+                        definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                           ? suma_SubUSD.toLocaleString('en-US', {
                               // style: 'currency',
                               // currency: 'USD',
@@ -1467,7 +1566,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     </td>
                     <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                       {`${
-                        definicion_CTX_IN_ALMACEN.enDolares
+                        definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                           ? suma_IGVUSD.toLocaleString('en-PE', {
                               // style: 'currency',
                               // currency: 'USD',
@@ -1482,7 +1581,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     </td>
                     <td colSpan={1} class="comoNumero" style={{ color: '#2E1800' }}>
                       {`${
-                        definicion_CTX_IN_ALMACEN.enDolares
+                        definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                           ? suma_TotUSD.toLocaleString('en-PE', {
                               // style: 'currency',
                               // currency: 'USD',
@@ -1502,10 +1601,10 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                       Sub Total
                     </td>
                     <td colSpan={1} style={{ textAlign: 'end', color: '#2E1800' }}>
-                      IGV {definicion_CTX_IN_ALMACEN.enDolares ? 'USD' : 'PEN'}
+                      IGV {definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'USD' : 'PEN'}
                     </td>
                     <td colSpan={1} style={{ textAlign: 'end', color: '#2E1800' }}>
-                      Total {definicion_CTX_IN_ALMACEN.enDolares ? 'USD' : 'PEN'}
+                      Total {definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'USD' : 'PEN'}
                     </td>
                   </tr>
                 </tfoot>
