@@ -128,9 +128,10 @@ export default component$(
     return (
       <div
         style={{
-          width: 'clamp(330px, 86%, 416px)',
+          width: 'clamp(320px, 100%, 416px)',
           // width: 'auto',
-          border: '3px solid red',
+          background: `${props.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #dddddd 100%)' : '#eeeeee'}`,
+          border: '1px solid red',
           padding: '2px',
         }}
         class="container-modal"

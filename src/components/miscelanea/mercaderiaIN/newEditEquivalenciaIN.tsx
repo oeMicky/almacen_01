@@ -201,7 +201,6 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
       {/* TITULO */}
       <h3>Registro de equivalencia</h3>
       {/* FORMULARIO */}
-
       <div class="add-form">
         {/* ENCABEZADO */}
         <div>
@@ -383,6 +382,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
               {props.unidadIN}
             </div>
           </div>
+          <br />
         </div>
 
         {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción*/}
