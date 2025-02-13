@@ -815,6 +815,18 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     obtenerMarcas(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                   }
                 }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    // console.log('💥💥💥💥💥 Enter => se_aplicacion_MERCADERIA_IN focus');
+                    (document.getElementById('se_marca_MERCADERIA_IN') as HTMLInputElement).focus();
+                    // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).select();
+                    // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).style.border = '1px solid red';
+                    // document.getElementById('se_aplicacion_MERCADERIA_IN')?.focus();
+                  }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('tipoDocumentoIdentidad')?.focus();
+                  // }
+                }}
               >
                 <option value="">-- Seleccione linea / tipo --</option>
                 {lasLineasTipos.value.map((linTip: any) => {
@@ -888,6 +900,18 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     definicion_CTX_MERCADERIA_IN.marca = elSelect.value;
                     //obtenerModelosVehiculares();
                   }
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    // console.log('💥💥💥💥💥 Enter => se_aplicacion_MERCADERIA_IN focus');
+                    (document.getElementById('se_unidad_MERCADERIA_IN') as HTMLInputElement).focus();
+                    // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).select();
+                    // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).style.border = '1px solid red';
+                    // document.getElementById('se_aplicacion_MERCADERIA_IN')?.focus();
+                  }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('tipoDocumentoIdentidad')?.focus();
+                  // }
                 }}
               >
                 <option value="">-- Seleccione marca --</option>
@@ -1003,6 +1027,18 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     definicion_CTX_MERCADERIA_IN.unidad = elSelect.value;
                     //obtenerModelosVehiculares();
                   }
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    // console.log('💥💥💥💥💥 Enter => se_aplicacion_MERCADERIA_IN focus');
+                    (document.getElementById('se_ubigeo_MERCADERIA_IN') as HTMLInputElement).focus();
+                    // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).select();
+                    // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).style.border = '1px solid red';
+                    // document.getElementById('se_aplicacion_MERCADERIA_IN')?.focus();
+                  }
+                  // if (e.key === 'Escape') {
+                  //   document.getElementById('tipoDocumentoIdentidad')?.focus();
+                  // }
                 }}
               >
                 <option value="">-- Seleccione unidad --</option>
@@ -1137,7 +1173,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 }}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    document.getElementById('se_UNSPSC_MERCADERIA_IN')?.focus();
+                    document.getElementById('se_porcentajeUtilidad_MERCADERIA_IN')?.focus();
                   }
                 }}
               />
@@ -1189,6 +1225,11 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                     definicion_CTX_MERCADERIA_IN.porcentajeUtilidad = Number((e.target as HTMLSelectElement).value);
                   }
                 }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('se_stockMinimo_MERCADERIA_IN')?.focus();
+                  }
+                }}
               >
                 <option value="">-- Seleccionar porcentaje utilidad --</option>
                 {losPorcentajesUtilidad.value.map((elem: any) => {
@@ -1220,7 +1261,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 }}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
-                    document.getElementById('in_conLote_MERCADERIA_IN')?.focus();
+                    document.getElementById('btn_add_equivalencia_MERCADERIA_IN')?.focus();
                   }
                 }}
               />
