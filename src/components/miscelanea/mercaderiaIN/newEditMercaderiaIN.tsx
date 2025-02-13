@@ -1559,7 +1559,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
             </div>
           </fieldset>
           <br />
-          {/* EQUIVALENCIAS */}
+          {/* EQUIVALENCIAS  */}
           <div>
             <div
               style={{
@@ -1578,6 +1578,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                   onClick={$(() => {
                     if (definicion_CTX_MERCADERIA_IN.idUnidad === '') {
                       alert('Seleccione la unidad.');
+                      document.getElementById('se_unidad_MERCADERIA_IN')?.focus();
                       return;
                     }
                     insertarEquivalencia.value = true;
