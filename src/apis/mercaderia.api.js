@@ -52,10 +52,37 @@ export const getBuscarMercaderiaPorDescripion = async (parametros) => {
   return res.json();
 };
 
+export const getBuscarMercaderiaPorDescripionTODOS = async (parametros) => {
+  // //console.log('//////api////////////******************get en getBuscarMercaderiaPorDescripionTODOS');
+  // //console.log('parametros getBuscarMercaderiaPorDescripionTODOS', parametros);
+  const res = await fetch(API + '/buscarMercaderiasPorDescripcionTODOS', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
 export const getBuscarMercaderiaPorAplicacion = async (parametros) => {
   // //console.log('//////api////////////******************get en getBuscarMercaderiaPorAplicacion');
   // //console.log('parametros getBuscarMercaderiaPorAplicacion', parametros);
   const res = await fetch(API + '/buscarMercaderiasPorAplicacion', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+    // signal: parametros.signal,
+  });
+  return res.json();
+};
+
+export const getBuscarMercaderiaPorAplicacionTODOS = async (parametros) => {
+  // //console.log('//////api////////////******************get en getBuscarMercaderiaPorAplicacionTODOS');
+  // //console.log('parametros getBuscarMercaderiaPorAplicacionTODOS', parametros);
+  const res = await fetch(API + '/buscarMercaderiasPorAplicacionTODOS', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

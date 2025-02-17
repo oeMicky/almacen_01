@@ -25,6 +25,7 @@ export default component$(
     esProduccion?: boolean;
     verAplicacion: boolean;
     verLineaMarca: boolean;
+    verTODOS: boolean;
   }) => {
     useStyles$(style);
 
@@ -84,28 +85,54 @@ export default component$(
       //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
       if (props.parametrosBusqueda.buscarPor === 'Descripción') {
-        const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
-          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(props.parametrosBusqueda),
-          signal: abortController.signal,
-        });
-        return res.json();
+        if (props.verTODOS) {
+          const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcionTODOS', {
+            // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(props.parametrosBusqueda),
+            signal: abortController.signal,
+          });
+          return res.json();
+        } else {
+          const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
+            // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(props.parametrosBusqueda),
+            signal: abortController.signal,
+          });
+          return res.json();
+        }
       }
       if (props.parametrosBusqueda.buscarPor === 'Aplicación') {
-        const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorAplicacion', {
-          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(props.parametrosBusqueda),
-          signal: abortController.signal,
-        });
-        return res.json();
+        if (props.verTODOS) {
+          const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorAplicacionTODOS', {
+            // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(props.parametrosBusqueda),
+            signal: abortController.signal,
+          });
+          return res.json();
+        } else {
+          const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorAplicacion', {
+            // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(props.parametrosBusqueda),
+            signal: abortController.signal,
+          });
+          return res.json();
+        }
       }
     });
     //#endregion BUSCANDO REGISTROS
@@ -270,7 +297,7 @@ export default component$(
                             {marca}
                           </td>
                           <td data-label="Ubigeo">{ubigeo}</td>
-                          <td data-label="Stock" class="comoNumero">
+                          <td data-label="Stock" class="comoNumero" style={{ color: 'purple' }}>
                             {totalCantidadSaldo.$numberDecimal
                               ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
                               : formatear_6Decimales(totalCantidadSaldo)}

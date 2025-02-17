@@ -17,6 +17,7 @@ export default component$(
     tipoCambio?: any;
     verAplicacion: boolean;
     verLineaMarca: boolean;
+    verTODOS: boolean;
     motivo?: string;
   }) => {
     useStyles$(style);
@@ -53,28 +54,54 @@ export default component$(
       //console.log('parametrosBusqueda', props.parametrosBusqueda);
 
       if (props.parametrosBusqueda.buscarPor === 'Descripción') {
-        const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
-          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(props.parametrosBusqueda),
-          signal: abortController.signal,
-        });
-        return res.json();
+        if (props.verTODOS) {
+          const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcionTODOS', {
+            // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(props.parametrosBusqueda),
+            signal: abortController.signal,
+          });
+          return res.json();
+        } else {
+          const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
+            // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(props.parametrosBusqueda),
+            signal: abortController.signal,
+          });
+          return res.json();
+        }
       }
       if (props.parametrosBusqueda.buscarPor === 'Aplicación') {
-        const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorAplicacion', {
-          // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(props.parametrosBusqueda),
-          signal: abortController.signal,
-        });
-        return res.json();
+        if (props.verTODOS) {
+          const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorAplicacionTODOS', {
+            // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(props.parametrosBusqueda),
+            signal: abortController.signal,
+          });
+          return res.json();
+        } else {
+          const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorAplicacion', {
+            // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(props.parametrosBusqueda),
+            signal: abortController.signal,
+          });
+          return res.json();
+        }
       }
     });
     //#endregion BUSCANDO REGISTROS

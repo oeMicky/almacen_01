@@ -44,6 +44,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
   const buscarMercaderiasIN = useSignal(0);
   const verAplicacion = useSignal(false);
   const verLineaMarca = useSignal(true);
+  const verTODOS = useSignal(true);
 
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -352,6 +353,7 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
               esAlmacen={true} //{props.esAlmacen}
               verAplicacion={verAplicacion.value}
               verLineaMarca={verLineaMarca.value}
+              verTODOS={verTODOS.value}
               motivo={props.motivo}
               //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
               //   parametrosBusqueda={parametrosBusqueda}

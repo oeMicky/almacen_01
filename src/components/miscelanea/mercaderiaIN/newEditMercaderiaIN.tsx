@@ -526,6 +526,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       // totalCantidadSaldo: props.mercaSeleccio.totalCantidadSaldo ? props.mercaSeleccio.totalCantidadSaldo : '',
       // costoPEN: props.mercaSeleccio.costoPEN ? props.mercaSeleccio.costoPEN : 0,
       // precioUnitarioPEN: props.mercaSeleccio.precioUnitarioPEN ? props.mercaSeleccio.precioUnitarioPEN : 0,
+      usuario: parametrosGlobales.usuario,
     });
 
     //console.log('merca', merca);

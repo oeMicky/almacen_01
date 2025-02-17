@@ -65,6 +65,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
   //#region INICIALIZACION
   const verAplicacion = useSignal(false);
   const verLineaMarca = useSignal(false);
+  const verTODOS = useSignal(true);
   const buscarMercaderiasIN = useSignal(0);
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
@@ -285,9 +286,25 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
                 //   }
                 // }}
               />
-              <label for="in_verLineaMarca_BUSCAR_MERCADERIA_IN">Ver Linea / Marca</label>
+              <label for="in_verLineaMarca_BUSCAR_MERCADERIA_IN" style={{ marginRight: '16px' }}>
+                Ver Linea / Marca
+              </label>
+            </div>
+            <div>
+              <input
+                id="in_verTODOS_BUSCAR_MERCADERIA_IN"
+                type="checkbox"
+                placeholder="Ver TODOS"
+                checked={verTODOS.value}
+                onChange$={(e) => {
+                  verTODOS.value = (e.target as HTMLInputElement).checked;
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+              />
+              <label for="in_verTODOS_BUSCAR_MERCADERIA_IN">Ver TODOS</label>
             </div>
           </div>
+          {/* Leyenda */}
           <div style={{ marginTop: '8px', display: 'flex' }}>
             <label style={{ marginRight: '8px' }}>Leyenda:</label>
             <label style={{ background: '#272727', color: 'white', marginRight: '8px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
@@ -307,6 +324,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
               tipoCambio={props.tipoCambio}
               verAplicacion={verAplicacion.value}
               verLineaMarca={verLineaMarca.value}
+              verTODOS={verTODOS.value}
               motivo={props.motivo}
               //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
               //   parametrosBusqueda={parametrosBusqueda}

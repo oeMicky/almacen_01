@@ -13,7 +13,12 @@ import KardexsOUT from './kardexsOUT';
 import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
 import { CTX_ADD_NOTA_VENTA, CTX_NOTA_VENTA } from '~/components/notaVenta/addNotaVenta';
-import { getBuscarMercaderiaPorAplicacion, getBuscarMercaderiaPorDescripion } from '~/apis/mercaderia.api';
+import {
+  getBuscarMercaderiaPorAplicacion,
+  getBuscarMercaderiaPorAplicacionTODOS,
+  getBuscarMercaderiaPorDescripion,
+  getBuscarMercaderiaPorDescripionTODOS,
+} from '~/apis/mercaderia.api';
 import Spinner from '~/components/system/spinner';
 import { elIdAuxiliar } from '~/functions/comunes';
 import NewEditMercaderiaIN from '../mercaderiaIN/newEditMercaderiaIN';
@@ -78,6 +83,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
   const hallado = useSignal(true);
   const verAplicacion = useSignal(false);
   const verLineaMarca = useSignal(false);
+  const verTODOS = useSignal(false);
   const buscarMercaderiasOUT = useSignal(0);
   const mostrarSpinner = useSignal(false);
 
@@ -158,12 +164,28 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     mostrarSpinner.value = true;
     let lasMercaderiasOUT: any;
     if (parametrosBusqueda.buscarPor === 'Descripción') {
-      lasMercaderiasOUT = await getBuscarMercaderiaPorDescripion(parametrosBusqueda);
-      lasMercaderiasOUT = lasMercaderiasOUT.data;
+      console.log('lasMercaderiasOUT Descripción');
+      if (verTODOS.value) {
+        console.log('lasMercaderiasOUT Descripción', verTODOS.value);
+        lasMercaderiasOUT = await getBuscarMercaderiaPorDescripionTODOS(parametrosBusqueda);
+        lasMercaderiasOUT = lasMercaderiasOUT.data;
+      } else {
+        console.log('lasMercaderiasOUT Descripción', verTODOS.value);
+        lasMercaderiasOUT = await getBuscarMercaderiaPorDescripion(parametrosBusqueda);
+        lasMercaderiasOUT = lasMercaderiasOUT.data;
+      }
     }
     if (parametrosBusqueda.buscarPor === 'Aplicación') {
-      lasMercaderiasOUT = await getBuscarMercaderiaPorAplicacion(parametrosBusqueda);
-      lasMercaderiasOUT = lasMercaderiasOUT.data;
+      console.log('lasMercaderiasOUT Aplicación');
+      if (verTODOS.value) {
+        console.log('lasMercaderiasOUT Aplicación', verTODOS.value);
+        lasMercaderiasOUT = await getBuscarMercaderiaPorAplicacionTODOS(parametrosBusqueda);
+        lasMercaderiasOUT = lasMercaderiasOUT.data;
+      } else {
+        console.log('lasMercaderiasOUT Aplicación', verTODOS.value);
+        lasMercaderiasOUT = await getBuscarMercaderiaPorAplicacion(parametrosBusqueda);
+        lasMercaderiasOUT = lasMercaderiasOUT.data;
+      }
     }
     // console.log('lasMercaderiasOUT _EnAUTOMATICO', lasMercaderiasOUT);
     // console.log('lasMercaderiasOUT _EnAUTOMATICO SUSCRIBIENTO AL PANEL');
@@ -403,48 +425,6 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
   });
   //#endregion BUSCAR MERCADERIAS OUT _EnAUTOMATICO
 
-  //#region BUSCAR MERCADERIAS OUT _EnAUTOMATICO
-  // const lasMercaderiasOUT = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-  //   track(() => buscarMercaderiasOUT_EnAUTOMATICO.value);
-
-  //   const abortController = new AbortController();
-  //   cleanup(() => abortController.abort('cleanup'));
-
-  //   //console.log('parametrosBusqueda', props.parametrosBusqueda);
-
-  //   if (parametrosBusqueda.buscarPor === 'Descripción') {
-  //     const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
-  //       // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(parametrosBusqueda),
-  //       signal: abortController.signal,
-  //     });
-  //     return res.json();
-  //   }
-  //   if (parametrosBusqueda.buscarPor === 'Aplicación') {
-  //     const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorAplicacion', {
-  //       // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(parametrosBusqueda),
-  //       signal: abortController.signal,
-  //     });
-  //     return res.json();
-  //   }
-  // });
-  //#endregion BUSCAR MERCADERIAS OUT _EnAUTOMATICO
-
-  //#region USO AUTO
-  // const publicarMOV = $(()=>{
-
-  // })
-  //#endregion USO AUTO
-
   return (
     <div
       id="modal_BuscarMercaderiaOUT"
@@ -644,7 +624,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 //   }
                 // }}
               />
-              <label for="in_Aplicacion_MICE">Aplicación</label>
+              <label for="in_Aplicacion_MICE">Buscar en Aplicación</label>
             </div>
             <div style={{ marginRight: '12px' }}>
               <input
@@ -669,7 +649,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               />
               <label for="in_VerAplicacion_MICE">Ver aplicación</label>
             </div>
-            <div>
+            <div style={{ marginRight: '12px' }}>
               <input
                 id="in_VerLineaMarca_MICE"
                 type="checkbox"
@@ -677,22 +657,23 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 onChange$={(e) => {
                   verLineaMarca.value = (e.target as HTMLInputElement).checked;
                 }}
-                // value={parametrosBusqueda.cadenaABuscar}
-                // onInput$={(e) => {
-                //   parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
-                // }}
-                // onFocusin$={(e) => {
-                //   (e.target as HTMLInputElement).select();
-                // }}
-                // onKeyPress$={(e) => {
-                //   if (e.key === 'Enter') {
-                //     localizarMercaderiasOUT();
-                //   }
-                // }}
               />
               <label for="in_VerLineaMarca_MICE">Ver linea / marca</label>
             </div>
+            <div>
+              <input
+                id="in_VerTODOS_MICE"
+                type="checkbox"
+                placeholder="Ver todos los articulos"
+                checked={verTODOS.value}
+                onChange$={(e) => {
+                  verTODOS.value = (e.target as HTMLInputElement).checked;
+                }}
+              />
+              <label for="in_VerTODOS_MICE">Ver TODOS</label>
+            </div>
           </div>
+          {/* Leyenda */}
           <div style={{ marginTop: '6px', display: 'flex' }}>
             <label style={{ marginRight: '8px' }}>Leyenda:</label>
             <label style={{ background: '#272727', color: 'white', marginRight: '8px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
@@ -711,6 +692,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               esProduccion={props.esProduccion}
               verAplicacion={verAplicacion.value}
               verLineaMarca={verLineaMarca.value}
+              verTODOS={verTODOS.value}
               // contexto={'buscar_mercaderia_out'}
               // contextoParaDocumento={props.contexto}
               //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
