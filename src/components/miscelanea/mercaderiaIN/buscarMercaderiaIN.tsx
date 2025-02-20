@@ -298,6 +298,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; enDola
                 checked={verTODOS.value}
                 onChange$={(e) => {
                   verTODOS.value = (e.target as HTMLInputElement).checked;
+                  document.getElementById('in_codigoDescripcion_BUSCAR_MERCADERIA_IN')?.focus();
                 }}
                 // value={parametrosBusqueda.cadenaABuscar}
               />

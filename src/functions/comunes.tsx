@@ -146,9 +146,11 @@ export const formatear_4Decimales = (num: any) => {
 };
 
 export const formatear_6Decimales = (num: any) => {
+  // console.log('GENESIS 0 formatear_6Decimales', num);
+
   let m = Number((Math.abs(num) * 1000000).toPrecision(15));
   m = (Math.round(m) / 1000000) * Math.sign(num);
-
+  // console.log('GENESIS 1 formatear_6Decimales', m);
   return m;
   // return m.toLocaleString('en-PE', {
   //   // style: 'currency',

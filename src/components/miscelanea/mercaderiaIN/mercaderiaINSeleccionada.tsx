@@ -557,6 +557,8 @@ export default component$(
                   porcentajeUtilidad: props.mercaINSelecci.porcentajeUtilidad,
                 });
               } else {
+                console.log('💥💥💥💥💥💥', cantidad.value * costo.value);
+
                 documentoItems.push({
                   idAuxiliar: parseInt(elIdAuxiliar()),
                   idMercaderia: props.mercaINSelecci._id,

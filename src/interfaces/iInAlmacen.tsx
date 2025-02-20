@@ -40,6 +40,11 @@ export interface IIngresoAAlmacen {
   // periodoContable: number;
 
   // igv: number;
+  documentosAdjuntos: any;
+
+  conIGV: boolean;
+  porMontoUnitario: boolean;
+  itemsMercaderias: any;
 
   montoSubTotalPEN: any;
   montoIGVPEN: any;
@@ -48,9 +53,6 @@ export interface IIngresoAAlmacen {
   montoSubTotalUSD: any;
   montoIGVUSD: any;
   montoTotalUSD: any;
-
-  documentosAdjuntos: any;
-  itemsMercaderias: any;
 
   usuarioCrea: string;
   creado: string;
