@@ -3,6 +3,7 @@ import ImgButton from '../../system/imgButton';
 import { images } from '~/assets';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 import { upPrecioPublicoPEN } from '~/apis/mercaderia.api';
+import { parametrosGlobales } from '~/routes/login';
 // import { parametrosGlobales } from '~/routes/login';
 
 export default component$((props: { idMercaderia: any; descripcion: string; pUtilidad: any }) => {
@@ -11,7 +12,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
   //#endregion CONTEXTO
 
   //#region INICIALIZACION DE VARIABLES
-  const costoUnitario = useSignal(0);
+  const costoUnitarioMasIGV = useSignal(0);
   const precioPublicoCalculado = useSignal(0);
   const precioPublico = useSignal(0);
   const fechaActual = new Date();
@@ -19,8 +20,8 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
 
   //#region GRABAR PRECIO PUBLICO
   const grabarPrecioPublico = $(async () => {
-    if (costoUnitario.value.toString().trim() === '' || costoUnitario.value === 0) {
-      alert('Ingrese el Costo Unitario PEN');
+    if (costoUnitarioMasIGV.value.toString().trim() === '' || costoUnitarioMasIGV.value === 0) {
+      alert('Ingrese el Costo Unitario PEN + IGV');
       document.getElementById('in_Costo_Unitario')?.focus();
       return;
     }
@@ -31,16 +32,18 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
     }
     console.log('grabarPrecioPublico', props.idMercaderia);
     console.log('fechaActual', fechaActual);
-    console.log('costoUnitario', costoUnitario.value);
+    console.log('costoUnitarioMasIGV', costoUnitarioMasIGV.value);
     console.log('precioPublicoCalculado', precioPublicoCalculado.value);
     console.log('precioPublico', precioPublico.value);
     try {
       const precioP = upPrecioPublicoPEN({
         idMercaderia: props.idMercaderia,
         fechaPrecioUnitario: fechaActual,
-        costoUnitarioPEN: costoUnitario.value,
+        costoUnitarioPENMasIGV: costoUnitarioMasIGV.value,
         precioUnitarioCalculadoPEN: precioPublicoCalculado.value,
         precioUnitarioPEN: precioPublico.value,
+
+        usuario: parametrosGlobales.usuario,
       });
 
       console.log('precioP', precioP);
@@ -92,7 +95,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
         <div>
           <div class="linea-formulario" style={{ marginBottom: '8px' }}>
             <label>Porcentaje Utilidad</label>
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
               <input
                 id="in_Porcentaje_Utilidad"
                 type="number"
@@ -112,17 +115,17 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
             </div>
           </div>
           <div class="linea-formulario" style={{ marginBottom: '8px' }}>
-            <label>Costo Unitario PEN</label>
+            <label>Costo Unitario PEN + IGV </label>
             <input
               id="in_Costo_Unitario"
               type="number"
               autoFocus={true}
-              placeholder="Costo Unitario PEN"
+              placeholder="Costo Unitario PEN + IGV"
               // class="input-formulario-usuario"
-              value={costoUnitario.value}
+              value={costoUnitarioMasIGV.value}
               onFocus$={(e) => (e.target as HTMLInputElement).select()}
               onChange$={(e) => {
-                costoUnitario.value = Number((e.target as HTMLInputElement).value);
+                costoUnitarioMasIGV.value = Number((e.target as HTMLInputElement).value);
                 precioPublicoCalculado.value = Number((e.target as HTMLInputElement).value) * (1 + props.pUtilidad / 100);
               }}
               onKeyPress$={(e) => {

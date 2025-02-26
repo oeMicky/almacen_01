@@ -77,3 +77,16 @@ export const getEgresoDeAlmacen = async (parametros) => {
   });
   return res.json();
 };
+
+export const getSerieNotaSalidaDeSucursal = async (parametros) => {
+  console.log('//////api////////////****************** en getSerieNotaSalidaDeSucursal');
+  console.log('parametros getSerieNotaSalidaDeSucursal', parametros);
+  const res = await fetch(API + '/obtenerSerieNotaSalidaDeSucursal', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

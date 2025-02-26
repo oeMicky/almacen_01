@@ -12,7 +12,7 @@ import Spinner from '~/components/system/spinner';
 import { parametrosGlobales } from '~/routes/login';
 
 import { getIgvVenta } from '~/apis/venta.api';
-import { existeMotivoNS } from '~/apis/egresosDeAlmacen.api';
+import { existeMotivoNS, getSerieNotaSalidaDeSucursal } from '~/apis/egresosDeAlmacen.api';
 import { cerosALaIzquierda, hoy } from '~/functions/comunes';
 import VerOutAlmacen from '~/components/outAlmacen/verOutAlmacen';
 
@@ -161,7 +161,7 @@ export default component$(() => {
               // //console.log('buscarCotizaciones.value', buscarCotizaciones.value);
             })}
             // onClick={buscarCotizacionesEntreFechas}
-          />
+          />   background: '#222', color: 'white', borderRadius: '5px'
         </div>
       </div> */}
       {/* ADD EGRESO DE MERCADERIAS */}
@@ -169,6 +169,7 @@ export default component$(() => {
         <ElButton
           name="ADD EGRESO DE MERCADERÍAS"
           title="Add un nuevo egreso de mercaderías"
+          class={'btn-out'}
           style={{ cursor: 'pointer', marginLeft: '5px' }}
           onClick={$(async () => {
             if (parametrosGlobales.idGrupoEmpresarial === '') {
@@ -176,6 +177,26 @@ export default component$(() => {
               alert('Faltan datos... vuelva a logearse..');
               navegarA('/login');
               return;
+            }
+            //VERIFICAR SI EXISTE LA SERIE DE LA NOTA DE SALIDA
+            if (parametrosGlobales.idSerieNotaSalida === '') {
+              //buscar la serie (SI EXISTE)
+              let laSerie = await getSerieNotaSalidaDeSucursal({
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idEmpresa: parametrosGlobales.idEmpresa,
+                idSucursal: parametrosGlobales.idSucursal,
+              });
+              console.log('🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
+              laSerie = laSerie.data[0];
+              console.log('🚕🚕🚕🚕🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
+
+              if (typeof laSerie !== 'undefined' && laSerie.idSerieNotaSalida !== '') {
+                parametrosGlobales.idSerieNotaSalida = laSerie.idSerieNotaSalida;
+                parametrosGlobales.serieNotaSalida = laSerie.serie;
+              } else {
+                alert('No existe la serie de la Nota de Salida.');
+                return;
+              }
             }
             //ANALISIS MOTIVO SALIDA ALMACEN: NOTA DE SALIDA
             if (typeof parametrosGlobales.idMotivosSalidaDelAlmacen_NS === 'undefined' || parametrosGlobales.idMotivosSalidaDelAlmacen_NS === '') {

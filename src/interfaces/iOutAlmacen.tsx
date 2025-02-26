@@ -17,6 +17,9 @@ export interface IEgresoDeAlmacen {
 
   idSerieNotaSalida: string;
   serie: string;
+
+  observacion: string;
+
   // numero: number;
   FISMA: string;
   igv: any;

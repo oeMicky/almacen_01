@@ -114,6 +114,8 @@ export default component$(() => {
                         parametrosGlobales.distrito = sucur.distrito;
                         parametrosGlobales.ubigeo = sucur.ubigeo;
 
+                        parametrosGlobales.actualizarPrecioPublico = sucur.actualizarPrecioPublico;
+
                         parametrosGlobales.editarTipoCambioManual = sucur.editarTipoCambioManual;
                         parametrosGlobales.tipoCambioManual = activo[0].tipoCambioManual ? activo[0].tipoCambioManual.$numberDecimal : 0;
 

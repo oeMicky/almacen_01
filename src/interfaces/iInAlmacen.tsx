@@ -15,7 +15,12 @@ export interface IIngresoAAlmacen {
   motivoIngresoAlmacen: string;
   idDocumento: string;
 
-  // serie: string;
+  idSerieNotaIngreso: string;
+  serie: string;
+
+  observacion: string;
+
+  //
   // numero: number;
   FISMA: string;
   reingreso: boolean;

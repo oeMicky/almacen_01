@@ -98,6 +98,11 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       motivoIngresoAlmacen: props.inSelecci.motivoIngresoAlmacen ? props.inSelecci.motivoIngresoAlmacen : '',
       idDocumento: props.inSelecci.idDocumento ? props.inSelecci.idDocumento : '',
 
+      idSerieNotaIngreso: props.inSelecci.idSerieNotaIngreso ? props.inSelecci.idSerieNotaIngreso : parametrosGlobales.idSerieNotaIngreso,
+      serie: props.inSelecci.serie ? props.inSelecci.serie : parametrosGlobales.serieNotaIngreso,
+
+      observacion: props.inSelecci.observacion ? props.inSelecci.observacion : '',
+
       // serie: props.inSelecci.serie ? props.inSelecci.serie : '',
       // numero: props.inSelecci.numero ? props.inSelecci.numero : 0,
       FISMA: props.inSelecci.FISMA ? props.inSelecci.FISMA.substring(0, 10) : hoy(),
@@ -482,6 +487,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       motivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen,
       idDocumento: definicion_CTX_IN_ALMACEN.idDocumento,
 
+      idSerieNotaIngreso: definicion_CTX_IN_ALMACEN.idSerieNotaIngreso,
+      serie: definicion_CTX_IN_ALMACEN.serie,
+
       // serie: definicion_CTX_IN_ALMACEN.serie,
       // numero: definicion_CTX_IN_ALMACEN.numero,
       FISMA: definicion_CTX_IN_ALMACEN.FISMA,
@@ -504,6 +512,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       tipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad,
       numeroIdentidad: definicion_CTX_IN_ALMACEN.numeroIdentidad,
       razonSocialNombre: definicion_CTX_IN_ALMACEN.razonSocialNombre,
+
+      observacion: definicion_CTX_IN_ALMACEN.observacion,
 
       documentosAdjuntos: definicion_CTX_IN_ALMACEN.documentosAdjuntos,
 
@@ -557,11 +567,22 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           alt="Icono de cerrar"
           height={16}
           width={16}
-          title="Cerrar el formulario"
+          title="Ver el definicion_CTX_IN_ALMACEN"
           onClick={$(() => {
             console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
           })}
         />
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Ver el parametrosGlobales"
+          onClick={$(() => {
+            console.log('parametrosGlobales', parametrosGlobales);
+          })}
+        />
+        */}
         {/*  <ImgButton
           src={images.see}
           alt="Icono de cerrar"
@@ -604,7 +625,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           {/* GENERALES DE IN ALMACÉN */}
           <div>
             <div hidden={definicion_CTX_IN_ALMACEN._id === '' ? true : false}>
-              {/* ID */}
+              {/* props.indexItem */}
               <div class="form-control">
                 <div class="form-control form-agrupado">
                   <input
@@ -646,18 +667,18 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             </div>
 
             {/* Numero de documento*/}
-            <div class="form-control">
-              {/* <label>Número</label>
+            {/* <div class="form-control">
+              <label>Número</label>
               <div class="form-control form-agrupado">
                 <input
                   id="inputNumeroDocumento"
                   style={{ width: '100%' }}
                   type="text"
                   disabled
-                  value={definicion_CTX_IN_ALMACEN.correlativo}
+                  value={definicion_CTX_IN_ALMACEN.conIGV ? 'CON IGV' : 'SIN IGV'}
                 />
-              </div> */}
-            </div>
+              </div>
+            </div> */}
             {/* FISMA */}
             <div class="form-control form-control-check">
               <div class="form-control form-agrupado">
@@ -679,11 +700,15 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 />
               </div>
             </div>
-            {/* motivo de ingreso */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            {/* MOTIVO INGRESO    ---    SERIE */}
+            {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}> */}
+            {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '4px' }}> */}
+            <div class="linea_1_11">
+              {/* motivo de ingreso */}
+              <div>
                 <ElSelect
                   id="se_motivoIngreso"
+                  estilos={{ width: '100%' }}
                   valorSeleccionado={definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen}
                   registros={losMotivosCargados.value}
                   registroID="_id"
@@ -733,14 +758,37 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         default:
                           break;
                       }
-                      if (definicion_CTX_IN_ALMACEN.enDolares) {
-                        // obtenerTipoCambio(document.getElementById('chbx_TipoCambio_IN_ALMACEN') as HTMLInputElement);
-                      }
+                      (document.getElementById('in_Observacion_IN') as HTMLSelectElement)?.focus();
+                      // if (definicion_CTX_IN_ALMACEN.enDolares) {
+                      //   // obtenerTipoCambio(document.getElementById('chbx_TipoCambio_IN_ALMACEN') as HTMLInputElement);
+                      // }
                     }
                   })}
                   onKeyPress={$((e: any) => {
                     if (e.key === 'Enter') {
-                      (document.getElementById('se_TipoDocumentoLiteral_REMITENTE') as HTMLSelectElement)?.focus();
+                      (document.getElementById('in_Observacion_IN') as HTMLSelectElement)?.focus();
+                    }
+                  })}
+                />
+              </div>
+              {/* SERIE */}
+              <div>
+                <input id="in_SERIE" type="text" disabled style={{ width: '100%' }} value={definicion_CTX_IN_ALMACEN.serie} />
+              </div>
+            </div>
+            {/* OBSERVACION*/}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_Observacion_IN"
+                  style={{ width: '100%', backgroundColor: '#F4FF7A' }}
+                  type="text"
+                  placeholder="Add observación"
+                  value={definicion_CTX_IN_ALMACEN.observacion}
+                  onChange$={(e) => (definicion_CTX_IN_ALMACEN.observacion = (e.target as HTMLInputElement).value)}
+                  onKeyPress$={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('se_TipoDocumentoLiteral_REMITENTE') as HTMLInputElement)?.focus();
                     }
                   })}
                 />
@@ -997,7 +1045,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 </tbody>
               </table>
             ) : (
-              <i style={{ fontSize: '0.8rem' }}>No existen documentos adjuntos</i>
+              <i style={{ marginTop: '4px', fontSize: '0.8rem' }}>No existen documentos adjuntos</i>
             )}
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN && (
               <div class="modal">
@@ -1008,11 +1056,15 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
           <br />
         </div>
-        {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
+        {/* TIPO DE CAMBIO       htmlFor={'checkboxTipoCambio'}*/}
         <div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr  1fr', gap: '4px' }}>
+          {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr  1fr', gap: '4px' }}> */}
+          {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '4px' }}> */}
+          <div class="linea_1_11">
             {/* Tipo Cambio    SUNAT */}
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            {/* <div style={{ display: 'flex', flexDirection: 'row' }}> */}
+            {/* <div style={{ display: 'flex', justifyContent: 'space-between' }}> */}
+            <div class="linea-celda-row-space-between">
               <div>
                 <input
                   type="checkbox"
@@ -1032,7 +1084,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     }
                   }}
                 />
-                <label for="chbx_TipoCambio_IN_ALMACEN" style={{ marginRight: '4px' }}>
+                <label for="chbx_TipoCambio_IN_ALMACEN" style={{ marginRight: '8px' }}>
                   USD SUNAT
                 </label>
               </div>
@@ -1053,7 +1105,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
               </div>
             </div>
             {/* Tipo Cambio    MANUAL */}
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            {/* <div style={{ display: 'flex', justifyContent: 'space-between' }}> */}
+            <div class="linea-celda-row-space-between">
               <div>
                 <input
                   type="checkbox"
@@ -1065,7 +1118,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     obtenerTipoCambioManual(e.target as HTMLInputElement);
                   }}
                 />
-                <label for="chbx_TipoCambio_MANUAL_IN_ALMACEN" style={{ marginRight: '4px' }}>
+                <label for="chbx_TipoCambio_MANUAL_IN_ALMACEN" style={{ marginRight: '8px' }}>
                   USD MANUAL
                 </label>
               </div>
@@ -1131,32 +1184,34 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   })}
                 />
                 <div>
-                  <input
-                    type="checkbox"
-                    checked={definicion_CTX_IN_ALMACEN.conIGV}
-                    id="chbx_conIGV_IN_ALMACEN"
-                    onClick$={(e) => {
-                      console.log('click en chbx_conIGV_IN_ALMACEN');
-                      definicion_CTX_IN_ALMACEN.conIGV = (e.target as HTMLInputElement).checked;
-                    }}
-                  />
-                  <label for="chbx_conIGV_IN_ALMACEN" style={{ marginRight: '12px' }}>
-                    CON IGV
-                  </label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    checked={definicion_CTX_IN_ALMACEN.porMontoUnitario}
-                    id="chbx_porMontoUnitario_IN_ALMACEN"
-                    onClick$={(e) => {
-                      console.log('click en chbx_porMontoUnitario_IN_ALMACEN');
-                      definicion_CTX_IN_ALMACEN.porMontoUnitario = (e.target as HTMLInputElement).checked;
-                    }}
-                  />
-                  <label for="chbx_porMontoUnitario_IN_ALMACEN" style={{ marginRight: '4px' }}>
-                    POR MONTO UNITARIO
-                  </label>
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={definicion_CTX_IN_ALMACEN.conIGV}
+                      id="chbx_conIGV_IN_ALMACEN"
+                      onClick$={(e) => {
+                        console.log('click en chbx_conIGV_IN_ALMACEN');
+                        definicion_CTX_IN_ALMACEN.conIGV = (e.target as HTMLInputElement).checked;
+                      }}
+                    />
+                    <label for="chbx_conIGV_IN_ALMACEN" style={{ marginRight: '12px' }}>
+                      CON IGV
+                    </label>
+                  </div>
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={definicion_CTX_IN_ALMACEN.porMontoUnitario}
+                      id="chbx_porMontoUnitario_IN_ALMACEN"
+                      onClick$={(e) => {
+                        console.log('click en chbx_porMontoUnitario_IN_ALMACEN');
+                        definicion_CTX_IN_ALMACEN.porMontoUnitario = (e.target as HTMLInputElement).checked;
+                      }}
+                    />
+                    <label for="chbx_porMontoUnitario_IN_ALMACEN" style={{ marginRight: '4px' }}>
+                      POR MONTO UNITARIO
+                    </label>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -1177,6 +1232,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   }
                   igv={definicion_CTX_IN_ALMACEN.elIgv}
                   motivo={definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen}
+                  conIGV={definicion_CTX_IN_ALMACEN.conIGV}
+                  porMontoUnitario={definicion_CTX_IN_ALMACEN.porMontoUnitario}
                 />
               </div>
             )}
@@ -1209,14 +1266,15 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 </thead>
                 <tbody>
                   {definicion_CTX_IN_ALMACEN.itemsMercaderias.map((iTMercaIN: any, index: number) => {
-                    console.log('DIMMMMMMMMMMMM  iTMercaIN', iTMercaIN);
+                    // console.log('DIMMMMMMMMMMMM  iTMercaIN', iTMercaIN);
                     const indexItemMercaIN = index + 1;
-
+                    // console.log('tbody  indexItemMercaIN', indexItemMercaIN);
+                    // console.log('tbody  iTMercaIN.subPEN', iTMercaIN.subPEN);
                     /////****** PEN
                     suma_SubPEN = suma_SubPEN + redondeo2Decimales(iTMercaIN.subPEN.$numberDecimal ? iTMercaIN.subPEN.$numberDecimal : iTMercaIN.subPEN);
-
+                    // console.log('tbody  suma_SubPEN', suma_SubPEN);
                     suma_TotPEN = suma_TotPEN + redondeo2Decimales(iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN);
-
+                    // console.log('DIMMMMMMMMMMMM  iTMercaIN', iTMercaIN);
                     // console.log('DoMMMMMMMMMMMM', !definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia);
                     // console.log('definicion_CTX_IN_ALMACEN.enDolares ==>>', definicion_CTX_IN_ALMACEN.enDolares);
                     // console.log('definicion_CTX_IN_ALMACEN.reingreso ==>>', definicion_CTX_IN_ALMACEN.reingreso);
@@ -1225,7 +1283,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     // } else {
                     //   console.log('iTMercaIN.totPEN ==>> undefined');
                     // }
-
+                    // console.log('tbody  iTMercaIN', iTMercaIN);
                     suma_IGVPEN = suma_TotPEN - suma_SubPEN;
 
                     ///******USD
@@ -1240,7 +1298,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     } else {
                       console.log('iTMercaIN.subUSD ==>> undefined');
                     }
-
+                    console.log('tbody  typeof iTMercaIN.subUSD');
                     return (
                       <tr key={iTMercaIN.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar}>{`${cerosALaIzquierda(indexItemMercaIN, 3)}`}</td>
@@ -1412,6 +1470,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                                   iTMercaIN.subPEN = formatear_6Decimales(iTMercaIN.subUSD * elTC);
                                   iTMercaIN.valorUnitarioPEN = formatear_6Decimales(costoIncluidoIGV * elTC);
                                   iTMercaIN.totPEN = formatear_6Decimales(iTMercaIN.totUSD * elTC);
+                                  console.log('💚💚💚💚💚🥪🥪🥪🥪🥪', iTMercaIN.subPEN, iTMercaIN.totPEN);
                                 } else {
                                   //******  PEN
                                   iTMercaIN.costoUnitarioPEN = costo;
@@ -1433,6 +1492,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                                   iTMercaIN.totPEN =
                                     (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
                                     (iTMercaIN.valorUnitarioPEN.$numberDecimal ? iTMercaIN.valorUnitarioPEN.$numberDecimal : iTMercaIN.valorUnitarioPEN);
+                                  console.log('🥪🥪🥪🥪🥪💚💚💚💚💚', iTMercaIN.subPEN, iTMercaIN.totPEN);
                                 }
                               }}
                               onFocusin$={(e) => {

@@ -89,8 +89,10 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       motivoEgresoAlmacen: props.outSelecci.motivoEgresoAlmacen ? props.outSelecci.motivoEgresoAlmacen : '',
       idDocumento: props.outSelecci.idDocumento ? props.outSelecci.idDocumento : '',
 
-      idSerieNotaSalida: props.outSelecci.idSerieNotaSalida ? props.outSelecci.idSerieNotaSalida : '',
-      serie: props.outSelecci.serie ? props.outSelecci.serie : '',
+      idSerieNotaSalida: props.outSelecci.idSerieNotaSalida ? props.outSelecci.idSerieNotaSalida : parametrosGlobales.idSerieNotaSalida,
+      serie: props.outSelecci.serie ? props.outSelecci.serie : parametrosGlobales.serieNotaSalida,
+
+      observacion: props.outSelecci.observacion ? props.outSelecci.observacion : '',
 
       // serie: props.inSelecci.serie ? props.inSelecci.serie : '',
       // numero: props.inSelecci.numero ? props.inSelecci.numero : 0,
@@ -363,6 +365,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         idSerieNotaSalida: definicion_CTX_OUT_ALMACEN.idSerieNotaSalida,
         serie: definicion_CTX_OUT_ALMACEN.serie,
 
+        observacion: definicion_CTX_OUT_ALMACEN.observacion,
+
         FISMA: definicion_CTX_OUT_ALMACEN.FISMA,
         fechaLocal: fechaLocal, //DD-MM-YYYY
         horaLocal: horaLocal,
@@ -420,6 +424,16 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           alt="Icono de cerrar"
           height={16}
           width={16}
+          title="parametrosGlobales"
+          onClick={$(() => {
+            console.log('parametrosGlobales', parametrosGlobales);
+          })}
+        />
+        <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
           title="definicion_CTX_OUT_ALMACEN"
           onClick={$(() => {
             console.log('definicion_CTX_OUT_ALMACEN', definicion_CTX_OUT_ALMACEN);
@@ -447,7 +461,17 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       </div>
       {/* FORMULARIO */}
       <div class="add-form">
-        <h3 style={{ fontSize: '0.8rem' }}>
+        <h3
+          style={{
+            height: '22px',
+            alignContent: 'center',
+            fontSize: '0.8rem',
+            backgroundColor: '#333',
+            color: '#eee',
+            paddingLeft: '6px',
+            borderRadius: '4px',
+          }}
+        >
           Out almacén - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
         </h3>
         {/* ----------------------------------------------------- */}
@@ -520,12 +544,12 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 />
               </div>
             </div>
-            {/* motivo de egreso */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            <div class="linea_1_11">
+              {/* motivo de egreso */}
+              <div>
                 <ElSelect
                   id="se_motivoEgreso"
-                  estilos={{ cursor: 'pointer' }}
+                  estilos={{ cursor: 'pointer', width: '100%' }}
                   valorSeleccionado={definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen}
                   registros={losMotivosCargados.value}
                   registroID={'_id'}
@@ -576,11 +600,34 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                         default:
                           break;
                       }
+                      (document.getElementById('in_Observacion_OUT') as HTMLSelectElement)?.focus();
                     }
                   })}
                   onKeyPress={$((e: any) => {
                     if (e.key === 'Enter') {
-                      (document.getElementById('se_TipoDocumentoLiteral_DESTINATARIO') as HTMLSelectElement)?.focus();
+                      (document.getElementById('in_Observacion_OUT') as HTMLSelectElement)?.focus();
+                    }
+                  })}
+                />
+              </div>
+              {/* SERIE */}
+              <div>
+                <input id="in_SERIE" type="text" disabled style={{ width: '100%' }} value={definicion_CTX_OUT_ALMACEN.serie} />
+              </div>
+            </div>
+            {/* OBSERVACION*/}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_Observacion_OUT"
+                  style={{ width: '100%', backgroundColor: '#F4FF7A' }}
+                  type="text"
+                  placeholder="Add observación"
+                  value={definicion_CTX_OUT_ALMACEN.observacion}
+                  onChange$={(e) => (definicion_CTX_OUT_ALMACEN.observacion = (e.target as HTMLInputElement).value)}
+                  onKeyPress$={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('se_TipoDocumentoLiteral_DESTINATARIO') as HTMLInputElement)?.focus();
                     }
                   })}
                 />
@@ -1045,6 +1092,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               </div>
             )}
           </div>
+          <br />
         </div>
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}

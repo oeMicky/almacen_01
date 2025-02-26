@@ -33,6 +33,7 @@ export const parametrosGlobales = {
   idPersona: '',
   idEmpresa: '', //'60f097ca53621708ecc4e782', //'60efd5c8e0eac5122cc56ddc',
   RazonSocial: '', //'CORPORACION ACME I',
+  actualizarPrecioPublico: false,
   editarTipoCambioManual: false,
   tipoCambioManual: '',
   colorHeaderEmpresarial: '',
@@ -62,6 +63,12 @@ export const parametrosGlobales = {
   //
   ingreso: false,
   periodos: [],
+  //
+  idSerieNotaIngreso: '',
+  serieNotaIngreso: '',
+  //
+  idSerieNotaSalida: '',
+  serieNotaSalida: '',
   //
   idMotivosSalidaDelAlmacen_NV: '',
   idMotivosSalidaDelAlmacen_NS: '',
@@ -137,6 +144,7 @@ export default component$(() => {
     // email: 'emilia@cao.com',
     // email: 'beka@cao.com',
     // email: 'debora@cao.com',
+
     // contrasena: '12345678',
     // contrasena: 'Pamela123',
     contrasena: '',
@@ -224,6 +232,8 @@ export default component$(() => {
       parametrosGlobales.provincia = sucursales.data[0].provincia;
       parametrosGlobales.distrito = sucursales.data[0].distrito;
       parametrosGlobales.ubigeo = sucursales.data[0].ubigeo;
+
+      parametrosGlobales.actualizarPrecioPublico = sucursales.data[0].actualizarPrecioPublico;
 
       parametrosGlobales.editarTipoCambioManual = sucursales.data[0].editarTipoCambioManual;
       parametrosGlobales.tipoCambioManual = activo[0].tipoCambioManual ? activo[0].tipoCambioManual.$numberDecimal : 0;

@@ -15,6 +15,7 @@ import { parametrosGlobales } from '~/routes/login';
 import BorrarInAlmacen from './borrarInAlmacen';
 import { cerosALaIzquierda, hoy } from '~/functions/comunes';
 import { useNavigate } from '@builder.io/qwik-city';
+import { getSerieNotaIngresoDeSucursal } from '~/apis/ingresosAAlmacen.api';
 
 export const CTX_INDEX_IN_ALMACEN = createContextId<any>('index_in_almacen');
 
@@ -230,9 +231,29 @@ export default component$(() => {
             onClick={$(async () => {
               if (parametrosGlobales.idGrupoEmpresarial === '') {
                 // console.log('estaVACIA');
-                alert('Faltan datos... vuelva a logearse..');
+                alert('Faltan datos... vuelva a logearse...');
                 navegarA('/login');
                 return;
+              }
+              //VERIFICAR SI EXISTE LA SERIE DE LA NOTA DE INGRESO
+              if (parametrosGlobales.idSerieNotaIngreso === '') {
+                //buscar la serie (SI EXISTE)
+                let laSerie = await getSerieNotaIngresoDeSucursal({
+                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                  idEmpresa: parametrosGlobales.idEmpresa,
+                  idSucursal: parametrosGlobales.idSucursal,
+                });
+                console.log('🚎🚎🚎🚎 laSerie NotaIngreso', laSerie);
+                laSerie = laSerie.data[0];
+                console.log('🚎🚎🚎🚎🚎🚎🚎🚎 laSerie NotaIngreso', laSerie);
+
+                if (typeof laSerie !== 'undefined' && laSerie.idSerieNotaIngreso !== '') {
+                  parametrosGlobales.idSerieNotaIngreso = laSerie.idSerieNotaIngreso;
+                  parametrosGlobales.serieNotaIngreso = laSerie.serie;
+                } else {
+                  alert('No existe la serie de la Nota de Ingreso.');
+                  return;
+                }
               }
               //validar PERIODO
               let anioAnterior = '';

@@ -203,6 +203,69 @@ a.linkHeaderPrincipal:hover {
   align-items: center;
   justify-content: space-around; */
 }
+.btn-out {
+  background-color:#222; /* rgb(19, 19, 19); /*var(--color-celeste-claro);*/
+  border-radius: 5px;
+   color:rgb(224, 224, 224); 
+   /* border: none; */
+ /* 
+  padding: 2px 5px;
+  margin: 2px 2px;
+  text-align:  center;
+  display: inline-block;
+  align-items: center;
+  justify-content: space-around; */
+}
+.btn-out:hover {
+  background-color: #444;/*  var(--color-celeste-medio); */
+  border-radius: 5px;
+   color: rgb(224, 224, 224);
+   /* border: none; */
+ /* 
+  padding: 2px 5px;
+  margin: 2px 2px;
+  text-align: center;
+  font-weight: 600;
+  display: inline-block;
+  align-items: center;
+  justify-content: space-around; */
+}
+.linea_1_11 {
+  /* border: rgb(215, 215, 216) 1px dashed; */
+  display: grid;
+  grid-template-columns: 1fr; 
+  gap: 4px;
+   /* justify-content: space-between */
+  /* padding: 15px 15px */
+}
+.linea-celda-row-space-between {
+  /* border: rgb(215, 215, 216) 1px dashed; */
+  display: flex;
+  justify-content: space-between;
+  }
+/*MAS DE 768px*/
+@media screen and (min-width:768px) {
+  .linea_1_11 {
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    gap: 4px;
+    /* padding: 15px 15px */
+  }
+  .linea-celda-row-space-between {
+    /* border: rgb(59, 59, 224) 1px dashed; */
+    display: flex;
+    flex-direction:row ; 
+    /*  */
+    justify-content: flex-start;
+  }
+}
+/* ///////////////////////////////// */
+
+/*MAS DE 768px*/
+/* @media screen and (min-width:768px) {  
+  
+} */
+
 /************************************/
 /*********SECCION INICIO*************/
 /************************************/
