@@ -284,29 +284,25 @@ export default component$(
                               : {}
                           }
                         >
-                          <td data-label="Descripción" class="comoCadena">
-                            {descripcion}
-                          </td>
-                          <td data-label="Descripción" class="comoCadena" style={props.verAplicacion ? '' : { display: 'none' }}>
+                          <td data-label="Descripción">{descripcion}</td>
+                          <td data-label="Aplicación" style={props.verAplicacion ? '' : { display: 'none' }}>
                             {aplicacion}
                           </td>
-                          <td data-label="Linea/Tipo" class="comoCadena" style={props.verLineaMarca ? '' : { display: 'none' }}>
+                          <td data-label="Linea/Tipo" style={props.verLineaMarca ? '' : { display: 'none' }}>
                             {lineaTipo}
                           </td>
-                          <td data-label="Marca" class="comoCadena" style={props.verLineaMarca ? '' : { display: 'none' }}>
+                          <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
                             {marca}
                           </td>
                           <td data-label="Ubigeo">{ubigeo}</td>
-                          <td data-label="Stock" class="comoNumero" style={{ color: 'purple' }}>
+                          <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
                             {totalCantidadSaldo.$numberDecimal
                               ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
                               : formatear_6Decimales(totalCantidadSaldo)}
                           </td>
-                          <td data-label="Uni" class="acciones">
-                            {unidad}
-                          </td>
+                          <td data-label="Uni">{unidad}</td>
                           {props.esAlmacen || props.esProduccion ? (
-                            <td data-label="Costo Promd.PEN" style={{ textAlign: 'end' }}>
+                            <td data-label="Costo Promd.PEN" class="comoNumeroLeft">
                               {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
                                 ? promedioCostoUnitarioMovil.$numberDecimal
                                   ? formatear_6Decimales(promedioCostoUnitarioMovil.$numberDecimal)
@@ -314,7 +310,7 @@ export default component$(
                                 : '_'}
                             </td>
                           ) : (
-                            <td data-label="Precio PEN" style={{ textAlign: 'end' }}>
+                            <td data-label="Precio PEN" class="comoNumeroLeft">
                               {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                                 ? precioUnitarioPEN.$numberDecimal
                                   ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
@@ -325,10 +321,10 @@ export default component$(
                           {/* <td data-label="Precio">
                             {typeof precio !== 'undefined' ? (precio.$numberDecimal ? precio.$numberDecimal : precio) : '_'}
                           </td> */}
-                          <td data-label="Kx" class="acciones">
+                          <td data-label="Kx" class="accionesLeft">
                             {KARDEXS.length === 0 ? 'No' : 'Si'}
                           </td>
-                          <td data-label="Acciones" class="acciones">
+                          <td data-label="Acciones" class="accionesLeft">
                             <input
                               // id="in_BuscarDetraccion"
                               type="image"

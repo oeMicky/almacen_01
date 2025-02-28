@@ -227,7 +227,7 @@ export default component$(
                                 </td>
                               )
                             ) : ( */}
-                            <td data-label="Precio PEN" class="comoNumero">
+                            <td data-label="Precio PEN" class="comoNumeroLeft">
                               {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                                 ? precioUnitarioPEN.$numberDecimal
                                   ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
@@ -235,9 +235,7 @@ export default component$(
                                 : '-'}
                             </td>
                             {/* )} */}
-                            <td data-label="Kx" class="acciones">
-                              {KARDEXS.length === 0 ? 'No' : 'Si'}
-                            </td>
+                            <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
                             <td data-label="Uti" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {typeof porcentajeUtilidad !== 'undefined' && porcentajeUtilidad !== null
                                 ? porcentajeUtilidad.$numberDecimal
@@ -245,7 +243,7 @@ export default component$(
                                   : porcentajeUtilidad
                                 : ''}
                             </td>
-                            <td data-label="Acciones" class="acciones">
+                            <td data-label="Acciones" class="accionesLeft">
                               <input
                                 // id="in_BuscarDetraccion"
                                 type="image"
@@ -254,7 +252,7 @@ export default component$(
                                 height={12}
                                 width={12}
                                 style={{ marginRight: '4px' }}
-                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')} class="acciones"
                                 onClick$={() => {
                                   //console.log('mercaINLocali', mercaINLocali);
                                   if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {

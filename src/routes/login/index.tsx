@@ -129,23 +129,14 @@ export default component$(() => {
   const navegarA = useNavigate();
   const passwordTF = useSignal(true);
 
+  /**** EN PRODUCCION */
+  /**** EN PRODUCCION */
+  /**** EN PRODUCCION : Subir este archivo con email: '' , contrasena: '' */
   const definicion_CTX_LOGEO = useStore({
     mostrarSpinner: false,
     // email: 'mvizconde@msn.com',
-    // email: 'carlos@merma.com',
-    // email: 'mvizconde@cao.com',
-    // email: "paolo@cao.com",
-    // email: 'joseluis@cao.com',
-    // email: 'keymar0@cao.com',
     email: '',
 
-    // email: "",
-    // email: 'taty@cao.com',
-    // email: 'emilia@cao.com',
-    // email: 'beka@cao.com',
-    // email: 'debora@cao.com',
-
-    // contrasena: '12345678',
     // contrasena: 'Pamela123',
     contrasena: '',
   });

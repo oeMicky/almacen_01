@@ -810,8 +810,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           {/* ----------------------------------------------------- */}
         </div>
         {/* ----------------------------------------------------- */}
-        {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS */}
-        <div hidden={definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}>
+        {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS   hidden={definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}*/}
+        <div style={definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO' ? { display: 'none' } : ''}>
           <div
             style={{
               display: 'flex',

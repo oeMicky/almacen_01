@@ -99,7 +99,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                         totalCantidadSaldo,
                         unidad,
                         precioUnitarioPEN,
-                        promedioCostoUnitarioMovil,
+                        // promedioCostoUnitarioMovil,
                         KARDEXS,
                         noFacturar,
                         activo,
@@ -108,45 +108,33 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
 
                       return (
                         <tr key={_id} style={!activo ? { background: 'black', color: 'white' } : noFacturar ? { background: '#ff5aff' } : {}}>
-                          <td data-label="Descripción" class="comoCadena">
-                            {descripcion}
-                          </td>
-                          <td data-label="Linea/Tipo" class="comoCadena">
-                            {lineaTipo}
-                          </td>
-                          <td data-label="Marca" class="comoCadena">
-                            {marca}
-                          </td>
-                          <td data-label="Ubigeo" class="comoNumero">
-                            {typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}
-                          </td>
+                          <td data-label="Descripción">{descripcion}</td>
+                          <td data-label="Linea/Tipo">{lineaTipo}</td>
+                          <td data-label="Marca">{marca}</td>
+                          <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}</td>
                           <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
                             <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
                           </td>
-                          <td data-label="Uni" class="comoCadena">
-                            {unidad}
-                          </td>
-                          {props.esAlmacen ? (
-                            <td data-label="Costo Promd.Uni PEN" class="comoNumero">
+                          <td data-label="Uni">{unidad}</td>
+                          {/* {props.esAlmacen ? (
+                            <td data-label="Costo Promd.Uni PEN" class="comoNumeroLeft">
                               {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
                                 ? promedioCostoUnitarioMovil.$numberDecimal
                                   ? formatear_2Decimales(promedioCostoUnitarioMovil.$numberDecimal)
                                   : formatear_2Decimales(promedioCostoUnitarioMovil)
                                 : '-'}
                             </td>
-                          ) : (
-                            <td data-label="Precio PEN" class="comoNumero">
-                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                                ? precioUnitarioPEN.$numberDecimal
-                                  ? precioUnitarioPEN.$numberDecimal
-                                  : precioUnitarioPEN
-                                : '-'}
-                            </td>
-                          )}
-                          <td data-label="Kx" class="acciones">
-                            {KARDEXS.length === 0 ? 'No' : 'Si'}
+                          ) : ( */}
+                          <td data-label="Precio PEN" class="comoNumeroLeft">
+                            {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                              ? precioUnitarioPEN.$numberDecimal
+                                ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
+                                : formatear_2Decimales(precioUnitarioPEN)
+                              : '-'}
                           </td>
-                          <td data-label="Acciones" class="acciones">
+                          {/* )} */}
+                          <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
+                          <td data-label="Acciones" class="accionesLeft">
                             <input
                               type="image"
                               src={images.see}

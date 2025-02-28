@@ -950,7 +950,13 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
         </div>
         {/* ----------------------------------------------------- */}
         {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS */}
-        <div style={definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen === 'APERTURA DE INVENTARIO' ? { display: 'none' } : ''}>
+        <div
+          style={
+            definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen === 'APERTURA DE INVENTARIO' || definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen === 'TRASLADO'
+              ? { display: 'none' }
+              : ''
+          }
+        >
           <div
             style={{
               display: 'flex',
