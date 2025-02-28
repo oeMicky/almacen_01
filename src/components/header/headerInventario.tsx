@@ -1,12 +1,15 @@
-import { component$, useStyles$ } from '@builder.io/qwik';
+import { component$, useSignal, useStyles$ } from '@builder.io/qwik';
 import { Link, useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
 import { parametrosGlobales } from '~/routes/login';
 import style from '../header/headerAlmacen.css?inline';
+import Spinner from '../system/spinner';
 
 export default component$(() => {
   useStyles$(style);
   const navegarA = useNavigate();
+  const mostrarSpinner = useSignal(false);
+
   return (
     <header style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
       <div class="container-header">
@@ -41,8 +44,10 @@ export default component$(() => {
               class="main-menu__item"
               style={{ cursor: 'pointer' }}
               onClick$={() => {
+                mostrarSpinner.value = true;
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 navegarA('/outAlmacen');
+                mostrarSpinner.value = false;
               }}
             >
               {/* <Link href="/outAlmacen/"> */}
@@ -55,8 +60,10 @@ export default component$(() => {
               class="main-menu__item"
               style={{ cursor: 'pointer' }}
               onClick$={() => {
+                mostrarSpinner.value = true;
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 navegarA('/kardex');
+                mostrarSpinner.value = false;
               }}
             >
               {/* <Link href="/kardex/"> */}
@@ -104,11 +111,11 @@ export default component$(() => {
         </nav>
       </div>
       {/* MOSTRAR SPINNER */}
-      {/* {definicion_CTX_HEADER_ALMACEN.mostrarSpinner && (
+      {mostrarSpinner.value && (
         <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>
-      )} */}
+      )}
     </header>
   );
 });

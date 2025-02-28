@@ -6,7 +6,7 @@ import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import style from '../tabla/tabla.css?inline';
 import { formatear_2Decimales } from '~/functions/comunes';
 
-export default component$((props: { buscarMercaderiasKARDEX: number; parametrosBusqueda: any; esAlmacen: boolean }) => {
+export default component$((props: { buscarMercaderiasKARDEX: number; parametrosBusqueda: any; esAlmacen: boolean; verTODOS: boolean }) => {
   useStyles$(style);
   //#region CONTEXTOS
   const ctx_index_kardex = useContext(CTX_INDEX_KARDEX);
@@ -20,17 +20,39 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
     cleanup(() => abortController.abort('cleanup'));
 
     //console.log('parametrosBusqueda', props.parametrosBusqueda);
-
-    const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
-      // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(props.parametrosBusqueda),
-      signal: abortController.signal,
-    });
-    return res.json();
+    if (props.verTODOS) {
+      const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcionTODOS', {
+        // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(props.parametrosBusqueda),
+        signal: abortController.signal,
+      });
+      return res.json();
+    } else {
+      const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
+        // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(props.parametrosBusqueda),
+        signal: abortController.signal,
+      });
+      return res.json();
+    }
+    // const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
+    //   // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(props.parametrosBusqueda),
+    //   signal: abortController.signal,
+    // });
+    // return res.json();
   });
   //#endregion BUSCANDO REGISTROS
 
@@ -98,7 +120,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                           <td data-label="Ubigeo" class="comoNumero">
                             {typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}
                           </td>
-                          <td data-label="Stock" class="comoNumero">
+                          <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
                             <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
                           </td>
                           <td data-label="Uni" class="comoCadena">

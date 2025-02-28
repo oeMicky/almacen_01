@@ -229,93 +229,100 @@ export default component$(() => {
             style={{ cursor: 'pointer', marginLeft: '4px' }}
             // class="btn-press"
             onClick={$(async () => {
-              if (parametrosGlobales.idGrupoEmpresarial === '') {
-                // console.log('estaVACIA');
-                alert('Faltan datos... vuelva a logearse...');
-                navegarA('/login');
-                return;
-              }
-              //VERIFICAR SI EXISTE LA SERIE DE LA NOTA DE INGRESO
-              if (parametrosGlobales.idSerieNotaIngreso === '') {
-                //buscar la serie (SI EXISTE)
-                let laSerie = await getSerieNotaIngresoDeSucursal({
-                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                  idEmpresa: parametrosGlobales.idEmpresa,
-                  idSucursal: parametrosGlobales.idSucursal,
-                });
-                console.log('🚎🚎🚎🚎 laSerie NotaIngreso', laSerie);
-                laSerie = laSerie.data[0];
-                console.log('🚎🚎🚎🚎🚎🚎🚎🚎 laSerie NotaIngreso', laSerie);
-
-                if (typeof laSerie !== 'undefined' && laSerie.idSerieNotaIngreso !== '') {
-                  parametrosGlobales.idSerieNotaIngreso = laSerie.idSerieNotaIngreso;
-                  parametrosGlobales.serieNotaIngreso = laSerie.serie;
-                } else {
-                  alert('No existe la serie de la Nota de Ingreso.');
+              try {
+                definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = true;
+                if (parametrosGlobales.idGrupoEmpresarial === '') {
+                  // console.log('estaVACIA');
+                  alert('Faltan datos... vuelva a logearse...');
+                  navegarA('/login');
                   return;
                 }
-              }
-              //validar PERIODO
-              let anioAnterior = '';
-              let mesAnterior = '';
-              const anio = (document.getElementById('in_laFechaHoyInAlmacen') as HTMLInputElement).value.substring(0, 4);
-              const mes = (document.getElementById('in_laFechaHoyInAlmacen') as HTMLInputElement).value.substring(5, 7);
-              //console.log(anio);
-              // //console.log('la fechitaaaa', anio + mes);
-              const periodoActual = anio + mes;
-              const PPP = losPeriodosCargados.value;
-              if (parseInt(mes) === 1) {
-                anioAnterior = (parseInt(anio) - 1).toString();
-                mesAnterior = '12';
-              } else {
-                anioAnterior = anio;
-                mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
-              }
-              const periodoANTE = anioAnterior + mesAnterior;
-              //console.log(periodoANTE);
-              // //console.log('mas', mas);
-              // //console.log('PPP', PPP);
-              const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
-              //console.log('⚠ elPeriodo', elPeriodo);
-              if (typeof elPeriodo === 'undefined') {
-                alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
-                return;
-              }
-              periodo.idPeriodo = elPeriodo._id;
-              periodo.periodo = elPeriodo.periodo;
-              //************* */
-              const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
-              periodoAnterior.idPeriodo = elPeriodoAnterior._id;
-              periodoAnterior.periodo = elPeriodoAnterior.periodo;
+                //VERIFICAR SI EXISTE LA SERIE DE LA NOTA DE INGRESO
+                if (parametrosGlobales.idSerieNotaIngreso === '') {
+                  //buscar la serie (SI EXISTE)
+                  let laSerie = await getSerieNotaIngresoDeSucursal({
+                    idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                    idEmpresa: parametrosGlobales.idEmpresa,
+                    idSucursal: parametrosGlobales.idSucursal,
+                  });
+                  console.log('🚎🚎🚎🚎 laSerie NotaIngreso', laSerie);
+                  laSerie = laSerie.data[0];
+                  console.log('🚎🚎🚎🚎🚎🚎🚎🚎 laSerie NotaIngreso', laSerie);
 
-              if (periodo.idPeriodo === '') {
-                alert('Seleccione el periodo.');
-                document.getElementById('se_periodo')?.focus();
-                ini.value++;
-                return;
-              }
-              // obteniendo IGVs de COMPRA
-              let elIgv = await getIgvsCompra({
-                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                idEmpresa: parametrosGlobales.idEmpresa,
-              });
-              elIgv = elIgv.data;
-              //console.log("elIgv", elIgv);
-              losIgvsCompra.value = elIgv;
-              const tre = elIgv.filter((docs: any) => docs.default === true);
-              // //console.log('tre', tre);
-              igvCompraPorDefault.idElIgv = tre[0]._id;
-              igvCompraPorDefault.elIgv = tre[0].igv;
-              // //console.log('igvCompraPorDefault', igvCompraPorDefault);
-              //
-              // let elIgv = await getIgvVenta(parametrosGlobales);
-              // elIgv = elIgv.data;
-              // //console.log('elIgv', elIgv);
-              // igv.value = elIgv[0].igv;
-              // //console.log('igv.value::', igv.value);
+                  if (typeof laSerie !== 'undefined' && laSerie.idSerieNotaIngreso !== '') {
+                    parametrosGlobales.idSerieNotaIngreso = laSerie.idSerieNotaIngreso;
+                    parametrosGlobales.serieNotaIngreso = laSerie.serie;
+                  } else {
+                    alert('No existe la serie de la Nota de Ingreso.');
+                    return;
+                  }
+                }
+                //validar PERIODO
+                let anioAnterior = '';
+                let mesAnterior = '';
+                const anio = (document.getElementById('in_laFechaHoyInAlmacen') as HTMLInputElement).value.substring(0, 4);
+                const mes = (document.getElementById('in_laFechaHoyInAlmacen') as HTMLInputElement).value.substring(5, 7);
+                //console.log(anio);
+                // //console.log('la fechitaaaa', anio + mes);
+                const periodoActual = anio + mes;
+                const PPP = losPeriodosCargados.value;
+                if (parseInt(mes) === 1) {
+                  anioAnterior = (parseInt(anio) - 1).toString();
+                  mesAnterior = '12';
+                } else {
+                  anioAnterior = anio;
+                  mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
+                }
+                const periodoANTE = anioAnterior + mesAnterior;
+                //console.log(periodoANTE);
+                // //console.log('mas', mas);
+                // //console.log('PPP', PPP);
+                const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
+                //console.log('⚠ elPeriodo', elPeriodo);
+                if (typeof elPeriodo === 'undefined') {
+                  alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
+                  return;
+                }
+                periodo.idPeriodo = elPeriodo._id;
+                periodo.periodo = elPeriodo.periodo;
+                //************* */
+                const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
+                periodoAnterior.idPeriodo = elPeriodoAnterior._id;
+                periodoAnterior.periodo = elPeriodoAnterior.periodo;
 
-              definicion_CTX_INDEX_IN_ALMACEN.iNS = [];
-              definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen = true;
+                if (periodo.idPeriodo === '') {
+                  alert('Seleccione el periodo.');
+                  document.getElementById('se_periodo')?.focus();
+                  ini.value++;
+                  return;
+                }
+                // obteniendo IGVs de COMPRA
+                let elIgv = await getIgvsCompra({
+                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                  idEmpresa: parametrosGlobales.idEmpresa,
+                });
+                elIgv = elIgv.data;
+                //console.log("elIgv", elIgv);
+                losIgvsCompra.value = elIgv;
+                const tre = elIgv.filter((docs: any) => docs.default === true);
+                // //console.log('tre', tre);
+                igvCompraPorDefault.idElIgv = tre[0]._id;
+                igvCompraPorDefault.elIgv = tre[0].igv;
+                // //console.log('igvCompraPorDefault', igvCompraPorDefault);
+                //
+                // let elIgv = await getIgvVenta(parametrosGlobales);
+                // elIgv = elIgv.data;
+                // //console.log('elIgv', elIgv);
+                // igv.value = elIgv[0].igv;
+                // //console.log('igv.value::', igv.value);
+
+                definicion_CTX_INDEX_IN_ALMACEN.iNS = [];
+                definicion_CTX_INDEX_IN_ALMACEN.mostrarPanelNewInAlmacen = true;
+              } catch (error) {
+                console.log(error);
+              } finally {
+                definicion_CTX_INDEX_IN_ALMACEN.mostrarSpinner = false;
+              }
             })}
           />
         </div>

@@ -444,7 +444,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       document.getElementById('in_IGV')?.focus();
       return;
     }
-    if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'APERTURA DE INVENTARIO') {
+    if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'APERTURA DE INVENTARIO' && definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'TRASLADO') {
       if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length < 1) {
         alert('Agregue al menos un documento');
         document.getElementById('bu_Add_Documento')?.focus();

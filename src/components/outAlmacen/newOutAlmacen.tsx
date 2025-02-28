@@ -316,7 +316,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     // }
     //DOCUMENTOS ADJUNTOS
     //console.log(' //documentosAdjuntos');
-    if (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'NOTA DE SALIDA') {
+    if (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'NOTA DE SALIDA' && definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO') {
       if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
         alert('Agregue al menos un documento');
         document.getElementById('btn_Add_Documento')?.focus();

@@ -1,13 +1,15 @@
-import { component$, useStyles$ } from '@builder.io/qwik';
+import { component$, useSignal, useStyles$ } from '@builder.io/qwik';
 import { Link, useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
 import { parametrosGlobales } from '~/routes/login';
 import style from '../header/headerAlmacen.css?inline';
+import Spinner from '../system/spinner';
 // import { existeMotivoNV } from '~/apis/egresosDeAlmacen.api';
 
 export default component$(() => {
   useStyles$(style);
   const navegarA = useNavigate();
+  const mostrarSpinner = useSignal(false);
   return (
     <header style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
       <div class="container-header">
@@ -29,8 +31,10 @@ export default component$(() => {
               title="Nota de venta"
               style={{ cursor: 'pointer' }}
               onClick$={() => {
+                mostrarSpinner.value = true;
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 navegarA('/notaVenta');
+                mostrarSpinner.value = false;
               }}
             >
               {/* <input
@@ -54,8 +58,10 @@ export default component$(() => {
               title="Facturación electrónica"
               style={{ cursor: 'pointer' }}
               onClick$={() => {
+                mostrarSpinner.value = true;
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 navegarA('/venta');
+                mostrarSpinner.value = false;
               }}
             >
               {/* <input
@@ -79,8 +85,10 @@ export default component$(() => {
               title="Reporte de venta"
               style={{ cursor: 'pointer' }}
               onClick$={() => {
+                mostrarSpinner.value = true;
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 navegarA('/reporteVenta');
+                mostrarSpinner.value = false;
               }}
             >
               {/* <input
@@ -104,8 +112,10 @@ export default component$(() => {
               title="Cotización"
               style={{ cursor: 'pointer' }}
               onClick$={() => {
+                mostrarSpinner.value = true;
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 navegarA('/cotizacion');
+                mostrarSpinner.value = false;
               }}
             >
               {/* <Link href="/cotizacion/"> */}
@@ -117,8 +127,10 @@ export default component$(() => {
               title="Seleccionar servicio"
               style={{ cursor: 'pointer' }}
               onClick$={() => {
+                mostrarSpinner.value = true;
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
                 navegarA('/seleccionarServicio');
+                mostrarSpinner.value = false;
               }}
             >
               {/* <Link href="/seleccionarServicio/"> */}
@@ -155,11 +167,11 @@ export default component$(() => {
         </nav>
       </div>
       {/* MOSTRAR SPINNER */}
-      {/* {definicion_CTX_HEADER_ALMACEN.mostrarSpinner && (
+      {mostrarSpinner.value && (
         <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Spinner />
         </div>
-      )} */}
+      )}
     </header>
   );
 });

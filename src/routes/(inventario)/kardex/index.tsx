@@ -31,6 +31,7 @@ export default component$(() => {
   //#region INICIALIZANDO
   const navegarA = useNavigate();
   const buscarMercaderiasKARDEX = useSignal(0);
+  const verTODOS = useSignal(true);
   // const mercaderiaIN = useSignal(false);
 
   const parametrosBusqueda = useStore({
@@ -140,6 +141,18 @@ export default component$(() => {
         <label style={{ marginRight: '4px' }}>Leyenda:</label>
         <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
         <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px' }}>No facturable</label>
+        <input
+          id="in_verTODOS_KARDEX"
+          type="checkbox"
+          placeholder="Ver TODOS"
+          checked={verTODOS.value}
+          onChange$={(e) => {
+            verTODOS.value = (e.target as HTMLInputElement).checked;
+            // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
+          }}
+          // value={parametrosBusqueda.cadenaABuscar}
+        />
+        <label for="in_verTODOS_KARDEX">Ver TODOS</label>
       </div>
       {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN && (
         <div class="modal">
@@ -154,6 +167,7 @@ export default component$(() => {
             parametrosBusqueda={parametrosBusqueda}
             // contexto={props.contexto}
             esAlmacen={true}
+            verTODOS={verTODOS.value}
             //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
             //   parametrosBusqueda={parametrosBusqueda}
           />

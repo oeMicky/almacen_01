@@ -82,7 +82,7 @@ export default component$(
       idEmpresa: parametrosGlobales.idEmpresa,
       idAlmacen: parametrosGlobales.idAlmacen,
       buscarPor: 'Descripción', //por.value,
-      cadenaABuscar: 'bien', // 'acce 5', //cadena.value,
+      cadenaABuscar: '', // 'acce 5', //cadena.value,
     });
     //#endregion INICIALIZACION
 
@@ -162,6 +162,7 @@ export default component$(
           />
         </div>
         {/* TITULO */}
+        <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>{parametrosGlobales.sucursal}</h3>
         <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Buscar mercaderías / IN</h3>
         {/* FORMULARIO */}
         <div class="add-form">

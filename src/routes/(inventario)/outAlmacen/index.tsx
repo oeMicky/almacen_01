@@ -172,99 +172,106 @@ export default component$(() => {
           class={'btn-out'}
           style={{ cursor: 'pointer', marginLeft: '5px' }}
           onClick={$(async () => {
-            if (parametrosGlobales.idGrupoEmpresarial === '') {
-              // console.log('estaVACIA');
-              alert('Faltan datos... vuelva a logearse..');
-              navegarA('/login');
-              return;
-            }
-            //VERIFICAR SI EXISTE LA SERIE DE LA NOTA DE SALIDA
-            if (parametrosGlobales.idSerieNotaSalida === '') {
-              //buscar la serie (SI EXISTE)
-              let laSerie = await getSerieNotaSalidaDeSucursal({
-                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                idEmpresa: parametrosGlobales.idEmpresa,
-                idSucursal: parametrosGlobales.idSucursal,
-              });
-              console.log('🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
-              laSerie = laSerie.data[0];
-              console.log('🚕🚕🚕🚕🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
-
-              if (typeof laSerie !== 'undefined' && laSerie.idSerieNotaSalida !== '') {
-                parametrosGlobales.idSerieNotaSalida = laSerie.idSerieNotaSalida;
-                parametrosGlobales.serieNotaSalida = laSerie.serie;
-              } else {
-                alert('No existe la serie de la Nota de Salida.');
+            try {
+              definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner = true;
+              if (parametrosGlobales.idGrupoEmpresarial === '') {
+                // console.log('estaVACIA');
+                alert('Faltan datos... vuelva a logearse..');
+                navegarA('/login');
                 return;
               }
-            }
-            //ANALISIS MOTIVO SALIDA ALMACEN: NOTA DE SALIDA
-            if (typeof parametrosGlobales.idMotivosSalidaDelAlmacen_NS === 'undefined' || parametrosGlobales.idMotivosSalidaDelAlmacen_NS === '') {
-              // console.log('00000 parametrosGlobales.idMotivosSalidaDelAlmacen_NS', parametrosGlobales.idMotivosSalidaDelAlmacen_NS);
-              let existe = await existeMotivoNS({
-                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                idEmpresa: parametrosGlobales.idEmpresa,
-              });
-              // console.log('................existe..0........', existe);
-              existe = existe.data;
-              // console.log('................existe..1........', existe);
-              // console.log('................existe..2........', existe[0]);
-              if (existe.length === 0) {
-                alert('No existe el motivo de salida de nota de venta en el almacén, pongase en contacto con el administrador.');
-                return;
-              } else {
-                parametrosGlobales.idMotivosSalidaDelAlmacen_NS = existe[0]._id;
-                // console.log('111 parametrosGlobales.idMotivosSalidaDelAlmacen_NV', parametrosGlobales.idMotivosSalidaDelAlmacen_NV);
-              }
-            }
-            //validar PERIODO
-            let anioAnterior = '';
-            let mesAnterior = '';
-            const anio = (document.getElementById('in_laFechaHoyOutAlmacen') as HTMLInputElement).value.substring(0, 4);
-            const mes = (document.getElementById('in_laFechaHoyOutAlmacen') as HTMLInputElement).value.substring(5, 7);
-            //console.log(anio);
-            // //console.log('la fechitaaaa', anio + mes);
-            const periodoActual = anio + mes;
-            const PPP = losPeriodosCargados.value;
-            if (parseInt(mes) === 1) {
-              anioAnterior = (parseInt(anio) - 1).toString();
-              mesAnterior = '12';
-            } else {
-              anioAnterior = anio;
-              mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
-            }
-            const periodoANTE = anioAnterior + mesAnterior;
-            //console.log(periodoANTE);
-            // //console.log('mas', mas);
-            // //console.log('PPP', PPP);
-            const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
-            //console.log('⚠ elPeriodo', elPeriodo);
-            if (typeof elPeriodo === 'undefined') {
-              alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
-              return;
-            }
-            periodo.idPeriodo = elPeriodo._id;
-            periodo.periodo = elPeriodo.periodo;
-            //************* */
-            const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
-            periodoAnterior.idPeriodo = elPeriodoAnterior._id;
-            periodoAnterior.periodo = elPeriodoAnterior.periodo;
+              //VERIFICAR SI EXISTE LA SERIE DE LA NOTA DE SALIDA
+              if (parametrosGlobales.idSerieNotaSalida === '') {
+                //buscar la serie (SI EXISTE)
+                let laSerie = await getSerieNotaSalidaDeSucursal({
+                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                  idEmpresa: parametrosGlobales.idEmpresa,
+                  idSucursal: parametrosGlobales.idSucursal,
+                });
+                console.log('🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
+                laSerie = laSerie.data[0];
+                console.log('🚕🚕🚕🚕🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
 
-            if (periodo.idPeriodo === '') {
-              alert('Seleccione el periodo.');
-              document.getElementById('se_periodo')?.focus();
-              ini.value++;
-              return;
+                if (typeof laSerie !== 'undefined' && laSerie.idSerieNotaSalida !== '') {
+                  parametrosGlobales.idSerieNotaSalida = laSerie.idSerieNotaSalida;
+                  parametrosGlobales.serieNotaSalida = laSerie.serie;
+                } else {
+                  alert('No existe la serie de la Nota de Salida.');
+                  return;
+                }
+              }
+              //ANALISIS MOTIVO SALIDA ALMACEN: NOTA DE SALIDA
+              if (typeof parametrosGlobales.idMotivosSalidaDelAlmacen_NS === 'undefined' || parametrosGlobales.idMotivosSalidaDelAlmacen_NS === '') {
+                // console.log('00000 parametrosGlobales.idMotivosSalidaDelAlmacen_NS', parametrosGlobales.idMotivosSalidaDelAlmacen_NS);
+                let existe = await existeMotivoNS({
+                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                  idEmpresa: parametrosGlobales.idEmpresa,
+                });
+                // console.log('................existe..0........', existe);
+                existe = existe.data;
+                // console.log('................existe..1........', existe);
+                // console.log('................existe..2........', existe[0]);
+                if (existe.length === 0) {
+                  alert('No existe el motivo de salida de nota de venta en el almacén, pongase en contacto con el administrador.');
+                  return;
+                } else {
+                  parametrosGlobales.idMotivosSalidaDelAlmacen_NS = existe[0]._id;
+                  // console.log('111 parametrosGlobales.idMotivosSalidaDelAlmacen_NV', parametrosGlobales.idMotivosSalidaDelAlmacen_NV);
+                }
+              }
+              //validar PERIODO
+              let anioAnterior = '';
+              let mesAnterior = '';
+              const anio = (document.getElementById('in_laFechaHoyOutAlmacen') as HTMLInputElement).value.substring(0, 4);
+              const mes = (document.getElementById('in_laFechaHoyOutAlmacen') as HTMLInputElement).value.substring(5, 7);
+              //console.log(anio);
+              // //console.log('la fechitaaaa', anio + mes);
+              const periodoActual = anio + mes;
+              const PPP = losPeriodosCargados.value;
+              if (parseInt(mes) === 1) {
+                anioAnterior = (parseInt(anio) - 1).toString();
+                mesAnterior = '12';
+              } else {
+                anioAnterior = anio;
+                mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
+              }
+              const periodoANTE = anioAnterior + mesAnterior;
+              //console.log(periodoANTE);
+              // //console.log('mas', mas);
+              // //console.log('PPP', PPP);
+              const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
+              //console.log('⚠ elPeriodo', elPeriodo);
+              if (typeof elPeriodo === 'undefined') {
+                alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
+                return;
+              }
+              periodo.idPeriodo = elPeriodo._id;
+              periodo.periodo = elPeriodo.periodo;
+              //************* */
+              const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
+              periodoAnterior.idPeriodo = elPeriodoAnterior._id;
+              periodoAnterior.periodo = elPeriodoAnterior.periodo;
+
+              if (periodo.idPeriodo === '') {
+                alert('Seleccione el periodo.');
+                document.getElementById('se_periodo')?.focus();
+                ini.value++;
+                return;
+              }
+              //
+              let elIgv = await getIgvVenta(parametrosGlobales);
+              elIgv = elIgv.data;
+              // //console.log('elIgv', elIgv);
+              igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
+              // //console.log('igv.value::', igv.value);
+              // showAddCotizacion.value = true;
+              definicion_CTX_INDEX_OUT_ALMACEN.oNS = [];
+              definicion_CTX_INDEX_OUT_ALMACEN.mostrarPanelNewOutAlmacen = true;
+            } catch (error) {
+              console.log('🚀 ~ file: index.tsx ~ line 169 ~ onClick ~ error', error);
+            } finally {
+              definicion_CTX_INDEX_OUT_ALMACEN.mostrarSpinner = false;
             }
-            //
-            let elIgv = await getIgvVenta(parametrosGlobales);
-            elIgv = elIgv.data;
-            // //console.log('elIgv', elIgv);
-            igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-            // //console.log('igv.value::', igv.value);
-            // showAddCotizacion.value = true;
-            definicion_CTX_INDEX_OUT_ALMACEN.oNS = [];
-            definicion_CTX_INDEX_OUT_ALMACEN.mostrarPanelNewOutAlmacen = true;
           })}
         />
         {/* BUSCAR EGRESOS DE ALMACEN */}
