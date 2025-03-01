@@ -134,10 +134,13 @@ export default component$(() => {
   /**** EN PRODUCCION : Subir este archivo con email: '' , contrasena: '' */
   const definicion_CTX_LOGEO = useStore({
     mostrarSpinner: false,
-    // email: 'mvizconde@msn.com',
-    email: '',
 
+    //-- BETA --
+    // email: 'mvizconde@msn.com',
     // contrasena: 'Pamela123',
+
+    //PRODUCCION
+    email: '',
     contrasena: '',
   });
   //#endregion INICIALIZACION

@@ -749,7 +749,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('se_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -875,7 +875,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('se_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -999,7 +999,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('se_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -1014,7 +1014,7 @@ export default component$(
           <div class="form-control">
             <div class="form-control form-agrupado">
               <input
-                id="se_ubigeo_MERCADERIA_IN_MICE"
+                id="in_ubigeo_MERCADERIA_IN_MICE"
                 style={{ width: '100%' }}
                 type="text"
                 placeholder="Ubigeo"
@@ -1162,6 +1162,11 @@ export default component$(
                   document.getElementById('in_Fecha_Vencimiento_MICE')?.focus();
                   return;
                 }
+              }
+              if (props.mercaINSelecci.ubigeo.trim() === '') {
+                alert('Ingrese el ubigeo');
+                document.getElementById('in_ubigeo_MERCADERIA_IN_MICE')?.focus();
+                return;
               }
               if (actualizarPrecioPublicoPEN.value) {
                 if (
