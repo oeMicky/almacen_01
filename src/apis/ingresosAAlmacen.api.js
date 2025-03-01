@@ -14,8 +14,8 @@ export const loadMotivosIngresoAAlmacen = async (parametros) => {
 };
 
 export const inIngresoAAlmacen = async (parametros) => {
-  // //console.log('//////api////////////****************** en inIngresoAAlmacen');
-  // //console.log('parametros inIngresoAAlmacen', parametros);
+  console.log('//////api////////////****************** en inIngresoAAlmacen');
+  console.log('parametros inIngresoAAlmacen', parametros);
   const res = await fetch(API + '/inIngresoAAlmacen', {
     method: 'POST',
     headers: {

@@ -200,7 +200,7 @@ export default component$(() => {
         </button>
         {/* <button
           onClick$={() => {
-            //console.log('ppp', parametrosGlobales);
+            console.log('ppp', parametrosGlobales);
           }}
         >
           ppppppppp

@@ -12,6 +12,7 @@ import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from '../ordenProduccionTerminado/r
 import { CTX_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 import { upPrecioPublicoPEN } from '~/apis/mercaderia.api';
 import { parametrosGlobales } from '~/routes/login';
+import { upUbigeo } from '~/apis/kardex.api';
 
 export default component$(
   (props: {
@@ -748,7 +749,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('btn_Registrar_MercaderiaIN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('se_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -874,7 +875,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('btn_Registrar_MercaderiaIN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('se_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -998,7 +999,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('btn_Registrar_MercaderiaIN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('se_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -1007,6 +1008,34 @@ export default component$(
               </div>
             </div>
             <br />
+          </div>
+          <hr style={{ margin: '5px 0 5px 0' }} color={'#aaa'}></hr>
+          {/* Ubigeo */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <input
+                id="se_ubigeo_MERCADERIA_IN_MICE"
+                style={{ width: '100%' }}
+                type="text"
+                placeholder="Ubigeo"
+                title="Ubigeo Ej: 1A83 (1:Piso, A:Sección, 8:Columna, 3:Fila)"
+                value={props.mercaINSelecci.ubigeo}
+                onChange$={(e) => {
+                  props.mercaINSelecci.ubigeo = (e.target as HTMLInputElement).value.trim();
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('btn_Registrar_MercaderiaIN_MICE')?.focus();
+                  }
+                }}
+              />
+            </div>
+          </div>
+          {/* Ejm Ubigeo */}
+          <div class="form-control">
+            <div class="form-control form-agrupado">
+              <label style={{ color: '#666666' }}>Ejm: 1A83 (1:Piso, A:Sección, 8:Columna, 3:Fila)</label>
+            </div>
           </div>
           <hr hidden={!parametrosGlobales.actualizarPrecioPublico} style={{ margin: '5px 0 5px 0' }} color={'#aaa'}></hr>
           {/* PRECIO PUBLICO PEN */}
@@ -1188,6 +1217,7 @@ export default component$(
 
                   descripcion: props.mercaINSelecci.descripcion,
                   // descripcionEquivalencia: props.mercaINSelecci.descripcion,
+                  ubigeo: props.mercaINSelecci.ubigeo,
 
                   lote: lote.value,
                   fechaProduccion: fechaProduccion.value,
@@ -1233,6 +1263,7 @@ export default component$(
 
                   descripcion: props.mercaINSelecci.descripcion,
                   // descripcionEquivalencia: props.mercaINSelecci.descripcion,
+                  ubigeo: props.mercaINSelecci.ubigeo,
 
                   lote: lote.value,
                   fechaProduccion: fechaProduccion.value,
@@ -1272,6 +1303,20 @@ export default component$(
               if (props.contextoInmediato === 'kardexs_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = false;
               }
+              // ACTUALIZAR UBIGEO
+              // console.log('props.elKardex._id', props.elKardex._id);
+
+              if (props.mercaINSelecci.ubigeo.trim() !== '' && typeof props.elKardex._id !== 'undefined') {
+                const ubi = await upUbigeo({
+                  idKardex: props.elKardex._id,
+                  ubigeo: props.mercaINSelecci.ubigeo,
+
+                  usuario: parametrosGlobales.usuario,
+                });
+
+                console.log('ubi.......', ubi);
+              }
+
               // ACTUALIZAR PRECIO PUBLICO PEN
               if (actualizarPrecioPublicoPEN.value) {
                 const precioP = await upPrecioPublicoPEN({

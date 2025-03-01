@@ -72,7 +72,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     aplicacion: props.mercaSeleccio.aplicacion ? props.mercaSeleccio.aplicacion : '',
     UNSPSC: props.mercaSeleccio.UNSPSC ? props.mercaSeleccio.UNSPSC : '',
 
-    ubigeo: props.mercaSeleccio.ubigeo ? props.mercaSeleccio.ubigeo : '',
+    // ubigeo: props.mercaSeleccio.ubigeo ? props.mercaSeleccio.ubigeo : '',
 
     porcentajeUtilidadXDefecto: typeof props.mercaSeleccio.porcentajeUtilidadXDefecto === 'undefined' ? true : props.mercaSeleccio.porcentajeUtilidadXDefecto,
     // porcentajeUtilidad: props.mercaSeleccio.porcentajeUtilidad.$numberDecimal ? props.mercaSeleccio.porcentajeUtilidad.$numberDecimal : 0,
@@ -503,7 +503,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       idUnidad: definicion_CTX_MERCADERIA_IN.idUnidad,
       unidad: definicion_CTX_MERCADERIA_IN.unidad,
 
-      ubigeo: definicion_CTX_MERCADERIA_IN.ubigeo,
+      // ubigeo: definicion_CTX_MERCADERIA_IN.ubigeo,
 
       porcentajeUtilidadXDefecto: definicion_CTX_MERCADERIA_IN.porcentajeUtilidadXDefecto,
       porcentajeUtilidad: definicion_CTX_MERCADERIA_IN.porcentajeUtilidad,
@@ -1032,7 +1032,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
                     // console.log('💥💥💥💥💥 Enter => se_aplicacion_MERCADERIA_IN focus');
-                    (document.getElementById('se_ubigeo_MERCADERIA_IN') as HTMLInputElement).focus();
+                    (document.getElementById('se_porcentajeUtilidad_MERCADERIA_IN') as HTMLInputElement).focus();
                     // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).select();
                     // (document.getElementById('se_aplicacion_MERCADERIA_IN') as HTMLInputElement).style.border = '1px solid red';
                     // document.getElementById('se_aplicacion_MERCADERIA_IN')?.focus();
@@ -1159,33 +1159,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
             )} */}
           </div>
           <br />
-          {/* Ubigeo */}
-          <div class="form-control">
-            <div class="form-control form-agrupado">
-              <input
-                id="se_ubigeo_MERCADERIA_IN"
-                style={{ width: '100%' }}
-                type="text"
-                placeholder="Ubigeo"
-                title="Ubigeo Ej: 1A83 (1:Piso, A:Sección, 8:Columna, 3:Fila)"
-                value={definicion_CTX_MERCADERIA_IN.ubigeo}
-                onChange$={(e) => {
-                  definicion_CTX_MERCADERIA_IN.ubigeo = (e.target as HTMLInputElement).value.trim();
-                }}
-                onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    document.getElementById('se_porcentajeUtilidad_MERCADERIA_IN')?.focus();
-                  }
-                }}
-              />
-            </div>
-          </div>
-          {/* Ejm Ubigeo */}
-          <div class="form-control">
-            <div class="form-control form-agrupado">
-              <label style={{ color: '#666666' }}>Ejm: 1A83 (1:Piso, A:Sección, 8:Columna, 3:Fila)</label>
-            </div>
-          </div>
+
           {/* PORCENTAJE DE UTILIDAD x DEFECTO */}
           <div>
             <div>
@@ -1621,22 +1595,24 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
                       return (
                         <tr key={iTEqui.idAuxiliar}>
                           {/* <td data-label="Ítem" key={iTSer.idAuxili ar}>{`${cerosALaIzquierda(indexItemServi, 3)}`}</td> */}
-                          <td data-label="Descripción Equivalencia">{iTEqui.descripcionEquivalencia}</td>
+                          <td data-label="Descripción Equivalencia">
+                            <b>{iTEqui.descripcionEquivalencia}</b>
+                          </td>
                           {/* <td data-label="Tipo Equivalencia">{iTEqui.tipoEquivalencia ? 'T' : 'F'}</td> */}
 
-                          <td data-label="Uni Eq" class="comoNumero">
+                          <td data-label="Uni Eq" class="accionesLeft">
                             {iTEqui.unidadEquivalencia}
                           </td>
-                          <td data-label="=" class="acciones">
+                          <td data-label="=" class="accionesLeft">
                             =
                           </td>
-                          <td data-label="Factor" class="acciones">
+                          <td data-label="Factor" class="accionesLeft">
                             {iTEqui.tipoEquivalencia ? iTEqui.factor : '1/' + iTEqui.factor}
                           </td>
-                          <td data-label="Uni" class="comoCadena">
+                          <td data-label="Uni" class="accionesLeft">
                             {definicion_CTX_MERCADERIA_IN.unidad}
                           </td>
-                          <td data-label="Acciones" class="acciones">
+                          <td data-label="Acciones" class="accionesLeft">
                             <input
                               type="image"
                               src={images.edit}

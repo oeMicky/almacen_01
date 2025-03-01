@@ -4,6 +4,7 @@ import { images } from '~/assets';
 import { parametrosGlobales } from '~/routes/login';
 import style from '../header/headerAlmacen.css?inline';
 import Spinner from '../system/spinner';
+import { limpiarParametrosGlobales } from '~/functions/limpiar';
 
 export default component$(() => {
   useStyles$(style);
@@ -99,9 +100,22 @@ export default component$(() => {
                 sessionStorage.removeItem('sucursal');
                 sessionStorage.removeItem('idAlmacen');
                 sessionStorage.removeItem('almacenActivo');
+                sessionStorage.removeItem('idSerieNotaIngreso');
+                sessionStorage.removeItem('serieNotaIngreso');
+                sessionStorage.removeItem('idSerieNotaSalida');
+                sessionStorage.removeItem('serieNotaSalida');
                 // sessionStorage.clear;
-                parametrosGlobales.idGrupoEmpresarial = '';
-                parametrosGlobales.nombreGrupoEmpresarial = '';
+                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                limpiarParametrosGlobales();
+                // parametrosGlobales.idGrupoEmpresarial = '';
+                // parametrosGlobales.nombreGrupoEmpresarial = '';
+                // parametrosGlobales.idSerieNotaIngreso = '';
+                // parametrosGlobales.serieNotaIngreso = '';
+                // parametrosGlobales.idSerieNotaSalida = '';
+                // parametrosGlobales.serieNotaSalida = '';
+
+                // parametrosGlobales.idGrupoEmpresarial = '';
+                // parametrosGlobales.nombreGrupoEmpresarial = '';
                 navegarA('/login');
               }}
             >

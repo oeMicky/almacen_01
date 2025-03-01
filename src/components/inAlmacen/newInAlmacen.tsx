@@ -1314,11 +1314,11 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                           <strong> {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>
                         </td>
                         <td data-label="IGV">{iTMercaIN.IGV.$numberDecimal ? iTMercaIN.IGV.$numberDecimal : iTMercaIN.IGV} %</td>
-                        <td data-label="Cantidad" class="comoNumero">
+                        <td data-label="Cantidad" class="comoNumeroLeft">
                           <input
                             type="number"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
-                            style={{ width: '70px', textAlign: 'end' }}
+                            style={{ width: '80px', textAlign: 'end' }}
                             value={
                               !definicion_CTX_IN_ALMACEN.reingreso
                                 ? iTMercaIN.cantidadIngresada.$numberDecimal
@@ -1401,7 +1401,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                             }}
                           />
                         </td>
-                        <td data-label="Uni" class="comoNumero">
+                        <td data-label="Uni" class="accionesLeft">
                           {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.unidad : iTMercaIN.unidadEquivalencia}
                         </td>
                         {/* SIN IGV -- SIN IGV -- SIN IGV -- SIN IGV */}
@@ -1410,14 +1410,14 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         {/* costoUnitario */}
                         <td
                           data-label={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'CostoUniUSD' : 'CostoUniPEN'}
-                          class="comoNumero"
+                          class="comoNumeroLeft"
                           style={definicion_CTX_IN_ALMACEN.conIGV ? { display: 'none' } : ''}
                         >
                           {definicion_CTX_IN_ALMACEN.porMontoUnitario ? (
                             <input
                               type="number"
                               disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
-                              style={{ width: '70px', textAlign: 'end' }}
+                              style={{ width: '80px', textAlign: 'end' }}
                               value={
                                 definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                                   ? formatear_6Decimales(
@@ -1532,14 +1532,14 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         {/* sub */}
                         <td
                           data-label={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'subUSD' : 'subPEN'}
-                          class="comoNumero"
+                          class="comoNumeroLeft"
                           style={definicion_CTX_IN_ALMACEN.conIGV ? { display: 'none' } : ''}
                         >
                           {!definicion_CTX_IN_ALMACEN.porMontoUnitario ? (
                             <input
                               type="number"
                               disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
-                              style={{ width: '70px', textAlign: 'end' }}
+                              style={{ width: '80px', textAlign: 'end' }}
                               value={
                                 definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                                   ? formatear_6Decimales(iTMercaIN.subUSD.$numberDecimal ? iTMercaIN.subUSD.$numberDecimal : iTMercaIN.subUSD)
@@ -1662,14 +1662,14 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         {/* valorUnitario */}
                         <td
                           data-label={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'ValorUniUSD' : 'ValorUniPEN'}
-                          class="comoNumero"
+                          class="comoNumeroLeft"
                           style={!definicion_CTX_IN_ALMACEN.conIGV ? { display: 'none' } : ''}
                         >
                           {definicion_CTX_IN_ALMACEN.porMontoUnitario ? (
                             <input
                               type="number"
                               disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
-                              style={{ width: '90px', textAlign: 'end' }}
+                              style={{ width: '80px', textAlign: 'end' }}
                               value={
                                 definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                                   ? formatear_6Decimales(
@@ -1782,13 +1782,15 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         <td
                           data-label={definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual ? 'TotUSD' : 'TotPEN'}
                           // style={{ textAlign: 'end' }}
-                          style={!definicion_CTX_IN_ALMACEN.conIGV ? { display: 'none' } : { textAlign: 'end' }}
+                          class="comoNumeroLeft"
+                          // style={!definicion_CTX_IN_ALMACEN.conIGV ? { display: 'none' } : { textAlign: 'start' }}
+                          style={!definicion_CTX_IN_ALMACEN.conIGV ? { display: 'none' } : ''}
                         >
                           {!definicion_CTX_IN_ALMACEN.porMontoUnitario ? (
                             <input
                               type="number"
                               disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
-                              style={{ width: '90px', textAlign: 'end' }}
+                              style={{ width: '80px', textAlign: 'end' }}
                               value={
                                 definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual
                                   ? formatear_6Decimales(
@@ -1907,7 +1909,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         </td>
                         {/* ACCIONES -- ACCIONES -- ACCIONES -- ACCIONES */}
                         {definicion_CTX_IN_ALMACEN._id === '' ? (
-                          <td data-label="Acc" class="acciones">
+                          <td data-label="Acc" class="accionesLeft">
                             <input
                               type="image"
                               src={images.trash}

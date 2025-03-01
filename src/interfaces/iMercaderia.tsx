@@ -63,6 +63,64 @@ export interface IMercaderiaIN {
 
   UNSPSC: string;
 
+  // ubigeo: string;
+
+  porcentajeUtilidadXDefecto: boolean;
+  porcentajeUtilidad: any;
+
+  conLote: boolean;
+  conFechaProduccion: boolean;
+  conFechaVencimiento: boolean;
+  //IMPORTANTE
+  idKardex: string;
+  lote: string;
+  fechaVencimiento: string;
+
+  // costoUnitarioMovil: any;
+  idLineaTipo: string;
+  lineaTipo: string;
+  idMarca: string;
+  marca: string;
+  idUnidad: string;
+  unidad: string;
+
+  tipoImpuesto: any;
+  tipoAfectacionDelImpuesto: string;
+  porcentaje: any;
+
+  stockMinimo: any;
+
+  kardex: any;
+  KARDEXS: any;
+
+  inafecto: boolean;
+  exonerado: boolean;
+  sujetoAPercepcion: boolean;
+  percepcion: number;
+
+  equivalencias: [IMercaEquivalenciaIN]; //any;
+
+  totalCantidadSaldo: any;
+  promedioCostoUnitarioMovil: any;
+
+  costoPEN: any;
+
+  costoDeInicioPEN: any;
+  precioUnitarioPEN: any;
+}
+
+export interface IMercaderiaIN_BUSCAR {
+  _id: string;
+
+  noFacturar: boolean;
+
+  activo: boolean;
+  codigo: string;
+  descripcion: string;
+  aplicacion: string;
+
+  UNSPSC: string;
+
   ubigeo: string;
 
   porcentajeUtilidadXDefecto: boolean;

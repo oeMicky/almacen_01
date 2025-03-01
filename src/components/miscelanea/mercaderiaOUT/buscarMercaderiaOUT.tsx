@@ -491,7 +491,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: '8px', fontSize: '0.9rem' }}>{parametrosGlobales.sucursal}</h3>
+      <h3 style={{ marginBottom: '8px', fontSize: '0.9rem', color: 'red' }}>{parametrosGlobales.sucursal}</h3>
       <h3 style={{ marginBottom: '8px', fontSize: '0.9rem' }}>Buscar bienes / OUT</h3>
       {/* FORMULARIO */}
       <div class="add-form">

@@ -3,6 +3,7 @@ import { Link, useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
 import { parametrosGlobales } from '~/routes/login';
 import style from '../header/headerAlmacen.css?inline';
+import { limpiarParametrosGlobales } from '~/functions/limpiar';
 
 export default component$(() => {
   useStyles$(style);
@@ -68,8 +69,9 @@ export default component$(() => {
                 sessionStorage.removeItem('idAlmacen');
                 sessionStorage.removeItem('almacenActivo');
                 // sessionStorage.clear;
-                parametrosGlobales.idGrupoEmpresarial = '';
-                parametrosGlobales.nombreGrupoEmpresarial = '';
+                limpiarParametrosGlobales();
+                // parametrosGlobales.idGrupoEmpresarial = '';
+                // parametrosGlobales.nombreGrupoEmpresarial = '';
                 navegarA('/login');
               }}
             >

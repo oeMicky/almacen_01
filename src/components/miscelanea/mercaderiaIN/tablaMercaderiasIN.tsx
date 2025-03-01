@@ -1,7 +1,7 @@
 import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 // import ImgButton from '~/components/system/imgButton';
-import type { IMercaderiaIN } from '~/interfaces/iMercaderia';
+import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 import { formatear_6Decimales } from '~/functions/comunes';
@@ -121,7 +121,7 @@ export default component$(
         onResolved={(mercaderiasIN) => {
           console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
           const { data } = mercaderiasIN; //{ status, data, message }
-          const misMercaderiasIN: IMercaderiaIN[] = data;
+          const misMercaderiasIN: IMercaderiaIN_BUSCAR[] = data;
           ctx.mostrarSpinner = false;
           return (
             <>
@@ -202,7 +202,8 @@ export default component$(
                             <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {marca}
                             </td>
-                            <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}</td>
+                            <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== '' && ubigeo !== null ? ubigeo : '-'}</td>
+                            {/* <td data-label="Ubigeo">{typeof ubigeo === 'undefined' && ubigeo === '' && ubigeo === null ? '-' : ubigeo}</td> */}
 
                             <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
                               <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>

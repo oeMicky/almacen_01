@@ -1,7 +1,7 @@
 import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 // import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
-import type { IMercaderiaIN } from '~/interfaces/iMercaderia';
+import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import style from '../tabla/tabla.css?inline';
 import { formatear_2Decimales } from '~/functions/comunes';
@@ -70,7 +70,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
       onResolved={(mercaderias) => {
         console.log('onResolved 🍓🍓🍓🍓', mercaderias);
         const { data } = mercaderias; //{ status, data, message }
-        const misMercaderiasKARDEX: IMercaderiaIN[] = data;
+        const misMercaderiasKARDEX: IMercaderiaIN_BUSCAR[] = data;
         return (
           <>
             {misMercaderiasKARDEX.length > 0 ? (

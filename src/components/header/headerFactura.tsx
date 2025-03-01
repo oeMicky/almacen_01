@@ -4,6 +4,7 @@ import { images } from '~/assets';
 import { parametrosGlobales } from '~/routes/login';
 import style from '../header/headerAlmacen.css?inline';
 import Spinner from '../system/spinner';
+import { limpiarParametrosGlobales } from '~/functions/limpiar';
 // import { existeMotivoNV } from '~/apis/egresosDeAlmacen.api';
 
 export default component$(() => {
@@ -156,8 +157,9 @@ export default component$(() => {
                 sessionStorage.removeItem('idAlmacen');
                 sessionStorage.removeItem('almacenActivo');
                 // sessionStorage.clear;
-                parametrosGlobales.idGrupoEmpresarial = '';
-                parametrosGlobales.nombreGrupoEmpresarial = '';
+                limpiarParametrosGlobales();
+                // parametrosGlobales.idGrupoEmpresarial = '';
+                // parametrosGlobales.nombreGrupoEmpresarial = '';
                 navegarA('/login');
               }}
             >
