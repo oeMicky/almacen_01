@@ -227,7 +227,7 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercasOUT) => {
-          //console.log('onResolved 🍓🍓🍓🍓', mercasOUT);
+          // console.log('onResolved 🍓🍓🍓🍓', mercasOUT);
           const { data } = mercasOUT; //{ status, data, message }
           const misMercaderiasOUT: IMercaderiaOUT[] = data;
           //console.log('misMercaderiasOUT', misMercaderiasOUT);
@@ -409,7 +409,7 @@ export default component$(
                                 title="Editar mercadería"
                                 height={12}
                                 width={12}
-                                // style={{ marginRight: '2px' }}
+                                style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
@@ -418,6 +418,42 @@ export default component$(
                                 }}
                               />
                             )}
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
+                              src={images.ubigeo}
+                              title="Editar ubigeo"
+                              height={12}
+                              width={12}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
+                                if (mercaOUTLocali.KARDEXS.length === 0) {
+                                  alert('El ítem seleccionado no presenta kardex.');
+                                  return;
+                                }
+
+                                if (mercaOUTLocali.KARDEXS.length === 1) {
+                                  console.log('🍔🍟🍟🍟🍟 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
+
+                                  ctx_buscar_mercaderia_out.elIdKardex = mercaOUTLocali.KARDEXS[0]._id;
+                                  ctx_buscar_mercaderia_out.elUBIGEO = ubigeo;
+                                  ctx_buscar_mercaderia_out.mostrarPanelNewEditUbigeo = true;
+                                  console.log(
+                                    '🍔🍔🍔🍔🍔 mercaOUTLocali.KARDEXS.length',
+                                    ctx_buscar_mercaderia_out.elIdKardex,
+                                    ctx_buscar_mercaderia_out.elUBIGEO
+                                  );
+                                }
+                                // if (mercaOUTLocali.KARDEXS.length > 1) {
+                                //   console.log('🥗🥗🥗🥗🥗 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
+                                //   ctx.mM = mercaOUTLocali;
+                                //   ctx.mostrarPanelKardexsIN = true;
+                                // }
+
+                                // ctx_buscar_mercaderia_out.mostrarSpinner = true;
+                                //console.log('la merca A Editar IN', ctx.mM);
+                              }}
+                            />
                           </td>
                         </tr>
                       );

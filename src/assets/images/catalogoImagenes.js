@@ -105,6 +105,7 @@ import sucursal from '../images/sucursal.svg';
 import three_dots from '../images/three-dots.svg';
 import three_dots2 from '../images/three-dots2.svg';
 import trash from '../images/trash.svg';
+import ubigeo from '../images/ubigeo.svg';
 import user from '../images/user.svg';
 import x from '../images/x.svg';
 import xml from '../images/xml.svg';
@@ -217,6 +218,7 @@ export default {
   three_dots,
   three_dots2,
   trash,
+  ubigeo,
   user,
   x,
   xml,

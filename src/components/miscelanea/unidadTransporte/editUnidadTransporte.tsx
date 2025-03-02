@@ -60,7 +60,7 @@ export default component$((props: { uniTranspSeleccionado: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 400px)',
+        width: 'clamp(320px, 100%, 400px)',
         // width: 'auto',
         padding: '1px',
         // border: '3px dashed yellow',

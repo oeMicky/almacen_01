@@ -22,6 +22,8 @@ import {
 import Spinner from '~/components/system/spinner';
 import { elIdAuxiliar } from '~/functions/comunes';
 import NewEditMercaderiaIN from '../mercaderiaIN/newEditMercaderiaIN';
+import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
+// import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
 
@@ -34,6 +36,11 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     mostrarPanelNewEditMercaderiaIN: false,
     grabo_mercaderiaIN: false,
 
+    mostrarPanelNewEditUbigeo: false,
+    elIdKardex: '',
+    elUBIGEO: '',
+    grabo_ubigeo: false,
+
     mostrarPanelKardexsOUT: false,
 
     mostrarPanelMercaderiaOUTSeleccionada: false,
@@ -41,6 +48,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
 
     mostrarPanelAsignarPrecioOUT: false,
     grabo_PrecioOUT: false,
+
+    // mostrarSpinner: false,
   });
   useContextProvider(CTX_BUSCAR_MERCADERIA_OUT, definicion_CTX_BUSCAR_MERCADERIA_OUT);
   //#endregion DEFINICION CTX_BUSCAR_MERCADERIA_OUT - para eDITAR - para BUSCAR
@@ -152,6 +161,23 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     }
   });
   //#endregion REFRESCAR TABLA MERCADERIAS OUT x grabo_mercaderiaIN
+
+  //#region REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
+  useTask$(({ track }) => {
+    track(() => {
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_ubigeo;
+    });
+    if (definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_ubigeo) {
+      // parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.elIdKardex = '';
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.elUBIGEO = '';
+
+      // buscarMercaderiasIN.value++;
+      localizarMercaderiasOUT();
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_ubigeo = false;
+    }
+  });
+  //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
 
   //#region BUSCAR MERCADERIAS OUT _EnAUTOMATICO
   const localizarMercaderiasOUT_EnAUTOMATICO = $(async () => {
@@ -433,13 +459,13 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
         verLineaMarca.value || verAplicacion.value
           ? hallado.value
             ? {
-                width: 'clamp(330px, 86%, 1112px)',
+                width: 'clamp(320px, 100%, 1112px)',
                 // width: 'auto',
                 border: '1px solid red',
                 padding: '2px',
               }
             : {
-                width: 'clamp(330px, 86%, 1112px)',
+                width: 'clamp(320px, 100%, 1112px)',
                 // width: 'auto',
                 border: '1px solid red',
                 padding: '2px',
@@ -447,13 +473,13 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               }
           : hallado.value
           ? {
-              width: 'clamp(330px, 86%, 800px)',
+              width: 'clamp(320px, 100%, 800px)',
               // width: 'auto',
               border: '1px solid red',
               padding: '2px',
             }
           : {
-              width: 'clamp(330px, 86%, 800px)',
+              width: 'clamp(320px, 100%, 800px)',
               // width: 'auto',
               border: '1px solid red',
               padding: '2px',
@@ -728,6 +754,15 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 esProduccion={props.esProduccion}
                 contexto={props.contexto}
                 porcentaje={props.porcentaje}
+              />
+            </div>
+          )}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelNewEditUbigeo && (
+            <div class="modal">
+              <NewEditUbigeo
+                idKardex={definicion_CTX_BUSCAR_MERCADERIA_OUT.elIdKardex}
+                ubigeo={definicion_CTX_BUSCAR_MERCADERIA_OUT.elUBIGEO}
+                contexto="buscar_mercaderia_out"
               />
             </div>
           )}

@@ -131,7 +131,7 @@ export default component$(
     return (
       <div
         style={{
-          width: 'clamp(330px, 86%, 512px)',
+          width: 'clamp(320px, 100%, 512px)',
           // width: 'auto',
           border: '1px solid red',
           padding: '2px',

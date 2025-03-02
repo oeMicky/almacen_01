@@ -12,7 +12,7 @@ export default component$((props: { borrarCuentaContable: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 400px)',
+        width: 'clamp(320px, 100%, 400px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

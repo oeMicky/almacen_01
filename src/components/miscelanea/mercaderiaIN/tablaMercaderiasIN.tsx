@@ -119,7 +119,7 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercaderiasIN) => {
-          console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
+          // console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
           const { data } = mercaderiasIN; //{ status, data, message }
           const misMercaderiasIN: IMercaderiaIN_BUSCAR[] = data;
           ctx.mostrarSpinner = false;
@@ -348,6 +348,40 @@ export default component$(
                                 onClick$={() => {
                                   ctx.mM = mercaINLocali;
                                   ctx.mostrarPanelNewEditMercaderiaIN = true;
+                                  ctx.mostrarSpinner = true;
+                                  //console.log('la merca A Editar IN', ctx.mM);
+                                }}
+                              />
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
+                                src={images.ubigeo}
+                                title="Editar ubigeo"
+                                height={12}
+                                width={12}
+                                style={{ marginRight: '4px' }}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
+                                  if (mercaINLocali.KARDEXS.length === 0) {
+                                    alert('El ítem seleccionado no presenta kardex.');
+                                    return;
+                                  }
+
+                                  if (mercaINLocali.KARDEXS.length === 1) {
+                                    console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+
+                                    ctx.elIdKardex = mercaINLocali.KARDEXS[0]._id;
+                                    ctx.elUBIGEO = ubigeo;
+                                    ctx.mostrarPanelNewEditUbigeo = true;
+                                    //console.log('la mercaSeleccionada IN DIRECTA', ctx.mM);
+                                  }
+                                  if (mercaINLocali.KARDEXS.length > 1) {
+                                    console.log('🥗🥗🥗🥗🥗 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+                                    ctx.mM = mercaINLocali;
+                                    ctx.mostrarPanelKardexsIN = true;
+                                    //console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);
+                                  }
+
                                   ctx.mostrarSpinner = true;
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}

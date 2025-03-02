@@ -176,6 +176,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                               alt="icono de editar"
                               height={14}
                               width={14}
+                              style={{ marginRight: '8px' }}
                               title="Editar mercadería"
                               onClick$={() => {
                                 ctx_index_kardex.mM = mercaINLocali;
@@ -183,6 +184,38 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 //   ctx_buscar_mercaderia_in.mM = mercaINLocali;
                                 //   ctx_buscar_mercaderia_in.mostrarPanelNewEditMercaderiaIN = true;
                                 //console.log('la merca A Editar IN-->', ctx_index_kardex.mM);
+                              }}
+                            />
+                            <input
+                              // id="in_BuscarDetraccion"
+                              type="image"
+                              src={images.ubigeo}
+                              title="Editar ubigeo"
+                              height={12}
+                              width={12}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
+                                if (mercaINLocali.KARDEXS.length === 0) {
+                                  alert('El ítem seleccionado no presenta kardex.');
+                                  return;
+                                }
+
+                                if (mercaINLocali.KARDEXS.length === 1) {
+                                  console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+
+                                  ctx_index_kardex.elIdKardex = mercaINLocali.KARDEXS[0]._id;
+                                  ctx_index_kardex.elUBIGEO = ubigeo;
+                                  ctx_index_kardex.mostrarPanelNewEditUbigeo = true;
+                                  console.log('🍔🍔🍔🍔🍔 mercaINLocali.KARDEXS.length', ctx_index_kardex.elIdKardex, ctx_index_kardex.elUBIGEO);
+                                }
+                                // if (mercaINLocali.KARDEXS.length > 1) {
+                                //   console.log('🥗🥗🥗🥗🥗 mercaOUTLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+                                //   ctx.mM = mercaINLocali;
+                                //   ctx.mostrarPanelKardexsIN = true;
+                                // }
+
+                                // ctx_buscar_mercaderia_out.mostrarSpinner = true;
+                                //console.log('la merca A Editar IN', ctx.mM);
                               }}
                             />
                           </td>

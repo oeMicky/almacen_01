@@ -5,6 +5,7 @@ import Kardex from '~/components/kardex/kardex';
 import Kardexs from '~/components/kardex/kardexs';
 import TablaMercaderiasKardex from '~/components/kardex/tablaMercaderiasKardex';
 import NewEditMercaderiaIN from '~/components/miscelanea/mercaderiaIN/newEditMercaderiaIN';
+import NewEditUbigeo from '~/components/miscelanea/mercaderiaIN/newEditUbigeo';
 // import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -20,6 +21,11 @@ export default component$(() => {
     // grabo_OS: false,
     mostrarPanelNewEditMercaderiaIN: false,
     grabo_mercaderiaIN: false,
+
+    mostrarPanelNewEditUbigeo: false,
+    elIdKardex: '',
+    elUBIGEO: '',
+    grabo_ubigeo: false,
 
     // mostrarPanelNewEditMercaderiaIN: false,
     mostrarPanelVerInAlmacen: false,
@@ -65,6 +71,22 @@ export default component$(() => {
     }
   });
   //#endregion REFRESCAR TABLA MERCADERIAS IN
+
+  //#region REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
+  useTask$(({ track }) => {
+    track(() => {
+      definicion_CTX_INDEX_KARDEX.grabo_ubigeo;
+    });
+    if (definicion_CTX_INDEX_KARDEX.grabo_ubigeo) {
+      // parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
+      definicion_CTX_INDEX_KARDEX.elIdKardex = '';
+      definicion_CTX_INDEX_KARDEX.elUBIGEO = '';
+
+      buscarMercaderiasKARDEX.value++;
+      definicion_CTX_INDEX_KARDEX.grabo_ubigeo = false;
+    }
+  });
+  //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
 
   return (
     <div class="container">
@@ -191,10 +213,15 @@ export default component$(() => {
               kardex={definicion_CTX_INDEX_KARDEX.kK}
               // esAlmacen={props.esAlmacen}
               // esAlmacen={false}
-              contexto={'index_kardexs'}
+              contexto="index_kardexs"
               // contextoParaDocumento={props.contexto}
               // igv={props.igv}
             />
+          </div>
+        )}
+        {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditUbigeo && (
+          <div class="modal">
+            <NewEditUbigeo idKardex={definicion_CTX_INDEX_KARDEX.elIdKardex} ubigeo={definicion_CTX_INDEX_KARDEX.elUBIGEO} contexto="index_kardexs" />
           </div>
         )}
         {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN && (

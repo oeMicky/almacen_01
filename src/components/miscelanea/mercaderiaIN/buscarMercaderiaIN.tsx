@@ -12,6 +12,7 @@ import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGui
 import Kardexs from '~/components/kardex/kardexs';
 import Kardex from '~/components/kardex/kardex';
 import EditPrecioPublicoIN from './editPrecioPublicoIN';
+import NewEditUbigeo from './newEditUbigeo';
 // import MercaderiaINSelec from "./mercaderiaINSelec";
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
@@ -35,6 +36,11 @@ export default component$(
 
       mM: [],
       kK: [],
+
+      mostrarPanelNewEditUbigeo: false,
+      elIdKardex: '',
+      elUBIGEO: '',
+      grabo_ubigeo: false,
 
       mostrarPanelNewEditMercaderiaIN: false,
       abuscar: '',
@@ -99,7 +105,7 @@ export default component$(
     });
     //#endregion BUSCAR MERCADERIAS IN
 
-    //#region REFRESCAR TABLA MERCADERIAS IN
+    //#region REFRESCAR TABLA MERCADERIAS IN: grabo_mercaderiaIN
     useTask$(({ track }) => {
       track(() => {
         definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_mercaderiaIN;
@@ -110,7 +116,7 @@ export default component$(
         definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_mercaderiaIN = false;
       }
     });
-    //#endregion REFRESCAR TABLA MERCADERIAS IN
+    //#endregion REFRESCAR TABLA MERCADERIAS IN: grabo_mercaderiaIN
 
     //#region ADICIONAR MERCADERIA IN
     const adicionarMercaderiasIN = $(() => {
@@ -118,6 +124,22 @@ export default component$(
       definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelNewEditMercaderiaIN = true;
     });
     //#endregion ADICIONAR MERCADERIA IN
+
+    //#region REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
+    useTask$(({ track }) => {
+      track(() => {
+        definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_ubigeo;
+      });
+      if (definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_ubigeo) {
+        // parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
+        definicion_CTX_BUSCAR_MERCADERIA_IN.elIdKardex = '';
+        definicion_CTX_BUSCAR_MERCADERIA_IN.elUBIGEO = '';
+
+        buscarMercaderiasIN.value++;
+        definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_ubigeo = false;
+      }
+    });
+    //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
 
     return (
       <div
@@ -387,6 +409,15 @@ export default component$(
                   contexto={'buscar_mercaderia_IN'}
                   // contextoParaDocumento={props.contexto}
                   // igv={props.igv}
+                />
+              </div>
+            )}
+            {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelNewEditUbigeo && (
+              <div class="modal">
+                <NewEditUbigeo
+                  idKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.elIdKardex}
+                  ubigeo={definicion_CTX_BUSCAR_MERCADERIA_IN.elUBIGEO}
+                  contexto="buscar_mercaderia_in"
                 />
               </div>
             )}

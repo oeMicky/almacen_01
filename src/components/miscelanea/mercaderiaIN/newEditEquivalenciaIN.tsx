@@ -159,7 +159,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 560px)',
+        width: 'clamp(320px, 100%, 560px)',
         // width: 'auto',
         padding: '2px',
       }}

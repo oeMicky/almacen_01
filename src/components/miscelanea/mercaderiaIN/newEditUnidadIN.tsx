@@ -49,7 +49,7 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 390px)',
+        width: 'clamp(320px, 100%, 390px)',
         // width: 'auto',
         padding: '2px',
         // background: '#c0c0c0',
