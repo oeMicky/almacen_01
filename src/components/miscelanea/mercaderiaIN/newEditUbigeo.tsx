@@ -41,7 +41,7 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
 
   //#region GRABAR UBIGEO
   const grabarUbigeo = $(async () => {
-    if (UBI.value.trim() === '') {
+    if (typeof UBI.value === 'undefined' || UBI.value === null || UBI.value.trim() === '') {
       alert('Ingrese el ubigeo');
       document.getElementById('in_ubigeoIN_MICE')?.focus();
       return;
@@ -85,13 +85,15 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
         />
       </div>
       {/* TITULO */}
-      <h3>Registro de ubigeo </h3>
+      <h3>Registro de ubigeo</h3>
       {/* FORMULARIO */}
 
       <div class="add-form">
         {/* Ubigeo  */}
-        <div class="form-control" style={{ margin: '8px 0' }}>
-          <div class="form-control form-agrupado">
+        {/* <div class="form-control">
+          <div class="form-control form-agrupado"> */}
+        <div>
+          <div>
             <input
               id="in_ubigeoIN_MICE"
               style={{ width: '100%' }}
@@ -114,6 +116,7 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
               // }}
             />
           </div>
+          <br />
         </div>
 
         {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción*/}

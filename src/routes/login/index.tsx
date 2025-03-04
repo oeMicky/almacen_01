@@ -775,7 +775,7 @@ export default component$(() => {
               </div>
               <div class="linea-formulario">
                 <label>Clave</label>
-                <div style={{ position: 'relative', left: '12px' }}>
+                <div style={{ position: 'relative', left: '12px', display: 'flex' }}>
                   <input
                     id="inputClave_LOGIN"
                     name="clave"

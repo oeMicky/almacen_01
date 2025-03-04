@@ -76,6 +76,7 @@ export default component$(
           : props.mercaINSelecci.promedioCostoUnitarioMovil
         : 0
     );
+    const ubigeo = useSignal(props.mercaINSelecci.ubigeo);
     // const costo = useSignal(typeof props.CUP !== 'undefined' ? props.CUP : 0);
     // const precio = useSignal(typeof props.CUP !== "undefined" ? props.CUP : 0);
     const costoPENMasIGV = useSignal(0);
@@ -1019,9 +1020,9 @@ export default component$(
                 type="text"
                 placeholder="Ubigeo"
                 title="Ubigeo Ej: 1A83 (1:Piso, A:Sección, 8:Columna, 3:Fila)"
-                value={props.mercaINSelecci.ubigeo}
+                value={ubigeo.value}
                 onChange$={(e) => {
-                  props.mercaINSelecci.ubigeo = (e.target as HTMLInputElement).value.trim();
+                  ubigeo.value = (e.target as HTMLInputElement).value.trim();
                 }}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
@@ -1163,11 +1164,13 @@ export default component$(
                   return;
                 }
               }
-              if (props.mercaINSelecci.ubigeo.trim() === '') {
+              if (typeof ubigeo.value === 'undefined' || ubigeo.value === null || ubigeo.value === '') {
                 alert('Ingrese el ubigeo');
                 document.getElementById('in_ubigeo_MERCADERIA_IN_MICE')?.focus();
                 return;
               }
+              // console.log('........................', ubigeo.value);
+
               if (actualizarPrecioPublicoPEN.value) {
                 if (
                   typeof props.mercaINSelecci.precioUnitarioPEN === 'undefined' ||
@@ -1222,7 +1225,7 @@ export default component$(
 
                   descripcion: props.mercaINSelecci.descripcion,
                   // descripcionEquivalencia: props.mercaINSelecci.descripcion,
-                  ubigeo: props.mercaINSelecci.ubigeo,
+                  ubigeo: ubigeo.value,
 
                   lote: lote.value,
                   fechaProduccion: fechaProduccion.value,
@@ -1268,7 +1271,7 @@ export default component$(
 
                   descripcion: props.mercaINSelecci.descripcion,
                   // descripcionEquivalencia: props.mercaINSelecci.descripcion,
-                  ubigeo: props.mercaINSelecci.ubigeo,
+                  ubigeo: ubigeo.value,
 
                   lote: lote.value,
                   fechaProduccion: fechaProduccion.value,
@@ -1311,10 +1314,10 @@ export default component$(
               // ACTUALIZAR UBIGEO
               // console.log('props.elKardex._id', props.elKardex._id);
 
-              if (props.mercaINSelecci.ubigeo.trim() !== '' && typeof props.elKardex._id !== 'undefined') {
+              if (ubigeo.value !== null && ubigeo.value !== '' && typeof props.elKardex._id !== 'undefined') {
                 const ubi = await upUbigeo({
                   idKardex: props.elKardex._id,
-                  ubigeo: props.mercaINSelecci.ubigeo,
+                  ubigeo: ubigeo.value,
 
                   usuario: parametrosGlobales.usuario,
                 });

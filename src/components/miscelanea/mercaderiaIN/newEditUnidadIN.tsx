@@ -75,8 +75,8 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
 
       <div class="add-form">
         {/* Unidad  */}
-        <div class="form-control" style={{ margin: '8px 0' }}>
-          <div class="form-control form-agrupado">
+        <div>
+          <div>
             <input
               id="in_unidadIN_MICE"
               style={{ width: '100%', background: '#eee' }}
@@ -97,6 +97,7 @@ export default component$((props: { idLineaTipo: string; idUnidad: string; unida
               }}
             />
           </div>
+          <br />
         </div>
 
         {/* GRABAR   onClick={(e) => onSubmit(e)} Sujeto a percepción*/}
