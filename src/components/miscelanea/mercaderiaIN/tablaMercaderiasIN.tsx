@@ -252,7 +252,7 @@ export default component$(
                                 title="Seleccionar mercadería"
                                 height={12}
                                 width={12}
-                                style={{ marginRight: '4px' }}
+                                style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')} class="acciones"
                                 onClick$={() => {
                                   //console.log('mercaINLocali', mercaINLocali);
@@ -292,7 +292,7 @@ export default component$(
                                   title={aplicacion}
                                   height={12}
                                   width={12}
-                                  style={{ marginRight: '4px' }}
+                                  style={{ marginRight: '6px' }}
                                   // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
                                     alert(aplicacion);
@@ -306,7 +306,7 @@ export default component$(
                                 title="Ver kardex/s"
                                 height={12}
                                 width={12}
-                                style={{ marginRight: '4px' }}
+                                style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   console.log('☪☪☪☪☪☪');
@@ -343,7 +343,7 @@ export default component$(
                                 title="Editar mercadería"
                                 height={12}
                                 width={12}
-                                style={{ marginRight: '4px' }}
+                                style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   ctx.mM = mercaINLocali;
@@ -359,7 +359,7 @@ export default component$(
                                 title="Editar ubigeo"
                                 height={12}
                                 width={12}
-                                style={{ marginRight: '4px' }}
+                                style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   if (mercaINLocali.KARDEXS.length === 0) {
