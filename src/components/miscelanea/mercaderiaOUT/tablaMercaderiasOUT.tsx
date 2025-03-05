@@ -294,7 +294,7 @@ export default component$(
                           <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
                             {marca}
                           </td>
-                          <td data-label="Ubigeo">{ubigeo}</td>
+                          <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td>
                           <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
                             {totalCantidadSaldo.$numberDecimal
                               ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)

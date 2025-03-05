@@ -112,21 +112,9 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
             </div>
 
             {/* FISMA */}
-            <div class="form-control form-control-check">
-              <div class="form-control form-agrupado">
-                <input id="in_FISMA" type="text" disabled={props.outSelecci._id !== ''} style={{ width: '100%' }} value={props.outSelecci.FISMA} />
-              </div>
-            </div>
-            {/* motivo de egreso */}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                <input
-                  id="in_MotivoEgresoAlmacen"
-                  type="text"
-                  disabled={props.outSelecci._id !== ''}
-                  style={{ width: '100%' }}
-                  value={props.outSelecci.motivoEgresoAlmacen}
-                />
+                <input id="in_FISMA" type="text" disabled={props.outSelecci._id !== ''} style={{ width: '100%' }} value={props.outSelecci.FISMA} />
               </div>
             </div>
             {/* Nota de salida: serie - número */}
@@ -143,6 +131,31 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                 </div>
               </div>
             )}
+            {/* motivo de egreso */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_MotivoEgresoAlmacen"
+                  type="text"
+                  disabled={props.outSelecci._id !== ''}
+                  style={{ width: '100%' }}
+                  value={props.outSelecci.motivoEgresoAlmacen}
+                />
+              </div>
+            </div>
+            {/* obesrvacion */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_Observacion"
+                  style={{ background: '#F4FF7A', width: '100%' }}
+                  type="text"
+                  // autoFocus
+                  disabled
+                  value={props.outSelecci.observacion}
+                />
+              </div>
+            </div>
 
             <br />
           </div>
@@ -292,30 +305,28 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                           key={iTMercaOUT.idAuxiliar}
                           style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}
                         >{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
-                        <td data-label="idMerca" class="comoCadena" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
+                        <td data-label="idMerca" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
                           {iTMercaOUT.idMercaderia}
                         </td>
-                        <td data-label="Descripción" class="comoCadena" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
+                        <td data-label="Descripción" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
                           {iTMercaOUT.descripcionEquivalencia}
                         </td>
-                        <td data-label="Cantidad" class="comoNumero" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
+                        <td data-label="Cantidad" class="comoNumeroLeft" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
                           <strong>
                             {iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
                               ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
                               : iTMercaOUT.cantidadSacadaEquivalencia}
                           </strong>
                         </td>
-                        <td data-label="Uni" class="comoCadena">
-                          {iTMercaOUT.unidadEquivalencia}
-                        </td>
-                        <td data-label="Costo Unit PEN" class="comoNumero">
+                        <td data-label="Uni">{iTMercaOUT.unidadEquivalencia}</td>
+                        <td data-label="Costo Unit PEN" class="comoNumeroLeft">
                           {formatear_6Decimales(
                             iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
                               ? iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
                               : iTMercaOUT.costoUnitarioEquivalenciaPEN
                           )}
                         </td>
-                        <td data-label="SubTotal PEN" style={{ textAlign: 'end' }}>
+                        <td data-label="SubTotal PEN" class="comoNumeroLeft">
                           {iTMercaOUT.subEquivalenciaPEN.$numberDecimal
                             ? formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN.$numberDecimal)
                             : formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN)}

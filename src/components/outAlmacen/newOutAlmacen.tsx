@@ -981,14 +981,10 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
                     return (
                       <tr key={iTMercaOUT.idAuxiliar}>
-                        <td data-label="Ítem" key={iTMercaOUT.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
-                        <td data-label="idMerca" class="comoCadena">
-                          {iTMercaOUT.idMercaderia}
-                        </td>
-                        <td data-label="Descripción" class="comoCadena">
-                          {iTMercaOUT.descripcionEquivalencia}
-                        </td>
-                        <td data-label="Cantidad" class="comoNumero">
+                        <td data-label="Ítem" key={iTMercaOUT.idAuxiliar}>{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
+                        <td data-label="idMerca">{iTMercaOUT.idMercaderia}</td>
+                        <td data-label="Descripción">{iTMercaOUT.descripcionEquivalencia}</td>
+                        <td data-label="Cantidad">
                           <input
                             type="number"
                             style={{ width: '96px', textAlign: 'end' }}
@@ -1019,10 +1015,10 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                             // }}
                           />
                         </td>
-                        <td data-label="Uni" class="comoCadena">
+                        <td data-label="Uni" class="accionesLeft">
                           {iTMercaOUT.unidadEquivalencia}
                         </td>
-                        <td data-label="Costo Unit PEN" class="comoNumero">
+                        <td data-label="Costo Unit PEN">
                           <input
                             type="number"
                             style={{ width: '96px', textAlign: 'end' }}
@@ -1051,13 +1047,13 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                             // }}
                           />
                         </td>
-                        <td data-label="SubTotal PEN" style={{ textAlign: 'end' }}>
+                        <td data-label="SubTotal PEN" class="comoNumeroLeft">
                           {iTMercaOUT.subEquivalenciaPEN.$numberDecimal
                             ? formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN.$numberDecimal)
                             : formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN)}
                         </td>
                         {definicion_CTX_OUT_ALMACEN._id === '' ? (
-                          <td data-label="Acc" class="acciones">
+                          <td data-label="Acc" class="accionesLeft">
                             <input
                               type="image"
                               src={images.trash}

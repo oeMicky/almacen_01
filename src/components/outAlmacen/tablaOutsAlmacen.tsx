@@ -1,5 +1,5 @@
 import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import style from '../tabla/tabla.css?inline';
 import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
 import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
@@ -87,27 +87,15 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                       const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
-                          <td data-label="Ítem">{indexItem}</td>
-                          <td data-label="ID" class="comoCadena">
-                            {_id}
-                          </td>
-                          <td data-label="Respon" class="comoCadena">
-                            {usuarioCrea.substring(0, 10)}
-                          </td>
-                          <td data-label="FISMA" class="comoCadena">
-                            {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '-'}
-                          </td>
-                          <td data-label="Motivo" class="comoCadena">
-                            {motivoEgresoAlmacen ? motivoEgresoAlmacen : '-'}
-                          </td>
-                          <td data-label="Doc" class="comoCadena">
-                            {numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '-'}
-                          </td>
-                          <td data-label="Razón social" class="comoCadena">
-                            {razonSocialNombre ? razonSocialNombre : '-'}
-                          </td>
+                          <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
+                          <td data-label="ID">{_id}</td>
+                          <td data-label="Respon">{usuarioCrea.substring(0, 10)}</td>
+                          <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '-'}</td>
+                          <td data-label="Motivo">{motivoEgresoAlmacen ? motivoEgresoAlmacen : '-'}</td>
+                          <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '-'}</td>
+                          <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '-'}</td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                          <td data-label="Acciones" class="acciones">
+                          <td data-label="Acciones" class="accionesLeft">
                             <input
                               type="image"
                               src={images.see}

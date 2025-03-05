@@ -3,7 +3,7 @@ import style from '../tabla/tabla.css?inline';
 import { CTX_INDEX_IN_ALMACEN } from '~/routes/(inventario)/inAlmacen';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
-import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import type { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
 import { images } from '~/assets';
 // import ImgButton from '../system/imgButton';
@@ -90,27 +90,15 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                       const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
-                          <td data-label="Ítem">{indexItem}</td>
-                          <td data-label="ID" class="comoCadena">
-                            {_id}
-                          </td>
-                          <td data-label="Respon" class="comoCadena">
-                            {usuarioCrea.substring(0, 10)}
-                          </td>
-                          <td data-label="FISMA" class="comoCadena">
-                            {FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}
-                          </td>
-                          <td data-label="Motivo" class="comoCadena">
-                            {motivoIngresoAlmacen ? motivoIngresoAlmacen : '_'}
-                          </td>
-                          <td data-label="Doc" class="comoCadena">
-                            {numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '_'}
-                          </td>
-                          <td data-label="Razón social" class="comoCadena">
-                            {razonSocialNombre ? razonSocialNombre : '_'}
-                          </td>
+                          <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
+                          <td data-label="ID">{_id}</td>
+                          <td data-label="Respon">{usuarioCrea.substring(0, 10)}</td>
+                          <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}</td>
+                          <td data-label="Motivo">{motivoIngresoAlmacen ? motivoIngresoAlmacen : '_'}</td>
+                          <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '_'}</td>
+                          <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '_'}</td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
-                          <td data-label="Acciones" class="acciones">
+                          <td data-label="Acciones" class="accionesLeft">
                             <input
                               type="image"
                               src={images.see}
@@ -132,7 +120,7 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                               alt="icono de ver"
                               height={14}
                               width={14}
-                              style={{ marginLeft: '4px' }}
+                              style={{ marginLeft: '6px' }}
                               title="Ver ingreso a almacén"
                               onClick$={() => {
                                 console.log('el ELIMINAR EL INGRESO...', _id, inAlmaLocali);

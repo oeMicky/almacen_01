@@ -111,7 +111,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                           <td data-label="Descripción">{descripcion}</td>
                           <td data-label="Linea/Tipo">{lineaTipo}</td>
                           <td data-label="Marca">{marca}</td>
-                          <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== '' ? ubigeo : '-'}</td>
+                          <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td>
                           <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
                             <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
                           </td>

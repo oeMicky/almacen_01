@@ -220,13 +220,11 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
 
                           return (
                             <tr key={_id} style={IS ? { color: 'blue' } : { color: 'red' }}>
-                              <td data-label="FISMA" class="comoCadena">
-                                {formatoDDMMYYYY_PEN(FISMA)}
-                              </td>
+                              <td data-label="FISMA">{formatoDDMMYYYY_PEN(FISMA)}</td>
                               <td
                                 data-label="Cnt.Entrada"
                                 title={IS ? (cantidadOrigenEquivalencia ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia : '') : ''}
-                                class="comoNumero"
+                                class="comoNumeroLeft"
                               >
                                 {cantidadIngresada.$numberDecimal
                                   ? formatear_4Decimales(cantidadIngresada.$numberDecimal)
@@ -235,33 +233,31 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                               <td
                                 data-label="Cnt.Salida"
                                 title={IS ? '' : cantidadOrigenEquivalencia ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia : ''}
-                                class="comoNumero"
+                                class="comoNumeroLeft"
                               >
                                 {cantidadSacada.$numberDecimal ? formatear_4Decimales(cantidadSacada.$numberDecimal) : formatear_4Decimales(cantidadSacada)}
                               </td>
-                              <td data-label="Cnt.Saldo" style={{ textAlign: 'right' }}>
+                              <td data-label="Cnt.Saldo" class="comoNumeroLeft">
                                 {cantidadSaldo.$numberDecimal ? formatear_4Decimales(cantidadSaldo.$numberDecimal) : formatear_4Decimales(cantidadSaldo)}
                               </td>
-                              <td data-label="Uni" class="acciones">
-                                {props.mercaSelecci.unidad}
-                              </td>
-                              <td data-label="Cts.Unita." class="comoNumero">
+                              <td data-label="Uni">{props.mercaSelecci.unidad}</td>
+                              <td data-label="Cts.Unita." class="comoNumeroLeft">
                                 {costoUnitario.$numberDecimal ? costoUnitario.$numberDecimal : costoUnitario}
                               </td>
-                              <td data-label="Cts.Unita.Movil" class="comoNumero">
+                              <td data-label="Cts.Unita.Movil" class="comoNumeroLeft">
                                 {costoUnitarioMovil.$numberDecimal ? costoUnitarioMovil.$numberDecimal : costoUnitarioMovil}
                               </td>
-                              <td data-label="Costo Entrada" class="comoNumero">
+                              <td data-label="Costo Entrada" class="comoNumeroLeft">
                                 {costoIngreso.$numberDecimal ? formatear_6Decimales(costoIngreso.$numberDecimal) : formatear_6Decimales(costoIngreso)}
                               </td>
-                              <td data-label="Costo Salida" class="comoNumero">
+                              <td data-label="Costo Salida" class="comoNumeroLeft">
                                 {costoSalida.$numberDecimal ? formatear_6Decimales(costoSalida.$numberDecimal) : formatear_6Decimales(costoSalida)}
                               </td>
-                              <td data-label="Costo Saldo" class="comoNumero">
+                              <td data-label="Costo Saldo" class="comoNumeroLeft">
                                 {costoSaldo.$numberDecimal ? formatear_6Decimales(costoSaldo.$numberDecimal) : formatear_6Decimales(costoSaldo)}
                               </td>
 
-                              <td data-label="Acc" class="acciones">
+                              <td data-label="Acc" class="accionesLeft">
                                 <input
                                   type="image"
                                   src={images.see}

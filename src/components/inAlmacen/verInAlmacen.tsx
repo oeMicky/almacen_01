@@ -52,7 +52,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
           justifyContent: 'end',
         }}
       >
-        {/* <ImgButton
+        <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={18}
@@ -61,7 +61,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
           onClick={$(() => {
             console.log('props.inSelecci', props.inSelecci);
           })}
-        /> */}
+        />
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -124,15 +124,24 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
               </div>
             </div>
 
-            {/* FISMA */}
-            <div class="form-control form-control-check">
-              <div class="form-control form-agrupado">
+            {/* FISMA  serie numero*/}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+              <div>
                 <input
                   id="in_FISMA"
                   type="text"
                   disabled={props.inSelecci._id !== ''}
                   style={{ width: '100%' }}
                   value={formatoDDMMYYYY_PEN(props.inSelecci.FISMA)}
+                />
+              </div>
+              <div>
+                <input
+                  id="in_Serie_Numero"
+                  type="text"
+                  disabled={props.inSelecci._id !== ''}
+                  style={{ width: '100%' }}
+                  value={props.inSelecci.serie + ' - ' + cerosALaIzquierda(props.inSelecci.numero, 8)}
                 />
               </div>
             </div>
@@ -145,6 +154,19 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                   disabled={props.inSelecci._id !== ''}
                   style={{ width: '100%' }}
                   value={props.inSelecci.motivoIngresoAlmacen}
+                />
+              </div>
+            </div>
+            {/* obesrvacion */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_Observacion"
+                  style={{ background: '#F4FF7A', width: '100%' }}
+                  type="text"
+                  // autoFocus
+                  disabled
+                  value={props.inSelecci.observacion}
                 />
               </div>
             </div>
@@ -352,7 +374,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                           <strong>{!props.inSelecci.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>
                         </td>
                         <td data-label="IGV">{iTMercaIN.IGV.$numberDecimal ? iTMercaIN.IGV.$numberDecimal : iTMercaIN.IGV} %</td>
-                        <td data-label="Cantidad" class="comoNumero" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
+                        <td data-label="Cantidad" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
                           <strong>
                             {!props.inSelecci.reingreso
                               ? iTMercaIN.cantidadIngresada.$numberDecimal
@@ -363,10 +385,8 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                               : iTMercaIN.cantidadIngresadaEquivalencia}
                           </strong>
                         </td>
-                        <td data-label="Uni" class="comoNumero">
-                          {!props.inSelecci.reingreso ? iTMercaIN.unidad : iTMercaIN.unidadEquivalencia}
-                        </td>
-                        <td data-label={props.inSelecci.enDolares ? 'CostoUniUSD' : 'CostoUniPEN'} class="comoNumero">
+                        <td data-label="Uni">{!props.inSelecci.reingreso ? iTMercaIN.unidad : iTMercaIN.unidadEquivalencia}</td>
+                        <td data-label={props.inSelecci.enDolares ? 'CostoUniUSD' : 'CostoUniPEN'}>
                           {props.inSelecci.enDolares
                             ? formatear_6Decimales(
                                 !props.inSelecci.reingreso
@@ -387,7 +407,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                                   : iTMercaIN.costoUnitarioEquivalenciaPEN
                               )}
                         </td>
-                        <td data-label={props.inSelecci.enDolares ? 'SubUSD' : 'SubPEN'} class="comoNumero">
+                        <td data-label={props.inSelecci.enDolares ? 'SubUSD' : 'SubPEN'}>
                           {props.inSelecci.enDolares
                             ? !props.inSelecci.reingreso
                               ? iTMercaIN.subUSD.$numberDecimal
@@ -404,7 +424,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                             ? formatear_6Decimales(iTMercaIN.subEquivalenciaPEN.$numberDecimal)
                             : formatear_6Decimales(iTMercaIN.subEquivalenciaPEN)}
                         </td>
-                        <td data-label={props.inSelecci.enDolares ? 'ValorUniUSD' : 'ValorUniPEN'} class="comoNumero">
+                        <td data-label={props.inSelecci.enDolares ? 'ValorUniUSD' : 'ValorUniPEN'}>
                           {props.inSelecci.enDolares
                             ? formatear_6Decimales(
                                 !props.inSelecci.reingreso
@@ -425,7 +445,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                                   : iTMercaIN.valorUnitarioEquivalenciaPEN
                               )}
                         </td>
-                        <td data-label={props.inSelecci.enDolares ? 'TotUSD' : 'TotPEN'} style={{ textAlign: 'end' }}>
+                        <td data-label={props.inSelecci.enDolares ? 'TotUSD' : 'TotPEN'}>
                           {props.inSelecci.enDolares
                             ? !props.inSelecci.reingreso
                               ? iTMercaIN.totUSD.$numberDecimal
