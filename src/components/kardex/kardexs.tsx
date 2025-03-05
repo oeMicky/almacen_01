@@ -26,7 +26,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 800px)',
+        width: 'clamp(320px, 100%, 800px)',
         //  width: 'auto',
         border: '1px solid red',
         padding: '2px',
@@ -64,9 +64,18 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
         <div style={{ marginBottom: '8px' }}>
           {/* MERCADERIA */}
           <div style={{ fontSize: '0.8rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>Código:{` ${props.mercaINSelecci.codigo} `}</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>Descripción:{` ${props.mercaINSelecci.descripcion}`}</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>Linea/Tipo:{` ${props.mercaINSelecci.lineaTipo}`}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+              <label>Código</label>
+              <label>{props.mercaINSelecci.codigo}</label>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+              <label>Descripción:</label>
+              <label>{props.mercaINSelecci.descripcion}</label>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0' }}>
+              <label>Linea/Tipo:</label>
+              <label>{props.mercaINSelecci.lineaTipo}</label>
+            </div>
           </div>
         </div>
         {/*  tabla KARDEXS  */}
@@ -92,8 +101,8 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
                   <tr key={iTKardexsIN._id}>
                     <td data-label="Ítem" key={iTKardexsIN._id}>{`${cerosALaIzquierda(indexKardexsOUT, 3)}`}</td>
                     <td data-label="Kx">{iTKardexsIN._id.substring(iTKardexsIN._id.length - 6)}</td>
-                    <td data-label="Lote">{iTKardexsIN.lote}</td>
-                    <td data-label="Fecha vencimiento">{formatoDDMMYYYY_PEN(iTKardexsIN.fechaVencimiento)}</td>
+                    <td data-label="Lote">{iTKardexsIN.lote ? iTKardexsIN.lote : '-'}</td>
+                    <td data-label="Fecha vencimiento">{iTKardexsIN.fechaVencimiento ? formatoDDMMYYYY_PEN(iTKardexsIN.fechaVencimiento) : '-'}</td>
                     <td data-label="Costo Uni. PEN">
                       {typeof iTKardexsIN.costoUnitarioMovil !== 'undefined' && iTKardexsIN.costoUnitarioMovil !== null
                         ? iTKardexsIN.costoUnitarioMovil.$numberDecimal
@@ -101,12 +110,12 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
                           : formatear_2Decimales(iTKardexsIN.costoUnitarioMovil)
                         : '_'}
                     </td>
-                    <td data-label="Stock" style={{ textAlign: 'end' }}>
-                      {iTKardexsIN.cantidadSaldo.$numberDecimal ? iTKardexsIN.cantidadSaldo.$numberDecimal : iTKardexsIN.cantidadSaldo}
+                    <td data-label="Stock" style={{ color: 'purple' }}>
+                      <strong> {iTKardexsIN.cantidadSaldo.$numberDecimal ? iTKardexsIN.cantidadSaldo.$numberDecimal : iTKardexsIN.cantidadSaldo}</strong>
                     </td>
                     <td data-label="Uni">{props.mercaINSelecci.unidad}</td>
 
-                    <td data-label="Acc" class="acciones">
+                    <td data-label="Acc" class="accionesLeft">
                       <input
                         // id="in_BuscarDetraccion"
                         type="image"

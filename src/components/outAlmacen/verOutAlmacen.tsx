@@ -24,7 +24,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 96%, 1096px)',
+        width: 'clamp(320px, 100%, 1096px)',
         // width: 'auto',
         padding: '2px',
         background: '#eee',

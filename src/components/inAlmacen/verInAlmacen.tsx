@@ -38,7 +38,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 96%, 1112px)',
+        width: 'clamp(320px, 100%, 1112px)',
         background: `${props.inSelecci.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : '#eee'}`,
         // width: 'auto',
         padding: '2px',
