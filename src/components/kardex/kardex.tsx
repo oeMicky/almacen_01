@@ -136,25 +136,25 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
         <div style={{ marginBottom: '8px' }}>
           {/* MERCADERIA */}
           <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Código:<strong>{` ${props.mercaSelecci.codigo} `}</strong>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Descripción:<strong> {` ${props.mercaSelecci.descripcion}`}</strong>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Linea/Tipo:<strong> {` ${props.mercaSelecci.lineaTipo}`}</strong>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Marca:<strong>{` ${props.mercaSelecci.marca}`}</strong>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Unidad:<strong> {` ${props.mercaSelecci.unidad}`}</strong>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Ubigeo:<strong> {` ${props.mercaSelecci.ubigeo}`}</strong>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', margin: '4px 0', color: '#61605c' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               % Utilidad:<strong> {` ${props.mercaSelecci.porcentajeUtilidad.$numberDecimal + ' %'}`}</strong>
             </div>
           </div>
