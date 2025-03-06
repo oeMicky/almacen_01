@@ -141,7 +141,10 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                   type="text"
                   disabled={props.inSelecci._id !== ''}
                   style={{ width: '100%' }}
-                  value={props.inSelecci.serie + ' - ' + cerosALaIzquierda(props.inSelecci.numero, 8)}
+                  value={
+                    (props.inSelecci.serie ? props.inSelecci.serie : '') + ' - ' + cerosALaIzquierda(props.inSelecci.numero ? props.inSelecci.numero : 0, 8)
+                  }
+                  // value={cerosALaIzquierda(props.inSelecci.numero, 8)}
                 />
               </div>
             </div>

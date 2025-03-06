@@ -127,7 +127,8 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
         </div>
       )}
       {/* TITULO */}
-      <h2 style={{ display: 'grid', gridTemplateColumns: '90px 1fr', marginBottom: '4px', fontSize: '1rem' }}>
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'red' }}>{parametrosGlobales.sucursal}</h3>
+      <h2 style={{ display: 'grid', gridTemplateColumns: '84px 1fr', marginBottom: '4px', fontSize: '1rem' }}>
         Kardex: <strong>{props.kardex._id}</strong>
       </h2>
       {/* FORMULARIO */}
