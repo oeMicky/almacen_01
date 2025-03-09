@@ -7,6 +7,7 @@ import TablaMercaderiasKardex from '~/components/kardex/tablaMercaderiasKardex';
 import EditPrecioPublicoIN from '~/components/miscelanea/mercaderiaIN/editPrecioPublicoIN';
 import NewEditMercaderiaIN from '~/components/miscelanea/mercaderiaIN/newEditMercaderiaIN';
 import NewEditUbigeo from '~/components/miscelanea/mercaderiaIN/newEditUbigeo';
+import Spinner from '~/components/system/spinner';
 // import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -38,6 +39,8 @@ export default component$(() => {
     pUtilidad: 0,
     mostrarPanelEditPrecioPublicoIN: false,
     grabo_precio_publico: false,
+
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_INDEX_KARDEX, definicion_CTX_INDEX_KARDEX);
   //#endregion CTX_INDEX_KARDEX
@@ -271,6 +274,12 @@ export default component$(() => {
               pUtilidad={definicion_CTX_INDEX_KARDEX.pUtilidad}
               contexto="index_kardex"
             />
+          </div>
+        )}
+        {/* MOSTRAR SPINNER */}
+        {definicion_CTX_INDEX_KARDEX.mostrarSpinner && (
+          <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Spinner />
           </div>
         )}
       </div>
