@@ -199,6 +199,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
   const elDocSelecionado = useSignal([]);
   const losMotivosCargados = useSignal([]);
 
+  // const filaPivote: any = useSignal([]);
+  // const filaAComparar: any = useSignal([]);
+
   const borrarDocumento = useStore({
     idAuxiliar: '',
     codigoTCP: '',
@@ -1250,6 +1253,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   <tr>
                     <th>Ítem</th>
                     <th>Kx</th>
+                    {/* <th>Mer</th> */}
                     <th>Código</th>
                     <th>Descripción</th>
                     <th>IGV</th>
@@ -1309,6 +1313,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                       <tr key={iTMercaIN.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar}>{`${cerosALaIzquierda(indexItemMercaIN, 3)}`}</td>
                         <td data-label="Kx">{typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : '-'}</td>
+                        {/* <td data-label="Mer">{typeof iTMercaIN.idMercaderia !== 'undefined' ? iTMercaIN.idMercaderia : '-'}</td> */}
                         <td data-label="Código">{iTMercaIN.codigo}</td>
                         <td data-label="Descripción">
                           <strong> {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>
@@ -2031,10 +2036,37 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
         {definicion_CTX_IN_ALMACEN._id === '' ? (
           <input
             type="button"
+            // disabled
             value={'Grabar INGRESO ' + diaDeLaSemana(definicion_CTX_IN_ALMACEN.FISMA) + ' ' + definicion_CTX_IN_ALMACEN.FISMA.substring(8, 10)}
             class="btn-centro"
+            // style={{ cursor: 'pointer', height: '40px', backgroundColor: 'grey' }}
             style={{ cursor: 'pointer', height: '40px' }}
-            onClick$={() => registrarIngreso()}
+            onClick$={() => {
+              ////// AGRUPAR ITEMS NUEVOS Y Q NO TIENE KARDEX
+              let nroFilas = definicion_CTX_IN_ALMACEN.itemsMercaderias.length;
+
+              for (let index = 0; index < definicion_CTX_IN_ALMACEN.itemsMercaderias.length; index++) {
+                const element = definicion_CTX_IN_ALMACEN.itemsMercaderias[index];
+                if (typeof element.idKardex === 'undefined') {
+                  let iWHILE = index + 1;
+                  while (iWHILE < nroFilas) {
+                    const elementWHILE = definicion_CTX_IN_ALMACEN.itemsMercaderias[iWHILE];
+                    if (element.idMercaderia === elementWHILE.idMercaderia) {
+                      if (typeof elementWHILE.idKardex === 'undefined') {
+                        element.cantidadIngresada += elementWHILE.cantidadIngresada;
+
+                        definicion_CTX_IN_ALMACEN.itemsMercaderias.splice(iWHILE, 1);
+                        nroFilas--;
+                      }
+                    } else {
+                      iWHILE++;
+                    }
+                  }
+                }
+              }
+              ///////// REGISTRAR INGRESO
+              registrarIngreso();
+            }}
           />
         ) : (
           ''
@@ -2043,3 +2075,45 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     </div>
   );
 });
+
+{
+  /* ----------------------------------------------------- */
+}
+{
+  /* AGRUPAR */
+}
+{
+  /* <input
+          type="button"
+          value="AGRUPAR"
+          class="btn-centro"
+          style={{ cursor: 'pointer', height: '40px' }}
+          onClick$={() => {
+            console.log('definicion_CTX_IN_ALMACEN.itemsMercaderias', JSON.stringify(definicion_CTX_IN_ALMACEN.itemsMercaderias));
+            let nroFilas = definicion_CTX_IN_ALMACEN.itemsMercaderias.length;
+            console.log('🧧✨🧧✨✨🧨✨✨', nroFilas);
+            for (let index = 0; index < definicion_CTX_IN_ALMACEN.itemsMercaderias.length; index++) {
+              console.log('🥪🥪🥪🥪🥪💚💚💚💚💚', index);
+
+              const element = definicion_CTX_IN_ALMACEN.itemsMercaderias[index];
+              if (typeof element.idKardex === 'undefined') {
+                let iWHILE = index + 1;
+                while (iWHILE < nroFilas) {
+                  console.log('💚💚💚💚💚🥪🥪🥪🥪🥪 iWHILE < nroFilas', iWHILE, nroFilas);
+                  const elementWHILE = definicion_CTX_IN_ALMACEN.itemsMercaderias[iWHILE];
+                  if (element.idMercaderia === elementWHILE.idMercaderia) {
+                    if (typeof elementWHILE.idKardex === 'undefined') {
+                      element.cantidadIngresada += elementWHILE.cantidadIngresada;
+
+                      definicion_CTX_IN_ALMACEN.itemsMercaderias.splice(iWHILE, 1);
+                      nroFilas--;
+                    }
+                  } else {
+                    iWHILE++;
+                  }
+                }
+              }
+            }
+          }}
+        /> */
+}

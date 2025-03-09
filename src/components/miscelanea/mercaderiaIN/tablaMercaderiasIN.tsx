@@ -4,7 +4,7 @@ import { images } from '~/assets';
 import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
-import { formatear_6Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, formatear_6Decimales } from '~/functions/comunes';
 import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from '../ordenProduccionTerminado/registroProductosTerminados';
 
 export default component$(
@@ -131,6 +131,7 @@ export default component$(
                     {/* <table> */}
                     <thead>
                       <tr>
+                        <th>Ítem</th>
                         <th>Descripción</th>
                         <th style={props.verAplicacion ? '' : { display: 'none' }}>Aplicación</th>
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
@@ -154,7 +155,8 @@ export default component$(
                       </tr>
                     </thead>
                     <tbody>
-                      {misMercaderiasIN.map((mercaINLocali) => {
+                      {misMercaderiasIN.map((mercaINLocali, index) => {
+                        const elIndex = index + 1;
                         const {
                           _id,
                           descripcion,
@@ -191,6 +193,7 @@ export default component$(
                             //     : { color: '' }
                             // }
                           >
+                            <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                             <td data-label="Descripción">{descripcion}</td>
                             <td data-label="Aplicación" style={props.verAplicacion ? '' : { display: 'none' }}>
                               {aplicacion}
@@ -246,10 +249,9 @@ export default component$(
                             </td>
                             <td data-label="Acciones" class="accionesLeft">
                               <input
-                                // id="in_BuscarDetraccion"
-                                type="image"
-                                src={images.check32}
                                 title="Seleccionar mercadería"
+                                src={images.check32}
+                                type="image"
                                 height={12}
                                 width={12}
                                 style={{ marginRight: '6px' }}
@@ -300,10 +302,9 @@ export default component$(
                                 />
                               )}
                               <input
-                                // id="in_BuscarDetraccion"
-                                type="image"
-                                src={images.see}
                                 title="Ver kardex/s"
+                                src={images.see}
+                                type="image"
                                 height={12}
                                 width={12}
                                 style={{ marginRight: '6px' }}
@@ -337,10 +338,9 @@ export default component$(
                                 }}
                               />
                               <input
-                                // id="in_BuscarDetraccion"
+                                title="Editar mercadería"
                                 type="image"
                                 src={images.edit}
-                                title="Editar mercadería"
                                 height={12}
                                 width={12}
                                 style={{ marginRight: '6px' }}
@@ -353,10 +353,9 @@ export default component$(
                                 }}
                               />
                               <input
-                                // id="in_BuscarDetraccion"
+                                title="Editar ubigeo"
                                 type="image"
                                 src={images.ubigeo}
-                                title="Editar ubigeo"
                                 height={12}
                                 width={12}
                                 style={{ marginRight: '6px' }}
@@ -387,10 +386,9 @@ export default component$(
                                 }}
                               />
                               <input
-                                // id="in_BuscarDetraccion"
+                                title="Editar precio público"
                                 type="image"
                                 src={images.moneyBag}
-                                title="Editar precio público"
                                 height={12}
                                 width={12}
                                 // style={{ marginRight: '2px' }}
@@ -402,6 +400,12 @@ export default component$(
                                   }
                                   ctx.idMercaderia = mercaINLocali._id;
                                   ctx.descripcion = mercaINLocali.descripcion;
+                                  ctx.cuMASigv =
+                                    typeof mercaINLocali.costoUnitarioPENMasIGV !== 'undefined' && mercaINLocali.costoUnitarioPENMasIGV !== null
+                                      ? mercaINLocali.costoUnitarioPENMasIGV.$numberDecimal
+                                        ? mercaINLocali.costoUnitarioPENMasIGV.$numberDecimal
+                                        : mercaINLocali.costoUnitarioPENMasIGV
+                                      : 0;
                                   ctx.pUtilidad = mercaINLocali.porcentajeUtilidad.$numberDecimal;
                                   ctx.mostrarPanelEditPrecioPublicoIN = true;
                                   // ctx.mostrarSpinner = true;

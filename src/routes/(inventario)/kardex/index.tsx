@@ -4,6 +4,7 @@ import { images } from '~/assets';
 import Kardex from '~/components/kardex/kardex';
 import Kardexs from '~/components/kardex/kardexs';
 import TablaMercaderiasKardex from '~/components/kardex/tablaMercaderiasKardex';
+import EditPrecioPublicoIN from '~/components/miscelanea/mercaderiaIN/editPrecioPublicoIN';
 import NewEditMercaderiaIN from '~/components/miscelanea/mercaderiaIN/newEditMercaderiaIN';
 import NewEditUbigeo from '~/components/miscelanea/mercaderiaIN/newEditUbigeo';
 // import ImgButton from '~/components/system/imgButton';
@@ -30,6 +31,13 @@ export default component$(() => {
     // mostrarPanelNewEditMercaderiaIN: false,
     mostrarPanelVerInAlmacen: false,
     mostrarPanelVerOutAlmacen: false,
+
+    idMercaderia: '',
+    descripcion: '',
+    cuMASigv: 0,
+    pUtilidad: 0,
+    mostrarPanelEditPrecioPublicoIN: false,
+    grabo_precio_publico: false,
   });
   useContextProvider(CTX_INDEX_KARDEX, definicion_CTX_INDEX_KARDEX);
   //#endregion CTX_INDEX_KARDEX
@@ -45,7 +53,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: '', //cadena.value,
+    cadenaABuscar: 'merca', //cadena.value,
   });
   //#endregion INICIALIZANDO
 
@@ -87,6 +95,24 @@ export default component$(() => {
     }
   });
   //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
+
+  //#region REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
+  useTask$(({ track }) => {
+    track(() => {
+      definicion_CTX_INDEX_KARDEX.grabo_precio_publico;
+    });
+    if (definicion_CTX_INDEX_KARDEX.grabo_precio_publico) {
+      // parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
+      definicion_CTX_INDEX_KARDEX.idMercaderia = '';
+      definicion_CTX_INDEX_KARDEX.descripcion = '';
+      definicion_CTX_INDEX_KARDEX.cuMASigv = 0;
+      definicion_CTX_INDEX_KARDEX.pUtilidad = 0;
+
+      buscarMercaderiasKARDEX.value++;
+      definicion_CTX_INDEX_KARDEX.grabo_precio_publico = false;
+    }
+  });
+  //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
 
   return (
     <div class="container">
@@ -232,6 +258,18 @@ export default component$(() => {
               //esAlmacen={true}
               // contexto={props.contexto}
               // igv={props.igv}
+            />
+          </div>
+        )}
+        {/*  EDITAR PRECIO PUBLICO IN  */}
+        {definicion_CTX_INDEX_KARDEX.mostrarPanelEditPrecioPublicoIN && (
+          <div class="modal">
+            <EditPrecioPublicoIN
+              idMercaderia={definicion_CTX_INDEX_KARDEX.idMercaderia}
+              descripcion={definicion_CTX_INDEX_KARDEX.descripcion}
+              cuMASigv={definicion_CTX_INDEX_KARDEX.cuMASigv}
+              pUtilidad={definicion_CTX_INDEX_KARDEX.pUtilidad}
+              contexto="index_kardex"
             />
           </div>
         )}

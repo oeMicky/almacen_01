@@ -750,7 +750,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -876,7 +876,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -1000,7 +1000,7 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE') as HTMLInputElement).focus();
+                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
                       }
                     }}
                   />
@@ -1015,14 +1015,14 @@ export default component$(
           <div class="form-control">
             <div class="form-control form-agrupado">
               <input
-                id="in_ubigeo_MERCADERIA_IN_MICE"
+                id="in_ubigeo_MERCADERIA_IN_MICE_SELEC"
                 style={{ width: '100%' }}
                 type="text"
                 placeholder="Ubigeo"
                 title="Ubigeo Ej: 1A83 (1:Piso, A:Sección, 8:Columna, 3:Fila)"
                 value={ubigeo.value}
                 onChange$={(e) => {
-                  ubigeo.value = (e.target as HTMLInputElement).value.trim();
+                  ubigeo.value = (e.target as HTMLInputElement).value.trim().toUpperCase();
                 }}
                 onKeyPress$={(e) => {
                   if (e.key === 'Enter') {
@@ -1166,7 +1166,7 @@ export default component$(
               }
               if (typeof ubigeo.value === 'undefined' || ubigeo.value === null || ubigeo.value === '') {
                 alert('Ingrese el ubigeo');
-                document.getElementById('in_ubigeo_MERCADERIA_IN_MICE')?.focus();
+                document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC')?.focus();
                 return;
               }
               // console.log('........................', ubigeo.value);
@@ -1221,11 +1221,11 @@ export default component$(
                   idKardex: props.elKardex._id,
                   item: 0,
 
-                  codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '_',
+                  codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '-',
 
                   descripcion: props.mercaINSelecci.descripcion,
                   // descripcionEquivalencia: props.mercaINSelecci.descripcion,
-                  ubigeo: ubigeo.value,
+                  ubigeo: ubigeo.value.toUpperCase(),
 
                   lote: lote.value,
                   fechaProduccion: fechaProduccion.value,
@@ -1267,11 +1267,11 @@ export default component$(
                   idKardex: props.elKardex._id,
                   item: 0,
 
-                  codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '_',
+                  codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '-',
 
                   descripcion: props.mercaINSelecci.descripcion,
                   // descripcionEquivalencia: props.mercaINSelecci.descripcion,
-                  ubigeo: ubigeo.value,
+                  ubigeo: ubigeo.value.toUpperCase(),
 
                   lote: lote.value,
                   fechaProduccion: fechaProduccion.value,
@@ -1317,7 +1317,7 @@ export default component$(
               if (ubigeo.value !== null && ubigeo.value !== '' && typeof props.elKardex._id !== 'undefined') {
                 const ubi = await upUbigeo({
                   idKardex: props.elKardex._id,
-                  ubigeo: ubigeo.value,
+                  ubigeo: ubigeo.value.toUpperCase(),
 
                   usuario: parametrosGlobales.usuario,
                 });

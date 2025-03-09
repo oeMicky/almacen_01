@@ -159,6 +159,7 @@ export interface IMercaderiaIN_BUSCAR {
   equivalencias: [IMercaEquivalenciaIN]; //any;
 
   totalCantidadSaldo: any;
+  costoUnitarioPENMasIGV: any;
   promedioCostoUnitarioMovil: any;
 
   costoPEN: any;

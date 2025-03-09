@@ -32,6 +32,7 @@ export default component$(
     const definicion_CTX_BUSCAR_MERCADERIA_IN = useStore({
       idMercaderia: '',
       descripcion: '',
+      cuMASigv: 0,
       pUtilidad: 0,
 
       mM: [],
@@ -54,6 +55,7 @@ export default component$(
       mostrarPanelMercaderiaINSeleccionada: false,
 
       mostrarPanelEditPrecioPublicoIN: false,
+      grabo_precio_publico: false,
 
       mostrarSpinner: false,
     });
@@ -141,6 +143,24 @@ export default component$(
     });
     //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
 
+    //#region REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
+    useTask$(({ track }) => {
+      track(() => {
+        definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_precio_publico;
+      });
+      if (definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_precio_publico) {
+        // parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
+        definicion_CTX_BUSCAR_MERCADERIA_IN.idMercaderia = '';
+        definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion = '';
+        definicion_CTX_BUSCAR_MERCADERIA_IN.cuMASigv = 0;
+        definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad = 0;
+
+        buscarMercaderiasIN.value++;
+        definicion_CTX_BUSCAR_MERCADERIA_IN.grabo_precio_publico = false;
+      }
+    });
+    //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
+
     return (
       <div
         style={
@@ -152,7 +172,7 @@ export default component$(
                 padding: '2px',
               }
             : {
-                width: 'clamp(320px, 100%, 800px)',
+                width: 'clamp(320px, 100%, 960px)',
                 // width: 'auto',
                 border: '1px solid red',
                 padding: '2px',
@@ -433,7 +453,9 @@ export default component$(
                 <EditPrecioPublicoIN
                   idMercaderia={definicion_CTX_BUSCAR_MERCADERIA_IN.idMercaderia}
                   descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
+                  cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_IN.cuMASigv}
                   pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
+                  contexto="buscar_mercaderia_in"
                 />
               </div>
             )}

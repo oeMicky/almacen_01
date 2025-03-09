@@ -4,16 +4,34 @@ import { images } from '~/assets';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 import { upPrecioPublicoPEN } from '~/apis/mercaderia.api';
 import { parametrosGlobales } from '~/routes/login';
+import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 // import { parametrosGlobales } from '~/routes/login';
 
-export default component$((props: { idMercaderia: any; descripcion: string; pUtilidad: any }) => {
+export default component$((props: { idMercaderia: any; descripcion: string; cuMASigv: any; pUtilidad: any; contexto: string }) => {
   //#region CONTEXTO
-  const ctx_buscar_mercaderia_in = useContext(CTX_BUSCAR_MERCADERIA_IN);
+  // const ctx_buscar_mercaderia_in = useContext(CTX_BUSCAR_MERCADERIA_IN);
   //#endregion CONTEXTO
+  //#region CONTEXTOS
+  let ctx: any = [];
+  switch (props.contexto) {
+    case 'buscar_mercaderia_in':
+      ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
+      break;
+    case 'index_kardex':
+      ctx = useContext(CTX_INDEX_KARDEX);
+      break;
+    // case 'cotizacion':
+    //   ctx = useContext(CTX_DOCS_COTIZACION);
+    //   break;
+    // case 'new_edit_cotizacion':
+    //   ctx = useContext(CTX_NEW_EDIT_COTIZACION);
+    //   break;
+  }
+  //#endregion CONTEXTOS
 
   //#region INICIALIZACION DE VARIABLES
-  const costoUnitarioMasIGV = useSignal(0);
-  const precioPublicoCalculado = useSignal(0);
+  const costoUnitarioMasIGV = useSignal(props.cuMASigv);
+  const precioPublicoCalculado = useSignal(props.cuMASigv * (1 + props.pUtilidad / 100));
   const precioPublico = useSignal(0);
   const fechaActual = new Date();
   //#endregion INICIALIZACION DE VARIABLES
@@ -47,10 +65,11 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
       });
 
       console.log('precioP', precioP);
-      ctx_buscar_mercaderia_in.mostrarPanelEditPrecioPublicoIN = false;
+      ctx.grabo_precio_publico = true;
+      ctx.mostrarPanelEditPrecioPublicoIN = false;
     } catch (error) {
       console.log('grabarPrecioPublico error:', error);
-      ctx_buscar_mercaderia_in.mostrarPanelEditPrecioPublicoIN = false;
+      ctx.mostrarPanelEditPrecioPublicoIN = false;
     }
   });
   //#endregion GRABAR PRECIO PUBLICO
@@ -74,7 +93,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_buscar_mercaderia_in.mostrarPanelEditPrecioPublicoIN = false;
+            ctx.mostrarPanelEditPrecioPublicoIN = false;
           })}
         />
         {/* <ImgButton
@@ -96,13 +115,13 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
           <div class="linea-formulario" style={{ marginBottom: '8px' }}>
             <label>Porcentaje Utilidad</label>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <input
+              {/* <input
                 id="in_Porcentaje_Utilidad"
                 type="number"
                 disabled
                 placeholder="Porcentaje Utilidad"
                 // class="input-formulario-usuario"
-                style={{ marginRight: '4px' }}
+                style={{ marginRight: '4px', background: '#eee' }}
                 value={props.pUtilidad}
                 // onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
                 onKeyPress$={(e) => {
@@ -110,8 +129,8 @@ export default component$((props: { idMercaderia: any; descripcion: string; pUti
                     (document.getElementById('in_Costo_Unitario') as HTMLInputElement)?.focus();
                   }
                 }}
-              />
-              <label>%</label>
+              /> */}
+              <label>{props.pUtilidad} %</label>
             </div>
           </div>
           <div class="linea-formulario" style={{ marginBottom: '8px' }}>

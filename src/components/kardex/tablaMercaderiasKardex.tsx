@@ -4,7 +4,7 @@ import { images } from '~/assets';
 import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import style from '../tabla/tabla.css?inline';
-import { formatear_2Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, formatear_2Decimales } from '~/functions/comunes';
 
 export default component$((props: { buscarMercaderiasKARDEX: number; parametrosBusqueda: any; esAlmacen: boolean; verTODOS: boolean }) => {
   useStyles$(style);
@@ -78,19 +78,23 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                 <table style={{ fontSize: '0.9rem', fontWeight: 'lighter ', padding: '2px' }}>
                   <thead>
                     <tr>
+                      <th>Ítem</th>
                       <th>Descripción</th>
                       <th>Linea/Tipo</th>
                       <th>Marca</th>
                       <th>Ubi</th>
                       <th>Stock</th>
                       <th>Uni</th>
-                      {props.esAlmacen ? <th>Costo Promd.Uni PEN</th> : <th>Precio Uni PEN</th>}
+                      {/* {props.esAlmacen ? <th>Costo PEN + IGV</th> : <th>Precio Uni PEN</th>} */}
+                      <th>Costo PEN + IGV</th>
+                      <th>Precio PEN</th>
                       <th>Kx</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {misMercaderiasKARDEX.map((mercaINLocali) => {
+                    {misMercaderiasKARDEX.map((mercaINLocali, index) => {
+                      const elIndex = index + 1;
                       const {
                         _id,
                         descripcion,
@@ -98,6 +102,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                         marca,
                         totalCantidadSaldo,
                         unidad,
+                        costoUnitarioPENMasIGV,
                         precioUnitarioPEN,
                         // promedioCostoUnitarioMovil,
                         KARDEXS,
@@ -108,6 +113,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
 
                       return (
                         <tr key={_id} style={!activo ? { background: 'black', color: 'white' } : noFacturar ? { background: '#ff5aff' } : {}}>
+                          <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                           <td data-label="Descripción">{descripcion}</td>
                           <td data-label="Linea/Tipo">{lineaTipo}</td>
                           <td data-label="Marca">{marca}</td>
@@ -125,6 +131,13 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 : '-'}
                             </td>
                           ) : ( */}
+                          <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
+                            {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                              ? costoUnitarioPENMasIGV.$numberDecimal
+                                ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                                : formatear_2Decimales(costoUnitarioPENMasIGV)
+                              : '-'}
+                          </td>
                           <td data-label="Precio PEN" class="comoNumeroLeft">
                             {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                               ? precioUnitarioPEN.$numberDecimal
@@ -136,12 +149,12 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                           <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
                           <td data-label="Acciones" class="accionesLeft">
                             <input
+                              title="Ver kardex/s"
                               type="image"
                               src={images.see}
                               alt="icono de adicionar"
                               height={14}
                               width={14}
-                              title="Ver kardex/s"
                               style={{ marginRight: '8px' }}
                               onClick$={() => {
                                 //console.log('mercaINLocali', mercaINLocali);
@@ -171,13 +184,13 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                               }}
                             />
                             <input
+                              title="Editar mercadería"
                               type="image"
                               src={images.edit}
                               alt="icono de editar"
                               height={14}
                               width={14}
                               style={{ marginRight: '8px' }}
-                              title="Editar mercadería"
                               onClick$={() => {
                                 ctx_index_kardex.mM = mercaINLocali;
                                 ctx_index_kardex.mostrarPanelNewEditMercaderiaIN = true;
@@ -187,12 +200,12 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                               }}
                             />
                             <input
-                              // id="in_BuscarDetraccion"
+                              title="Editar ubigeo"
                               type="image"
                               src={images.ubigeo}
-                              title="Editar ubigeo"
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
+                              style={{ marginRight: '8px' }}
                               // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 if (mercaINLocali.KARDEXS.length === 0) {
@@ -215,6 +228,38 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 // }
 
                                 // ctx_buscar_mercaderia_out.mostrarSpinner = true;
+                                //console.log('la merca A Editar IN', ctx.mM);
+                              }}
+                            />
+                            <input
+                              title="Editar precio público"
+                              type="image"
+                              src={images.moneyBag}
+                              height={14}
+                              width={14}
+                              // style={{ marginRight: '2px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
+                                if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
+                                  alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
+                                  return;
+                                }
+                                console.log('🍟🍟🍟🍟');
+
+                                ctx_index_kardex.idMercaderia = mercaINLocali._id;
+                                ctx_index_kardex.descripcion = mercaINLocali.descripcion;
+                                ctx_index_kardex.cuMASigv =
+                                  typeof mercaINLocali.costoUnitarioPENMasIGV !== 'undefined' && mercaINLocali.costoUnitarioPENMasIGV !== null
+                                    ? mercaINLocali.costoUnitarioPENMasIGV.$numberDecimal
+                                      ? mercaINLocali.costoUnitarioPENMasIGV.$numberDecimal
+                                      : mercaINLocali.costoUnitarioPENMasIGV
+                                    : 0;
+                                // mercaINLocali.costoUnitarioPENMasIGV.$numberDecimal? mercaINLocali.costoUnitarioPENMasIGV.$numberDecimal;
+                                ctx_index_kardex.pUtilidad = mercaINLocali.porcentajeUtilidad.$numberDecimal;
+                                ctx_index_kardex.mostrarPanelEditPrecioPublicoIN = true;
+                                console.log('🍔🍔🍔🍔🍔🍔');
+                                // ctx.mostrarSpinner = true;
+
                                 //console.log('la merca A Editar IN', ctx.mM);
                               }}
                             />

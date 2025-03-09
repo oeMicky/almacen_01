@@ -181,7 +181,8 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
               <>
                 {misMovimientos.length > 0 ? (
                   <>
-                    <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}>
+                    {/* <table style={{ fontSize: '0.8em', fontWeight: 'lighter ' }}> */}
+                    <table style={{ fontSize: '0.9em', fontWeight: 'lighter ' }}>
                       <thead>
                         <tr>
                           <th>FISMA</th>
