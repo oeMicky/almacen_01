@@ -53,7 +53,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: 'merca', //cadena.value,
+    cadenaABuscar: '', //cadena.value,
   });
   //#endregion INICIALIZANDO
 
