@@ -57,7 +57,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: 'mobil bal', //cadena.value,
+    cadenaABuscar: '', //cadena.value,   'mobil bal'
   });
   //#endregion INICIALIZANDO
 
