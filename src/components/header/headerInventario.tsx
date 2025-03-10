@@ -68,7 +68,7 @@ export default component$(() => {
               }}
             >
               {/* <Link href="/kardex/"> */}
-              <img src={images.Kx} style={{ width: '30px' }} />
+              <img src={images.Inv} style={{ width: '30px' }} />
               {/* </Link> */}
             </li>
             <li

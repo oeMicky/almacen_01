@@ -43,6 +43,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
       });
       return res.json();
     }
+
     // const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
     //   // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
     //   method: 'POST',
@@ -71,6 +72,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
         console.log('onResolved 🍓🍓🍓🍓', mercaderias);
         const { data } = mercaderias; //{ status, data, message }
         const misMercaderiasKARDEX: IMercaderiaIN_BUSCAR[] = data;
+        ctx_index_kardex.kK = data;
         return (
           <>
             {misMercaderiasKARDEX.length > 0 ? (
@@ -79,6 +81,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                   <thead>
                     <tr>
                       <th>Ítem</th>
+                      {/* <th>idMercaderia</th> */}
                       <th>Descripción</th>
                       <th>Linea/Tipo</th>
                       <th>Marca</th>
@@ -114,6 +117,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                       return (
                         <tr key={_id} style={!activo ? { background: 'black', color: 'white' } : noFacturar ? { background: '#ff5aff' } : {}}>
                           <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
+                          {/* <td data-label="idMercaderia">{_id}</td> */}
                           <td data-label="Descripción">{descripcion}</td>
                           <td data-label="Linea/Tipo">{lineaTipo}</td>
                           <td data-label="Marca">{marca}</td>

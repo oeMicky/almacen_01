@@ -8,6 +8,7 @@ import EditPrecioPublicoIN from '~/components/miscelanea/mercaderiaIN/editPrecio
 import NewEditMercaderiaIN from '~/components/miscelanea/mercaderiaIN/newEditMercaderiaIN';
 import NewEditUbigeo from '~/components/miscelanea/mercaderiaIN/newEditUbigeo';
 import Spinner from '~/components/system/spinner';
+import { cerosALaIzquierda, hoy } from '~/functions/comunes';
 // import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -56,7 +57,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: '', //cadena.value,
+    cadenaABuscar: 'mobil bal', //cadena.value,
   });
   //#endregion INICIALIZANDO
 
@@ -117,6 +118,33 @@ export default component$(() => {
   });
   //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
 
+  //#region CREAR Y DOWNLOAD CSV
+  const createAndDownloadFile = $((nameFile: string, texto: string) => {
+    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    // const texto = 'hOLA A TODOS';
+
+    const filename = nameFile; ///'file.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([texto], { type: 'text/plain' });
+
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    // pom.setAttribute('download', filename);
+    // pom.setAttribute('download', filename + '.txt');
+    pom.setAttribute('download', filename + '.csv');
+
+    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
+
+    // const stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+    // console.log('first txt');
+  });
+  //#endregion CREAR Y DOWNLOAD CSV
+
   return (
     <div class="container">
       {/* <h1 style={{ color: 'grey', fontWeight: 'light', fontSize: '0.7rem' }}>
@@ -134,7 +162,7 @@ export default component$(() => {
         </label>
       </div>
       <h4 style={{ margin: '8px 0 4px 2px' }}>
-        <u>Kardex</u>
+        <u>Inventario</u>
       </h4>
 
       {/* BUSCAR POR */}
@@ -160,12 +188,12 @@ export default component$(() => {
           }}
         />
         <input
+          title="Buscar datos de mercadería"
           type="image"
           src={images.searchPLUS}
           alt="Icono de buscar de mercadería"
           height={21.5}
           width={21.5}
-          title="Buscar datos de mercadería"
           onClick$={() => {
             if (parametrosGlobales.idGrupoEmpresarial === '') {
               // console.log('estaVACIA');
@@ -188,29 +216,145 @@ export default component$(() => {
         <br />
         <div style={{ margin: '0 5px' }}></div>
       </div>
-      <div>
-        <label style={{ marginRight: '4px' }}>Leyenda:</label>
-        <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
-        <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px' }}>No facturable</label>
-        <input
-          id="in_verTODOS_KARDEX"
-          type="checkbox"
-          placeholder="Ver TODOS"
-          checked={verTODOS.value}
-          onChange$={(e) => {
-            verTODOS.value = (e.target as HTMLInputElement).checked;
-            // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
-          }}
-          // value={parametrosBusqueda.cadenaABuscar}
-        />
-        <label for="in_verTODOS_KARDEX">Ver TODOS</label>
+      {/* LEYENDA */}
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        {/* LEYENDA */}
+        <div>
+          <label style={{ marginRight: '4px' }}>Leyenda:</label>
+          <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
+          <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px' }}>No facturable</label>
+          <input
+            id="in_verTODOS_KARDEX"
+            type="checkbox"
+            placeholder="Ver TODOS"
+            checked={verTODOS.value}
+            onChange$={(e) => {
+              verTODOS.value = (e.target as HTMLInputElement).checked;
+              // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
+            }}
+            // value={parametrosBusqueda.cadenaABuscar}
+          />
+          <label for="in_verTODOS_KARDEX">Ver TODOS</label>
+        </div>
+        {/* ACCIONES */}
+        <div>
+          <input
+            title="Descargar datos del inventario"
+            type="image"
+            src={images.download}
+            height={21.5}
+            width={21.5}
+            style={{ marginRight: '8px' }}
+            // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+            onClick$={() => {
+              if (definicion_CTX_INDEX_KARDEX.kK.length === 0) {
+                alert('No hay datos para descargar.');
+                return;
+              } else {
+                // alert('Datos KARDEX.');
+                console.log(definicion_CTX_INDEX_KARDEX.kK);
+                definicion_CTX_INDEX_KARDEX.mostrarSpinner = true;
+                //FECHA HORA LOCAL
+                const elHoy = hoy();
+                const fechaLocal = elHoy.substring(8, 10) + '/' + elHoy.substring(5, 7) + '/' + elHoy.substring(0, 4);
+                const fechaLocal_2 = elHoy.substring(8, 10) + '-' + elHoy.substring(5, 7) + '-' + elHoy.substring(0, 4);
+
+                const hhhhDate = new Date();
+                const horaLocal =
+                  cerosALaIzquierda(hhhhDate.getHours(), 2) +
+                  ':' +
+                  cerosALaIzquierda(hhhhDate.getMinutes(), 2) +
+                  ':' +
+                  cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+                const horaLocal_2 =
+                  cerosALaIzquierda(hhhhDate.getHours(), 2) +
+                  '-' +
+                  cerosALaIzquierda(hhhhDate.getMinutes(), 2) +
+                  '-' +
+                  cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+
+                let aExportar = '';
+                aExportar = 'INVENTARIO AL ' + fechaLocal + ' ' + horaLocal + '|\n';
+                aExportar += '\n';
+                aExportar += 'ITEM|DESCRIPCIÓN|LINEA|MARCA|UBIGEO|STOCK|UNI|COSTO PEN|PRECIO PEN|KX|\n';
+                definicion_CTX_INDEX_KARDEX.kK.map((com: any, index: number) => {
+                  const { descripcion, lineaTipo, marca, ubigeo, totalCantidadSaldo, unidad, costoUnitarioPENMasIGV, precioUnitarioPEN, KARDEXS } = com;
+                  const elIndex = index + 1;
+                  // const bI = typeof baseImponiblePEN === 'undefined' ? '' : baseImponiblePEN.$numberDecimal;
+                  // const iGV = typeof igvPEN === 'undefined' ? '' : igvPEN.$numberDecimal;
+                  // const adNO = typeof adquisicionesNoGravadasPEN === 'undefined' ? '' : adquisicionesNoGravadasPEN.$numberDecimal;
+                  // const isc = typeof iscPEN === 'undefined' ? '' : iscPEN.$numberDecimal;
+                  // const icbp = typeof icbpPEN === 'undefined' ? '' : icbpPEN.$numberDecimal;
+                  // const otros = typeof otrosPEN === 'undefined' ? '' : otrosPEN.$numberDecimal;
+                  // const total = typeof totalPEN === 'undefined' ? '' : totalPEN.$numberDecimal;
+                  // const detra = typeof detraccion === 'undefined' ? '' : detraccion;
+                  // const detraConsta = typeof detraccionConstancia === 'undefined' ? '' : detraccionConstancia;
+                  // const detraM = typeof detraccionMontoPEN === 'undefined' ? '' : detraccionMontoPEN.$numberDecimal;
+                  // const detraPorc = typeof detraccionPorcentaje === 'undefined' ? '' : detraccionPorcentaje.$numberDecimal;
+
+                  aExportar =
+                    aExportar +
+                    elIndex +
+                    '|' +
+                    descripcion +
+                    '|' +
+                    lineaTipo +
+                    '|' +
+                    marca +
+                    '|' +
+                    (typeof ubigeo !== 'undefined' && ubigeo !== null ? ubigeo.toString() : '-') +
+                    '|' +
+                    (typeof totalCantidadSaldo !== 'undefined' && totalCantidadSaldo !== null
+                      ? totalCantidadSaldo.$numberDecimal
+                        ? totalCantidadSaldo.$numberDecimal
+                        : totalCantidadSaldo
+                      : '-') +
+                    '|' +
+                    unidad +
+                    '|' +
+                    (typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                      ? costoUnitarioPENMasIGV.$numberDecimal
+                        ? costoUnitarioPENMasIGV.$numberDecimal
+                        : costoUnitarioPENMasIGV
+                      : '-') +
+                    '|' +
+                    (typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                      ? precioUnitarioPEN.$numberDecimal
+                        ? precioUnitarioPEN.$numberDecimal
+                        : precioUnitarioPEN
+                      : '-') +
+                    '|' +
+                    (KARDEXS.length === 0 ? 'No' : 'Si') +
+                    '\n';
+                });
+                console.log('aExportar', aExportar);
+
+                // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
+                createAndDownloadFile('Inventario_' + fechaLocal_2 + '_' + horaLocal_2, aExportar);
+
+                definicion_CTX_INDEX_KARDEX.mostrarSpinner = false;
+                alert('Archivo descargado.');
+              }
+
+              // if (mercaINLocali.KARDEXS.length === 1) {
+              //   console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+
+              //   ctx_index_kardex.elIdKardex = mercaINLocali.KARDEXS[0]._id;
+              //   ctx_index_kardex.elUBIGEO = ubigeo;
+              //   ctx_index_kardex.mostrarPanelNewEditUbigeo = true;
+              //   console.log('🍔🍔🍔🍔🍔 mercaINLocali.KARDEXS.length', ctx_index_kardex.elIdKardex, ctx_index_kardex.elUBIGEO);
+              // }
+            }}
+          />
+        </div>
       </div>
+
       {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN && (
         <div class="modal">
           <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_INDEX_KARDEX.mM} contexto={'index_kardexs'} />
         </div>
       )}
-      {/*  tabla  MERCADERIAS LOCALIZADOS */}
+      {/*  TABLA  --  MERCADERIAS LOCALIZADOS */}
       <div class="form-control" style={{ margin: '10px 0' }}>
         {buscarMercaderiasKARDEX.value > 0 ? (
           <TablaMercaderiasKardex
