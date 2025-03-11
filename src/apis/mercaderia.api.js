@@ -1,5 +1,18 @@
 const API = import.meta.env.VITE_URL + '/api/mercaderia';
 
+export const verUbigeoAntiguo = async (parametros) => {
+  // //console.log('//////api////////////******************obtener a upPrecioPublicoPEN');
+  // //console.log('parametros upPrecioPublicoPEN', parametros);
+  const res = await fetch(API + '/verUbigeoAntiguo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
 export const upPrecioPublicoPEN = async (parametros) => {
   // //console.log('//////api////////////******************obtener a upPrecioPublicoPEN');
   // //console.log('parametros upPrecioPublicoPEN', parametros);

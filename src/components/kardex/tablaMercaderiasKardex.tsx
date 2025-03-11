@@ -5,6 +5,7 @@ import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
 import style from '../tabla/tabla.css?inline';
 import { cerosALaIzquierda, formatear_2Decimales } from '~/functions/comunes';
+import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
 
 export default component$((props: { buscarMercaderiasKARDEX: number; parametrosBusqueda: any; esAlmacen: boolean; verTODOS: boolean }) => {
   useStyles$(style);
@@ -241,7 +242,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                               src={images.moneyBag}
                               height={14}
                               width={14}
-                              // style={{ marginRight: '2px' }}
+                              style={{ marginRight: '8px' }}
                               // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
@@ -265,6 +266,20 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 // ctx.mostrarSpinner = true;
 
                                 //console.log('la merca A Editar IN', ctx.mM);
+                              }}
+                            />
+                            <input
+                              title="Ver ubigeo antiguo"
+                              type="image"
+                              src={images.xo}
+                              height={14}
+                              width={14}
+                              style={{ marginRight: '8px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              onClick$={async () => {
+                                const resp = await verUbigeoAntiguo({ idMercaderia: mercaINLocali._id });
+                                // console.log('resp ubigeo', resp.data);
+                                alert('El ubigeo antiguo es: ' + resp.data[0].ubigeo);
                               }}
                             />
                           </td>

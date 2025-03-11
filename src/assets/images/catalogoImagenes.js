@@ -109,6 +109,7 @@ import ubigeo from '../images/ubigeo.svg';
 import user from '../images/user.svg';
 import x from '../images/x.svg';
 import xml from '../images/xml.svg';
+import xo from '../images/xo.svg';
 
 export default {
   caoSLogoGrandeWB,
@@ -222,4 +223,5 @@ export default {
   user,
   x,
   xml,
+  xo,
 };
