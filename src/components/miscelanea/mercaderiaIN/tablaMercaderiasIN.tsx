@@ -327,13 +327,13 @@ export default component$(
                                     ctx.kK = mercaINLocali.KARDEXS[0];
                                     ctx.mostrarPanelKARDEX = true;
 
-                                    //console.log('la mercaSeleccionada ', ctx_index_kardex.mM);
-                                    //console.log('la mercaSeleccionada KARDEX', ctx_index_kardex.kK);
+                                    //console.log('la mercaSeleccionada ', ctx_index_inventario.mM);
+                                    //console.log('la mercaSeleccionada KARDEX', ctx_index_inventario.kK);
                                   }
                                   if (mercaINLocali.KARDEXS.length > 1) {
                                     ctx.mM = mercaINLocali;
                                     ctx.mostrarPanelKARDEXS = true;
-                                    //console.log('la mercaSeleccionada KARDEXS', ctx_index_kardex.mM);
+                                    //console.log('la mercaSeleccionada KARDEXS', ctx_index_inventario.mM);
                                   }
                                 }}
                               />

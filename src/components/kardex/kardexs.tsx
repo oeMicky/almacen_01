@@ -2,7 +2,7 @@ import { $, component$, createContextId, useContext, useContextProvider, useStor
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatear_2Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
+import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import Kardex from './kardex';
 
 export const CTX_KARDEXS = createContextId<any>('ctx_kardexs__');
@@ -16,7 +16,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
   //#endregion DEFINICION CTX_KARDEXS
 
   //#reuseStoregion CONTEXTO
-  const ctx_index_kardex = useContext(CTX_INDEX_KARDEX);
+  const ctx_index_inventario = useContext(CTX_INDEX_INVENTARIO);
   //#endregion CONTEXTO
 
   //#region INICIALIZACION
@@ -42,7 +42,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_index_kardex.mostrarPanelKARDEXS = false;
+            ctx_index_inventario.mostrarPanelKARDEXS = false;
           })}
         />
         <ImgButton
@@ -126,11 +126,11 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
                         style={{ padding: '2px' }}
                         // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                         onClick$={() => {
-                          ctx_index_kardex.mM = props.mercaINSelecci;
-                          ctx_index_kardex.kK = props.mercaINSelecci.KARDEXS[index];
+                          ctx_index_inventario.mM = props.mercaINSelecci;
+                          ctx_index_inventario.kK = props.mercaINSelecci.KARDEXS[index];
                           // definicion_CTX_KARDEXS_IN.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = true;
-                          //console.log('la mercade seleccionada ', ctx_index_kardex.mM);
-                          //console.log('la mercade seleccionada -  KARDEX', ctx_index_kardex.kK);
+                          //console.log('la mercade seleccionada ', ctx_index_inventario.mM);
+                          //console.log('la mercade seleccionada -  KARDEX', ctx_index_inventario.kK);
 
                           definicion_CTX_KARDEXS.mostrarPanelKARDEX = true;
                         }}
@@ -148,8 +148,8 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
       {definicion_CTX_KARDEXS.mostrarPanelKARDEX && (
         <div class="modal">
           <Kardex
-            mercaSelecci={ctx_index_kardex.mM}
-            kardex={ctx_index_kardex.kK}
+            mercaSelecci={ctx_index_inventario.mM}
+            kardex={ctx_index_inventario.kK}
             // esAlmacen={props.esAlmacen}
             // esAlmacen={false}
             contexto={'kardexs'}

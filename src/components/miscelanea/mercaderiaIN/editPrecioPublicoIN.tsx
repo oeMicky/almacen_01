@@ -4,7 +4,7 @@ import { images } from '~/assets';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 import { upPrecioPublicoPEN } from '~/apis/mercaderia.api';
 import { parametrosGlobales } from '~/routes/login';
-import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
+import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 // import { parametrosGlobales } from '~/routes/login';
 
 export default component$((props: { idMercaderia: any; descripcion: string; cuMASigv: any; pUtilidad: any; contexto: string }) => {
@@ -18,7 +18,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
       ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
       break;
     case 'index_kardex':
-      ctx = useContext(CTX_INDEX_KARDEX);
+      ctx = useContext(CTX_INDEX_INVENTARIO);
       break;
     // case 'cotizacion':
     //   ctx = useContext(CTX_DOCS_COTIZACION);

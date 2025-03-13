@@ -5,7 +5,7 @@ import { CTX_KARDEXS } from './kardexs';
 import { parametrosGlobales } from '~/routes/login';
 import type { IMovimientoKARDEX } from '~/interfaces/iKardex';
 import { formatear_4Decimales, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
+import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import styles from '../tabla/tabla.css?inline';
 import { getIngresoAAlmacen } from '~/apis/ingresosAAlmacen.api';
 import VerInAlmacen from '../inAlmacen/verInAlmacen';
@@ -37,7 +37,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
   switch (props.contexto) {
     case 'index_kardexs':
       //console.log('contexto::a: index_kardexs');
-      ctx = useContext(CTX_INDEX_KARDEX);
+      ctx = useContext(CTX_INDEX_INVENTARIO);
       break;
     case 'kardexs':
       //console.log('contexto::a: kardexs');

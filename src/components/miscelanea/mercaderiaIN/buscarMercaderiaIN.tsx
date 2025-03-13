@@ -13,6 +13,8 @@ import Kardexs from '~/components/kardex/kardexs';
 import Kardex from '~/components/kardex/kardex';
 import EditPrecioPublicoIN from './editPrecioPublicoIN';
 import NewEditUbigeo from './newEditUbigeo';
+import { verOtrosAlmacenes } from '~/apis/usuario.api';
+import InventarioExterno from '../inventarioExterno/inventarioExterno';
 // import MercaderiaINSelec from "./mercaderiaINSelec";
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
@@ -56,6 +58,10 @@ export default component$(
 
       mostrarPanelEditPrecioPublicoIN: false,
       grabo_precio_publico: false,
+
+      mostrarPanelInventarioExterno: false,
+      mostrarPanelVerOtrosAlmacenenes: false,
+      almacenExterno: [],
 
       mostrarSpinner: false,
     });
@@ -182,22 +188,22 @@ export default component$(
       >
         {/* BOTONES DEL MARCO */}
         <div style={{ display: 'flex', justifyContent: 'end' }}>
-          {/* <ImgButton
-          src={images.see}
-          alt="Icono de cerrar"
-          height={18}
-          width={18}
-          title="Cerrar el formulario"
-          onClick={$(() => {
-            //console.log(props.tipoCambio);
-          })}
-        /> */}
           <ImgButton
+            title="Ver el parametrosGlobales"
+            src={images.see}
+            alt="Icono de cerrar"
+            height={18}
+            width={18}
+            onClick={$(() => {
+              console.log(parametrosGlobales);
+            })}
+          />
+          <ImgButton
+            title="Cerrar el formulario"
             src={images.x}
             alt="Icono de cerrar"
             height={18}
             width={18}
-            title="Cerrar el formulario"
             onClick={$(() => {
               ctx.mostrarPanelBuscarMercaderiaIN = false;
             })}
@@ -210,7 +216,7 @@ export default component$(
         <div class="add-form">
           {/* ENCABEZADO */}
           <div style={{ marginBottom: '8px' }}>
-            {/* Buscar por */}
+            {/* Buscar por: input - lupa - mas - flecha up right */}
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <input
@@ -233,9 +239,9 @@ export default component$(
                   }}
                 />
                 <input
+                  title="Buscar datos de mercadería"
                   type="image"
                   src={images.searchPLUS}
-                  title="Buscar datos de mercadería"
                   alt="icono buscar"
                   height={16}
                   width={16}
@@ -244,13 +250,43 @@ export default component$(
                     localizarMercaderiasIN();
                   }}
                 />
+                {parametrosGlobales.verOtrosAlmacenes && (
+                  <input
+                    title="Ver otros almacenes"
+                    type="image"
+                    src={images.arrowUpRight}
+                    alt="icono ir a ..."
+                    height={16}
+                    width={16}
+                    onClick$={async () => {
+                      const losAlmacenes = await verOtrosAlmacenes({
+                        usuario: parametrosGlobales.usuario,
+                        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                        idSucursal: parametrosGlobales.idSucursal,
+                      });
+                      console.log('losAlmacenes.data', losAlmacenes.data.length, losAlmacenes.data);
+                      if (losAlmacenes.data.length === 0) {
+                        alert('No existe otros almacenes.');
+                        return;
+                      }
+                      if (losAlmacenes.data.length === 1) {
+                        //ir directo al panel de busqueda
+                        definicion_CTX_BUSCAR_MERCADERIA_IN.almacenExterno = losAlmacenes.data[0];
+                        definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelInventarioExterno = true;
+                      } else {
+                        //ir al panel de listado de almacenes disponibles
+                      }
+                    }}
+                  />
+                )}
                 <input
+                  title="Registar nueva mercadería"
                   type="image"
                   src={images.add}
-                  title="Registar nueva mercadería"
                   alt="icono add"
                   height={16}
                   width={16}
+                  style={{ margin: '0 4px' }}
                   onClick$={() => {
                     adicionarMercaderiasIN();
                   }}
@@ -455,6 +491,20 @@ export default component$(
                   descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
                   cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_IN.cuMASigv}
                   pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
+                  contexto="buscar_mercaderia_in"
+                />
+              </div>
+            )}
+            {/*  INVENTARIO EXTERNO  */}
+            {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelInventarioExterno && (
+              <div class="modal">
+                <InventarioExterno
+                  almacen={definicion_CTX_BUSCAR_MERCADERIA_IN.almacenExterno}
+                  buscar={parametrosBusqueda.cadenaABuscar}
+                  // idMercaderia={definicion_CTX_BUSCAR_MERCADERIA_IN.idMercaderia}
+                  // descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
+                  // cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_IN.cuMASigv}
+                  // pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
                   contexto="buscar_mercaderia_in"
                 />
               </div>

@@ -30,6 +30,7 @@ import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
 
 import add from '../images/add.svg';
 import adjunto from '../images/adjunto.svg';
+import arrowUpRight from '../images/arrow-up-right.svg';
 import arrowUp from '../images/arrow-up.svg';
 import arrowDown from '../images/arrow-down.svg';
 import arrowRight from '../images/arrow-right.svg';
@@ -144,6 +145,7 @@ export default {
 
   add,
   adjunto,
+  arrowUpRight,
   arrowUp,
   arrowDown,
   arrowRight,

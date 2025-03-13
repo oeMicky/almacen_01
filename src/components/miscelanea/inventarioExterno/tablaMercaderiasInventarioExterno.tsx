@@ -1,21 +1,22 @@
-import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
-// import ImgButton from '../system/imgButton';
-import { images } from '~/assets';
+import { component$, Resource, useResource$, useStyles$ } from '@builder.io/qwik';
+import style from '../../tabla/tabla.css?inline';
+// import { CTX_INVENTARIO_EXTERNO } from './inventarioExterno';
 import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
-import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
-import style from '../tabla/tabla.css?inline';
-import { cerosALaIzquierda, formatear_2Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda } from '~/functions/comunes';
+import { images } from '~/assets'; //formatear_2Decimales
 import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
 
-export default component$((props: { buscarMercaderiasKARDEX: number; parametrosBusqueda: any; esAlmacen: boolean; verTODOS: boolean }) => {
+export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; parametrosBusqueda: any; verTODOS: boolean }) => {
   useStyles$(style);
+
   //#region CONTEXTOS
-  const ctx_index_inventario = useContext(CTX_INDEX_INVENTARIO);
+  //   const ctx_inventario_externo = useContext(CTX_INVENTARIO_EXTERNO);
   //#endregion CONTEXTOS
 
   //#region BUSCANDO REGISTROS
   const lasMercaderiasKARDEX = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
-    track(() => props.buscarMercaderiasKARDEX.valueOf());
+    // track(() => props.buscarMercaderiasINVEXTERNO.valueOf());
+    track(() => props.buscarMercaderiasINVENTARIOEXTERNO);
 
     const abortController = new AbortController();
     cleanup(() => abortController.abort('cleanup'));
@@ -44,17 +45,6 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
       });
       return res.json();
     }
-
-    // const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
-    //   // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(props.parametrosBusqueda),
-    //   signal: abortController.signal,
-    // });
-    // return res.json();
   });
   //#endregion BUSCANDO REGISTROS
 
@@ -73,12 +63,12 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
         console.log('onResolved 🍓🍓🍓🍓', mercaderias);
         const { data } = mercaderias; //{ status, data, message }
         const misMercaderiasKARDEX: IMercaderiaIN_BUSCAR[] = data;
-        ctx_index_inventario.kK = data;
         return (
           <>
             {misMercaderiasKARDEX.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.9rem', fontWeight: 'lighter ', padding: '2px' }}>
+                {/* <table style={{ fontSize: '0.9rem', fontWeight: 'lighter ', padding: '2px' }}> */}
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>
@@ -90,8 +80,8 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                       <th>Stock</th>
                       <th>Uni</th>
                       {/* {props.esAlmacen ? <th>Costo PEN + IGV</th> : <th>Precio Uni PEN</th>} */}
-                      <th>Costo PEN + IGV</th>
-                      <th>Precio PEN</th>
+                      {/* <th>Costo PEN + IGV</th>
+                      <th>Precio PEN</th> */}
                       <th>Kx</th>
                       <th>Acciones</th>
                     </tr>
@@ -106,8 +96,8 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                         marca,
                         totalCantidadSaldo,
                         unidad,
-                        costoUnitarioPENMasIGV,
-                        precioUnitarioPEN,
+                        // costoUnitarioPENMasIGV,
+                        // precioUnitarioPEN,
                         // promedioCostoUnitarioMovil,
                         KARDEXS,
                         noFacturar,
@@ -128,15 +118,15 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                           </td>
                           <td data-label="Uni">{unidad}</td>
                           {/* {props.esAlmacen ? (
-                            <td data-label="Costo Promd.Uni PEN" class="comoNumeroLeft">
-                              {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
-                                ? promedioCostoUnitarioMovil.$numberDecimal
-                                  ? formatear_2Decimales(promedioCostoUnitarioMovil.$numberDecimal)
-                                  : formatear_2Decimales(promedioCostoUnitarioMovil)
-                                : '-'}
-                            </td>
-                          ) : ( */}
-                          <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
+                              <td data-label="Costo Promd.Uni PEN" class="comoNumeroLeft">
+                                {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
+                                  ? promedioCostoUnitarioMovil.$numberDecimal
+                                    ? formatear_2Decimales(promedioCostoUnitarioMovil.$numberDecimal)
+                                    : formatear_2Decimales(promedioCostoUnitarioMovil)
+                                  : '-'}
+                              </td>
+                            ) : ( */}
+                          {/* <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
                             {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
                               ? costoUnitarioPENMasIGV.$numberDecimal
                                 ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
@@ -149,11 +139,11 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
                                 : formatear_2Decimales(precioUnitarioPEN)
                               : '-'}
-                          </td>
+                          </td> */}
                           {/* )} */}
                           <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
                           <td data-label="Acciones" class="accionesLeft">
-                            <input
+                            {/* <input
                               title="Ver kardex/s"
                               type="image"
                               src={images.see}
@@ -165,9 +155,6 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 //console.log('mercaINLocali', mercaINLocali);
                                 if (mercaINLocali.KARDEXS.length === 0) {
                                   alert('No se localizan kardex/s');
-                                  // ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                  // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                  // //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
                                 }
                                 if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
                                   alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
@@ -178,17 +165,14 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                   ctx_index_inventario.mM = mercaINLocali;
                                   ctx_index_inventario.kK = mercaINLocali.KARDEXS[0];
                                   ctx_index_inventario.mostrarPanelKARDEX = true;
-                                  //console.log('la mercaSeleccionada ', ctx_index_inventario.mM);
-                                  //console.log('la mercaSeleccionada KARDEX', ctx_index_inventario.kK);
                                 }
                                 if (mercaINLocali.KARDEXS.length > 1) {
                                   ctx_index_inventario.mM = mercaINLocali;
                                   ctx_index_inventario.mostrarPanelKARDEXS = true;
-                                  //console.log('la mercaSeleccionada KARDEXS', ctx_index_inventario.mM);
                                 }
                               }}
-                            />
-                            <input
+                            /> */}
+                            {/* <input
                               title="Editar mercadería"
                               type="image"
                               src={images.edit}
@@ -199,12 +183,9 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                               onClick$={() => {
                                 ctx_index_inventario.mM = mercaINLocali;
                                 ctx_index_inventario.mostrarPanelNewEditMercaderiaIN = true;
-                                //   ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                //   ctx_buscar_mercaderia_in.mostrarPanelNewEditMercaderiaIN = true;
-                                //console.log('la merca A Editar IN-->', ctx_index_inventario.mM);
                               }}
-                            />
-                            <input
+                            /> */}
+                            {/* <input
                               title="Editar ubigeo"
                               type="image"
                               src={images.ubigeo}
@@ -267,7 +248,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
 
                                 //console.log('la merca A Editar IN', ctx.mM);
                               }}
-                            />
+                            />*/}
                             <input
                               title="Ver ubigeo antiguo"
                               type="image"

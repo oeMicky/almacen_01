@@ -1,9 +1,11 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
+import { verOtrosAlmacenes } from '~/apis/usuario.api';
 import { images } from '~/assets';
 import Kardex from '~/components/kardex/kardex';
 import Kardexs from '~/components/kardex/kardexs';
 import TablaMercaderiasKardex from '~/components/kardex/tablaMercaderiasKardex';
+import InventarioExterno from '~/components/miscelanea/inventarioExterno/inventarioExterno';
 import EditPrecioPublicoIN from '~/components/miscelanea/mercaderiaIN/editPrecioPublicoIN';
 import NewEditMercaderiaIN from '~/components/miscelanea/mercaderiaIN/newEditMercaderiaIN';
 import NewEditUbigeo from '~/components/miscelanea/mercaderiaIN/newEditUbigeo';
@@ -12,11 +14,11 @@ import { cerosALaIzquierda, hoy } from '~/functions/comunes';
 // import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 
-export const CTX_INDEX_KARDEX = createContextId<any>('ctx_index_kardex__');
+export const CTX_INDEX_INVENTARIO = createContextId<any>('ctx_index_inventario__');
 
 export default component$(() => {
-  //#region CTX_INDEX_KARDEX
-  const definicion_CTX_INDEX_KARDEX = useStore({
+  //#region CTX_INDEX_INVENTARIO
+  const definicion_CTX_INDEX_INVENTARIO = useStore({
     mM: [],
     kK: [],
     mostrarPanelKARDEXS: false,
@@ -41,10 +43,14 @@ export default component$(() => {
     mostrarPanelEditPrecioPublicoIN: false,
     grabo_precio_publico: false,
 
+    mostrarPanelInventarioExterno: false,
+    mostrarPanelVerOtrosAlmacenenes: false,
+    almacenExterno: [],
+
     mostrarSpinner: false,
   });
-  useContextProvider(CTX_INDEX_KARDEX, definicion_CTX_INDEX_KARDEX);
-  //#endregion CTX_INDEX_KARDEX
+  useContextProvider(CTX_INDEX_INVENTARIO, definicion_CTX_INDEX_INVENTARIO);
+  //#endregion CTX_INDEX_INVENTARIO
 
   //#region INICIALIZANDO
   const navegarA = useNavigate();
@@ -75,11 +81,11 @@ export default component$(() => {
   //#region REFRESCAR TABLA MERCADERIAS IN
   useTask$(({ track }) => {
     track(() => {
-      definicion_CTX_INDEX_KARDEX.grabo_mercaderiaIN;
+      definicion_CTX_INDEX_INVENTARIO.grabo_mercaderiaIN;
     });
-    if (definicion_CTX_INDEX_KARDEX.grabo_mercaderiaIN) {
+    if (definicion_CTX_INDEX_INVENTARIO.grabo_mercaderiaIN) {
       buscarMercaderiasKARDEX.value++;
-      definicion_CTX_INDEX_KARDEX.grabo_mercaderiaIN = false;
+      definicion_CTX_INDEX_INVENTARIO.grabo_mercaderiaIN = false;
     }
   });
   //#endregion REFRESCAR TABLA MERCADERIAS IN
@@ -87,15 +93,15 @@ export default component$(() => {
   //#region REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
   useTask$(({ track }) => {
     track(() => {
-      definicion_CTX_INDEX_KARDEX.grabo_ubigeo;
+      definicion_CTX_INDEX_INVENTARIO.grabo_ubigeo;
     });
-    if (definicion_CTX_INDEX_KARDEX.grabo_ubigeo) {
+    if (definicion_CTX_INDEX_INVENTARIO.grabo_ubigeo) {
       // parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
-      definicion_CTX_INDEX_KARDEX.elIdKardex = '';
-      definicion_CTX_INDEX_KARDEX.elUBIGEO = '';
+      definicion_CTX_INDEX_INVENTARIO.elIdKardex = '';
+      definicion_CTX_INDEX_INVENTARIO.elUBIGEO = '';
 
       buscarMercaderiasKARDEX.value++;
-      definicion_CTX_INDEX_KARDEX.grabo_ubigeo = false;
+      definicion_CTX_INDEX_INVENTARIO.grabo_ubigeo = false;
     }
   });
   //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
@@ -103,17 +109,17 @@ export default component$(() => {
   //#region REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
   useTask$(({ track }) => {
     track(() => {
-      definicion_CTX_INDEX_KARDEX.grabo_precio_publico;
+      definicion_CTX_INDEX_INVENTARIO.grabo_precio_publico;
     });
-    if (definicion_CTX_INDEX_KARDEX.grabo_precio_publico) {
+    if (definicion_CTX_INDEX_INVENTARIO.grabo_precio_publico) {
       // parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
-      definicion_CTX_INDEX_KARDEX.idMercaderia = '';
-      definicion_CTX_INDEX_KARDEX.descripcion = '';
-      definicion_CTX_INDEX_KARDEX.cuMASigv = 0;
-      definicion_CTX_INDEX_KARDEX.pUtilidad = 0;
+      definicion_CTX_INDEX_INVENTARIO.idMercaderia = '';
+      definicion_CTX_INDEX_INVENTARIO.descripcion = '';
+      definicion_CTX_INDEX_INVENTARIO.cuMASigv = 0;
+      definicion_CTX_INDEX_INVENTARIO.pUtilidad = 0;
 
       buscarMercaderiasKARDEX.value++;
-      definicion_CTX_INDEX_KARDEX.grabo_precio_publico = false;
+      definicion_CTX_INDEX_INVENTARIO.grabo_precio_publico = false;
     }
   });
   //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
@@ -194,6 +200,7 @@ export default component$(() => {
           alt="Icono de buscar de mercadería"
           height={21.5}
           width={21.5}
+          style={{ marginRight: '4px' }}
           onClick$={() => {
             if (parametrosGlobales.idGrupoEmpresarial === '') {
               // console.log('estaVACIA');
@@ -204,11 +211,40 @@ export default component$(() => {
             localizarMercaderiasKARDEX();
           }}
         />
+        {parametrosGlobales.verOtrosAlmacenes && (
+          <input
+            title="Ver otros almacenes"
+            type="image"
+            src={images.arrowUpRight}
+            alt="icono ir a ..."
+            height={21.5}
+            width={21.5}
+            onClick$={async () => {
+              const losAlmacenes = await verOtrosAlmacenes({
+                usuario: parametrosGlobales.usuario,
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idSucursal: parametrosGlobales.idSucursal,
+              });
+              console.log('losAlmacenes.data', losAlmacenes.data.length, losAlmacenes.data);
+              if (losAlmacenes.data.length === 0) {
+                alert('No existe otros almacenes.');
+                return;
+              }
+              if (losAlmacenes.data.length === 1) {
+                //ir directo al panel de busqueda
+                definicion_CTX_INDEX_INVENTARIO.almacenExterno = losAlmacenes.data[0];
+                definicion_CTX_INDEX_INVENTARIO.mostrarPanelInventarioExterno = true;
+              } else {
+                //ir al panel de listado de almacenes disponibles
+              }
+            }}
+          />
+        )}
         <button
           style={{ cursor: 'pointer', marginLeft: '4px' }}
           onClick$={() => {
-            definicion_CTX_INDEX_KARDEX.mM = [];
-            definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN = true;
+            definicion_CTX_INDEX_INVENTARIO.mM = [];
+            definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN = true;
           }}
         >
           ADD MERCADERÍA
@@ -247,13 +283,13 @@ export default component$(() => {
             style={{ marginRight: '8px' }}
             // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
             onClick$={() => {
-              if (definicion_CTX_INDEX_KARDEX.kK.length === 0) {
+              if (definicion_CTX_INDEX_INVENTARIO.kK.length === 0) {
                 alert('No hay datos para descargar.');
                 return;
               } else {
                 // alert('Datos KARDEX.');
-                console.log(definicion_CTX_INDEX_KARDEX.kK);
-                definicion_CTX_INDEX_KARDEX.mostrarSpinner = true;
+                console.log(definicion_CTX_INDEX_INVENTARIO.kK);
+                definicion_CTX_INDEX_INVENTARIO.mostrarSpinner = true;
                 //FECHA HORA LOCAL
                 const elHoy = hoy();
                 const fechaLocal = elHoy.substring(8, 10) + '/' + elHoy.substring(5, 7) + '/' + elHoy.substring(0, 4);
@@ -277,7 +313,7 @@ export default component$(() => {
                 aExportar = 'INVENTARIO AL ' + fechaLocal + ' ' + horaLocal + '|\n';
                 aExportar += '\n';
                 aExportar += 'ITEM|DESCRIPCIÓN|LINEA|MARCA|UBIGEO|STOCK|UNI|COSTO PEN|PRECIO PEN|KX|\n';
-                definicion_CTX_INDEX_KARDEX.kK.map((com: any, index: number) => {
+                definicion_CTX_INDEX_INVENTARIO.kK.map((com: any, index: number) => {
                   const { descripcion, lineaTipo, marca, ubigeo, totalCantidadSaldo, unidad, costoUnitarioPENMasIGV, precioUnitarioPEN, KARDEXS } = com;
                   const elIndex = index + 1;
                   // const bI = typeof baseImponiblePEN === 'undefined' ? '' : baseImponiblePEN.$numberDecimal;
@@ -332,26 +368,26 @@ export default component$(() => {
                 // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
                 createAndDownloadFile('Inventario_' + fechaLocal_2 + '_' + horaLocal_2, aExportar);
 
-                definicion_CTX_INDEX_KARDEX.mostrarSpinner = false;
+                definicion_CTX_INDEX_INVENTARIO.mostrarSpinner = false;
                 alert('Archivo descargado.');
               }
 
               // if (mercaINLocali.KARDEXS.length === 1) {
               //   console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
 
-              //   ctx_index_kardex.elIdKardex = mercaINLocali.KARDEXS[0]._id;
-              //   ctx_index_kardex.elUBIGEO = ubigeo;
-              //   ctx_index_kardex.mostrarPanelNewEditUbigeo = true;
-              //   console.log('🍔🍔🍔🍔🍔 mercaINLocali.KARDEXS.length', ctx_index_kardex.elIdKardex, ctx_index_kardex.elUBIGEO);
+              //   ctx_index_inventario.elIdKardex = mercaINLocali.KARDEXS[0]._id;
+              //   ctx_index_inventario.elUBIGEO = ubigeo;
+              //   ctx_index_inventario.mostrarPanelNewEditUbigeo = true;
+              //   console.log('🍔🍔🍔🍔🍔 mercaINLocali.KARDEXS.length', ctx_index_inventario.elIdKardex, ctx_index_inventario.elUBIGEO);
               // }
             }}
           />
         </div>
       </div>
 
-      {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN && (
+      {definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN && (
         <div class="modal">
-          <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_INDEX_KARDEX.mM} contexto={'index_kardexs'} />
+          <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_INDEX_INVENTARIO.mM} contexto={'index_kardexs'} />
         </div>
       )}
       {/*  TABLA  --  MERCADERIAS LOCALIZADOS */}
@@ -369,21 +405,21 @@ export default component$(() => {
         ) : (
           ''
         )}
-        {definicion_CTX_INDEX_KARDEX.mostrarPanelKARDEXS && (
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelKARDEXS && (
           <div class="modal">
             <Kardexs
-              mercaINSelecci={definicion_CTX_INDEX_KARDEX.mM}
+              mercaINSelecci={definicion_CTX_INDEX_INVENTARIO.mM}
               esAlmacen={true}
               // contexto={props.contexto}
               // igv={props.igv}
             />
           </div>
         )}
-        {definicion_CTX_INDEX_KARDEX.mostrarPanelKARDEX && (
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelKARDEX && (
           <div class="modal">
             <Kardex
-              mercaSelecci={definicion_CTX_INDEX_KARDEX.mM}
-              kardex={definicion_CTX_INDEX_KARDEX.kK}
+              mercaSelecci={definicion_CTX_INDEX_INVENTARIO.mM}
+              kardex={definicion_CTX_INDEX_INVENTARIO.kK}
               // esAlmacen={props.esAlmacen}
               // esAlmacen={false}
               contexto="index_kardexs"
@@ -392,15 +428,15 @@ export default component$(() => {
             />
           </div>
         )}
-        {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditUbigeo && (
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditUbigeo && (
           <div class="modal">
-            <NewEditUbigeo idKardex={definicion_CTX_INDEX_KARDEX.elIdKardex} ubigeo={definicion_CTX_INDEX_KARDEX.elUBIGEO} contexto="index_kardexs" />
+            <NewEditUbigeo idKardex={definicion_CTX_INDEX_INVENTARIO.elIdKardex} ubigeo={definicion_CTX_INDEX_INVENTARIO.elUBIGEO} contexto="index_kardexs" />
           </div>
         )}
-        {definicion_CTX_INDEX_KARDEX.mostrarPanelNewEditMercaderiaIN && (
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN && (
           <div class="modal">
             <NewEditMercaderiaIN
-              mercaSeleccio={definicion_CTX_INDEX_KARDEX.mM}
+              mercaSeleccio={definicion_CTX_INDEX_INVENTARIO.mM}
               contexto="index_kardexs"
               //esAlmacen={true}
               // contexto={props.contexto}
@@ -409,19 +445,33 @@ export default component$(() => {
           </div>
         )}
         {/*  EDITAR PRECIO PUBLICO IN  */}
-        {definicion_CTX_INDEX_KARDEX.mostrarPanelEditPrecioPublicoIN && (
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelEditPrecioPublicoIN && (
           <div class="modal">
             <EditPrecioPublicoIN
-              idMercaderia={definicion_CTX_INDEX_KARDEX.idMercaderia}
-              descripcion={definicion_CTX_INDEX_KARDEX.descripcion}
-              cuMASigv={definicion_CTX_INDEX_KARDEX.cuMASigv}
-              pUtilidad={definicion_CTX_INDEX_KARDEX.pUtilidad}
+              idMercaderia={definicion_CTX_INDEX_INVENTARIO.idMercaderia}
+              descripcion={definicion_CTX_INDEX_INVENTARIO.descripcion}
+              cuMASigv={definicion_CTX_INDEX_INVENTARIO.cuMASigv}
+              pUtilidad={definicion_CTX_INDEX_INVENTARIO.pUtilidad}
               contexto="index_kardex"
             />
           </div>
         )}
+        {/*  INVENTARIO EXTERNO  */}
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelInventarioExterno && (
+          <div class="modal">
+            <InventarioExterno
+              almacen={definicion_CTX_INDEX_INVENTARIO.almacenExterno}
+              buscar={parametrosBusqueda.cadenaABuscar}
+              // idMercaderia={definicion_CTX_BUSCAR_MERCADERIA_IN.idMercaderia}
+              // descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
+              // cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_IN.cuMASigv}
+              // pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
+              contexto="index_inventario"
+            />
+          </div>
+        )}
         {/* MOSTRAR SPINNER */}
-        {definicion_CTX_INDEX_KARDEX.mostrarSpinner && (
+        {definicion_CTX_INDEX_INVENTARIO.mostrarSpinner && (
           <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Spinner />
           </div>

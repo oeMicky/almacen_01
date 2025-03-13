@@ -99,6 +99,7 @@ export const parametrosGlobales = {
   SIRE: false,
   compras: false,
   inventario: false,
+  verOtrosAlmacenes: false,
   ordenesProduccion: false,
   ordenesServicio: false,
   seguimientoCosto: false,
@@ -175,7 +176,7 @@ export default component$(() => {
   const analisisDeLogeo = $(async (logeado: string, usuario: string) => {
     // //console.log('analisisDeLogeo -> logeado', logeado);
     const sucursales = await getSucursalesAdjuntasUsuario({ idUsuario: logeado });
-    // console.log('analisisDeLogeo -> sucursales', sucursales.data);
+    console.log('💎💎💎💎💎💎💎analisisDeLogeo -> sucursales', sucursales.data);
 
     parametrosGlobales.usuario = usuario;
     parametrosGlobales.sucursalesAdjuntas = sucursales.data;
@@ -264,6 +265,7 @@ export default component$(() => {
       parametrosGlobales.SIRE = sucursales.data[0].SIRE;
       parametrosGlobales.compras = sucursales.data[0].compras;
       parametrosGlobales.inventario = sucursales.data[0].inventario; //******* */
+      parametrosGlobales.verOtrosAlmacenes = sucursales.data[0].verOtrosAlmacenes; //******* */
       parametrosGlobales.ordenesProduccion = sucursales.data[0].ordenesProduccion;
       parametrosGlobales.ordenesServicio = sucursales.data[0].ordenesServicio;
       parametrosGlobales.seguimientoCosto = sucursales.data[0].seguimientoCosto;

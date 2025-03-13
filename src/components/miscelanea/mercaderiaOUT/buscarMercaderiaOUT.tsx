@@ -23,6 +23,8 @@ import Spinner from '~/components/system/spinner';
 import { elIdAuxiliar } from '~/functions/comunes';
 import NewEditMercaderiaIN from '../mercaderiaIN/newEditMercaderiaIN';
 import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
+import { verOtrosAlmacenes } from '~/apis/usuario.api';
+import InventarioExterno from '../inventarioExterno/inventarioExterno';
 // import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
@@ -48,6 +50,10 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
 
     mostrarPanelAsignarPrecioOUT: false,
     grabo_PrecioOUT: false,
+
+    mostrarPanelInventarioExterno: false,
+    mostrarPanelVerOtrosAlmacenenes: false,
+    almacenExterno: [],
 
     // mostrarSpinner: false,
   });
@@ -473,13 +479,13 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               }
           : hallado.value
           ? {
-              width: 'clamp(320px, 100%, 800px)',
+              width: 'clamp(320px, 100%, 880px)',
               // width: 'auto',
               border: '1px solid red',
               padding: '2px',
             }
           : {
-              width: 'clamp(320px, 100%, 800px)',
+              width: 'clamp(320px, 100%, 880px)',
               // width: 'auto',
               border: '1px solid red',
               padding: '2px',
@@ -615,11 +621,40 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 title="Buscar datos de mercadería"
                 height={16}
                 width={16}
-                style={{ marginLeft: '4px' }}
+                style={{ margin: '0 4px' }}
                 onClick$={() => {
                   localizarMercaderiasOUT();
                 }}
               />
+              {parametrosGlobales.verOtrosAlmacenes && (
+                <input
+                  title="Ver otros almacenes"
+                  type="image"
+                  src={images.arrowUpRight}
+                  alt="icono ir a ..."
+                  height={16}
+                  width={16}
+                  onClick$={async () => {
+                    const losAlmacenes = await verOtrosAlmacenes({
+                      usuario: parametrosGlobales.usuario,
+                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                      idSucursal: parametrosGlobales.idSucursal,
+                    });
+                    console.log('losAlmacenes.data', losAlmacenes.data.length, losAlmacenes.data);
+                    if (losAlmacenes.data.length === 0) {
+                      alert('No existe otros almacenes.');
+                      return;
+                    }
+                    if (losAlmacenes.data.length === 1) {
+                      //ir directo al panel de busqueda
+                      definicion_CTX_BUSCAR_MERCADERIA_OUT.almacenExterno = losAlmacenes.data[0];
+                      definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelInventarioExterno = true;
+                    } else {
+                      //ir al panel de listado de almacenes disponibles
+                    }
+                  }}
+                />
+              )}
             </div>
           </div>
 
@@ -770,6 +805,20 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
           {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelNewEditMercaderiaIN && (
             <div class="modal">
               <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM} contexto={props.contexto} />
+            </div>
+          )}
+          {/*  INVENTARIO EXTERNO  */}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelInventarioExterno && (
+            <div class="modal">
+              <InventarioExterno
+                almacen={definicion_CTX_BUSCAR_MERCADERIA_OUT.almacenExterno}
+                buscar={parametrosBusqueda.cadenaABuscar}
+                // idMercaderia={definicion_CTX_BUSCAR_MERCADERIA_IN.idMercaderia}
+                // descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
+                // cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_IN.cuMASigv}
+                // pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
+                contexto="buscar_mercaderia_out"
+              />
             </div>
           )}
           {/* MOSTRAR SPINNER */}

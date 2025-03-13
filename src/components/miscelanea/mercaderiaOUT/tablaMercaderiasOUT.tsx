@@ -4,7 +4,7 @@ import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
 import type { IMercaderiaOUT } from '~/interfaces/iMercaderia';
 // import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
-import { formatear_6Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, formatear_6Decimales } from '~/functions/comunes';
 // import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 // import { CTX_O_P } from '~/components/ordenProduccion/newEditOrdenProduccion';
 // import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
@@ -239,6 +239,7 @@ export default component$(
                   {/* <table> */}
                   <thead>
                     <tr>
+                      <th>Ítem</th>
                       <th>Descripción</th>
                       <th style={props.verAplicacion ? '' : { display: 'none' }}>Aplicación</th>
                       <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
@@ -253,8 +254,8 @@ export default component$(
                     </tr>
                   </thead>
                   <tbody>
-                    {misMercaderiasOUT.map((mercaOUTLocali) => {
-                      //, index
+                    {misMercaderiasOUT.map((mercaOUTLocali, index) => {
+                      const elIndex = index + 1;
                       const {
                         _id,
                         descripcion,
@@ -284,6 +285,7 @@ export default component$(
                               : {}
                           }
                         >
+                          <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                           <td data-label="Descripción">{descripcion}</td>
                           <td data-label="Aplicación" style={props.verAplicacion ? '' : { display: 'none' }}>
                             {aplicacion}

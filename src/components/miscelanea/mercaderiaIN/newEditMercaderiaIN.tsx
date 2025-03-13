@@ -14,7 +14,7 @@ import { parametrosGlobales } from '~/routes/login';
 import style from '../../tabla/tabla.css?inline';
 import { inUpMercaderia } from '~/apis/mercaderia.api';
 import NewEditMarcaIN from './newEditMarcaIN';
-import { CTX_INDEX_KARDEX } from '~/routes/(inventario)/kardex';
+import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import BuscarUnidadSUNAT from './buscarUnidadSUNAT';
 import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from '../ordenProduccionTerminado/registroProductosTerminados';
 import SelectTipoImpuesto from '~/components/system/selectTipoImpuesto';
@@ -140,7 +140,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       ctx = useContext(CTX_BUSCAR_MERCADERIA_OUT);
       break;
     case 'index_kardexs':
-      ctx = useContext(CTX_INDEX_KARDEX);
+      ctx = useContext(CTX_INDEX_INVENTARIO);
       break;
     case 'registro_productos_terminados':
       ctx = useContext(CTX_REGISTRO_PRODUCTOS_TERMINADOS);

@@ -63,7 +63,7 @@ export default component$(() => {
               onClick$={() => {
                 mostrarSpinner.value = true;
                 (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
-                navegarA('/kardex');
+                navegarA('/inventario');
                 mostrarSpinner.value = false;
               }}
             >
