@@ -328,10 +328,9 @@ export default component$(
                           </td>
                           <td data-label="Acciones" class="accionesLeft">
                             <input
-                              // id="in_BuscarDetraccion"
+                              title="Seleccionar mercadería"
                               type="image"
                               src={images.check32}
-                              title="Seleccionar mercadería"
                               height={12}
                               width={12}
                               style={{ marginRight: '6px' }}
@@ -405,10 +404,9 @@ export default component$(
                               /> */}
                             {props.esAlmacen && (
                               <input
-                                // id="in_BuscarDetraccion"
+                                title="Editar mercadería"
                                 type="image"
                                 src={images.edit}
-                                title="Editar mercadería"
                                 height={12}
                                 width={12}
                                 style={{ marginRight: '6px' }}
@@ -421,13 +419,12 @@ export default component$(
                               />
                             )}
                             <input
-                              // id="in_BuscarDetraccion"
+                              title="Editar ubigeo"
                               type="image"
                               src={images.ubigeo}
-                              title="Editar ubigeo"
                               height={12}
                               width={12}
-                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              style={{ marginRight: '6px' }}
                               onClick$={() => {
                                 if (mercaOUTLocali.KARDEXS.length === 0) {
                                   alert('El ítem seleccionado no presenta kardex.');
@@ -454,6 +451,42 @@ export default component$(
 
                                 // ctx_buscar_mercaderia_out.mostrarSpinner = true;
                                 //console.log('la merca A Editar IN', ctx.mM);
+                              }}
+                            />
+                            <input
+                              title="Ver kardex/s"
+                              src={images.see}
+                              type="image"
+                              height={12}
+                              width={12}
+                              style={{ marginRight: '6px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
+                                console.log('☪☪☪☪☪☪');
+                                if (mercaOUTLocali.KARDEXS.length === 0) {
+                                  alert('No se localizan kardex/s');
+                                  // ctx_buscar_mercaderia_in.mM = mercaINLocali;
+                                  // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
+                                  // //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                }
+                                if (typeof mercaOUTLocali.porcentajeUtilidad === 'undefined' || mercaOUTLocali.porcentajeUtilidad === null) {
+                                  alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
+                                  return;
+                                }
+                                if (mercaOUTLocali.KARDEXS.length === 1) {
+                                  console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥', mercaOUTLocali);
+                                  ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                  ctx_buscar_mercaderia_out.kK = mercaOUTLocali.KARDEXS[0];
+                                  ctx_buscar_mercaderia_out.mostrarPanelKARDEX = true;
+
+                                  //console.log('la mercaSeleccionada ', ctx_index_inventario.mM);
+                                  //console.log('la mercaSeleccionada KARDEX', ctx_index_inventario.kK);
+                                }
+                                if (mercaOUTLocali.KARDEXS.length > 1) {
+                                  ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                  ctx_buscar_mercaderia_out.mostrarPanelKARDEXS = true;
+                                  //console.log('la mercaSeleccionada KARDEXS', ctx_index_inventario.mM);
+                                }
                               }}
                             />
                           </td>

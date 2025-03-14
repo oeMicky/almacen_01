@@ -25,6 +25,8 @@ import NewEditMercaderiaIN from '../mercaderiaIN/newEditMercaderiaIN';
 import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
 import { verOtrosAlmacenes } from '~/apis/usuario.api';
 import InventarioExterno from '../inventarioExterno/inventarioExterno';
+import Kardexs from '~/components/kardex/kardexs';
+import Kardex from '~/components/kardex/kardex';
 // import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
@@ -54,6 +56,9 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     mostrarPanelInventarioExterno: false,
     mostrarPanelVerOtrosAlmacenenes: false,
     almacenExterno: [],
+
+    mostrarPanelKARDEX: false,
+    mostrarPanelKARDEXS: false,
 
     // mostrarSpinner: false,
   });
@@ -789,6 +794,29 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 esProduccion={props.esProduccion}
                 contexto={props.contexto}
                 porcentaje={props.porcentaje}
+              />
+            </div>
+          )}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelKARDEXS && (
+            <div class="modal">
+              <Kardexs
+                mercaINSelecci={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM}
+                esAlmacen={true}
+                // contexto={props.contexto}
+                // igv={props.igv}
+              />
+            </div>
+          )}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelKARDEX && (
+            <div class="modal">
+              <Kardex
+                mercaSelecci={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM}
+                kardex={definicion_CTX_BUSCAR_MERCADERIA_OUT.kK}
+                // esAlmacen={props.esAlmacen}
+                // esAlmacen={false}
+                contexto={'buscar_mercaderia_out'}
+                // contextoParaDocumento={props.contexto}
+                // igv={props.igv}
               />
             </div>
           )}
