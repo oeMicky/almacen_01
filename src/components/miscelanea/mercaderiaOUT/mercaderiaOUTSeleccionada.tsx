@@ -16,6 +16,7 @@ import { CTX_NOTA_VENTA } from '~/components/notaVenta/addNotaVenta';
 
 import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
 import { CTX_KARDEXS_OUT } from './kardexsOUT';
+import { parametrosGlobales } from '~/routes/login';
 export default component$(
   (props: {
     mercaOUTSelecci: any;
@@ -189,6 +190,8 @@ export default component$(
             })}
           /> */}
         </div>
+        {/* TITULO */}
+        <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'red' }}>{parametrosGlobales.sucursal}</h3>
         {/* FORMULARIO */}
         <div class="add-form">
           {/* MERCADERIA  fontWeight: 'lighter' */}
@@ -431,7 +434,7 @@ export default component$(
           <input
             id="btn_Grabar_mercaderiaOUTSeleccionada"
             type="button"
-            value="Grabar"
+            value="Adjuntar SALIDA"
             style={{ height: '40px' }}
             class="btn-centro"
             onClick$={() => {

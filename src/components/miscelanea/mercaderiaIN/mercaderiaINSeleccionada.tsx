@@ -339,6 +339,8 @@ export default component$(
             })}
           />
         </div>
+        {/* TITULO */}
+        <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'red' }}>{parametrosGlobales.sucursal}</h3>
         {/* FORMULARIO12 */}
         <div class="add-form">
           {/* MERCADERIA */}
@@ -1139,7 +1141,7 @@ export default component$(
           <input
             id="btn_Registrar_MercaderiaIN_MICE"
             type="button"
-            value="Grabar "
+            value="Adjuntar INGRESO"
             style={{ cursor: 'pointer', height: '40px' }}
             class="btn-centro"
             onClick$={async () => {
