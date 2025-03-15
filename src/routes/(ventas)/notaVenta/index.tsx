@@ -258,9 +258,9 @@ export default component$(() => {
           panel
         </button> */}
         <button
+          title="Adiciona nota de venta"
           tabIndex={3}
           id="btn_Add_Nota_Venta"
-          title="Adiciona nota de venta"
           style={{ cursor: 'pointer' }}
           onClick$={async () => {
             if (parametrosGlobales.idGrupoEmpresarial === '') {
@@ -374,9 +374,9 @@ export default component$(() => {
         />
         {/*   <input id="in_laFechaHoyVenta" type="date" disabled value={'2024-04-09'} style={{ marginLeft: '4px' }} />*/}
         <input
+          title="Buscar notas venta"
           type="image"
           tabIndex={2}
-          title="Buscar notas venta"
           alt="icon busqueda"
           src={images.searchPLUS}
           height={21.5}

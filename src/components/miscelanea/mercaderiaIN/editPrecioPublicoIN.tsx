@@ -2,7 +2,7 @@ import { $, component$, useContext, useSignal } from '@builder.io/qwik';
 import ImgButton from '../../system/imgButton';
 import { images } from '~/assets';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
-import { upPrecioPublicoPEN } from '~/apis/mercaderia.api';
+import { upCostoUnitarioPENMasIGV, upPrecioPublicoPEN } from '~/apis/mercaderia.api';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 // import { parametrosGlobales } from '~/routes/login';
@@ -30,6 +30,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION DE VARIABLES
+  const conPrecioPublico = useSignal(true);
   const costoUnitarioMasIGV = useSignal(props.cuMASigv);
   const precioPublicoCalculado = useSignal(props.cuMASigv * (1 + props.pUtilidad / 100));
   const precioPublico = useSignal(0);
@@ -54,7 +55,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
     console.log('precioPublicoCalculado', precioPublicoCalculado.value);
     console.log('precioPublico', precioPublico.value);
     try {
-      const precioP = upPrecioPublicoPEN({
+      const precioP = await upPrecioPublicoPEN({
         idMercaderia: props.idMercaderia,
         fechaPrecioUnitario: fechaActual,
         costoUnitarioPENMasIGV: costoUnitarioMasIGV.value,
@@ -74,10 +75,43 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
   });
   //#endregion GRABAR PRECIO PUBLICO
 
+  //#region GRABAR COSTO UNITARIO MAS IGV
+  const grabarSoloCostoUnitarioMasIGV = $(async () => {
+    //|| costoUnitarioMasIGV.value === 0
+    if (costoUnitarioMasIGV.value.toString().trim() === '') {
+      alert('Ingrese el Costo Unitario PEN + IGV');
+      document.getElementById('in_Costo_Unitario')?.focus();
+      return;
+    }
+
+    console.log('grabarSoloCostoUnitarioMasIGV', props.idMercaderia);
+    console.log('fechaActual', fechaActual);
+    console.log('costoUnitarioMasIGV', costoUnitarioMasIGV.value);
+    // console.log('precioPublicoCalculado', precioPublicoCalculado.value);
+    // console.log('precioPublico', precioPublico.value);
+    try {
+      const costoP = await upCostoUnitarioPENMasIGV({
+        idMercaderia: props.idMercaderia,
+        fechaPrecioUnitario: fechaActual,
+        costoUnitarioPENMasIGV: costoUnitarioMasIGV.value,
+
+        usuario: parametrosGlobales.usuario,
+      });
+
+      console.log('costoP', costoP);
+      ctx.grabo_precio_publico = true;
+      ctx.mostrarPanelEditPrecioPublicoIN = false;
+    } catch (error) {
+      console.log('grabarSoloCostoUnitarioMasIGV error:', error);
+      ctx.mostrarPanelEditPrecioPublicoIN = false;
+    }
+  });
+  //#endregion GRABAR COSTO UNITARIO MAS IGV
+
   return (
     <div
       style={{
-        width: 'clamp(320px, 100%, 360px)',
+        width: 'clamp(320px, 100%, 380px)',
         // width: 'auto',
         // border: '1px solid red',
         padding: '2px',
@@ -115,21 +149,6 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
           <div class="linea-formulario" style={{ marginBottom: '8px' }}>
             <label>Porcentaje Utilidad</label>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              {/* <input
-                id="in_Porcentaje_Utilidad"
-                type="number"
-                disabled
-                placeholder="Porcentaje Utilidad"
-                // class="input-formulario-usuario"
-                style={{ marginRight: '4px', background: '#eee' }}
-                value={props.pUtilidad}
-                // onChange$={(e) => (definicion_CTX_CAMBIO_CLAVE.claveAnterior = (e.target as HTMLInputElement).value)}
-                onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    (document.getElementById('in_Costo_Unitario') as HTMLInputElement)?.focus();
-                  }
-                }}
-              /> */}
               <label>{props.pUtilidad} %</label>
             </div>
           </div>
@@ -156,7 +175,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
           </div>
           <div class="linea-formulario" style={{ marginBottom: '8px' }}>
             <label>Precio Público Calculado PEN</label>
-            <input
+            {/* <input
               id="in_Precio_Publico_Calculado"
               type="number"
               disabled
@@ -169,25 +188,53 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
                   (document.getElementById('in_Precio_Publico') as HTMLInputElement)?.focus();
                 }
               }}
-            />
+            /> */}
+            <label>{precioPublicoCalculado.value}</label>
           </div>
-          <div class="linea-formulario" style={{ marginBottom: '8px' }}>
-            <label>Precio Público PEN</label>
-            <input
-              id="in_Precio_Publico"
-              type="number"
-              placeholder="Precio Público"
-              // class="input-formulario-usuario"
-              style={{ borderStyle: 'solid', borderWidth: '1px', borderColor: 'red' }}
-              value={precioPublico.value}
-              onChange$={(e) => (precioPublico.value = Number((e.target as HTMLInputElement).value))}
-              onKeyPress$={(e) => {
-                if (e.key === 'Enter') {
-                  (document.getElementById('in_btn_Grabar_USUARIO') as HTMLInputElement)?.focus();
-                }
-              }}
-            />
+          <div style={{ borderRadius: '6px', padding: '6px 0', background: '#c5c6c7' }}>
+            <div style={{ marginBottom: '8px' }}>
+              <input
+                id="chk_Con_Precio_Publico"
+                type="checkbox"
+                placeholder="Con Precio Público"
+                style={{ cursor: 'pointer', margin: '2px' }}
+                checked={conPrecioPublico.value}
+                onChange$={(e) => {
+                  conPrecioPublico.value = (e.target as HTMLInputElement).checked;
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('in_Precio_Publico')?.focus();
+                  }
+                }}
+                onFocusin$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
+              />
+
+              <label for="chk_Con_Precio_Publico" style={{ cursor: 'pointer', marginLeft: '2px' }}>
+                Con Precio Público
+              </label>
+            </div>
+            <div class="linea-formulario" style={{ marginBottom: '8px' }}>
+              <label>Precio Público PEN</label>
+              <input
+                id="in_Precio_Publico"
+                type="number"
+                placeholder="Precio Público"
+                // class="input-formulario-usuario"
+                style={{ borderStyle: 'solid', borderWidth: '1px', borderColor: 'red' }}
+                value={precioPublico.value}
+                onChange$={(e) => (precioPublico.value = Number((e.target as HTMLInputElement).value))}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_btn_Grabar_USUARIO') as HTMLInputElement)?.focus();
+                  }
+                }}
+              />
+            </div>
           </div>
+
           <br />
         </div>
 
@@ -195,11 +242,15 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
         <input
           id="in_btn_Grabar_USUARIO"
           class="boton-formulario"
-          style={{ height: '32px' }}
+          style={{ height: '40px' }}
           type="button"
           value="Grabar"
           onClick$={() => {
-            grabarPrecioPublico();
+            if (conPrecioPublico.value) {
+              grabarPrecioPublico();
+            } else {
+              grabarSoloCostoUnitarioMasIGV();
+            }
           }}
         />
       </div>

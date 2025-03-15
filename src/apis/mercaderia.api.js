@@ -13,6 +13,19 @@ export const verUbigeoAntiguo = async (parametros) => {
   return res.json();
 };
 
+export const upCostoUnitarioPENMasIGV = async (parametros) => {
+  // //console.log('//////api////////////******************obtener a upCostoUnitarioPENMasIGV');
+  // //console.log('parametros upCostoUnitarioPENMasIGV', parametros);
+  const res = await fetch(API + '/upCostoUnitarioPENMasIGV', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
 export const upPrecioPublicoPEN = async (parametros) => {
   // //console.log('//////api////////////******************obtener a upPrecioPublicoPEN');
   // //console.log('parametros upPrecioPublicoPEN', parametros);

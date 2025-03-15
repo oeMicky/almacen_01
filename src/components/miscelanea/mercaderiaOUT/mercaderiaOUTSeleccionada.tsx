@@ -513,6 +513,8 @@ export default component$(
                 } else {
                   tPVU = '02';
                 }
+                console.log('👔👔👔👔👔👔👔', props.mercaOUTSelecci.tipoImpuesto[0]);
+
                 documento.push({
                   idAuxiliar: unicoAux,
                   idMercaderia: props.mercaOUTSelecci._id,
@@ -523,7 +525,7 @@ export default component$(
 
                   noFacturar: props.mercaOUTSelecci.noFacturar,
 
-                  tipoImpuesto: props.mercaOUTSelecci.tipoImpuesto,
+                  tipoImpuesto: props.mercaOUTSelecci.tipoImpuesto[0],
                   tipoAfectacionDelImpuesto: props.mercaOUTSelecci.tipoAfectacionDelImpuesto,
                   porcentaje: parseFloat(props.porcentaje),
 
@@ -569,6 +571,7 @@ export default component$(
                   descripcionContableVenta: props.mercaOUTSelecci.descripcionContableVenta,
                   tipoContableVenta: props.mercaOUTSelecci.tipoContableVenta,
                 });
+                console.log(props.contextoParaDocumento);
               }
               if (props.contextoParaDocumento === 'orden_produccion') {
                 documento.push({

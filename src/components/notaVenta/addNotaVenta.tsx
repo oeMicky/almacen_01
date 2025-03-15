@@ -1297,7 +1297,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
       class="container-modal"
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(330px, 96%, 1000px)',
+        width: 'clamp(320px, 100%, 1000px)',
         // width: 'auto',
         // background: `${definicion_CTX_NOTA_VENTA.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : '#eee'}`,
         border: '3px solid purple',
@@ -1338,11 +1338,11 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
         /> */}
 
         <ImgButton
+          title="Cerrar el formulario"
           src={images.x}
           alt="Icono de cerrar"
           height={18}
           width={18}
-          title="Cerrar el formulario"
           onClick={$(() => {
             ctx_index_nota_venta.grabo_NotaVenta = grabo.value;
             ctx_index_nota_venta.mostrarPanelNotaVenta = false;
@@ -1392,9 +1392,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             <div>
               <div>
                 <input
+                  title="Cliente Ventas Varias"
                   id="chk_clienteVentasVarias_VENTA"
                   type="checkbox"
-                  title="Cliente Ventas Varias"
                   style={{ margin: '2px' }}
                   disabled
                   checked
@@ -1834,9 +1834,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             {!definicion_CTX_NOTA_VENTA.verCuotasCredito && (
               <div>
                 <input
+                  id="Todo en efectivo"
                   type="radio"
                   value="Todo en efectivo"
-                  id="Todo en efectivo"
                   name="Contado"
                   checked={definicion_CTX_NOTA_VENTA.todoEnEfectivo}
                   onChange$={(e) => {
@@ -1850,9 +1850,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', margin: '6px 0' }}>
                   <div>
                     <input
+                      id="Una parte en efectivo"
                       type="radio"
                       value="Una parte en efectivo"
-                      id="Una parte en efectivo"
                       name="Contado"
                       checked={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
                       onChange$={(e) => {
@@ -1863,8 +1863,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     <label for="Una parte en efectivo">Una parte en efectivo</label>
                   </div>
                   <input
-                    type="number"
                     id="inputMontoEnEfectivo"
+                    type="number"
                     placeholder="Efectivo"
                     style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
                     disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
@@ -1900,8 +1900,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     <option value={'DEPÓSITO EN CUENTA'}>DEPÓSITO EN CUENTA</option>
                   </select>
                   <input
-                    type="number"
                     id="inputMontoOtroMedioPago"
+                    type="number"
                     placeholder="Otro medio"
                     style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
                     disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
@@ -2093,8 +2093,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <input
-                  type="text"
                   id="in_Observacion"
+                  type="text"
                   // tabIndex={1}
                   // autoFocus={true}
                   value={definicion_CTX_NOTA_VENTA.observacion}
@@ -2126,7 +2126,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     <thead>
                       <tr>
                         <th>Ítem</th>
-                        <th>Código</th>
+                        <th style={{ display: 'none' }}>Código</th>
                         <th>Descripción</th>
                         <th>Cantidad</th>
                         <th>Uni</th>
@@ -2140,6 +2140,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     </thead>
                     <tbody>
                       {definicion_CTX_NOTA_VENTA.itemsNotaVenta.map((iTNotVen: any, index: number) => {
+                        console.log('🥽🥽🥽');
+
                         const indexItemVenta = index + 1;
                         let t_bi = 0;
                         let t_igv = 0;
@@ -2148,13 +2150,15 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         const t_isc = 0;
                         let t_export = 0;
                         let t_otros = 0;
+
                         //console.log('iTVen.tipoImpuesto[1]', iTVen.tipoImpuesto[1].toString());
                         //IGV, ISC, IVAP, exoneradas, exportación, gratuitas, inafecta, otrosTributos
                         //['1000', 'IGV', 'VAT']  ['1016', 'IVAP', 'VAT']  ['2000', 'ISC', 'EXC']  ['7152', 'ICBPER', 'OTH']  ['9995', 'EXP', 'FRE']
                         //['9996', 'GRA', 'FRE']  ['9997', 'EXO', 'VAT']  ['9998', 'INA', 'FRE']  ['9999', 'OTROS', 'OTH']
+
                         if (definicion_CTX_NOTA_VENTA.enDolares) {
                           //console.log('enDolares$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-                          if (iTNotVen.tipoImpuesto[1] === 'IGV') {
+                          if (iTNotVen.tipoImpuesto === 'IGV') {
                             const vv = redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal ? iTNotVen.ventaUSD.$numberDecimal : iTNotVen.ventaUSD);
                             t_bi = redondeo6Decimales((vv * 100) / (100 + iTNotVen.porcentaje));
                             t_igv = redondeo6Decimales(vv - t_bi);
@@ -2163,19 +2167,19 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                           // }
                           // if (iTVen.tipoImpuesto === 'IVAP') {
                           // }
-                          if (iTNotVen.tipoImpuesto[1].toString() === 'EXO') {
+                          if (iTNotVen.tipoImpuesto === 'EXO') {
                             t_exo = redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal ? iTNotVen.ventaUSD.$numberDecimal : iTNotVen.ventaUSD);
                           }
-                          if (iTNotVen.tipoImpuesto[1] === 'EXP') {
+                          if (iTNotVen.tipoImpuesto === 'EXP') {
                             t_export = redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal ? iTNotVen.ventaUSD.$numberDecimal : iTNotVen.ventaUSD);
                           }
-                          if (iTNotVen.tipoImpuesto[1] === 'GRA') {
+                          if (iTNotVen.tipoImpuesto === 'GRA') {
                             t_otros = redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal ? iTNotVen.ventaUSD.$numberDecimal : iTNotVen.ventaUSD);
                           }
-                          if (iTNotVen.tipoImpuesto[1] === 'INA') {
+                          if (iTNotVen.tipoImpuesto === 'INA') {
                             t_ina = redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal ? iTNotVen.ventaUSD.$numberDecimal : iTNotVen.ventaUSD);
                           }
-                          if (iTNotVen.tipoImpuesto[1] === 'OTROS') {
+                          if (iTNotVen.tipoImpuesto === 'OTROS') {
                             t_otros = redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal ? iTNotVen.ventaUSD.$numberDecimal : iTNotVen.ventaUSD);
                           }
                           // if (iTVen.exonerado) {
@@ -2197,8 +2201,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                           // }
                         } else {
                           // if (iTVen.tipoImpuesto === 'IGV') {
-                          //console.log('PENPENPENPENPENPENPEmn');
-                          if (iTNotVen.tipoImpuesto[1] === 'IGV') {
+                          console.log('PENPENPENPENPENPENPEmn', iTNotVen.tipoImpuesto);
+                          if (iTNotVen.tipoImpuesto === 'IGV') {
+                            console.log('🎈', iTNotVen.ventaPEN, iTNotVen.porcentaje);
                             //console.log('iTVen.ventaPEN:::', iTVen.ventaPEN);
                             const vv = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                             //console.log('vv', vv);
@@ -2206,26 +2211,30 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             t_bi = redondeo6Decimales((vv * 100) / (100 + iTNotVen.porcentaje));
                             t_igv = redondeo6Decimales(vv - t_bi);
                           }
+                          console.log('🥽');
                           // if (iTVen.tipoImpuesto === 'ISC') {
                           // }
                           // if (iTVen.tipoImpuesto === 'IVAP') {
                           // }
-                          if (iTNotVen.tipoImpuesto[1].toString() === 'EXO') {
+                          if (iTNotVen.tipoImpuesto.toString() === 'EXO') {
+                            console.log('🎈🎈', iTNotVen.ventaPEN);
                             t_exo = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
-                          if (iTNotVen.tipoImpuesto[1] === 'EXP') {
+                          console.log('🥽🥽');
+                          if (iTNotVen.tipoImpuesto === 'EXP') {
                             t_export = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
-                          if (iTNotVen.tipoImpuesto[1] === 'GRA') {
+                          console.log('🥽🥽🥽');
+                          if (iTNotVen.tipoImpuesto === 'GRA') {
                             t_otros = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
-                          if (iTNotVen.tipoImpuesto[1] === 'INA') {
+                          if (iTNotVen.tipoImpuesto === 'INA') {
                             t_ina = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
-                          if (iTNotVen.tipoImpuesto[1] === 'OTROS') {
+                          if (iTNotVen.tipoImpuesto === 'OTROS') {
                             t_otros = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
-                          //console.log('fin ...PENPENPENPENPENPENPEmn');
+                          console.log('fin ...PENPENPENPENPENPENPEmn');
                           // if (iTVen.exonerado) {
                           //   t_exo = redondeo2Decimales(
                           //     iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
@@ -2244,7 +2253,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                           //   }
                           // }
                         }
-
+                        console.log('🧨🧨🧨');
                         sumaTOTAL = sumaTOTAL + t_bi + t_igv + t_exo + t_ina + t_isc + t_export + t_otros;
                         sumaTOTAL_BI = sumaTOTAL_BI + t_bi;
                         sumaTOTAL_IGV = sumaTOTAL_IGV + t_igv;
@@ -2253,7 +2262,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         sumaTOTAL_ISC = sumaTOTAL_ISC + t_isc;
                         sumaTOTAL_EXPORT = sumaTOTAL_EXPORT + t_export;
                         sumaTOTAL_OTROS = sumaTOTAL_OTROS + t_otros;
-                        //console.log(
+
+                        // console.log(
                         //   `valores ${index + 1} : `,
                         //   sumaTOTAL,
                         //   sumaTOTAL_BI,
@@ -2264,7 +2274,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         //   sumaTOTAL_EXPORT,
                         //   sumaTOTAL_OTROS
                         // );
-                        //SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
+
+                        // SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
                         if (index + 1 === definicion_CTX_NOTA_VENTA.itemsNotaVenta.length && definicion_CTX_NOTA_VENTA._id === '') {
                           fijarMontos({
                             sumaTOTAL,
@@ -2275,13 +2286,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             sumaTOTAL_ISC,
                             sumaTOTAL_EXPORT,
                             sumaTOTAL_OTROS,
-                          }); //ff5aff
+                          });
                         }
 
                         return (
                           <tr key={iTNotVen.idAuxiliar} style={iTNotVen.noFacturar ? { background: '#ff5aff' } : {}}>
                             <td data-label="Ítem" key={iTNotVen.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(indexItemVenta, 3)}`}</td>
-                            <td data-label="Código" class="comoCadena">
+                            <td data-label="Código" class="comoCadena" style={{ display: 'none' }}>
                               {iTNotVen.codigo}
                             </td>
                             <td data-label="Descripción" class="comoCadena">
@@ -2373,37 +2384,38 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             </td>
                             <td data-label="Imp" class="comoCadena">
                               {/* {iTVen.tipoImpuesto.substring(0, 6)} */}
-                              {iTNotVen.tipoImpuesto[1]}
+                              {iTNotVen.tipoImpuesto}
                             </td>
                             <td data-label="Afec" class="acciones">
                               {iTNotVen.tipoAfectacionDelImpuesto}
                             </td>
                             <td data-label="Acciones" class="acciones">
-                              <input
+                              {/* <input
+                                title="Editar impuesto"
                                 // id="in_BuscarDetraccion"
                                 type="image"
                                 src={images.Imp}
-                                title="Editar impuesto"
                                 alt="icono editar"
                                 height={12}
                                 width={12}
-                                style={{ marginRight: '2px' }}
+                                style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   //console.log('iTVen.tipoImpuesto', iTVen.tipoImpuesto);
                                   editarImpuesto_ItemVenta.idAuxiliar = iTNotVen.idAuxiliar;
                                   editarImpuesto_ItemVenta.descripcion = iTNotVen.descripcionEquivalencia;
-                                  editarImpuesto_ItemVenta.tipoImpuesto =
-                                    iTNotVen.tipoImpuesto[0] + ' ' + iTNotVen.tipoImpuesto[1] + ' ' + iTNotVen.tipoImpuesto[2];
+                                  //////   AAAATENCIONNNNNNNNNNN
+                                  // editarImpuesto_ItemVenta.tipoImpuesto =
+                                  //   iTNotVen.tipoImpuesto[0] + ' ' + iTNotVen.tipoImpuesto[1] + ' ' + iTNotVen.tipoImpuesto[2];
                                   editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto = iTNotVen.tipoAfectacionDelImpuesto;
                                   definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditarImpuesto = true;
                                 }}
-                              />
+                              /> */}
                               <input
+                                title="Eliminar ítem"
                                 // id="in_BuscarDetraccion"
                                 type="image"
                                 src={images.trash}
-                                title="Eliminar ítem"
                                 alt="icono eliminar"
                                 height={12}
                                 width={12}
@@ -2534,14 +2546,15 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         </td>
                         <td colSpan={3} />
                       </tr>
-                      <tr>
+                      <tr style={definicion_CTX_NOTA_VENTA.todoEnEfectivo ? {} : { display: 'none' }}>
                         <td colSpan={7} class="comoNumero" style={{ color: '#494641' }}>
                           <label style={{ marginRight: '4px' }}>{`Efectivo ingresado <-> Vuelto`}</label>
                           <input
+                            title="Efectivo ingresado"
                             id="input_EfectivoIngresado_NOTAVENTA"
                             type="number"
-                            title="Efectivo ingresado"
                             disabled={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
+                            size={12}
                             style={{ color: 'purple' }}
                             value={
                               definicion_CTX_NOTA_VENTA.efectivoIngresado.$numberDecimal
@@ -2564,16 +2577,17 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         </td>
                         <td colSpan={3}>
                           <input
+                            title="Vuelto"
                             id="input_Vuelto_NOTAVENTA"
                             type="number"
-                            title="Vuelto"
+                            size={12}
                             disabled
                             value={
                               definicion_CTX_NOTA_VENTA.vuelto.$numberDecimal
                                 ? definicion_CTX_NOTA_VENTA.vuelto.$numberDecimal
                                 : definicion_CTX_NOTA_VENTA.vuelto
                             }
-                            style={{ color: 'purple', background: '#fefea8' }}
+                            style={{ color: 'purple', background: '#fefea8', display: 'flex' }}
                             // onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true)}
                           />
                         </td>
@@ -2586,8 +2600,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
               )}
               {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBorrarItemNotaVenta && (
                 <div class="modal">
-                  {' '}
-                  <BorrarItemNotaVenta borrarItemNotaVenta={borrarItemNotaVenta} />{' '}
+                  <BorrarItemNotaVenta borrarItemNotaVenta={borrarItemNotaVenta} />
                 </div>
               )}
               {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditarImpuesto && (

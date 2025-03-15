@@ -113,7 +113,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: '', // 'bls 838', // 'acce 5', //cadena.value,
+    cadenaABuscar: 'valv 20w 50', // 'bls 838', // 'acce 5', //cadena.value,
   });
 
   useTask$(({ track }) => {

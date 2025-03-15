@@ -55,7 +55,7 @@ export default component$(() => {
   //#region INICIALIZANDO
   const navegarA = useNavigate();
   const buscarMercaderiasKARDEX = useSignal(0);
-  const verTODOS = useSignal(true);
+  const verTODOS = useSignal(false);
   // const mercaderiaIN = useSignal(false);
 
   const parametrosBusqueda = useStore({

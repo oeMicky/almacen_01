@@ -69,6 +69,7 @@ import libroDiarioClaro from '../images/libro-diarioClaro.svg';
 import libroDiarioOscuro from '../images/libro-diarioOscuro.svg';
 import libroDiarioDisable from '../images/libro-diarioDisable.svg';
 import list from '../images/list.svg';
+import listaFavoritos from '../images/listaFavoritos.svg';
 import logout from '../images/logout.svg';
 import logout24 from '../images/logout24.svg';
 import logout32 from '../images/logout32.svg';
@@ -184,6 +185,7 @@ export default {
   libroDiarioOscuro,
   libroDiarioDisable,
   list,
+  listaFavoritos,
   logout,
   logout24,
   logout32,
