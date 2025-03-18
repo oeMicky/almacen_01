@@ -36,6 +36,7 @@ import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionApertu
 import BuscarOrdenProduccionTerminado from '../miscelanea/ordenProduccionTerminado/buscarOrdenProduccionTerminado';
 import BorrarItemMercaderiaIN from './borrarItemMercaderiaIN';
 import { getTipoCambio } from '~/apis/apisExternas.api';
+import ListaFavoritosAlmacenIN from './listaFavoritosAlmacenIN';
 
 export const CTX_NEW_IN_ALMACEN = createContextId<any>('new_in_almacen');
 
@@ -52,6 +53,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     selecciono_Persona: false,
 
     mostrarPanelBuscarPersona: false,
+
+    mostrarPanelListaFavoritosAlmacenIN: false,
 
     mostrarPanelBuscarMercaderiaIN: false,
     mostrarPanelDeleteItemMercaderiaIN: false,
@@ -565,7 +568,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           justifyContent: 'end',
         }}
       >
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
@@ -574,7 +577,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           onClick={$(() => {
             console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
           })}
-        />
+        /> */}
         {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
@@ -864,17 +867,30 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   </option>
                 </select>
                 {definicion_CTX_IN_ALMACEN._id === '' ? (
-                  <input
-                    id="in_BuscarREMITENTE"
-                    type="image"
-                    src={images.searchPLUS}
-                    title="Buscar datos de identidad"
-                    height={16}
-                    width={16}
-                    style={{ margin: '2px 4px' }}
-                    // onFocusin$={() => }
-                    onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true)}
-                  />
+                  <>
+                    <input
+                      title="Buscar datos de identidad"
+                      id="in_BuscarREMITENTE"
+                      type="image"
+                      src={images.searchPLUS}
+                      height={16}
+                      width={16}
+                      style={{ margin: '2px 4px' }}
+                      // onFocusin$={() => }
+                      onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true)}
+                    />
+                    {/* <input
+                      title="Buscar en favoritos"
+                      id="in_BuscarENFavoritos"
+                      type="image"
+                      src={images.listaFavoritos}
+                      height={16}
+                      width={16}
+                      style={{ margin: '2px 0' }}
+                      // onFocusin$={() => }
+                      onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacenIN = true)}
+                    /> */}
+                  </>
                 ) : (
                   ''
                 )}
@@ -883,6 +899,11 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona && (
               <div class="modal">
                 <BuscarPersona soloPersonasNaturales={false} seleccionar="remitente" contexto="new_in_almacen" rol="remitente" />
+              </div>
+            )}
+            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacenIN && (
+              <div class="modal">
+                <ListaFavoritosAlmacenIN />
               </div>
             )}
             {/* numero identidad REMITENTE*/}

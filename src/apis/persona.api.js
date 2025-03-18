@@ -39,3 +39,29 @@ export const getPersonaPorDniRuc = async (parametros) => {
   });
   return res.json();
 };
+
+export const activarFavoritoAlmacen = async (parametros) => {
+  // //console.log('//////api////////////******************inser/update en activarFavoritoAlmacen');
+  // //console.log('parametros activarFavoritoAlmacen->', parametros);
+  const res = await fetch(API + '/activarFavoritoAlmacen', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
+export const desactivarFavoritoAlmacen = async (parametros) => {
+  // //console.log('//////api////////////******************inser/update en desactivarFavoritoAlmacen');
+  // //console.log('parametros desactivarFavoritoAlmacen->', parametros);
+  const res = await fetch(API + '/desactivarFavoritoAlmacen', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};

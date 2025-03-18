@@ -16,6 +16,8 @@ import { CTX_DESTINATARIO_GR, CTX_NEW_EDIT_GUIA_REMISION } from '~/components/gu
 import { CTX_BUSCAR_CHOFER } from '../chofer/buscarChofer';
 import { CTX_CLIENTE_OP, CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
 import { CTX_BUSCAR_TRANSPORTISTA } from '../transportista/buscarTransportista';
+import { cerosALaIzquierda } from '~/functions/comunes';
+// import { activarFavoritoAlmacen, desactivarFavoritoAlmacen } from '~/apis/persona.api';
 
 //parametrosBusqueda: any;
 export default component$((props: { buscarPersona: number; soloPersonasNaturales: boolean; contexto?: string; rol: string; personaEDITADA?: any }) => {
@@ -261,24 +263,34 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                   </thead>
                   <tbody>
                     {ctx_buscar_persona.misPersonas.map((persoLocali: any, index: number) => {
-                      const { _id, codigoTipoDocumentoIdentidad, tipoDocumentoIdentidad, numeroIdentidad, razonSocialNombre, direccion, email, telefono } =
-                        persoLocali;
+                      const {
+                        _id,
+                        codigoTipoDocumentoIdentidad,
+                        tipoDocumentoIdentidad,
+                        numeroIdentidad,
+                        razonSocialNombre,
+                        direccion,
+                        email,
+                        telefono,
+                        // favoritoAlmacen,
+                        // favoritoVenta,
+                      } = persoLocali;
                       const indexItem = index + 1;
                       return (
                         <tr key={_id}>
-                          <td data-label="Ítem">{indexItem}</td>
+                          <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
                           <td data-label="Tipo">{tipoDocumentoIdentidad}</td>
                           <td data-label="Número">{numeroIdentidad}</td>
                           <td data-label="R.Soc/Nomb">{razonSocialNombre}</td>
                           <td data-label="Acciones" class="accionesLeft">
                             <input
                               // id="in_BuscarDetraccion"
+                              title="Seleccionar persona"
                               type="image"
                               src={images.check32}
-                              title="Seleccionar persona"
                               height={14}
                               width={14}
-                              style={{ marginRight: '4px' }}
+                              style={{ marginRight: '6px' }}
                               // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 //console.log('persoLocali', persoLocali);
@@ -320,12 +332,12 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                             />
                             <input
                               // id="in_BuscarDetraccion"
+                              title="Editar persona"
                               type="image"
                               src={images.edit}
-                              title="Editar persona"
                               height={14}
                               width={14}
-                              // style={{ margin: '2px' }}
+                              style={{ marginRight: '6px' }}
                               // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 ctx_buscar_persona.pP = persoLocali;
@@ -336,19 +348,74 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                                 //console.log('selecion', persoLocali);
                               }}
                             />
-                            {/* <input
-                                // id="in_BuscarDetraccion"
+                            {/* {props.contexto === 'new_in_almacen' || props.contexto === 'new_out_almacen' ? (
+                              <input
+                                title="Es favorito del almacén"
                                 type="image"
-                                src={images.see}
-                                title="Editar persona"
-                                height={12}
-                                width={12}
-                                // style={{ margin: '2px' }}
+                                src={favoritoAlmacen ? images.estrella128 : images.estrella128Contorno}
+                                height={14}
+                                width={14}
+                                style={{ marginRight: '6px' }}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                onClick$={async () => {
+                                  if (favoritoAlmacen) {
+                                    console.log('desactivarFavoritoAlmacen', razonSocialNombre);
+                                    await desactivarFavoritoAlmacen({
+                                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                      idEmpresa: parametrosGlobales.idEmpresa,
+                                      idSucursal: parametrosGlobales.idSucursal,
+
+                                      idPersona: _id,
+                                      codigoTipoDocumentoIdentidad: codigoTipoDocumentoIdentidad,
+                                      tipoDocumentoIdentidad: tipoDocumentoIdentidad,
+                                      numeroIdentidad: numeroIdentidad,
+                                      razonSocialNombre: razonSocialNombre,
+
+                                      // listaFavoritosAlmacen: [],
+
+                                      usuario: parametrosGlobales.usuario,
+                                    });
+                                  } else {
+                                    //console.log('misPersonas', ctx_buscar_persona.misPersonas);
+                                    console.log('activarFavoritoAlmacen', razonSocialNombre); //const activo =
+                                    await activarFavoritoAlmacen({
+                                      idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                      idEmpresa: parametrosGlobales.idEmpresa,
+                                      idSucursal: parametrosGlobales.idSucursal,
+
+                                      idPersona: _id,
+                                      codigoTipoDocumentoIdentidad: codigoTipoDocumentoIdentidad,
+                                      tipoDocumentoIdentidad: tipoDocumentoIdentidad,
+                                      numeroIdentidad: numeroIdentidad,
+                                      razonSocialNombre: razonSocialNombre,
+
+                                      // listaFavoritosAlmacen: [],
+
+                                      usuario: parametrosGlobales.usuario,
+                                    });
+                                  }
+                                  ctx_buscar_persona.buscarPersona++;
+                                }}
+                              />
+                            ) : (
+                              ''
+                            )} */}
+                            {/* {props.contexto === 'venta' ? (
+                              <input
+                                title="Es favorito de venta"
+                                type="image"
+                                src={favoritoVenta ? images.estrella128 : images.estrella128Contorno}
+                                height={14}
+                                width={14}
+                                style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   //console.log('misPersonas', ctx_buscar_persona.misPersonas);
                                 }}
-                              /> */}
+                              />
+                            ) : (
+                              ''
+                            )} */}
                           </td>
                         </tr>
                       );

@@ -137,18 +137,22 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                             </td>
                           ) : ( */}
                           <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
-                            {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
-                              ? costoUnitarioPENMasIGV.$numberDecimal
-                                ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
-                                : formatear_2Decimales(costoUnitarioPENMasIGV)
-                              : '-'}
+                            <strong>
+                              {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                                ? costoUnitarioPENMasIGV.$numberDecimal
+                                  ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                                  : formatear_2Decimales(costoUnitarioPENMasIGV)
+                                : '-'}
+                            </strong>
                           </td>
                           <td data-label="Precio PEN" class="comoNumeroLeft">
-                            {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                              ? precioUnitarioPEN.$numberDecimal
-                                ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
-                                : formatear_2Decimales(precioUnitarioPEN)
-                              : '-'}
+                            <strong>
+                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                ? precioUnitarioPEN.$numberDecimal
+                                  ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
+                                  : formatear_2Decimales(precioUnitarioPEN)
+                                : '-'}
+                            </strong>
                           </td>
                           {/* )} */}
                           <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>

@@ -222,7 +222,7 @@ export default component$(
                 <input
                   id="in_codigoDescripcion_BUSCAR_MERCADERIA_IN"
                   autoFocus
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', fontWeight: 'bold' }}
                   type="text"
                   placeholder="Ingrese la mercadería a buscar"
                   value={parametrosBusqueda.cadenaABuscar}

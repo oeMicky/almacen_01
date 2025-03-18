@@ -1,4 +1,4 @@
-import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, useContext, useContextProvider, useStore, useTask$ } from '@builder.io/qwik'; //useSignal,
 import { images } from '~/assets';
 import ImgButton from '../../system/imgButton';
 import TablaPersonasHalladas from './tablaPersonasHalladas';
@@ -29,6 +29,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
     grabo_Persona: false,
     buscarPor: 'DNI / RUC',
     conceptoABuscar: '',
+
+    buscarPersona: 0,
 
     mostrarPanelNewEditPersona: false,
 
@@ -82,7 +84,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
 
   //#region INICIALIZACION
   // const ini = useSignal(0);
-  const buscarPersona = useSignal(0);
+  // const buscarPersona = useSignal(0);
   document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
   // useTask$(({ track }) => {
   //   track(() => ini.value);
@@ -108,7 +110,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
       document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
       return;
     }
-    buscarPersona.value++;
+    // buscarPersona.value++;
+    definicion_CTX_BUSCAR_PERSONA.buscarPersona++;
   });
   //#endregion BUSCAR PERSONAS
 
@@ -140,7 +143,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
     <div
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(330px, 86%, 600px)',
+        width: 'clamp(320px, 100%, 600px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -332,9 +335,9 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
         )}
         {/* TABLA DE PERSONAS HALLADAS*/}
         <div class="form-control">
-          {buscarPersona.value > 0 ? (
+          {definicion_CTX_BUSCAR_PERSONA.buscarPersona > 0 ? (
             <TablaPersonasHalladas
-              buscarPersona={buscarPersona.value}
+              buscarPersona={definicion_CTX_BUSCAR_PERSONA.buscarPersona}
               soloPersonasNaturales={props.soloPersonasNaturales}
               // parametrosBusqueda={parametrosBusqueda}
               contexto={props.contexto}
