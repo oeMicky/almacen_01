@@ -25,6 +25,7 @@ export interface IMercaderiaOUT {
 
   marca: string;
   totalCantidadSaldo: any;
+  costoUnitarioPENMasIGV: any;
   promedioCostoUnitarioMovil: any;
   unidad: string;
 

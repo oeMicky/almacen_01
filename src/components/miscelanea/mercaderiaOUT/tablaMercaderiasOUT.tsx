@@ -4,7 +4,7 @@ import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
 import type { IMercaderiaOUT } from '~/interfaces/iMercaderia';
 // import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
-import { cerosALaIzquierda, formatear_6Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, formatear_2Decimales, formatear_6Decimales } from '~/functions/comunes';
 // import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 // import { CTX_O_P } from '~/components/ordenProduccion/newEditOrdenProduccion';
 // import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
@@ -265,7 +265,8 @@ export default component$(
                         totalCantidadSaldo,
                         unidad,
                         precioUnitarioPEN,
-                        promedioCostoUnitarioMovil,
+                        costoUnitarioPENMasIGV,
+                        // promedioCostoUnitarioMovil,
                         KARDEXS,
                         activo,
                         noFacturar,
@@ -304,14 +305,23 @@ export default component$(
                           </td>
                           <td data-label="Uni">{unidad}</td>
                           {props.esAlmacen || props.esProduccion ? (
-                            <td data-label="Costo Promd.PEN" class="comoNumeroLeft">
-                              {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
-                                ? promedioCostoUnitarioMovil.$numberDecimal
-                                  ? formatear_6Decimales(promedioCostoUnitarioMovil.$numberDecimal)
-                                  : promedioCostoUnitarioMovil
-                                : '_'}
+                            <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
+                              <strong>
+                                {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                                  ? costoUnitarioPENMasIGV.$numberDecimal
+                                    ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                                    : formatear_2Decimales(costoUnitarioPENMasIGV)
+                                  : '-'}
+                              </strong>
                             </td>
                           ) : (
+                            // <td data-label="Costo Promd.PEN" class="comoNumeroLeft">
+                            //   {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
+                            //     ? promedioCostoUnitarioMovil.$numberDecimal
+                            //       ? formatear_6Decimales(promedioCostoUnitarioMovil.$numberDecimal)
+                            //       : promedioCostoUnitarioMovil
+                            //     : '_'}
+                            // </td>
                             <td data-label="Precio PEN" class="comoNumeroLeft">
                               {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                                 ? precioUnitarioPEN.$numberDecimal

@@ -232,11 +232,13 @@ export default component$(
                               )
                             ) : ( */}
                             <td data-label="Precio PEN" class="comoNumeroLeft">
-                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                                ? precioUnitarioPEN.$numberDecimal
-                                  ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
-                                  : precioUnitarioPEN
-                                : '-'}
+                              <strong>
+                                {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                  ? precioUnitarioPEN.$numberDecimal
+                                    ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                    : precioUnitarioPEN
+                                  : '-'}
+                              </strong>
                             </td>
                             {/* )} */}
                             <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
