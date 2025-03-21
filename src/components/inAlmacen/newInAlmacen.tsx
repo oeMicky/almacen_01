@@ -36,7 +36,7 @@ import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionApertu
 import BuscarOrdenProduccionTerminado from '../miscelanea/ordenProduccionTerminado/buscarOrdenProduccionTerminado';
 import BorrarItemMercaderiaIN from './borrarItemMercaderiaIN';
 import { getTipoCambio } from '~/apis/apisExternas.api';
-import ListaFavoritosAlmacenIN from './listaFavoritosAlmacenIN';
+import ListaFavoritosAlmacen from '../miscelanea/favoritos/listaFavoritosAlmacen';
 
 export const CTX_NEW_IN_ALMACEN = createContextId<any>('new_in_almacen');
 
@@ -54,7 +54,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
 
     mostrarPanelBuscarPersona: false,
 
-    mostrarPanelListaFavoritosAlmacenIN: false,
+    mostrarPanelListaFavoritosAlmacen: false,
 
     mostrarPanelBuscarMercaderiaIN: false,
     mostrarPanelDeleteItemMercaderiaIN: false,
@@ -246,8 +246,10 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
   //#region REMITENTE
   useTask$(({ track }) => {
     track(() => definicion_CTX_NEW_IN_ALMACEN.selecciono_Persona);
+    console.log('🎲🎲🎲🎲🎲', definicion_CTX_NEW_IN_ALMACEN.selecciono_Persona, definicion_CTX_NEW_IN_ALMACEN.rol_Persona);
+
     if (definicion_CTX_NEW_IN_ALMACEN.selecciono_Persona && definicion_CTX_NEW_IN_ALMACEN.rol_Persona === 'remitente') {
-      // alert('evalua a la persona');
+      alert('evalua a la persona');
       definicion_CTX_IN_ALMACEN.idRemitente = defini_CTX_REMITENTE_IN_ALMACEN._id;
       definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad = defini_CTX_REMITENTE_IN_ALMACEN.codigoTipoDocumentoIdentidad;
       definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad = defini_CTX_REMITENTE_IN_ALMACEN.tipoDocumentoIdentidad;
@@ -568,16 +570,16 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           justifyContent: 'end',
         }}
       >
-        {/* <ImgButton
+        <ImgButton
+          title="Ver el definicion_CTX_IN_ALMACEN"
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
-          title="Ver el definicion_CTX_IN_ALMACEN"
           onClick={$(() => {
             console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
           })}
-        /> */}
+        />
         {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
@@ -875,11 +877,11 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                       src={images.searchPLUS}
                       height={16}
                       width={16}
-                      style={{ margin: '2px 4px' }}
+                      style={{ margin: '2px 6px' }}
                       // onFocusin$={() => }
                       onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona = true)}
                     />
-                    {/* <input
+                    <input
                       title="Buscar en favoritos"
                       id="in_BuscarENFavoritos"
                       type="image"
@@ -888,8 +890,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                       width={16}
                       style={{ margin: '2px 0' }}
                       // onFocusin$={() => }
-                      onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacenIN = true)}
-                    /> */}
+                      onClick$={() => (definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacen = true)}
+                    />
                   </>
                 ) : (
                   ''
@@ -901,9 +903,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 <BuscarPersona soloPersonasNaturales={false} seleccionar="remitente" contexto="new_in_almacen" rol="remitente" />
               </div>
             )}
-            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacenIN && (
+            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacen && (
               <div class="modal">
-                <ListaFavoritosAlmacenIN />
+                <ListaFavoritosAlmacen contexto="new_in_almacen" rol="remitente" />
               </div>
             )}
             {/* numero identidad REMITENTE*/}
@@ -1275,9 +1277,10 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     <th>Ítem</th>
                     <th>Kx</th>
                     {/* <th>Mer</th> */}
-                    <th>Código</th>
+                    <th style={{ display: 'none' }}>Código</th>
                     <th>Descripción</th>
                     <th>IGV</th>
+                    <th>Ubi</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
                     <th hidden={definicion_CTX_IN_ALMACEN.conIGV}>
@@ -1335,11 +1338,27 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         <td data-label="Ítem" key={iTMercaIN.idAuxiliar}>{`${cerosALaIzquierda(indexItemMercaIN, 3)}`}</td>
                         <td data-label="Kx">{typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : '-'}</td>
                         {/* <td data-label="Mer">{typeof iTMercaIN.idMercaderia !== 'undefined' ? iTMercaIN.idMercaderia : '-'}</td> */}
-                        <td data-label="Código">{iTMercaIN.codigo}</td>
+                        <td data-label="Código" style={{ display: 'none' }}>
+                          {iTMercaIN.codigo}
+                        </td>
                         <td data-label="Descripción">
                           <strong> {!definicion_CTX_IN_ALMACEN.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>
                         </td>
                         <td data-label="IGV">{iTMercaIN.IGV.$numberDecimal ? iTMercaIN.IGV.$numberDecimal : iTMercaIN.IGV} %</td>
+                        <td data-label="Ubi" class="comoNumeroLeft">
+                          <input
+                            type="text"
+                            disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
+                            style={{ width: '80px', textAlign: 'end' }}
+                            value={iTMercaIN.ubigeo}
+                            onChange$={(e) => {
+                              iTMercaIN.ubigeo = (e.target as HTMLInputElement).value.toUpperCase();
+                            }}
+                            onFocusin$={(e) => {
+                              (e.target as HTMLInputElement).select();
+                            }}
+                          />
+                        </td>
                         <td data-label="Cantidad" class="comoNumeroLeft">
                           <input
                             type="number"

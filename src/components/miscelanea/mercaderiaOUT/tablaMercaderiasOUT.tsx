@@ -5,6 +5,7 @@ import type { IMercaderiaOUT } from '~/interfaces/iMercaderia';
 // import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
 import { cerosALaIzquierda, formatear_2Decimales, formatear_6Decimales } from '~/functions/comunes';
+import { parametrosGlobales } from '~/routes/login';
 // import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 // import { CTX_O_P } from '~/components/ordenProduccion/newEditOrdenProduccion';
 // import { CTX_F_B_NC_ND } from '~/components/venta/addVenta';
@@ -412,22 +413,22 @@ export default component$(
                                   //console.log("mercaOUTLocali", mercaOUTLocali);
                                 }}
                               /> */}
-                            {props.esAlmacen && (
-                              <input
-                                title="Editar mercadería"
-                                type="image"
-                                src={images.edit}
-                                height={12}
-                                width={12}
-                                style={{ marginRight: '6px' }}
-                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
-                                onClick$={() => {
-                                  ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
-                                  console.log('mercaOUTLocali', mercaOUTLocali);
-                                  ctx_buscar_mercaderia_out.mostrarPanelNewEditMercaderiaIN = true;
-                                }}
-                              />
-                            )}
+                            {/* {props.esAlmacen && ( */}
+                            <input
+                              title="Editar mercadería"
+                              type="image"
+                              src={images.edit}
+                              height={12}
+                              width={12}
+                              style={{ marginRight: '6px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
+                                ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                console.log('mercaOUTLocali', mercaOUTLocali);
+                                ctx_buscar_mercaderia_out.mostrarPanelNewEditMercaderiaIN = true;
+                              }}
+                            />
+                            {/* )} */}
                             <input
                               title="Editar ubigeo"
                               type="image"
@@ -499,6 +500,36 @@ export default component$(
                                 }
                               }}
                             />
+                            {parametrosGlobales.actualizarPrecioPublico && (
+                              <input
+                                title="Editar precio público"
+                                type="image"
+                                src={images.moneyBag}
+                                height={12}
+                                width={12}
+                                // style={{ marginRight: '2px' }}
+                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                onClick$={() => {
+                                  if (typeof mercaOUTLocali.porcentajeUtilidad === 'undefined' || mercaOUTLocali.porcentajeUtilidad === null) {
+                                    alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
+                                    return;
+                                  }
+                                  ctx_buscar_mercaderia_out.idMercaderia = mercaOUTLocali._id;
+                                  ctx_buscar_mercaderia_out.descripcion = mercaOUTLocali.descripcion;
+                                  ctx_buscar_mercaderia_out.cuMASigv =
+                                    typeof mercaOUTLocali.costoUnitarioPENMasIGV !== 'undefined' && mercaOUTLocali.costoUnitarioPENMasIGV !== null
+                                      ? mercaOUTLocali.costoUnitarioPENMasIGV.$numberDecimal
+                                        ? mercaOUTLocali.costoUnitarioPENMasIGV.$numberDecimal
+                                        : mercaOUTLocali.costoUnitarioPENMasIGV
+                                      : 0;
+                                  ctx_buscar_mercaderia_out.pUtilidad = mercaOUTLocali.porcentajeUtilidad.$numberDecimal;
+                                  ctx_buscar_mercaderia_out.mostrarPanelEditPrecioPublicoIN = true;
+                                  // ctx.mostrarSpinner = true;
+
+                                  //console.log('la merca A Editar IN', ctx.mM);
+                                }}
+                              />
+                            )}
                           </td>
                         </tr>
                       );

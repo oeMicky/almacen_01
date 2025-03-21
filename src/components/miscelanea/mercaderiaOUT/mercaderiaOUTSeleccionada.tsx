@@ -513,7 +513,7 @@ export default component$(
                 } else {
                   tPVU = '02';
                 }
-                console.log('👔👔👔👔👔👔👔', props.mercaOUTSelecci.tipoImpuesto[0]);
+                console.log('👔👔👔👔👔👔👔', props.mercaOUTSelecci.tipoImpuesto[1], props.mercaOUTSelecci.tipoImpuesto);
 
                 documento.push({
                   idAuxiliar: unicoAux,
@@ -525,7 +525,7 @@ export default component$(
 
                   noFacturar: props.mercaOUTSelecci.noFacturar,
 
-                  tipoImpuesto: props.mercaOUTSelecci.tipoImpuesto[0],
+                  tipoImpuesto: props.mercaOUTSelecci.tipoImpuesto[1],
                   tipoAfectacionDelImpuesto: props.mercaOUTSelecci.tipoAfectacionDelImpuesto,
                   porcentaje: parseFloat(props.porcentaje),
 

@@ -27,6 +27,7 @@ import BorrarDocumentoOUT from './borrarDocumentoOUT';
 import { getSeriesDeNotaSalidaDeLaSucursal, inEgresoDeAlmacen, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
 import BuscarOrdenServicioAperturado from '../miscelanea/ordenServicioAperturado/buscarOrdenServicioAperturado';
 import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionAperturado/buscarOrdenProduccionAperturado';
+import ListaFavoritosAlmacen from '../miscelanea/favoritos/listaFavoritosAlmacen';
 
 export const CTX_NEW_OUT_ALMACEN = createContextId<any>('new_out_almacen');
 
@@ -50,6 +51,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     mostrarPanelAdjuntarDocumento: false,
     mostrarPanelBuscarMercaderiaOUT: false,
     mostrarPanelDeleteItemMercaderiaOUT: false,
+
+    mostrarPanelListaFavoritosAlmacen: false,
 
     mostrarPanelBuscarOrdenProduccionAperturado: false,
     mostrarPanelBuscarOrdenServicioAperturado: false,
@@ -544,6 +547,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 />
               </div>
             </div>
+            {/* MOTIVO SALIDA  -- SERIE  */}
             <div class="linea_1_11">
               {/* motivo de egreso */}
               <div>
@@ -595,6 +599,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           //alert('Elegio venta');
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
+                          break;
+                        case 'TRASLADO':
+                          //alert('Elegio venta');
+                          // definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
+                          definicion_CTX_OUT_ALMACEN.idDestinatario = parametrosGlobales.idEmpresa;
+                          definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad = '6';
+                          definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad = 'RUC';
+                          definicion_CTX_OUT_ALMACEN.numeroIdentidad = parametrosGlobales.RUC;
+                          definicion_CTX_OUT_ALMACEN.razonSocialNombre = parametrosGlobales.RazonSocial;
                           break;
 
                         default:
@@ -725,16 +738,29 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   </option>
                 </select>
                 {definicion_CTX_OUT_ALMACEN._id === '' ? (
-                  <input
-                    type="image"
-                    src={images.searchPLUS}
-                    title="Buscar datos de identidad"
-                    alt="icono buscar"
-                    height={16}
-                    width={16}
-                    style={{ marginLeft: '4px' }}
-                    onClick$={() => (definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona = true)}
-                  />
+                  <>
+                    <input
+                      title="Buscar datos de identidad"
+                      type="image"
+                      src={images.searchPLUS}
+                      alt="icono buscar"
+                      height={16}
+                      width={16}
+                      style={{ margin: '2px 6px' }}
+                      onClick$={() => (definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona = true)}
+                    />
+                    <input
+                      title="Buscar en favoritos"
+                      id="in_BuscarENFavoritos"
+                      type="image"
+                      src={images.listaFavoritos}
+                      height={16}
+                      width={16}
+                      style={{ margin: '2px 0' }}
+                      // onFocusin$={() => }
+                      onClick$={() => (definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelListaFavoritosAlmacen = true)}
+                    />
+                  </>
                 ) : (
                   ''
                 )}
@@ -743,6 +769,11 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
             {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona && (
               <div class="modal">
                 <BuscarPersona soloPersonasNaturales={false} seleccionar="destinatario" contexto="new_out_almacen" rol="destinatario" />
+              </div>
+            )}
+            {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelListaFavoritosAlmacen && (
+              <div class="modal">
+                <ListaFavoritosAlmacen contexto="new_out_almacen" rol="destinatario" />
               </div>
             )}
             {/* numero identidad DESTINATARIO*/}

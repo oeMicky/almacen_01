@@ -27,6 +27,7 @@ import { verOtrosAlmacenes } from '~/apis/usuario.api';
 import InventarioExterno from '../inventarioExterno/inventarioExterno';
 import Kardexs from '~/components/kardex/kardexs';
 import Kardex from '~/components/kardex/kardex';
+import EditPrecioPublicoIN from '../mercaderiaIN/editPrecioPublicoIN';
 // import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
@@ -34,11 +35,19 @@ export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia
 export default component$((props: { contexto: string; esAlmacen: boolean; esProduccion?: boolean; porcentaje: any }) => {
   //#region DEFINICION CTX_BUSCAR_MERCADERIA_OUT - para eDITAR - para BUSCAR
   const definicion_CTX_BUSCAR_MERCADERIA_OUT = useStore({
+    idMercaderia: '',
+    descripcion: '',
+    cuMASigv: 0,
+    pUtilidad: 0,
+
     mM: [],
     kK: [],
 
     mostrarPanelNewEditMercaderiaIN: false,
     grabo_mercaderiaIN: false,
+
+    mostrarPanelEditPrecioPublicoIN: false,
+    grabo_precio_publico: false,
 
     mostrarPanelNewEditUbigeo: false,
     elIdKardex: '',
@@ -189,6 +198,24 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     }
   });
   //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_ubigeo
+
+  //#region REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
+  useTask$(({ track }) => {
+    track(() => {
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_precio_publico;
+    });
+    if (definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_precio_publico) {
+      // parametrosBusqueda.cadenaABuscar = definicion_CTX_BUSCAR_MERCADERIA_IN.abuscar;
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.idMercaderia = '';
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.descripcion = '';
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.cuMASigv = 0;
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.pUtilidad = 0;
+
+      buscarMercaderiasOUT.value++;
+      definicion_CTX_BUSCAR_MERCADERIA_OUT.grabo_precio_publico = false;
+    }
+  });
+  //#endregion REFRESCAR TABLA MERCADERIAS IN : grabo_precio_publico
 
   //#region BUSCAR MERCADERIAS OUT _EnAUTOMATICO
   const localizarMercaderiasOUT_EnAUTOMATICO = $(async () => {
@@ -506,22 +533,22 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        {/* <ImgButton
+        <ImgButton
+          title="Ver el parametro global"
           src={images.see}
           alt="Icono de cerrar"
           height={18}
           width={18}
-          title="Cerrar el formulario"
           onClick={$(() => {
-            //console.log()
+            console.log('parametrosGlobales', parametrosGlobales);
           })}
-        /> */}
+        />
         <ImgButton
+          title="Cerrar el formulario"
           src={images.x}
           alt="Icono de cerrar"
           height={18}
           width={18}
-          title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelBuscarMercaderiaOUT = false;
           })}
@@ -829,10 +856,22 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               />
             </div>
           )}
-          {/*  EDITAR MERCADERIA IN  */}
+          {/*  EDITAR MERCADERIA IN   contexto={props.contexto}*/}
           {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelNewEditMercaderiaIN && (
             <div class="modal">
-              <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM} contexto={props.contexto} />
+              <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM} contexto="buscar_mercaderia_out" />
+            </div>
+          )}
+          {/*  EDITAR PRECIO PUBLICO IN  */}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelEditPrecioPublicoIN && (
+            <div class="modal">
+              <EditPrecioPublicoIN
+                idMercaderia={definicion_CTX_BUSCAR_MERCADERIA_OUT.idMercaderia}
+                descripcion={definicion_CTX_BUSCAR_MERCADERIA_OUT.descripcion}
+                cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_OUT.cuMASigv}
+                pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_OUT.pUtilidad}
+                contexto="buscar_mercaderia_out"
+              />
             </div>
           )}
           {/*  INVENTARIO EXTERNO  */}

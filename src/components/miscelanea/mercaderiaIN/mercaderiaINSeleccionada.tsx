@@ -1168,7 +1168,8 @@ export default component$(
               }
               if (typeof ubigeo.value === 'undefined' || ubigeo.value === null || ubigeo.value === '') {
                 alert('Ingrese el ubigeo');
-                document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC')?.focus();
+                (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                // document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC')?.focus();
                 return;
               }
               // console.log('........................', ubigeo.value);

@@ -71,14 +71,14 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
       }}
       onResolved={(mercaderias) => {
         console.log('onResolved 🍓🍓🍓🍓', mercaderias);
-        const { data } = mercaderias; //{ status, data, message }
+        const { data } = mercaderias; //{ status, data, message }    , padding: '2px'
         const misMercaderiasKARDEX: IMercaderiaIN_BUSCAR[] = data;
         ctx_index_inventario.kK = data;
         return (
           <>
             {misMercaderiasKARDEX.length > 0 ? (
               <>
-                <table style={{ fontSize: '0.9rem', fontWeight: 'lighter ', padding: '2px' }}>
+                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
                   <thead>
                     <tr>
                       <th>Ítem</th>

@@ -157,11 +157,11 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
         }}
       >
         <ImgButton
+          title="Cerrar el formulario"
           src={images.x}
           alt="Icono de cerrar"
           height={18}
           width={18}
-          title="Cerrar el formulario"
           onClick={$(() => {
             //console.log('xxxxxxxxxxxxxx', props.contexto, props.rol);
             if (props.contexto === 'new_out_almacen') {
@@ -193,22 +193,22 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
           })}
         />
         <ImgButton
+          title="Cerrar el formulario"
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
-          title="Cerrar el formulario"
           onClick={$(() => {
             //console.log('definicion_CTX_BUSCAR_PERSONA', definicion_CTX_BUSCAR_PERSONA);
             // //console.log('parametrosBusqueda', parametrosBusqueda);
           })}
         />
         <ImgButton
+          title="Cerrar el formulario"
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
-          title="Cerrar el formulario"
           onClick={$(() => {
             //console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
             // //console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);

@@ -5,6 +5,7 @@ import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 import { upCostoUnitarioPENMasIGV, upPrecioPublicoPEN } from '~/apis/mercaderia.api';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
+import { CTX_BUSCAR_MERCADERIA_OUT } from '../mercaderiaOUT/buscarMercaderiaOUT';
 // import { parametrosGlobales } from '~/routes/login';
 
 export default component$((props: { idMercaderia: any; descripcion: string; cuMASigv: any; pUtilidad: any; contexto: string }) => {
@@ -16,6 +17,9 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
   switch (props.contexto) {
     case 'buscar_mercaderia_in':
       ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
+      break;
+    case 'buscar_mercaderia_out':
+      ctx = useContext(CTX_BUSCAR_MERCADERIA_OUT);
       break;
     case 'index_kardex':
       ctx = useContext(CTX_INDEX_INVENTARIO);
@@ -39,21 +43,21 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
 
   //#region GRABAR PRECIO PUBLICO
   const grabarPrecioPublico = $(async () => {
-    if (costoUnitarioMasIGV.value.toString().trim() === '' || costoUnitarioMasIGV.value === 0) {
+    if (costoUnitarioMasIGV.value.toString().trim() === '') {
       alert('Ingrese el Costo Unitario PEN + IGV');
       document.getElementById('in_Costo_Unitario')?.focus();
       return;
     }
-    if (precioPublico.value.toString().trim() === '' || precioPublico.value === 0) {
+    if (precioPublico.value.toString().trim() === '') {
       alert('Ingrese el Precio Público PEN');
       document.getElementById('in_Precio_Publico')?.focus();
       return;
     }
-    console.log('grabarPrecioPublico', props.idMercaderia);
-    console.log('fechaActual', fechaActual);
-    console.log('costoUnitarioMasIGV', costoUnitarioMasIGV.value);
-    console.log('precioPublicoCalculado', precioPublicoCalculado.value);
-    console.log('precioPublico', precioPublico.value);
+    // console.log('grabarPrecioPublico', props.idMercaderia);
+    // console.log('fechaActual', fechaActual);
+    // console.log('costoUnitarioMasIGV', costoUnitarioMasIGV.value);
+    // console.log('precioPublicoCalculado', precioPublicoCalculado.value);
+    // console.log('precioPublico', precioPublico.value);
     try {
       const precioP = await upPrecioPublicoPEN({
         idMercaderia: props.idMercaderia,
@@ -84,9 +88,9 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
       return;
     }
 
-    console.log('grabarSoloCostoUnitarioMasIGV', props.idMercaderia);
-    console.log('fechaActual', fechaActual);
-    console.log('costoUnitarioMasIGV', costoUnitarioMasIGV.value);
+    // console.log('grabarSoloCostoUnitarioMasIGV', props.idMercaderia);
+    // console.log('fechaActual', fechaActual);
+    // console.log('costoUnitarioMasIGV', costoUnitarioMasIGV.value);
     // console.log('precioPublicoCalculado', precioPublicoCalculado.value);
     // console.log('precioPublico', precioPublico.value);
     try {

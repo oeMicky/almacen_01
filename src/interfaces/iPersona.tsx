@@ -84,3 +84,12 @@ export interface ITransportista {
   activo: boolean;
   registroMTC: string;
 }
+
+export interface IFavorito {
+  _id: string;
+  idPersona: string;
+  codigoTipoDocumentoIdentidad: string;
+  tipoDocumentoIdentidad: string;
+  numeroIdentidad: string;
+  razonSocialNombre: string;
+}

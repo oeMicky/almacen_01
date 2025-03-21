@@ -2239,7 +2239,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             {definicion_CTX_ADD_VENTA.mostrarPanelCuotasCredito && (
               <div class="modal">
                 <NewEditCuotaCreditoVenta
-                  ancho={280}
+                  contexto="add_venta"
                   esEdit={cuotaCredito_esEdit.value}
                   cuota={cuota}
                   // inicializarCuotaCredito={inicializarCuota}

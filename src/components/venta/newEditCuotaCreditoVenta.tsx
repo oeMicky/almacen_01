@@ -4,9 +4,22 @@ import { images } from '~/assets';
 import ImgButton from '../system/imgButton';
 import type { ICuotaCreditoVenta } from '~/interfaces/iVenta';
 import { CTX_ADD_VENTA } from './addVenta';
+import { CTX_ADD_NOTA_VENTA } from '../notaVenta/addNotaVenta';
+//
+export default component$((props: { contexto: string; esEdit: boolean; cuota: ICuotaCreditoVenta }) => {
+  //#region CONTEXTOS
+  let ctx: any = [];
+  switch (props.contexto) {
+    case 'add_nota_venta':
+      ctx = useContext(CTX_ADD_NOTA_VENTA);
+      break;
+    case 'add_venta':
+      ctx = useContext(CTX_ADD_VENTA);
+      break;
+  }
+  //#endregion CONTEXTOS
+  // const ctx_add_venta = useContext(CTX_ADD_VENTA);
 
-export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuotaCreditoVenta }) => {
-  const ctx_add_venta = useContext(CTX_ADD_VENTA);
   // const cuota = useStore<ICuotaCreditoVenta>({
   //   idAuxiliar: 0,
   //   fechaCuota: hoy(),
@@ -24,15 +37,15 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
       alert(`el monto es 0, revise. ${props.cuota.idAuxiliar}`);
       return;
     }
-    ctx_add_venta.mostrarPanelCuotasCredito = false;
-    ctx_add_venta.grabo_CuotaCredito = true;
+    ctx.mostrarPanelCuotasCredito = false;
+    ctx.grabo_CuotaCredito = true;
     // ctx_docs_venta.grabo_cuotas_numero++;
   });
 
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 330px)',
+        width: 'clamp(320px, 100%, 330px)',
         background: '#eee',
         //  width: props.ancho + 'px'
       }}
@@ -41,12 +54,12 @@ export default component$((props: { ancho: number; esEdit: boolean; cuota: ICuot
       {/* BOTONES DEL MARCO   */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
+          title="Cerrar formulario"
           src={images.x}
           alt="Icono de cerrar"
           height={18}
           width={18}
-          title="Cerrar formulario"
-          onClick={$(() => (ctx_add_venta.mostrarPanelCuotasCredito = false))}
+          onClick={$(() => (ctx.mostrarPanelCuotasCredito = false))}
         />
         {/* <ImgButton
           src={images.see}

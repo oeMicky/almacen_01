@@ -145,6 +145,12 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     case 'registro_productos_terminados':
       ctx = useContext(CTX_REGISTRO_PRODUCTOS_TERMINADOS);
       break;
+    case 'buscar_mercaderia_in':
+      ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
+      break;
+    case 'buscar_mercaderia_out':
+      ctx = useContext(CTX_BUSCAR_MERCADERIA_OUT);
+      break;
   }
 
   //const ctx_buscar_mercaderia_in = useContext(CTX_BUSCAR_MERCADERIA_IN);
@@ -552,17 +558,17 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        {/* <ImgButton
+        <ImgButton
+          title="Ver props.contexto"
           src={images.see}
           alt="Icono de persona"
           height={16}
           width={16}
-          title="Ver props.mercaSeleccio"
           onClick={$(() => {
-            //console.log('props.mercaSeleccio', props.mercaSeleccio);
+            console.log('props.contexto', props.contexto);
           })}
         />
-        <ImgButton
+        {/*   <ImgButton
           src={images.see}
           alt="Icono de persona"
           height={16}
@@ -605,11 +611,11 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
           })}
         /> */}
         <ImgButton
+          title="Cerrar el formulario"
           src={images.x}
           alt="Icono de cerrar"
           height={18}
           width={18}
-          title="Cerrar el formulario"
           onClick={$(() => {
             ctx.mostrarPanelNewEditMercaderiaIN = false;
           })}
@@ -702,7 +708,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
             <div class="form-control form-agrupado">
               <input
                 id="se_descripcion_MERCADERIA_IN"
-                style={{ width: '100%' }}
+                style={{ width: '100%', fontWeight: 'bold' }}
                 type="text"
                 placeholder="Descripción"
                 value={definicion_CTX_MERCADERIA_IN.descripcion}
