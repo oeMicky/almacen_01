@@ -1126,7 +1126,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         {definicion_CTX_OUT_ALMACEN._id === '' ? (
           <input
             type="button"
-            value={'Grabar EGRESO ' + diaDeLaSemana(definicion_CTX_OUT_ALMACEN.FISMA) + ' ' + definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10)}
+            value={'Grabar SALIDA ' + diaDeLaSemana(definicion_CTX_OUT_ALMACEN.FISMA) + ' ' + definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10)}
             style={{ cursor: 'pointer', height: '40px' }}
             class="btn-centro"
             onClick$={() => registrarEgreso()}

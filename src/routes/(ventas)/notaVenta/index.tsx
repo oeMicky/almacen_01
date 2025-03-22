@@ -12,7 +12,7 @@ import {
 import { parametrosGlobales } from '../../login/index';
 
 import { getIgvVenta, upDarDeBaja } from '~/apis/venta.api';
-import { existeMotivoNV } from '~/apis/egresosDeAlmacen.api';
+import { existeMotivoNV, getSerieNotaSalidaDeSucursal } from '~/apis/egresosDeAlmacen.api';
 
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
@@ -286,6 +286,36 @@ export default component$(() => {
               } else {
                 parametrosGlobales.idMotivosSalidaDelAlmacen_NV = existe[0]._id;
                 // console.log('111 parametrosGlobales.idMotivosSalidaDelAlmacen_NV', parametrosGlobales.idMotivosSalidaDelAlmacen_NV);
+              }
+            }
+            //VERIFICAR SI EXISTE LA SERIE DE LA NOTA DE SALIDA DEL ALMACEN
+            console.log(
+              '🧧  parametrosGlobales.almacenActivo && parametrosGlobales.idSerieNotaSalida',
+              parametrosGlobales.almacenActivo,
+              parametrosGlobales.idSerieNotaSalida
+            );
+            if (parametrosGlobales.almacenActivo && parametrosGlobales.idSerieNotaSalida === '') {
+              //buscar la serie (SI EXISTE)
+              let laSerie = await getSerieNotaSalidaDeSucursal({
+                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                idEmpresa: parametrosGlobales.idEmpresa,
+                idSucursal: parametrosGlobales.idSucursal,
+              });
+              console.log('🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
+              laSerie = laSerie.data[0];
+              console.log('🚕🚕🚕🚕🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
+
+              if (typeof laSerie !== 'undefined' && laSerie.idSerieNotaSalida !== '') {
+                parametrosGlobales.idSerieNotaSalida = laSerie.idSerieNotaSalida;
+                parametrosGlobales.serieNotaSalida = laSerie.serie;
+                console.log(
+                  '🧧🧧  parametrosGlobales.idSerieNotaSalida, parametrosGlobales.serieNotaSalida',
+                  parametrosGlobales.idSerieNotaSalida,
+                  parametrosGlobales.serieNotaSalida
+                );
+              } else {
+                alert('No existe la serie de la Nota de Salida.');
+                return;
               }
             }
             // console.log('222 parametrosGlobales.idMotivosSalidaDelAlmacen_NV', parametrosGlobales.idMotivosSalidaDelAlmacen_NV);

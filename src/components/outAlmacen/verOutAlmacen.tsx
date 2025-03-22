@@ -3,7 +3,9 @@ import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
 import { parametrosGlobales } from '~/routes/login'; //
-import { cerosALaIzquierda, formatoDDMMYYYY_PEN, formatear_6Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+// import { cerosALaIzquierda, formatear_6Decimales } from '~/functions/comunes';
+// import { cerosALaIzquierda } from '~/functions/comunes';
 import { CTX_KARDEX } from '../kardex/kardex';
 
 export default component$((props: { outSelecci: any; contexto: string; indexItem?: number; codigoMercaderia?: string }) => {
@@ -331,9 +333,17 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                           )}
                         </td>
                         <td data-label="SubTotal PEN" class="comoNumeroLeft">
-                          {iTMercaOUT.subEquivalenciaPEN.$numberDecimal
+                          {formatear_6Decimales(
+                            (iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                              ? iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal
+                              : iTMercaOUT.cantidadSacadaEquivalencia) *
+                              (iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                ? iTMercaOUT.costoUnitarioEquivalenciaPEN.$numberDecimal
+                                : iTMercaOUT.costoUnitarioEquivalenciaPEN)
+                          )}
+                          {/* {iTMercaOUT.subEquivalenciaPEN.$numberDecimal
                             ? formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN.$numberDecimal)
-                            : formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN)}
+                            : formatear_6Decimales(iTMercaOUT.subEquivalenciaPEN)} */}
                         </td>
                       </tr>
                     );

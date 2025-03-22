@@ -167,8 +167,8 @@ export default component$(() => {
       {/* ADD EGRESO DE MERCADERIAS */}
       <div style={{ display: 'inline-flex' }}>
         <ElButton
-          name="ADD EGRESO DE MERCADERÍAS"
-          title="Add un nuevo egreso de mercaderías"
+          name="ADD SALIDA DE MERCADERÍAS"
+          title="Add un nueva salida de mercaderías"
           class={'btn-out'}
           style={{ cursor: 'pointer', marginLeft: '5px' }}
           onClick={$(async () => {

@@ -263,7 +263,8 @@ export interface INotaVenta {
 
   // codigoTipoOperacion: string;
   // tipoOperacion: string;
-
+  idSerieNotaSalida: string;
+  serieNotaSalida: string;
   // codigoTipoComprobantePago: string;
   // tipoComprobantePago: string;
   idSerieNotaVenta: string;

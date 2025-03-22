@@ -300,9 +300,11 @@ export default component$(
                           </td>
                           <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td>
                           <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
-                            {totalCantidadSaldo.$numberDecimal
-                              ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
-                              : formatear_6Decimales(totalCantidadSaldo)}
+                            <strong>
+                              {totalCantidadSaldo.$numberDecimal
+                                ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
+                                : formatear_6Decimales(totalCantidadSaldo)}
+                            </strong>
                           </td>
                           <td data-label="Uni">{unidad}</td>
                           {props.esAlmacen || props.esProduccion ? (
@@ -324,11 +326,13 @@ export default component$(
                             //     : '_'}
                             // </td>
                             <td data-label="Precio PEN" class="comoNumeroLeft">
-                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                                ? precioUnitarioPEN.$numberDecimal
-                                  ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
-                                  : precioUnitarioPEN
-                                : '_'}
+                              <strong>
+                                {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                  ? precioUnitarioPEN.$numberDecimal
+                                    ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                    : precioUnitarioPEN
+                                  : '_'}
+                              </strong>
                             </td>
                           )}
                           {/* <td data-label="Precio">

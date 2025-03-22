@@ -39,7 +39,8 @@ export default component$(() => {
               class="main-menu__item"
               style={{ cursor: 'pointer' }}
               // onClick$={() => {
-              //   navegarA('#asociados');
+              //   navegarA('/login');
+              //   // navegarA('#asociados');
               // }}
             >
               <a class="main-menu__link" href="#asociados" target="_blank">
@@ -54,6 +55,8 @@ export default component$(() => {
               }}
             >
               {/* <Link style={{ color: '#eee', textDecoration: 'none' }} href="../login/"> */}
+              Ingresar
+              {/*
               Ingresar
               {/* </Link> */}
             </li>

@@ -13,6 +13,7 @@ import {
   redondeo6Decimales,
   literal,
   formatear_2Decimales,
+  diaDeLaSemana,
 } from '~/functions/comunes';
 
 import { getTipoCambio } from '~/apis/apisExternas.api';
@@ -108,6 +109,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
 
       // codigoTipoOperacion: '',
       // tipoOperacion: '',
+      idSerieNotaSalida: props.nvSelecci.idSerieNotaSalida ? props.nvSelecci.idSerieNotaSalida : parametrosGlobales.idSerieNotaSalida,
+      serieNotaSalida: props.nvSelecci.serie ? props.nvSelecci.serie : parametrosGlobales.serieNotaSalida,
 
       // codigoTipoComprobantePago: '',
       // tipoComprobantePago: '',
@@ -1076,7 +1079,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
 
       // codigoTipoOperacion: definicion_CTX_NOTA_VENTA.codigoTipoOperacion,
       // tipoOperacion: definicion_CTX_NOTA_VENTA.tipoOperacion,
-
+      idSerieNotaSalida: definicion_CTX_NOTA_VENTA.idSerieNotaSalida,
+      serieNotaSalida: definicion_CTX_NOTA_VENTA.serieNotaSalida,
       // codigoTipoComprobantePago: definicion_CTX_NOTA_VENTA.codigoTipoComprobantePago,
       // tipoComprobantePago: definicion_CTX_NOTA_VENTA.tipoComprobantePago,
       idSerieNotaVenta: definicion_CTX_NOTA_VENTA.idSerieNotaVenta,
@@ -1305,27 +1309,27 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
         padding: '0',
       }}
     >
-      {/* BOTONES DEL MARCO */}
+      {/* BOTONES DEL MARCO    */}
       <div
         style={{
           display: 'flex',
           justifyContent: 'end',
           // border: '1px solid blue',
-          background: 'linear-gradient(to bottom, purple 0%, #eee 100%)',
+          background: 'linear-gradient(to bottom, #901090 0%, #eee 100%)',
           width: 'auto',
         }}
       >
-        {/* <ImgButton
+        <ImgButton
+          title="ver parametros globales - definicion_CTX_NOTA_VENTA"
           src={images.see}
           alt="Icono de ver"
           height={16}
           width={16}
-          title="ver"
           onClick={$(() => {
             console.log('parametrosGlobales', parametrosGlobales);
             console.log('definicion_CTX_NOTA_VENTA', definicion_CTX_NOTA_VENTA);
           })}
-        /> */}
+        />
         {/* <ImgButton
           src={images.see}
           alt="Icono de ver"
@@ -1389,8 +1393,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL CLIENTE */}
           <div>
-            {/* cliente VENTAS VARIAS*/}
-            <div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+              {/* cliente VENTAS VARIAS*/}
+
               <div>
                 <input
                   title="Cliente Ventas Varias"
@@ -1416,375 +1421,129 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                   Cliente Ventas Varias
                 </label>
               </div>
+              {parametrosGlobales.almacenActivo ? (
+                <label style={{ textAlign: 'right', color: 'green' }}>ALMACÉN ACTIVO</label>
+              ) : (
+                <strong style={{ textAlign: 'right', color: 'red' }}>ALMACÉN INACTIVO</strong>
+              )}
             </div>
-            {/* estrellas */}
-            {/* <div style={{ margin: '8px 0' }} hidden={definicion_CTX_NOTA_VENTA.clienteVentasVarias}>
-              <img
-                id="e1"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 1 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella 1"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 1}
-                title="Estrella 1"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-              <img
-                id="e2"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 2 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella 2"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 2}
-                title="Estrella 2"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-              <img
-                id="e3"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 3 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella 3"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 3}
-                title="Estrella 3"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-              <img
-                id="e4"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 4 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella4"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 4}
-                title="Estrella 4"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-              <img
-                id="e5"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente === 5 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella 5"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 5}
-                title="Estrella 5"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-            </div> */}
-            {/* tipo de documento identidad*/}
-            {/* <div class="form-control">
-              <div class="form-control form-agrupado">
-                <select
-                  id="selectTipoDocumentoLiteral"
-                  disabled
-                  // value={6}
-                  value={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad}
-                  // onChange={cambioTipoDocumento}
-                  onChange$={(e) => {
-                    const idx = (e.target as HTMLSelectElement).selectedIndex;
-                    const rere = e.target as HTMLSelectElement;
-                    const elOption = rere[idx];
 
-                    //
-                    //
-                    // const csd = (e.target as HTMLSelectElement).current[idx];
-                    // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
-                    definicion_CTX_NOTA_VENTA.codigoTipoDocumentoIdentidad = elOption.id;
-                    definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
-                  }}
-                  // style={{ width: '100%' }}
-                >
-                  <option id="1" value="DNI" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'DNI'}>
-                    DNI
-                  </option>
-                  <option id="6" value="RUC" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'RUC'}>
-                    RUC
-                  </option>
-                  <option id="4" value="C.EXT" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'C.EXT'}>
-                    C.EXT
-                  </option>
-                </select>
-                <input
-                  id="ima_BuscarCliente_VENTA"
-                  type="image"
-                  src={images.searchPLUS}
-                  title="Buscar datos de identidad"
-                  height={16}
-                  width={16}
-                  style={{ margin: '2px 4px 2px 4px' }}
-                  onClick$={() => (definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBuscarPersona = true)}
-                />
-                <input
-                  // id="in_BuscarDetraccion"
-                  type="image"
-                  src={images.edit}
-                  title="Editar cliente"
-                  height={16}
-                  width={16}
-                  style={{ margin: '2px 0' }}
-                  disabled={definicion_CTX_NOTA_VENTA.idCliente === '' ? true : false}
-                  onClick$={() => {
-                    console.log('japon');
-                    // ctx_buscar_persona.pP = persoLocali;
-                    // ctx_buscar_persona.mostrarPanelEditPersona = true;
-                    definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditPersonaDirecta = true;
-                  }}
-                />
-              </div>
-            </div>
-            {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBuscarPersona && (
-              <div class="modal">
-                <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="venta" rol="cliente" />
-              </div>
-            )} */}
-            {/* EDIT - PERSONA/CLIENTE */}
-            {/* {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditPersonaDirecta && (
-              <div class="modal">
-                <EditarPersonaDirecta
-                  soloPersonaNatural={defini_CTX_CLIENTE_VENTA.codigoTipoDocumentoIdentidad === '6' ? false : true}
-                  personaSeleccio={defini_CTX_CLIENTE_VENTA}
-                  contexto={'add_venta'}
-                />
-              </div>
-            )} */}
-            {/* numero identidad*/}
-            {/* <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNumeroDocumentoIdentidad"
-                  style={{ width: '100%' }}
-                  type="number"
-                  disabled
-                  placeholder="Add número"
-                  value={definicion_CTX_NOTA_VENTA.numeroIdentidad}
-                  onChange$={(e) => (definicion_CTX_NOTA_VENTA.numeroIdentidad = (e.target as HTMLInputElement).value)}
-                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
-                />
-              </div>
-            </div> */}
-            {/* Razon Social / Nombre */}
-            {/* <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNombreCliente"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled
-                  placeholder="Razón social / Nombre"
-                  value={definicion_CTX_NOTA_VENTA.razonSocialNombre}
-                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
-                />
-              </div>
-            </div> */}
-            {/* Dirección Cliente */}
-            {/* <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputDireccionCliente"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled
-                  placeholder="Direccion cliente"
-                  value={definicion_CTX_NOTA_VENTA.direccionCliente}
-                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
-                />
-              </div>
-            </div> */}
-            {/* Email - Telefono */}
-            {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '4px 0', gap: '4px' }}>
-              <input
-                id="inputEmail"
-                style={{ width: '100%' }}
-                type="email"
-                placeholder="Email"
-                value={definicion_CTX_NOTA_VENTA.email}
-                onChange$={(e) => {
-                  definicion_CTX_NOTA_VENTA.email = (e.target as HTMLInputElement).value;
-                }}
-                // onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                id="inputTelefono"
-                style={{ width: '100%' }}
-                type="tel"
-                placeholder="Telefono"
-                value={definicion_CTX_NOTA_VENTA.telefono}
-                onChange$={(e) => {
-                  definicion_CTX_NOTA_VENTA.telefono = (e.target as HTMLInputElement).value;
-                }}
-                // onChange={(e) => setEmail(e.target.value)}
-              />
-            </div> */}
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE NOTA VENTA */}
           <div>
-            {/* Serie  */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                {definicion_CTX_NOTA_VENTA._id === '' ? (
-                  <select
-                    id="selectSerieVenta"
-                    onChange$={(e) => {
-                      const idx = (e.target as HTMLSelectElement).selectedIndex;
-                      const elSelect = e.target as HTMLSelectElement;
-                      const elOption = elSelect[idx];
-
-                      //console.log('❤❤❤ dataSerie.value ', dataSerie.value);
-                      // const SSS: any = dataSerie.value;
-                      // const der = SSS.find((ew: any) => ew._id === elOption.id);
-
-                      //console.log('❤❤❤ der ', der);
-                      // definicion_CTX_NOTA_VENTA.codigoTipoOperacion = der.codigoTipoOperacionXDefault;
-                      // definicion_CTX_NOTA_VENTA.tipoOperacion = der.tipoOperacionXDefault;
-                      // definicion_CTX_NOTA_VENTA.impresionTipoFacturaBoleta = der.impresionTipoFacturaBoleta;
-
-                      definicion_CTX_NOTA_VENTA.idSerieNotaVenta = elOption.id;
-                      definicion_CTX_NOTA_VENTA.serie = (e.target as HTMLSelectElement).value;
-                      document.getElementById('in_Fecha')?.focus();
-                    }}
-                  >
-                    <option value="">-- Seleccione una serie --</option>
-                    {dataSerie.value.map((ser: any) => {
-                      return (
-                        <option id={ser._id} value={ser.serie} selected={definicion_CTX_NOTA_VENTA.serie === ser.serie}>
-                          {ser.serie}
-                        </option>
-                      );
-                    })}
-                  </select>
-                ) : (
-                  <input
-                    disabled
-                    value={definicion_CTX_NOTA_VENTA.serie + `-` + cerosALaIzquierda(definicion_CTX_NOTA_VENTA.numero, 8)}
-                    style={{ width: '100%' }}
-                  />
-                )}
-              </div>
-            </div>
-            {/* fecha    */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Fecha_Para_Venta"
-                  type="date"
-                  disabled
-                  min={menosXdiasHoy(2)}
-                  max={hoy()}
-                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
-                  value={definicion_CTX_NOTA_VENTA.fecha}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+              {/* fecha    */}
+              <input
+                id="in_Fecha_Para_Venta"
+                type="date"
+                disabled
+                min={menosXdiasHoy(2)}
+                max={hoy()}
+                // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                value={definicion_CTX_NOTA_VENTA.fecha}
+                onChange$={(e) => {
+                  definicion_CTX_NOTA_VENTA.fecha = (e.target as HTMLInputElement).value;
+                  //validar PERIODO
+                  const anio = definicion_CTX_NOTA_VENTA.fecha;
+                  const mes = definicion_CTX_NOTA_VENTA.fecha;
+                  // //console.log('la fechitaaaa', anio + mes);
+                  const mas = anio + mes;
+                  const PPP = losPeriodosCargados.value;
+                  // //console.log('mas', mas);
+                  // //console.log('PPP', PPP);
+                  const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(mas));
+                  // //console.log('elPeriodo', elPeriodo);
+                  definicion_CTX_NOTA_VENTA.idPeriodo = elPeriodo._id;
+                  definicion_CTX_NOTA_VENTA.periodo = elPeriodo.periodo;
+                }}
+                style={{ width: '100%' }}
+              />
+              {/* Serie  */}
+              {definicion_CTX_NOTA_VENTA._id === '' ? (
+                <select
+                  id="selectSerieVenta"
                   onChange$={(e) => {
-                    definicion_CTX_NOTA_VENTA.fecha = (e.target as HTMLInputElement).value;
-                    //validar PERIODO
-                    const anio = definicion_CTX_NOTA_VENTA.fecha;
-                    const mes = definicion_CTX_NOTA_VENTA.fecha;
-                    // //console.log('la fechitaaaa', anio + mes);
-                    const mas = anio + mes;
-                    const PPP = losPeriodosCargados.value;
-                    // //console.log('mas', mas);
-                    // //console.log('PPP', PPP);
-                    const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(mas));
-                    // //console.log('elPeriodo', elPeriodo);
-                    definicion_CTX_NOTA_VENTA.idPeriodo = elPeriodo._id;
-                    definicion_CTX_NOTA_VENTA.periodo = elPeriodo.periodo;
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const elSelect = e.target as HTMLSelectElement;
+                    const elOption = elSelect[idx];
+
+                    //console.log('❤❤❤ dataSerie.value ', dataSerie.value);
+                    // const SSS: any = dataSerie.value;
+                    // const der = SSS.find((ew: any) => ew._id === elOption.id);
+
+                    //console.log('❤❤❤ der ', der);
+                    // definicion_CTX_NOTA_VENTA.codigoTipoOperacion = der.codigoTipoOperacionXDefault;
+                    // definicion_CTX_NOTA_VENTA.tipoOperacion = der.tipoOperacionXDefault;
+                    // definicion_CTX_NOTA_VENTA.impresionTipoFacturaBoleta = der.impresionTipoFacturaBoleta;
+
+                    definicion_CTX_NOTA_VENTA.idSerieNotaVenta = elOption.id;
+                    definicion_CTX_NOTA_VENTA.serie = (e.target as HTMLSelectElement).value;
+                    document.getElementById('in_Fecha')?.focus();
                   }}
+                >
+                  <option value="">-- Seleccione una serie --</option>
+                  {dataSerie.value.map((ser: any) => {
+                    return (
+                      <option id={ser._id} value={ser.serie} selected={definicion_CTX_NOTA_VENTA.serie === ser.serie}>
+                        {ser.serie}
+                      </option>
+                    );
+                  })}
+                </select>
+              ) : (
+                <input
+                  disabled
+                  value={definicion_CTX_NOTA_VENTA.serie + `-` + cerosALaIzquierda(definicion_CTX_NOTA_VENTA.numero, 8)}
                   style={{ width: '100%' }}
                 />
-              </div>
+              )}
             </div>
             <br />
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
 
           {/* ----------------------------------------------------- */}
           {/* IGV - TC  */}
           <div>
-            {/* IGV */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <strong style={{ fontSize: '0.9rem', fontWeight: '400', paddingLeft: '4px', paddingRight: '24px' }}>IGV</strong>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+              {/* IGV */}
+              <div class="form-control">
+                {/* <strong style={{ fontSize: '0.9rem', fontWeight: '400', paddingLeft: '4px', paddingRight: '24px' }}>IGV</strong> */}
+                {/* style={{ paddingLeft: '4px', paddingRight: '12px' }} */}
+                <label style={{ padding: '4px 4px' }}>IGV</label>
                 <input type="text" id="inputIGV" disabled value={definicion_CTX_NOTA_VENTA.igv.$numberDecimal + ' %'} style={{ width: '100%' }} />
               </div>
-            </div>
-            {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
-            <div class="form-control">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
-                <input
-                  type="checkbox"
-                  id="chbx_TipoCambio_Para_Venta"
-                  disabled
-                  // onClick$={(e) => {
-                  //   venta.enDolares = (e.target as HTMLInputElement).checked;
-                  // }}
-                  onClick$={(e) => {
-                    if (definicion_CTX_NOTA_VENTA.fecha === '') {
-                      alert('Ingrese la fecha para esta venta');
-                      (e.target as HTMLInputElement).checked = false;
-                      document.getElementById('in_Fecha_Para_Venta')?.focus();
-                      return;
-                    }
-                    obtenerTipoCambio(e.target as HTMLInputElement);
-                  }}
-                />
-                {/* <strong 
-                  style={{ fontSize: '0.9rem', fontWeight: '400', cursor: 'pointer' }}
-                  onClick$={() => {
-                    if ((document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked === false) {
+              {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
+              <div class="form-control">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
+                  <input
+                    type="checkbox"
+                    id="chbx_TipoCambio_Para_Venta"
+                    disabled
+                    // onClick$={(e) => {
+                    //   venta.enDolares = (e.target as HTMLInputElement).checked;
+                    // }}
+                    onClick$={(e) => {
                       if (definicion_CTX_NOTA_VENTA.fecha === '') {
                         alert('Ingrese la fecha para esta venta');
-                        // (e.target as HTMLInputElement).checked = false;
-                        (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
+                        (e.target as HTMLInputElement).checked = false;
                         document.getElementById('in_Fecha_Para_Venta')?.focus();
                         return;
                       }
-                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = true;
-                    } else {
-                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
-                      // definicion_CTX_NOTA_VENTA.enDolares = false;
-                    }
-                    obtenerTipoCambio(document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement);
-                    // document.getElementById('chbx_TipoCambio_Para_Venta')?.onclick;
-                  }}
-                >
-                  USD
-                </strong> */}
-
-                <label
-                  // style={{ textAlign: 'start' }}
-                  for="chbx_TipoCambio_Para_Venta"
-                  // onClick$={
-                  //   (document.getElementById('checkboxTipoCambio')?.checked = !document.getElementById('checkboxTipoCambio'))
-                  // }
-                >
-                  USD
-                </label>
-              </div>
-              <div class="form-control form-agrupado">
-                <input id="inputTipoCambio" type="number" value={definicion_CTX_NOTA_VENTA.tipoCambio} disabled style={{ width: '100%' }} />
+                      obtenerTipoCambio(e.target as HTMLInputElement);
+                    }}
+                  />
+                  <label for="chbx_TipoCambio_Para_Venta">USD </label>
+                </div>
+                <div class="form-control form-agrupado">
+                  <input id="inputTipoCambio" type="number" value={definicion_CTX_NOTA_VENTA.tipoCambio} disabled style={{ width: '100%' }} />
+                </div>
               </div>
             </div>
+
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
@@ -2373,175 +2132,169 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           {/* ----------------------------------------------------- */}
           {/* VENDEDOR - METODO DE PAGO */}
           <div>
-            {/* Vendedor */}
-            {/* <div class="form-control">
-              <label>Vendedor</label>
-              <div class="form-control form-agrupado">
-                <input id="inputVendedor" style={{ width: '100%' }} type="text" disabled />
-              </div>
-            </div> */}
-            {/* Método Pago */}
-            <div class="form-control">
-              <div class="form-control form-agrupado" style={{ display: 'flex' }}>
-                <select
-                  id="metodoPago"
-                  value={definicion_CTX_NOTA_VENTA.metodoPago}
-                  // onChange={changeMetodoPago}
-                  onChange$={() => {
-                    definicion_CTX_NOTA_VENTA.verCuotasCredito = !definicion_CTX_NOTA_VENTA.verCuotasCredito;
-                  }}
-                  style={definicion_CTX_NOTA_VENTA.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
-                >
-                  <option value={'CONTADO'}>CONTADO</option>
-                  <option value={'CRÉDITO'}>CRÉDITO</option>
-                </select>
-                {definicion_CTX_NOTA_VENTA.verCuotasCredito && (
-                  <button
-                    title="Adicionar cuota"
-                    id="addCuota"
-                    class="btn"
-                    onClick$={() => {
-                      (cuota.idAuxiliar = parseInt(elIdAuxiliar())),
-                        (cuota.fechaCuota = hoy()),
-                        (cuota.importeCuotaPEN = 0),
-                        (cuotaCredito_esEdit.value = false);
-                      definicion_CTX_ADD_NOTA_VENTA.mostrarPanelCuotasCredito = true;
-                      definicion_CTX_ADD_NOTA_VENTA.grabo_CuotaCredito = false;
-                    }}
-                  >
-                    Add cuota
-                  </button>
-                )}
-              </div>
-            </div>
-            {!definicion_CTX_NOTA_VENTA.verCuotasCredito && (
-              <div>
-                <input
-                  id="Todo en efectivo"
-                  type="radio"
-                  value="Todo en efectivo"
-                  name="Contado"
-                  checked={definicion_CTX_NOTA_VENTA.todoEnEfectivo}
-                  onChange$={(e) => {
-                    definicion_CTX_NOTA_VENTA.todoEnEfectivo = (e.target as HTMLInputElement).checked;
-                    definicion_CTX_NOTA_VENTA.unaParteEnEfectivo = !definicion_CTX_NOTA_VENTA.todoEnEfectivo;
-                  }}
-                />
-                <label for="Todo en efectivo">Todo en efectivo</label>
-                <br />
-                {/* <div class="form-control form-agrupado" style={{ display: 'flex' }}> */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', margin: '6px 0' }}>
+            {definicion_CTX_NOTA_VENTA.itemsNotaVenta.length > 0 ? (
+              <>
+                <div class="form-control">
+                  <div class="form-control form-agrupado" style={{ display: 'flex' }}>
+                    <select
+                      id="metodoPago"
+                      value={definicion_CTX_NOTA_VENTA.metodoPago}
+                      // onChange={changeMetodoPago}
+                      onChange$={() => {
+                        definicion_CTX_NOTA_VENTA.verCuotasCredito = !definicion_CTX_NOTA_VENTA.verCuotasCredito;
+                      }}
+                      style={definicion_CTX_NOTA_VENTA.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
+                    >
+                      <option value={'CONTADO'}>CONTADO</option>
+                      <option value={'CRÉDITO'}>CRÉDITO</option>
+                    </select>
+                    {definicion_CTX_NOTA_VENTA.verCuotasCredito && (
+                      <button
+                        title="Adicionar cuota"
+                        id="addCuota"
+                        class="btn"
+                        onClick$={() => {
+                          (cuota.idAuxiliar = parseInt(elIdAuxiliar())),
+                            (cuota.fechaCuota = hoy()),
+                            (cuota.importeCuotaPEN = 0),
+                            (cuotaCredito_esEdit.value = false);
+                          definicion_CTX_ADD_NOTA_VENTA.mostrarPanelCuotasCredito = true;
+                          definicion_CTX_ADD_NOTA_VENTA.grabo_CuotaCredito = false;
+                        }}
+                      >
+                        Add cuota
+                      </button>
+                    )}
+                  </div>
+                </div>
+                {!definicion_CTX_NOTA_VENTA.verCuotasCredito && (
                   <div>
                     <input
-                      id="Una parte en efectivo"
+                      id="Todo en efectivo"
                       type="radio"
-                      value="Una parte en efectivo"
+                      value="Todo en efectivo"
                       name="Contado"
-                      checked={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
+                      checked={definicion_CTX_NOTA_VENTA.todoEnEfectivo}
                       onChange$={(e) => {
-                        definicion_CTX_NOTA_VENTA.unaParteEnEfectivo = (e.target as HTMLInputElement).checked;
-                        definicion_CTX_NOTA_VENTA.todoEnEfectivo = !definicion_CTX_NOTA_VENTA.unaParteEnEfectivo;
+                        definicion_CTX_NOTA_VENTA.todoEnEfectivo = (e.target as HTMLInputElement).checked;
+                        definicion_CTX_NOTA_VENTA.unaParteEnEfectivo = !definicion_CTX_NOTA_VENTA.todoEnEfectivo;
                       }}
                     />
-                    <label for="Una parte en efectivo">Una parte en efectivo</label>
+                    <label for="Todo en efectivo">Todo en efectivo</label>
+                    <br />
+                    {/* <div class="form-control form-agrupado" style={{ display: 'flex' }}> */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', margin: '6px 0' }}>
+                      <div>
+                        <input
+                          id="Una parte en efectivo"
+                          type="radio"
+                          value="Una parte en efectivo"
+                          name="Contado"
+                          checked={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
+                          onChange$={(e) => {
+                            definicion_CTX_NOTA_VENTA.unaParteEnEfectivo = (e.target as HTMLInputElement).checked;
+                            definicion_CTX_NOTA_VENTA.todoEnEfectivo = !definicion_CTX_NOTA_VENTA.unaParteEnEfectivo;
+                          }}
+                        />
+                        <label for="Una parte en efectivo">Una parte en efectivo</label>
+                      </div>
+                      <input
+                        id="inputMontoEnEfectivo"
+                        type="number"
+                        placeholder="Efectivo"
+                        style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
+                        disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
+                        value={definicion_CTX_NOTA_VENTA.montoEnEfectivo}
+                        onChange$={(e) => (definicion_CTX_NOTA_VENTA.montoEnEfectivo = (e.target as HTMLInputElement).value)}
+                        onKeyPress$={(e) => {
+                          if (e.key === 'Enter') {
+                            document.getElementById('select_contado')?.focus();
+                          }
+                        }}
+                      />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                      <select
+                        id="select_contado"
+                        style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
+                        disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
+                        value={definicion_CTX_NOTA_VENTA.otroMedioPago}
+                        onChange$={(e) => {
+                          definicion_CTX_NOTA_VENTA.otroMedioPago = (e.target as HTMLSelectElement).value;
+                          document.getElementById('in_otroMedio')?.focus();
+                        }}
+                        onKeyPress$={(e) => {
+                          if (e.key === 'Enter') {
+                            document.getElementById('inputMontoOtroMedioPago')?.focus();
+                          }
+                        }}
+                        // style={definicion_CTX_NOTA_VENTA.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
+                      >
+                        <option value={'TRANSFERENCIA DE FONDOS'}>TRANSFERENCIA DE FONDOS</option>
+                        <option value={'TARJETA DE CRÉDITO'}>TARJETA DE CRÉDITO</option>
+                        <option value={'TARJETA DE DÉBITO'}>TARJETA DE DÉBITO</option>
+                        <option value={'DEPÓSITO EN CUENTA'}>DEPÓSITO EN CUENTA</option>
+                      </select>
+                      <input
+                        id="inputMontoOtroMedioPago"
+                        type="number"
+                        placeholder="Otro medio"
+                        style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
+                        disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
+                        value={definicion_CTX_NOTA_VENTA.montoOtroMedioPago}
+                        onChange$={(e) => (definicion_CTX_NOTA_VENTA.montoOtroMedioPago = (e.target as HTMLInputElement).value)}
+                        onKeyPress$={(e) => {
+                          if (e.key === 'Enter') {
+                            document.getElementById('btnVerAlmacen')?.focus();
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
-                  <input
-                    id="inputMontoEnEfectivo"
-                    type="number"
-                    placeholder="Efectivo"
-                    style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
-                    disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
-                    value={definicion_CTX_NOTA_VENTA.montoEnEfectivo}
-                    onChange$={(e) => (definicion_CTX_NOTA_VENTA.montoEnEfectivo = (e.target as HTMLInputElement).value)}
-                    onKeyPress$={(e) => {
-                      if (e.key === 'Enter') {
-                        document.getElementById('select_contado')?.focus();
-                      }
-                    }}
-                  />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
-                  <select
-                    id="select_contado"
-                    style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
-                    disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
-                    value={definicion_CTX_NOTA_VENTA.otroMedioPago}
-                    onChange$={(e) => {
-                      definicion_CTX_NOTA_VENTA.otroMedioPago = (e.target as HTMLSelectElement).value;
-                      document.getElementById('in_otroMedio')?.focus();
-                    }}
-                    onKeyPress$={(e) => {
-                      if (e.key === 'Enter') {
-                        document.getElementById('inputMontoOtroMedioPago')?.focus();
-                      }
-                    }}
-                    // style={definicion_CTX_NOTA_VENTA.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
-                  >
-                    <option value={'TRANSFERENCIA DE FONDOS'}>TRANSFERENCIA DE FONDOS</option>
-                    <option value={'TARJETA DE CRÉDITO'}>TARJETA DE CRÉDITO</option>
-                    <option value={'TARJETA DE DÉBITO'}>TARJETA DE DÉBITO</option>
-                    <option value={'DEPÓSITO EN CUENTA'}>DEPÓSITO EN CUENTA</option>
-                  </select>
-                  <input
-                    id="inputMontoOtroMedioPago"
-                    type="number"
-                    placeholder="Otro medio"
-                    style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
-                    disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
-                    value={definicion_CTX_NOTA_VENTA.montoOtroMedioPago}
-                    onChange$={(e) => (definicion_CTX_NOTA_VENTA.montoOtroMedioPago = (e.target as HTMLInputElement).value)}
-                    onKeyPress$={(e) => {
-                      if (e.key === 'Enter') {
-                        document.getElementById('btnVerAlmacen')?.focus();
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-            {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelCuotasCredito && (
-              <div class="modal">
-                <NewEditCuotaCreditoVenta contexto="add_nota_venta" esEdit={cuotaCredito_esEdit.value} cuota={cuota} />
-              </div>
-            )}
-            {/* TABLA DE CUOTAS DE PAGO venta.verCuotasCredito &&   ctx_PanelVenta.grabo_cuotas_numero &&*/}
-            {
-              <div class="form-control">
-                {definicion_CTX_NOTA_VENTA.cuotasCredito.length > 0 ? (
-                  <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', margin: '4px 0' }}>
-                    <thead>
-                      <tr>
-                        <th>Nro. Cuota</th>
-                        <th>Fecha</th>
-                        <th>Importe</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {definicion_CTX_NOTA_VENTA.cuotasCredito.map((value: any, index: number) => {
-                        //   const { idAuxiliar, fechaCuota, importeCuotaPEN } = cuota;
-                        const indexItem = index + 1;
-                        // sumaCuotas.value = sumaCuotas.value + redondeo2Decimales(cuota.importeCuotaPEN);
-                        sumaCuotas = sumaCuotas + redondeo2Decimales(value.importeCuotaPEN);
+                )}
+                {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelCuotasCredito && (
+                  <div class="modal">
+                    <NewEditCuotaCreditoVenta contexto="add_nota_venta" esEdit={cuotaCredito_esEdit.value} cuota={cuota} />
+                  </div>
+                )}
+                {/* TABLA DE CUOTAS DE PAGO venta.verCuotasCredito &&   ctx_PanelVenta.grabo_cuotas_numero &&*/}
+                {
+                  <div class="form-control">
+                    {definicion_CTX_NOTA_VENTA.cuotasCredito.length > 0 ? (
+                      <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', margin: '4px 0' }}>
+                        <thead>
+                          <tr>
+                            <th>Nro. Cuota</th>
+                            <th>Fecha</th>
+                            <th>Importe</th>
+                            <th>Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {definicion_CTX_NOTA_VENTA.cuotasCredito.map((value: any, index: number) => {
+                            //   const { idAuxiliar, fechaCuota, importeCuotaPEN } = cuota;
+                            const indexItem = index + 1;
+                            // sumaCuotas.value = sumaCuotas.value + redondeo2Decimales(cuota.importeCuotaPEN);
+                            sumaCuotas = sumaCuotas + redondeo2Decimales(value.importeCuotaPEN);
 
-                        //   importeTotal(sumaCuotas);
-                        // Cuota{}
-                        return (
-                          <tr key={value.idAuxiliar}>
-                            <td data-label="Nro. Cuota" key={value.idAuxiliar}>{`${cerosALaIzquierda(indexItem, 3)}`}</td>
-                            <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fechaCuota)}</td>
-                            <td data-label="Importe" style={{ textAlign: 'end' }}>
-                              {/* {cuota.importeCuotaPEN} */}
-                              {`${value.importeCuotaPEN.toLocaleString('en-PE', {
-                                // style: 'currency',
-                                currency: 'PEN',
-                                minimumFractionDigits: 2,
-                              })}`}
-                            </td>
-                            <td data-label="Acciones" style={{ textAlign: 'center' }}>
-                              <input type="image" title="Editar ítem" alt="icono de editar" height={14} width={14} src={images.edit} />
-                              <input type="image" title="Eliminar ítem" alt="icono de eliminar" height={14} width={14} src={images.trash} />
-                              {/* <ImgButton
+                            //   importeTotal(sumaCuotas);
+                            // Cuota{}
+                            return (
+                              <tr key={value.idAuxiliar}>
+                                <td data-label="Nro. Cuota" key={value.idAuxiliar}>{`${cerosALaIzquierda(indexItem, 3)}`}</td>
+                                <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fechaCuota)}</td>
+                                <td data-label="Importe" style={{ textAlign: 'end' }}>
+                                  {/* {cuota.importeCuotaPEN} */}
+                                  {`${value.importeCuotaPEN.toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })}`}
+                                </td>
+                                <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                                  <input type="image" title="Editar ítem" alt="icono de editar" height={14} width={14} src={images.edit} />
+                                  <input type="image" title="Eliminar ítem" alt="icono de eliminar" height={14} width={14} src={images.trash} />
+                                  {/* <ImgButton
                                 src={images.edit}
                                 alt="icono de editar"
                                 height={12}
@@ -2565,35 +2318,35 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                 //     onDel(idAuxiliar);
                                 //   }}
                               /> */}
-                            </td>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th colSpan={2} style={{ textAlign: 'end' }}>
+                              Suma Cuotas
+                            </th>
+                            <th colSpan={1} style={{ textAlign: 'end' }}>
+                              {`${sumaCuotas.toLocaleString('en-PE', {
+                                style: 'currency',
+                                currency: 'PEN',
+                                minimumFractionDigits: 2,
+                              })}`}
+                            </th>
+                            <th></th>
                           </tr>
-                        );
-                      })}
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th colSpan={2} style={{ textAlign: 'end' }}>
-                          Suma Cuotas
-                        </th>
-                        <th colSpan={1} style={{ textAlign: 'end' }}>
-                          {`${sumaCuotas.toLocaleString('en-PE', {
-                            style: 'currency',
-                            currency: 'PEN',
-                            minimumFractionDigits: 2,
-                          })}`}
-                        </th>
-                        <th></th>
-                      </tr>
-                    </tfoot>
-                  </table>
-                ) : definicion_CTX_NOTA_VENTA.verCuotasCredito ? (
-                  <i style={{ fontSize: '0.8rem' }}>No existen cuotas de crédito</i>
-                ) : (
-                  ''
-                )}
-              </div>
-            }
-            {/*   {showPanelDeleteCuotaCredito && (
+                        </tfoot>
+                      </table>
+                    ) : definicion_CTX_NOTA_VENTA.verCuotasCredito ? (
+                      <i style={{ fontSize: '0.8rem' }}>No existen cuotas de crédito</i>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                }
+                {/*   {showPanelDeleteCuotaCredito && (
               <Modal
                 componente={
                   <DeleteCuotaCredito
@@ -2604,12 +2357,26 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 }
               />
             )} */}
+              </>
+            ) : (
+              ''
+            )}
+
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
         </div>
+
+        {/* ----------------------------------------------------- */}
+        {/* GRABAR */}
         {definicion_CTX_NOTA_VENTA._id === '' ? (
-          <input type="submit" value="Grabar NOTA DE VENTA" class="btn-centro" style={{ height: '40px' }} onClick$={() => grabandoNotaVenta()} />
+          <input
+            type="submit"
+            value={'Grabar NOTA DE VENTA ' + diaDeLaSemana(definicion_CTX_NOTA_VENTA.fecha) + ' ' + definicion_CTX_NOTA_VENTA.fecha.substring(8, 10)}
+            class="btn-centro"
+            style={{ height: '40px' }}
+            onClick$={() => grabandoNotaVenta()}
+          />
         ) : (
           ''
         )}
@@ -2624,3 +2391,249 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
     </div>
   );
 });
+
+{
+  /* estrellas */
+}
+{
+  /* <div style={{ margin: '8px 0' }} hidden={definicion_CTX_NOTA_VENTA.clienteVentasVarias}>
+              <img
+                id="e1"
+                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 1 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella 1"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 1}
+                title="Estrella 1"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+              <img
+                id="e2"
+                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 2 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella 2"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 2}
+                title="Estrella 2"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+              <img
+                id="e3"
+                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 3 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella 3"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 3}
+                title="Estrella 3"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+              <img
+                id="e4"
+                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 4 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella4"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 4}
+                title="Estrella 4"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+              <img
+                id="e5"
+                src={definicion_CTX_NOTA_VENTA.estrellasCliente === 5 ? images.estrella128 : images.estrella128Contorno}
+                alt="Estrella 5"
+                width={14}
+                height={14}
+                hidden={ESTRELLA_MAX.value < 5}
+                title="Estrella 5"
+                style={{
+                  marginLeft: '4px',
+                  marginRight: '4px',
+                  marginTop: '1px',
+                }}
+              />
+            </div> */
+}
+{
+  /* tipo de documento identidad*/
+}
+{
+  /* <div class="form-control">
+              <div class="form-control form-agrupado">
+                <select
+                  id="selectTipoDocumentoLiteral"
+                  disabled
+                  // value={6}
+                  value={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad}
+                  // onChange={cambioTipoDocumento}
+                  onChange$={(e) => {
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const rere = e.target as HTMLSelectElement;
+                    const elOption = rere[idx];
+
+                    //
+                    //
+                    // const csd = (e.target as HTMLSelectElement).current[idx];
+                    // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
+                    definicion_CTX_NOTA_VENTA.codigoTipoDocumentoIdentidad = elOption.id;
+                    definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
+                  }}
+                  // style={{ width: '100%' }}
+                >
+                  <option id="1" value="DNI" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'DNI'}>
+                    DNI
+                  </option>
+                  <option id="6" value="RUC" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'RUC'}>
+                    RUC
+                  </option>
+                  <option id="4" value="C.EXT" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'C.EXT'}>
+                    C.EXT
+                  </option>
+                </select>
+                <input
+                  id="ima_BuscarCliente_VENTA"
+                  type="image"
+                  src={images.searchPLUS}
+                  title="Buscar datos de identidad"
+                  height={16}
+                  width={16}
+                  style={{ margin: '2px 4px 2px 4px' }}
+                  onClick$={() => (definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBuscarPersona = true)}
+                />
+                <input
+                  // id="in_BuscarDetraccion"
+                  type="image"
+                  src={images.edit}
+                  title="Editar cliente"
+                  height={16}
+                  width={16}
+                  style={{ margin: '2px 0' }}
+                  disabled={definicion_CTX_NOTA_VENTA.idCliente === '' ? true : false}
+                  onClick$={() => {
+                    console.log('japon');
+                    // ctx_buscar_persona.pP = persoLocali;
+                    // ctx_buscar_persona.mostrarPanelEditPersona = true;
+                    definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditPersonaDirecta = true;
+                  }}
+                />
+              </div>
+            </div>
+            {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBuscarPersona && (
+              <div class="modal">
+                <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="venta" rol="cliente" />
+              </div>
+            )} */
+}
+{
+  /* EDIT - PERSONA/CLIENTE */
+}
+{
+  /* {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditPersonaDirecta && (
+              <div class="modal">
+                <EditarPersonaDirecta
+                  soloPersonaNatural={defini_CTX_CLIENTE_VENTA.codigoTipoDocumentoIdentidad === '6' ? false : true}
+                  personaSeleccio={defini_CTX_CLIENTE_VENTA}
+                  contexto={'add_venta'}
+                />
+              </div>
+            )} */
+}
+{
+  /* numero identidad*/
+}
+{
+  /* <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="inputNumeroDocumentoIdentidad"
+                  style={{ width: '100%' }}
+                  type="number"
+                  disabled
+                  placeholder="Add número"
+                  value={definicion_CTX_NOTA_VENTA.numeroIdentidad}
+                  onChange$={(e) => (definicion_CTX_NOTA_VENTA.numeroIdentidad = (e.target as HTMLInputElement).value)}
+                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                />
+              </div>
+            </div> */
+}
+{
+  /* Razon Social / Nombre */
+}
+{
+  /* <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="inputNombreCliente"
+                  style={{ width: '100%' }}
+                  type="text"
+                  disabled
+                  placeholder="Razón social / Nombre"
+                  value={definicion_CTX_NOTA_VENTA.razonSocialNombre}
+                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
+                />
+              </div>
+            </div> */
+}
+{
+  /* Dirección Cliente */
+}
+{
+  /* <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="inputDireccionCliente"
+                  style={{ width: '100%' }}
+                  type="text"
+                  disabled
+                  placeholder="Direccion cliente"
+                  value={definicion_CTX_NOTA_VENTA.direccionCliente}
+                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
+                />
+              </div>
+            </div> */
+}
+{
+  /* Email - Telefono */
+}
+{
+  /* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '4px 0', gap: '4px' }}>
+              <input
+                id="inputEmail"
+                style={{ width: '100%' }}
+                type="email"
+                placeholder="Email"
+                value={definicion_CTX_NOTA_VENTA.email}
+                onChange$={(e) => {
+                  definicion_CTX_NOTA_VENTA.email = (e.target as HTMLInputElement).value;
+                }}
+                // onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                id="inputTelefono"
+                style={{ width: '100%' }}
+                type="tel"
+                placeholder="Telefono"
+                value={definicion_CTX_NOTA_VENTA.telefono}
+                onChange$={(e) => {
+                  definicion_CTX_NOTA_VENTA.telefono = (e.target as HTMLInputElement).value;
+                }}
+                // onChange={(e) => setEmail(e.target.value)}
+              />
+            </div> */
+}
