@@ -165,6 +165,7 @@ export default component$(
                           marca,
                           totalCantidadSaldo,
                           unidad,
+                          stockMinimo,
                           // costoDeInicioPEN,
                           precioUnitarioPEN,
                           // promedioCostoUnitarioMovil,
@@ -194,7 +195,16 @@ export default component$(
                             // }
                           >
                             <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
-                            <td data-label="Descripción">{descripcion}</td>
+                            <td data-label="Descripción">
+                              {parseFloat(stockMinimo.$numberDecimal) >= parseFloat(totalCantidadSaldo.$numberDecimal) ? (
+                                <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
+                              ) : parseFloat(stockMinimo.$numberDecimal) + 5 >= parseFloat(totalCantidadSaldo.$numberDecimal) ? (
+                                <img src={images.flagAmber} alt="Bandera ambar" width="12" height="12" />
+                              ) : (
+                                ''
+                              )}
+                              {descripcion}
+                            </td>
                             <td data-label="Aplicación" style={props.verAplicacion ? '' : { display: 'none' }}>
                               {aplicacion}
                             </td>

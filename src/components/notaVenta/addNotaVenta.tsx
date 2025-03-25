@@ -1820,6 +1820,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             </td>
                             {/* ----------------------------------------------------- */}
                             <td data-label="Cantidad" class="comoNumero">
+                              {/* <button style={{ width: '21px' }}>-</button> */}
                               <input
                                 type="number"
                                 style={{ width: '60px', textAlign: 'end' }}
@@ -1841,6 +1842,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                   }
                                 }}
                               />
+                              {/* <button>+</button> */}
                             </td>
                             <td data-label="Uni" class="acciones">
                               {iTNotVen.unidadEquivalencia}

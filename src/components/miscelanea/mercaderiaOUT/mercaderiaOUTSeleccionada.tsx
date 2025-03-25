@@ -492,29 +492,36 @@ export default component$(
                   percepcion: props.mercaOUTSelecci.percepcion,
                 });
               }
+              let tPVU = '';
+              if (
+                props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '10' ||
+                props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '11' ||
+                props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '12' ||
+                props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '13' ||
+                props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '14' ||
+                props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '15' ||
+                props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '16' ||
+                props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '17'
+              ) {
+                tPVU = '01';
+              } else {
+                tPVU = '02';
+              }
+              console.log('👔👔👔👔👔👔👔', props.mercaOUTSelecci.tipoImpuesto[1], props.mercaOUTSelecci.tipoImpuesto);
+
+              let elTImp;
+              if (props.mercaOUTSelecci.tipoImpuesto.length > 1) {
+                elTImp = props.mercaOUTSelecci.tipoImpuesto[1];
+              } else {
+                elTImp = props.mercaOUTSelecci.tipoImpuesto[0];
+              }
+              console.log('👔👔👔👔👔👔👔', elTImp);
               if (
                 props.contextoParaDocumento === 'orden_servicio' ||
                 props.contextoParaDocumento === 'new_venta' ||
                 props.contextoParaDocumento === 'nota_venta' ||
                 props.contextoParaDocumento === 'new_edit_cotizacion'
               ) {
-                let tPVU = '';
-                if (
-                  props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '10' ||
-                  props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '11' ||
-                  props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '12' ||
-                  props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '13' ||
-                  props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '14' ||
-                  props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '15' ||
-                  props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '16' ||
-                  props.mercaOUTSelecci.tipoAfectacionDelImpuesto === '17'
-                ) {
-                  tPVU = '01';
-                } else {
-                  tPVU = '02';
-                }
-                console.log('👔👔👔👔👔👔👔', props.mercaOUTSelecci.tipoImpuesto[1], props.mercaOUTSelecci.tipoImpuesto);
-
                 documento.push({
                   idAuxiliar: unicoAux,
                   idMercaderia: props.mercaOUTSelecci._id,
@@ -525,7 +532,7 @@ export default component$(
 
                   noFacturar: props.mercaOUTSelecci.noFacturar,
 
-                  tipoImpuesto: props.mercaOUTSelecci.tipoImpuesto[1],
+                  tipoImpuesto: elTImp, // props.mercaOUTSelecci.tipoImpuesto[1],
                   tipoAfectacionDelImpuesto: props.mercaOUTSelecci.tipoAfectacionDelImpuesto,
                   porcentaje: parseFloat(props.porcentaje),
 
@@ -584,9 +591,11 @@ export default component$(
 
                   noFacturar: props.mercaOUTSelecci.noFacturar,
 
-                  tipoImpuesto: props.mercaOUTSelecci.tipoImpuesto,
+                  tipoImpuesto: elTImp, // props.mercaOUTSelecci.tipoImpuesto,
                   tipoAfectacionDelImpuesto: props.mercaOUTSelecci.tipoAfectacionDelImpuesto,
                   porcentaje: parseFloat(props.porcentaje),
+
+                  tipoPrecioVentaUnitario: tPVU,
 
                   codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
 

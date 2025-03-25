@@ -17,6 +17,7 @@ export interface IMercaderiaOUT {
   KARDEXS: any;
 
   ubigeo: string;
+  stockMinimo: any;
 
   lineaTipo: string;
   codigoContableVenta: string;

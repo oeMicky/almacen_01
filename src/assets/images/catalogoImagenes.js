@@ -58,6 +58,8 @@ import eyePassword from '../images/eye password.svg';
 import facturasClaro from '../images/FACelec_IIClaro.svg';
 import facturasOscuro from '../images/FACelec_IIOscuro.svg';
 import facturasDisable from '../images/FACelec_IIDisable.svg';
+import flagAmber from '../images/flagAmber.svg';
+import flagRed from '../images/flagRed.svg';
 import guiasClaro from '../images/GR_IIClaro.svg';
 import guiasOscuro from '../images/GR_IIOscuro.svg';
 import guiasDisable from '../images/GR_IIDisable.svg';
@@ -174,6 +176,8 @@ export default {
   facturasClaro,
   facturasOscuro,
   facturasDisable,
+  flagAmber,
+  flagRed,
   guiasClaro,
   guiasOscuro,
   guiasDisable,
