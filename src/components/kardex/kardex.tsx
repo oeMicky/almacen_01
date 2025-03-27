@@ -13,6 +13,7 @@ import { CTX_BUSCAR_MERCADERIA_IN } from '../miscelanea/mercaderiaIN/buscarMerca
 import { getEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
 import VerOutAlmacen from '../outAlmacen/verOutAlmacen';
 import { CTX_BUSCAR_MERCADERIA_OUT } from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
+import { CTX_INVENTARIO_EXTERNO } from '../miscelanea/inventarioExterno/inventarioExterno';
 
 export const CTX_KARDEX = createContextId<any>('ctx_kardex__');
 
@@ -51,6 +52,10 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
     case 'buscar_mercaderia_out':
       //console.log('contexto::a: kardexs');
       ctx = useContext(CTX_BUSCAR_MERCADERIA_OUT);
+      break;
+    case 'inventario_externo':
+      //console.log('contexto::a: kardexs');
+      ctx = useContext(CTX_INVENTARIO_EXTERNO);
       break;
   }
   //#endregion CONTEXTOS

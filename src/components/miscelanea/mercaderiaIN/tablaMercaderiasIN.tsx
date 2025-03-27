@@ -175,6 +175,19 @@ export default component$(
                           noFacturar,
                           ubigeo,
                         } = mercaINLocali;
+                        let elSM = 0;
+                        let elTCS = 0;
+                        if (typeof stockMinimo === 'undefined' || stockMinimo === null) {
+                          elSM = 0;
+                        } else {
+                          elSM = stockMinimo.$numberDecimal ? parseFloat(stockMinimo.$numberDecimal) : stockMinimo;
+                        }
+                        if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
+                          elTCS = 0;
+                        } else {
+                          elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                        }
+                        console.log(' 🍍🍍🍍🍍', elSM, elTCS);
 
                         return (
                           <tr
@@ -196,9 +209,9 @@ export default component$(
                           >
                             <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                             <td data-label="Descripción">
-                              {parseFloat(stockMinimo.$numberDecimal) >= parseFloat(totalCantidadSaldo.$numberDecimal) ? (
+                              {elSM >= elTCS ? (
                                 <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
-                              ) : parseFloat(stockMinimo.$numberDecimal) + 5 >= parseFloat(totalCantidadSaldo.$numberDecimal) ? (
+                              ) : elSM + 5 >= elTCS ? (
                                 <img src={images.flagAmber} alt="Bandera ambar" width="12" height="12" />
                               ) : (
                                 ''

@@ -1,10 +1,10 @@
-import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
+import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik'; //useSignal
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
-import type { IMercaderiaOUT } from '~/interfaces/iMercaderia';
+import type { IMercaderiaOUT_BUSCAR } from '~/interfaces/iMercaderia';
 // import ImgButton from '~/components/system/imgButton';
 import { images } from '~/assets';
-import { cerosALaIzquierda, formatear_2Decimales, formatear_6Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, elIdAuxiliar, formatear_2Decimales, formatear_6Decimales } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 // import { CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
 // import { CTX_O_P } from '~/components/ordenProduccion/newEditOrdenProduccion';
@@ -19,6 +19,8 @@ export default component$(
   (props: {
     buscarMercaderiasOUT: number;
     parametrosBusqueda: any;
+    documento: any;
+    porcentaje: any;
     // contexto: string;
     // contextoParaDocumento: string;
     addAutomatica: boolean;
@@ -30,7 +32,10 @@ export default component$(
   }) => {
     useStyles$(style);
 
+    // const destello = useSignal(false);
+
     //#region CONTEXTOS
+
     const ctx_buscar_mercaderia_out = useContext(CTX_BUSCAR_MERCADERIA_OUT);
     // let ctx: any = [];
     // let documento: any = [];
@@ -228,14 +233,23 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercasOUT) => {
-          // console.log('onResolved 🍓🍓🍓🍓', mercasOUT);
+          console.log('onResolved 🍓🍓🍓🍓', mercasOUT);
           const { data } = mercasOUT; //{ status, data, message }
-          const misMercaderiasOUT: IMercaderiaOUT[] = data;
+          const misMercaderiasOUT: IMercaderiaOUT_BUSCAR[] = data;
           //console.log('misMercaderiasOUT', misMercaderiasOUT);
           return (
             <>
               {misMercaderiasOUT.length > 0 ? (
-                <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
+                <table
+                  style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}
+                  onKeyUp$={(e) => {
+                    // console.log('🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚', e.key);
+                    if (e.key === 'Escape') {
+                      // ctx.mostrarPanelBuscarMercaderiaOUT = false;
+                      alert('🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚');
+                    }
+                  }}
+                >
                   {/* <table style={{ fontWeight: 'lighter ' }}> */}
                   {/* <table> */}
                   <thead>
@@ -275,6 +289,20 @@ export default component$(
                         ubigeo,
                       } = mercaOUTLocali;
                       // const indexItem = index + 1;   , costoUnitarioMovil, precio
+                      let elSM = 0;
+                      let elTCS = 0;
+                      if (typeof stockMinimo === 'undefined' || stockMinimo === null) {
+                        elSM = 0;
+                      } else {
+                        elSM = stockMinimo.$numberDecimal ? parseFloat(stockMinimo.$numberDecimal) : stockMinimo;
+                      }
+                      if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
+                        elTCS = 0;
+                      } else {
+                        elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                      }
+                      console.log(' 🍍🍍🍍🍍', elSM, elTCS);
+
                       return (
                         <tr
                           key={_id}
@@ -289,10 +317,138 @@ export default component$(
                           }
                         >
                           <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
-                          <td data-label="Descripción">
-                            {parseFloat(stockMinimo.$numberDecimal) >= parseFloat(totalCantidadSaldo.$numberDecimal) ? (
+                          <td
+                            data-label="Descripción"
+                            style={{ cursor: 'pointer' }}
+                            onKeyUp$={(e) => {
+                              // console.log('🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚', e.key);
+                              if (e.key === 'Escape') {
+                                // ctx.mostrarPanelBuscarMercaderiaOUT = false;
+                                alert('🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚');
+                              }
+                            }}
+                            onClick$={(e) => {
+                              try {
+                                const unicoAux = parseInt(elIdAuxiliar());
+                                let tPVU = '';
+                                if (
+                                  mercaOUTLocali.tipoAfectacionDelImpuesto === '10' ||
+                                  mercaOUTLocali.tipoAfectacionDelImpuesto === '11' ||
+                                  mercaOUTLocali.tipoAfectacionDelImpuesto === '12' ||
+                                  mercaOUTLocali.tipoAfectacionDelImpuesto === '13' ||
+                                  mercaOUTLocali.tipoAfectacionDelImpuesto === '14' ||
+                                  mercaOUTLocali.tipoAfectacionDelImpuesto === '15' ||
+                                  mercaOUTLocali.tipoAfectacionDelImpuesto === '16' ||
+                                  mercaOUTLocali.tipoAfectacionDelImpuesto === '17'
+                                ) {
+                                  tPVU = '01';
+                                } else {
+                                  tPVU = '02';
+                                }
+                                console.log('👔👔👔👔👔👔👔', mercaOUTLocali.tipoImpuesto[1], mercaOUTLocali.tipoImpuesto);
+
+                                let elTImp;
+                                if (mercaOUTLocali.tipoImpuesto.length > 1) {
+                                  elTImp = mercaOUTLocali.tipoImpuesto[1];
+                                } else {
+                                  elTImp = mercaOUTLocali.tipoImpuesto[0];
+                                }
+                                console.log('👔👔👔👔👔👔👔', elTImp);
+                                const laEqui = mercaOUTLocali.equivalencias[0];
+                                let elKAR;
+                                if (mercaOUTLocali.KARDEXS.length === 1) {
+                                  elKAR = mercaOUTLocali.KARDEXS[0];
+                                }
+                                // if (mercaOUTLocali.KARDEXS.length > 1) {
+                                //   ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                //   ctx_buscar_mercaderia_out.mostrarPanelKardexsOUT = true;
+                                //   //console.log('la mercade seleccionada OUT -INDIRECTA', ctx_buscar_mercaderia_out.mM);
+                                // }
+                                let elCOS_elPRE;
+                                if (props.esAlmacen || props.esProduccion) {
+                                  elCOS_elPRE =
+                                    typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                                      ? costoUnitarioPENMasIGV.$numberDecimal
+                                        ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                                        : formatear_2Decimales(costoUnitarioPENMasIGV)
+                                      : 0;
+                                } else {
+                                  elCOS_elPRE =
+                                    typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                      ? precioUnitarioPEN.$numberDecimal
+                                        ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                        : precioUnitarioPEN
+                                      : 0;
+                                }
+                                props.documento.push({
+                                  idAuxiliar: unicoAux,
+                                  idMercaderia: mercaOUTLocali._id,
+                                  idEquivalencia: laEqui._id,
+                                  idKardex: elKAR._id,
+                                  item: 0,
+                                  tipo: 'MERCADERIA',
+
+                                  noFacturar: mercaOUTLocali.noFacturar,
+
+                                  tipoImpuesto: elTImp, // props.mercaOUTSelecci.tipoImpuesto[1],
+                                  tipoAfectacionDelImpuesto: mercaOUTLocali.tipoAfectacionDelImpuesto,
+                                  porcentaje: parseFloat(props.porcentaje),
+
+                                  tipoPrecioVentaUnitario: tPVU,
+
+                                  codigo: mercaOUTLocali.codigo ? mercaOUTLocali.codigo : '_',
+
+                                  descripcion: mercaOUTLocali.descripcion,
+                                  descripcionEquivalencia: laEqui.descripcionEquivalencia,
+
+                                  cantidad: 1 * parseFloat(laEqui.laEquivalencia.$numberDecimal),
+                                  cantidadEquivalencia: 1,
+
+                                  cantidadSacada: 1 * parseFloat(laEqui.laEquivalencia.$numberDecimal),
+                                  cantidadSacadaEquivalencia: 1,
+
+                                  unidad: mercaOUTLocali.unidad,
+                                  unidadEquivalencia: laEqui.unidadEquivalencia,
+
+                                  costoUnitarioPEN: parseFloat(elKAR.costoUnitarioMovil.$numberDecimal),
+                                  costoUnitarioEquivalenciaPEN:
+                                    parseFloat(elKAR.costoUnitarioMovil.$numberDecimal) * parseFloat(laEqui.laEquivalencia.$numberDecimal),
+
+                                  porcentajeUtilidad: mercaOUTLocali.porcentajeUtilidad,
+
+                                  //precio = c + IGV
+                                  precioUnitarioPEN: elCOS_elPRE, // precioEquivalencia.value,
+                                  //venta = k * precio
+                                  ventaPEN: 1 * elCOS_elPRE, //precioEquivalencia.value,
+
+                                  precioUnitarioUSD: 0,
+                                  ventaUSD: 0,
+                                  tipoEquivalencia: laEqui.tipoEquivalencia,
+                                  factor: laEqui.factor,
+                                  laEquivalencia: laEqui.laEquivalencia,
+
+                                  exonerado: mercaOUTLocali.exonerado,
+                                  inafecto: mercaOUTLocali.inafecto,
+                                  sujetoAPercepcion: mercaOUTLocali.sujetoAPercepcion,
+                                  percepcion: mercaOUTLocali.percepcion,
+
+                                  codigoContableVenta: mercaOUTLocali.codigoContableVenta,
+                                  descripcionContableVenta: mercaOUTLocali.descripcionContableVenta,
+                                  tipoContableVenta: mercaOUTLocali.tipoContableVenta,
+                                });
+                              } catch (error) {
+                                console.error(error);
+                              } finally {
+                                // DESTELLO
+                                (e.target as HTMLTableElement).style.animation = '';
+                                (e.target as HTMLTableElement).offsetWidth;
+                                (e.target as HTMLTableElement).style.animation = 'example 0.3s linear 0s 1 alternate';
+                              }
+                            }}
+                          >
+                            {elSM >= elTCS ? (
                               <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
-                            ) : parseFloat(stockMinimo.$numberDecimal) + 5 >= parseFloat(totalCantidadSaldo.$numberDecimal) ? (
+                            ) : elSM + 5 >= elTCS ? (
                               <img src={images.flagAmber} alt="Bandera ambar" width="12" height="12" />
                             ) : (
                               ''
@@ -309,23 +465,30 @@ export default component$(
                             {marca}
                           </td>
                           <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td>
-                          <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
-                            <strong>
-                              {totalCantidadSaldo.$numberDecimal
-                                ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
-                                : formatear_6Decimales(totalCantidadSaldo)}
-                            </strong>
+                          <td
+                            data-label="Stock"
+                            class="comoNumeroLeft"
+                            style={{ fontWeight: 'bold', color: 'purple' }}
+                            // onClick$={(e) => {  , cursor: 'pointer'
+                            //   (e.target as HTMLTableElement).style.animation = '';
+                            //   (e.target as HTMLTableElement).offsetWidth;
+                            //   (e.target as HTMLTableElement).style.animation = 'example 0.3s linear 0s 1 alternate';
+                            // }}
+                          >
+                            {/* <strong style={{ color: 'purple' }}> */}
+                            {totalCantidadSaldo.$numberDecimal
+                              ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
+                              : formatear_6Decimales(totalCantidadSaldo)}
+                            {/* </strong> */}
                           </td>
                           <td data-label="Uni">{unidad}</td>
                           {props.esAlmacen || props.esProduccion ? (
-                            <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
-                              <strong>
-                                {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
-                                  ? costoUnitarioPENMasIGV.$numberDecimal
-                                    ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
-                                    : formatear_2Decimales(costoUnitarioPENMasIGV)
-                                  : '-'}
-                              </strong>
+                            <td data-label="Costo PEN + IGV" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                              {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                                ? costoUnitarioPENMasIGV.$numberDecimal
+                                  ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                                  : formatear_2Decimales(costoUnitarioPENMasIGV)
+                                : '-'}
                             </td>
                           ) : (
                             // <td data-label="Costo Promd.PEN" class="comoNumeroLeft">
@@ -335,14 +498,12 @@ export default component$(
                             //       : promedioCostoUnitarioMovil
                             //     : '_'}
                             // </td>
-                            <td data-label="Precio PEN" class="comoNumeroLeft">
-                              <strong>
-                                {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                                  ? precioUnitarioPEN.$numberDecimal
-                                    ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
-                                    : precioUnitarioPEN
-                                  : '_'}
-                              </strong>
+                            <td data-label="Precio PEN" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                ? precioUnitarioPEN.$numberDecimal
+                                  ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                  : precioUnitarioPEN
+                                : '_'}
                             </td>
                           )}
                           {/* <td data-label="Precio">

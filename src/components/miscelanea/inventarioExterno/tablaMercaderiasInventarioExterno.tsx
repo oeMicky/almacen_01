@@ -1,16 +1,17 @@
-import { component$, Resource, useResource$, useStyles$ } from '@builder.io/qwik';
+import { component$, Resource, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
 // import { CTX_INVENTARIO_EXTERNO } from './inventarioExterno';
 import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import { cerosALaIzquierda } from '~/functions/comunes';
 import { images } from '~/assets'; //formatear_2Decimales
 import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
+import { CTX_INVENTARIO_EXTERNO } from './inventarioExterno';
 
 export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; parametrosBusqueda: any; verTODOS: boolean }) => {
   useStyles$(style);
 
   //#region CONTEXTOS
-  //   const ctx_inventario_externo = useContext(CTX_INVENTARIO_EXTERNO);
+  const ctx_inventario_externo = useContext(CTX_INVENTARIO_EXTERNO);
   //#endregion CONTEXTOS
 
   //#region BUSCANDO REGISTROS
@@ -143,7 +144,7 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                           {/* )} */}
                           <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
                           <td data-label="Acciones" class="accionesLeft">
-                            {/* <input
+                            <input
                               title="Ver kardex/s"
                               type="image"
                               src={images.see}
@@ -162,16 +163,17 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                                 }
                                 if (mercaINLocali.KARDEXS.length === 1) {
                                   console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥');
-                                  ctx_index_inventario.mM = mercaINLocali;
-                                  ctx_index_inventario.kK = mercaINLocali.KARDEXS[0];
-                                  ctx_index_inventario.mostrarPanelKARDEX = true;
+
+                                  ctx_inventario_externo.mM = mercaINLocali;
+                                  ctx_inventario_externo.kK = mercaINLocali.KARDEXS[0];
+                                  ctx_inventario_externo.mostrarPanelKARDEX = true;
                                 }
-                                if (mercaINLocali.KARDEXS.length > 1) {
-                                  ctx_index_inventario.mM = mercaINLocali;
-                                  ctx_index_inventario.mostrarPanelKARDEXS = true;
-                                }
+                                // if (mercaINLocali.KARDEXS.length > 1) {
+                                //   ctx_index_inventario.mM = mercaINLocali;
+                                //   ctx_index_inventario.mostrarPanelKARDEXS = true;
+                                // }
                               }}
-                            /> */}
+                            />
                             {/* <input
                               title="Editar mercadería"
                               type="image"

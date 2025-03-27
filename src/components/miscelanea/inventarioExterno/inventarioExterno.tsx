@@ -5,12 +5,18 @@ import { CTX_BUSCAR_MERCADERIA_IN } from '../mercaderiaIN/buscarMercaderiaIN';
 import TablaMercaderiasInventarioExterno from './tablaMercaderiasInventarioExterno';
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import { CTX_BUSCAR_MERCADERIA_OUT } from '../mercaderiaOUT/buscarMercaderiaOUT';
+import Kardex from '~/components/kardex/kardex';
 
 export const CTX_INVENTARIO_EXTERNO = createContextId<any>('ctx_inventario_externo__');
 
 export default component$((props: { contexto: string; almacen: any; buscar: string }) => {
   //#region DEFINICON CTX_INVENTARIO_EXTERNO
   const definicion_CTX_INVENTARIO_EXTERNO = useStore({
+    mM: [],
+    kK: [],
+
+    mostrarPanelKARDEX: false,
+
     mostrarSpinner: false,
   });
   useContextProvider(CTX_INVENTARIO_EXTERNO, definicion_CTX_INVENTARIO_EXTERNO);
@@ -274,6 +280,19 @@ export default component$((props: { contexto: string; almacen: any; buscar: stri
             />
           ) : (
             ''
+          )}
+          {definicion_CTX_INVENTARIO_EXTERNO.mostrarPanelKARDEX && (
+            <div class="modal">
+              <Kardex
+                mercaSelecci={definicion_CTX_INVENTARIO_EXTERNO.mM}
+                kardex={definicion_CTX_INVENTARIO_EXTERNO.kK}
+                // esAlmacen={props.esAlmacen}
+                // esAlmacen={false}
+                contexto={'inventario_externo'}
+                // contextoParaDocumento={props.contexto}
+                // igv={props.igv}
+              />
+            </div>
           )}
 
           {/* MOSTRAR SPINNER */}

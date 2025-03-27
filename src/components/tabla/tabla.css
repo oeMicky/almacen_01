@@ -183,3 +183,15 @@ tfoot td {
     text-align: right;
   }
 }
+
+/**********ANIMATION*********/
+@keyframes example {
+  from {
+    background-color: #fdff00;
+    /* background-color: #00b7ff; */
+  }
+  to {
+    background-color: #c9ff00;
+    /* background-color: #ff0073; */
+  }
+}

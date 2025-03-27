@@ -422,32 +422,32 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           justifyContent: 'end',
         }}
       >
-        <ImgButton
+        {/* <ImgButton
+          title="parametrosGlobales"
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
-          title="parametrosGlobales"
           onClick={$(() => {
             console.log('parametrosGlobales', parametrosGlobales);
           })}
-        />
+        /> */}
         <ImgButton
+          title="definicion_CTX_OUT_ALMACEN"
           src={images.see}
           alt="Icono de cerrar"
           height={16}
           width={16}
-          title="definicion_CTX_OUT_ALMACEN"
           onClick={$(() => {
             console.log('definicion_CTX_OUT_ALMACEN', definicion_CTX_OUT_ALMACEN);
           })}
         />
         <ImgButton
+          title="Cerrar el formulario"
           src={images.x}
           alt="Icono de cerrar"
           height={18}
           width={18}
-          title="Cerrar el formulario"
           onClick={$(() => {
             if (definicion_CTX_OUT_ALMACEN.itemsMercaderias.length > 0) {
               if (confirm('Hay mercaderías ingresadas, ¿Desea cerrar el formulario?')) {

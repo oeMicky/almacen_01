@@ -2,38 +2,40 @@ import { $, component$, Resource, useContext, useResource$, useSignal } from '@b
 
 import { images } from '~/assets';
 import { parametrosGlobales } from '~/routes/login';
-import { CTX_NEW_IN_ALMACEN, CTX_REMITENTE_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
+import { CTX_IN_ALMACEN, CTX_NEW_IN_ALMACEN } from '~/components/inAlmacen/newInAlmacen';
 import ImgButton from '~/components/system/imgButton';
 import type { IFavorito } from '~/interfaces/iPersona';
 import { cerosALaIzquierda } from '~/functions/comunes';
-import { CTX_DESTINATARIO_OUT_ALMACEN, CTX_NEW_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
+import { CTX_NEW_OUT_ALMACEN, CTX_OUT_ALMACEN } from '~/components/outAlmacen/newOutAlmacen';
 // import { cerosALaIzquierda } from '~/functions/comunes';
 
 export default component$((props: { contexto: string; rol: string }) => {
   //#region CONTEXTOS
   // const ctx = useContext(CTX_NEW_IN_ALMACEN);
   let ctx: any = [];
-  let ctx_rol: any = [];
+  let ctx_DOC: any = [];
   switch (props.contexto) {
     case 'new_in_almacen':
       ctx = useContext(CTX_NEW_IN_ALMACEN);
+      ctx_DOC = useContext(CTX_IN_ALMACEN);
       // //console.log('swicth.......useContext(CTX_NEW_IN_ALMACEN)');
-      if (props.rol === 'remitente') {
-        ctx_rol = useContext(CTX_REMITENTE_IN_ALMACEN);
-        // //console.log('swicth.......useContext(CTX_REMITENTE_IN_ALMACEN)');
-      }
+      // if (props.rol === 'remitente') {
+      //   ctx_rol = useContext(CTX_REMITENTE_IN_ALMACEN);
+      //   // //console.log('swicth.......useContext(CTX_REMITENTE_IN_ALMACEN)');
+      // }
       break;
     case 'new_out_almacen':
       ctx = useContext(CTX_NEW_OUT_ALMACEN);
+      ctx_DOC = useContext(CTX_OUT_ALMACEN);
       // //console.log('swicth.......useContext(CTX_NEW_OUT_ALMACEN)');
-      if (props.rol === 'destinatario') {
-        ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
-        // //console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
-      }
-      if (props.rol === 'cliente') {
-        ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
-        // //console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
-      }
+      // if (props.rol === 'destinatario') {
+      //   ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
+      //   // //console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
+      // }
+      // if (props.rol === 'cliente') {
+      //   ctx_rol = useContext(CTX_DESTINATARIO_OUT_ALMACEN);
+      //   // //console.log('swicth.......useContext(CTX_DESTINATARIO_OUT_ALMACEN)');
+      // }
       break;
   }
   //#region CONTEXTOS
@@ -148,41 +150,22 @@ export default component$((props: { contexto: string; rol: string }) => {
                                 style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
-                                  if (props.contexto === 'new_out_almacen' && props.rol === 'cliente') {
-                                    // ctx_buscar_persona.pP = persoLocali;
-                                    ctx.mostrarPanelVentasCliente = true;
-                                  } else {
-                                    console.log('TABLA_PERSONA SELECCIONADA: es verdadderoa.....', razonSocialNombre);
-                                    ctx_rol._id = _id;
-                                    ctx_rol.codigoTipoDocumentoIdentidad = codigoTipoDocumentoIdentidad;
-                                    ctx_rol.tipoDocumentoIdentidad = tipoDocumentoIdentidad;
-                                    ctx_rol.numeroIdentidad = numeroIdentidad;
-                                    ctx_rol.razonSocialNombre = razonSocialNombre;
-                                    // ctx_rol.direccion = direccion;
-                                    // ctx_rol.email = email;
-                                    // ctx_rol.telefono = telefono;
-                                    //console.log('ctx_rol', ctx_rol);
+                                  switch (props.contexto) {
+                                    case 'new_in_almacen':
+                                      ctx_DOC.idRemitente = idPersona;
 
-                                    // ctx.mostrarPanelBuscarPersona = false;
-                                    // if (props.rol === 'remitente') {
-                                    //   ctx.mostrarPanelBuscarRemitente = false;
-                                    // }
-                                    // if (props.rol === 'destinatario') {
-                                    //   ctx.mostrarPanelBuscarDestinatario = false;
-                                    // }
-                                    // if (props.rol === 'transportista') {
-                                    //   //console.log('transportista');
-                                    //   ctx.mostrarPanelBuscarTransportista = false;
-                                    // }
-                                    // if (props.rol === 'chofer') {
-                                    //   ctx.mostrarPanelBuscarChofer = false;
-                                    // }
-                                    ctx.idPersona = idPersona;
-                                    // ctx.conceptoABuscar = numeroIdentidad;
-                                    ctx.rol_Persona = props.rol;
-                                    ctx.selecciono_Persona = true;
-                                    ctx.mostrarPanelListaFavoritosAlmacen = false;
+                                      break;
+                                    case 'new_out_almacen':
+                                      ctx_DOC.idDestinatario = idPersona;
+
+                                      break;
                                   }
+                                  ctx_DOC.razonSocialNombre = razonSocialNombre;
+                                  ctx_DOC.tipoDocumentoIdentidad = tipoDocumentoIdentidad;
+                                  ctx_DOC.numeroIdentidad = numeroIdentidad;
+                                  ctx_DOC.codigoTipoDocumentoIdentidad = codigoTipoDocumentoIdentidad;
+
+                                  ctx.mostrarPanelListaFavoritosAlmacen = false;
                                 }}
                               />
                             </td>

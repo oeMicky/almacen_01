@@ -690,11 +690,11 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
 
   //#region SUBMIT
   const grabandoNotaVenta = $(async () => {
-    if (definicion_CTX_NOTA_VENTA.observacion.trim() === '') {
-      alert('Ingrese en la observación el nombre de quien solicita.');
-      document.getElementById('in_Observacion')?.focus();
-      return;
-    }
+    // if (definicion_CTX_NOTA_VENTA.observacion.trim() === '') {
+    //   alert('Ingrese en la observación el nombre de quien solicita.');
+    //   document.getElementById('in_Observacion')?.focus();
+    //   return;
+    // }
     //CLIENTE
     // if (definicion_CTX_NOTA_VENTA.clienteVentasVarias) {
     //   if (definicion_CTX_NOTA_VENTA.codigoTipoComprobantePago !== '03') {
@@ -1606,29 +1606,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
-          {/* ----------------------------------------------------- */}
-          {/* OBSERVACION */}
-          <div>
-            {/* OBSERVACION */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Observacion"
-                  type="text"
-                  // tabIndex={1}
-                  // autoFocus={true}
-                  value={definicion_CTX_NOTA_VENTA.observacion}
-                  style={{ width: '100%', background: 'yellow' }}
-                  placeholder="Observación"
-                  onChange$={(e) => {
-                    definicion_CTX_NOTA_VENTA.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
-                  }}
-                />
-              </div>
-            </div>
-            <br />
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
-          </div>
+
           {/* ----------------------------------------------------- */}
           {/* ----------------------------------------------------- */}
           {/* ----------------------------------------------------- */}
@@ -1820,7 +1798,31 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             </td>
                             {/* ----------------------------------------------------- */}
                             <td data-label="Cantidad" class="comoNumero">
-                              {/* <button style={{ width: '21px' }}>-</button> */}
+                              <button
+                                style={{ width: '21px' }}
+                                onClick$={() => {
+                                  const previo = iTNotVen.cantidadEquivalencia.$numberDecimal
+                                    ? iTNotVen.cantidadEquivalencia.$numberDecimal - 1
+                                    : iTNotVen.cantidadEquivalencia - 1;
+                                  if (previo <= 0) {
+                                    alert('La cantidad no puede ser menor o igual a CERO (0).');
+                                    return;
+                                  }
+                                  iTNotVen.cantidadEquivalencia = previo;
+                                  if (definicion_CTX_NOTA_VENTA.enDolares) {
+                                    iTNotVen.ventaUSD = iTNotVen.cantidadEquivalencia * iTNotVen.precioUnitarioUSD;
+                                    iTNotVen.ventaPEN = iTNotVen.cantidadEquivalencia * iTNotVen.precioUnitarioPEN;
+                                  } else {
+                                    iTNotVen.ventaPEN =
+                                      (iTNotVen.cantidadEquivalencia.$numberDecimal
+                                        ? iTNotVen.cantidadEquivalencia.$numberDecimal
+                                        : iTNotVen.cantidadEquivalencia) *
+                                      (iTNotVen.precioUnitarioPEN.$numberDecimal ? iTNotVen.precioUnitarioPEN.$numberDecimal : iTNotVen.precioUnitarioPEN);
+                                  }
+                                }}
+                              >
+                                -
+                              </button>
                               <input
                                 type="number"
                                 style={{ width: '60px', textAlign: 'end' }}
@@ -1842,7 +1844,25 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                   }
                                 }}
                               />
-                              {/* <button>+</button> */}
+                              <button
+                                onClick$={() => {
+                                  iTNotVen.cantidadEquivalencia = iTNotVen.cantidadEquivalencia.$numberDecimal
+                                    ? iTNotVen.cantidadEquivalencia.$numberDecimal + 1
+                                    : iTNotVen.cantidadEquivalencia + 1;
+                                  if (definicion_CTX_NOTA_VENTA.enDolares) {
+                                    iTNotVen.ventaUSD = iTNotVen.cantidadEquivalencia * iTNotVen.precioUnitarioUSD;
+                                    iTNotVen.ventaPEN = iTNotVen.cantidadEquivalencia * iTNotVen.precioUnitarioPEN;
+                                  } else {
+                                    iTNotVen.ventaPEN =
+                                      (iTNotVen.cantidadEquivalencia.$numberDecimal
+                                        ? iTNotVen.cantidadEquivalencia.$numberDecimal
+                                        : iTNotVen.cantidadEquivalencia) *
+                                      (iTNotVen.precioUnitarioPEN.$numberDecimal ? iTNotVen.precioUnitarioPEN.$numberDecimal : iTNotVen.precioUnitarioPEN);
+                                  }
+                                }}
+                              >
+                                +
+                              </button>
                             </td>
                             <td data-label="Uni" class="acciones">
                               {iTNotVen.unidadEquivalencia}
@@ -1892,7 +1912,6 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             </td>
                             {/* ----------------------------------------------------- */}
                             <td data-label="Venta" class="comoNumero">
-                              {/* {iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN} */}
                               {definicion_CTX_NOTA_VENTA.enDolares
                                 ? iTNotVen.ventaUSD.$numberDecimal
                                   ? redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal)
@@ -1912,27 +1931,6 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                               {iTNotVen.tipoAfectacionDelImpuesto}
                             </td>
                             <td data-label="Acciones" class="acciones">
-                              {/* <input
-                                title="Editar impuesto"
-                                // id="in_BuscarDetraccion"
-                                type="image"
-                                src={images.Imp}
-                                alt="icono editar"
-                                height={12}
-                                width={12}
-                                style={{ marginRight: '6px' }}
-                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
-                                onClick$={() => {
-                                  //console.log('iTVen.tipoImpuesto', iTVen.tipoImpuesto);
-                                  editarImpuesto_ItemVenta.idAuxiliar = iTNotVen.idAuxiliar;
-                                  editarImpuesto_ItemVenta.descripcion = iTNotVen.descripcionEquivalencia;
-                                  //////   AAAATENCIONNNNNNNNNNN
-                                  // editarImpuesto_ItemVenta.tipoImpuesto =
-                                  //   iTNotVen.tipoImpuesto[0] + ' ' + iTNotVen.tipoImpuesto[1] + ' ' + iTNotVen.tipoImpuesto[2];
-                                  editarImpuesto_ItemVenta.tipoAfectacionDelImpuesto = iTNotVen.tipoAfectacionDelImpuesto;
-                                  definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditarImpuesto = true;
-                                }}
-                              /> */}
                               <input
                                 title="Eliminar ítem"
                                 // id="in_BuscarDetraccion"
@@ -1956,8 +1954,6 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         );
                       })}
                     </tbody>
-                    {/* style={{ display: 'flex', flexDirection: 'column', justifyItems: 'end', border: '1px dashed blue' }} */}
-                    {/* <tfoot style={{ display: 'flex',justifyContent:'right',aligItems: 'right', border: '1px solid blue' }}> */}
                     <tfoot>
                       <tr>
                         <td colSpan={5} class="comoNumero" style={{ color: '#2E1800' }}>
@@ -2093,6 +2089,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                     ? definicion_CTX_NOTA_VENTA.totalPEN.$numberDecimal
                                     : definicion_CTX_NOTA_VENTA.totalPEN)
                               );
+                            }}
+                            onFocus$={(e) => {
+                              (e.target as HTMLInputElement).select();
                             }}
                             // onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true)}
                           />
@@ -2364,6 +2363,29 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
               ''
             )}
 
+            <br />
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
+          </div>
+          {/* ----------------------------------------------------- */}
+          {/* OBSERVACION */}
+          <div>
+            {/* OBSERVACION */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="in_Observacion"
+                  type="text"
+                  // tabIndex={1}
+                  // autoFocus={true}
+                  value={definicion_CTX_NOTA_VENTA.observacion}
+                  style={{ width: '100%', background: 'yellow' }}
+                  placeholder="Observación"
+                  onChange$={(e) => {
+                    definicion_CTX_NOTA_VENTA.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
+                  }}
+                />
+              </div>
+            </div>
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>

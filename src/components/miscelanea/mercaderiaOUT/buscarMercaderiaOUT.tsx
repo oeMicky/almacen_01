@@ -133,6 +133,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
       document.activeElement;
       // const ele =
       // document.getElementById('IN_IN_codigoDescripcion_MICE')?.addEventListener('focus', focusFunt);
+      (document.getElementById('IN_IN_codigoDescripcion_MICE') as HTMLInputElement)?.select();
 
       // window.setTimeout(() => ele?.focus(), 0);
       ini.value++;
@@ -524,12 +525,18 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               backgroundColor: '#ff3d3d',
             }
       }
-      // onKeyUp$={(e) => {
-      //   console.log('☮💨💨💨💨💨💨', e.key);
+      // onKeyPress$={(e) => {
       //   if (e.key === 'Escape') {
       //     ctx.mostrarPanelBuscarMercaderiaOUT = false;
       //   }
       // }}
+      // onKeyUpCapture$={}
+      onKeyUpCapture$={(e) => {
+        console.log('☮💨💨💨💨💨💨', e.key);
+        if (e.key === 'Escape') {
+          ctx.mostrarPanelBuscarMercaderiaOUT = false;
+        }
+      }}
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -586,6 +593,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
             <div class="form-control form-agrupado">
               <input
                 id="IN_IN_codigoDescripcion_MICE"
+                autoFocus={true}
                 // tabIndex={0}
                 style={{ width: '100%' }}
                 type="text"
@@ -704,6 +712,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                   } else {
                     parametrosBusqueda.buscarPor = 'Descripción';
                   }
+                  verAplicacion.value = (e.target as HTMLInputElement).checked;
                 }}
                 // value={parametrosBusqueda.cadenaABuscar}
                 // onInput$={(e) => {
@@ -720,11 +729,12 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               />
               <label for="in_Aplicacion_MICE">Buscar en Aplicación</label>
             </div>
-            <div style={{ marginRight: '12px' }}>
+            <div style={{ display: 'none', marginRight: '12px' }}>
               <input
                 id="in_VerAplicacion_MICE"
                 type="checkbox"
                 placeholder="Ver aplicación"
+                checked={verAplicacion.value}
                 onChange$={(e) => {
                   verAplicacion.value = (e.target as HTMLInputElement).checked;
                 }}
@@ -780,6 +790,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
             <TablaMercaderiasOUT
               buscarMercaderiasOUT={buscarMercaderiasOUT.value}
               parametrosBusqueda={parametrosBusqueda}
+              documento={documento}
+              porcentaje={props.porcentaje}
               // contexto={props.contexto}
               addAutomatica={(document.getElementById('in_ADD_AUTOMATICA_MICE') as HTMLInputElement).checked}
               esAlmacen={props.esAlmacen}

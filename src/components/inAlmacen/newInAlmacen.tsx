@@ -580,27 +580,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
           })}
         />
-        {/* <ImgButton
-          src={images.see}
-          alt="Icono de cerrar"
-          height={16}
-          width={16}
-          title="Ver el parametrosGlobales"
-          onClick={$(() => {
-            console.log('parametrosGlobales', parametrosGlobales);
-          })}
-        />
-        */}
-        {/*  <ImgButton
-          src={images.see}
-          alt="Icono de cerrar"
-          height={16}
-          width={16}
-          title="Cerrar el  props.inSelecci"
-          onClick={$(() => {
-            console.log(' props.inSelecci', props.inSelecci);
-          })}
-        /> */}
+
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
