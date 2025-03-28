@@ -95,7 +95,7 @@ export default component$((props: { buscarServicios: number; parametrosBusqueda:
                           {/* <td data-label="Ítem" key={indexItem}>
                             {indexItem}
                           </td> */}
-                          <td data-label="Código">{codigo ? codigo : '_'}</td>
+                          <td data-label="Código">{codigo ? codigo : '-'}</td>
                           <td data-label="Descripción">{descripcion}</td>
                           <td data-label="Impuesto" class="acciones" title={tipoAfectacionDelImpuesto}>
                             {tipoImpuesto[1]}

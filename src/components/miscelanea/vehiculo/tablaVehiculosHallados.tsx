@@ -134,9 +134,9 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                         <tr key={_id}>
                           <td data-label="Ítem">{indexItem}</td>
                           <td data-label="Placa">{placa}</td>
-                          <td data-label="Marca">{vehiculoMarca ? vehiculoMarca : '_'}</td>
-                          <td data-label="Modelo">{vehiculoModelo ? vehiculoModelo : '_'}</td>
-                          <td data-label="VIN">{vin ? vin : '_'}</td>
+                          <td data-label="Marca">{vehiculoMarca ? vehiculoMarca : '-'}</td>
+                          <td data-label="Modelo">{vehiculoModelo ? vehiculoModelo : '-'}</td>
+                          <td data-label="VIN">{vin ? vin : '-'}</td>
                           <td data-label="Acciones" class="acciones">
                             <input
                               // id="in_BuscarDetraccion"

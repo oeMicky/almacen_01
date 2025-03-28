@@ -160,7 +160,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
 
                                       tipoPrecioVentaUnitario: ser.tipoPrecioVentaUnitario,
 
-                                      codigo: ser.codigo ? ser.codigo : '_',
+                                      codigo: ser.codigo ? ser.codigo : '-',
 
                                       descripcion: ser.descripcion, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
                                       descripcionEquivalencia: ser.descripcionEquivalencia, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
@@ -168,8 +168,8 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                       cantidad: ser.cantidad.$numberDecimal,
                                       cantidadEquivalencia: ser.cantidadEquivalencia.$numberDecimal,
 
-                                      unidad: ser.unidad ? ser.unidad : '_',
-                                      unidadEquivalencia: ser.unidadEquivalencia ? ser.unidadEquivalencia : '_',
+                                      unidad: ser.unidad ? ser.unidad : '-',
+                                      unidadEquivalencia: ser.unidadEquivalencia ? ser.unidadEquivalencia : '-',
 
                                       costoUnitarioPEN: ser.costoUnitarioPEN.$numberDecimal,
                                       costoUnitarioEquivalenciaPEN: ser.costoUnitarioEquivalenciaPEN.$numberDecimal,
@@ -258,7 +258,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
 
                                         tipoPrecioVentaUnitario: requi.tipoPrecioVentaUnitario,
 
-                                        codigo: requi.codigo ? requi.codigo : '_',
+                                        codigo: requi.codigo ? requi.codigo : '-',
 
                                         descripcion: requi.descripcion,
                                         descripcionEquivalencia: requi.descripcionEquivalencia,
@@ -351,7 +351,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
 
                                     tipoPrecioVentaUnitario: ser.tipoPrecioVentaUnitario,
 
-                                    codigo: ser.codigo ? ser.codigo : '_',
+                                    codigo: ser.codigo ? ser.codigo : '-',
 
                                     descripcion: ser.descripcion, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
                                     descripcionEquivalencia: ser.descripcionEquivalencia, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
@@ -359,8 +359,8 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                     cantidad: ser.cantidad.$numberDecimal,
                                     cantidadEquivalencia: ser.cantidadEquivalencia.$numberDecimal,
 
-                                    unidad: ser.unidad ? ser.unidad : '_',
-                                    unidadEquivalencia: ser.unidadEquivalencia ? ser.unidadEquivalencia : '_',
+                                    unidad: ser.unidad ? ser.unidad : '-',
+                                    unidadEquivalencia: ser.unidadEquivalencia ? ser.unidadEquivalencia : '-',
 
                                     costoUnitarioPEN: ser.costoUnitarioPEN.$numberDecimal,
                                     costoUnitarioEquivalenciaPEN: ser.costoUnitarioEquivalenciaPEN.$numberDecimal,
@@ -396,7 +396,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
 
                                       tipoPrecioVentaUnitario: requi.tipoPrecioVentaUnitario,
 
-                                      codigo: requi.codigo ? requi.codigo : '_',
+                                      codigo: requi.codigo ? requi.codigo : '-',
 
                                       descripcion: requi.descripcion,
                                       descripcionEquivalencia: requi.descripcionEquivalencia,
@@ -511,7 +511,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
 
                                         tipoPrecioVentaUnitario: ser.tipoPrecioVentaUnitario,
 
-                                        codigo: ser.codigo ? ser.codigo : '_',
+                                        codigo: ser.codigo ? ser.codigo :'-',
 
                                         descripcion: ser.descripcion, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
                                         descripcionEquivalencia: ser.descripcionEquivalencia, // 'V_ZZZZZZZZZZZZZZZ 10 UNIDADES',
@@ -519,8 +519,8 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
                                         cantidad: ser.cantidad.$numberDecimal,
                                         cantidadEquivalencia: ser.cantidadEquivalencia.$numberDecimal,
 
-                                        unidad: ser.unidad ? ser.unidad : '_',
-                                        unidadEquivalencia: ser.unidadEquivalencia ? ser.unidadEquivalencia : '_',
+                                        unidad: ser.unidad ? ser.unidad : '-',
+                                        unidadEquivalencia: ser.unidadEquivalencia ? ser.unidadEquivalencia : '-',
 
                                         costoUnitarioPEN: ser.costoUnitarioPEN.$numberDecimal,
                                         costoUnitarioEquivalenciaPEN: ser.costoUnitarioEquivalenciaPEN.$numberDecimal,
@@ -556,7 +556,7 @@ export default component$((props: { buscarOrdenesServicio: number; modoSeleccion
 
                                           tipoPrecioVentaUnitario: requi.tipoPrecioVentaUnitario,
 
-                                          codigo: requi.codigo ? requi.codigo : '_',
+                                          codigo: requi.codigo ? requi.codigo : '-',
 
                                           descripcion: requi.descripcion,
                                           descripcionEquivalencia: requi.descripcionEquivalencia,

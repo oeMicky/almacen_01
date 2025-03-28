@@ -161,7 +161,7 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                             {serie + ' - ' + cerosALaIzquierda(numero, 8)}
                           </td>
                           <td data-label="Fecha" class="comoCadena">
-                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}
+                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '-'}
                           </td>
                           <td data-label="Cliente" class="comoCadena">
                             {ordServiLocali.clienteVentasVarias ? 'Cliente ventas varias' : razonSocialNombreCliente}
@@ -170,12 +170,12 @@ export default component$((props: { buscarOrdenesServicio: number; parametrosBus
                             {placa}
                           </td>
                           <td data-label="Estado" class="comoCadena" style={estado === 'APERTURADO' ? { color: '#9103aa' } : {}}>
-                            {estado ? estado : '_'}
+                            {estado ? estado : '-'}
                           </td>
                           <td data-label="Tipo" class="comoCadena">
-                            {tipo ? tipo : '_'}
+                            {tipo ? tipo : '-'}
                           </td>
-                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
+                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '-'}</td> */}
                           <td data-label="Acciones" class="acciones">
                             <input
                               // id="in_BuscarDetraccion"

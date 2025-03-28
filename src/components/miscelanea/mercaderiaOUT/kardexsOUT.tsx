@@ -98,13 +98,13 @@ export default component$((props: { mercaOUTSelecci: any; esAlmacen: boolean; es
                     <td data-label="Ítem" key={iTKardexsOUT._id}>{`${cerosALaIzquierda(indexKardexsOUT, 3)}`}</td>
                     <td data-label="Kx">{iTKardexsOUT._id.substring(iTKardexsOUT._id.length - 6)}</td>
                     <td data-label="Lote">{iTKardexsOUT.lote}</td>
-                    <td data-label="Fecha vencimiento">{iTKardexsOUT.fechaVencimiento ? formatoDDMMYYYY_PEN(iTKardexsOUT.fechaVencimiento) : '_'}</td>
+                    <td data-label="Fecha vencimiento">{iTKardexsOUT.fechaVencimiento ? formatoDDMMYYYY_PEN(iTKardexsOUT.fechaVencimiento) : '-'}</td>
                     <td data-label="Costo PEN">
                       {typeof iTKardexsOUT.costoUnitarioMovil !== 'undefined' && iTKardexsOUT.costoUnitarioMovil !== null
                         ? iTKardexsOUT.costoUnitarioMovil.$numberDecimal
                           ? iTKardexsOUT.costoUnitarioMovil.$numberDecimal
                           : iTKardexsOUT.costoUnitarioMovil
-                        : '_'}
+                        : '-'}
                     </td>
                     <td data-label="Stock" style={{ textAlign: 'end' }}>
                       {iTKardexsOUT.cantidadSaldo.$numberDecimal ? iTKardexsOUT.cantidadSaldo.$numberDecimal : iTKardexsOUT.cantidadSaldo}

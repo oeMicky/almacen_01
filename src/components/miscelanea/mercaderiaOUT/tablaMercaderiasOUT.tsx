@@ -179,7 +179,7 @@ export default component$(
 
     //   //   tipoPrecioVentaUnitario: tPVU,
 
-    //   //   codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
+    //   //   codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '-',
 
     //   //   descripcion: props.mercaOUTSelecci.descripcion,
     //   //   descripcionEquivalencia: equivalencia.descripcionEquivalencia,
@@ -396,7 +396,7 @@ export default component$(
 
                                   tipoPrecioVentaUnitario: tPVU,
 
-                                  codigo: mercaOUTLocali.codigo ? mercaOUTLocali.codigo : '_',
+                                  codigo: mercaOUTLocali.codigo ? mercaOUTLocali.codigo : '-',
 
                                   descripcion: mercaOUTLocali.descripcion,
                                   descripcionEquivalencia: laEqui.descripcionEquivalencia,
@@ -496,18 +496,18 @@ export default component$(
                             //     ? promedioCostoUnitarioMovil.$numberDecimal
                             //       ? formatear_6Decimales(promedioCostoUnitarioMovil.$numberDecimal)
                             //       : promedioCostoUnitarioMovil
-                            //     : '_'}
+                            //     : '-'}
                             // </td>
                             <td data-label="Precio PEN" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
                               {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                                 ? precioUnitarioPEN.$numberDecimal
                                   ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
                                   : precioUnitarioPEN
-                                : '_'}
+                                : '-'}
                             </td>
                           )}
                           {/* <td data-label="Precio">
-                            {typeof precio !== 'undefined' ? (precio.$numberDecimal ? precio.$numberDecimal : precio) : '_'}
+                            {typeof precio !== 'undefined' ? (precio.$numberDecimal ? precio.$numberDecimal : precio) : '-'}
                           </td> */}
                           <td data-label="Kx" class="accionesLeft">
                             {KARDEXS.length === 0 ? 'No' : 'Si'}

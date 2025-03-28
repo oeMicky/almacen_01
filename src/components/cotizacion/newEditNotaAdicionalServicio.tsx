@@ -37,7 +37,7 @@ export default component$((props: { notaAdicionalServicio: any; contexto: string
         tipoAfectacionDelImpuesto: null,
         porcentaje: null,
 
-        codigo: '_',
+        codigo: '-',
 
         descripcion: props.notaAdicionalServicio.descripcionEquivalencia.trim().toUpperCase(),
         descripcionEquivalencia: props.notaAdicionalServicio.descripcionEquivalencia.trim().toUpperCase(),

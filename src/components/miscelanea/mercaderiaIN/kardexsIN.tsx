@@ -99,7 +99,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
                         ? iTKardexsIN.costoUnitarioMovil.$numberDecimal
                           ? iTKardexsIN.costoUnitarioMovil.$numberDecimal
                           : iTKardexsIN.costoUnitarioMovil
-                        : '_'}
+                        : '-'}
                     </td>
                     <td data-label="Stock" style={{ textAlign: 'end' }}>
                       {iTKardexsIN.cantidadSaldo.$numberDecimal ? iTKardexsIN.cantidadSaldo.$numberDecimal : iTKardexsIN.cantidadSaldo}

@@ -138,7 +138,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })
-                                : '_'}
+                                : '-'}
                             </td>
                             <td
                               data-label="IGV PEN"
@@ -157,7 +157,7 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })
-                                : '_'}
+                                : '-'}
                             </td>
                             <td
                               data-label="Importe PEN"
@@ -176,10 +176,10 @@ export default component$((props: { buscarCompras: number; parametrosBusqueda: a
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })
-                                : '_'}
+                                : '-'}
                             </td>
                             <td data-label="Mon" class="acciones" style={'tipoCompra' in compra ? {} : { background: '#FFD700' }}>
-                              {'moneda' in compra ? compra.moneda : '_'}
+                              {'moneda' in compra ? compra.moneda : '-'}
                             </td>
                             <td data-label="Dt" class="acciones">
                               {compra.detraccion ? 'Si' : '-'}

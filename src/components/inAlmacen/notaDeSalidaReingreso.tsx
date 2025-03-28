@@ -298,7 +298,7 @@ export default component$((props: { nsSeleccionada: any }) => {
 
                   IGV: IGVCalculado, //reingresoLocali.igv,
 
-                  codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '_',
+                  codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '-',
 
                   descripcion: reingresoLocali.descripcion,
                   descripcionEquivalencia: reingresoLocali.descripcionEquivalencia,

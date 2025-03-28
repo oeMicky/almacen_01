@@ -96,15 +96,15 @@ export default component$((props: { contexto: string; buscarOrdenesServicio: num
                             {serie + ' - ' + cerosALaIzquierda(numero, 8)}
                           </td>
                           <td data-label="Fecha" class="comoCadena">
-                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}
+                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '-'}
                           </td>
                           <td data-label="Cliente" class="comoCadena">
                             {clienteVentasVarias ? 'Cliente ventas varias' : razonSocialNombreCliente}
                           </td>
                           <td data-label="Tipo" class="comoCadena">
-                            {tipo ? tipo : '_'}
+                            {tipo ? tipo : '-'}
                           </td>
-                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
+                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '-'}</td> */}
                           <td data-label="Acciones" class="acciones">
                             <input
                               // id="in_BuscarDetraccion"

@@ -197,7 +197,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
 
                                         tipoPrecioVentaUnitario: ser.tipoPrecioVentaUnitario,
 
-                                        codigo: ser.codigo ? ser.codigo : '_',
+                                        codigo: ser.codigo ? ser.codigo : '-',
 
                                         descripcion: ser.descripcion,
                                         descripcionEquivalencia: ser.descripcionEquivalencia,
@@ -239,7 +239,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
 
                                         tipoPrecioVentaUnitario: rep.tipoPrecioVentaUnitario,
 
-                                        codigo: rep.codigo ? rep.codigo : '_',
+                                        codigo: rep.codigo ? rep.codigo : '-',
 
                                         descripcion: rep.descripcion,
                                         descripcionEquivalencia: rep.descripcionEquivalencia,

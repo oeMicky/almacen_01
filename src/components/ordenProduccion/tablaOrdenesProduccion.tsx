@@ -114,7 +114,7 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
                             {serie + ' - ' + cerosALaIzquierda(numero, 8)}
                           </td>
                           <td data-label="Fecha" class="comoCadena">
-                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '_'}
+                            {fechaInicio ? formatoDDMMYYYY_PEN(fechaInicio) : '-'}
                           </td>
                           <td data-label="Cliente" class="comoCadena">
                             {ordProdLocali.clienteVentasVarias ? 'Cliente ventas varias' : razonSocialNombreCliente}
@@ -123,10 +123,10 @@ export default component$((props: { buscarOrdenesProduccion: number; parametrosB
                             {ordProdLocali.requerimientosCliente}
                           </td>
                           <td data-label="Estado" class="comoCadena" style={estado === 'APERTURADO' ? { color: '#9103aa' } : {}}>
-                            {estado ? estado : '_'}
+                            {estado ? estado : '-'}
                           </td>
                           <td data-label="Tipo" class="comoCadena">
-                            {tipo ? tipo : '_'}
+                            {tipo ? tipo : '-'}
                           </td>
                           <td data-label="Acciones" class="acciones">
                             <input

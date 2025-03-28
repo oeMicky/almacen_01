@@ -94,7 +94,7 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                           <td data-label="Motivo">{motivoEgresoAlmacen ? motivoEgresoAlmacen : '-'}</td>
                           <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '-'}</td>
                           <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '-'}</td>
-                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
+                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '-'}</td> */}
                           <td data-label="Acciones" class="accionesLeft">
                             <input
                               type="image"

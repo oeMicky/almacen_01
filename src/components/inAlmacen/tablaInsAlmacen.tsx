@@ -93,11 +93,11 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                           <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
                           <td data-label="ID">{_id}</td>
                           <td data-label="Respon">{usuarioCrea.substring(0, 10)}</td>
-                          <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '_'}</td>
-                          <td data-label="Motivo">{motivoIngresoAlmacen ? motivoIngresoAlmacen : '_'}</td>
-                          <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '_'}</td>
-                          <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '_'}</td>
-                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '_'}</td> */}
+                          <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '-'}</td>
+                          <td data-label="Motivo">{motivoIngresoAlmacen ? motivoIngresoAlmacen : '-'}</td>
+                          <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '-'}</td>
+                          <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '-'}</td>
+                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '-'}</td> */}
                           <td data-label="Acciones" class="accionesLeft">
                             <input
                               type="image"

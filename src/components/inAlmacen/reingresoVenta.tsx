@@ -298,7 +298,7 @@ export default component$((props: { contexto: string; ventaSeleccionada: any }) 
 
                   IGV: elIGV,
 
-                  codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '_',
+                  codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '-',
 
                   descripcion: reingresoLocali.descripcion,
                   descripcionEquivalencia: reingresoLocali.descripcionEquivalencia,

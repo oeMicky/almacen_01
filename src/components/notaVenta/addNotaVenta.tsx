@@ -33,6 +33,7 @@ import { CTX_INDEX_NOTA_VENTA } from '~/routes/(ventas)/notaVenta';
 import { getSeriesActivasNotasVentas, inNotaVenta } from '~/apis/notaVenta.api';
 import BorrarItemNotaVenta from './borrarItemNotaVenta';
 import NewEditCuotaCreditoVenta from '../venta/newEditCuotaCreditoVenta';
+// import PanelOtros from './panelOtros';
 
 export const CTX_CLIENTE_VENTA = createContextId<IPersonaVenta>('cliente');
 export const CTX_NOTA_VENTA = createContextId<INotaVenta>('nota_venta');
@@ -52,7 +53,10 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
   const definicion_CTX_ADD_NOTA_VENTA = useStore({
     mostrarPanelCuotasCredito: false,
     grabo_CuotaCredito: false,
+
     mostrarVerAlmacen: false,
+
+    mostrarPanelOtros: false,
 
     desabilitarAlmacenServicios: false,
 
@@ -317,6 +321,16 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
     idAuxiliar: '',
     item: '',
     descripcion: '',
+    tipoImpuesto: '',
+    tipoAfectacionDelImpuesto: '',
+  });
+
+  const otro_ItemVenta = useStore({
+    idAuxiliar: '',
+    item: '',
+    cantidad: 1,
+    descripcion: '',
+    precio: 0,
     tipoImpuesto: '',
     tipoAfectacionDelImpuesto: '',
   });
@@ -1349,8 +1363,18 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           height={18}
           width={18}
           onClick={$(() => {
-            ctx_index_nota_venta.grabo_NotaVenta = grabo.value;
-            ctx_index_nota_venta.mostrarPanelNotaVenta = false;
+            if (definicion_CTX_NOTA_VENTA.itemsNotaVenta.length > 0) {
+              if (confirm('Hay mercaderías ingresadas, ¿Desea cerrar el formulario?')) {
+                ctx_index_nota_venta.grabo_NotaVenta = grabo.value;
+                ctx_index_nota_venta.mostrarPanelNotaVenta = false;
+              }
+              //  else {
+              //   ctx_index_in_almacen.mostrarPanelNewInAlmacen = true;
+              // }
+            } else {
+              ctx_index_nota_venta.grabo_NotaVenta = grabo.value;
+              ctx_index_nota_venta.mostrarPanelNotaVenta = false;
+            }
           })}
         />
       </div>
@@ -1571,6 +1595,24 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                   />
                 </div>
               )}
+              {/* //ver OTROS OUT */}
+              {/* <button
+                id="btn_Otros"
+                hidden={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
+                disabled={definicion_CTX_ADD_NOTA_VENTA.desabilitarAlmacenServicios}
+                onClick$={() => (definicion_CTX_ADD_NOTA_VENTA.mostrarPanelOtros = true)}
+                style={{ cursor: 'pointer', height: '40px' }}
+              >
+                ADD OTROS
+              </button>
+              {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelOtros && (
+                <div class="modal">
+                  <PanelOtros
+                    contexto="nota_venta"
+                    porcentaje={definicion_CTX_NOTA_VENTA.igv.$numberDecimal ? definicion_CTX_NOTA_VENTA.igv.$numberDecimal : definicion_CTX_NOTA_VENTA.igv}
+                  />
+                </div>
+              )} */}
               {/* //ver SERVICIO */}
               {/* <button
                 id="btnAddServicio"
@@ -1606,7 +1648,192 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
+          {/* ----------------------------------------------------- */}
+          {/* OTROS */}
+          <div style={{ display: 'none', gridTemplateColumns: '1fr 2fr 1fr', gap: '4px' }}>
+            <div>
+              <input
+                id="in_Cantidad_OTROS"
+                type="number"
+                name=""
+                style={{ width: '100%' }}
+                value={otro_ItemVenta.cantidad}
+                onChange$={(e) => {
+                  otro_ItemVenta.cantidad = parseFloat((e.target as HTMLInputElement).value);
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    document.getElementById('in_Descripcion_OTROS')?.focus();
+                  }
+                }}
+                onKeyUp$={(e) => {
+                  // console.log('🧶🧶🧶 e.key: ', e.key);
+                  if (e.key === 'ArrowRight') {
+                    // console.log('🎄🎄🎄 ArrowRight');
+                    document.getElementById('in_Descripcion_OTROS')?.focus();
+                  }
+                }}
+                onFocus$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
+              />
+            </div>
+            <div>
+              <input
+                id="in_Descripcion_OTROS"
+                type="text"
+                name=""
+                style={{ width: '100%' }}
+                value={otro_ItemVenta.descripcion}
+                onChange$={(e) => {
+                  otro_ItemVenta.descripcion = (e.target as HTMLInputElement).value.toUpperCase();
+                }}
+                onKeyPress$={(e) => {
+                  // console.log('👓👓👓 e.key: ', e.key);
+                  if (e.key === 'Enter') {
+                    document.getElementById('in_Precio_OTROS')?.focus();
+                  }
+                  // if (e.key === 'Left') {
+                  //   console.log('🔥🔥🔥 LEFT');
 
+                  //   document.getElementById('in_Cantidad_OTROS')?.focus();
+                  // }
+                  // if (e.key === 'Right') {
+                  //   console.log('🎄🎄🎄 Right');
+                  //   document.getElementById('in_Precio_OTROS')?.focus();
+                  // }
+                }}
+                onKeyDown$={(e) => {
+                  if (e.ctrlKey && e.key === 'ArrowLeft') {
+                    console.log('🎄🎄🎄 ArrowLeft');
+                    document.getElementById('in_Cantidad_OTROS')?.focus();
+                  }
+                  if (e.ctrlKey && e.key === 'ArrowRight') {
+                    console.log('🎄🎄🎄 ArrowRight');
+                    document.getElementById('in_Precio_OTROS')?.focus();
+                  }
+                }}
+                // onKeyUp$={(e) => {
+                //   console.log('🧶🧶🧶 e.key: ', e.key);
+                //   if (e.key === 'ArrowLeft') {
+                //     console.log('🔥🔥🔥 ArrowLeft');
+                //     document.getElementById('in_Cantidad_OTROS')?.focus();
+                //   }
+                // }}
+                // onFocus$={(e) => {
+              />
+            </div>
+            <div>
+              <input
+                id="in_Precio_OTROS"
+                type="number"
+                name=""
+                style={{ width: '100%' }}
+                value={otro_ItemVenta.precio}
+                onChange$={(e) => {
+                  otro_ItemVenta.precio = parseFloat((e.target as HTMLInputElement).value);
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    if (otro_ItemVenta.cantidad.toString().trim() === '') {
+                      alert('Ingrese la cantidad del ítem');
+                      document.getElementById('in_Cantidad_OTROS')?.focus();
+                      return;
+                    }
+                    if (otro_ItemVenta.descripcion.trim() === '') {
+                      alert('Ingrese la descripción del ítem');
+                      document.getElementById('in_Descripcion_OTROS')?.focus();
+                      return;
+                    }
+                    if (otro_ItemVenta.precio.toString().trim() === '') {
+                      alert('Ingrese la precio del ítem');
+                      document.getElementById('in_Precio_OTROS')?.focus();
+                      return;
+                    }
+                    //ADD ITEM
+                    const unicoAux = parseInt(elIdAuxiliar());
+
+                    definicion_CTX_NOTA_VENTA.itemsNotaVenta.push({
+                      idAuxiliar: unicoAux,
+                      idMercaderia: null,
+                      idEquivalencia: null,
+                      idKardex: null,
+                      item: 0,
+                      tipo: 'OTRO',
+
+                      noFacturar: false,
+
+                      tipoImpuesto: 'IGV', // elTImp, // props.mercaOUTSelecci.tipoImpuesto[1],
+                      tipoAfectacionDelImpuesto: '10', // mercaOUTLocali.tipoAfectacionDelImpuesto,
+                      porcentaje: parseFloat(
+                        definicion_CTX_NOTA_VENTA.igv.$numberDecimal ? definicion_CTX_NOTA_VENTA.igv.$numberDecimal : definicion_CTX_NOTA_VENTA.igv
+                      ),
+
+                      tipoPrecioVentaUnitario: '01', // tPVU,
+
+                      codigo: '-',
+
+                      descripcion: otro_ItemVenta.descripcion.trim(),
+                      descripcionEquivalencia: otro_ItemVenta.descripcion.trim(),
+
+                      cantidad: 1 * otro_ItemVenta.cantidad,
+                      cantidadEquivalencia: otro_ItemVenta.cantidad,
+
+                      cantidadSacada: 1 * otro_ItemVenta.cantidad,
+                      cantidadSacadaEquivalencia: otro_ItemVenta.cantidad,
+
+                      unidad: 'NIU',
+                      unidadEquivalencia: 'NIU',
+
+                      costoUnitarioPEN: otro_ItemVenta.precio,
+                      costoUnitarioEquivalenciaPEN: otro_ItemVenta.precio,
+
+                      porcentajeUtilidad: 0,
+
+                      //precio = c + IGV
+                      precioUnitarioPEN: otro_ItemVenta.precio, // precioEquivalencia.value,
+                      //venta = k * precio
+                      ventaPEN: otro_ItemVenta.cantidad * otro_ItemVenta.precio, //precioEquivalencia.value,
+
+                      precioUnitarioUSD: 0,
+                      ventaUSD: 0,
+
+                      tipoEquivalencia: '',
+                      factor: 0,
+                      laEquivalencia: 0,
+
+                      exonerado: false,
+                      inafecto: false,
+                      sujetoAPercepcion: false,
+                      percepcion: 0,
+
+                      codigoContableVenta: '',
+                      descripcionContableVenta: '',
+                      tipoContableVenta: true,
+                    });
+                    //RE-INICIANDO
+                    otro_ItemVenta.cantidad = 1;
+                    otro_ItemVenta.descripcion = '';
+                    otro_ItemVenta.precio = 0;
+                    document.getElementById('in_Cantidad_OTROS')?.focus();
+                  }
+                }}
+                onKeyUp$={(e) => {
+                  // console.log('🧶🧶🧶 e.key: ', e.key);
+                  if (e.key === 'ArrowLeft') {
+                    // console.log('🔥🔥🔥 ArrowLeft');
+
+                    document.getElementById('in_Descripcion_OTROS')?.focus();
+                  }
+                }}
+                onFocus$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
+                // onBlur$={(e) => {
+              />
+            </div>
+          </div>
+          <br />
           {/* ----------------------------------------------------- */}
           {/* ----------------------------------------------------- */}
           {/* ----------------------------------------------------- */}

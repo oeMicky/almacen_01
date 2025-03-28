@@ -405,7 +405,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
                   idItem: despachoLocali._id,
                   item: 0,
 
-                  codigo: despachoLocali.codigo ? despachoLocali.codigo : '_',
+                  codigo: despachoLocali.codigo ? despachoLocali.codigo : '-',
 
                   descripcion: despachoLocali.descripcion,
                   descripcionEquivalencia: despachoLocali.descripcionEquivalencia,
@@ -444,7 +444,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
             //   idAuxiliar: parseInt(elIdAuxiliar()),
             //   idKardex: props.elKardex._id,
             //   item: 0,
-            //   codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
+            //   codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '-',
             //   descripcionEquivalencia: equivalencia.descripcionEquivalencia,
             //   cantidad: cantidad.value,
             //   unidadEquivalencia: equivalencia.unidadEquivalencia,

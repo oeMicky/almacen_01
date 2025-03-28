@@ -310,7 +310,7 @@ export default component$((props: { contexto: string; osSeleccionada: any }) => 
 
                   IGV: reingresoLocali.igv,
 
-                  codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '_',
+                  codigo: reingresoLocali.codigo ? reingresoLocali.codigo : '-',
 
                   descripcion: reingresoLocali.descripcion,
                   descripcionEquivalencia: reingresoLocali.descripcionEquivalencia,

@@ -365,7 +365,7 @@ export default component$((props: { contexto: string; opSeleccionada: any }) => 
                   idItem: despachoLocali._id,
                   item: 0,
 
-                  codigo: despachoLocali.codigo ? despachoLocali.codigo : '_',
+                  codigo: despachoLocali.codigo ? despachoLocali.codigo : '-',
 
                   descripcion: despachoLocali.descripcion,
                   descripcionEquivalencia: despachoLocali.descripcionEquivalencia,

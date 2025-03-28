@@ -340,7 +340,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
             item: 0,
             tipo: 'MERCADERIA',
 
-            codigo: lasMercaderiasOUT[0].codigo ? lasMercaderiasOUT[0].codigo : '_',
+            codigo: lasMercaderiasOUT[0].codigo ? lasMercaderiasOUT[0].codigo : '-',
 
             descripcion: lasMercaderiasOUT[0].descripcion,
             descripcionEquivalencia: lasMercaderiasOUT[0].equivalencias[0].descripcionEquivalencia,
@@ -435,7 +435,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
 
             tipoPrecioVentaUnitario: tPVU,
 
-            codigo: lasMercaderiasOUT[0].codigo ? lasMercaderiasOUT[0].codigo : '_',
+            codigo: lasMercaderiasOUT[0].codigo ? lasMercaderiasOUT[0].codigo : '-',
 
             descripcion: lasMercaderiasOUT[0].descripcion,
             descripcionEquivalencia: lasMercaderiasOUT[0].equivalencias[0].descripcionEquivalencia,

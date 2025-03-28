@@ -764,7 +764,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                         <td data-label="Ítem" key={iTCotiServi.idAuxiliar} class="comoCadena">{`${cerosALaIzquierda(indexItemServi, 3)}`}</td>
                         <td data-label="Kx" class="comoCadena"></td>
                         <td data-label="Código" class="comoCadena">
-                          {iTCotiServi.codigo ? iTCotiServi.codigo : '_'}
+                          {iTCotiServi.codigo ? iTCotiServi.codigo : '-'}
                         </td>
                         <td data-label="Descripción" class="comoCadena">
                           {iTCotiServi.descripcionEquivalencia}
@@ -796,7 +796,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                           />
                         </td>
                         <td data-label="Uni" class="comoCadena">
-                          {iTCotiServi.unidadEquivalencia ? iTCotiServi.unidadEquivalencia : '_'}
+                          {iTCotiServi.unidadEquivalencia ? iTCotiServi.unidadEquivalencia : '-'}
                         </td>
                         {/* ----------------------------------------------------- */}
                         <td data-label="Precio Uni" class="comoNumero">

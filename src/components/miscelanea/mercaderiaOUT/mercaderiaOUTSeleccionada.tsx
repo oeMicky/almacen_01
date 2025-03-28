@@ -458,7 +458,7 @@ export default component$(
                   item: 0,
                   tipo: 'MERCADERIA',
 
-                  codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
+                  codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '-',
 
                   descripcion: props.mercaOUTSelecci.descripcion,
                   descripcionEquivalencia: equivalencia.descripcionEquivalencia,
@@ -538,7 +538,7 @@ export default component$(
 
                   tipoPrecioVentaUnitario: tPVU,
 
-                  codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
+                  codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '-',
 
                   descripcion: props.mercaOUTSelecci.descripcion,
                   descripcionEquivalencia: equivalencia.descripcionEquivalencia,
@@ -597,7 +597,7 @@ export default component$(
 
                   tipoPrecioVentaUnitario: tPVU,
 
-                  codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '_',
+                  codigo: props.mercaOUTSelecci.codigo ? props.mercaOUTSelecci.codigo : '-',
 
                   descripcion: props.mercaOUTSelecci.descripcion,
                   descripcionEquivalencia: equivalencia.descripcionEquivalencia,

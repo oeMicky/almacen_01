@@ -108,7 +108,7 @@ export default component$((props: { paPrueba: any }) => {
     <div
       id="modal_panelPrueba"
       style={{
-        width: 'clamp(330px, 86%, 500px)',
+        width: 'clamp(320px, 100%, 500px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

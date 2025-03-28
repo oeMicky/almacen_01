@@ -82,7 +82,7 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
       <div class="add-form">
         {/* SERVICIO */}
         <div style={{ fontSize: '0.7rem' }}>
-          <div>Código:{` ${props.serviSelecci.codigo ? props.serviSelecci.codigo : '_'}`}</div>
+          <div>Código:{` ${props.serviSelecci.codigo ? props.serviSelecci.codigo : '-'}`}</div>
           <div style={{ margin: '6px 0' }}>Descripción:{` ${props.serviSelecci.descripcion}`}</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
             <div>
@@ -178,7 +178,7 @@ export default component$((props: { serviSelecci: any; contexto: string; porcent
 
               tipoPrecioVentaUnitario: tPVU,
 
-              codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '_',
+              codigo: props.serviSelecci.codigo ? props.serviSelecci.codigo : '-',
 
               descripcion: props.serviSelecci.descripcion,
               descripcionEquivalencia: props.serviSelecci.descripcion,
