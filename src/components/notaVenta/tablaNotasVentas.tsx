@@ -263,7 +263,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                                 title="Imprimir"
                                 height={14}
                                 width={14}
-                                style={{ marginRight: '4px' }}
+                                style={{ marginRight: '6px' }}
                                 onClick$={async () => {
                                   // ctx_index_nota_venta.NV = notaVenta;
                                   // ctx_index_nota_venta.mostrarPanelNotaVenta = true;
@@ -279,7 +279,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                                 title="Ver detalle"
                                 height={14}
                                 width={14}
-                                style={{ marginRight: '4px' }}
+                                style={{ marginRight: '6px' }}
                                 onClick$={async () => {
                                   // ctx_index_nota_venta.mostrarSpinner = true;
 

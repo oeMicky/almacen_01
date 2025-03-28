@@ -108,18 +108,41 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                         unidad,
                         costoUnitarioPENMasIGV,
                         precioUnitarioPEN,
+                        stockMinimo,
                         // promedioCostoUnitarioMovil,
                         KARDEXS,
                         noFacturar,
                         activo,
                         ubigeo,
                       } = mercaINLocali;
+                      let elSM = 0;
+                      let elTCS = 0;
+                      if (typeof stockMinimo === 'undefined' || stockMinimo === null) {
+                        elSM = 0;
+                      } else {
+                        elSM = stockMinimo.$numberDecimal ? parseFloat(stockMinimo.$numberDecimal) : stockMinimo;
+                      }
+                      if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
+                        elTCS = 0;
+                      } else {
+                        elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                      }
+                      console.log(' 🍍🍍🍍🍍', elSM, elTCS);
 
                       return (
                         <tr key={_id} style={!activo ? { background: 'black', color: 'white' } : noFacturar ? { background: '#ff5aff' } : {}}>
                           <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                           {/* <td data-label="idMercaderia">{_id}</td> */}
-                          <td data-label="Descripción">{descripcion}</td>
+                          <td data-label="Descripción">
+                            {elSM >= elTCS ? (
+                              <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
+                            ) : elSM + 5 >= elTCS ? (
+                              <img src={images.flagAmber} alt="Bandera ambar" width="12" height="12" />
+                            ) : (
+                              ''
+                            )}
+                            {descripcion}
+                          </td>
                           <td data-label="Linea/Tipo">{lineaTipo}</td>
                           <td data-label="Marca">{marca}</td>
                           <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td>

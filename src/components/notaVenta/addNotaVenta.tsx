@@ -1783,7 +1783,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
 
                       noFacturar: false,
 
-                      tipoImpuesto: 'IGV', // elTImp, // props.mercaOUTSelecci.tipoImpuesto[1],
+                      tipoImpuesto: ['1000', 'IGV', 'VAT'], // elTImp, // props.mercaOUTSelecci.tipoImpuesto[1],
                       tipoAfectacionDelImpuesto: '10', // mercaOUTLocali.tipoAfectacionDelImpuesto,
                       porcentaje: parseFloat(
                         definicion_CTX_NOTA_VENTA.igv.$numberDecimal ? definicion_CTX_NOTA_VENTA.igv.$numberDecimal : definicion_CTX_NOTA_VENTA.igv
@@ -1818,7 +1818,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                       precioUnitarioUSD: 0,
                       ventaUSD: 0,
 
-                      tipoEquivalencia: '',
+                      tipoEquivalencia: true,
                       factor: 0,
                       laEquivalencia: 0,
 
@@ -2038,6 +2038,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             {/* ----------------------------------------------------- */}
                             <td data-label="Cantidad" class="comoNumero">
                               <button
+                                hidden={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
                                 style={{ width: '21px' }}
                                 onClick$={() => {
                                   const previo = iTNotVen.cantidadEquivalencia.$numberDecimal
@@ -2064,6 +2065,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                               </button>
                               <input
                                 type="number"
+                                disabled={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
                                 style={{ width: '60px', textAlign: 'end' }}
                                 value={
                                   iTNotVen.cantidadEquivalencia.$numberDecimal ? iTNotVen.cantidadEquivalencia.$numberDecimal : iTNotVen.cantidadEquivalencia
@@ -2084,6 +2086,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                 }}
                               />
                               <button
+                                hidden={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
                                 onClick$={() => {
                                   iTNotVen.cantidadEquivalencia = iTNotVen.cantidadEquivalencia.$numberDecimal
                                     ? iTNotVen.cantidadEquivalencia.$numberDecimal + 1
@@ -2110,6 +2113,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             <td data-label="Precio Uni" class="comoNumero">
                               <input
                                 type="number"
+                                disabled={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
                                 style={{ width: '60px', textAlign: 'end' }}
                                 value={
                                   definicion_CTX_NOTA_VENTA.enDolares
@@ -2172,6 +2176,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             <td data-label="Acciones" class="acciones">
                               <input
                                 title="Eliminar ítem"
+                                hidden={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
                                 // id="in_BuscarDetraccion"
                                 type="image"
                                 src={images.trash}
@@ -2646,9 +2651,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
 
         {pasoProcesoGrabacion.value &&
           (grabo.value ? (
-            <label style={{ color: 'green' }}>Registro SATISFACTORIO!!!</label>
+            <label style={{ textAlign: 'center', color: 'green' }}>Registro SATISFACTORIO!!!</label>
           ) : (
-            <label style={{ color: 'red' }}>Inconveniente en registro.</label>
+            <label style={{ textAlign: 'center', color: 'red' }}>Inconveniente en registro.</label>
           ))}
       </div>
     </div>
