@@ -1650,7 +1650,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           </div>
           {/* ----------------------------------------------------- */}
           {/* OTROS */}
-          <div style={{ display: 'none', gridTemplateColumns: '1fr 2fr 1fr', gap: '4px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '4px' }}>
             <div>
               <input
                 id="in_Cantidad_OTROS"
@@ -1659,15 +1659,17 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 style={{ width: '100%' }}
                 value={otro_ItemVenta.cantidad}
                 onChange$={(e) => {
+                  console.log('🎪 in_Cantidad_OTROS onChange e.key: ');
                   otro_ItemVenta.cantidad = parseFloat((e.target as HTMLInputElement).value);
                 }}
                 onKeyPress$={(e) => {
+                  console.log('🎪 in_Cantidad_OTROS onKeyPress e.key: ', e.key);
                   if (e.key === 'Enter') {
                     document.getElementById('in_Descripcion_OTROS')?.focus();
                   }
                 }}
                 onKeyUp$={(e) => {
-                  // console.log('🧶🧶🧶 e.key: ', e.key);
+                  console.log('🎪 in_Cantidad_OTROS onKeyUp e.key: ', e.key);
                   if (e.key === 'ArrowRight') {
                     // console.log('🎄🎄🎄 ArrowRight');
                     document.getElementById('in_Descripcion_OTROS')?.focus();
@@ -1682,44 +1684,50 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
               <input
                 id="in_Descripcion_OTROS"
                 type="text"
-                name=""
+                placeholder="Descripción"
                 style={{ width: '100%' }}
                 value={otro_ItemVenta.descripcion}
                 onChange$={(e) => {
                   otro_ItemVenta.descripcion = (e.target as HTMLInputElement).value.toUpperCase();
                 }}
-                onKeyPress$={(e) => {
-                  // console.log('👓👓👓 e.key: ', e.key);
-                  if (e.key === 'Enter') {
-                    document.getElementById('in_Precio_OTROS')?.focus();
-                  }
-                  // if (e.key === 'Left') {
-                  //   console.log('🔥🔥🔥 LEFT');
+                // onKeyPress$={(e) => {
+                //   // console.log('👓👓👓 e.key: ', e.key);
+                //   if (e.key === 'Enter') {
+                //     document.getElementById('in_Precio_OTROS')?.focus();
+                //   }
+                //   // if (e.key === 'Left') {
+                //   //   console.log('🔥🔥🔥 LEFT');
 
-                  //   document.getElementById('in_Cantidad_OTROS')?.focus();
-                  // }
-                  // if (e.key === 'Right') {
-                  //   console.log('🎄🎄🎄 Right');
-                  //   document.getElementById('in_Precio_OTROS')?.focus();
-                  // }
-                }}
+                //   //   document.getElementById('in_Cantidad_OTROS')?.focus();
+                //   // }
+                //   // if (e.key === 'Right') {
+                //   //   console.log('🎄🎄🎄 Right');
+                //   //   document.getElementById('in_Precio_OTROS')?.focus();
+                //   // }
+                // }}
                 onKeyDown$={(e) => {
+                  console.log('🎄 in_Descripcion_OTROS onKeyDown e.key: ', e.key);
                   if (e.ctrlKey && e.key === 'ArrowLeft') {
-                    console.log('🎄🎄🎄 ArrowLeft');
+                    console.log('🎄🎄🎄 in_Descripcion_OTROS ArrowLeft');
                     document.getElementById('in_Cantidad_OTROS')?.focus();
                   }
                   if (e.ctrlKey && e.key === 'ArrowRight') {
-                    console.log('🎄🎄🎄 ArrowRight');
+                    console.log('🎄🎄🎄 in_Descripcion_OTROS ArrowRight');
                     document.getElementById('in_Precio_OTROS')?.focus();
                   }
                 }}
-                // onKeyUp$={(e) => {
-                //   console.log('🧶🧶🧶 e.key: ', e.key);
-                //   if (e.key === 'ArrowLeft') {
-                //     console.log('🔥🔥🔥 ArrowLeft');
-                //     document.getElementById('in_Cantidad_OTROS')?.focus();
-                //   }
-                // }}
+                onKeyUp$={(e) => {
+                  console.log('🎄 in_Descripcion_OTROS onKeyUp e.key: ', e.key);
+                  if (e.key === 'Enter') {
+                    if (otro_ItemVenta.descripcion.trim() !== '') {
+                      document.getElementById('in_Precio_OTROS')?.focus();
+                    }
+                  }
+                  // if (e.key === 'ArrowLeft') {
+                  //   console.log('🔥🔥🔥 ArrowLeft');
+                  //   document.getElementById('in_Cantidad_OTROS')?.focus();
+                  // }
+                }}
                 // onFocus$={(e) => {
               />
             </div>
@@ -1731,10 +1739,22 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 style={{ width: '100%' }}
                 value={otro_ItemVenta.precio}
                 onChange$={(e) => {
+                  console.log('🧶 in_Precio_OTROS onChange');
                   otro_ItemVenta.precio = parseFloat((e.target as HTMLInputElement).value);
                 }}
-                onKeyPress$={(e) => {
+                // onKeyPress$={(e) => {
+
+                // }}
+                onKeyUp$={(e) => {
+                  console.log('🧶 in_Precio_OTROS e.key: ', e.key);
+                  if (e.key === 'ArrowLeft') {
+                    // console.log('🔥🔥🔥 ArrowLeft');
+
+                    document.getElementById('in_Descripcion_OTROS')?.focus();
+                  }
                   if (e.key === 'Enter') {
+                    console.log('🧶🧶 in_Precio_OTROS Enter', otro_ItemVenta.cantidad, otro_ItemVenta.descripcion, otro_ItemVenta.precio);
+
                     if (otro_ItemVenta.cantidad.toString().trim() === '') {
                       alert('Ingrese la cantidad del ítem');
                       document.getElementById('in_Cantidad_OTROS')?.focus();
@@ -1816,14 +1836,6 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     otro_ItemVenta.descripcion = '';
                     otro_ItemVenta.precio = 0;
                     document.getElementById('in_Cantidad_OTROS')?.focus();
-                  }
-                }}
-                onKeyUp$={(e) => {
-                  // console.log('🧶🧶🧶 e.key: ', e.key);
-                  if (e.key === 'ArrowLeft') {
-                    // console.log('🔥🔥🔥 ArrowLeft');
-
-                    document.getElementById('in_Descripcion_OTROS')?.focus();
                   }
                 }}
                 onFocus$={(e) => {
@@ -1926,9 +1938,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                           // }
                         } else {
                           // if (iTVen.tipoImpuesto === 'IGV') {
-                          console.log('PENPENPENPENPENPENPEmn', iTNotVen.tipoImpuesto);
+                          // console.log('PENPENPENPENPENPENPEmn', iTNotVen.tipoImpuesto);
                           if (iTNotVen.tipoImpuesto === 'IGV') {
-                            console.log('🎈', iTNotVen.ventaPEN, iTNotVen.porcentaje);
+                            // console.log('🎈', iTNotVen.ventaPEN, iTNotVen.porcentaje);
                             //console.log('iTVen.ventaPEN:::', iTVen.ventaPEN);
                             const vv = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                             //console.log('vv', vv);
@@ -1936,7 +1948,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             t_bi = redondeo6Decimales((vv * 100) / (100 + iTNotVen.porcentaje));
                             t_igv = redondeo6Decimales(vv - t_bi);
                           }
-                          console.log('🥽');
+                          // console.log('🥽');
                           // if (iTVen.tipoImpuesto === 'ISC') {
                           // }
                           // if (iTVen.tipoImpuesto === 'IVAP') {
@@ -1945,11 +1957,11 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             console.log('🎈🎈', iTNotVen.ventaPEN);
                             t_exo = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
-                          console.log('🥽🥽');
+                          // console.log('🥽🥽');
                           if (iTNotVen.tipoImpuesto === 'EXP') {
                             t_export = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
-                          console.log('🥽🥽🥽');
+                          // console.log('🥽🥽🥽');
                           if (iTNotVen.tipoImpuesto === 'GRA') {
                             t_otros = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
@@ -1959,7 +1971,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                           if (iTNotVen.tipoImpuesto === 'OTROS') {
                             t_otros = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
-                          console.log('fin ...PENPENPENPENPENPENPEmn');
+                          // console.log('fin ...PENPENPENPENPENPENPEmn');
                           // if (iTVen.exonerado) {
                           //   t_exo = redondeo2Decimales(
                           //     iTVen.ventaPEN.$numberDecimal ? iTVen.ventaPEN.$numberDecimal : iTVen.ventaPEN
@@ -1978,7 +1990,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                           //   }
                           // }
                         }
-                        console.log('🧨🧨🧨');
+                        // console.log('🧨🧨🧨');
                         sumaTOTAL = sumaTOTAL + t_bi + t_igv + t_exo + t_ina + t_isc + t_export + t_otros;
                         sumaTOTAL_BI = sumaTOTAL_BI + t_bi;
                         sumaTOTAL_IGV = sumaTOTAL_IGV + t_igv;

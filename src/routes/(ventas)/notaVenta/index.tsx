@@ -289,11 +289,11 @@ export default component$(() => {
               }
             }
             //VERIFICAR SI EXISTE LA SERIE DE LA NOTA DE SALIDA DEL ALMACEN
-            console.log(
-              '🧧  parametrosGlobales.almacenActivo && parametrosGlobales.idSerieNotaSalida',
-              parametrosGlobales.almacenActivo,
-              parametrosGlobales.idSerieNotaSalida
-            );
+            // console.log(
+            //   '🧧  parametrosGlobales.almacenActivo && parametrosGlobales.idSerieNotaSalida',
+            //   parametrosGlobales.almacenActivo,
+            //   parametrosGlobales.idSerieNotaSalida
+            // );
             if (parametrosGlobales.almacenActivo && parametrosGlobales.idSerieNotaSalida === '') {
               //buscar la serie (SI EXISTE)
               let laSerie = await getSerieNotaSalidaDeSucursal({
@@ -301,18 +301,18 @@ export default component$(() => {
                 idEmpresa: parametrosGlobales.idEmpresa,
                 idSucursal: parametrosGlobales.idSucursal,
               });
-              console.log('🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
+              // console.log('🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
               laSerie = laSerie.data[0];
-              console.log('🚕🚕🚕🚕🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
+              // console.log('🚕🚕🚕🚕🚕🚕🚕🚕 laSerie NotaSalida', laSerie);
 
               if (typeof laSerie !== 'undefined' && laSerie.idSerieNotaSalida !== '') {
                 parametrosGlobales.idSerieNotaSalida = laSerie.idSerieNotaSalida;
                 parametrosGlobales.serieNotaSalida = laSerie.serie;
-                console.log(
-                  '🧧🧧  parametrosGlobales.idSerieNotaSalida, parametrosGlobales.serieNotaSalida',
-                  parametrosGlobales.idSerieNotaSalida,
-                  parametrosGlobales.serieNotaSalida
-                );
+                // console.log(
+                //   '🧧🧧  parametrosGlobales.idSerieNotaSalida, parametrosGlobales.serieNotaSalida',
+                //   parametrosGlobales.idSerieNotaSalida,
+                //   parametrosGlobales.serieNotaSalida
+                // );
               } else {
                 alert('No existe la serie de la Nota de Salida.');
                 return;

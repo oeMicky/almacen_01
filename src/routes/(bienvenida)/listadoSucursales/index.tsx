@@ -83,7 +83,7 @@ export default component$(() => {
                           idSucursal: sucur.idSucursal,
                         });
                         activo = activo.data;
-                        console.log('🎫🎫🎫activo', activo);
+                        // console.log('🎫🎫🎫activo', activo);
                         if (!activo[0].activoGE) {
                           alert(`El grupo empresarial ${sucur.grupoEmpresarial} esta inactivo. Pongase en contacto con el administrador.`);
                           return;

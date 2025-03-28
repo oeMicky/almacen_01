@@ -176,7 +176,7 @@ export default component$(() => {
   const analisisDeLogeo = $(async (logeado: string, usuario: string) => {
     // //console.log('analisisDeLogeo -> logeado', logeado);
     const sucursales = await getSucursalesAdjuntasUsuario({ idUsuario: logeado });
-    console.log('💎💎💎💎💎💎💎analisisDeLogeo -> sucursales', sucursales.data);
+    // console.log('💎💎💎💎💎💎💎analisisDeLogeo -> sucursales', sucursales.data);
 
     parametrosGlobales.usuario = usuario;
     parametrosGlobales.sucursalesAdjuntas = sucursales.data;
