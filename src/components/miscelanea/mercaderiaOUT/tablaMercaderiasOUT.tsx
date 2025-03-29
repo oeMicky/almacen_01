@@ -319,7 +319,7 @@ export default component$(
                           <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                           <td
                             data-label="Descripción"
-                            style={{ cursor: 'pointer' }}
+                            style={props.esAlmacen ? '' : { cursor: 'pointer' }}
                             onKeyUp$={(e) => {
                               // console.log('🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚', e.key);
                               if (e.key === 'Escape') {
@@ -329,6 +329,9 @@ export default component$(
                             }}
                             onClick$={(e) => {
                               try {
+                                if (props.esAlmacen) {
+                                  return;
+                                }
                                 const unicoAux = parseInt(elIdAuxiliar());
                                 let tPVU = '';
                                 if (
@@ -440,9 +443,11 @@ export default component$(
                                 console.error(error);
                               } finally {
                                 // DESTELLO
-                                (e.target as HTMLTableElement).style.animation = '';
-                                (e.target as HTMLTableElement).offsetWidth;
-                                (e.target as HTMLTableElement).style.animation = 'example 0.3s linear 0s 1 alternate';
+                                if (!props.esAlmacen) {
+                                  (e.target as HTMLTableElement).style.animation = '';
+                                  (e.target as HTMLTableElement).offsetWidth;
+                                  (e.target as HTMLTableElement).style.animation = 'example 0.3s linear 0s 1 alternate';
+                                }
                               }
                             }}
                           >

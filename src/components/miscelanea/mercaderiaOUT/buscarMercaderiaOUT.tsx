@@ -133,9 +133,12 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
       document.activeElement;
       // const ele =
       // document.getElementById('IN_IN_codigoDescripcion_MICE')?.addEventListener('focus', focusFunt);
-      (document.getElementById('IN_IN_codigoDescripcion_MICE') as HTMLInputElement)?.select();
+      // (document.getElementById('IN_IN_codigoDescripcion_MICE') as HTMLInputElement)?.select();
 
       // window.setTimeout(() => ele?.focus(), 0);
+      setTimeout(() => {
+        document.getElementById('IN_IN_codigoDescripcion_MICE')?.focus();
+      }, 200);
       ini.value++;
     }
     // function focusFunt() {

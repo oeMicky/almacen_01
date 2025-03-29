@@ -87,6 +87,7 @@ export default component$(
     //#endregion CONTEXTOS
 
     //#region INICIALIZACION
+    const ini = useSignal(0);
     const verAplicacion = useSignal(false);
     const verLineaMarca = useSignal(false);
     const verTODOS = useSignal(true);
@@ -97,6 +98,19 @@ export default component$(
       idAlmacen: parametrosGlobales.idAlmacen,
       buscarPor: 'Descripción', //por.value,
       cadenaABuscar: '', // 'acce 5', //cadena.value,
+    });
+
+    useTask$(({ track }) => {
+      track(() => ini.value);
+
+      if (ini.value === 0) {
+        // (document.getElementById('IN_IN_codigoDescripcion_MICE') as HTMLInputElement)?.select();
+
+        setTimeout(() => {
+          document.getElementById('in_codigoDescripcion_BUSCAR_MERCADERIA_IN')?.focus();
+        }, 200);
+        ini.value++;
+      }
     });
     //#endregion INICIALIZACION
 

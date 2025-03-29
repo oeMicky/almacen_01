@@ -1676,6 +1676,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                   }
                 }}
                 onFocus$={(e) => {
+                  console.log('🎪 in_Cantidad_OTROS onFocus e.: ');
                   (e.target as HTMLInputElement).select();
                 }}
               />
@@ -1708,11 +1709,11 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 onKeyDown$={(e) => {
                   console.log('🎄 in_Descripcion_OTROS onKeyDown e.key: ', e.key);
                   if (e.ctrlKey && e.key === 'ArrowLeft') {
-                    console.log('🎄🎄🎄 in_Descripcion_OTROS ArrowLeft');
+                    // console.log('🎄🎄🎄 in_Descripcion_OTROS ArrowLeft');
                     document.getElementById('in_Cantidad_OTROS')?.focus();
                   }
                   if (e.ctrlKey && e.key === 'ArrowRight') {
-                    console.log('🎄🎄🎄 in_Descripcion_OTROS ArrowRight');
+                    // console.log('🎄🎄🎄 in_Descripcion_OTROS ArrowRight');
                     document.getElementById('in_Precio_OTROS')?.focus();
                   }
                 }}
@@ -1739,14 +1740,14 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 style={{ width: '100%' }}
                 value={otro_ItemVenta.precio}
                 onChange$={(e) => {
-                  console.log('🧶 in_Precio_OTROS onChange');
+                  // console.log('🧶 in_Precio_OTROS onChange');
                   otro_ItemVenta.precio = parseFloat((e.target as HTMLInputElement).value);
                 }}
                 // onKeyPress$={(e) => {
 
                 // }}
                 onKeyUp$={(e) => {
-                  console.log('🧶 in_Precio_OTROS e.key: ', e.key);
+                  // console.log('🧶 in_Precio_OTROS onKeyUp e.key: ', e.key);
                   if (e.key === 'ArrowLeft') {
                     // console.log('🔥🔥🔥 ArrowLeft');
 
@@ -1755,7 +1756,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                   if (e.key === 'Enter') {
                     console.log('🧶🧶 in_Precio_OTROS Enter', otro_ItemVenta.cantidad, otro_ItemVenta.descripcion, otro_ItemVenta.precio);
 
-                    if (otro_ItemVenta.cantidad.toString().trim() === '') {
+                    if (isNaN(otro_ItemVenta.cantidad) || typeof otro_ItemVenta.cantidad === 'undefined' || otro_ItemVenta.cantidad.toString().trim() === '') {
                       alert('Ingrese la cantidad del ítem');
                       document.getElementById('in_Cantidad_OTROS')?.focus();
                       return;
@@ -1765,7 +1766,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                       document.getElementById('in_Descripcion_OTROS')?.focus();
                       return;
                     }
-                    if (otro_ItemVenta.precio.toString().trim() === '') {
+                    if (isNaN(otro_ItemVenta.precio) || typeof otro_ItemVenta.precio === 'undefined' || otro_ItemVenta.precio.toString().trim() === '') {
                       alert('Ingrese la precio del ítem');
                       document.getElementById('in_Precio_OTROS')?.focus();
                       return;
@@ -1783,7 +1784,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
 
                       noFacturar: false,
 
-                      tipoImpuesto: ['1000', 'IGV', 'VAT'], // elTImp, // props.mercaOUTSelecci.tipoImpuesto[1],
+                      tipoImpuesto: 'IGV', //['1000', 'IGV', 'VAT'], // elTImp, // props.mercaOUTSelecci.tipoImpuesto[1],
                       tipoAfectacionDelImpuesto: '10', // mercaOUTLocali.tipoAfectacionDelImpuesto,
                       porcentaje: parseFloat(
                         definicion_CTX_NOTA_VENTA.igv.$numberDecimal ? definicion_CTX_NOTA_VENTA.igv.$numberDecimal : definicion_CTX_NOTA_VENTA.igv
@@ -1832,13 +1833,16 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                       tipoContableVenta: true,
                     });
                     //RE-INICIANDO
+                    // fijarMontos();
+                    document.getElementById('in_Cantidad_OTROS')?.focus();
                     otro_ItemVenta.cantidad = 1;
                     otro_ItemVenta.descripcion = '';
                     otro_ItemVenta.precio = 0;
-                    document.getElementById('in_Cantidad_OTROS')?.focus();
                   }
                 }}
                 onFocus$={(e) => {
+                  // console.log('🧶 in_Precio_OTROS onFocus e.: ');
+
                   (e.target as HTMLInputElement).select();
                 }}
                 // onBlur$={(e) => {
@@ -1877,7 +1881,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     </thead>
                     <tbody>
                       {definicion_CTX_NOTA_VENTA.itemsNotaVenta.map((iTNotVen: any, index: number) => {
-                        console.log('🥽🥽🥽');
+                        // console.log('🥽🥽🥽🧨');
 
                         const indexItemVenta = index + 1;
                         let t_bi = 0;
@@ -1894,7 +1898,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         //['9996', 'GRA', 'FRE']  ['9997', 'EXO', 'VAT']  ['9998', 'INA', 'FRE']  ['9999', 'OTROS', 'OTH']
 
                         if (definicion_CTX_NOTA_VENTA.enDolares) {
-                          console.log('enDolares$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+                          // console.log('enDolares$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
                           if (iTNotVen.tipoImpuesto === 'IGV') {
                             const vv = redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal ? iTNotVen.ventaUSD.$numberDecimal : iTNotVen.ventaUSD);
                             t_bi = redondeo6Decimales((vv * 100) / (100 + iTNotVen.porcentaje));
@@ -1954,7 +1958,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                           // if (iTVen.tipoImpuesto === 'IVAP') {
                           // }
                           if (iTNotVen.tipoImpuesto.toString() === 'EXO') {
-                            console.log('🎈🎈', iTNotVen.ventaPEN);
+                            // console.log('🎈🎈', iTNotVen.ventaPEN);
                             t_exo = redondeo6Decimales(iTNotVen.ventaPEN.$numberDecimal ? iTNotVen.ventaPEN.$numberDecimal : iTNotVen.ventaPEN);
                           }
                           // console.log('🥽🥽');
@@ -2014,6 +2018,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
 
                         // SOLO AL LLEGAR AL FINAL DE LA ITERACION SE FIJA LOS MONTOS
                         if (index + 1 === definicion_CTX_NOTA_VENTA.itemsNotaVenta.length && definicion_CTX_NOTA_VENTA._id === '') {
+                          // console.log('🎗🎗🎗🎗🎗');
+
                           fijarMontos({
                             sumaTOTAL,
                             sumaTOTAL_BI,
