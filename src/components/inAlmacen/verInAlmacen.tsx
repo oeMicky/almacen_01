@@ -327,6 +327,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                     {/* <th>Código</th> */}
                     <th>Descripción</th>
                     <th>IGV</th>
+                    <th>Ubi</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
                     <th>{props.inSelecci.enDolares ? 'CostoUniUSD' : 'CostoUniPEN'}</th>
@@ -377,6 +378,9 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                           <strong>{!props.inSelecci.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>
                         </td>
                         <td data-label="IGV">{iTMercaIN.IGV.$numberDecimal ? iTMercaIN.IGV.$numberDecimal : iTMercaIN.IGV} %</td>
+                        <td data-label="Ubi" class="comoNumeroLeft">
+                          {iTMercaIN.ubigeo}
+                        </td>
                         <td data-label="Cantidad" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
                           <strong>
                             {!props.inSelecci.reingreso

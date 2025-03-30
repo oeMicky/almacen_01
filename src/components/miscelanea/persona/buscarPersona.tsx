@@ -14,7 +14,7 @@ import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGui
 import { CTX_BUSCAR_CHOFER } from '../chofer/buscarChofer';
 import VentasCliente from '../venta/ventasCliente';
 import EditarPersona from './editarPersona';
-import type { IPersonaEdit } from '~/interfaces/iPersona';
+// import type { IPersonaEdit } from '~/interfaces/iPersona';
 import VentasClienteVentasVarios from './ventasClienteVentasVarios';
 import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
 import { CTX_BUSCAR_TRANSPORTISTA } from '../transportista/buscarTransportista';
@@ -120,20 +120,22 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
     track(() => definicion_CTX_BUSCAR_PERSONA.grabo_Persona);
 
     if (definicion_CTX_BUSCAR_PERSONA.grabo_Persona) {
+      localizarPersonas();
       // (definicion_CTX_BUSCAR_PERSONA.buscarPor = 'DNI / RUC'),
       //   (definicion_CTX_BUSCAR_PERSONA.cadenaABuscar = definicion_CTX_BUSCAR_PERSONA.conceptoABuscar),
       //console.log('BBPP: definicion_CTX_BUSCAR_PERSONA.personaEDITADA', definicion_CTX_BUSCAR_PERSONA.personaEDITADA);
       // buscarPersona.value++;
-      if (definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id !== '') {
-        const KKK: IPersonaEdit[] = definicion_CTX_BUSCAR_PERSONA.misPersonas.filter(
-          (pers: any) => pers._id === definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id
-        );
-        KKK[0].razonSocialNombre = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.razonSocialNombre;
-        KKK[0].direccion = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.direccion;
-        KKK[0].email = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.email;
-        KKK[0].telefono = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.telefono;
-        KKK[0].cuentasCorrientes = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.cuentasCorrientes;
-      }
+
+      // if (definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id !== '') {
+      //   const KKK: IPersonaEdit[] = definicion_CTX_BUSCAR_PERSONA.misPersonas.filter(
+      //     (pers: any) => pers._id === definicion_CTX_BUSCAR_PERSONA.personaEDITADA._id
+      //   );
+      //   KKK[0].razonSocialNombre = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.razonSocialNombre;
+      //   KKK[0].direccion = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.direccion;
+      //   KKK[0].email = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.email;
+      //   KKK[0].telefono = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.telefono;
+      //   KKK[0].cuentasCorrientes = definicion_CTX_BUSCAR_PERSONA.personaEDITADA.cuentasCorrientes;
+      // }
       definicion_CTX_BUSCAR_PERSONA.grabo_Persona = false;
     }
   });
@@ -156,6 +158,28 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
           justifyContent: 'end',
         }}
       >
+        {/* <ImgButton
+          title="Cerrar el formulario"
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          onClick={$(() => {
+            //console.log('definicion_CTX_BUSCAR_PERSONA', definicion_CTX_BUSCAR_PERSONA);
+            // //console.log('parametrosBusqueda', parametrosBusqueda);
+          })}
+        /> */}
+        <ImgButton
+          title="Cerrar el formulario"
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          onClick={$(() => {
+            //console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+            // //console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);
+          })}
+        />{' '}
         <ImgButton
           title="Cerrar el formulario"
           src={images.x}
@@ -190,28 +214,6 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
             }
 
             ctx.selecciono_Persona = false;
-          })}
-        />
-        <ImgButton
-          title="Cerrar el formulario"
-          src={images.see}
-          alt="Icono de cerrar"
-          height={16}
-          width={16}
-          onClick={$(() => {
-            //console.log('definicion_CTX_BUSCAR_PERSONA', definicion_CTX_BUSCAR_PERSONA);
-            // //console.log('parametrosBusqueda', parametrosBusqueda);
-          })}
-        />
-        <ImgButton
-          title="Cerrar el formulario"
-          src={images.see}
-          alt="Icono de cerrar"
-          height={16}
-          width={16}
-          onClick={$(() => {
-            //console.log('definicion_CTX_BUSCAR_PERSONA.conceptoABuscar', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
-            // //console.log('parametrosBusqueda.cadenaABuscar', parametrosBusqueda.cadenaABuscar);
           })}
         />
       </div>

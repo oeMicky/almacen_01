@@ -249,7 +249,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     console.log('🎲🎲🎲🎲🎲', definicion_CTX_NEW_IN_ALMACEN.selecciono_Persona, definicion_CTX_NEW_IN_ALMACEN.rol_Persona);
 
     if (definicion_CTX_NEW_IN_ALMACEN.selecciono_Persona && definicion_CTX_NEW_IN_ALMACEN.rol_Persona === 'remitente') {
-      alert('evalua a la persona');
+      // alert('evalua a la persona');
       definicion_CTX_IN_ALMACEN.idRemitente = defini_CTX_REMITENTE_IN_ALMACEN._id;
       definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad = defini_CTX_REMITENTE_IN_ALMACEN.codigoTipoDocumentoIdentidad;
       definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad = defini_CTX_REMITENTE_IN_ALMACEN.tipoDocumentoIdentidad;
@@ -1329,7 +1329,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                           <input
                             type="text"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
-                            style={{ width: '80px', textAlign: 'end' }}
+                            style={{ width: '100%', textAlign: 'end' }}
                             value={iTMercaIN.ubigeo}
                             onChange$={(e) => {
                               iTMercaIN.ubigeo = (e.target as HTMLInputElement).value.toUpperCase();

@@ -196,7 +196,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 500px)',
+        width: 'clamp(320px, 100%, 500px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -205,23 +205,33 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
-          src={images.x}
-          alt="Icono de cerrar"
-          height={18}
-          width={18}
-          title="Cerrar el formulario"
-          onClick={$(() => {
-            ctx_buscar_persona.mostrarPanelNewEditPersona = false;
-          })}
-        />
-        <ImgButton
+          title="Ver persona"
           src={images.see}
           alt="Icono de persona"
           height={16}
           width={16}
-          title="Ver persona"
           onClick={$(() => {
             //console.log('persona', persona);
+          })}
+        />
+        <ImgButton
+          title="Ver persona"
+          src={images.see}
+          alt="Icono de persona"
+          height={16}
+          width={16}
+          onClick={$(() => {
+            //console.log('persona', persona);
+          })}
+        />
+        <ImgButton
+          title="Cerrar el formulario"
+          src={images.x}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
+          onClick={$(() => {
+            ctx_buscar_persona.mostrarPanelNewEditPersona = false;
           })}
         />
       </div>

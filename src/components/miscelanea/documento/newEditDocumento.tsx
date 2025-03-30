@@ -129,7 +129,7 @@ export default component$((props: { docSelecci: any; contexto: string }) => {
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 600px)',
+        width: 'clamp(320px, 100%, 600px)',
         // width: 'auto',
         padding: '2px',
       }}

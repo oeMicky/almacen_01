@@ -171,75 +171,78 @@ export default component$(() => {
         <u>Inventario</u>
       </h4>
 
-      {/* BUSCAR POR */}
-      <div style={{ display: 'flex', margin: '10px 0' }}>
-        <label style={{ marginRight: '10px' }}>Buscar </label>
-        <input
-          id="in_CodigoDescripcion_KARDEX"
-          // style={{ width: '157px', marginLeft: '4px', marginRight: '4px' }}
-          style={{ width: 'clamp(157px, 90%, 375px)', marginLeft: '4px', marginRight: '4px' }}
-          type="text"
-          placeholder="Descripción"
-          value={parametrosBusqueda.cadenaABuscar}
-          onInput$={(e) => {
-            parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
-          }}
-          onFocusin$={(e) => {
-            (e.target as HTMLInputElement).select();
-          }}
-          onKeyPress$={(e) => {
-            if (e.key === 'Enter') {
-              localizarMercaderiasKARDEX();
-            }
-          }}
-        />
-        <input
-          title="Buscar datos de mercadería"
-          type="image"
-          src={images.searchPLUS}
-          alt="Icono de buscar de mercadería"
-          height={21.5}
-          width={21.5}
-          style={{ marginRight: '4px' }}
-          onClick$={() => {
-            if (parametrosGlobales.idGrupoEmpresarial === '') {
-              // console.log('estaVACIA');
-              alert('Faltan datos... vuelva a logearse..');
-              navegarA('/login');
-              return;
-            }
-            localizarMercaderiasKARDEX();
-          }}
-        />
-        {parametrosGlobales.verOtrosAlmacenes && (
+      {/* BUSCAR POR       style={{ display: 'flex', margin: '10px 0' }} */}
+      <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', margin: '10px 0' }}>
+          <label style={{ marginRight: '10px' }}>Buscar </label>
           <input
-            title="Ver otros almacenes"
-            type="image"
-            src={images.arrowUpRight}
-            alt="icono ir a ..."
-            height={21.5}
-            width={21.5}
-            onClick$={async () => {
-              const losAlmacenes = await verOtrosAlmacenes({
-                usuario: parametrosGlobales.usuario,
-                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                idSucursal: parametrosGlobales.idSucursal,
-              });
-              console.log('losAlmacenes.data', losAlmacenes.data.length, losAlmacenes.data);
-              if (losAlmacenes.data.length === 0) {
-                alert('No existe otros almacenes.');
-                return;
-              }
-              if (losAlmacenes.data.length === 1) {
-                //ir directo al panel de busqueda
-                definicion_CTX_INDEX_INVENTARIO.almacenExterno = losAlmacenes.data[0];
-                definicion_CTX_INDEX_INVENTARIO.mostrarPanelInventarioExterno = true;
-              } else {
-                //ir al panel de listado de almacenes disponibles
+            id="in_CodigoDescripcion_KARDEX"
+            // style={{ width: '157px', marginLeft: '4px', marginRight: '4px' }}
+            style={{ width: 'clamp(157px, 90%, 375px)', marginLeft: '4px', marginRight: '4px' }}
+            type="text"
+            placeholder="Descripción"
+            value={parametrosBusqueda.cadenaABuscar}
+            onInput$={(e) => {
+              parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+            }}
+            onFocusin$={(e) => {
+              (e.target as HTMLInputElement).select();
+            }}
+            onKeyPress$={(e) => {
+              if (e.key === 'Enter') {
+                localizarMercaderiasKARDEX();
               }
             }}
           />
-        )}
+          <input
+            title="Buscar datos de mercadería"
+            type="image"
+            src={images.searchPLUS}
+            alt="Icono de buscar de mercadería"
+            height={21.5}
+            width={21.5}
+            style={{ marginRight: '4px' }}
+            onClick$={() => {
+              if (parametrosGlobales.idGrupoEmpresarial === '') {
+                // console.log('estaVACIA');
+                alert('Faltan datos... vuelva a logearse..');
+                navegarA('/login');
+                return;
+              }
+              localizarMercaderiasKARDEX();
+            }}
+          />
+          {parametrosGlobales.verOtrosAlmacenes && (
+            <input
+              title="Ver otros almacenes"
+              type="image"
+              src={images.arrowUpRight}
+              alt="icono ir a ..."
+              height={21.5}
+              width={21.5}
+              onClick$={async () => {
+                const losAlmacenes = await verOtrosAlmacenes({
+                  usuario: parametrosGlobales.usuario,
+                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                  idSucursal: parametrosGlobales.idSucursal,
+                });
+                console.log('losAlmacenes.data', losAlmacenes.data.length, losAlmacenes.data);
+                if (losAlmacenes.data.length === 0) {
+                  alert('No existe otros almacenes.');
+                  return;
+                }
+                if (losAlmacenes.data.length === 1) {
+                  //ir directo al panel de busqueda
+                  definicion_CTX_INDEX_INVENTARIO.almacenExterno = losAlmacenes.data[0];
+                  definicion_CTX_INDEX_INVENTARIO.mostrarPanelInventarioExterno = true;
+                } else {
+                  //ir al panel de listado de almacenes disponibles
+                }
+              }}
+            />
+          )}
+        </div>
+
         <button
           style={{ cursor: 'pointer', marginLeft: '4px' }}
           onClick$={() => {
@@ -249,9 +252,10 @@ export default component$(() => {
         >
           ADD MERCADERÍA
         </button>
-        <br />
-        <div style={{ margin: '0 5px' }}></div>
+        {/* <br />
+        <div style={{ margin: '0 5px' }}></div> */}
       </div>
+      <br />
       {/* LEYENDA */}
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         {/* LEYENDA */}
