@@ -890,7 +890,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     // const indexItemServi = index + 1;
 
                     return (
-                      <tr key={iTDocAdj.idAuxiliar}>
+                      <tr key={iTDocAdj.idAuxiliar} style={{ backgroundColor: '#cdc2b5 ' }}>
                         <td data-label="TCP" class="comoCadena">
                           {iTDocAdj.descripcionTCP}
                         </td>

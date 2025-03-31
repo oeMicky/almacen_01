@@ -8,6 +8,7 @@ interface IElBottun {
   disabled?: boolean;
   title: string;
   onClick?: any;
+  onFocus?: any;
   class?: any;
   // estilos?: any;
 }

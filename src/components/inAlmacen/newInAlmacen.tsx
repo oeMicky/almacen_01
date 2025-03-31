@@ -1010,7 +1010,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     // const indexItemServi = index + 1;
 
                     return (
-                      <tr key={iTDocAdj.idAuxiliar}>
+                      <tr key={iTDocAdj.idAuxiliar} style={{ backgroundColor: '#cdc2b5 ' }}>
                         <td data-label="TCP">{iTDocAdj.descripcionTCP}</td>
                         <td data-label="Fecha">{formatoDDMMYYYY_PEN(iTDocAdj.fecha)}</td>
                         <td data-label="Serie">{iTDocAdj.serie}</td>
@@ -1165,7 +1165,12 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           >
             {/* ADD MERCADERIA: CON IGV / SIN IGV */}
             {definicion_CTX_IN_ALMACEN._id === '' ? (
-              <div style={{ display: 'flex', marginBottom: '12px' }}>
+              <div
+                style={{ display: 'flex', marginBottom: '12px' }}
+                onFocus$={() => {
+                  console.log('onFocus div ADD MERCADERIA: ', document.activeElement);
+                }}
+              >
                 <ElButton
                   id="btn_Add_Mercaderia"
                   class="btn"
@@ -1193,6 +1198,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                       }
                     }
                     definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarMercaderiaIN = true;
+                  })}
+                  onFocus={$(() => {
+                    console.log('onFocus: ElButton Add mercadería ', document.activeElement);
                   })}
                 />
                 <div>
@@ -1230,7 +1238,12 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
               ''
             )}
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarMercaderiaIN && (
-              <div class="modal">
+              <div
+                class="modal"
+                onFocus$={() => {
+                  console.log('onFocus: ', document.activeElement);
+                }}
+              >
                 <BuscarMercaderiaIN
                   contexto="new_in_almacen"
                   esAlmacen={true}
@@ -1251,7 +1264,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             )}
             {/* TABLA MERCADERIA IN: REPUESTOS -- LUBRICANTES -- ETC */}
             {definicion_CTX_IN_ALMACEN.itemsMercaderias.length > 0 ? (
-              <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
+              <table id="ttt_IN_ALMACEN" style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
                     <th>Ítem</th>
@@ -1329,7 +1342,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                           <input
                             type="text"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
-                            style={{ width: '100%', textAlign: 'end' }}
+                            style={{ width: '100%', textAlign: 'start' }}
                             value={iTMercaIN.ubigeo}
                             onChange$={(e) => {
                               iTMercaIN.ubigeo = (e.target as HTMLInputElement).value.toUpperCase();

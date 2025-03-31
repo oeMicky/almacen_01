@@ -9,6 +9,7 @@ interface IImgButton {
   title: string;
   hidden?: boolean;
   onClick?: any;
+  onKeyUp?: any;
   onFocusin?: any;
   onFocus?: any;
 }
@@ -56,6 +57,7 @@ export default component$((props: IImgButton) => {
             }
       }
       onClick$={props.onClick}
+      onKeyUp$={props.onKeyUp}
       onMouseEnter$={() => (enfocado.value = true)}
       onMouseLeave$={() => (enfocado.value = false)}
       // onFocusin$={props.onFocusin}

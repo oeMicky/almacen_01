@@ -199,6 +199,13 @@ export default component$(
               }
         }
         class="container-modal"
+        onKeyUp$={(e) => {
+          if (e.key === 'Escape') {
+            alert('Escape presionado: modal _BUSCAR_MERCADERIA_IN');
+            ctx.mostrarPanelBuscarMercaderiaIN = false;
+            ctx.mM = null;
+          }
+        }}
       >
         {/* BOTONES DEL MARCO */}
         <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -209,7 +216,27 @@ export default component$(
             height={18}
             width={18}
             onClick={$(() => {
+              console.log('_______: ', document.activeElement);
+            })}
+            onKeyUp={$((e: any) => {
+              if (e.key === 'Escape') {
+                alert('Escape presionado: Ver el parametrosGlobales');
+              }
+            })}
+          />
+          <ImgButton
+            title="Ver el parametrosGlobales"
+            src={images.see}
+            alt="Icono de cerrar"
+            height={18}
+            width={18}
+            onClick={$(() => {
               console.log(parametrosGlobales);
+            })}
+            onKeyUp={$((e: any) => {
+              if (e.key === 'Escape') {
+                alert('Escape presionado: Ver el parametrosGlobales');
+              }
             })}
           />
           <ImgButton
@@ -221,13 +248,25 @@ export default component$(
             onClick={$(() => {
               ctx.mostrarPanelBuscarMercaderiaIN = false;
             })}
+            onKeyUp={$((e: any) => {
+              if (e.key === 'Escape') {
+                alert('Escape presionado: Cerrar el formulario');
+              }
+            })}
           />
         </div>
         {/* TITULO */}
         <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'red' }}>{parametrosGlobales.sucursal}</h3>
         <h3 style={{ marginBottom: '10px', fontSize: '0.9rem' }}>Buscar mercaderías / IN</h3>
         {/* FORMULARIO */}
-        <div class="add-form">
+        <div
+          class="add-form"
+          onKeyUp$={(e) => {
+            if (e.key === 'Escape') {
+              alert('Escape presionado: FORMULARIO');
+            }
+          }}
+        >
           {/* ENCABEZADO */}
           <div style={{ marginBottom: '8px' }}>
             {/* Buscar por: input - lupa - mas - flecha up right */}
@@ -251,6 +290,23 @@ export default component$(
                       localizarMercaderiasIN();
                     }
                   }}
+                  onKeyUp$={(e) => {
+                    if (e.key === 'Escape') {
+                      alert('Escape presionado: in_codigoDescripcion_BUSCAR_MERCADERIA_IN');
+                      ctx.mostrarPanelBuscarMercaderiaIN = false;
+                      ctx.mM = null;
+                    }
+                  }}
+                  // onFocusin$={(e) => {
+                  //   (e.target as HTMLInputElement).select();
+                  //   // alert('ojo: onFocusin');
+                  //   console.log('_______onFocusin: ', document.activeElement);
+                  // }}
+                  onFocus$={() => {
+                    console.log('onFocus: in_codigoDescripcion_BUSCAR_MERCADERIA_IN ', document.activeElement);
+                  }}
+
+                  // onFocusout$={() => {
                 />
                 <input
                   title="Buscar datos de mercadería"
@@ -323,6 +379,7 @@ export default component$(
                     } else {
                       parametrosBusqueda.buscarPor = 'Descripción';
                     }
+                    verAplicacion.value = (e.target as HTMLInputElement).checked;
                   }}
                   // value={parametrosBusqueda.cadenaABuscar}
                   // onInput$={(e) => {
@@ -341,7 +398,7 @@ export default component$(
                   Aplicación
                 </label>
               </div>
-              <div>
+              <div style={{ display: 'none' }}>
                 <input
                   id="in_verAplicacion_BUSCAR_MERCADERIA_IN"
                   type="checkbox"

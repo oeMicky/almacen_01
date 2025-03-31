@@ -170,15 +170,16 @@ export default component$(() => {
       <h4 style={{ margin: '8px 0 4px 2px' }}>
         <u>Inventario</u>
       </h4>
-
-      {/* BUSCAR POR       style={{ display: 'flex', margin: '10px 0' }} */}
-      <div style={{ display: 'flex' }}>
-        <div style={{ display: 'flex', margin: '10px 0' }}>
-          <label style={{ marginRight: '10px' }}>Buscar </label>
+      {/* <br /> */}
+      {/* BUSCAR POR       style={{ display: 'flex', margin: '10px 0' }}  justifyContent: 'space-between', alignItems: 'center' */}
+      {/* style={{ marginRight: '10px' margin: '10px 0'}} */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ display: 'flex', marginTop: '8px' }}>
+          <label>Buscar </label>
           <input
             id="in_CodigoDescripcion_KARDEX"
             // style={{ width: '157px', marginLeft: '4px', marginRight: '4px' }}
-            style={{ width: 'clamp(157px, 90%, 375px)', marginLeft: '4px', marginRight: '4px' }}
+            style={{ width: 'clamp(157px, 90%, 375px)', margin: '0 4px' }}
             type="text"
             placeholder="Descripción"
             value={parametrosBusqueda.cadenaABuscar}
@@ -242,9 +243,8 @@ export default component$(() => {
             />
           )}
         </div>
-
         <button
-          style={{ cursor: 'pointer', marginLeft: '4px' }}
+          style={{ cursor: 'pointer', marginLeft: '4px', marginTop: '8px' }}
           onClick$={() => {
             definicion_CTX_INDEX_INVENTARIO.mM = [];
             definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN = true;
@@ -252,6 +252,7 @@ export default component$(() => {
         >
           ADD MERCADERÍA
         </button>
+
         {/* <br />
         <div style={{ margin: '0 5px' }}></div> */}
       </div>
@@ -259,22 +260,24 @@ export default component$(() => {
       {/* LEYENDA */}
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         {/* LEYENDA */}
-        <div>
-          <label style={{ marginRight: '4px' }}>Leyenda:</label>
-          <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
-          <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px' }}>No facturable</label>
-          <input
-            id="in_verTODOS_KARDEX"
-            type="checkbox"
-            placeholder="Ver TODOS"
-            checked={verTODOS.value}
-            onChange$={(e) => {
-              verTODOS.value = (e.target as HTMLInputElement).checked;
-              // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
-            }}
-            // value={parametrosBusqueda.cadenaABuscar}
-          />
-          <label for="in_verTODOS_KARDEX">Ver TODOS</label>
+        <div style={{ display: 'flex' }}>
+          <label style={{ marginRight: '4px', marginTop: '8px' }}>Leyenda:</label>
+          <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px', marginTop: '8px' }}>Inactivo</label>
+          <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px', marginRight: '4px', marginTop: '8px' }}>No facturable</label>
+          <div style={{ marginTop: '8px' }}>
+            <input
+              id="in_verTODOS_KARDEX"
+              type="checkbox"
+              placeholder="Ver TODOS"
+              checked={verTODOS.value}
+              onChange$={(e) => {
+                verTODOS.value = (e.target as HTMLInputElement).checked;
+                // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
+              }}
+              // value={parametrosBusqueda.cadenaABuscar}
+            />
+            <label for="in_verTODOS_KARDEX">Ver TODOS</label>
+          </div>
         </div>
         {/* ACCIONES */}
         <div>

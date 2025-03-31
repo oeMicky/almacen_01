@@ -127,7 +127,20 @@ export default component$(
             <>
               {misMercaderiasIN.length > 0 ? (
                 <>
-                  <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
+                  <table
+                    id="ttt_MERCADERIAS_IN"
+                    style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}
+                    onKeyUp$={(e) => {
+                      if (e.key === 'Escape') {
+                        alert('Escape presionado:table');
+                        // ctx.mostrarPanelMercaderiaINSeleccionada = false;
+                        // ctx.mM = null;
+                      }
+                    }}
+                    onFocus$={() => {
+                      console.log('onFocus: ttt_MERCADERIAS_IN ', document.activeElement);
+                    }}
+                  >
                     {/* <table> */}
                     <thead>
                       <tr>
@@ -208,7 +221,7 @@ export default component$(
                             // }
                           >
                             <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
-                            <td data-label="Descripción">
+                            <td data-label="Descripción" style={{ fontWeight: 'bold' }}>
                               {elSM >= elTCS ? (
                                 <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
                               ) : elSM + 5 >= elTCS ? (
@@ -308,6 +321,13 @@ export default component$(
                                     ctx.mM = mercaINLocali;
                                     ctx.mostrarPanelKardexsIN = true;
                                     //console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);
+                                  }
+                                }}
+                                onKeyUp$={(e) => {
+                                  if (e.key === 'Escape') {
+                                    alert('Escape presionado: Seleccionar mercadería');
+                                    // ctx.mostrarPanelMercaderiaINSeleccionada = false;
+                                    // ctx.mM = null;
                                   }
                                 }}
                               />

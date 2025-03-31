@@ -319,7 +319,7 @@ export default component$(
                           <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                           <td
                             data-label="Descripción"
-                            style={props.esAlmacen ? '' : { cursor: 'pointer' }}
+                            style={props.esAlmacen ? { fontWeight: 'bold' } : { cursor: 'pointer', fontWeight: 'bold' }}
                             onKeyUp$={(e) => {
                               // console.log('🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚', e.key);
                               if (e.key === 'Escape') {

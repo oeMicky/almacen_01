@@ -1037,7 +1037,7 @@ export default component$(
           {/* Ejm Ubigeo */}
           <div class="form-control">
             <div class="form-control form-agrupado">
-              <label style={{ color: '#666666' }}>Ejm: 1A83 (1:Piso, A:Sección, 8:Columna, H:Fila)</label>
+              <label style={{ color: '#666666' }}>Ejm: 1A8H (1:Piso, A:Sección, 8:Columna, H:Fila)</label>
             </div>
           </div>
           <hr hidden={!parametrosGlobales.actualizarPrecioPublico} style={{ margin: '5px 0 5px 0' }} color={'#aaa'}></hr>
@@ -1310,6 +1310,7 @@ export default component$(
 
               if (props.contextoInmediato === 'buscar_mercaderia_in' || props.contextoInmediato === 'registro_productos_terminados') {
                 ctx.mostrarPanelMercaderiaINSeleccionada = false;
+                document.getElementById('ttt_MERCADERIAS_IN')?.focus();
               }
               if (props.contextoInmediato === 'kardexs_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = false;

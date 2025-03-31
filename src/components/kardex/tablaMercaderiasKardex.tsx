@@ -133,7 +133,7 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                         <tr key={_id} style={!activo ? { background: 'black', color: 'white' } : noFacturar ? { background: '#ff5aff' } : {}}>
                           <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                           {/* <td data-label="idMercaderia">{_id}</td> */}
-                          <td data-label="Descripción">
+                          <td data-label="Descripción" style={{ fontWeight: 'bold' }}>
                             {elSM >= elTCS ? (
                               <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
                             ) : elSM + 5 >= elTCS ? (
