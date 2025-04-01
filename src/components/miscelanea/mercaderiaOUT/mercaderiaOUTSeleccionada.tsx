@@ -394,7 +394,7 @@ export default component$(
                 {props.esAlmacen || props.esProduccion ? (
                   <div>
                     Costo equiv. (PEN):
-                    <strong style={{ marginLeft: '2px', color: 'green' }}>
+                    <strong style={{ marginLeft: '2px', color: 'purple' }}>
                       {equivalencia.laEquivalencia.$numberDecimal === 0
                         ? ''
                         : equivalencia.idUnidadEquivalencia !== ''
@@ -478,6 +478,10 @@ export default component$(
                     cantidadSacada.value *
                     parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) *
                     parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+
+                  stockMinimo: props.mercaOUTSelecci.stockMinimo,
+                  stockEquivalente: redondeo6Decimales(props.elKardex.cantidadSaldo.$numberDecimal / equivalencia.laEquivalencia.$numberDecimal),
+                  totalCantidadSaldo: props.mercaOUTSelecci.totalCantidadSaldo,
 
                   precioUnitarioUSD: 0,
                   ventaUSD: 0,

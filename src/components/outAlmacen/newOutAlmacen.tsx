@@ -8,9 +8,10 @@ import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
 import {
   cerosALaIzquierda,
   diaDeLaSemana,
+  elIdAuxiliar,
   // elIdAuxiliar,
   formatear_6Decimales,
-  formatoDDMMYYYY_PEN,
+  // formatoDDMMYYYY_PEN,
   hoy,
   menosXdiasHoy,
   // redondeo2Decimales,
@@ -19,7 +20,7 @@ import {
 import ElSelect from '../system/elSelect';
 import BuscarPersona from '../miscelanea/persona/buscarPersona';
 import ElButton from '../system/elButton';
-import NewEditDocumento from '../miscelanea/documento/newEditDocumento';
+// import NewEditDocumento from '../miscelanea/documento/newEditDocumento';
 import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
 import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
 import BorrarItemMercaderiaOUT from './borrarItemMercaderiaOUT';
@@ -28,6 +29,8 @@ import { getSeriesDeNotaSalidaDeLaSucursal, inEgresoDeAlmacen, loadMotivosEgreso
 import BuscarOrdenServicioAperturado from '../miscelanea/ordenServicioAperturado/buscarOrdenServicioAperturado';
 import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionAperturado/buscarOrdenProduccionAperturado';
 import ListaFavoritosAlmacen from '../miscelanea/favoritos/listaFavoritosAlmacen';
+import { loadTiposComprobantePago } from '~/apis/sunat.api';
+// import { IDocumento } from '~/interfaces/iDocumento';
 
 export const CTX_NEW_OUT_ALMACEN = createContextId<any>('new_out_almacen');
 
@@ -158,7 +161,18 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
   //#region INICALIZACION
   const ini = useSignal(0);
+  const LosTCPcargados = useSignal([]);
 
+  const documento = useStore({
+    idAuxiliar: elIdAuxiliar(),
+    codigoTCP: '',
+    descripcionTCP: '',
+    fecha: hoy(),
+    serie: '',
+    numero: '',
+
+    lote: '',
+  });
   // let suma_SubPEN = 0;
   // let suma_IGVPEN = 0;
   // let suma_TotPEN = 0;
@@ -184,6 +198,20 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
   // const
   //#endregion INICALIZACION
+
+  //#region CARGAR LOS TCP
+  const cargarLosTCP = $(async () => {
+    const losTCP = await loadTiposComprobantePago();
+    console.log('losTCP', losTCP);
+    LosTCPcargados.value = losTCP.data;
+    //console.log(' LosTCPcargados.value', LosTCPcargados.value);
+  });
+
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
+  //   cargarLosTCP();
+  // });
+  //#endregion CARGAR LOS TCP
 
   //#region CARGAR SERIES NOTA DE SALIDA - DE LA SUCURSAL
   const cargarSeriesNotaSalida_DelaSucursal = $(async () => {
@@ -218,6 +246,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   useTask$(({ track }) => {
     track(() => ini.value);
     cargarMotivosEgreso();
+    cargarLosTCP();
   });
   //#endregion CARGAR MOTIVOS DE EGRESO
 
@@ -320,9 +349,29 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     //DOCUMENTOS ADJUNTOS
     //console.log(' //documentosAdjuntos');
     if (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'NOTA DE SALIDA' && definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO') {
-      if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
-        alert('Agregue al menos un documento');
-        document.getElementById('btn_Add_Documento')?.focus();
+      // if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
+      //   alert('Agregue al menos un documento');
+      //   document.getElementById('btn_Add_Documento')?.focus();
+      //   return;
+      // }
+      if (documento.descripcionTCP === '') {
+        alert('Seleccione el tipo de comprobante de pago');
+        document.getElementById('se_tcpIN_DOCUMENTO')?.focus();
+        return;
+      }
+      if (documento.fecha === '') {
+        alert('Seleccione la fecha del comprobante de pago');
+        document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+        return;
+      }
+      if (documento.serie === '') {
+        alert('Ingrese la serie del comprobante de pago');
+        document.getElementById('in_Serie_DOCUMENTO')?.focus();
+        return;
+      }
+      if (documento.numero === '') {
+        alert('Ingrese el número de comprobante de pago');
+        document.getElementById('in_Numero_DOCUMENTO')?.focus();
         return;
       }
     }
@@ -381,7 +430,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         numeroIdentidad: definicion_CTX_OUT_ALMACEN.numeroIdentidad,
         razonSocialNombre: definicion_CTX_OUT_ALMACEN.razonSocialNombre,
 
-        documentosAdjuntos: definicion_CTX_OUT_ALMACEN.documentosAdjuntos,
+        documentosAdjuntos: documento, // definicion_CTX_OUT_ALMACEN.documentosAdjuntos,
 
         itemsMercaderias: definicion_CTX_OUT_ALMACEN.itemsMercaderias,
 
@@ -525,9 +574,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 />
               </div> */}
             </div>
-            {/* FISMA */}
-            <div class="form-control form-control-check">
+            {/* <div class="form-control form-control-check">
               <div class="form-control form-agrupado">
+              
+              </div>
+            </div> */}
+            {/* FISMA  --  MOTIVO SALIDA  -- SERIE  */}
+            <div class="linea_1_111">
+              {/* FISMA */}
+              <div>
                 <input
                   id="in_FISMA"
                   type="date"
@@ -546,9 +601,6 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   }}
                 />
               </div>
-            </div>
-            {/* MOTIVO SALIDA  -- SERIE  */}
-            <div class="linea_1_11">
               {/* motivo de egreso */}
               <div>
                 <ElSelect
@@ -609,11 +661,26 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           definicion_CTX_OUT_ALMACEN.numeroIdentidad = parametrosGlobales.RUC;
                           definicion_CTX_OUT_ALMACEN.razonSocialNombre = parametrosGlobales.RazonSocial;
                           break;
+                        case 'NOTA DE VENTA':
+                          //alert('Elegio venta');
+                          // definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
+                          definicion_CTX_OUT_ALMACEN.idDestinatario = parametrosGlobales.idEmpresa;
+                          definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad = '6';
+                          definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad = 'RUC';
+                          definicion_CTX_OUT_ALMACEN.numeroIdentidad = parametrosGlobales.RUC;
+                          definicion_CTX_OUT_ALMACEN.razonSocialNombre = parametrosGlobales.RazonSocial;
+                          documento.codigoTCP = '00';
+                          documento.descripcionTCP = 'Otros';
+                          documento.serie = 'NV';
+                          // document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+                          // (document.getElementById('in_Fecha_DOCUMENTO') as HTMLInputElement).value = definicion_CTX_OUT_ALMACEN.FISMA;
+                          (document.getElementById('in_Fecha_DOCUMENTO') as HTMLInputElement)?.focus();
+                          break;
 
                         default:
                           break;
                       }
-                      (document.getElementById('in_Observacion_OUT') as HTMLSelectElement)?.focus();
+                      // (document.getElementById('in_Observacion_OUT') as HTMLSelectElement)?.focus();
                     }
                   })}
                   onKeyPress={$((e: any) => {
@@ -628,24 +695,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 <input id="in_SERIE" type="text" disabled style={{ width: '100%' }} value={definicion_CTX_OUT_ALMACEN.serie} />
               </div>
             </div>
-            {/* OBSERVACION*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Observacion_OUT"
-                  style={{ width: '100%', backgroundColor: '#F4FF7A' }}
-                  type="text"
-                  placeholder="Add observación"
-                  value={definicion_CTX_OUT_ALMACEN.observacion}
-                  onChange$={(e) => (definicion_CTX_OUT_ALMACEN.observacion = (e.target as HTMLInputElement).value)}
-                  onKeyPress$={$((e: any) => {
-                    if (e.key === 'Enter') {
-                      (document.getElementById('se_TipoDocumentoLiteral_DESTINATARIO') as HTMLInputElement)?.focus();
-                    }
-                  })}
-                />
-              </div>
-            </div>
+
             {/* select NOTA SALIDA */}
             {/* Serie  class="form-control"*/}
             <div hidden={!definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}>
@@ -705,14 +755,14 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL DESTINATARIO */}
           <div>
-            {/* tipo de documento identidad DESTINATARIO*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            <div class="linea_1_111">
+              {/* tipo de documento identidad DESTINATARIO*/}
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <select
                   id="se_TipoDocumentoLiteral_DESTINATARIO"
                   disabled={definicion_CTX_OUT_ALMACEN._id !== ''}
                   value={definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad}
-                  // onChange={cambioTipoDocumento}
+                  style={{ cursor: 'pointer', width: '100%' }}
                   onChange$={(e) => {
                     const idx = (e.target as HTMLSelectElement).selectedIndex;
                     const rere = e.target as HTMLSelectElement;
@@ -765,20 +815,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   ''
                 )}
               </div>
-            </div>
-            {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona && (
-              <div class="modal">
-                <BuscarPersona soloPersonasNaturales={false} seleccionar="destinatario" contexto="new_out_almacen" rol="destinatario" />
-              </div>
-            )}
-            {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelListaFavoritosAlmacen && (
-              <div class="modal">
-                <ListaFavoritosAlmacen contexto="new_out_almacen" rol="destinatario" />
-              </div>
-            )}
-            {/* numero identidad DESTINATARIO*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+
+              {/* numero identidad DESTINATARIO*/}
+              <div>
                 <input
                   id="in_NumeroDocumentoIdentidad_DESTINATARIO"
                   style={{ width: '100%' }}
@@ -794,11 +833,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   })}
                 />
               </div>
-            </div>
 
-            {/* Razon Social / Nombre - DESTINATARIO*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              {/* Razon Social / Nombre - DESTINATARIO*/}
+              <div>
                 <input
                   id="in_Nombre_DESTINATARIO"
                   style={{ width: '100%' }}
@@ -814,8 +851,19 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 />
               </div>
             </div>
+
             <br />
           </div>
+          {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona && (
+            <div class="modal">
+              <BuscarPersona soloPersonasNaturales={false} seleccionar="destinatario" contexto="new_out_almacen" rol="destinatario" />
+            </div>
+          )}
+          {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelListaFavoritosAlmacen && (
+            <div class="modal">
+              <ListaFavoritosAlmacen contexto="new_out_almacen" rol="destinatario" />
+            </div>
+          )}
           {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
           <div>
@@ -841,17 +889,129 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           {/* ----------------------------------------------------- */}
         </div>
         {/* ----------------------------------------------------- */}
-        {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS   hidden={definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}*/}
-        <div style={definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO' ? { display: 'none' } : ''}>
-          <div
-            style={{
+        {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS   hidden={definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}
+        style={{
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               margin: '4px 0',
-            }}
-          >
-            {definicion_CTX_OUT_ALMACEN._id === '' ? (
+            }}*/}
+        <div style={definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO' ? { display: 'none' } : ''}>
+          <div>
+            <div class="linea_1_1111">
+              <div>
+                <select
+                  id="se_tcpIN_DOCUMENTO"
+                  style={{ cursor: 'pointer', width: '100%' }}
+                  onChange$={(e) => {
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const elSelect = e.target as HTMLSelectElement;
+                    const elOption = elSelect[idx];
+
+                    documento.codigoTCP = elOption.id;
+                    documento.descripcionTCP = (e.target as HTMLSelectElement).value;
+                    console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀', documento.codigoTCP, documento.descripcionTCP);
+
+                    document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+                  }}
+                  // onKeyUp$={$((e: any) => {
+                  //   if (e.key === 'Enter') {
+                  //     (document.getElementById('in_Fecha_DOCUMENTO') as HTMLSelectElement)?.focus();
+                  //   }
+                  // })}
+                >
+                  <option value="">-- Seleccione TCP --</option>
+                  {LosTCPcargados.value.map((ser: any) => {
+                    return (
+                      <option id={ser.codigo} value={ser.descripcion} selected={ser.descripcion === documento.descripcionTCP}>
+                        {ser.descripcion}
+                      </option>
+                    );
+                  })}
+                </select>
+                {/* <ElSelect
+                  id={'se_tcpIN_DOCUMENTO'}
+                  valorSeleccionado={documento.descripcionTCP}
+                  registros={LosTCPcargados.value}
+                  registroID={'codigo'}
+                  registroTEXT={'descripcion'}
+                  seleccione={'-- Seleccione TCP --'}
+                  onChange={$(() => {
+                    // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                    const elSelec = document.getElementById('se_tcpIN_DOCUMENTO') as HTMLSelectElement;
+                    const elIdx = elSelec.selectedIndex;
+                    // //console.log('?', elIdx, elSelec[elIdx].id);
+                    documento.codigoTCP = elSelec[elIdx].id;
+                    if (documento.codigoTCP === '') {
+                      documento.descripcionTCP = '';
+                    } else {
+                      documento.descripcionTCP = elSelec.value;
+                      // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                    }
+                  })}
+                  onKeyPress={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('in_Fecha_DOCUMENTO') as HTMLSelectElement)?.focus();
+                    }
+                  })}
+                /> */}
+              </div>
+              <div>
+                <input
+                  id="in_Fecha_DOCUMENTO"
+                  style={{ cursor: 'pointer', width: '100%' }}
+                  type="date"
+                  autoFocus
+                  placeholder="Add fecha"
+                  value={documento.fecha}
+                  onInput$={(e) => {
+                    documento.fecha = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('in_Serie_DOCUMENTO') as HTMLInputElement)?.focus();
+                    }
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  id="in_Serie_DOCUMENTO"
+                  style={{ width: '100%' }}
+                  type="text"
+                  autoFocus
+                  placeholder="Add serie"
+                  value={documento.serie}
+                  onInput$={(e) => {
+                    documento.serie = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('in_Numero_DOCUMENTO') as HTMLInputElement)?.focus();
+                    }
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  id="in_Numero_DOCUMENTO"
+                  style={{ width: '100%' }}
+                  type="number"
+                  placeholder="Add número"
+                  value={documento.numero}
+                  onChange$={(e) => {
+                    documento.numero = (e.target as HTMLInputElement).value.trim();
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('btn_Add_Mercaderia') as HTMLInputElement)?.focus();
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <br />
+            {/* {definicion_CTX_OUT_ALMACEN._id === '' ? (
               <div style={{ marginBottom: '4px' }}>
                 <ElButton
                   id="btn_Add_Documento"
@@ -872,9 +1032,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               <div class="modal">
                 <NewEditDocumento docSelecci={elDocSelecionado.value} contexto="new_out_almacen" />
               </div>
-            )}
+            )} */}
             {/* TABLA DOCUMENTOS ADJUNTOS   */}
-            {definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length > 0 ? (
+            {/* {definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length > 0 ? (
               <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
@@ -946,7 +1106,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               </table>
             ) : (
               <i style={{ fontSize: '0.8rem' }}>No existen documentos adjuntos</i>
-            )}
+            )} */}
             {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteDocumentoOUT && (
               <div class="modal">
                 <BorrarDocumentoOUT borrarDocumento={borrarDocumento} />
@@ -997,8 +1157,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 <thead>
                   <tr>
                     <th>Ítem</th>
-                    <th>idMerca</th>
+                    {/* <th>idMerca</th> */}
                     <th>Descripción</th>
+                    <th>Stock</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
                     <th>Costo Unit PEN</th>
@@ -1009,12 +1170,39 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 <tbody>
                   {definicion_CTX_OUT_ALMACEN.itemsMercaderias.map((iTMercaOUT: any, index: any) => {
                     const indexItemMerca = index + 1;
+                    let elSM = 0;
+                    let elTCS = 0;
+                    if (typeof iTMercaOUT.stockMinimo === 'undefined' || iTMercaOUT.stockMinimo === null) {
+                      elSM = 0;
+                    } else {
+                      elSM = iTMercaOUT.stockMinimo.$numberDecimal ? parseFloat(iTMercaOUT.stockMinimo.$numberDecimal) : iTMercaOUT.stockMinimo;
+                    }
+                    if (typeof iTMercaOUT.totalCantidadSaldo === 'undefined' || iTMercaOUT.totalCantidadSaldo === null) {
+                      elTCS = 0;
+                    } else {
+                      elTCS = iTMercaOUT.totalCantidadSaldo.$numberDecimal
+                        ? parseFloat(iTMercaOUT.totalCantidadSaldo.$numberDecimal)
+                        : iTMercaOUT.totalCantidadSaldo;
+                    }
+                    console.log(' 🍍🍍🍍🍍', elSM, elTCS);
 
                     return (
                       <tr key={iTMercaOUT.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaOUT.idAuxiliar}>{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
-                        <td data-label="idMerca">{iTMercaOUT.idMercaderia}</td>
-                        <td data-label="Descripción">{iTMercaOUT.descripcionEquivalencia}</td>
+                        {/* <td data-label="idMerca" >{iTMercaOUT.idMercaderia}</td> */}
+                        <td data-label="Descripción" style={{ fontWeight: 'bold' }}>
+                          {elSM >= elTCS ? (
+                            <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
+                          ) : elSM + 5 >= elTCS ? (
+                            <img src={images.flagAmber} alt="Bandera ambar" width="12" height="12" />
+                          ) : (
+                            ''
+                          )}
+                          {iTMercaOUT.descripcionEquivalencia}
+                        </td>
+                        <td data-label="Stock" style={{ fontWeight: 'bold' }}>
+                          {iTMercaOUT.stockEquivalente}
+                        </td>
                         <td data-label="Cantidad">
                           <input
                             type="number"
@@ -1119,12 +1307,32 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               </div>
             )}
           </div>
-          <br />
+          {/* <br /> */}
+        </div>
+        {/* ----------------------------------------------------- */}
+        {/* OBSERVACION*/}
+        <div class="form-control">
+          <div class="form-control form-agrupado">
+            <input
+              id="in_Observacion_OUT"
+              style={{ width: '100%', backgroundColor: '#F4FF7A' }}
+              type="text"
+              placeholder="Add observación"
+              value={definicion_CTX_OUT_ALMACEN.observacion}
+              onChange$={(e) => (definicion_CTX_OUT_ALMACEN.observacion = (e.target as HTMLInputElement).value)}
+              onKeyPress$={$((e: any) => {
+                if (e.key === 'Enter') {
+                  (document.getElementById('in_GRABAR_OUT_ALMACEN') as HTMLInputElement)?.focus();
+                }
+              })}
+            />
+          </div>
         </div>
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}
         {definicion_CTX_OUT_ALMACEN._id === '' ? (
           <input
+            id="in_GRABAR_OUT_ALMACEN"
             type="button"
             value={'Grabar SALIDA ' + diaDeLaSemana(definicion_CTX_OUT_ALMACEN.FISMA) + ' ' + definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10)}
             style={{ cursor: 'pointer', height: '40px' }}

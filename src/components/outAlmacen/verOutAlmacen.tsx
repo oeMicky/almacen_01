@@ -252,18 +252,10 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
 
                     return (
                       <tr key={iTDocAdj.idAuxiliar}>
-                        <td data-label="TCP" class="comoCadena">
-                          {iTDocAdj.descripcionTCP}
-                        </td>
-                        <td data-label="Fecha" class="comoCadena">
-                          {formatoDDMMYYYY_PEN(iTDocAdj.fecha)}
-                        </td>
-                        <td data-label="Serie" class="comoCadena">
-                          {iTDocAdj.serie}
-                        </td>
-                        <td data-label="Número" class="comoCadena">
-                          {cerosALaIzquierda(iTDocAdj.numero, 8)}
-                        </td>
+                        <td data-label="TCP">{iTDocAdj.descripcionTCP}</td>
+                        <td data-label="Fecha">{formatoDDMMYYYY_PEN(iTDocAdj.fecha)}</td>
+                        <td data-label="Serie">{iTDocAdj.serie}</td>
+                        <td data-label="Número">{cerosALaIzquierda(iTDocAdj.numero, 8)}</td>
                       </tr>
                     );
                   })}
