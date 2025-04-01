@@ -126,6 +126,9 @@ export default component$(
           (document.getElementById('in_Cantidad_mercaderiaOUTSeleccionada') as HTMLInputElement)?.focus();
         }
       }
+      setTimeout(() => {
+        document.getElementById('in_Cantidad_mercaderiaOUTSeleccionada')?.focus();
+      }, 200);
     });
     //#endregion INICIALIZACION
 
