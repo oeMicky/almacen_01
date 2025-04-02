@@ -5,11 +5,12 @@ import { CTX_INDEX_IN_ALMACEN } from '~/routes/(inventario)/inAlmacen';
 import type { IPersona } from '~/interfaces/iPersona';
 import type { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
 import ElButton from '../system/elButton';
-import NewEditDocumento from '../miscelanea/documento/newEditDocumento';
+// import NewEditDocumento from '../miscelanea/documento/newEditDocumento';
 import BuscarMercaderiaIN from '../miscelanea/mercaderiaIN/buscarMercaderiaIN';
 import {
   cerosALaIzquierda,
   diaDeLaSemana,
+  elIdAuxiliar,
   formatear_6Decimales,
   formatoDDMMYYYY_PEN,
   hoy,
@@ -37,6 +38,7 @@ import BuscarOrdenProduccionTerminado from '../miscelanea/ordenProduccionTermina
 import BorrarItemMercaderiaIN from './borrarItemMercaderiaIN';
 import { getTipoCambio } from '~/apis/apisExternas.api';
 import ListaFavoritosAlmacen from '../miscelanea/favoritos/listaFavoritosAlmacen';
+import { loadTiposComprobantePago } from '~/apis/sunat.api';
 
 export const CTX_NEW_IN_ALMACEN = createContextId<any>('new_in_almacen');
 
@@ -190,6 +192,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
 
   //#region INICALIZACION
   const ini = useSignal(0);
+  const LosTCPcargados = useSignal([]);
 
   let suma_SubPEN = 0;
   let suma_IGVPEN = 0;
@@ -199,11 +202,21 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
   let suma_IGVUSD = 0;
   let suma_TotUSD = 0;
 
-  const elDocSelecionado = useSignal([]);
+  // const elDocSelecionado = useSignal([]);
   const losMotivosCargados = useSignal([]);
 
   // const filaPivote: any = useSignal([]);
   // const filaAComparar: any = useSignal([]);
+  const documento = useStore({
+    idAuxiliar: elIdAuxiliar(),
+    codigoTCP: '',
+    descripcionTCP: '',
+    fecha: hoy(),
+    serie: '',
+    numero: '',
+
+    lote: '',
+  });
 
   const borrarDocumento = useStore({
     idAuxiliar: '',
@@ -227,6 +240,20 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
   // const
   //#endregion INICALIZACION
 
+  //#region CARGAR LOS TCP
+  const cargarLosTCP = $(async () => {
+    const losTCP = await loadTiposComprobantePago();
+    console.log('losTCP', losTCP);
+    LosTCPcargados.value = losTCP.data;
+    //console.log(' LosTCPcargados.value', LosTCPcargados.value);
+  });
+
+  // useTask$(({ track }) => {
+  //   track(() => ini.value);
+  //   cargarLosTCP();
+  // });
+  //#endregion CARGAR LOS TCP
+
   //#region CARGAR MOTIVOS DE INGRESO
   const cargarMotivosIngreso = $(async () => {
     const losMotivos = await loadMotivosIngresoAAlmacen({
@@ -240,6 +267,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
   useTask$(({ track }) => {
     track(() => ini.value);
     cargarMotivosIngreso();
+    cargarLosTCP();
   });
   //#endregion CARGAR MOTIVOS DE INGRESO
 
@@ -453,9 +481,29 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       return;
     }
     if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'APERTURA DE INVENTARIO' && definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'TRASLADO') {
-      if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length < 1) {
-        alert('Agregue al menos un documento');
-        document.getElementById('bu_Add_Documento')?.focus();
+      // if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length < 1) {
+      //   alert('Agregue al menos un documento');
+      //   document.getElementById('bu_Add_Documento')?.focus();
+      //   return;
+      // }
+      if (documento.descripcionTCP === '') {
+        alert('Seleccione el tipo de comprobante de pago');
+        document.getElementById('se_tcpIN_DOCUMENTO')?.focus();
+        return;
+      }
+      if (documento.fecha === '') {
+        alert('Seleccione la fecha del comprobante de pago');
+        document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+        return;
+      }
+      if (documento.serie === '') {
+        alert('Ingrese la serie del comprobante de pago');
+        document.getElementById('in_Serie_DOCUMENTO')?.focus();
+        return;
+      }
+      if (documento.numero === '') {
+        alert('Ingrese el número de comprobante de pago');
+        document.getElementById('in_Numero_DOCUMENTO')?.focus();
         return;
       }
     }
@@ -523,7 +571,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
 
       observacion: definicion_CTX_IN_ALMACEN.observacion,
 
-      documentosAdjuntos: definicion_CTX_IN_ALMACEN.documentosAdjuntos,
+      documentosAdjuntos: documento, // definicion_CTX_IN_ALMACEN.documentosAdjuntos,
 
       conIGV: definicion_CTX_IN_ALMACEN.conIGV,
       porMontoUnitario: definicion_CTX_IN_ALMACEN.porMontoUnitario,
@@ -667,9 +715,13 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 />
               </div>
             </div> */}
-            {/* FISMA */}
-            <div class="form-control form-control-check">
-              <div class="form-control form-agrupado">
+
+            {/* MOTIVO INGRESO    ---    SERIE */}
+            {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}> */}
+            {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '4px' }}> */}
+            <div class="linea_1_111">
+              {/* FISMA */}
+              <div>
                 <input
                   id="in_FISMA"
                   type="date"
@@ -687,11 +739,6 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   }}
                 />
               </div>
-            </div>
-            {/* MOTIVO INGRESO    ---    SERIE */}
-            {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}> */}
-            {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '4px' }}> */}
-            <div class="linea_1_11">
               {/* motivo de ingreso */}
               <div>
                 <ElSelect
@@ -746,7 +793,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         default:
                           break;
                       }
-                      (document.getElementById('in_Observacion_IN') as HTMLSelectElement)?.focus();
+                      (document.getElementById('btn_Add_Mercaderia') as HTMLInputElement)?.focus();
+                      // (document.getElementById('in_Observacion_IN') as HTMLSelectElement)?.focus();
                       // if (definicion_CTX_IN_ALMACEN.enDolares) {
                       //   // obtenerTipoCambio(document.getElementById('chbx_TipoCambio_IN_ALMACEN') as HTMLInputElement);
                       // }
@@ -754,7 +802,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   })}
                   onKeyPress={$((e: any) => {
                     if (e.key === 'Enter') {
-                      (document.getElementById('in_Observacion_IN') as HTMLSelectElement)?.focus();
+                      (document.getElementById('btn_Add_Mercaderia') as HTMLInputElement)?.focus();
+                      // (document.getElementById('in_Observacion_IN') as HTMLSelectElement)?.focus();
                     }
                   })}
                 />
@@ -764,24 +813,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 <input id="in_SERIE" type="text" disabled style={{ width: '100%' }} value={definicion_CTX_IN_ALMACEN.serie} />
               </div>
             </div>
-            {/* OBSERVACION*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Observacion_IN"
-                  style={{ width: '100%', backgroundColor: '#F4FF7A' }}
-                  type="text"
-                  placeholder="Add observación"
-                  value={definicion_CTX_IN_ALMACEN.observacion}
-                  onChange$={(e) => (definicion_CTX_IN_ALMACEN.observacion = (e.target as HTMLInputElement).value)}
-                  onKeyPress$={$((e: any) => {
-                    if (e.key === 'Enter') {
-                      (document.getElementById('se_TipoDocumentoLiteral_REMITENTE') as HTMLInputElement)?.focus();
-                    }
-                  })}
-                />
-              </div>
-            </div>
+
             <br />
           </div>
           {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarOrdenProduccionTerminado && (
@@ -816,14 +848,14 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL REMITENTE */}
           <div>
-            {/* tipo de documento identidad REMITENTE*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            <div class="linea_1_111">
+              {/* tipo de documento identidad REMITENTE*/}
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <select
                   id="se_TipoDocumentoLiteral_REMITENTE"
                   disabled={definicion_CTX_IN_ALMACEN._id !== ''}
                   value={definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad}
-                  // onChange={cambioTipoDocumento}
+                  style={{ cursor: 'pointer', width: '100%' }}
                   onChange$={(e) => {
                     const idx = (e.target as HTMLSelectElement).selectedIndex;
                     const rere = e.target as HTMLSelectElement;
@@ -877,20 +909,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   ''
                 )}
               </div>
-            </div>
-            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona && (
-              <div class="modal">
-                <BuscarPersona soloPersonasNaturales={false} seleccionar="remitente" contexto="new_in_almacen" rol="remitente" />
-              </div>
-            )}
-            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacen && (
-              <div class="modal">
-                <ListaFavoritosAlmacen contexto="new_in_almacen" rol="remitente" />
-              </div>
-            )}
-            {/* numero identidad REMITENTE*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              {/* numero identidad REMITENTE*/}
+              <div>
                 <input
                   id="in_NumeroDocumentoIdentidad_REMITENTE"
                   style={{ width: '100%' }}
@@ -906,11 +926,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   })}
                 />
               </div>
-            </div>
-
-            {/* Razon Social / Nombre - REMITENTE*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              {/* Razon Social / Nombre - REMITENTE*/}
+              <div>
                 <input
                   id="in_Nombre_REMITENTE"
                   style={{ width: '100%' }}
@@ -926,7 +943,17 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 />
               </div>
             </div>
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
+            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona && (
+              <div class="modal">
+                <BuscarPersona soloPersonasNaturales={false} seleccionar="remitente" contexto="new_in_almacen" rol="remitente" />
+              </div>
+            )}
+            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacen && (
+              <div class="modal">
+                <ListaFavoritosAlmacen contexto="new_in_almacen" rol="remitente" />
+              </div>
+            )}
+
             <br />
           </div>
           {/* ----------------------------------------------------- */}
@@ -963,15 +990,121 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
               : ''
           }
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              margin: '4px 0',
-            }}
-          >
-            {definicion_CTX_IN_ALMACEN._id === '' ? (
+          <div>
+            <div class="linea_1_1111">
+              <div>
+                <select
+                  id="se_tcpIN_DOCUMENTO"
+                  style={{ cursor: 'pointer', width: '100%' }}
+                  onChange$={(e) => {
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const elSelect = e.target as HTMLSelectElement;
+                    const elOption = elSelect[idx];
+
+                    documento.codigoTCP = elOption.id;
+                    documento.descripcionTCP = (e.target as HTMLSelectElement).value;
+                    console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀', documento.codigoTCP, documento.descripcionTCP);
+
+                    document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+                  }}
+                  // onKeyUp$={$((e: any) => {
+                  //   if (e.key === 'Enter') {
+                  //     (document.getElementById('in_Fecha_DOCUMENTO') as HTMLSelectElement)?.focus();
+                  //   }
+                  // })}
+                >
+                  <option value="">-- Seleccione TCP --</option>
+                  {LosTCPcargados.value.map((ser: any) => {
+                    return (
+                      <option id={ser.codigo} value={ser.descripcion} selected={ser.descripcion === documento.descripcionTCP}>
+                        {ser.descripcion}
+                      </option>
+                    );
+                  })}
+                </select>
+                {/* <ElSelect
+                  id={'se_tcpIN_DOCUMENTO'}
+                  valorSeleccionado={documento.descripcionTCP}
+                  registros={LosTCPcargados.value}
+                  registroID={'codigo'}
+                  registroTEXT={'descripcion'}
+                  seleccione={'-- Seleccione TCP --'}
+                  onChange={$(() => {
+                    // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
+                    const elSelec = document.getElementById('se_tcpIN_DOCUMENTO') as HTMLSelectElement;
+                    const elIdx = elSelec.selectedIndex;
+                    // //console.log('?', elIdx, elSelec[elIdx].id);
+                    documento.codigoTCP = elSelec[elIdx].id;
+                    if (documento.codigoTCP === '') {
+                      documento.descripcionTCP = '';
+                    } else {
+                      documento.descripcionTCP = elSelec.value;
+                      // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
+                    }
+                  })}
+                  onKeyPress={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('in_Fecha_DOCUMENTO') as HTMLSelectElement)?.focus();
+                    }
+                  })}
+                /> */}
+              </div>
+              <div>
+                <input
+                  id="in_Fecha_DOCUMENTO"
+                  style={{ cursor: 'pointer', width: '100%' }}
+                  type="date"
+                  autoFocus
+                  placeholder="Add fecha"
+                  value={documento.fecha}
+                  onInput$={(e) => {
+                    documento.fecha = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('in_Serie_DOCUMENTO') as HTMLInputElement)?.focus();
+                    }
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  id="in_Serie_DOCUMENTO"
+                  style={{ width: '100%' }}
+                  type="text"
+                  autoFocus
+                  placeholder="Add serie"
+                  value={documento.serie}
+                  onInput$={(e) => {
+                    documento.serie = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('in_Numero_DOCUMENTO') as HTMLInputElement)?.focus();
+                    }
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  id="in_Numero_DOCUMENTO"
+                  style={{ width: '100%' }}
+                  type="number"
+                  placeholder="Add número"
+                  value={documento.numero}
+                  onChange$={(e) => {
+                    documento.numero = (e.target as HTMLInputElement).value.trim();
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('btn_Add_Mercaderia') as HTMLInputElement)?.focus();
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <br />
+            {/* {definicion_CTX_IN_ALMACEN._id === '' ? (
               <div style={{ marginBottom: '4px' }}>
                 <ElButton
                   id="bu_Add_Documento"
@@ -987,14 +1120,14 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
               </div>
             ) : (
               ''
-            )}
-            {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento && (
+            )} */}
+            {/* {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelAdjuntarDocumento && (
               <div class="modal">
                 <NewEditDocumento docSelecci={elDocSelecionado.value} contexto="new_in_almacen" />
               </div>
-            )}
+            )} */}
             {/* TABLA DOCUMENTOS ADJUNTOS   */}
-            {definicion_CTX_IN_ALMACEN.documentosAdjuntos.length > 0 ? (
+            {/* {definicion_CTX_IN_ALMACEN.documentosAdjuntos.length > 0 ? (
               <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                 <thead>
                   <tr>
@@ -1058,7 +1191,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
               </table>
             ) : (
               <i style={{ marginTop: '4px', fontSize: '0.8rem' }}>No existen documentos adjuntos</i>
-            )}
+            )} */}
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteDocumentoIN && (
               <div class="modal">
                 <BorrarDocumentoIN borrarDocumento={borrarDocumento} />
@@ -2063,11 +2196,30 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           </div>
           <br />
         </div>
-
+        {/* ----------------------------------------------------- */}
+        {/* OBSERVACION*/}
+        <div class="form-control">
+          <div class="form-control form-agrupado">
+            <input
+              id="in_Observacion_IN"
+              style={{ width: '100%', backgroundColor: '#F4FF7A' }}
+              type="text"
+              placeholder="Add observación"
+              value={definicion_CTX_IN_ALMACEN.observacion}
+              onChange$={(e) => (definicion_CTX_IN_ALMACEN.observacion = (e.target as HTMLInputElement).value)}
+              onKeyPress$={$((e: any) => {
+                if (e.key === 'Enter') {
+                  (document.getElementById('btn_GrabarIngreso') as HTMLInputElement)?.focus();
+                }
+              })}
+            />
+          </div>
+        </div>
         {/* ----------------------------------------------------- */}
         {/* GRABAR */}
         {definicion_CTX_IN_ALMACEN._id === '' ? (
           <input
+            id="btn_GrabarIngreso"
             type="button"
             // disabled
             value={'Grabar INGRESO ' + diaDeLaSemana(definicion_CTX_IN_ALMACEN.FISMA) + ' ' + definicion_CTX_IN_ALMACEN.FISMA.substring(8, 10)}

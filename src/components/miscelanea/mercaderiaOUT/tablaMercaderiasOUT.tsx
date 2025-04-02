@@ -262,9 +262,11 @@ export default component$(
                       <th>Ubi</th>
                       <th>Stock</th>
                       <th>Uni</th>
-                      {props.esAlmacen || props.esProduccion ? <th>Costo Promd.PEN</th> : <th>Precio PEN</th>}
+                      <th>Costo Promd.PEN</th>
+                      <th>Precio PEN</th>
+                      {/* {props.esAlmacen || props.esProduccion ? :} */}
                       {/* <th>Precio</th> */}
-                      <th>Kx</th>
+                      {/* <th>Kx</th> */}
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -283,7 +285,7 @@ export default component$(
                         costoUnitarioPENMasIGV,
                         // promedioCostoUnitarioMovil,
                         stockMinimo,
-                        KARDEXS,
+                        // KARDEXS,
                         activo,
                         noFacturar,
                         ubigeo,
@@ -487,14 +489,15 @@ export default component$(
                             {/* </strong> */}
                           </td>
                           <td data-label="Uni">{unidad}</td>
-                          {props.esAlmacen || props.esProduccion ? (
-                            <td data-label="Costo PEN + IGV" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
-                              {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
-                                ? costoUnitarioPENMasIGV.$numberDecimal
-                                  ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
-                                  : formatear_2Decimales(costoUnitarioPENMasIGV)
-                                : '-'}
-                            </td>
+                          <td data-label="Costo PEN + IGV" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                            {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                              ? costoUnitarioPENMasIGV.$numberDecimal
+                                ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                                : formatear_2Decimales(costoUnitarioPENMasIGV)
+                              : '-'}
+                          </td>
+                          {/* {props.esAlmacen || props.esProduccion ? (
+                            
                           ) : (
                             // <td data-label="Costo Promd.PEN" class="comoNumeroLeft">
                             //   {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
@@ -503,20 +506,21 @@ export default component$(
                             //       : promedioCostoUnitarioMovil
                             //     : '-'}
                             // </td>
-                            <td data-label="Precio PEN" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
-                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                                ? precioUnitarioPEN.$numberDecimal
-                                  ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
-                                  : precioUnitarioPEN
-                                : '-'}
-                            </td>
-                          )}
+                            
+                          )} */}
+                          <td data-label="Precio PEN" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                            {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                              ? precioUnitarioPEN.$numberDecimal
+                                ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                : precioUnitarioPEN
+                              : '-'}
+                          </td>
                           {/* <td data-label="Precio">
                             {typeof precio !== 'undefined' ? (precio.$numberDecimal ? precio.$numberDecimal : precio) : '-'}
                           </td> */}
-                          <td data-label="Kx" class="accionesLeft">
+                          {/* <td data-label="Kx" class="accionesLeft">
                             {KARDEXS.length === 0 ? 'No' : 'Si'}
-                          </td>
+                          </td> */}
                           <td data-label="Acciones" class="accionesLeft">
                             <input
                               title="Seleccionar mercadería"

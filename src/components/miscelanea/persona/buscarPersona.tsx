@@ -1,4 +1,4 @@
-import { $, component$, createContextId, useContext, useContextProvider, useStore, useTask$ } from '@builder.io/qwik'; //useSignal,
+import { $, component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik'; //useSignal,
 import { images } from '~/assets';
 import ImgButton from '../../system/imgButton';
 import TablaPersonasHalladas from './tablaPersonasHalladas';
@@ -83,14 +83,20 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
-  // const ini = useSignal(0);
+  const ini = useSignal(0);
   // const buscarPersona = useSignal(0);
   document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
-  // useTask$(({ track }) => {
-  //   track(() => ini.value);
-  //   //console.log('inicializando...');
-  //   document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
-  // });
+  useTask$(({ track }) => {
+    track(() => ini.value);
+    //console.log('inicializando...');
+    // document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
+    if (ini.value === 0) {
+      //console.log('inicializando...ini.value', ini.value);
+      setTimeout(() => {
+        document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
+      }, 200);
+    }
+  });
   //#endregion INICIALIZACION
 
   // const por = useSignal('DNI / RUC');

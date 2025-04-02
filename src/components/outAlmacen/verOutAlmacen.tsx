@@ -251,7 +251,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                     // const indexItemServi = index + 1;
 
                     return (
-                      <tr key={iTDocAdj.idAuxiliar}>
+                      <tr key={iTDocAdj.idAuxiliar} style={{ backgroundColor: '#cdc2b5 ' }}>
                         <td data-label="TCP">{iTDocAdj.descripcionTCP}</td>
                         <td data-label="Fecha">{formatoDDMMYYYY_PEN(iTDocAdj.fecha)}</td>
                         <td data-label="Serie">{iTDocAdj.serie}</td>

@@ -4,7 +4,7 @@ import { images } from '~/assets';
 import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import style from '../../tabla/tabla.css?inline';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
-import { cerosALaIzquierda, formatear_6Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, formatear_2Decimales, formatear_6Decimales } from '~/functions/comunes';
 import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from '../ordenProduccionTerminado/registroProductosTerminados';
 
 export default component$(
@@ -153,6 +153,7 @@ export default component$(
 
                         <th>Stock</th>
                         <th>Uni</th>
+                        <th>Costo PEN + IGV</th>
                         {/* {props.esAlmacen ? (
                           props.motivo === 'APERTURA DE INVENTARIO' ? (
                             <th>Costo Inicio PEN</th>
@@ -162,7 +163,7 @@ export default component$(
                         ) : ( */}
                         <th>Precio Uni PEN</th>
                         {/* )} */}
-                        <th>Kx</th>
+                        {/* <th>Kx</th> */}
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Uti</th>
                         <th>Acciones</th>
                       </tr>
@@ -179,11 +180,12 @@ export default component$(
                           totalCantidadSaldo,
                           unidad,
                           stockMinimo,
+                          costoUnitarioPENMasIGV,
                           // costoDeInicioPEN,
                           precioUnitarioPEN,
                           // promedioCostoUnitarioMovil,
                           porcentajeUtilidad,
-                          KARDEXS,
+                          // KARDEXS,
                           activo,
                           noFacturar,
                           ubigeo,
@@ -248,6 +250,13 @@ export default component$(
                               <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
                             </td>
                             <td data-label="Uni">{unidad}</td>
+                            <td data-label="Costo PEN + IGV" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                              {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                                ? costoUnitarioPENMasIGV.$numberDecimal
+                                  ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                                  : formatear_2Decimales(costoUnitarioPENMasIGV)
+                                : '-'}
+                            </td>
                             {/* {props.esAlmacen ? (
                               props.motivo === 'APERTURA DE INVENTARIO' ? (
                                 <td data-label="Costo Inicio PEN" class="comoNumero">
@@ -277,7 +286,7 @@ export default component$(
                               </strong>
                             </td>
                             {/* )} */}
-                            <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
+                            {/* <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td> */}
                             <td data-label="Uti" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {typeof porcentajeUtilidad !== 'undefined' && porcentajeUtilidad !== null
                                 ? porcentajeUtilidad.$numberDecimal

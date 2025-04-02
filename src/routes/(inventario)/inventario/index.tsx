@@ -53,6 +53,7 @@ export default component$(() => {
   //#endregion CTX_INDEX_INVENTARIO
 
   //#region INICIALIZANDO
+  const ini = useSignal(0);
   const navegarA = useNavigate();
   const buscarMercaderiasKARDEX = useSignal(0);
   const verTODOS = useSignal(false);
@@ -77,6 +78,17 @@ export default component$(() => {
     buscarMercaderiasKARDEX.value++;
   });
   //#endregion BUSCAR MERCADERIAS IN
+
+  //#region INI
+  useTask$(({ track }) => {
+    track(() => ini.value);
+    if (ini.value === 0) {
+      setTimeout(() => {
+        document.getElementById('in_CodigoDescripcion_KARDEX')?.focus();
+      }, 200);
+    }
+  });
+  //#endregion INI
 
   //#region REFRESCAR TABLA MERCADERIAS IN
   useTask$(({ track }) => {

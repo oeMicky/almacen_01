@@ -561,24 +561,6 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               </div>
             </div>
 
-            {/* Numero de documento*/}
-            <div class="form-control">
-              {/* <label>Número</label>
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNumeroDocumento"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled
-                  value={definicion_CTX_IN_ALMACEN.correlativo}
-                />
-              </div> */}
-            </div>
-            {/* <div class="form-control form-control-check">
-              <div class="form-control form-agrupado">
-              
-              </div>
-            </div> */}
             {/* FISMA  --  MOTIVO SALIDA  -- SERIE  */}
             <div class="linea_1_111">
               {/* FISMA */}
@@ -674,7 +656,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           documento.serie = 'NV';
                           // document.getElementById('in_Fecha_DOCUMENTO')?.focus();
                           // (document.getElementById('in_Fecha_DOCUMENTO') as HTMLInputElement).value = definicion_CTX_OUT_ALMACEN.FISMA;
-                          (document.getElementById('in_Fecha_DOCUMENTO') as HTMLInputElement)?.focus();
+                          (document.getElementById('btn_Add_Mercaderia') as HTMLInputElement)?.focus();
                           break;
 
                         default:
@@ -890,12 +872,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         </div>
         {/* ----------------------------------------------------- */}
         {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS   hidden={definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}
-        style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              margin: '4px 0',
-            }}*/}
+         */}
         <div style={definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO' ? { display: 'none' } : ''}>
           <div>
             <div class="linea_1_1111">
