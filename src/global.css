@@ -243,6 +243,8 @@ a.linkHeaderPrincipal:hover {
   display: grid;
   grid-template-columns: 1fr; 
   gap: 4px;
+
+  margin-bottom:  4px
    /* justify-content: space-between */
   /* padding: 15px 15px */
 }
@@ -251,6 +253,8 @@ a.linkHeaderPrincipal:hover {
   display: grid;
   grid-template-columns: 1fr; 
   gap: 4px;
+
+  margin-bottom:  4px
    /* justify-content: space-between */
   /* padding: 15px 15px */
 }

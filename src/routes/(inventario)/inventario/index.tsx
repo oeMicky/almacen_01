@@ -83,9 +83,17 @@ export default component$(() => {
   useTask$(({ track }) => {
     track(() => ini.value);
     if (ini.value === 0) {
-      setTimeout(() => {
-        document.getElementById('in_CodigoDescripcion_KARDEX')?.focus();
-      }, 200);
+      try {
+        if (document !== undefined) {
+          setTimeout(() => {
+            document.getElementById('in_CodigoDescripcion_KARDEX')?.focus(); //m
+          }, 200);
+        }
+
+        // ini.value++;
+      } catch (error) {
+        console.log('error: ', error);
+      }
     }
   });
   //#endregion INI
@@ -190,6 +198,7 @@ export default component$(() => {
           <label>Buscar </label>
           <input
             id="in_CodigoDescripcion_KARDEX"
+            autoFocus={true}
             // style={{ width: '157px', marginLeft: '4px', marginRight: '4px' }}
             style={{ width: 'clamp(157px, 90%, 375px)', margin: '0 4px' }}
             type="text"

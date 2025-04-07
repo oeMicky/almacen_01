@@ -12,6 +12,18 @@ export const menosXdiasHoy = (xDias: number) => {
   return al;
 };
 
+export const masXdiasHoy = (xDias: number) => {
+  const hoy = new Date();
+  const montoXDias = 1000 * 60 * 60 * 24 * xDias;
+  console.log('hoy masXdiasHoy', hoy, montoXDias);
+
+  const elDia = new Date(hoy.getTime() + montoXDias);
+  console.log('elDia', elDia);
+  const al = elDia.getFullYear() + '-' + ('0' + (elDia.getMonth() + 1)).slice(-2) + '-' + ('0' + elDia.getDate()).slice(-2);
+  console.log('al', al);
+  return al;
+};
+
 export const diaDeLaSemana = (fecha: string) => {
   const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   const fechaDate = new Date(fecha);

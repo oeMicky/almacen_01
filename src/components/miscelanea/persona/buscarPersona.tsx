@@ -18,6 +18,7 @@ import EditarPersona from './editarPersona';
 import VentasClienteVentasVarios from './ventasClienteVentasVarios';
 import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
 import { CTX_BUSCAR_TRANSPORTISTA } from '../transportista/buscarTransportista';
+import Spinner from '~/components/system/spinner';
 
 export const CTX_BUSCAR_PERSONA = createContextId<any>('buscar_persona');
 
@@ -36,6 +37,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
 
     mostrarPanelEditPersona: false,
     personaEDITADA: { _id: '', razonSocialNombre: '', direccion: '', email: '', telefono: '', cuentasCorrientes: [] },
+
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_BUSCAR_PERSONA, definicion_CTX_BUSCAR_PERSONA);
   //#endregion DEFINICION CTX_BUSCAR_PERSONA
@@ -237,8 +240,8 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 style={{ width: '100%' }}
                 onChange$={(e) => {
                   definicion_CTX_BUSCAR_PERSONA.buscarPor = (e.target as HTMLSelectElement).value;
-                  document.getElementById('in_conceptoABuscar_PERSONA')?.focus();
-                  // document.getElementById('in_conceptoABuscar_PERSONA').select();
+                  (document.getElementById('in_conceptoABuscar_PERSONA') as HTMLInputElement).focus();
+                  // (document.getElementById('in_conceptoABuscar_PERSONA') as HTMLInputElement).select();
                 }}
               >
                 <option value={'DNI / RUC'} selected={definicion_CTX_BUSCAR_PERSONA.buscarPor === 'DNI / RUC'}>
@@ -255,16 +258,28 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
             <div class="form-control form-agrupado">
               <input
                 id="in_conceptoABuscar_PERSONA"
-                style={{ width: '100%' }}
+                style={{ width: '100%', fontWeight: 'bold' }}
                 type={definicion_CTX_BUSCAR_PERSONA.buscarPor === 'DNI / RUC' ? 'number' : 'text'}
                 value={definicion_CTX_BUSCAR_PERSONA.conceptoABuscar}
                 // onFocusout$={() => localizarPersonas()}
                 onInput$={(e) => {
                   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
+                  console.log('🎎🎎🎎🎎🎎 onInput', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                  if (
+                    definicion_CTX_BUSCAR_PERSONA.conceptoABuscar.length === 11 &&
+                    (definicion_CTX_BUSCAR_PERSONA.conceptoABuscar.substring(0, 2) === '20' ||
+                      definicion_CTX_BUSCAR_PERSONA.conceptoABuscar.substring(0, 2) === '10')
+                  ) {
+                    // document.getElementById('in_BuscarPersona')?.focus();
+                    // console.log('.............buscando por RUC', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                    // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = true;
+                    localizarPersonas();
+                    // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = false;
+                  }
                 }}
-                // onChange$={(e) => {
-                //   definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
-                //   // //console.log('onChange---', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+                // onChange$={() => {
+                //   // definicion_CTX_BUSCAR_PERSONA.conceptoABuscar = (e.target as HTMLInputElement).value.trim();
+                //   console.log('onChange---', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
                 // }}
                 onKeyDown$={(e) => {
                   // //console.log('🚐🚐🚐🚐🚌🚐🚐🚌🚌🚐🚐🚐🚐🚌🚐🚐first', e);
@@ -298,7 +313,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 id="in_BuscarPersona"
                 type="image"
                 src={images.searchPLUS}
-                height={16}
+                height={18}
                 width={16}
                 style={{ margin: '0px 4px' }}
                 // onFocusin$={() => //console.log('🎁🎁🎁🎁🎁')}
@@ -308,7 +323,7 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 id="in_AdicionarPersona"
                 type="image"
                 src={images.add}
-                height={16}
+                height={18}
                 width={16}
                 style={{ marginRight: '2px' }}
                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
@@ -332,7 +347,12 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
         {/* NEW - PERSONA*/}
         {definicion_CTX_BUSCAR_PERSONA.mostrarPanelNewEditPersona && (
           <div class="modal">
-            <NewEditPersona soloPersonaNatural={props.soloPersonasNaturales} personaSeleccio={definicion_CTX_BUSCAR_PERSONA.pP} contexto={props.contexto} />
+            <NewEditPersona
+              soloPersonaNatural={props.soloPersonasNaturales}
+              personaSeleccio={definicion_CTX_BUSCAR_PERSONA.pP}
+              contexto={props.contexto}
+              valorABuscarAUTOMATICAMENTE={definicion_CTX_BUSCAR_PERSONA.conceptoABuscar.trim()}
+            />
           </div>
         )}
         {/* EDIT - PERSONA*/}
@@ -371,6 +391,12 @@ export default component$((props: { seleccionar?: string; soloPersonasNaturales:
                 // cliente={definicion_CTX_BUSCAR_PERSONA.pP}
                 contexto={props.contexto}
               />
+            </div>
+          )}
+          {/* MOSTRAR SPINNER */}
+          {definicion_CTX_BUSCAR_PERSONA.mostrarSpinner && (
+            <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Spinner />
             </div>
           )}
         </div>

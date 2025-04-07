@@ -13,7 +13,17 @@ import {
   // getIgvVenta,
 } from '~/apis/venta.api';
 //
-import { hoy, elIdAuxiliar, cerosALaIzquierda, redondeo2Decimales, formatoDDMMYYYY_PEN, menosXdiasHoy, redondeo6Decimales, literal } from '~/functions/comunes';
+import {
+  hoy,
+  elIdAuxiliar,
+  cerosALaIzquierda,
+  redondeo2Decimales,
+  formatoDDMMYYYY_PEN,
+  menosXdiasHoy,
+  redondeo6Decimales,
+  literal,
+  masXdiasHoy,
+} from '~/functions/comunes';
 // import SeleccionarPersona from '../miscelanea/persona/seleccionarPersona';
 import { CTX_INDEX_VENTA } from '~/routes/(ventas)/venta';
 import { getTipoCambio } from '~/apis/apisExternas.api';
@@ -315,7 +325,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
 
   const cuota = useStore<ICuotaCreditoVenta>({
     idAuxiliar: 0,
-    fechaCuota: hoy(),
+    fechaCuota: masXdiasHoy(30), // hoy(),
     importeCuotaPEN: 99,
   });
 
@@ -1494,7 +1504,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           {/* GENERALES DEL CLIENTE */}
           <div>
             {/* cliente VENTAS VARIAS*/}
-            <div>
+            <div style={{ marginBotton: '2px' }}>
               <div>
                 <input
                   id="chk_clienteVentasVarias_VENTA"
@@ -1592,64 +1602,135 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 }}
               />
             </div> */}
-            {/* tipo de documento identidad*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <select
-                  id="selectTipoDocumentoLiteral"
-                  disabled
-                  style={{ cursor: 'pointer' }}
-                  value={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad}
-                  // onChange={cambioTipoDocumento}
-                  onChange$={(e) => {
-                    const idx = (e.target as HTMLSelectElement).selectedIndex;
-                    const rere = e.target as HTMLSelectElement;
-                    const elOption = rere[idx];
+            {/* TIPO DE IDENTIDAD - NUMERO DE IDENTIDAD - RAZON SOCIAL / NOMBRE  */}
+            <div class="linea_1_111">
+              {/* tipo de documento identidad*/}
+              <div>
+                <div style={{ display: 'flex' }}>
+                  <select
+                    id="selectTipoDocumentoLiteral"
+                    disabled
+                    style={{ cursor: 'pointer', width: '100%', height: '18px' }}
+                    value={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad}
+                    // onChange={cambioTipoDocumento}
+                    onChange$={(e) => {
+                      const idx = (e.target as HTMLSelectElement).selectedIndex;
+                      const rere = e.target as HTMLSelectElement;
+                      const elOption = rere[idx];
 
-                    //
-                    //
-                    // const csd = (e.target as HTMLSelectElement).current[idx];
-                    // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
-                    definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = elOption.id;
-                    definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
-                  }}
-                  // style={{ width: '100%' }}
-                >
-                  <option id="1" value="DNI" selected={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad === 'DNI'}>
-                    DNI
-                  </option>
-                  <option id="6" value="RUC" selected={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad === 'RUC'}>
-                    RUC
-                  </option>
-                  <option id="4" value="C.EXT" selected={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad === 'C.EXT'}>
-                    C.EXT
-                  </option>
-                </select>
+                      //
+                      //
+                      // const csd = (e.target as HTMLSelectElement).current[idx];
+                      // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
+                      definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = elOption.id;
+                      definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
+                    }}
+                    // style={{ width: '100%' }}
+                  >
+                    <option id="1" value="DNI" selected={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad === 'DNI'}>
+                      DNI
+                    </option>
+                    <option id="6" value="RUC" selected={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad === 'RUC'}>
+                      RUC
+                    </option>
+                    <option id="4" value="C.EXT" selected={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad === 'C.EXT'}>
+                      C.EXT
+                    </option>
+                  </select>
+                  <input
+                    id="ima_BuscarCliente_VENTA"
+                    type="image"
+                    src={images.searchPLUS}
+                    title="Buscar datos de identidad"
+                    height={18}
+                    width={16}
+                    style={{ margin: '0 4px ' }}
+                    onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true)}
+                  />
+                  <input
+                    // id="in_BuscarDetraccion"
+                    type="image"
+                    src={images.edit}
+                    title="Editar cliente"
+                    height={18}
+                    width={16}
+                    // style={{ margin: '2px 0' }}
+                    disabled={definicion_CTX_F_B_NC_ND.idCliente === '' ? true : false}
+                    onClick$={() => {
+                      // console.log('japon');
+                      // ctx_buscar_persona.pP = persoLocali;
+                      // ctx_buscar_persona.mostrarPanelEditPersona = true;
+                      definicion_CTX_ADD_VENTA.mostrarPanelEditPersonaDirecta = true;
+                    }}
+                  />
+                </div>
+              </div>
+              {/* numero identidad*/}
+              <div>
                 <input
-                  id="ima_BuscarCliente_VENTA"
-                  type="image"
-                  src={images.searchPLUS}
-                  title="Buscar datos de identidad"
-                  height={16}
-                  width={16}
-                  style={{ margin: '2px 4px 2px 4px' }}
-                  onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true)}
+                  id="inputNumeroDocumentoIdentidad"
+                  style={{ width: '100%' }}
+                  type="number"
+                  disabled
+                  placeholder="Add número"
+                  value={definicion_CTX_F_B_NC_ND.numeroIdentidad}
+                  onChange$={(e) => (definicion_CTX_F_B_NC_ND.numeroIdentidad = (e.target as HTMLInputElement).value)}
+                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
                 />
+              </div>
+              {/* Razon Social / Nombre */}
+              <div>
                 <input
-                  // id="in_BuscarDetraccion"
-                  type="image"
-                  src={images.edit}
-                  title="Editar cliente"
-                  height={16}
-                  width={16}
-                  style={{ margin: '2px 0' }}
-                  disabled={definicion_CTX_F_B_NC_ND.idCliente === '' ? true : false}
-                  onClick$={() => {
-                    // console.log('japon');
-                    // ctx_buscar_persona.pP = persoLocali;
-                    // ctx_buscar_persona.mostrarPanelEditPersona = true;
-                    definicion_CTX_ADD_VENTA.mostrarPanelEditPersonaDirecta = true;
+                  id="inputNombreCliente"
+                  style={{ width: '100%' }}
+                  type="text"
+                  disabled
+                  placeholder="Razón social / Nombre"
+                  value={definicion_CTX_F_B_NC_ND.razonSocialNombre}
+                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
+                />
+              </div>
+            </div>
+            {/* DIRECCION - EMAIL - TELEFONO  */}
+            <div class="linea_1_111">
+              {/* Dirección Cliente */}
+              <div>
+                <input
+                  id="inputDireccionCliente"
+                  style={{ width: '100%' }}
+                  type="text"
+                  disabled
+                  placeholder="Direccion cliente"
+                  value={definicion_CTX_F_B_NC_ND.direccionCliente}
+                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
+                />
+              </div>
+              {/* Email  */}
+              <div>
+                <input
+                  id="inputEmail"
+                  style={{ width: '100%' }}
+                  type="email"
+                  placeholder="Email"
+                  value={definicion_CTX_F_B_NC_ND.email}
+                  onChange$={(e) => {
+                    definicion_CTX_F_B_NC_ND.email = (e.target as HTMLInputElement).value;
                   }}
+                  // onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              {/* Telefono */}
+              <div>
+                <input
+                  id="inputTelefono"
+                  style={{ width: '100%' }}
+                  type="tel"
+                  placeholder="Telefono"
+                  value={definicion_CTX_F_B_NC_ND.telefono}
+                  onChange$={(e) => {
+                    definicion_CTX_F_B_NC_ND.telefono = (e.target as HTMLInputElement).value;
+                  }}
+                  // onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -1668,86 +1749,19 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 />
               </div>
             )}
-            {/* numero identidad*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNumeroDocumentoIdentidad"
-                  style={{ width: '100%' }}
-                  type="number"
-                  disabled
-                  placeholder="Add número"
-                  value={definicion_CTX_F_B_NC_ND.numeroIdentidad}
-                  onChange$={(e) => (definicion_CTX_F_B_NC_ND.numeroIdentidad = (e.target as HTMLInputElement).value)}
-                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
-                />
-              </div>
-            </div>
-            {/* Razon Social / Nombre */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNombreCliente"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled
-                  placeholder="Razón social / Nombre"
-                  value={definicion_CTX_F_B_NC_ND.razonSocialNombre}
-                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
-                />
-              </div>
-            </div>
-            {/* Dirección Cliente */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputDireccionCliente"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled
-                  placeholder="Direccion cliente"
-                  value={definicion_CTX_F_B_NC_ND.direccionCliente}
-                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
-                />
-              </div>
-            </div>
-            {/* Email - Telefono */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '4px 0', gap: '4px' }}>
-              <input
-                id="inputEmail"
-                style={{ width: '100%' }}
-                type="email"
-                placeholder="Email"
-                value={definicion_CTX_F_B_NC_ND.email}
-                onChange$={(e) => {
-                  definicion_CTX_F_B_NC_ND.email = (e.target as HTMLInputElement).value;
-                }}
-                // onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                id="inputTelefono"
-                style={{ width: '100%' }}
-                type="tel"
-                placeholder="Telefono"
-                value={definicion_CTX_F_B_NC_ND.telefono}
-                onChange$={(e) => {
-                  definicion_CTX_F_B_NC_ND.telefono = (e.target as HTMLInputElement).value;
-                }}
-                // onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE FACTURA */}
           <div>
-            {/* Documento */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            <div class="linea_1_111">
+              {/* Documento */}
+              <div>
                 <select
                   id="selectDocumentoVenta"
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', width: '100%' }}
                   onChange$={(e) => {
                     tipoDocumento.value = (e.target as HTMLSelectElement).value;
                     // alert('eligio ' + tipoDocumento.value);
@@ -1767,14 +1781,12 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   </option>
                 </select>
               </div>
-            </div>
-            {/* Serie  */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              {/* Serie  */}
+              <div>
                 {
                   <select
                     id="selectSerieVenta"
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', width: '100%' }}
                     onChange$={(e) => {
                       const idx = (e.target as HTMLSelectElement).selectedIndex;
                       const elSelect = e.target as HTMLSelectElement;
@@ -1804,10 +1816,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   </select>
                 }
               </div>
-            </div>
-            {/* fecha    */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              {/* fecha    */}
+              <div>
                 <input
                   id="in_Fecha_Para_Venta"
                   type="date"
@@ -1836,14 +1846,14 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 />
               </div>
             </div>
+
             <br />
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
-          {/* ----------------------------------------------------- */}
+          {/* ------------- ---------------------------------------- */}
           {/* ***NC -- ND -- */}
           <div id="zona_NC_ND" style={{ background: 'grey' }} hidden={tipoDocumento.value === '07' || tipoDocumento.value === '08' ? false : true}>
             {/* *** select -- */}
-            <div class="form-control">
+            <div class="form-control" style={{ paddingTop: '2px' }}>
               <div class="form-control form-agrupado" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'left' }}>
                 <select
                   id="select_Tipo_Nota_Credito"
@@ -1952,11 +1962,11 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
               </div>
             </div>
             {/* *** datos -- */}
-            <div class="form-control">
-              <div class="form-control form-agrupado" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'left' }}>
+            <div class="linea_1_1111" style={{ margin: '0 4px', paddingBottom: '4px' }}>
+              <div>
                 <input
                   id="in_VENTA_NC_ND_Fecha"
-                  style={{ marginLeft: '4px' }}
+                  style={{ width: '100%' }}
                   // disabled
                   type="date"
                   placeholder="Add NC/ND Fecha"
@@ -1964,19 +1974,11 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   onChange$={(e) => (definicion_CTX_F_B_NC_ND.referenciaFecha = (e.target as HTMLInputElement).value)}
                   // onChange={(e) => setNumeroIdentidad(e.target.value)}
                 />
-                {/* <input
-                  id="in_VENTA_NC_ND_TCP"
-                  // style={{ width: '100%' }}
-                  // disabled
-                  type="number"
-                  placeholder="Add NC/ND TCP"
-                  value={definicion_CTX_F_B_NC_ND.referenciaTipo}
-                  onChange$={(e) => (definicion_CTX_F_B_NC_ND.referenciaTipo = (e.target as HTMLInputElement).value)}
-                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
-                /> */}
+              </div>
+              <div>
                 <select
                   id="select_VENTA_NC_ND_TCP"
-                  style={{ cursor: 'pointer', width: '152px' }}
+                  style={{ cursor: 'pointer', width: '100%' }}
                   onChange$={(e) => {
                     const idx = (e.target as HTMLSelectElement).selectedIndex;
                     const elSelect = e.target as HTMLSelectElement;
@@ -2002,9 +2004,11 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     Ticket de máquina registradora
                   </option>
                 </select>
+              </div>
+              <div>
                 <input
                   id="in_VENTA_NC_ND_Serie"
-                  // style={{ width: '100%' }}
+                  style={{ width: '100%' }}
                   // disabled
                   type="text"
                   placeholder="Add NC/ND Serie"
@@ -2016,9 +2020,11 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     }
                   }}
                 />
+              </div>
+              <div>
                 <input
                   id="in_VENTA_NC_ND_Numero"
-                  style={{ marginRight: '4px' }}
+                  style={{ width: '100%' }}
                   // disabled
                   type="number"
                   placeholder="Add NC/ND Numero"
@@ -2033,70 +2039,60 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             </div>
           </div>
           <br hidden={tipoDocumento.value === '07' || tipoDocumento.value === '08' ? false : true}></br>
-          {/* ----------------------------------------------------- */}
+          {/* --------------style={{ fontSize: '0.9rem', fontWeight: '400', paddingLeft: '4px', paddingRight: '24px' }}--------------------------------------- */}
           {/* IGV - TC  */}
           <div>
-            {/* IGV */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <strong style={{ fontSize: '0.9rem', fontWeight: '400', paddingLeft: '4px', paddingRight: '24px' }}>IGV</strong>
+            <div class="linea_1_11">
+              {/* IGV */}
+              <div style={{ display: 'flex' }}>
+                <strong style={{ marginRight: '4px', marginTop: '2px', width: '20%' }}>IGV</strong>
                 <input type="text" id="inputIGV" disabled value={definicion_CTX_F_B_NC_ND.igv.$numberDecimal + ' %'} style={{ width: '100%' }} />
               </div>
-            </div>
-            {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
-            <div class="form-control">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '3px' }}>
-                <input
-                  type="checkbox"
-                  id="chbx_TipoCambio_Para_Venta"
-                  style={{ cursor: 'pointer' }}
-                  onClick$={(e) => {
-                    if (definicion_CTX_F_B_NC_ND.fecha === '') {
-                      alert('Ingrese la fecha para esta venta');
-                      (e.target as HTMLInputElement).checked = false;
-                      document.getElementById('in_Fecha_Para_Venta')?.focus();
-                      return;
-                    }
-                    obtenerTipoCambio(e.target as HTMLInputElement);
-                  }}
-                />
-                <strong
-                  style={{ fontSize: '0.9rem', fontWeight: '400', cursor: 'pointer' }}
-                  onClick$={() => {
-                    if ((document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked === false) {
+              {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
+              <div style={{ display: 'flex' }}>
+                <div style={{ width: '20%' }}>
+                  <input
+                    id="chbx_TipoCambio_Para_Venta"
+                    type="checkbox"
+                    style={{ cursor: 'pointer' }}
+                    onClick$={(e) => {
                       if (definicion_CTX_F_B_NC_ND.fecha === '') {
                         alert('Ingrese la fecha para esta venta');
-                        // (e.target as HTMLInputElement).checked = false;
-                        (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
+                        (e.target as HTMLInputElement).checked = false;
                         document.getElementById('in_Fecha_Para_Venta')?.focus();
                         return;
                       }
-                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = true;
-                    } else {
-                      (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
-                      // definicion_CTX_F_B_NC_ND.enDolares = false;
-                    }
-                    obtenerTipoCambio(document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement);
-                    // document.getElementById('chbx_TipoCambio_Para_Venta')?.onclick;
-                  }}
-                >
-                  USD
-                </strong>
-                {/* {''}
-                <label
-                  style={{ textAlign: 'start' }}
-                  for="checkboxTipoCambio"
-                  // onClick$={
-                  //   (document.getElementById('checkboxTipoCambio')?.checked = !document.getElementById('checkboxTipoCambio'))
-                  // }
-                >
-                  Tipo Cambio (USD)
-                </label> */}
-              </div>
-              <div class="form-control form-agrupado">
+                      obtenerTipoCambio(e.target as HTMLInputElement);
+                    }}
+                  />
+                  <strong
+                    style={{ fontSize: '0.9rem', fontWeight: '400', cursor: 'pointer', marginRight: '4px', marginTop: '1px' }}
+                    onClick$={() => {
+                      if ((document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked === false) {
+                        if (definicion_CTX_F_B_NC_ND.fecha === '') {
+                          alert('Ingrese la fecha para esta venta');
+                          // (e.target as HTMLInputElement).checked = false;
+                          (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
+                          document.getElementById('in_Fecha_Para_Venta')?.focus();
+                          return;
+                        }
+                        (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = true;
+                      } else {
+                        (document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement).checked = false;
+                        // definicion_CTX_F_B_NC_ND.enDolares = false;
+                      }
+                      obtenerTipoCambio(document.getElementById('chbx_TipoCambio_Para_Venta') as HTMLInputElement);
+                      // document.getElementById('chbx_TipoCambio_Para_Venta')?.onclick;
+                    }}
+                  >
+                    USD
+                  </strong>
+                </div>
+
                 <input id="inputTipoCambio" type="number" value={definicion_CTX_F_B_NC_ND.tipoCambio} disabled style={{ width: '100%' }} />
               </div>
             </div>
+
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
@@ -2119,19 +2115,20 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   onChange$={() => {
                     definicion_CTX_F_B_NC_ND.verCuotasCredito = !definicion_CTX_F_B_NC_ND.verCuotasCredito;
                   }}
-                  style={definicion_CTX_F_B_NC_ND.verCuotasCredito ? { cursor: 'pointer', width: '79%' } : { cursor: 'pointer', width: '100%' }}
+                  style={definicion_CTX_F_B_NC_ND.verCuotasCredito ? { cursor: 'pointer', width: '70%' } : { cursor: 'pointer', width: '100%' }}
                 >
-                  <option value={'CONTADO'}>CONTADO</option>
-                  <option value={'CRÉDITO'}>CRÉDITO</option>
+                  <option value="CONTADO">CONTADO</option>
+                  <option value="CRÉDITO">CRÉDITO</option>
                 </select>
                 {definicion_CTX_F_B_NC_ND.verCuotasCredito && (
                   <button
                     id="addCuota"
                     class="btn"
                     title="Adicionar cuota"
+                    style={{ width: '28%', cursor: 'pointer' }}
                     onClick$={() => {
                       (cuota.idAuxiliar = parseInt(elIdAuxiliar())),
-                        (cuota.fechaCuota = hoy()),
+                        (cuota.fechaCuota = masXdiasHoy(30)),
                         (cuota.importeCuotaPEN = 0),
                         (cuotaCredito_esEdit.value = false);
                       definicion_CTX_ADD_VENTA.mostrarPanelCuotasCredito = true;
@@ -2165,9 +2162,9 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', margin: '6px 0' }}>
                   <div>
                     <input
+                      id="Una parte en efectivo"
                       type="radio"
                       value="Una parte en efectivo"
-                      id="Una parte en efectivo"
                       name="Contado"
                       style={{ cursor: 'pointer' }}
                       checked={definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
@@ -2181,8 +2178,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     </label>
                   </div>
                   <input
-                    type="number"
                     id="inputMontoEnEfectivo"
+                    type="number"
                     placeholder="Efectivo"
                     style={definicion_CTX_F_B_NC_ND.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
                     disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
@@ -2199,7 +2196,9 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   <select
                     id="select_contado"
                     style={
-                      definicion_CTX_F_B_NC_ND.unaParteEnEfectivo ? { cursor: 'pointer', background: 'white' } : { cursor: 'pointer', background: '#eeeeee' }
+                      definicion_CTX_F_B_NC_ND.unaParteEnEfectivo
+                        ? { cursor: 'pointer', background: 'white', width: '100%' }
+                        : { cursor: 'pointer', background: '#eeeeee', width: '100%' }
                     }
                     disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
                     value={definicion_CTX_F_B_NC_ND.otroMedioPago}
@@ -2220,8 +2219,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     <option value={'DEPÓSITO EN CUENTA'}>DEPÓSITO EN CUENTA</option>
                   </select>
                   <input
-                    type="number"
                     id="inputMontoOtroMedioPago"
+                    type="number"
                     placeholder="Otro medio"
                     style={definicion_CTX_F_B_NC_ND.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
                     disabled={!definicion_CTX_F_B_NC_ND.unaParteEnEfectivo}
@@ -2276,7 +2275,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                           <tr key={value.idAuxiliar}>
                             <td data-label="Nro. Cuota" key={value.idAuxiliar}>{`${cerosALaIzquierda(indexItem, 3)}`}</td>
                             <td data-label="Fecha">{formatoDDMMYYYY_PEN(value.fechaCuota)}</td>
-                            <td data-label="Importe" style={{ textAlign: 'end' }}>
+                            <td data-label="Importe" class="comoNumeroLeft">
                               {/* {cuota.importeCuotaPEN} */}
                               {`${value.importeCuotaPEN.toLocaleString('en-PE', {
                                 // style: 'currency',
@@ -2284,7 +2283,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                                 minimumFractionDigits: 2,
                               })}`}
                             </td>
-                            <td data-label="Acciones" style={{ textAlign: 'center' }}>
+                            <td data-label="Acciones" class="accionesLeft">
                               <input type="image" title="Editar ítem" alt="icono de editar" height={14} width={14} src={images.edit} />
                               <input type="image" title="Eliminar ítem" alt="icono de eliminar" height={14} width={14} src={images.trash} />
                               {/* <ImgButton
@@ -2421,27 +2420,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
-          {/* ----------------------------------------------------- */}
-          {/* OBSERVACION */}
-          <div>
-            {/* OBSERVACION */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  type="text"
-                  id="in_Observacion"
-                  value={definicion_CTX_F_B_NC_ND.observacion}
-                  style={{ width: '100%', background: 'yellow' }}
-                  placeholder="Observación"
-                  onChange$={(e) => {
-                    definicion_CTX_F_B_NC_ND.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
-                  }}
-                />
-              </div>
-            </div>
-            <br />
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
-          </div>
+
           {/* ----------------------------------------------------- */}
           {/* ----------------------------------------------------- */}
           {/* ----------------------------------------------------- */}
@@ -2920,9 +2899,13 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   Con detracción
                 </label>
               </div>
-              <div id="zona_Detraccion" hidden={!definicion_CTX_F_B_NC_ND.detraccion}>
+              <div
+                id="zona_Detraccion"
+                hidden={!definicion_CTX_F_B_NC_ND.detraccion}
+                style={{ borderRadius: '2px', backgroundColor: '#999999', padding: '2px 0px' }}
+              >
                 {/* Detracción Bienes Servicios */}
-                <div style={{ display: 'flex', margin: '4px 0px' }}>
+                <div style={{ display: 'flex', margin: '4px 4px' }}>
                   <select
                     id="select_Detraccion"
                     style={{ cursor: 'pointer', width: '100%' }}
@@ -2950,7 +2933,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                   </select>
                 </div>
                 {/* Medio de Pago  DETRACCION*/}
-                <div style={{ display: 'flex', margin: '4px 0px' }}>
+                <div style={{ display: 'flex', margin: '4px 4px' }}>
                   <select
                     id="select_DetraccionMedioPago"
                     style={{ cursor: 'pointer', width: '100%' }}
@@ -2977,68 +2960,91 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     })}
                   </select>
                 </div>
-                {/* Cuenta bancaria DETRACCION */}
-                <div style={{ display: 'flex', margin: '4px 0px' }}>
-                  <input
-                    type="text"
-                    id="in_CuentaBancariaDetraccion"
-                    value={definicion_CTX_F_B_NC_ND.detraccionNumCuentaBancoNacion}
-                    disabled
-                    style={{ width: '100%' }}
-                    placeholder="Cuenta bancaria detracción"
-                    // onChange$={(e) => {
-                    //   definicion_CTX_F_B_NC_ND.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
-                    // }}
-                  />
-                </div>
-                {/* Porcentaje DETRACCION */}
-                <div style={{ display: 'flex', margin: '4px 0px' }}>
-                  <label style={{ width: '92px' }}>PORCENTAJE</label>
-                  <input
-                    type="number"
-                    id="in_PorcentajeDetraccion"
-                    value={definicion_CTX_F_B_NC_ND.detraccionPorcentaje}
-                    style={{ width: '100%' }}
-                    placeholder="Porcentaje detracción"
-                    onChange$={(e) => {
-                      definicion_CTX_F_B_NC_ND.detraccionPorcentaje = (e.target as HTMLInputElement).value.toUpperCase().trim();
-                    }}
-                    onKeyPress$={(e) => {
-                      if (e.key === 'Enter') {
-                        document.getElementById('in_MontoDetraccion')?.focus();
-                      }
-                    }}
-                    onFocus$={(e) => {
-                      (e.target as HTMLInputElement).select();
-                    }}
-                  />
-                </div>
-                {/* Monto DETRACCION */}
-                <div style={{ display: 'flex', margin: '4px 0px' }}>
-                  <label style={{ width: '92px' }}>MONTO PEN</label>
-                  <input
-                    type="number"
-                    id="in_MontoDetraccion"
-                    value={definicion_CTX_F_B_NC_ND.detraccionMontoPEN}
-                    style={{ width: '100%' }}
-                    placeholder="Monto detracción"
-                    onChange$={(e) => {
-                      definicion_CTX_F_B_NC_ND.detraccionMontoPEN = (e.target as HTMLInputElement).value.toUpperCase().trim();
-                    }}
-                    onKeyPress$={(e) => {
-                      if (e.key === 'Enter') {
-                        document.getElementById('btn_GrabarVenta')?.focus();
-                      }
-                    }}
-                    onFocus$={(e) => {
-                      (e.target as HTMLInputElement).select();
-                    }}
-                  />
+                <div class="linea_1_111" style={{ margin: '0 4px 4px 4px' }}>
+                  {/* Cuenta bancaria DETRACCION */}
+                  <div>
+                    <input
+                      type="text"
+                      id="in_CuentaBancariaDetraccion"
+                      value={definicion_CTX_F_B_NC_ND.detraccionNumCuentaBancoNacion}
+                      disabled
+                      style={{ width: '100%' }}
+                      placeholder="Cuenta bancaria detracción"
+                      // onChange$={(e) => {
+                      //   definicion_CTX_F_B_NC_ND.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
+                      // }}
+                    />
+                  </div>
+                  {/* Porcentaje DETRACCION */}
+                  <div style={{ display: 'flex' }}>
+                    <label style={{ width: '36%', marginTop: '2px', marginRight: '4px' }}>PORCENTAJE</label>
+                    <input
+                      type="number"
+                      id="in_PorcentajeDetraccion"
+                      value={definicion_CTX_F_B_NC_ND.detraccionPorcentaje}
+                      style={{ width: '100%' }}
+                      placeholder="Porcentaje detracción"
+                      onChange$={(e) => {
+                        definicion_CTX_F_B_NC_ND.detraccionPorcentaje = (e.target as HTMLInputElement).value.toUpperCase().trim();
+                      }}
+                      onKeyPress$={(e) => {
+                        if (e.key === 'Enter') {
+                          document.getElementById('in_MontoDetraccion')?.focus();
+                        }
+                      }}
+                      onFocus$={(e) => {
+                        (e.target as HTMLInputElement).select();
+                      }}
+                    />
+                  </div>
+                  {/* Monto DETRACCION */}
+                  <div style={{ display: 'flex' }}>
+                    <label style={{ width: '36%', marginTop: '2px', marginRight: '4px' }}>MONTO PEN</label>
+                    <input
+                      type="number"
+                      id="in_MontoDetraccion"
+                      value={definicion_CTX_F_B_NC_ND.detraccionMontoPEN}
+                      style={{ width: '100%' }}
+                      placeholder="Monto detracción"
+                      onChange$={(e) => {
+                        definicion_CTX_F_B_NC_ND.detraccionMontoPEN = (e.target as HTMLInputElement).value.toUpperCase().trim();
+                      }}
+                      onKeyPress$={(e) => {
+                        if (e.key === 'Enter') {
+                          document.getElementById('btn_GrabarVenta')?.focus();
+                        }
+                      }}
+                      onFocus$={(e) => {
+                        (e.target as HTMLInputElement).select();
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
               <br />
             </div>
           )}
+          {/* ----------------------------------------------------- */}
+          {/* OBSERVACION */}
+          <div>
+            {/* OBSERVACION */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  type="text"
+                  id="in_Observacion"
+                  value={definicion_CTX_F_B_NC_ND.observacion}
+                  style={{ width: '100%', background: 'yellow' }}
+                  placeholder="Observación"
+                  onChange$={(e) => {
+                    definicion_CTX_F_B_NC_ND.observacion = (e.target as HTMLInputElement).value.toUpperCase().trim();
+                  }}
+                />
+              </div>
+            </div>
+            <br />
+            {/* <hr style={{ margin: '5px 0' }}></hr> */}
+          </div>
         </div>
         <input
           id="btn_GrabarVenta"

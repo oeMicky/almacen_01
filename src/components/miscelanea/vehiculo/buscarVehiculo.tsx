@@ -50,6 +50,10 @@ export default component$((props: { contexto: string }) => {
     buscarPor: 'Placa', //por.value,
     cadenaABuscar: '', //cadena.value,
   });
+
+  setTimeout(() => {
+    document.getElementById('in_BusquedaVehiculo_VEHICULO')?.focus();
+  }, 200);
   //#endregion INICIALIZACION
 
   //#region BUSCAR VEHICULOS
@@ -79,7 +83,7 @@ export default component$((props: { contexto: string }) => {
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 600px)',
+        width: 'clamp(320px, 100%, 600px)',
         // width: 'auto',
         padding: '1px',
         // border: '3px dashed yellow',
@@ -103,7 +107,7 @@ export default component$((props: { contexto: string }) => {
             ctx.mostrarPanelBuscarVehiculo = false;
           })}
         />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de cerrar"
           height={16}
@@ -112,7 +116,7 @@ export default component$((props: { contexto: string }) => {
           onClick={$(() => {
             //console.log('parametrosBusqueda', parametrosBusqueda);
           })}
-        />
+        /> */}
       </div>
       {/* FORMULARIO */}
       <div class="add-form">

@@ -35,7 +35,7 @@ export const registrarPersona = $(async (persona: any) => {
   return registro;
 });
 
-export default component$((props: { soloPersonaNatural: boolean; personaSeleccio: any; contexto: string }) => {
+export default component$((props: { soloPersonaNatural: boolean; personaSeleccio: any; contexto: string; valorABuscarAUTOMATICAMENTE: string }) => {
   //#region DEFINICION PERSONA - NEW  /EDIT
   const persona = useStore<IPersona>({
     _id: props.personaSeleccio._id ? props.personaSeleccio._id : '',
@@ -55,6 +55,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
+  const ini = useSignal(0);
   const condicion = useSignal('');
   const mostrarSpinner = useSignal(false);
 
@@ -82,7 +83,6 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
     //   persona.tipoDocumentoIdentidad = props.personaSeleccio.tipoDocumentoIdentidad;
     // }
   });
-  //#endregion INICIALIZACION
 
   //#region BUSCAR_PERSONA_EN_API_EXTERNA
   const buscarPersonaEnAPIExterna = $(async () => {
@@ -95,6 +95,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
     }
     condicion.value = '';
     mostrarSpinner.value = true;
+    // POR RUC
     if (persona.codigoTipoDocumentoIdentidad === '6') {
       const laIdentidad = await getRUC(persona.numeroIdentidad);
       //console.log('laIdentidad - RUC:', laIdentidad);
@@ -102,6 +103,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
       persona.razonSocialNombre = laData.nombre;
       condicion.value = laData.condicion;
     } else {
+      // POR DNI
       if (persona.codigoTipoDocumentoIdentidad === '1') {
         const laIdentidad = await getDNI(persona.numeroIdentidad);
         //console.log('laIdentidad - DNI:', laIdentidad);
@@ -115,6 +117,26 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
     mostrarSpinner.value = false;
   });
   //#endregion BUSCAR_PERSONA_EN_API_EXTERNA
+
+  useTask$(({ track }) => {
+    track(() => ini.value);
+    if (ini.value === 0) {
+      //console.log('props.valorABuscarAUTOMATICAMENTE', props.valorABuscarAUTOMATICAMENTE);
+      if (
+        props.valorABuscarAUTOMATICAMENTE.length === 11 &&
+        (props.valorABuscarAUTOMATICAMENTE.substring(0, 2) === '20' || props.valorABuscarAUTOMATICAMENTE.substring(0, 2) === '10')
+      ) {
+        // document.getElementById('in_BuscarPersona')?.focus();
+        // console.log('.............buscando por RUC', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
+        // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = true;
+        persona.numeroIdentidad = props.valorABuscarAUTOMATICAMENTE;
+        buscarPersonaEnAPIExterna();
+        // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = false;
+      }
+    }
+  });
+
+  //#endregion INICIALIZACION
 
   //#region IR_A_REGISTRAR_PERSONA
   const irARegistrarPersona = $(async () => {
@@ -501,6 +523,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
               </div>
             </>
           )}
+          <br />
         </div>
 
         {/* GRABAR   onClick={(e) => onSubmit(e)}*/}

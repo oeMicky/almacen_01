@@ -10,6 +10,7 @@ import { getIgvVenta } from '~/apis/venta.api';
 import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
 import { images } from '~/assets';
+import { useNavigate } from '@builder.io/qwik-city';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 // import TablaCotizaciones from '~/components/venta/tablaCotizaciones';
 
@@ -29,6 +30,7 @@ export default component$(() => {
 
   //#region INICIALIZACION
   const ini = useSignal(0);
+  const navegarA = useNavigate();
   const buscarCotizaciones = useSignal(0);
   const igv = useSignal(0);
   // const showAddCotizacion = useSignal(false);
@@ -162,25 +164,39 @@ export default component$(() => {
             title="Add una cotización"
             style={{ cursor: 'pointer' }}
             onClick={$(async () => {
-              //validar PERIODO
-              if (periodo.idPeriodo === '') {
-                alert('Seleccione el periodo.');
-                document.getElementById('se_periodo')?.focus();
-                ini.value++;
-                return;
-              }
-              //
-              let elIgv = await getIgvVenta({
-                idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                idEmpresa: parametrosGlobales.idEmpresa,
-              });
-              elIgv = elIgv.data;
-              //console.log('elIgv', elIgv);
-              igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
-              //console.log('igv.value::', igv.value);
+              try {
+                definicion_CTX_INDEX_COTIZACION.mostrarSpinner = true;
+                //
+                if (parametrosGlobales.idGrupoEmpresarial === '') {
+                  // console.log('estaVACIA');
+                  alert('Faltan datos... vuelva a logearse..');
+                  navegarA('/login');
+                  return;
+                }
+                //validar PERIODO
+                if (periodo.idPeriodo === '') {
+                  alert('Seleccione el periodo.');
+                  document.getElementById('se_periodo')?.focus();
+                  ini.value++;
+                  return;
+                }
+                //
+                let elIgv = await getIgvVenta({
+                  idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                  idEmpresa: parametrosGlobales.idEmpresa,
+                });
+                elIgv = elIgv.data;
+                //console.log('elIgv', elIgv);
+                igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
+                //console.log('igv.value::', igv.value);
 
-              definicion_CTX_INDEX_COTIZACION.cC = [];
-              definicion_CTX_INDEX_COTIZACION.mostrarPanelNewEditCotizacion = true;
+                definicion_CTX_INDEX_COTIZACION.cC = [];
+                definicion_CTX_INDEX_COTIZACION.mostrarPanelNewEditCotizacion = true;
+              } catch (error) {
+                console.log('🚀 ~ onClick ~ error', error);
+              } finally {
+                definicion_CTX_INDEX_COTIZACION.mostrarSpinner = false;
+              }
             })}
           />
           <ElSelect

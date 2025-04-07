@@ -1,4 +1,4 @@
-import { $, component$, useContext } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 // import { , hoy } from '~/functions/comunes';
 import ImgButton from '../system/imgButton';
@@ -6,7 +6,7 @@ import type { ICuotaCreditoVenta } from '~/interfaces/iVenta';
 import { CTX_ADD_VENTA } from './addVenta';
 import { CTX_ADD_NOTA_VENTA } from '../notaVenta/addNotaVenta';
 //
-export default component$((props: { contexto: string; esEdit: boolean; cuota: ICuotaCreditoVenta }) => {
+export default component$((props: { contexto: string; esEdit: boolean; cuota: ICuotaCreditoVenta; fechaOrigen?: string }) => {
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
@@ -18,6 +18,19 @@ export default component$((props: { contexto: string; esEdit: boolean; cuota: IC
       break;
   }
   //#endregion CONTEXTOS
+
+  //#region INICIALIZACION
+  const ini = useSignal(0);
+
+  useTask$(({ track }) => {
+    track(() => ini.value);
+    if (ini.value === 0) {
+      setTimeout(() => {
+        document.getElementById('inputFechaCuota')?.focus();
+      }, 200);
+    }
+  });
+  //#endregion INICIALIZACION
   // const ctx_add_venta = useContext(CTX_ADD_VENTA);
 
   // const cuota = useStore<ICuotaCreditoVenta>({
@@ -46,6 +59,7 @@ export default component$((props: { contexto: string; esEdit: boolean; cuota: IC
     <div
       style={{
         width: 'clamp(320px, 100%, 330px)',
+        padding: '2px',
         background: '#eee',
         //  width: props.ancho + 'px'
       }}
@@ -54,6 +68,14 @@ export default component$((props: { contexto: string; esEdit: boolean; cuota: IC
       {/* BOTONES DEL MARCO   */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <ImgButton
+          src={images.see}
+          alt="Icono de see"
+          height={16}
+          width={16}
+          title="imprimir see"
+          onClick={$(() => console.log('cuota.idAuxiliar', props.cuota))}
+        />
+        <ImgButton
           title="Cerrar formulario"
           src={images.x}
           alt="Icono de cerrar"
@@ -61,14 +83,6 @@ export default component$((props: { contexto: string; esEdit: boolean; cuota: IC
           width={18}
           onClick={$(() => (ctx.mostrarPanelCuotasCredito = false))}
         />
-        {/* <ImgButton
-          src={images.see}
-          alt="Icono de see"
-          height={16}
-          width={16}
-          title="imprimir see"
-          onClick={$(() => //console.log('cuota.idAuxiliar', props.cuota.idAuxiliar))}
-        /> */}
       </div>
       {/* TITULO */}
       <h3 style={{ fontSize: '0.8rem' }}>Cuota</h3>
@@ -85,7 +99,11 @@ export default component$((props: { contexto: string; esEdit: boolean; cuota: IC
               onChange$={(e) => {
                 props.cuota.fechaCuota = (e.target as HTMLInputElement).value;
               }}
-              // onChange={(e) => setFechaCuota(e.target.value)}
+              onKeyUp$={(e) => {
+                if (e.key === 'Enter') {
+                  (document.getElementById('inputImporteCuota') as HTMLInputElement).focus();
+                }
+              }}
             />
           </div>
         </div>
@@ -101,18 +119,36 @@ export default component$((props: { contexto: string; esEdit: boolean; cuota: IC
               onChange$={(e) => {
                 props.cuota.importeCuotaPEN = parseFloat((e.target as HTMLInputElement).value);
               }}
+              onKeyUp$={(e) => {
+                if (e.key === 'Enter') {
+                  (document.getElementById('btnGrabarCuota') as HTMLInputElement).focus();
+                }
+              }}
               // onChange={(e) => setImporteCuota(e.target.value)}
             />
           </div>
         </div>
         {/* summit   onClick={(e) => onSubmit(e)} */}
         <input
+          id="btnGrabarCuota"
           type="button"
           value="Grabar "
           class="btn-centro"
-          style={{ marginTop: '7px' }}
+          style={{ marginTop: '8px', cursor: 'pointer', height: '40px' }}
           onClick$={() => {
             onSubmit();
+          }}
+          // onKeyDown$={() => {
+          //   console.log('onkeydown');
+          // }}
+          // onKeyPress$={() => {
+          //   console.log('onkeypress');
+          // }}
+          onKeyUp$={(e) => {
+            // console.log('onkeyup', e);
+            if (e.key === 'ArrowUp') {
+              (document.getElementById('inputImporteCuota') as HTMLInputElement).focus();
+            }
           }}
         />
       </div>

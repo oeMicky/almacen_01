@@ -133,7 +133,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
 
     //console.log('props.soloPersonasNaturales:::...', props.soloPersonasNaturales);
     //console.log('ctx_buscar_persona:::...', ctx_buscar_persona);
-
+    ctx_buscar_persona.mostrarSpinner = true;
     if (props.soloPersonasNaturales) {
       if (ctx_buscar_persona.buscarPor === 'Nombre / Razón social') {
         const res = await fetch(import.meta.env.VITE_URL + '/api/persona/obtenerSoloPersonasNaturalesPorRazonNombre', {
@@ -236,16 +236,19 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
       value={lasPersonas}
       onPending={() => {
         // //console.log('onPending 🍉🍉🍉🍉');
+        // ctx_buscar_persona.mostrarSpinner = false;
         return <div>Cargando...</div>;
       }}
       onRejected={() => {
         // //console.log('onRejected 🍍🍍🍍🍍');
+        ctx_buscar_persona.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(personas) => {
         console.log('onResolved 🍓🍓🍓🍓', personas);
         const { data } = personas; //{ status, data, message }
         // const misPersonas: IPersonaEdit[] = data;
+        ctx_buscar_persona.mostrarSpinner = false;
         ctx_buscar_persona.misPersonas = data;
         return (
           <>

@@ -149,9 +149,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
   // const grabo = useSignal(false);
 
   useTask$(async ({ track }) => {
-    track(() => {
-      ini.value;
-    });
+    track(() => ini.value);
+
     if (definicion_CTX_COTIZACION.idSerieCotizacion === '') {
       // obtenerSerie();
       const parametros = {
@@ -163,7 +162,17 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
       const lasSeries = await getSeriesActivasCotizaciones(parametros);
       dataSerie.value = lasSeries.data;
       //console.log('dataSerie.value', dataSerie.value);
+      if (dataSerie.value.length === 1) {
+        const seriesCCTT: any = dataSerie.value[0];
+        // console.log('seriesNNVV -->> seriesNNVV', seriesNNVV);
+        definicion_CTX_COTIZACION.idSerieCotizacion = seriesCCTT.idSerieCotizacion;
+        definicion_CTX_COTIZACION.serie = seriesCCTT.serie;
+      }
     }
+    //
+    setTimeout(() => {
+      document.getElementById('image_BuscarCliente')?.focus();
+    }, 200);
   });
   //#endregion INICIALIZACION
 
@@ -463,9 +472,24 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               </div>
             </div>
             <br></br>
-            {/* Serie  key={ser._id} id={ser._id} value={ser.serie}*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            {/* FECHA SERIE*/}
+            <div class="linea_1_11">
+              {/* fecha */}
+              <div>
+                <input
+                  id="in_Fecha"
+                  type="date"
+                  style={{ width: '100%' }}
+                  min={menosXdiasHoy(2)}
+                  max={hoy()}
+                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                  value={definicion_CTX_COTIZACION.fecha}
+                  onChange$={(e) => (definicion_CTX_COTIZACION.fecha = (e.target as HTMLInputElement).value)}
+                />
+              </div>
+              {/* serie */}
+              <div>
                 {definicion_CTX_COTIZACION.idSerieCotizacion !== '' ? (
                   <input
                     id="inputSerieCotizacion"
@@ -508,31 +532,14 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 )}
               </div>
             </div>
-            {/* fecha */}
-            <div class="form-control form-control-check">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Fecha"
-                  type="date"
-                  style={{ width: '100%' }}
-                  min={menosXdiasHoy(2)}
-                  max={hoy()}
-                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
-                  value={definicion_CTX_COTIZACION.fecha}
-                  onChange$={(e) => (definicion_CTX_COTIZACION.fecha = (e.target as HTMLInputElement).value)}
-                />
-              </div>
-            </div>
             <br />
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL CLIENTE */}
           <div>
-            {/* tipo de documento identidad*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            <div class="linea_1_111">
+              {/* tipo de documento identidad*/}
+              <div style={{ display: 'flex' }}>
                 <select
                   id="selectTipoDocumentoLiteral_COT"
                   disabled
@@ -550,21 +557,21 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                     C.EXT
                   </option>
                 </select>
+
+                <input
+                  id="image_BuscarCliente"
+                  type="image"
+                  src={images.searchPLUS}
+                  title="Buscar cliente"
+                  alt="icono buscar"
+                  height={18}
+                  width={16}
+                  style={{ marginLeft: '4px' }}
+                  onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true)}
+                />
               </div>
-              <input
-                type="image"
-                src={images.searchPLUS}
-                title="Buscar cliente"
-                alt="icono buscar"
-                height={16}
-                width={16}
-                style={{ marginLeft: '4px' }}
-                onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true)}
-              />
-            </div>
-            {/* numero identidad*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              {/* numero identidad     marginTop: '1px',   */}
+              <div>
                 <input
                   id="in_NumeroDocumentoIdentidad"
                   style={{ width: '100%' }}
@@ -573,10 +580,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   value={definicion_CTX_COTIZACION.numeroIdentidad}
                 />
               </div>
-            </div>
-            {/* Razon Social / Nombre */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              {/* Razon Social / Nombre */}
+              <div>
                 <input
                   id="in_NombreCliente"
                   style={{ width: '100%' }}
@@ -587,7 +592,6 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               </div>
             </div>
             <br />
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {/* {showSeleccionarPersona.value && ( */}
           {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona && (
@@ -602,8 +606,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <input
-                  type="number"
-                  id={'inputIGV'}
+                  type="text"
+                  id="inputIGV"
                   style={{ width: '100%' }}
                   placeholder="IGV"
                   disabled
@@ -612,7 +616,9 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   //     ? definicion_CTX_COTIZACION.igv.$numberDecimal
                   //     : definicion_CTX_COTIZACION.igv
                   // }
-                  value={definicion_CTX_COTIZACION.igv.$numberDecimal ? definicion_CTX_COTIZACION.igv.$numberDecimal : definicion_CTX_COTIZACION.igv}
+                  value={
+                    definicion_CTX_COTIZACION.igv.$numberDecimal ? definicion_CTX_COTIZACION.igv.$numberDecimal + ' %' : definicion_CTX_COTIZACION.igv + ' %'
+                  }
                 />
               </div>
             </div>
@@ -623,9 +629,9 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         </div>
         {/* GENERALES DEL VEHICULO */}
         <div>
-          {/* Placa */}
-          <div class="form-control">
-            <div class="form-control form-agrupado">
+          <div class="linea_1_1111">
+            {/* Placa */}
+            <div style={{ display: 'flex' }}>
               <input
                 id="inputPlaca"
                 disabled
@@ -639,33 +645,27 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 src={images.searchPLUS}
                 title="Buscar vehículo"
                 alt="icono buscar"
-                height={16}
+                height={18}
                 width={16}
                 style={{ marginLeft: '4px' }}
                 onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo = true)}
               />
             </div>
-          </div>
-          {/* Marca */}
-          <div class="form-control">
-            <div class="form-control form-agrupado">
+            {/* Marca */}
+            <div>
               <input id="inputMarca" style={{ width: '100%' }} type="text" placeholder="Marca" disabled value={definicion_CTX_COTIZACION.vehiculoMarca} />
             </div>
-          </div>
-          {/* Modelo */}
-          <div class="form-control">
-            <div class="form-control form-agrupado">
+            {/* Modelo */}
+            <div>
               <input id="inputModelo" style={{ width: '100%' }} type="text" placeholder="Modelo" disabled value={definicion_CTX_COTIZACION.vehiculoModelo} />
             </div>
-          </div>
-          {/* VIN */}
-          <div class="form-control">
-            <div class="form-control form-agrupado">
+            {/* VIN */}
+            <div>
               <input id="inputVIN" style={{ width: '100%' }} type="text" placeholder="VIN" disabled value={definicion_CTX_COTIZACION.vin} />
             </div>
           </div>
+
           <br />
-          {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo && (
           <div class="modal">
@@ -674,7 +674,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         )}
         {/* ----------------------------------------------------- */}
         {/* BOTON SERVICIO */}
-        <div>
+        <div hidden={definicion_CTX_COTIZACION.numero === 0 ? true : false}>
           <div
             style={{
               display: 'flex',
@@ -917,7 +917,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* BOTON REPUESTOS */}
-        <div>
+        <div hidden={definicion_CTX_COTIZACION.numero === 0 ? true : false}>
           <div
             style={{
               display: 'flex',
@@ -1145,6 +1145,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           type="button"
           value={definicion_CTX_COTIZACION.numero === 0 ? 'Aperturar cotización' : `Grabar`}
           class="btn-centro"
+          style={{ height: '40px' }}
           onClick$={() => registrarCotizacion()}
         />
       </div>

@@ -14,6 +14,7 @@ import {
   literal,
   formatear_2Decimales,
   diaDeLaSemana,
+  masXdiasHoy,
 } from '~/functions/comunes';
 
 import { getTipoCambio } from '~/apis/apisExternas.api';
@@ -313,7 +314,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
 
   const cuota = useStore<ICuotaCreditoVenta>({
     idAuxiliar: 0,
-    fechaCuota: hoy(),
+    fechaCuota: masXdiasHoy(30), // hoy(),
     importeCuotaPEN: 99,
   });
 
@@ -2404,9 +2405,10 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         title="Adicionar cuota"
                         id="addCuota"
                         class="btn"
+                        style={{ width: '100%' }}
                         onClick$={() => {
                           (cuota.idAuxiliar = parseInt(elIdAuxiliar())),
-                            (cuota.fechaCuota = hoy()),
+                            (cuota.fechaCuota = masXdiasHoy(30)), //hoy()
                             (cuota.importeCuotaPEN = 0),
                             (cuotaCredito_esEdit.value = false);
                           definicion_CTX_ADD_NOTA_VENTA.mostrarPanelCuotasCredito = true;
@@ -2505,7 +2507,12 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 )}
                 {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelCuotasCredito && (
                   <div class="modal">
-                    <NewEditCuotaCreditoVenta contexto="add_nota_venta" esEdit={cuotaCredito_esEdit.value} cuota={cuota} />
+                    <NewEditCuotaCreditoVenta
+                      contexto="add_nota_venta"
+                      esEdit={cuotaCredito_esEdit.value}
+                      cuota={cuota}
+                      fechaOrigen={definicion_CTX_NOTA_VENTA.fecha}
+                    />
                   </div>
                 )}
                 {/* TABLA DE CUOTAS DE PAGO venta.verCuotasCredito &&   ctx_PanelVenta.grabo_cuotas_numero &&*/}
@@ -2665,249 +2672,3 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
     </div>
   );
 });
-
-{
-  /* estrellas */
-}
-{
-  /* <div style={{ margin: '8px 0' }} hidden={definicion_CTX_NOTA_VENTA.clienteVentasVarias}>
-              <img
-                id="e1"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 1 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella 1"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 1}
-                title="Estrella 1"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-              <img
-                id="e2"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 2 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella 2"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 2}
-                title="Estrella 2"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-              <img
-                id="e3"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 3 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella 3"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 3}
-                title="Estrella 3"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-              <img
-                id="e4"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente >= 4 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella4"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 4}
-                title="Estrella 4"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-              <img
-                id="e5"
-                src={definicion_CTX_NOTA_VENTA.estrellasCliente === 5 ? images.estrella128 : images.estrella128Contorno}
-                alt="Estrella 5"
-                width={14}
-                height={14}
-                hidden={ESTRELLA_MAX.value < 5}
-                title="Estrella 5"
-                style={{
-                  marginLeft: '4px',
-                  marginRight: '4px',
-                  marginTop: '1px',
-                }}
-              />
-            </div> */
-}
-{
-  /* tipo de documento identidad*/
-}
-{
-  /* <div class="form-control">
-              <div class="form-control form-agrupado">
-                <select
-                  id="selectTipoDocumentoLiteral"
-                  disabled
-                  // value={6}
-                  value={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad}
-                  // onChange={cambioTipoDocumento}
-                  onChange$={(e) => {
-                    const idx = (e.target as HTMLSelectElement).selectedIndex;
-                    const rere = e.target as HTMLSelectElement;
-                    const elOption = rere[idx];
-
-                    //
-                    //
-                    // const csd = (e.target as HTMLSelectElement).current[idx];
-                    // venta.codigoTipoDocumentoIdentidad = parseInt(elOption.id);
-                    definicion_CTX_NOTA_VENTA.codigoTipoDocumentoIdentidad = elOption.id;
-                    definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
-                  }}
-                  // style={{ width: '100%' }}
-                >
-                  <option id="1" value="DNI" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'DNI'}>
-                    DNI
-                  </option>
-                  <option id="6" value="RUC" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'RUC'}>
-                    RUC
-                  </option>
-                  <option id="4" value="C.EXT" selected={definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad === 'C.EXT'}>
-                    C.EXT
-                  </option>
-                </select>
-                <input
-                  id="ima_BuscarCliente_VENTA"
-                  type="image"
-                  src={images.searchPLUS}
-                  title="Buscar datos de identidad"
-                  height={16}
-                  width={16}
-                  style={{ margin: '2px 4px 2px 4px' }}
-                  onClick$={() => (definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBuscarPersona = true)}
-                />
-                <input
-                  // id="in_BuscarDetraccion"
-                  type="image"
-                  src={images.edit}
-                  title="Editar cliente"
-                  height={16}
-                  width={16}
-                  style={{ margin: '2px 0' }}
-                  disabled={definicion_CTX_NOTA_VENTA.idCliente === '' ? true : false}
-                  onClick$={() => {
-                    console.log('japon');
-                    // ctx_buscar_persona.pP = persoLocali;
-                    // ctx_buscar_persona.mostrarPanelEditPersona = true;
-                    definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditPersonaDirecta = true;
-                  }}
-                />
-              </div>
-            </div>
-            {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBuscarPersona && (
-              <div class="modal">
-                <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="venta" rol="cliente" />
-              </div>
-            )} */
-}
-{
-  /* EDIT - PERSONA/CLIENTE */
-}
-{
-  /* {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelEditPersonaDirecta && (
-              <div class="modal">
-                <EditarPersonaDirecta
-                  soloPersonaNatural={defini_CTX_CLIENTE_VENTA.codigoTipoDocumentoIdentidad === '6' ? false : true}
-                  personaSeleccio={defini_CTX_CLIENTE_VENTA}
-                  contexto={'add_venta'}
-                />
-              </div>
-            )} */
-}
-{
-  /* numero identidad*/
-}
-{
-  /* <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNumeroDocumentoIdentidad"
-                  style={{ width: '100%' }}
-                  type="number"
-                  disabled
-                  placeholder="Add número"
-                  value={definicion_CTX_NOTA_VENTA.numeroIdentidad}
-                  onChange$={(e) => (definicion_CTX_NOTA_VENTA.numeroIdentidad = (e.target as HTMLInputElement).value)}
-                  // onChange={(e) => setNumeroIdentidad(e.target.value)}
-                />
-              </div>
-            </div> */
-}
-{
-  /* Razon Social / Nombre */
-}
-{
-  /* <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNombreCliente"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled
-                  placeholder="Razón social / Nombre"
-                  value={definicion_CTX_NOTA_VENTA.razonSocialNombre}
-                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
-                />
-              </div>
-            </div> */
-}
-{
-  /* Dirección Cliente */
-}
-{
-  /* <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputDireccionCliente"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled
-                  placeholder="Direccion cliente"
-                  value={definicion_CTX_NOTA_VENTA.direccionCliente}
-                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
-                />
-              </div>
-            </div> */
-}
-{
-  /* Email - Telefono */
-}
-{
-  /* <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '4px 0', gap: '4px' }}>
-              <input
-                id="inputEmail"
-                style={{ width: '100%' }}
-                type="email"
-                placeholder="Email"
-                value={definicion_CTX_NOTA_VENTA.email}
-                onChange$={(e) => {
-                  definicion_CTX_NOTA_VENTA.email = (e.target as HTMLInputElement).value;
-                }}
-                // onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                id="inputTelefono"
-                style={{ width: '100%' }}
-                type="tel"
-                placeholder="Telefono"
-                value={definicion_CTX_NOTA_VENTA.telefono}
-                onChange$={(e) => {
-                  definicion_CTX_NOTA_VENTA.telefono = (e.target as HTMLInputElement).value;
-                }}
-                // onChange={(e) => setEmail(e.target.value)}
-              />
-            </div> */
-}

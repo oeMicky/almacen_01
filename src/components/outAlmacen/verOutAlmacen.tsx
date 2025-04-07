@@ -73,144 +73,104 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE OUT ALMACÉN */}
           <div>
-            {/* indexItem */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_indexItem"
-                  style={{ width: '100%', backgroundColor: '#c0f0f0' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={props.indexItem}
-                />
-              </div>
+            <div class="linea_1_111">
+              {/* indexItem */}
+              <input
+                id="in_indexItem"
+                style={{ width: '100%', backgroundColor: '#c0f0f0' }}
+                type="text"
+                // autoFocus
+                disabled
+                value={props.indexItem}
+              />
+              {/* ID */}
+              <input
+                id="in_ID"
+                style={{ width: '100%' }}
+                type="text"
+                // autoFocus
+                disabled
+                value={props.outSelecci._id}
+              />
+              {/* USUARIO */}
+              <input
+                id="in_ID"
+                style={{ width: '100%' }}
+                type="text"
+                // autoFocus
+                disabled
+                value={props.outSelecci.usuarioCrea + '; ' + props.outSelecci.fechaLocal + ' ' + props.outSelecci.horaLocal}
+              />
             </div>
-            {/* ID */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_ID"
-                  style={{ width: '100%' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={props.outSelecci._id}
-                />
-              </div>
-            </div>
-            {/* USUARIO */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_ID"
-                  style={{ width: '100%' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={props.outSelecci.usuarioCrea + '; ' + props.outSelecci.fechaLocal + ' ' + props.outSelecci.horaLocal}
-                />
-              </div>
-            </div>
+            <div class="linea_1_111">
+              {/* FISMA */}
+              <input id="in_FISMA" type="text" disabled={props.outSelecci._id !== ''} style={{ width: '100%' }} value={props.outSelecci.FISMA} />
 
-            {/* FISMA */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input id="in_FISMA" type="text" disabled={props.outSelecci._id !== ''} style={{ width: '100%' }} value={props.outSelecci.FISMA} />
-              </div>
-            </div>
-            {/* Nota de salida: serie - número */}
-            {props.outSelecci.numero && props.outSelecci.serie && (
-              <div class="form-control">
-                <div class="form-control form-agrupado">
-                  <input
-                    id="in_MotivoEgresoAlmacen"
-                    type="text"
-                    disabled={props.outSelecci._id !== ''}
-                    style={{ width: '100%' }}
-                    value={
-                      (props.outSelecci.serie ? props.outSelecci.serie : '') +
-                      ' - ' +
-                      cerosALaIzquierda(props.outSelecci.numero ? props.outSelecci.numero : 0, 8)
-                    }
-                  />
-                </div>
-              </div>
-            )}
-            {/* motivo de egreso */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              {/* Nota de salida: serie - número */}
+              {props.outSelecci.numero && props.outSelecci.serie && (
                 <input
                   id="in_MotivoEgresoAlmacen"
                   type="text"
                   disabled={props.outSelecci._id !== ''}
                   style={{ width: '100%' }}
-                  value={props.outSelecci.motivoEgresoAlmacen}
+                  value={
+                    (props.outSelecci.serie ? props.outSelecci.serie : '') + ' - ' + cerosALaIzquierda(props.outSelecci.numero ? props.outSelecci.numero : 0, 8)
+                  }
                 />
-              </div>
+              )}
+              {/* motivo de egreso */}
+              <input
+                id="in_MotivoEgresoAlmacen"
+                type="text"
+                disabled={props.outSelecci._id !== ''}
+                style={{ width: '100%' }}
+                value={props.outSelecci.motivoEgresoAlmacen}
+              />
             </div>
             {/* obesrvacion */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Observacion"
-                  style={{ background: '#F4FF7A', width: '100%' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={props.outSelecci.observacion}
-                />
-              </div>
-            </div>
-
-            <br />
+            <input
+              id="in_Observacion"
+              style={{ background: '#F4FF7A', width: '100%' }}
+              type="text"
+              // autoFocus
+              disabled
+              value={props.outSelecci.observacion}
+            />
           </div>
 
-          {/* ----------------------------------------------------- */}
+          <br />
+          {/* ------------------------------------------------------------- */}
           {/* GENERALES DEL DESTINATARIO */}
-          <div>
+          <div class="linea_1_111">
             {/* tipo de documento identidad DESTINATARIO*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_FISMA"
-                  type="text"
-                  disabled={props.outSelecci._id !== ''}
-                  style={{ width: '100%', backgroundColor: '#c0f0f0' }}
-                  value={props.outSelecci.tipoDocumentoIdentidad}
-                />
-              </div>
-            </div>
+            <input
+              id="in_FISMA"
+              type="text"
+              disabled={props.outSelecci._id !== ''}
+              style={{ width: '100%', backgroundColor: '#c0f0f0' }}
+              value={props.outSelecci.tipoDocumentoIdentidad}
+            />
 
             {/* numero identidad DESTINATARIO*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_NumeroDocumentoIdentidad_DESTINATARIO"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled={props.outSelecci._id !== ''}
-                  placeholder="Add número identidad destinatario"
-                  value={props.outSelecci.numeroIdentidad}
-                />
-              </div>
-            </div>
-
+            <input
+              id="in_NumeroDocumentoIdentidad_DESTINATARIO"
+              style={{ width: '100%' }}
+              type="text"
+              disabled={props.outSelecci._id !== ''}
+              placeholder="Add número identidad destinatario"
+              value={props.outSelecci.numeroIdentidad}
+            />
             {/* Razon Social / Nombre - DESTINATARIO*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Nombre_DESTINATARIO"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled={props.outSelecci._id !== ''}
-                  placeholder="Razón social / Nombre - destinatario"
-                  value={props.outSelecci.razonSocialNombre}
-                />
-              </div>
-            </div>
-            <br />
+            <input
+              id="in_Nombre_DESTINATARIO"
+              style={{ width: '100%' }}
+              type="text"
+              disabled={props.outSelecci._id !== ''}
+              placeholder="Razón social / Nombre - destinatario"
+              value={props.outSelecci.razonSocialNombre}
+            />
           </div>
+          <br />
           {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
           <div>

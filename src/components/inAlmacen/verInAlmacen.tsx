@@ -84,153 +84,130 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE IN ALMACÉN */}
           <div>
-            {/* indexItem */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_indexItem"
-                  style={{ width: '100%', backgroundColor: '#c0f0f0' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={props.indexItem}
-                />
-              </div>
+            <div class="linea_1_111">
+              {/* indexItem */}
+              <input
+                id="in_indexItem"
+                style={{ width: '100%', backgroundColor: '#c0f0f0' }}
+                type="text"
+                // autoFocus
+                disabled
+                value={props.indexItem}
+              />
+              {/* ID */}
+              <input
+                id="in_ID"
+                style={{ width: '100%' }}
+                type="text"
+                // autoFocus
+                disabled
+                value={props.inSelecci._id}
+              />
+              {/* USUARIO */}
+              <input
+                id="in_USUARIO_CREA"
+                style={{ width: '100%' }}
+                type="text"
+                // autoFocus
+                disabled
+                value={props.inSelecci.usuarioCrea + '; ' + props.inSelecci.createdAt}
+              />
             </div>
-            {/* ID */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_ID"
-                  style={{ width: '100%' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={props.inSelecci._id}
-                />
-              </div>
-            </div>
-            {/* USUARIO */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_USUARIO_CREA"
-                  style={{ width: '100%' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={props.inSelecci.usuarioCrea + '; ' + props.inSelecci.createdAt}
-                />
-              </div>
-            </div>
-
-            {/* FISMA  serie numero*/}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
-              <div>
-                <input
-                  id="in_FISMA"
-                  type="text"
-                  disabled={props.inSelecci._id !== ''}
-                  style={{ width: '100%' }}
-                  value={formatoDDMMYYYY_PEN(props.inSelecci.FISMA)}
-                />
-              </div>
-              <div>
-                <input
-                  id="in_Serie_Numero"
-                  type="text"
-                  disabled={props.inSelecci._id !== ''}
-                  style={{ width: '100%' }}
-                  value={
-                    (props.inSelecci.serie ? props.inSelecci.serie : '') + ' - ' + cerosALaIzquierda(props.inSelecci.numero ? props.inSelecci.numero : 0, 8)
-                  }
-                  // value={cerosALaIzquierda(props.inSelecci.numero, 8)}
-                />
-              </div>
-            </div>
-            {/* motivo de ingreso */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Motivo"
-                  type="text"
-                  disabled={props.inSelecci._id !== ''}
-                  style={{ width: '100%' }}
-                  value={props.inSelecci.motivoIngresoAlmacen}
-                />
-              </div>
+            <div class="linea_1_111">
+              {/* FISMA  serie numero*/}
+              <input
+                id="in_FISMA"
+                type="text"
+                disabled={props.inSelecci._id !== ''}
+                style={{ width: '100%' }}
+                value={formatoDDMMYYYY_PEN(props.inSelecci.FISMA)}
+              />
+              <input
+                id="in_Serie_Numero"
+                type="text"
+                disabled={props.inSelecci._id !== ''}
+                style={{ width: '100%' }}
+                value={(props.inSelecci.serie ? props.inSelecci.serie : '') + ' - ' + cerosALaIzquierda(props.inSelecci.numero ? props.inSelecci.numero : 0, 8)}
+                // value={cerosALaIzquierda(props.inSelecci.numero, 8)}
+              />
+              {/* motivo de ingreso */}
+              <input id="in_Motivo" type="text" disabled={props.inSelecci._id !== ''} style={{ width: '100%' }} value={props.inSelecci.motivoIngresoAlmacen} />
             </div>
             {/* obesrvacion */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Observacion"
-                  style={{ background: '#F4FF7A', width: '100%' }}
-                  type="text"
-                  // autoFocus
-                  disabled
-                  value={props.inSelecci.observacion}
-                />
-              </div>
-            </div>
-            <br />
+            <input
+              id="in_Observacion"
+              style={{ background: '#F4FF7A', width: '100%' }}
+              type="text"
+              // autoFocus
+              disabled
+              value={props.inSelecci.observacion}
+            />
           </div>
-
+          <br />
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL REMITENTE */}
-          <div>
+          <div class="linea_1_111">
             {/* tipo de documento identidad REMITENTE*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_FISMA"
-                  type="text"
-                  disabled={props.inSelecci._id !== ''}
-                  style={{ width: '100%', backgroundColor: '#c0f0f0' }}
-                  value={props.inSelecci.tipoDocumentoIdentidad}
-                />
-              </div>
-            </div>
+            <input
+              id="in_FISMA"
+              type="text"
+              disabled={props.inSelecci._id !== ''}
+              style={{ width: '100%', backgroundColor: '#c0f0f0' }}
+              value={props.inSelecci.tipoDocumentoIdentidad}
+            />
             {/* numero identidad REMITENTE / RUC / DNI */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_NumeroDocumentoIdentidad_REMITENTE"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled={props.inSelecci._id !== ''}
-                  placeholder="Add número identidad remitente"
-                  value={props.inSelecci.numeroIdentidad}
-                />
-              </div>
-            </div>
+            <input
+              id="in_NumeroDocumentoIdentidad_REMITENTE"
+              style={{ width: '100%' }}
+              type="text"
+              disabled={props.inSelecci._id !== ''}
+              placeholder="Add número identidad remitente"
+              value={props.inSelecci.numeroIdentidad}
+            />
             {/* Razon Social / Nombre - REMITENTE*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Nombre_REMITENTE"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled={props.inSelecci._id !== ''}
-                  placeholder="Razón social / Nombre - remitente"
-                  value={props.inSelecci.razonSocialNombre}
-                />
-              </div>
-            </div>
-            <br />
+            <input
+              id="in_Nombre_REMITENTE"
+              style={{ width: '100%' }}
+              type="text"
+              disabled={props.inSelecci._id !== ''}
+              placeholder="Razón social / Nombre - remitente"
+              value={props.inSelecci.razonSocialNombre}
+            />
           </div>
+          <br />
           {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
-          <div>
+          <div class="linea_1_11">
             {/* IGV */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input type={'text'} id={'in_IGV'} style={{ width: '100%' }} disabled value={props.inSelecci.elIgv.$numberDecimal + ' %'} />
-              </div>
-            </div>
+            <input type={'text'} id={'in_IGV'} style={{ width: '100%' }} disabled value={props.inSelecci.elIgv.$numberDecimal + ' %'} />
 
-            <br />
+            <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '4px' }}>
+                <input type="checkbox" id="chbx_TipoCambio_IN_ALMACEN" checked={props.inSelecci.enDolares} disabled />
+                <label for="chbx_TipoCambio_IN_ALMACEN" style={{ marginRight: '4px' }}>
+                  USD
+                </label>
+              </div>
+              {typeof props.inSelecci.tipoCambio === 'undefined' ? (
+                ''
+              ) : (
+                <div class="form-control form-agrupado">
+                  <input
+                    id="inputTipoCambio_IN_ALMACEN"
+                    type="text"
+                    value={
+                      props.inSelecci.tipoCambio.toString() +
+                      '  ' +
+                      (props.inSelecci.documentosAdjuntos.length > 0 ? '(' + formatoDDMMYYYY_PEN(props.inSelecci.documentosAdjuntos[0].fecha) + ')' : '')
+                    }
+                    disabled
+                    style={{ width: '100%' }}
+                  />
+                </div>
+              )}
+            </div>
           </div>
+          <br />
           {/* ----------------------------------------------------- */}
         </div>
         {/* ----------------------------------------------------- */}
@@ -278,31 +255,6 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
         </div>
         {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
         <div>
-          <div class="form-control">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '4px' }}>
-              <input type="checkbox" id="chbx_TipoCambio_IN_ALMACEN" checked={props.inSelecci.enDolares} disabled />
-              <label for="chbx_TipoCambio_IN_ALMACEN" style={{ marginRight: '4px' }}>
-                USD
-              </label>
-            </div>
-            {typeof props.inSelecci.tipoCambio === 'undefined' ? (
-              ''
-            ) : (
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputTipoCambio_IN_ALMACEN"
-                  type="text"
-                  value={
-                    props.inSelecci.tipoCambio.toString() +
-                    '  ' +
-                    (props.inSelecci.documentosAdjuntos.length > 0 ? '(' + formatoDDMMYYYY_PEN(props.inSelecci.documentosAdjuntos[0].fecha) + ')' : '')
-                  }
-                  disabled
-                  style={{ width: '100%' }}
-                />
-              </div>
-            )}
-          </div>
           <br />
         </div>
         {/* ----------------------------------------------------- */}
