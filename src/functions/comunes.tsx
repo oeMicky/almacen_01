@@ -15,12 +15,12 @@ export const menosXdiasHoy = (xDias: number) => {
 export const masXdiasHoy = (xDias: number) => {
   const hoy = new Date();
   const montoXDias = 1000 * 60 * 60 * 24 * xDias;
-  console.log('hoy masXdiasHoy', hoy, montoXDias);
+  // console.log('hoy masXdiasHoy', hoy, montoXDias);
 
   const elDia = new Date(hoy.getTime() + montoXDias);
-  console.log('elDia', elDia);
+  // console.log('elDia', elDia);
   const al = elDia.getFullYear() + '-' + ('0' + (elDia.getMonth() + 1)).slice(-2) + '-' + ('0' + elDia.getDate()).slice(-2);
-  console.log('al', al);
+  // console.log('al', al);
   return al;
 };
 

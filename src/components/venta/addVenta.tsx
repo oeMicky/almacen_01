@@ -1504,7 +1504,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           {/* GENERALES DEL CLIENTE */}
           <div>
             {/* cliente VENTAS VARIAS*/}
-            <div style={{ marginBotton: '2px' }}>
+            <div style={{ marginBotton: '4px' }}>
               <div>
                 <input
                   id="chk_clienteVentasVarias_VENTA"

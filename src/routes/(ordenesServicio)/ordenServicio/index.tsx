@@ -259,6 +259,8 @@ export default component$(() => {
               return;
             }
             //
+            definicion_CTX_INDEX_ORDEN_SERVICIO.mostrarSpinner = true;
+            //
             let elIgv = await getIgvVenta(parametrosGlobales);
             elIgv = elIgv.data;
             //console.log('elIgv', elIgv);

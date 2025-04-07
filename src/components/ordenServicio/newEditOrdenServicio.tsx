@@ -295,8 +295,15 @@ OBSERVACIÓN(ES):
       //
       const lasSeries = await getSeriesActivasOrdenesServicio(parametros);
       dataSerie.value = lasSeries.data;
+      if (dataSerie.value.length === 1) {
+        const seriesOOSS: any = dataSerie.value[0];
+        // console.log('seriesNNVV -->> seriesNNVV', seriesNNVV);
+        definicion_CTX_O_S.idSerieOrdenServicio = seriesOOSS.idSerieOrdenServicio;
+        definicion_CTX_O_S.serie = seriesOOSS.serie;
+      }
     }
     // definicion_CTX_O_S.igv = props.igv;
+    ctx_index_orden_servicio.mostrarSpinner = false;
   });
   //
   //#endregion INICIALIZACION
@@ -686,185 +693,164 @@ OBSERVACIÓN(ES):
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE ORDEN DE SERVICIO */}
           <div>
-            {/* fecha Inicio */}
-            <div class="form-control form-control-check">
-              <div class="form-control form-agrupado">
+            <div class="linea_1_111">
+              {/* fecha Inicio */}
+              <input
+                id="inputFechaInicio"
+                type="date"
+                style={{ width: '100%' }}
+                disabled={definicion_CTX_O_S._id !== '' ? true : false}
+                min={menosXdiasHoy(2)}
+                max={hoy()}
+                // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                value={definicion_CTX_O_S.fechaInicio}
+                onChange$={(e) => {
+                  definicion_CTX_O_S.fechaInicio = (e.target as HTMLInputElement).value;
+                }}
+              />
+              {/* fecha Final */}
+              <input
+                id="inputFechaFinal"
+                type="date"
+                style={{ width: '100%' }}
+                // disabled
+                min={definicion_CTX_O_S.fechaInicio}
+                // max={hoy()}
+                // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
+                // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
+                value={definicion_CTX_O_S.fechaFinal}
+                onChange$={(e) => {
+                  definicion_CTX_O_S.fechaFinal = (e.target as HTMLInputElement).value;
+                }}
+              />
+              {/* Numero de Orden de Servicio*/}
+              {definicion_CTX_O_S.idSerieOrdenServicio !== '' ? (
                 <input
-                  id="inputFechaInicio"
-                  type="date"
+                  id="inputSerieOrdenServicio"
                   style={{ width: '100%' }}
-                  disabled={definicion_CTX_O_S._id !== '' ? true : false}
-                  min={menosXdiasHoy(2)}
-                  max={hoy()}
-                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
-                  value={definicion_CTX_O_S.fechaInicio}
-                  onChange$={(e) => {
-                    definicion_CTX_O_S.fechaInicio = (e.target as HTMLInputElement).value;
-                  }}
+                  type="text"
+                  disabled
+                  value={
+                    definicion_CTX_O_S._id === ''
+                      ? definicion_CTX_O_S.serie
+                      : definicion_CTX_O_S.serie + ' - ' + cerosALaIzquierda(definicion_CTX_O_S.numero, 8)
+                  }
                 />
-              </div>
-            </div>
-            {/* fecha Final */}
-            <div class="form-control form-control-check">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputFechaFinal"
-                  type="date"
-                  style={{ width: '100%' }}
-                  // disabled
-                  min={definicion_CTX_O_S.fechaInicio}
-                  // max={hoy()}
-                  // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
-                  // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}
-                  value={definicion_CTX_O_S.fechaFinal}
-                  onChange$={(e) => {
-                    definicion_CTX_O_S.fechaFinal = (e.target as HTMLInputElement).value;
-                  }}
-                />
-              </div>
-            </div>
-            {/* Numero de Orden de Servicio*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                {definicion_CTX_O_S.idSerieOrdenServicio !== '' ? (
-                  <input
-                    id="inputSerieOrdenServicio"
-                    style={{ width: '100%' }}
-                    type="text"
-                    disabled
-                    value={
-                      definicion_CTX_O_S._id === ''
-                        ? definicion_CTX_O_S.serie
-                        : definicion_CTX_O_S.serie + ' - ' + cerosALaIzquierda(definicion_CTX_O_S.numero, 8)
-                    }
-                  />
-                ) : (
-                  <select
-                    id="selectSerieOrdenServicio"
-                    onChange$={(e) => {
-                      const idx = (e.target as HTMLSelectElement).selectedIndex;
-                      const elSelect = e.target as HTMLSelectElement;
-                      const elOption = elSelect[idx];
-
-                      definicion_CTX_O_S.idSerieOrdenServicio = elOption.id;
-                      definicion_CTX_O_S.serie = (e.target as HTMLSelectElement).value;
-                      // const elementoSerie: any = dataSerie.value.filter(
-                      //   (cor: any) => cor.idSerieCotizacion === definicion_CTX_COTIZACION.idSerieCotizacion
-                      // );
-                      // //
-                      // definicion_CTX_COTIZACION.numero = elementoSerie[0].correlativo;
-                      document.getElementById('in_Fecha')?.focus();
-                    }}
-                  >
-                    <option value="">-- Seleccione una serie --</option>
-                    {dataSerie.value.map((ser: any) => {
-                      return (
-                        <option id={ser.idSerieOrdenServicio} value={ser.serie} selected={definicion_CTX_O_S.serie === ser.serie}>
-                          {ser.serie}
-                        </option>
-                      );
-                    })}
-                  </select>
-                )}
-              </div>
-            </div>
-            {/* <div class="form-control">
-              <label>Número</label>
-              <div class="form-control form-agrupado">
-                <input id="inputNumeroOS" style={{ width: '100%' }} type="text" disabled value={definicion_CTX_O_S.correlativo} />
-              </div>
-            </div> */}
-            {/* Estado */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              ) : (
                 <select
-                  id="selectEstado"
-                  value={definicion_CTX_O_S.estado}
+                  id="selectSerieOrdenServicio"
                   onChange$={(e) => {
-                    const a1 = definicion_CTX_O_S.requisiciones;
-                    const a2 = repuestosDespachados.value;
-                    // console.log('LOS ARRAYs A1......', a1);
-                    // console.log('LOS ARRAYs A2......', a2);
+                    const idx = (e.target as HTMLSelectElement).selectedIndex;
+                    const elSelect = e.target as HTMLSelectElement;
+                    const elOption = elSelect[idx];
 
-                    if ((e.target as HTMLSelectElement).value === 'TERMINADO') {
-                      // If length is not equal
-                      if (a1.length !== a2.length) {
-                        alert('Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad.');
-                        definicion_CTX_O_S.estado = '';
-                        return;
-                      } else {
-                        // Comparing each element of array
-                        for (let i = 0; i < a1.length; i++) {
-                          // console.log(
-                          //   'cantidades',
-                          //   parseFloat(a1[i].cantidadEquivalencia.$numberDecimal ? a1[i].cantidadEquivalencia.$numberDecimal : a1[i].cantidadEquivalencia),
-                          //   parseFloat(a2[i].cantidadDespachada.$numberDecimal ? a2[i].cantidadDespachada.$numberDecimal : a2[i].cantidadDespachada)
-                          // );
-
-                          if (
-                            parseFloat(a1[i].cantidadEquivalencia.$numberDecimal ? a1[i].cantidadEquivalencia.$numberDecimal : a1[i].cantidadEquivalencia) !==
-                            parseFloat(a2[i].cantidadDespachada.$numberDecimal ? a2[i].cantidadDespachada.$numberDecimal : a2[i].cantidadDespachada)
-                          ) {
-                            alert(
-                              'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique cantidad.'
-                            );
-                            definicion_CTX_O_S.estado = '';
-                            return;
-                          }
-                          if (a1[i].idMercaderia !== a2[i].idMercaderia) {
-                            alert(
-                              'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique (mercadería).'
-                            );
-                            definicion_CTX_O_S.estado = '';
-                            return;
-                          }
-                          if (a1[i].idEquivalencia !== a2[i].idEquivalencia) {
-                            alert(
-                              'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique (equivalencia).'
-                            );
-                            definicion_CTX_O_S.estado = '';
-                            return;
-                          }
-                        }
-                      }
-                    }
-                    definicion_CTX_O_S.estado = (e.target as HTMLSelectElement).value;
+                    definicion_CTX_O_S.idSerieOrdenServicio = elOption.id;
+                    definicion_CTX_O_S.serie = (e.target as HTMLSelectElement).value;
+                    // const elementoSerie: any = dataSerie.value.filter(
+                    //   (cor: any) => cor.idSerieCotizacion === definicion_CTX_COTIZACION.idSerieCotizacion
+                    // );
+                    // //
+                    // definicion_CTX_COTIZACION.numero = elementoSerie[0].correlativo;
+                    document.getElementById('in_Fecha')?.focus();
                   }}
-                  style={{ width: '100%' }}
                 >
-                  <option value="">-- Seleccione el estado --</option>
-                  <option value={'TERMINADO'} selected={definicion_CTX_O_S.estado === 'TERMINADO'}>
-                    TERMINADO
-                  </option>
-                  <option value={'DE BAJA'} selected={definicion_CTX_O_S.estado === 'DE BAJA'}>
-                    DE BAJA
-                  </option>
-                  <option value={'APERTURADO'} selected={definicion_CTX_O_S.estado === 'APERTURADO'}>
-                    APERTURADO
-                  </option>
-                </select>
-              </div>
-            </div>
-            {/* Tipo */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <select
-                  id="selectTipo"
-                  // value={oS.tipo}
-                  onChange$={(e) => {
-                    definicion_CTX_O_S.tipo = (e.target as HTMLSelectElement).value;
-                  }}
-                  style={{ width: '100%' }}
-                >
-                  {losTiposOSCargados.value.map((tipo: any) => {
+                  <option value="">-- Seleccione una serie --</option>
+                  {dataSerie.value.map((ser: any) => {
                     return (
-                      <option value={tipo.tipo} selected={definicion_CTX_O_S.tipo === tipo.tipo}>
-                        {tipo.tipo}
+                      <option id={ser.idSerieOrdenServicio} value={ser.serie} selected={definicion_CTX_O_S.serie === ser.serie}>
+                        {ser.serie}
                       </option>
                     );
                   })}
-                  {/* <option value={"MANTENIMIENTO"} selected={definicion_CTX_O_S.tipo === "MANTENIMIENTO"}>
+                </select>
+              )}
+            </div>
+            <div class="linea_1_111">
+              {/* Estado */}
+              <select
+                id="selectEstado"
+                value={definicion_CTX_O_S.estado}
+                onChange$={(e) => {
+                  const a1 = definicion_CTX_O_S.requisiciones;
+                  const a2 = repuestosDespachados.value;
+                  // console.log('LOS ARRAYs A1......', a1);
+                  // console.log('LOS ARRAYs A2......', a2);
+
+                  if ((e.target as HTMLSelectElement).value === 'TERMINADO') {
+                    // If length is not equal
+                    if (a1.length !== a2.length) {
+                      alert('Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad.');
+                      definicion_CTX_O_S.estado = '';
+                      return;
+                    } else {
+                      // Comparing each element of array
+                      for (let i = 0; i < a1.length; i++) {
+                        // console.log(
+                        //   'cantidades',
+                        //   parseFloat(a1[i].cantidadEquivalencia.$numberDecimal ? a1[i].cantidadEquivalencia.$numberDecimal : a1[i].cantidadEquivalencia),
+                        //   parseFloat(a2[i].cantidadDespachada.$numberDecimal ? a2[i].cantidadDespachada.$numberDecimal : a2[i].cantidadDespachada)
+                        // );
+
+                        if (
+                          parseFloat(a1[i].cantidadEquivalencia.$numberDecimal ? a1[i].cantidadEquivalencia.$numberDecimal : a1[i].cantidadEquivalencia) !==
+                          parseFloat(a2[i].cantidadDespachada.$numberDecimal ? a2[i].cantidadDespachada.$numberDecimal : a2[i].cantidadDespachada)
+                        ) {
+                          alert(
+                            'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique cantidad.'
+                          );
+                          definicion_CTX_O_S.estado = '';
+                          return;
+                        }
+                        if (a1[i].idMercaderia !== a2[i].idMercaderia) {
+                          alert(
+                            'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique (mercadería).'
+                          );
+                          definicion_CTX_O_S.estado = '';
+                          return;
+                        }
+                        if (a1[i].idEquivalencia !== a2[i].idEquivalencia) {
+                          alert(
+                            'Las requisiciones no coinciden con los ítems despachados. Estos deben ser iguales en concepto y cantidad, verifique (equivalencia).'
+                          );
+                          definicion_CTX_O_S.estado = '';
+                          return;
+                        }
+                      }
+                    }
+                  }
+                  definicion_CTX_O_S.estado = (e.target as HTMLSelectElement).value;
+                }}
+                style={{ width: '100%' }}
+              >
+                <option value="">-- Seleccione el estado --</option>
+                <option value={'TERMINADO'} selected={definicion_CTX_O_S.estado === 'TERMINADO'}>
+                  TERMINADO
+                </option>
+                <option value={'DE BAJA'} selected={definicion_CTX_O_S.estado === 'DE BAJA'}>
+                  DE BAJA
+                </option>
+                <option value={'APERTURADO'} selected={definicion_CTX_O_S.estado === 'APERTURADO'}>
+                  APERTURADO
+                </option>
+              </select>
+              {/* Tipo */}
+              <select
+                id="selectTipo"
+                // value={oS.tipo}
+                onChange$={(e) => {
+                  definicion_CTX_O_S.tipo = (e.target as HTMLSelectElement).value;
+                }}
+                style={{ width: '100%' }}
+              >
+                {losTiposOSCargados.value.map((tipo: any) => {
+                  return (
+                    <option value={tipo.tipo} selected={definicion_CTX_O_S.tipo === tipo.tipo}>
+                      {tipo.tipo}
+                    </option>
+                  );
+                })}
+                {/* <option value={"MANTENIMIENTO"} selected={definicion_CTX_O_S.tipo === "MANTENIMIENTO"}>
                     MANTENIMIENTO
                   </option>
                   <option value={"GARANTIA"} selected={definicion_CTX_O_S.tipo === "GARANTIA"}>
@@ -879,22 +865,20 @@ OBSERVACIÓN(ES):
                   <option value={"CAMPAÑA"} selected={definicion_CTX_O_S.tipo === "CAMPAÑA"}>
                     CAMPAÑA
                   </option> */}
-                </select>
-              </div>
-            </div>
-            {/* Técnico */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+              </select>
+              {/* Técnico */}
+              <div>
                 {tecnicoACTIVO.value ? (
-                  <>
+                  <div style={{ display: 'flex' }}>
                     <ElSelect
-                      id={'selectTecnico'}
+                      id="selectTecnico"
                       // elValor={oS.razonSocialNombreTecnico}
                       valorSeleccionado={definicion_CTX_O_S.razonSocialNombreTecnico}
                       registros={losTecnicos.value}
                       registroID={'idTecnico'}
                       registroTEXT={'razonSocialNombre'}
                       seleccione={'-- Seleccione un técnico --'}
+                      estilos={{ marginRight: '4px', width: '100%' }}
                       // onChange={changeTecnico}
                       onChange={$(() => {
                         const elSelec = document.getElementById('selectTecnico') as HTMLSelectElement;
@@ -912,12 +896,12 @@ OBSERVACIÓN(ES):
                       src={images.three_dots2}
                       title="Buscar técnico"
                       alt="icono buscar"
-                      height={16}
+                      height={18}
                       width={16}
-                      style={{ marginLeft: '4px' }}
+                      // style={{ marginLeft: '4px' }}
                       onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarTecnico = true)}
                     />
-                  </>
+                  </div>
                 ) : (
                   <input type="text" value={definicion_CTX_O_S.razonSocialNombreTecnico} disabled style={{ width: '100%' }} />
                 )}
@@ -929,6 +913,7 @@ OBSERVACIÓN(ES):
                 )}
               </div>
             </div>
+
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
@@ -938,7 +923,7 @@ OBSERVACIÓN(ES):
             {/* cliente VENTAS VARIAS*/}
             <div>
               {/* <label>Cliente Ventas Varias</label> */}
-              <div>
+              <div style={{ marginBottom: '4px' }}>
                 <input
                   id="chk_clienteVentasVarias_VENTA"
                   type="checkbox"
@@ -962,9 +947,9 @@ OBSERVACIÓN(ES):
                 </label>
               </div>
             </div>
-            {/* tipo de documento identidad*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            <div class="linea_1_111">
+              {/* tipo de documento identidad*/}
+              <div style={{ display: 'flex' }}>
                 <select
                   id="selectTipoDocumentoLiteral"
                   // value={oS.codigoTipoDocumentoIdentidad}
@@ -985,64 +970,42 @@ OBSERVACIÓN(ES):
                   </option>
                 </select>
                 <input
+                  title="Buscar cliente"
                   type="image"
                   src={images.searchPLUS}
-                  title="Buscar cliente"
                   alt="icono buscar"
-                  height={16}
+                  height={18}
                   width={16}
                   style={{ marginLeft: '4px' }}
                   onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarPersona = true)}
                 />
-                {/* <ImgButton
-                  id={'imgButtonSearchCliente'}
-                  src={images.searchPLUS}
-                  alt="imageso de buscar identidad"
-                  height={16}
-                  width={16}
-                  title="Buscar datos de identidad"
-                  // onClick={buscarCliente}
-                  onClick={$(() => {
-                    definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarPersona = true;
-                    // showAddOrdenServicio.value = true;
-                  })}
-                /> */}
               </div>
-            </div>
-            {/* numero identidad*/}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNumeroIdentidad"
-                  style={{ width: '100%' }}
-                  type="number"
-                  disabled
-                  placeholder="Add número identidad"
-                  value={definicion_CTX_O_S.numeroIdentidad}
-                  onChange$={(e) => {
-                    definicion_CTX_O_S.numeroIdentidad = (e.target as HTMLInputElement).value;
-                  }}
-                />
-              </div>
-            </div>
-            {/* Razon Social / Nombre */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="inputNombreCliente"
-                  style={{ width: '100%' }}
-                  type="text"
-                  placeholder="Razón social / Nombre"
-                  disabled
-                  value={definicion_CTX_O_S.razonSocialNombreCliente}
-                  onChange$={(e) => {
-                    definicion_CTX_O_S.razonSocialNombreCliente = (e.target as HTMLInputElement).value;
-                  }}
-                />
-              </div>
+              {/* numero identidad*/}
+              <input
+                id="inputNumeroIdentidad"
+                style={{ width: '100%' }}
+                type="number"
+                disabled
+                placeholder="Add número identidad"
+                value={definicion_CTX_O_S.numeroIdentidad}
+                onChange$={(e) => {
+                  definicion_CTX_O_S.numeroIdentidad = (e.target as HTMLInputElement).value;
+                }}
+              />
+              {/* Razon Social / Nombre */}
+              <input
+                id="inputNombreCliente"
+                style={{ width: '100%' }}
+                type="text"
+                placeholder="Razón social / Nombre"
+                disabled
+                value={definicion_CTX_O_S.razonSocialNombreCliente}
+                onChange$={(e) => {
+                  definicion_CTX_O_S.razonSocialNombreCliente = (e.target as HTMLInputElement).value;
+                }}
+              />
             </div>
             <br />
-            {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
           {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarPersona && (
             <div class="modal">
@@ -1055,18 +1018,17 @@ OBSERVACIÓN(ES):
             {/* IGV */}
             <div class="form-control">
               <div class="form-control form-agrupado">
-                <input type="number" id="inputIGV" disabled value={definicion_CTX_O_S.igv.$numberDecimal} style={{ width: '100%' }} />
+                <input id="inputIGV" type="text" disabled value={definicion_CTX_O_S.igv.$numberDecimal + ' %'} style={{ width: '100%' }} />
               </div>
             </div>
           </div>
           {/* ----------------------------------------------------- */}
           <br />
-          {/* <hr style={{ margin: '5px 0' }}></hr> */}
           {/* GENERALES DEL VEHICULO */}
           <div hidden={!definicion_CTX_O_S.osConRegistroDeVehiculo}>
-            {/* Placa */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
+            <div class="linea_1_111">
+              {/* Placa */}
+              <div style={{ display: 'flex' }}>
                 <input
                   id="inputPlaca"
                   style={{ width: '100%' }}
@@ -1089,38 +1051,26 @@ OBSERVACIÓN(ES):
                   src={images.searchPLUS}
                   title="Buscar vehículo"
                   alt="icono buscar"
-                  height={16}
+                  height={18}
                   width={16}
                   style={{ marginLeft: '4px' }}
                   onClick$={() => (definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarVehiculo = true)}
                 />
               </div>
+              {/* Marca */}
+              <input id="inputMarca" style={{ width: '100%' }} type="text" placeholder="Marca" disabled value={definicion_CTX_O_S.vehiculoMarca} />
+              {/* Modelo */}
+              <input id="inputModelo" style={{ width: '100%' }} type="text" placeholder="Modelo" disabled value={definicion_CTX_O_S.vehiculoModelo} />
             </div>
-            {/* Marca */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input id="inputMarca" style={{ width: '100%' }} type="text" placeholder="Marca" disabled value={definicion_CTX_O_S.vehiculoMarca} />
-              </div>
-            </div>
-            {/* Modelo */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input id="inputModelo" style={{ width: '100%' }} type="text" placeholder="Modelo" disabled value={definicion_CTX_O_S.vehiculoModelo} />
-              </div>
-            </div>
-            {/* VIN */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input id="inputVIN" style={{ width: '100%' }} type="text" placeholder="VIN" disabled value={definicion_CTX_O_S.vin} />
-              </div>
-            </div>
-            {/* Kilometraje */}
-            <div>
-              <label>Kilometraje</label>
-              <div class="form-control form-agrupado">
+            <div class="linea_1_11">
+              {/* VIN */}
+              <input id="inputVIN" style={{ width: '100%' }} type="text" placeholder="VIN" disabled value={definicion_CTX_O_S.vin} />
+              {/* Kilometraje */}
+              <div style={{ display: 'flex' }}>
+                <label style={{ marginTop: '2px' }}>Kilometraje</label>
                 <input
                   id="inputKilometraje"
-                  style={{ width: '100%' }}
+                  style={{ marginLeft: '4px', width: '100%' }}
                   type="number"
                   placeholder="Add kilometraje"
                   value={definicion_CTX_O_S.kilometraje}
@@ -1164,8 +1114,15 @@ OBSERVACIÓN(ES):
                   //   }
                   // }}
                 />
+                <div class="form-control form-agrupado"></div>
               </div>
             </div>
+
+            <div class="form-control">
+              <div class="form-control form-agrupado"></div>
+            </div>
+
+            <div></div>
             <br />
             {/* <hr style={{ margin: '5px 0' }}></hr> */}
           </div>
@@ -1185,9 +1142,10 @@ OBSERVACIÓN(ES):
           // }}
           >
             <label>Requerimientos del cliente</label>
-            <div>
+            <div style={{ flexDirection: 'column', display: 'flex', flexWrap: 'wrap' }}>
               <textarea
-                style={{ maxWidth: '100%' }}
+                // style={{ maxWidth: '100%' }}
+                style={{ width: '100%' }}
                 disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                 cols={90}
                 value={definicion_CTX_O_S.requerimientosCliente}
@@ -1212,9 +1170,9 @@ OBSERVACIÓN(ES):
           // }}
           >
             <label>Observaciones</label>
-            <div>
+            <div style={{ flexDirection: 'column', display: 'flex', flexWrap: 'wrap' }}>
               <textarea
-                style={{ maxWidth: '100%' }}
+                style={{ width: '100%' }}
                 disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
                 cols={90}
                 rows={4}
@@ -1233,7 +1191,7 @@ OBSERVACIÓN(ES):
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* BOTON SERVICIO */}
-        <div>
+        <div hidden={definicion_CTX_O_S._id === '' ? true : false}>
           <div
             style={{
               display: 'flex',
@@ -1458,7 +1416,7 @@ OBSERVACIÓN(ES):
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* BOTON REQUISICION */}
-        <div>
+        <div hidden={definicion_CTX_O_S._id === '' ? true : false}>
           <div
             style={{
               display: 'flex',
@@ -1680,7 +1638,7 @@ OBSERVACIÓN(ES):
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
         </div>
         {/* REPUESTOS DESPACHADOS */}
-        <div>
+        <div hidden={definicion_CTX_O_S._id === '' ? true : false}>
           <div
             style={{
               display: 'flex',
@@ -1814,7 +1772,7 @@ OBSERVACIÓN(ES):
         <input
           type="button"
           // disabled={definicion_CTX_O_S.estado === 'APERTURADO' ? false : true}
-          value={definicion_CTX_O_S.numero === 0 ? 'Aperturar orden de servicio' : `Grabar`}
+          value={definicion_CTX_O_S.numero === 0 ? 'Aperturar ORDEN DE SERVICIO' : `Grabar`}
           style={{ cursor: 'pointer', height: '40px' }}
           class="btn-centro"
           // onClick={(e) => onSubmit(e)}
