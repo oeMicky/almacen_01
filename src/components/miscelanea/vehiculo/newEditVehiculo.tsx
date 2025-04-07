@@ -216,18 +216,7 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        <ImgButton
-          src={images.x}
-          alt="Icono de cerrar"
-          height={18}
-          width={18}
-          title="Cerrar el formulario"
-          onClick={$(() => {
-            ctx_buscar_vehiculo.mostrarPanelNewEditVehiculo = false;
-            // ctx_docs_orden_servicio.mostrarPanelNewEditVehiculo0 = false;
-          })}
-        />
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de vehículo"
           height={16}
@@ -245,6 +234,17 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
           title="Ver vehículo"
           onClick={$(() => {
             //console.log('ini.value', ini.value);
+          })}
+        /> */}
+        <ImgButton
+          src={images.x}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            ctx_buscar_vehiculo.mostrarPanelNewEditVehiculo = false;
+            // ctx_docs_orden_servicio.mostrarPanelNewEditVehiculo0 = false;
           })}
         />
       </div>
@@ -518,13 +518,15 @@ export default component$((props: { vehiculoSelecci: any; contexto: any }) => {
               />
             </div>
           </div>
+          <br />
         </div>
 
         <input
           id="btn_grabar_VEHICULO"
           type="button"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value="Registrar" //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
+          style={{ height: '40px' }}
           onClick$={() => {
             grabarVehiculo();
           }}

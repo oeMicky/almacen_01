@@ -8,6 +8,7 @@ import { CTX_NEW_EDIT_ORDEN_SERVICIO, CTX_O_S } from '~/components/ordenServicio
 import { CTX_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion/newEditCotizacion';
 // import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 import { CTX_BUSCAR_UNIDAD_TRANSPORTE } from '../unidadTransporte/buscarUnidadTransporte';
+import { cerosALaIzquierda } from '~/functions/comunes';
 
 export default component$((props: { buscarVehiculos: number; parametrosBusqueda: any; contexto: string }) => {
   useStyles$(style);
@@ -132,12 +133,12 @@ export default component$((props: { buscarVehiculos: number; parametrosBusqueda:
                       return (
                         // <tr key={_id} style={{ border: '1px solid red' }}>
                         <tr key={_id}>
-                          <td data-label="Ítem">{indexItem}</td>
+                          <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
                           <td data-label="Placa">{placa}</td>
                           <td data-label="Marca">{vehiculoMarca ? vehiculoMarca : '-'}</td>
                           <td data-label="Modelo">{vehiculoModelo ? vehiculoModelo : '-'}</td>
                           <td data-label="VIN">{vin ? vin : '-'}</td>
-                          <td data-label="Acciones" class="acciones">
+                          <td data-label="Acciones" class="accionesLeft">
                             <input
                               // id="in_BuscarDetraccion"
                               type="image"

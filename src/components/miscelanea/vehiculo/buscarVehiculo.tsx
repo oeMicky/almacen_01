@@ -188,7 +188,7 @@ export default component$((props: { contexto: string }) => {
                 src={images.searchPLUS}
                 title="Buscar vehículo"
                 alt="icono buscar"
-                height={16}
+                height={18}
                 width={16}
                 style={{ margin: '0 4px' }}
                 onClick$={() => localizarVehiculos()}
@@ -197,7 +197,7 @@ export default component$((props: { contexto: string }) => {
                 type="image"
                 title="Adicionar vehículo"
                 alt="icono adicionar"
-                height={16}
+                height={18}
                 width={16}
                 src={images.add}
                 onClick$={() => {

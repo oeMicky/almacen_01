@@ -664,7 +664,6 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               <input id="inputVIN" style={{ width: '100%' }} type="text" placeholder="VIN" disabled value={definicion_CTX_COTIZACION.vin} />
             </div>
           </div>
-
           <br />
         </div>
         {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarVehiculo && (
