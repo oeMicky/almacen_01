@@ -94,8 +94,9 @@ export default component$((props: { marcaVehicularSelecci: any }) => {
         <input
           id="buttonGrabarMarcaVehicular"
           type="button"
-          value={'Registrar'} //REGISTRAR // SELECCIONAR // ACTUALIZAR
+          value="Registrar" //REGISTRAR // SELECCIONAR // ACTUALIZAR
           class="btn-centro"
+          style={{ height: '40px' }}
           onClick$={() => {
             grabarMarcaVehicular();
           }}
