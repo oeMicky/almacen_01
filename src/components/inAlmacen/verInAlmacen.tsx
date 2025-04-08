@@ -179,7 +179,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
           {/* IGV - TC */}
           <div class="linea_1_11">
             {/* IGV */}
-            <input type={'text'} id={'in_IGV'} style={{ width: '100%' }} disabled value={props.inSelecci.elIgv.$numberDecimal + ' %'} />
+            <input type="text" id="in_IGV" style={{ width: '100%' }} disabled value={props.inSelecci.elIgv.$numberDecimal + ' %'} />
 
             <div style={{ display: 'flex' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '4px' }}>
@@ -191,19 +191,19 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
               {typeof props.inSelecci.tipoCambio === 'undefined' ? (
                 ''
               ) : (
-                <div class="form-control form-agrupado">
-                  <input
-                    id="inputTipoCambio_IN_ALMACEN"
-                    type="text"
-                    value={
-                      props.inSelecci.tipoCambio.toString() +
-                      '  ' +
-                      (props.inSelecci.documentosAdjuntos.length > 0 ? '(' + formatoDDMMYYYY_PEN(props.inSelecci.documentosAdjuntos[0].fecha) + ')' : '')
-                    }
-                    disabled
-                    style={{ width: '100%' }}
-                  />
-                </div>
+                <input
+                  id="inputTipoCambio_IN_ALMACEN"
+                  type="text"
+                  value={
+                    props.inSelecci.tipoCambio.$numberDecimal
+                      ? props.inSelecci.tipoCambio.$numberDecimal
+                      : props.inSelecci.tipoCambio +
+                        '  ' +
+                        (props.inSelecci.documentosAdjuntos.length > 0 ? '(' + formatoDDMMYYYY_PEN(props.inSelecci.documentosAdjuntos[0].fecha) + ')' : '')
+                  }
+                  disabled
+                  style={{ width: '100%' }}
+                />
               )}
             </div>
           </div>

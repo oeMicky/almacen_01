@@ -130,6 +130,14 @@ export const redondeo6Decimales = (num: any) => {
 };
 
 export const cerosALaIzquierda = (num: any, size: number) => {
+  // console.log('cerosALaIzquierda', num, size);
+  if (num === null || num === undefined) {
+    return '-';
+  }
+  if (num === '') {
+    return '-';
+  }
+
   num = num.toString();
   while (num.length < size) num = '0' + num;
   return num;
