@@ -209,7 +209,7 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
             <div class="form-control form-agrupado">
               <input
                 id="in_descripcionEquivalenciaIN_MICE"
-                style={{ width: '100%' }}
+                style={{ width: '100%', fontWeight: 'bold' }}
                 type="text"
                 placeholder="Descripción de equivalencia"
                 value={equivalenciaIN.descripcionEquivalencia}

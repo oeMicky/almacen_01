@@ -333,7 +333,7 @@ export default component$((props: { soloPersonaNatural: boolean; personaSeleccio
             <div class="form-control form-agrupado">
               <input
                 id="in_numeroIdentidad_PERSONA"
-                style={{ width: '100%' }}
+                style={{ width: '100%', fontWeight: 'bold' }}
                 autoFocus
                 type="number"
                 placeholder="Número identidad"

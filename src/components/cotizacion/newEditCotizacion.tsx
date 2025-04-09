@@ -16,6 +16,7 @@ import { deRepuestosLubriCotizacion, deServicioCotizacion, getSeriesActivasCotiz
 import BorrarServicio from './borrarServicio';
 import BorrarRepuestoLubri from './borrarRepuestoLubri';
 import NewEditNotaAdicionalServicio from './newEditNotaAdicionalServicio';
+import { getPersonaPorDniRuc } from '~/apis/persona.api';
 
 export const CTX_COTIZACION = createContextId<ICotizacion>('cotizacion');
 
@@ -132,6 +133,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
 
   //#region INICIALIZACION
   const ini = useSignal(0);
+  const mensajeErrorCliente = useSignal('');
 
   // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
   // const idSerieCotizacion = useSignal('');
@@ -169,10 +171,11 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         definicion_CTX_COTIZACION.serie = seriesCCTT.serie;
       }
     }
-    //
+    //206 105 176 34
     setTimeout(() => {
-      document.getElementById('image_BuscarCliente')?.focus();
-    }, 200);
+      // document.getElementById('image_BuscarCliente')?.focus();
+      document.getElementById('in_NumeroDocumentoIdentidad')?.focus();
+    }, 100);
   });
   //#endregion INICIALIZACION
 
@@ -413,6 +416,16 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         }}
       >
         <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('definicion_CTX_COTIZACION', definicion_CTX_COTIZACION);
+          })}
+        />
+        <ImgButton
           src={images.x}
           alt="Icono de cerrar"
           height={18}
@@ -423,16 +436,6 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
             ctx_index_cotizacion.mostrarPanelNewEditCotizacion = false;
           })}
         />
-        {/* <ImgButton
-          src={images.see}
-          alt="Icono de cerrar"
-          height={16}
-          width={16}
-          title="Cerrar el formulario"
-          onClick={$(() => {
-            //console.log('definicion_CTX_COTIZACION', definicion_CTX_COTIZACION);
-          })}
-        /> */}
         {/*    <ImgButton
           src={images.see}
           alt="Icono de cerrar"
@@ -464,7 +467,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
         <div>
           {/* ----------------------------------------------------- */}
           {/* GENERALES DE COTIZACION */}
-          <div>
+          <div hidden>
             {/* PERIODO */}
             <div class="form-control">
               <div class="form-control form-agrupado">
@@ -539,8 +542,16 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           <div>
             <div class="linea_1_111">
               {/* tipo de documento identidad*/}
-              <div style={{ display: 'flex' }}>
-                <select
+              <div>
+                <input
+                  id="in_TipoDocumentoLiteral_COT"
+                  style={{ width: '100%' }}
+                  type="text"
+                  readOnly
+                  placeholder="Tipo documento identidad"
+                  value={definicion_CTX_COTIZACION.tipoDocumentoIdentidad}
+                />
+                {/* <select
                   id="selectTipoDocumentoLiteral_COT"
                   disabled
                   //   value={codigoTipoDocumentoIdentidad}
@@ -556,28 +567,93 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   <option value={4} selected={definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad === '4'}>
                     C.EXT
                   </option>
-                </select>
+                </select> */}
+              </div>
+              {/* numero identidad     marginTop: '1px',   */}
+              <div style={{ display: 'flex' }}>
+                <input
+                  id="in_NumeroDocumentoIdentidad"
+                  style={{ width: '100%', fontWeight: 'bold' }}
+                  type="number"
+                  placeholder="Add número de documento identidad"
+                  value={definicion_CTX_COTIZACION.numeroIdentidad}
+                  onInput$={async (e) => {
+                    definicion_CTX_COTIZACION.numeroIdentidad = (e.target as HTMLInputElement).value;
+                    if (
+                      definicion_CTX_COTIZACION.numeroIdentidad.length === 11 &&
+                      (definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '20' || definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '10')
+                    ) {
+                      // document.getElementById('in_BuscarPersona')?.focus();  //206 105 176 34  // no encontrado  //no determinado
+                      console.log('.............buscando por RUC', definicion_CTX_COTIZACION.numeroIdentidad);
+                      ctx_index_cotizacion.mostrarSpinner = true;
+                      const cliente = await getPersonaPorDniRuc({
+                        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                        idEmpresa: parametrosGlobales.idEmpresa,
+                        buscarPor: 'DNI / RUC',
+                        cadenaABuscar: definicion_CTX_COTIZACION.numeroIdentidad,
+                      });
+                      ctx_index_cotizacion.mostrarSpinner = false;
+                      console.log('.............buscando por RUC - cliente', cliente.data);
+                      if (cliente.status === 400) {
+                        alert(cliente.message);
+                        return;
+                      }
+                      if (cliente.data.length === 0) {
+                        // alert('Cliente no encontrado :|');
+                        definicion_CTX_COTIZACION.idCliente = '';
+                        definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = '';
+                        definicion_CTX_COTIZACION.tipoDocumentoIdentidad = '';
+                        // definicion_CTX_COTIZACION.numeroIdentidad = '';
+                        definicion_CTX_COTIZACION.razonSocialNombre = '';
+                        mensajeErrorCliente.value = 'Cliente no encontrado';
+                        return;
+                      }
+                      if (cliente.data.length === 1) {
+                        definicion_CTX_COTIZACION.idCliente = cliente.data[0]._id;
+                        definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = cliente.data[0].codigoTipoDocumentoIdentidad;
+                        definicion_CTX_COTIZACION.tipoDocumentoIdentidad = cliente.data[0].tipoDocumentoIdentidad;
+                        definicion_CTX_COTIZACION.numeroIdentidad = cliente.data[0].numeroIdentidad;
+                        definicion_CTX_COTIZACION.razonSocialNombre = cliente.data[0].razonSocialNombre;
+                        mensajeErrorCliente.value = '';
+                        return;
+                      }
+                      if (cliente.data.length > 1) {
+                        // alert('Cliente no determinado :|');
+                        definicion_CTX_COTIZACION.idCliente = '';
+                        definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = '';
+                        definicion_CTX_COTIZACION.tipoDocumentoIdentidad = '';
+                        // definicion_CTX_COTIZACION.numeroIdentidad = '';
+                        definicion_CTX_COTIZACION.razonSocialNombre = '';
+                        mensajeErrorCliente.value = 'Cliente no determinado';
+                        return;
+                      }
 
+                      // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = true;
+                      // localizarPersonas();
+                      // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = false;
+                    }
+                  }}
+                  onKeyUp$={(e) => {
+                    if (e.key === 'Enter') {
+                      if (definicion_CTX_COTIZACION.idCliente !== '') {
+                        document.getElementById('in_NombreCliente')?.focus();
+                      } else {
+                        document.getElementById('image_BuscarCliente')?.focus();
+                      }
+                    }
+                  }}
+                />
                 <input
                   id="image_BuscarCliente"
                   type="image"
                   src={images.searchPLUS}
+                  readOnly
                   title="Buscar cliente"
                   alt="icono buscar"
-                  height={18}
+                  height={20}
                   width={16}
                   style={{ marginLeft: '4px' }}
                   onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true)}
-                />
-              </div>
-              {/* numero identidad     marginTop: '1px',   */}
-              <div>
-                <input
-                  id="in_NumeroDocumentoIdentidad"
-                  style={{ width: '100%' }}
-                  type="number"
-                  placeholder="Add número"
-                  value={definicion_CTX_COTIZACION.numeroIdentidad}
                 />
               </div>
               {/* Razon Social / Nombre */}
@@ -591,6 +667,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 />
               </div>
             </div>
+            {mensajeErrorCliente.value !== '' && <label style={{ display: 'block', textAlign: 'center', color: 'red' }}>{mensajeErrorCliente.value}</label>}
             <br />
           </div>
           {/* {showSeleccionarPersona.value && ( */}
