@@ -1,4 +1,4 @@
-import { $, component$, useContext, useSignal } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
@@ -10,7 +10,16 @@ export default component$((props: { mercaOUTSelecci: any }) => {
   const ctx_buscar_mercaderia_out = useContext(CTX_BUSCAR_MERCADERIA_OUT);
   //#endregion CONTEXTOS
 
+  const ini = useSignal(0);
   const precio = useSignal<any>(props.mercaOUTSelecci.precioUnitarioPEN ? props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal : 0);
+
+  useTask$(({ track }) => {
+    track(() => ini.value);
+
+    setTimeout(() => {
+      document.getElementById('inputPrecio_MICE')?.focus();
+    }, 100);
+  });
 
   //#region ON SUBMIT
   const grabarPrecio_MICE = $(async () => {

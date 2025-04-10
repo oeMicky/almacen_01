@@ -128,7 +128,7 @@ export default component$(
       }
       setTimeout(() => {
         document.getElementById('in_Cantidad_mercaderiaOUTSeleccionada')?.focus();
-      }, 200);
+      }, 100);
     });
     //#endregion INICIALIZACION
 
