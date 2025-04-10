@@ -435,8 +435,15 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
   useTask$(({ track }) => {
     track(() => ini.value);
     console.log('🤍 entro a useTask INI');
+
     obtenerLineasTipos();
     obtenerPorcentajesUtilidad();
+    //
+    setTimeout(() => {
+      // document.getElementById('image_BuscarCliente')?.focus();
+      document.getElementById('se_descripcion_MERCADERIA_IN')?.focus();
+    }, 100);
+    //
     ctx.mostrarSpinner = false;
   });
 

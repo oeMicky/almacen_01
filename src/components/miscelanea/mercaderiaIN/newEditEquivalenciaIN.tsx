@@ -45,11 +45,23 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
   //#endregion CONTEXTOS
 
   //#region INICIALIZAR
+  const ini = useSignal(0);
   // const directoIndirecto = useSignal(true); //directo=true  indirecto=false
   const lasUnidadesEquivalentes = useSignal<any>(ctx_new_edit_mercaderia_in.lasUE);
   const uniEq = useStore({
     idUniEq: '',
     uniEq: '',
+  });
+
+  useTask$(({ track }) => {
+    track(() => ini.value);
+    console.log('🤍 entro a useTask INI');
+
+    setTimeout(() => {
+      // document.getElementById('image_BuscarCliente')?.focus();
+      document.getElementById('in_descripcionEquivalenciaIN_MICE')?.focus();
+    }, 100);
+    //
   });
   //#endregion INICIALIZAR
 
@@ -246,10 +258,10 @@ export default component$((props: { unidadIN: string; idLineaTipo: string; linea
                   }
                 }}
               >
-                <option value={'Directa'} selected={equivalenciaIN.tipoEquivalencia ? true : false}>
+                <option value="Directa" selected={equivalenciaIN.tipoEquivalencia ? true : false}>
                   Directa
                 </option>
-                <option value={'Indirecta'} selected={equivalenciaIN.tipoEquivalencia ? false : true}>
+                <option value="Indirecta" selected={equivalenciaIN.tipoEquivalencia ? false : true}>
                   Indirecta
                 </option>
               </select>

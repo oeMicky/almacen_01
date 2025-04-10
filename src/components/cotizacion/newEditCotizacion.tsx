@@ -575,7 +575,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   id="in_NumeroDocumentoIdentidad"
                   style={{ width: '100%', fontWeight: 'bold' }}
                   type="number"
-                  placeholder="Add número de documento identidad"
+                  placeholder="Add número de RUC / DNI"
                   value={definicion_CTX_COTIZACION.numeroIdentidad}
                   onInput$={async (e) => {
                     definicion_CTX_COTIZACION.numeroIdentidad = (e.target as HTMLInputElement).value;

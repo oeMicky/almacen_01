@@ -35,6 +35,10 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
     console.log('🤍 entro a useTask INI');
     // obtenerLineasTipos();
     // obtenerPorcentajesUtilidad();
+    setTimeout(() => {
+      // document.getElementById('image_BuscarCliente')?.focus();
+      document.getElementById('in_ubigeoIN_MICE')?.focus();
+    }, 100);
     ctx.mostrarSpinner = false;
   });
   //#endregion INICIALIZAR

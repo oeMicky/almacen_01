@@ -1,4 +1,4 @@
-import { $, component$, useContext, useSignal } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import ImgButton from '../../system/imgButton';
 import { images } from '~/assets';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
@@ -34,11 +34,23 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION DE VARIABLES
+  const ini = useSignal(0);
   const conPrecioPublico = useSignal(true);
   const costoUnitarioMasIGV = useSignal(props.cuMASigv);
   const precioPublicoCalculado = useSignal(props.cuMASigv * (1 + props.pUtilidad / 100));
   const precioPublico = useSignal(0);
   const fechaActual = new Date();
+
+  useTask$(({ track }) => {
+    track(() => ini.value);
+    console.log('🤍 entro a useTask INI');
+
+    setTimeout(() => {
+      // document.getElementById('image_BuscarCliente')?.focus();
+      document.getElementById('in_Precio_Publico')?.focus();
+    }, 100);
+    //
+  });
   //#endregion INICIALIZACION DE VARIABLES
 
   //#region GRABAR PRECIO PUBLICO
@@ -235,6 +247,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
                     (document.getElementById('in_btn_Grabar_USUARIO') as HTMLInputElement)?.focus();
                   }
                 }}
+                onFocus$={(e) => (e.target as HTMLInputElement).select()}
               />
             </div>
           </div>

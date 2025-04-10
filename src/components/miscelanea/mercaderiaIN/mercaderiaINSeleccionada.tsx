@@ -158,6 +158,12 @@ export default component$(
             totPEN.value = cantidad.value * costoPENMasIGV.value;
           }
         }
+        //
+        setTimeout(() => {
+          // document.getElementById('image_BuscarCliente')?.focus();
+          document.getElementById('in_Cantidad_MICE')?.focus();
+        }, 100);
+
         ini.value++;
       }
     });
