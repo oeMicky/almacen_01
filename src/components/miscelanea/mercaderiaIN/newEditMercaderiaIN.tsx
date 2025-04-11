@@ -487,9 +487,9 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
       return;
     }
 
-    // ctx.mostrarSpinner = true;
+    ctx.mostrarSpinner = true;
     // mostrarSpinner.value = true;
-    definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarSpinner = true;
+    // definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarSpinner = true;
     const merca = await inUpMercaderia({
       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
       idEmpresa: parametrosGlobales.idEmpresa,
@@ -545,7 +545,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     //console.log('merca', merca);
 
     // mostrarSpinner.value = false;
-    definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarSpinner = false;
+    // definicion_CTX_NEW_EDIT_MERCADERIA_IN.mostrarSpinner = false;
 
     ctx.abuscar = merca.data.descripcion;
     ctx.grabo_mercaderiaIN = true;

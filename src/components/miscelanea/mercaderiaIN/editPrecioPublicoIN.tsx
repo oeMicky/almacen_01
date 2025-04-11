@@ -8,7 +8,7 @@ import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import { CTX_BUSCAR_MERCADERIA_OUT } from '../mercaderiaOUT/buscarMercaderiaOUT';
 // import { parametrosGlobales } from '~/routes/login';
 
-export default component$((props: { idMercaderia: any; descripcion: string; cuMASigv: any; pUtilidad: any; contexto: string }) => {
+export default component$((props: { idMercaderia: any; descripcion: string; cuMASigv: any; pUtilidad: any; contexto: string; precioUnitarioPEN: any }) => {
   //#region CONTEXTO
   // const ctx_buscar_mercaderia_in = useContext(CTX_BUSCAR_MERCADERIA_IN);
   //#endregion CONTEXTO
@@ -38,7 +38,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
   const conPrecioPublico = useSignal(true);
   const costoUnitarioMasIGV = useSignal(props.cuMASigv);
   const precioPublicoCalculado = useSignal(props.cuMASigv * (1 + props.pUtilidad / 100));
-  const precioPublico = useSignal(0);
+  const precioPublico = useSignal(props.precioUnitarioPEN);
   const fechaActual = new Date();
 
   useTask$(({ track }) => {
@@ -71,6 +71,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
     // console.log('precioPublicoCalculado', precioPublicoCalculado.value);
     // console.log('precioPublico', precioPublico.value);
     try {
+      ctx.mostrarSpinner = true;
       const precioP = await upPrecioPublicoPEN({
         idMercaderia: props.idMercaderia,
         fechaPrecioUnitario: fechaActual,
@@ -106,6 +107,7 @@ export default component$((props: { idMercaderia: any; descripcion: string; cuMA
     // console.log('precioPublicoCalculado', precioPublicoCalculado.value);
     // console.log('precioPublico', precioPublico.value);
     try {
+      ctx.mostrarSpinner = true;
       const costoP = await upCostoUnitarioPENMasIGV({
         idMercaderia: props.idMercaderia,
         fechaPrecioUnitario: fechaActual,

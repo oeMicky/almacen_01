@@ -91,6 +91,7 @@ import pdf from '../images/pdf.svg';
 import pdf_2 from '../images/pdf_2.svg';
 import pencil from '../images/pencil.svg';
 import print from '../images/print.svg';
+import puntoVerde from '../images/puntoVerde.svg';
 import resendEmail from '../images/resend_email.svg';
 import searchPLUS from '../images/searchPLUS.svg';
 // import searchW from '../images/searchW.svg';
@@ -209,6 +210,7 @@ export default {
   pdf_2,
   pencil,
   print,
+  puntoVerde,
   resendEmail,
   searchPLUS,
   // searchW from '../images/searchW.svg';

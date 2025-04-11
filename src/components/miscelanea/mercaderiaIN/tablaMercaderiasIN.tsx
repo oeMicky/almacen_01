@@ -119,7 +119,7 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercaderiasIN) => {
-          // console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
+          console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
           const { data } = mercaderiasIN; //{ status, data, message }
           const misMercaderiasIN: IMercaderiaIN_BUSCAR[] = data;
           ctx.mostrarSpinner = false;
@@ -276,14 +276,12 @@ export default component$(
                                 </td>
                               )
                             ) : ( */}
-                            <td data-label="Precio PEN" class="comoNumeroLeft">
-                              <strong>
-                                {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                                  ? precioUnitarioPEN.$numberDecimal
-                                    ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
-                                    : precioUnitarioPEN
-                                  : '-'}
-                              </strong>
+                            <td data-label="Precio PEN" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                ? precioUnitarioPEN.$numberDecimal
+                                  ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                  : precioUnitarioPEN
+                                : '-'}
                             </td>
                             {/* )} */}
                             {/* <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td> */}
@@ -461,6 +459,12 @@ export default component$(
                                         : mercaINLocali.costoUnitarioPENMasIGV
                                       : 0;
                                   ctx.pUtilidad = mercaINLocali.porcentajeUtilidad.$numberDecimal;
+                                  ctx.precioUnitarioPEN =
+                                    typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                      ? precioUnitarioPEN.$numberDecimal
+                                        ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                        : precioUnitarioPEN
+                                      : 0;
                                   ctx.mostrarPanelEditPrecioPublicoIN = true;
                                   // ctx.mostrarSpinner = true;
 

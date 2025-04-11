@@ -230,12 +230,14 @@ export default component$(
         }}
         onRejected={() => {
           //console.log('onRejected 🍍🍍🍍🍍');
+          ctx_buscar_mercaderia_out.mostrarSpinner = false;
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercasOUT) => {
           console.log('onResolved 🍓🍓🍓🍓', mercasOUT);
           const { data } = mercasOUT; //{ status, data, message }
           const misMercaderiasOUT: IMercaderiaOUT_BUSCAR[] = data;
+          ctx_buscar_mercaderia_out.mostrarSpinner = false;
           //console.log('misMercaderiasOUT', misMercaderiasOUT);
           return (
             <>
@@ -707,6 +709,12 @@ export default component$(
                                         : mercaOUTLocali.costoUnitarioPENMasIGV
                                       : 0;
                                   ctx_buscar_mercaderia_out.pUtilidad = mercaOUTLocali.porcentajeUtilidad.$numberDecimal;
+                                  ctx_buscar_mercaderia_out.precioUnitarioPEN =
+                                    typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                      ? precioUnitarioPEN.$numberDecimal
+                                        ? formatear_6Decimales(precioUnitarioPEN.$numberDecimal)
+                                        : precioUnitarioPEN
+                                      : 0;
                                   ctx_buscar_mercaderia_out.mostrarPanelEditPrecioPublicoIN = true;
                                   // ctx.mostrarSpinner = true;
 

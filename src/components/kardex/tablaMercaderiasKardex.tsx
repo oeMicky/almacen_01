@@ -67,12 +67,14 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
       }}
       onRejected={() => {
         //console.log('onRejected 🍍🍍🍍🍍');
+        ctx_index_inventario.mostrarSpinner = false;
         return <div>Fallo en la carga de datos</div>;
       }}
       onResolved={(mercaderias) => {
         console.log('onResolved 🍓🍓🍓🍓', mercaderias);
         const { data } = mercaderias; //{ status, data, message }    , padding: '2px'
         const misMercaderiasKARDEX: IMercaderiaIN_BUSCAR[] = data;
+        ctx_index_inventario.mostrarSpinner = false;
         ctx_index_inventario.kK = data;
         return (
           <>
@@ -159,23 +161,19 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                 : '-'}
                             </td>
                           ) : ( */}
-                          <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
-                            <strong>
-                              {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
-                                ? costoUnitarioPENMasIGV.$numberDecimal
-                                  ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
-                                  : formatear_2Decimales(costoUnitarioPENMasIGV)
-                                : '-'}
-                            </strong>
+                          <td data-label="Costo PEN + IGV" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                            {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
+                              ? costoUnitarioPENMasIGV.$numberDecimal
+                                ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                                : formatear_2Decimales(costoUnitarioPENMasIGV)
+                              : '-'}
                           </td>
-                          <td data-label="Precio PEN" class="comoNumeroLeft">
-                            <strong>
-                              {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
-                                ? precioUnitarioPEN.$numberDecimal
-                                  ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
-                                  : formatear_2Decimales(precioUnitarioPEN)
-                                : '-'}
-                            </strong>
+                          <td data-label="Precio PEN" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                            {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                              ? precioUnitarioPEN.$numberDecimal
+                                ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
+                                : formatear_2Decimales(precioUnitarioPEN)
+                              : '-'}
                           </td>
                           {/* )} */}
                           <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
@@ -288,6 +286,12 @@ export default component$((props: { buscarMercaderiasKARDEX: number; parametrosB
                                     : 0;
                                 // mercaINLocali.costoUnitarioPENMasIGV.$numberDecimal? mercaINLocali.costoUnitarioPENMasIGV.$numberDecimal;
                                 ctx_index_inventario.pUtilidad = mercaINLocali.porcentajeUtilidad.$numberDecimal;
+                                ctx_index_inventario.precioUnitarioPEN =
+                                  typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
+                                    ? precioUnitarioPEN.$numberDecimal
+                                      ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
+                                      : formatear_2Decimales(precioUnitarioPEN)
+                                    : 0;
                                 ctx_index_inventario.mostrarPanelEditPrecioPublicoIN = true;
                                 console.log('🍔🍔🍔🍔🍔🍔');
                                 // ctx.mostrarSpinner = true;

@@ -58,7 +58,7 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
 
       usuario: parametrosGlobales.usuario,
     });
-    ctx.mostrarSpinner = false;
+    // ctx.mostrarSpinner = false;
 
     ctx.grabo_ubigeo = true;
     // ctx_buscar_mercaderia_in.laLineaTipo = lt.data;

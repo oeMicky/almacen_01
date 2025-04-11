@@ -36,6 +36,7 @@ export default component$(
       descripcion: '',
       cuMASigv: 0,
       pUtilidad: 0,
+      precioUnitarioPEN: 0,
 
       mM: [],
       kK: [],
@@ -563,6 +564,7 @@ export default component$(
                   cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_IN.cuMASigv}
                   pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
                   contexto="buscar_mercaderia_in"
+                  precioUnitarioPEN={definicion_CTX_BUSCAR_MERCADERIA_IN.precioUnitarioPEN}
                 />
               </div>
             )}

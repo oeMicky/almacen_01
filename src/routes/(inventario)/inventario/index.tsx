@@ -40,6 +40,7 @@ export default component$(() => {
     descripcion: '',
     cuMASigv: 0,
     pUtilidad: 0,
+    precioUnitarioPEN: 0,
     mostrarPanelEditPrecioPublicoIN: false,
     grabo_precio_publico: false,
 
@@ -481,6 +482,7 @@ export default component$(() => {
               cuMASigv={definicion_CTX_INDEX_INVENTARIO.cuMASigv}
               pUtilidad={definicion_CTX_INDEX_INVENTARIO.pUtilidad}
               contexto="index_kardex"
+              precioUnitarioPEN={definicion_CTX_INDEX_INVENTARIO.precioUnitarioPEN}
             />
           </div>
         )}

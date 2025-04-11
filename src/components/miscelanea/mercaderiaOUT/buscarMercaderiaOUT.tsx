@@ -39,6 +39,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     descripcion: '',
     cuMASigv: 0,
     pUtilidad: 0,
+    precioUnitarioPEN: 0,
 
     mM: [],
     kK: [],
@@ -69,7 +70,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     mostrarPanelKARDEX: false,
     mostrarPanelKARDEXS: false,
 
-    // mostrarSpinner: false,
+    mostrarSpinner: false,
   });
   useContextProvider(CTX_BUSCAR_MERCADERIA_OUT, definicion_CTX_BUSCAR_MERCADERIA_OUT);
   //#endregion DEFINICION CTX_BUSCAR_MERCADERIA_OUT - para eDITAR - para BUSCAR
@@ -114,7 +115,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
   const verLineaMarca = useSignal(false);
   const verTODOS = useSignal(false);
   const buscarMercaderiasOUT = useSignal(0);
-  const mostrarSpinner = useSignal(false);
+  // const mostrarSpinner = useSignal(false);
 
   // const buscarMercaderiasOUT_EnAUTOMATICO = useSignal(0);
   const parametrosBusqueda = useStore({
@@ -229,7 +230,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
       return;
     }
     // buscarMercaderiasOUT_EnAUTOMATICO.value++;
-    mostrarSpinner.value = true;
+    // mostrarSpinner.value = true;
+    definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarSpinner = true;
     let lasMercaderiasOUT: any;
     if (parametrosBusqueda.buscarPor === 'Descripción') {
       console.log('lasMercaderiasOUT Descripción');
@@ -331,7 +333,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
           //EXISTE KARDEX?
           if (typeof lasMercaderiasOUT[0].KARDEXS === 'undefined' || lasMercaderiasOUT[0].KARDEXS.length === 0) {
             alert('No se puede agregar este item, no tiene kardexs');
-            mostrarSpinner.value = false;
+            // mostrarSpinner.value = false;
+            definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarSpinner = false;
             return;
           }
           //
@@ -402,7 +405,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
           //EXISTE KARDEX?
           if (typeof lasMercaderiasOUT[0].KARDEXS === 'undefined' || lasMercaderiasOUT[0].KARDEXS.length === 0) {
             alert('No se puede agregar este item, no tiene kardexs');
-            mostrarSpinner.value = false;
+            // mostrarSpinner.value = false;
+            definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarSpinner = false;
             return;
           }
 
@@ -488,7 +492,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
       parametrosBusqueda.cadenaABuscar = '';
       // console.log('✅✅✅✅✅✅✅✅');
     }
-    mostrarSpinner.value = false;
+    // mostrarSpinner.value = false;
+    definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarSpinner = false;
     // parametrosBusqueda.cadenaABuscar = '';
   });
   //#endregion BUSCAR MERCADERIAS OUT _EnAUTOMATICO
@@ -515,13 +520,13 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               }
           : hallado.value
           ? {
-              width: 'clamp(320px, 100%, 880px)',
+              width: 'clamp(320px, 100%, 960px)',
               // width: 'auto',
               border: '1px solid red',
               padding: '2px',
             }
           : {
-              width: 'clamp(320px, 100%, 880px)',
+              width: 'clamp(320px, 100%, 960px)',
               // width: 'auto',
               border: '1px solid red',
               padding: '2px',
@@ -886,6 +891,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_OUT.cuMASigv}
                 pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_OUT.pUtilidad}
                 contexto="buscar_mercaderia_out"
+                precioUnitarioPEN={definicion_CTX_BUSCAR_MERCADERIA_OUT.precioUnitarioPEN}
               />
             </div>
           )}
@@ -904,7 +910,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
             </div>
           )}
           {/* MOSTRAR SPINNER */}
-          {mostrarSpinner.value && (
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarSpinner && (
             <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Spinner />
             </div>

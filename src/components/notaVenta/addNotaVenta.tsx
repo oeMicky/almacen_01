@@ -1464,7 +1464,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
               <input
                 id="in_Fecha_Para_Venta"
                 type="date"
-                disabled
+                // disabled
                 min={menosXdiasHoy(2)}
                 max={hoy()}
                 // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
