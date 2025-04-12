@@ -535,7 +535,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
 
       equivalencias: definicion_CTX_MERCADERIA_IN.equivalencias,
 
-      costoDeInicioPEN: definicion_CTX_MERCADERIA_IN.costoDeInicioPEN,
+      // costoDeInicioPEN: definicion_CTX_MERCADERIA_IN.costoDeInicioPEN,
       // totalCantidadSaldo: props.mercaSeleccio.totalCantidadSaldo ? props.mercaSeleccio.totalCantidadSaldo : '',
       // costoPEN: props.mercaSeleccio.costoPEN ? props.mercaSeleccio.costoPEN : 0,
       // precioUnitarioPEN: props.mercaSeleccio.precioUnitarioPEN ? props.mercaSeleccio.precioUnitarioPEN : 0,
