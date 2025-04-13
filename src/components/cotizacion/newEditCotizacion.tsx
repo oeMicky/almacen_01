@@ -37,6 +37,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
     rol_Persona: '',
     selecciono_Persona: false,
     mostrarPanelBuscarPersona: false,
+    mensajeErrorCliente: '',
+    mostrarPanelNewEditPersona: false,
 
     mostrarPanelBuscarVehiculo: false,
     mostrarPanelBuscarServicio: false,
@@ -133,7 +135,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
 
   //#region INICIALIZACION
   const ini = useSignal(0);
-  const mensajeErrorCliente = useSignal('');
+  // const mensajeErrorCliente = useSignal('');
 
   // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
   // const idSerieCotizacion = useSignal('');
@@ -580,8 +582,9 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   onInput$={async (e) => {
                     definicion_CTX_COTIZACION.numeroIdentidad = (e.target as HTMLInputElement).value;
                     if (
-                      definicion_CTX_COTIZACION.numeroIdentidad.length === 11 &&
-                      (definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '20' || definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '10')
+                      definicion_CTX_COTIZACION.numeroIdentidad.length === 11
+                      // &&
+                      // (definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '20' || definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '10')
                     ) {
                       // document.getElementById('in_BuscarPersona')?.focus();  //206 105 176 34  // no encontrado  //no determinado
                       console.log('.............buscando por RUC', definicion_CTX_COTIZACION.numeroIdentidad);
@@ -605,7 +608,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                         definicion_CTX_COTIZACION.tipoDocumentoIdentidad = '';
                         // definicion_CTX_COTIZACION.numeroIdentidad = '';
                         definicion_CTX_COTIZACION.razonSocialNombre = '';
-                        mensajeErrorCliente.value = 'Cliente no encontrado';
+                        definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = 'Persona no encontrada';
                         return;
                       }
                       if (cliente.data.length === 1) {
@@ -614,7 +617,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                         definicion_CTX_COTIZACION.tipoDocumentoIdentidad = cliente.data[0].tipoDocumentoIdentidad;
                         definicion_CTX_COTIZACION.numeroIdentidad = cliente.data[0].numeroIdentidad;
                         definicion_CTX_COTIZACION.razonSocialNombre = cliente.data[0].razonSocialNombre;
-                        mensajeErrorCliente.value = '';
+                        definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = '';
                         return;
                       }
                       if (cliente.data.length > 1) {
@@ -624,7 +627,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                         definicion_CTX_COTIZACION.tipoDocumentoIdentidad = '';
                         // definicion_CTX_COTIZACION.numeroIdentidad = '';
                         definicion_CTX_COTIZACION.razonSocialNombre = '';
-                        mensajeErrorCliente.value = 'Cliente no determinado';
+                        definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = 'Persona no determinada';
                         return;
                       }
 
@@ -653,7 +656,14 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   height={20}
                   width={16}
                   style={{ marginLeft: '4px' }}
-                  onClick$={() => (definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true)}
+                  onClick$={() => {
+                    definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true;
+                    // if (definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente === '') {
+
+                    // } else {
+                    //   definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelNewEditPersona = true;
+                    // }
+                  }}
                 />
               </div>
               {/* Razon Social / Nombre */}
@@ -667,16 +677,25 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                 />
               </div>
             </div>
-            {mensajeErrorCliente.value !== '' && <label style={{ display: 'block', textAlign: 'center', color: 'red' }}>{mensajeErrorCliente.value}</label>}
+            {definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente !== '' && (
+              <label style={{ display: 'block', textAlign: 'center', color: 'red' }}>{definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente}</label>
+            )}
             <br />
           </div>
           {/* {showSeleccionarPersona.value && ( */}
           {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="cotizacion" rol="cliente" />
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="cliente"
+                contexto="cotizacion"
+                rol="cliente"
+                valorABuscarAUTOMATICAMENTE={definicion_CTX_COTIZACION.numeroIdentidad}
+                mensajeErrorPersona={definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente}
+              />
             </div>
           )}
-          {/* ----------------------------------------------------- */}
+          {/*  -------------------------------------------------- */}
           {/* IGV - TC */}
           <div>
             {/* IGV */}

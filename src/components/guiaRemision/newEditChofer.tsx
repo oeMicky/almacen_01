@@ -1,4 +1,4 @@
-import { $, component$, useContext, useStore } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal, useStore } from '@builder.io/qwik';
 import ImgButton from '../system/imgButton';
 import { images } from '~/assets';
 import { CTX_NEW_EDIT_GUIA_REMISION } from './newEditGuiaRemision';
@@ -12,6 +12,8 @@ export default component$((props: { choferSeleccionado: any }) => {
   //#endregion CONTEXTOS
 
   //#region INICIALIZACION
+  const mensajeErrorChofer = useSignal('');
+
   const elChofer = useStore({
     idAuxiliar: props.choferSeleccionado.idAuxiliar ? props.choferSeleccionado.idAuxiliar : elIdAuxiliar(),
 
@@ -29,7 +31,7 @@ export default component$((props: { choferSeleccionado: any }) => {
   return (
     <div
       style={{
-        width: 'clamp(386px, 86%, 600px)',
+        width: 'clamp(320px, 100%, 600px)',
         // width: 'auto',
         padding: '2px',
       }}
@@ -111,7 +113,14 @@ export default component$((props: { choferSeleccionado: any }) => {
           </div>
           {ctx.mostrarPanelBuscarChofer && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={true} seleccionar="chofer" contexto="new_edit_guiaRemision" rol="chofer" />
+              <BuscarPersona
+                soloPersonasNaturales={true}
+                seleccionar="chofer"
+                contexto="new_edit_guiaRemision"
+                rol="chofer"
+                valorABuscarAUTOMATICAMENTE={elChofer.numeroIdentidad}
+                mensajeErrorPersona={mensajeErrorChofer.value}
+              />
             </div>
           )}
           {/* numero identidad*/}

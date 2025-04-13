@@ -44,6 +44,9 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
     mostrarPanelBuscarRemitente: false,
     mostrarPanelBuscarServicio: false,
 
+    mensajeErrorRemitente: '',
+    mensajeErrorDestinatario: '',
+
     mostrarPanelBuscarDestinatario: false,
 
     // mostrarPanelBuscarTransportista: false,
@@ -1205,7 +1208,14 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           </div>
           {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarRemitente && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={false} seleccionar="remitente" contexto="new_edit_guiaRemision" rol="remitente" />
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="remitente"
+                contexto="new_edit_guiaRemision"
+                rol="remitente"
+                valorABuscarAUTOMATICAMENTE={definicion_CTX_GUIA_REMISION.numeroIdentidadRemitente}
+                mensajeErrorPersona={definicion_CTX_NEW_EDIT_GUIA_REMISION.mensajeErrorRemitente}
+              />
             </div>
           )}
           {/* numero identidad*/}
@@ -1284,7 +1294,14 @@ export default component$((props: { addPeriodo: any; guiaRemisionSeleccionada: a
           </div>
           {definicion_CTX_NEW_EDIT_GUIA_REMISION.mostrarPanelBuscarDestinatario && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={false} seleccionar="destinatario" contexto="new_edit_guiaRemision" rol="destinatario" />
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="destinatario"
+                contexto="new_edit_guiaRemision"
+                rol="destinatario"
+                valorABuscarAUTOMATICAMENTE={definicion_CTX_GUIA_REMISION.numeroIdentidadDestinatario}
+                mensajeErrorPersona={definicion_CTX_NEW_EDIT_GUIA_REMISION.mensajeErrorDestinatario}
+              />
             </div>
           )}
           {/* numero identidad*/}

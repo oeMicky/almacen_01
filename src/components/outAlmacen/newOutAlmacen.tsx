@@ -46,6 +46,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     rol_Persona: '',
     selecciono_Persona: false,
 
+    mensajeErrorCliente: '',
+    mensajeErrorDestinatario: '',
+
     mostrarSelectNotaSalida: false,
     idSerieNotaSalida_porDefault: '',
     serieNotaSalida_porDefault: '',
@@ -728,12 +731,21 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
               <BuscarOrdenServicioAperturado contexto="egreso_de_almacen" />
             </div>
           )}
-          {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona_Venta && (
+
+          {/* {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona_Venta && (
             <div class="modal">
-              <BuscarPersona seleccionar="cliente" soloPersonasNaturales={false} contexto={'new_out_almacen'} rol="cliente" motivo={true} />
-              {/* <BuscarVenta contexto="egreso_de_almacen" /> */}
+              <BuscarPersona
+                seleccionar="cliente"
+                soloPersonasNaturales={false}
+                contexto={'new_out_almacen'}
+                rol="cliente"
+                motivo={true}
+                valorABuscarAUTOMATICAMENTE={definicion_CTX_OUT_ALMACEN.numeroIdentidad}
+                mensajeErrorPersona={definicion_CTX_NEW_OUT_ALMACEN.mensajeErrorCliente}
+              />
             </div>
-          )}
+          )} */}
+
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL DESTINATARIO */}
           <div>
@@ -838,7 +850,14 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           </div>
           {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={false} seleccionar="destinatario" contexto="new_out_almacen" rol="destinatario" />
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="destinatario"
+                contexto="new_out_almacen"
+                rol="destinatario"
+                valorABuscarAUTOMATICAMENTE={definicion_CTX_OUT_ALMACEN.numeroIdentidad}
+                mensajeErrorPersona={definicion_CTX_NEW_OUT_ALMACEN.mensajeErrorDestinatario}
+              />
             </div>
           )}
           {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelListaFavoritosAlmacen && (

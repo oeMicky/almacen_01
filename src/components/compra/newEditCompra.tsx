@@ -41,6 +41,8 @@ export default component$(
       rol_Persona: '',
       selecciono_Persona: false,
 
+      mensajeErrorProveedor: '',
+
       mostrarPanelBuscarDetraccionPorcentaje: false,
 
       letra: [],
@@ -1272,7 +1274,14 @@ export default component$(
               </div>
               {definicion_CTX_NEW_EDIT_COMPRA.mostrarPanelBuscarPersona && (
                 <div class="modal">
-                  <BuscarPersona soloPersonasNaturales={false} seleccionar="proveedor" contexto="new_edit_compra" rol="proveedor" />
+                  <BuscarPersona
+                    soloPersonasNaturales={false}
+                    seleccionar="proveedor"
+                    contexto="new_edit_compra"
+                    rol="proveedor"
+                    valorABuscarAUTOMATICAMENTE={definicion_CTX_COMPRA.numeroIdentidad}
+                    mensajeErrorPersona={definicion_CTX_NEW_EDIT_COMPRA.mensajeErrorProveedor}
+                  />
                 </div>
               )}
               {/* numero identidad*/}

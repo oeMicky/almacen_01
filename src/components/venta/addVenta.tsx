@@ -76,6 +76,8 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
     mostrarPanelBuscarServicio: false,
     mostrarPanelBuscarMercaderiaOUT: false,
 
+    mensajeErrorCliente: '',
+
     mostrarPanelEditPersonaDirecta: false,
     grabo_PersonaDirecta: false,
     // personaDirectaEDITADA: { _id: '', razonSocialNombre: '', direccion: '', email: '', telefono: '', cuentasCorrientes: [] },
@@ -1736,7 +1738,14 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             </div>
             {definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona && (
               <div class="modal">
-                <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="venta" rol="cliente" />
+                <BuscarPersona
+                  soloPersonasNaturales={false}
+                  seleccionar="cliente"
+                  contexto="venta"
+                  rol="cliente"
+                  valorABuscarAUTOMATICAMENTE={definicion_CTX_F_B_NC_ND.numeroIdentidad}
+                  mensajeErrorPersona={definicion_CTX_ADD_VENTA.mensajeErrorCliente}
+                />
               </div>
             )}
             {/* EDIT - PERSONA/CLIENTE */}

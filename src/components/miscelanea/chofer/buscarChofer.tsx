@@ -2,7 +2,7 @@ import { $, component$, createContextId, useContext, useContextProvider, useSign
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 import TablaChoferes from './tablaChoferes';
-import BuscarPersona from '../persona/buscarPersona';
+// import BuscarPersona from '../persona/buscarPersona';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 import { inUpChofer } from '~/apis/chofer.api';
@@ -206,11 +206,14 @@ export default component$((props: { contexto: string }) => {
               </div>
             </div>
           </div>
-          {definicion_CTX_BUSCAR_CHOFER.mostrarPanelBuscarPersona && (
+          {/* {definicion_CTX_BUSCAR_CHOFER.mostrarPanelBuscarPersona && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={true} seleccionar="persona" contexto="new_edit_guiaRemision" rol="chofer" />
+              <BuscarPersona soloPersonasNaturales={true} seleccionar="persona" contexto="new_edit_guiaRemision" rol="chofer" 
+              valorABuscarAUTOMATICAMENTE={definicion_CTX_COTIZACION.numeroIdentidad}
+              mensajeErrorPersona={definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente}
+              />
             </div>
-          )}
+          )} */}
           {definicion_CTX_BUSCAR_CHOFER.mostrarPanelEditChofer && (
             <div class="modal">
               <EditChofer choferSeleccionado={definicion_CTX_BUSCAR_CHOFER.cH} />

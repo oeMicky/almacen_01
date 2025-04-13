@@ -3,7 +3,7 @@ import { images } from '~/assets';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO } from '~/components/ordenServicio/newEditOrdenServicio';
 import ImgButton from '~/components/system/imgButton';
 import TablaTecnicos from './tablaTecnicos';
-import BuscarPersona from '../persona/buscarPersona';
+// import BuscarPersona from '../persona/buscarPersona';
 import { inUpTecnico } from '~/apis/tecnico.api';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_NEW_EDIT_ORDEN_PRODUCCION } from '~/components/ordenProduccion/newEditOrdenProduccion';
@@ -192,11 +192,14 @@ export default component$((props: { contexto: string }) => {
               </div>
             </div>
           </div>
-          {definicion_CTX_BUSCAR_TECNICO.mostrarPanelBuscarPersona && (
+          {/* {definicion_CTX_BUSCAR_TECNICO.mostrarPanelBuscarPersona && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={true} seleccionar="persona" contexto="buscar_tecnico" rol="persona" />
+              <BuscarPersona soloPersonasNaturales={true} seleccionar="persona" contexto="buscar_tecnico" rol="persona" 
+              valorABuscarAUTOMATICAMENTE={definicion_CTX_COTIZACION.numeroIdentidad}
+              mensajeErrorPersona={definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente}
+              />
             </div>
-          )}
+          )} */}
           {/* TABLA DE TÉCNICOS HALLADOS*/}
           <div class="form-control">{buscarTecnico.value > 0 ? <TablaTecnicos buscarTecnico={buscarTecnico.value} contexto={props.contexto} /> : ''}</div>
         </div>

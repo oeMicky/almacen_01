@@ -50,6 +50,8 @@ export default component$((props: { addPeriodo: any; oPSelecci: any; igv: any })
     selecciono_Persona: false,
     mostrarPanelBuscarPersona: false,
 
+    mensajeErrorCliente: '',
+
     // mostrarPanelBuscarVehiculo: false,
     addM: [],
     mostrarPanelAddManufactura: false,
@@ -798,7 +800,14 @@ export default component$((props: { addPeriodo: any; oPSelecci: any; igv: any })
           </div>
           {definicion_CTX_NEW_EDIT_ORDEN_PRODUCCION.mostrarPanelBuscarPersona && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="orden_produccion" rol="cliente" />
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="cliente"
+                contexto="orden_produccion"
+                rol="cliente"
+                valorABuscarAUTOMATICAMENTE={definicion_CTX_O_P.numeroIdentidad}
+                mensajeErrorPersona={definicion_CTX_NEW_EDIT_ORDEN_PRODUCCION.mensajeErrorCliente}
+              />
             </div>
           )}
           {/* ----------------------------------------------------- */}

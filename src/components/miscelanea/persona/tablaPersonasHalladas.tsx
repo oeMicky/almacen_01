@@ -284,7 +284,49 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                           <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
                           <td data-label="Tipo">{tipoDocumentoIdentidad}</td>
                           <td data-label="Número">{numeroIdentidad}</td>
-                          <td data-label="R.Soc/Nomb">{razonSocialNombre}</td>
+                          <td
+                            data-label="R.Soc/Nomb"
+                            style={{ cursor: 'pointer', fontWeight: 'bold' }}
+                            onClick$={() => {
+                              if (props.contexto === 'new_out_almacen' && props.rol === 'cliente') {
+                                ctx_buscar_persona.pP = persoLocali;
+                                ctx.mostrarPanelVentasCliente = true;
+                              } else {
+                                console.log('TABLA_PERSONAS_HALLADAS: es verdadderoa.....', direccion);
+                                ctx_rol._id = _id;
+                                ctx_rol.codigoTipoDocumentoIdentidad = codigoTipoDocumentoIdentidad;
+                                ctx_rol.tipoDocumentoIdentidad = tipoDocumentoIdentidad;
+                                ctx_rol.numeroIdentidad = numeroIdentidad;
+                                ctx_rol.razonSocialNombre = razonSocialNombre;
+                                ctx_rol.direccion = direccion;
+                                ctx_rol.email = email;
+                                ctx_rol.telefono = telefono;
+                                //console.log('ctx_rol', ctx_rol);
+
+                                ctx.mostrarPanelBuscarPersona = false;
+                                if (props.rol === 'remitente') {
+                                  ctx.mostrarPanelBuscarRemitente = false;
+                                }
+                                if (props.rol === 'destinatario') {
+                                  ctx.mostrarPanelBuscarDestinatario = false;
+                                }
+                                if (props.rol === 'transportista') {
+                                  //console.log('transportista');
+                                  ctx.mostrarPanelBuscarTransportista = false;
+                                }
+                                if (props.rol === 'chofer') {
+                                  ctx.mostrarPanelBuscarChofer = false;
+                                }
+                                ctx.idPersona = _id;
+                                ctx.conceptoABuscar = numeroIdentidad;
+                                ctx.mensajeErrorCliente = '';
+                                ctx.rol_Persona = props.rol;
+                                ctx.selecciono_Persona = true;
+                              }
+                            }}
+                          >
+                            {razonSocialNombre}
+                          </td>
                           <td data-label="Acciones" class="accionesLeft">
                             <input
                               // id="in_BuscarDetraccion"
@@ -328,6 +370,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                                   }
                                   ctx.idPersona = _id;
                                   ctx.conceptoABuscar = numeroIdentidad;
+                                  ctx.mensajeErrorCliente = '';
                                   ctx.rol_Persona = props.rol;
                                   ctx.selecciono_Persona = true;
                                 }
@@ -428,7 +471,7 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem', color: 'red' }}>No se encontraron registros</i>
               </div>
             )}
           </>

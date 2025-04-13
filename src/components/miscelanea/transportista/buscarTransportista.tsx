@@ -4,7 +4,7 @@ import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGui
 import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 import EditTransportista from './editTransportista';
-import BuscarPersona from '../persona/buscarPersona';
+// import BuscarPersona from '../persona/buscarPersona';
 import TablaTransportistas from './tablaTransportistas';
 import { inUpTransportista } from '~/apis/transportista.api';
 
@@ -203,11 +203,14 @@ export default component$((props: { contexto: string }) => {
             </div>
           </div>
         </div>
-        {definicion_CTX_BUSCAR_TRANSPORTISTA.mostrarPanelBuscarTransportista && (
+        {/* {definicion_CTX_BUSCAR_TRANSPORTISTA.mostrarPanelBuscarTransportista && (
           <div class="modal">
-            <BuscarPersona soloPersonasNaturales={false} seleccionar="persona" contexto="new_edit_guiaRemision" rol="transportista" />
+            <BuscarPersona soloPersonasNaturales={false} seleccionar="persona" contexto="new_edit_guiaRemision" rol="transportista" 
+            valorABuscarAUTOMATICAMENTE={definicion_CTX_COTIZACION.numeroIdentidad}
+            mensajeErrorPersona={definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente}
+            />
           </div>
-        )}
+        )} */}
         {definicion_CTX_BUSCAR_TRANSPORTISTA.mostrarPanelEditTransportista && (
           <div class="modal">
             <EditTransportista transportistaSeleccionado={definicion_CTX_BUSCAR_TRANSPORTISTA.tR} />

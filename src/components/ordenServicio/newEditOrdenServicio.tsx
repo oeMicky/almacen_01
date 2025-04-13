@@ -38,6 +38,8 @@ export default component$((props: { addPeriodo: any; oSSelecci: any; igv: any })
     selecciono_Tecnico: false,
     mostrarPanelBuscarTecnico: false,
 
+    mensajeErrorCliente: '',
+
     rol_Persona: '',
     selecciono_Persona: false,
     mostrarPanelBuscarPersona: false,
@@ -1009,7 +1011,14 @@ OBSERVACIÓN(ES):
           </div>
           {definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mostrarPanelBuscarPersona && (
             <div class="modal">
-              <BuscarPersona soloPersonasNaturales={false} seleccionar="cliente" contexto="orden_servicio" rol="cliente" />
+              <BuscarPersona
+                soloPersonasNaturales={false}
+                seleccionar="cliente"
+                contexto="orden_servicio"
+                rol="cliente"
+                valorABuscarAUTOMATICAMENTE={definicion_CTX_O_S.numeroIdentidad}
+                mensajeErrorPersona={definicion_CTX_NEW_EDIT_ORDEN_SERVICIO.mensajeErrorCliente}
+              />
             </div>
           )}
           {/* ----------------------------------------------------- */}

@@ -29,6 +29,7 @@ import caoSLinealDark from '../images/CAO-S-Lineal-dark.svg';
 import caoSLinealLight from '../images/CAO-S-Lineal-light.svg';
 
 import add from '../images/add.svg';
+import addSUNAT from '../images/addSUNAT.svg';
 import adjunto from '../images/adjunto.svg';
 import arrowUpRight from '../images/arrow-up-right.svg';
 import arrowUp from '../images/arrow-up.svg';
@@ -148,6 +149,7 @@ export default {
   caoSLinealLight,
 
   add,
+  addSUNAT,
   adjunto,
   arrowUpRight,
   arrowUp,

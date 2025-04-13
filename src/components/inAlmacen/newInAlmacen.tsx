@@ -54,6 +54,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     rol_Persona: '',
     selecciono_Persona: false,
 
+    mensajeErrorRemitente: '',
+
     mostrarPanelBuscarPersona: false,
 
     mostrarPanelListaFavoritosAlmacen: false,
@@ -945,7 +947,14 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             </div>
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona && (
               <div class="modal">
-                <BuscarPersona soloPersonasNaturales={false} seleccionar="remitente" contexto="new_in_almacen" rol="remitente" />
+                <BuscarPersona
+                  soloPersonasNaturales={false}
+                  seleccionar="remitente"
+                  contexto="new_in_almacen"
+                  rol="remitente"
+                  valorABuscarAUTOMATICAMENTE={definicion_CTX_IN_ALMACEN.numeroIdentidad}
+                  mensajeErrorPersona={definicion_CTX_NEW_IN_ALMACEN.mensajeErrorRemitente}
+                />
               </div>
             )}
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelListaFavoritosAlmacen && (
