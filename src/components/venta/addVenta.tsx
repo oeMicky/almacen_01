@@ -46,6 +46,7 @@ import EditarImpuesto from './editarImpuesto';
 import { getPorcentajesUtilidad } from '~/apis/grupoEmpresarial.api';
 import EditarPersonaDirecta from '../miscelanea/persona/editarPersonaDirecta';
 import { CTX_INDEX_NOTA_VENTA } from '~/routes/(ventas)/notaVenta';
+import { getPersonaPorDniRuc } from '~/apis/persona.api';
 // import EditarPersona from '../miscelanea/persona/editarPersona';
 
 export const CTX_CLIENTE_VENTA = createContextId<IPersonaVenta>('cliente');
@@ -1506,7 +1507,7 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
           {/* GENERALES DEL CLIENTE */}
           <div>
             {/* cliente VENTAS VARIAS*/}
-            <div style={{ marginBotton: '4px' }}>
+            <div style={{ marginBotton: '6px' }}>
               <div>
                 <input
                   id="chk_clienteVentasVarias_VENTA"
@@ -1608,8 +1609,16 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
             <div class="linea_1_111">
               {/* tipo de documento identidad*/}
               <div>
-                <div style={{ display: 'flex' }}>
-                  <select
+                <div>
+                  <input
+                    id="in_TipoDocumentoLiteral_VENTA"
+                    style={{ width: '100%' }}
+                    type="text"
+                    readOnly
+                    placeholder="Tipo documento identidad"
+                    value={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad}
+                  />
+                  {/* <select
                     id="selectTipoDocumentoLiteral"
                     disabled
                     style={{ cursor: 'pointer', width: '100%', height: '18px' }}
@@ -1638,46 +1647,111 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                     <option id="4" value="C.EXT" selected={definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad === 'C.EXT'}>
                       C.EXT
                     </option>
-                  </select>
-                  <input
-                    id="ima_BuscarCliente_VENTA"
-                    type="image"
-                    src={images.searchPLUS}
-                    title="Buscar datos de identidad"
-                    height={18}
-                    width={16}
-                    style={{ margin: '0 4px ' }}
-                    onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true)}
-                  />
-                  <input
-                    // id="in_BuscarDetraccion"
-                    type="image"
-                    src={images.edit}
-                    title="Editar cliente"
-                    height={18}
-                    width={16}
-                    // style={{ margin: '2px 0' }}
-                    disabled={definicion_CTX_F_B_NC_ND.idCliente === '' ? true : false}
-                    onClick$={() => {
-                      // console.log('japon');
-                      // ctx_buscar_persona.pP = persoLocali;
-                      // ctx_buscar_persona.mostrarPanelEditPersona = true;
-                      definicion_CTX_ADD_VENTA.mostrarPanelEditPersonaDirecta = true;
-                    }}
-                  />
+                  </select> */}
                 </div>
               </div>
               {/* numero identidad*/}
-              <div>
+              <div style={{ display: 'flex' }}>
                 <input
                   id="inputNumeroDocumentoIdentidad"
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', fontWeight: 'bold' }}
                   type="number"
-                  disabled
-                  placeholder="Add número"
+                  placeholder="Add RUC/DNI Cliente"
                   value={definicion_CTX_F_B_NC_ND.numeroIdentidad}
-                  onChange$={(e) => (definicion_CTX_F_B_NC_ND.numeroIdentidad = (e.target as HTMLInputElement).value)}
+                  onInput$={async (e) => {
+                    definicion_CTX_F_B_NC_ND.numeroIdentidad = (e.target as HTMLInputElement).value;
+                    if (
+                      definicion_CTX_F_B_NC_ND.numeroIdentidad.length === 11
+                      // &&
+                      // (definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '20' || definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '10')
+                    ) {
+                      // document.getElementById('in_BuscarPersona')?.focus();  //206 105 176 34  // no encontrado  //no determinado
+                      console.log('.............buscando por RUC', definicion_CTX_F_B_NC_ND.numeroIdentidad);
+                      ctx_index_venta.mostrarSpinner = true;
+                      const cliente = await getPersonaPorDniRuc({
+                        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                        idEmpresa: parametrosGlobales.idEmpresa,
+                        buscarPor: 'DNI / RUC',
+                        cadenaABuscar: definicion_CTX_F_B_NC_ND.numeroIdentidad,
+                      });
+                      ctx_index_venta.mostrarSpinner = false;
+                      console.log('.............buscando por RUC - cliente', cliente.data);
+                      if (cliente.status === 400) {
+                        alert(cliente.message);
+                        return;
+                      }
+                      if (cliente.data.length === 0) {
+                        // alert('Cliente no encontrado :|');
+                        definicion_CTX_F_B_NC_ND.idCliente = '';
+                        definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = '';
+                        definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = '';
+                        // definicion_CTX_COTIZACION.numeroIdentidad = '';
+                        definicion_CTX_F_B_NC_ND.razonSocialNombre = '';
+                        definicion_CTX_ADD_VENTA.mensajeErrorCliente = 'Persona no encontrada';
+                        return;
+                      }
+                      if (cliente.data.length === 1) {
+                        definicion_CTX_F_B_NC_ND.idCliente = cliente.data[0]._id;
+                        definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = cliente.data[0].codigoTipoDocumentoIdentidad;
+                        definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = cliente.data[0].tipoDocumentoIdentidad;
+                        definicion_CTX_F_B_NC_ND.numeroIdentidad = cliente.data[0].numeroIdentidad;
+                        definicion_CTX_F_B_NC_ND.razonSocialNombre = cliente.data[0].razonSocialNombre;
+                        definicion_CTX_ADD_VENTA.mensajeErrorCliente = '';
+                        return;
+                      }
+                      if (cliente.data.length > 1) {
+                        // alert('Cliente no determinado :|');
+                        definicion_CTX_F_B_NC_ND.idCliente = '';
+                        definicion_CTX_F_B_NC_ND.codigoTipoDocumentoIdentidad = '';
+                        definicion_CTX_F_B_NC_ND.tipoDocumentoIdentidad = '';
+                        // definicion_CTX_COTIZACION.numeroIdentidad = '';
+                        definicion_CTX_F_B_NC_ND.razonSocialNombre = '';
+                        definicion_CTX_ADD_VENTA.mensajeErrorCliente = 'Persona no determinada';
+                        return;
+                      }
+
+                      // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = true;
+                      // localizarPersonas();
+                      // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = false;
+                    }
+                  }}
+                  onKeyUp$={(e) => {
+                    if (e.key === 'Enter') {
+                      if (definicion_CTX_F_B_NC_ND.idCliente !== '') {
+                        document.getElementById('in_NombreCliente')?.focus();
+                      } else {
+                        document.getElementById('image_BuscarCliente')?.focus();
+                      }
+                    }
+                  }}
+                  // onChange$={(e) => (definicion_CTX_F_B_NC_ND.numeroIdentidad = (e.target as HTMLInputElement).value)}
                   // onChange={(e) => setNumeroIdentidad(e.target.value)}
+                />
+                <input
+                  id="ima_BuscarCliente_VENTA"
+                  type="image"
+                  src={images.searchPLUS}
+                  title="Buscar datos de identidad"
+                  height={18}
+                  width={16}
+                  style={{ margin: '0 4px ' }}
+                  onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true)}
+                />
+                <input
+                  // id="in_BuscarDetraccion"
+                  type="image"
+                  src={images.edit}
+                  title="Editar cliente"
+                  height={18}
+                  width={16}
+                  // style={{ margin: '2px 0' }}
+                  disabled={definicion_CTX_F_B_NC_ND.idCliente === '' ? true : false}
+                  onClick$={() => {
+                    // console.log('japon');
+                    // ctx_buscar_persona.pP = persoLocali;
+                    // ctx_buscar_persona.mostrarPanelEditPersona = true;
+                    definicion_CTX_ADD_VENTA.mostrarPanelEditPersonaDirecta = true;
+                  }}
                 />
               </div>
               {/* Razon Social / Nombre */}
@@ -1693,6 +1767,9 @@ export default component$((props: { addPeriodo: any; igv: number; addPeriodoAnte
                 />
               </div>
             </div>
+            {definicion_CTX_ADD_VENTA.mensajeErrorCliente !== '' && (
+              <label style={{ display: 'block', textAlign: 'center', color: 'red' }}>{definicion_CTX_ADD_VENTA.mensajeErrorCliente}</label>
+            )}
             {/* DIRECCION - EMAIL - TELEFONO  */}
             <div class="linea_1_111">
               {/* Dirección Cliente */}

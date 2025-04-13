@@ -30,6 +30,7 @@ import BuscarOrdenServicioAperturado from '../miscelanea/ordenServicioAperturado
 import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionAperturado/buscarOrdenProduccionAperturado';
 import ListaFavoritosAlmacen from '../miscelanea/favoritos/listaFavoritosAlmacen';
 import { loadTiposComprobantePago } from '~/apis/sunat.api';
+import { getPersonaPorDniRuc } from '~/apis/persona.api';
 // import { IDocumento } from '~/interfaces/iDocumento';
 
 export const CTX_NEW_OUT_ALMACEN = createContextId<any>('new_out_almacen');
@@ -752,7 +753,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
             <div class="linea_1_111">
               {/* tipo de documento identidad DESTINATARIO*/}
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <select
+                <input
+                  id="in_TipoDocumentoLiteral_DESTINATARIO"
+                  style={{ width: '100%' }}
+                  type="text"
+                  readOnly
+                  placeholder="Tipo documento identidad"
+                  value={definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad}
+                />
+                {/* <select
                   id="se_TipoDocumentoLiteral_DESTINATARIO"
                   disabled={definicion_CTX_OUT_ALMACEN._id !== ''}
                   value={definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad}
@@ -780,7 +789,91 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   <option id="4" value="C.EXT" selected={definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad === 'C.EXT'}>
                     C.EXT
                   </option>
-                </select>
+                </select> */}
+              </div>
+
+              {/* numero identidad DESTINATARIO*/}
+              <div style={{ display: 'flex' }}>
+                <input
+                  id="in_NumeroDocumentoIdentidad_DESTINATARIO"
+                  style={{ width: '100%', fontWeight: 'bold' }}
+                  type="text"
+                  disabled={definicion_CTX_OUT_ALMACEN._id !== ''}
+                  placeholder="Add número RUC/DNI Destinatario"
+                  value={definicion_CTX_OUT_ALMACEN.numeroIdentidad}
+                  onInput$={async (e) => {
+                    definicion_CTX_OUT_ALMACEN.numeroIdentidad = (e.target as HTMLInputElement).value;
+                    if (
+                      definicion_CTX_OUT_ALMACEN.numeroIdentidad.length === 11
+                      // &&
+                      // (definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '20' || definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '10')
+                    ) {
+                      // document.getElementById('in_BuscarPersona')?.focus();  //206 105 176 34  // no encontrado  //no determinado
+                      console.log('.............buscando por RUC', definicion_CTX_OUT_ALMACEN.numeroIdentidad);
+                      ctx_index_out_almacen.mostrarSpinner = true;
+                      const cliente = await getPersonaPorDniRuc({
+                        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                        idEmpresa: parametrosGlobales.idEmpresa,
+                        buscarPor: 'DNI / RUC',
+                        cadenaABuscar: definicion_CTX_OUT_ALMACEN.numeroIdentidad,
+                      });
+                      ctx_index_out_almacen.mostrarSpinner = false;
+                      console.log('.............buscando por RUC - cliente', cliente.data);
+                      if (cliente.status === 400) {
+                        alert(cliente.message);
+                        return;
+                      }
+                      if (cliente.data.length === 0) {
+                        // alert('Cliente no encontrado :|');
+                        definicion_CTX_OUT_ALMACEN.idDestinatario = '';
+                        definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad = '';
+                        definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad = '';
+                        // definicion_CTX_COTIZACION.numeroIdentidad = '';
+                        definicion_CTX_OUT_ALMACEN.razonSocialNombre = '';
+                        definicion_CTX_NEW_OUT_ALMACEN.mensajeErrorDestinatario = 'Persona no encontrada';
+                        return;
+                      }
+                      if (cliente.data.length === 1) {
+                        definicion_CTX_OUT_ALMACEN.idDestinatario = cliente.data[0]._id;
+                        definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad = cliente.data[0].codigoTipoDocumentoIdentidad;
+                        definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad = cliente.data[0].tipoDocumentoIdentidad;
+                        definicion_CTX_OUT_ALMACEN.numeroIdentidad = cliente.data[0].numeroIdentidad;
+                        definicion_CTX_OUT_ALMACEN.razonSocialNombre = cliente.data[0].razonSocialNombre;
+                        definicion_CTX_NEW_OUT_ALMACEN.mensajeErrorDestinatario = '';
+                        return;
+                      }
+                      if (cliente.data.length > 1) {
+                        // alert('Cliente no determinado :|');
+                        definicion_CTX_OUT_ALMACEN.idDestinatario = '';
+                        definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad = '';
+                        definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad = '';
+                        // definicion_CTX_COTIZACION.numeroIdentidad = '';
+                        definicion_CTX_OUT_ALMACEN.razonSocialNombre = '';
+                        definicion_CTX_NEW_OUT_ALMACEN.mensajeErrorDestinatario = 'Persona no determinada';
+                        return;
+                      }
+
+                      // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = true;
+                      // localizarPersonas();
+                      // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = false;
+                    }
+                  }}
+                  onKeyUp$={(e) => {
+                    if (e.key === 'Enter') {
+                      if (definicion_CTX_OUT_ALMACEN.idDestinatario !== '') {
+                        document.getElementById('in_Nombre_REMITENTE')?.focus();
+                      } else {
+                        document.getElementById('in_BuscarREMITENTE')?.focus();
+                      }
+                    }
+                  }}
+                  // onChange$={(e) => (definicion_CTX_OUT_ALMACEN.numeroIdentidad = (e.target as HTMLInputElement).value)}
+                  // onKeyPress$={$((e: any) => {
+                  //   if (e.key === 'Enter') {
+                  //     (document.getElementById('in_Nombre_DESTINATARIO') as HTMLInputElement)?.focus();
+                  //   }
+                  // })}
+                />
                 {definicion_CTX_OUT_ALMACEN._id === '' ? (
                   <>
                     <input
@@ -790,7 +883,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                       alt="icono buscar"
                       height={16}
                       width={16}
-                      style={{ margin: '2px 6px' }}
+                      style={{ margin: '2px 4px' }}
                       onClick$={() => (definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona = true)}
                     />
                     <input
@@ -810,24 +903,6 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 )}
               </div>
 
-              {/* numero identidad DESTINATARIO*/}
-              <div>
-                <input
-                  id="in_NumeroDocumentoIdentidad_DESTINATARIO"
-                  style={{ width: '100%' }}
-                  type="text"
-                  disabled={definicion_CTX_OUT_ALMACEN._id !== ''}
-                  placeholder="Add número identidad destinatario"
-                  value={definicion_CTX_OUT_ALMACEN.numeroIdentidad}
-                  onChange$={(e) => (definicion_CTX_OUT_ALMACEN.numeroIdentidad = (e.target as HTMLInputElement).value)}
-                  onKeyPress$={$((e: any) => {
-                    if (e.key === 'Enter') {
-                      (document.getElementById('in_Nombre_DESTINATARIO') as HTMLInputElement)?.focus();
-                    }
-                  })}
-                />
-              </div>
-
               {/* Razon Social / Nombre - DESTINATARIO*/}
               <div>
                 <input
@@ -845,7 +920,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 />
               </div>
             </div>
-
+            {definicion_CTX_NEW_OUT_ALMACEN.mensajeErrorDestinatario !== '' && (
+              <label style={{ display: 'block', textAlign: 'center', color: 'red' }}>{definicion_CTX_NEW_OUT_ALMACEN.mensajeErrorDestinatario}</label>
+            )}
             <br />
           </div>
           {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona && (

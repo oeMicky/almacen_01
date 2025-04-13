@@ -371,6 +371,8 @@ export default component$((props: { buscarPersona: number; soloPersonasNaturales
                                   ctx.idPersona = _id;
                                   ctx.conceptoABuscar = numeroIdentidad;
                                   ctx.mensajeErrorCliente = '';
+                                  ctx.mensajeErrorRemitente = '';
+                                  ctx.mensajeErrorDestinatario = '';
                                   ctx.rol_Persona = props.rol;
                                   ctx.selecciono_Persona = true;
                                 }
