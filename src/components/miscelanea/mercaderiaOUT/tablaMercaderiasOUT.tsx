@@ -331,7 +331,7 @@ export default component$(
                                 alert('🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚🚚');
                               }
                             }}
-                            onClick$={(e) => {
+                            onDblClick$={(e) => {
                               try {
                                 if (props.esAlmacen) {
                                   return;

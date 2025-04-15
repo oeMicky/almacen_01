@@ -1213,7 +1213,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
     if (notaVentaGRABADA) {
       grabo.value = true;
 
-      definicion_CTX_NOTA_VENTA.fecha = hoy();
+      // definicion_CTX_NOTA_VENTA.fecha = hoy();
 
       definicion_CTX_NOTA_VENTA.clienteVentasVarias = false;
       // definicion_CTX_NOTA_VENTA.idCliente = '';
