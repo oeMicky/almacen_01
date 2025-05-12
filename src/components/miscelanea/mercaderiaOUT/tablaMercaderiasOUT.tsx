@@ -234,7 +234,7 @@ export default component$(
           return <div>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercasOUT) => {
-          console.log('onResolved 🍓🍓🍓🍓', mercasOUT);
+          // console.log('onResolved 🍓🍓🍓🍓', mercasOUT);
           const { data } = mercasOUT; //{ status, data, message }
           const misMercaderiasOUT: IMercaderiaOUT_BUSCAR[] = data;
           ctx_buscar_mercaderia_out.mostrarSpinner = false;
@@ -260,8 +260,8 @@ export default component$(
                       <th>Descripción</th>
                       <th style={props.verAplicacion ? '' : { display: 'none' }}>Aplicación</th>
                       <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
-                      <th style={props.verLineaMarca ? '' : { display: 'none' }}>Marca</th>
-                      <th>Ubi</th>
+                      <th>Marca</th>
+                      {/* <th>Ubi</th> */}
                       <th>Stock</th>
                       <th>Uni</th>
                       <th>Costo Promd.PEN</th>
@@ -281,31 +281,43 @@ export default component$(
                         aplicacion,
                         lineaTipo,
                         marca,
-                        totalCantidadSaldo,
+                        // totalCantidadSaldo,
                         unidad,
                         precioUnitarioPEN,
                         costoUnitarioPENMasIGV,
-                        // promedioCostoUnitarioMovil,
+                        promedioCostoUnitarioMovil,
                         stockMinimo,
                         // KARDEXS,
                         activo,
                         noFacturar,
                         ubigeo,
+                        //
+                        lote,
+                        fechaVencimiento,
+                        //
+                        idKardex,
+                        sumStocks,
                       } = mercaOUTLocali;
                       // const indexItem = index + 1;   , costoUnitarioMovil, precio
                       let elSM = 0;
-                      let elTCS = 0;
+                      // let elTCS = 0;
+                      let laSumStocks = 0;
                       if (typeof stockMinimo === 'undefined' || stockMinimo === null) {
                         elSM = 0;
                       } else {
                         elSM = stockMinimo.$numberDecimal ? parseFloat(stockMinimo.$numberDecimal) : stockMinimo;
                       }
-                      if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
-                        elTCS = 0;
+                      // if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
+                      //   elTCS = 0;
+                      // } else {
+                      //   elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                      // }
+                      if (typeof sumStocks === 'undefined' || sumStocks === null) {
+                        laSumStocks = 0;
                       } else {
-                        elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                        laSumStocks = sumStocks.$numberDecimal ? parseFloat(sumStocks.$numberDecimal) : sumStocks;
                       }
-                      console.log(' 🍍🍍🍍🍍', elSM, elTCS);
+                      // console.log(' 🍍🍍🍍🍍', elSM, laSumStocks);
 
                       return (
                         <tr
@@ -315,7 +327,7 @@ export default component$(
                               ? { background: '#272727', color: 'white' }
                               : noFacturar
                               ? { background: '#ff5aff' }
-                              : (totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo) === 0
+                              : laSumStocks === 0
                               ? { color: 'red' }
                               : {}
                           }
@@ -352,7 +364,7 @@ export default component$(
                                 } else {
                                   tPVU = '02';
                                 }
-                                console.log('👔👔👔👔👔👔👔', mercaOUTLocali.tipoImpuesto[1], mercaOUTLocali.tipoImpuesto);
+                                // console.log('👔👔👔👔👔👔👔', mercaOUTLocali.tipoImpuesto[1], mercaOUTLocali.tipoImpuesto);
 
                                 let elTImp;
                                 if (mercaOUTLocali.tipoImpuesto.length > 1) {
@@ -360,7 +372,7 @@ export default component$(
                                 } else {
                                   elTImp = mercaOUTLocali.tipoImpuesto[0];
                                 }
-                                console.log('👔👔👔👔👔👔👔', elTImp);
+                                // console.log('👔👔👔👔👔👔👔', elTImp);
                                 const laEqui = mercaOUTLocali.equivalencias[0];
                                 let elKAR;
                                 if (mercaOUTLocali.KARDEXS.length === 1) {
@@ -455,9 +467,9 @@ export default component$(
                               }
                             }}
                           >
-                            {elSM >= elTCS ? (
+                            {elSM >= laSumStocks ? (
                               <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
-                            ) : elSM + 5 >= elTCS ? (
+                            ) : elSM + 5 >= laSumStocks ? (
                               <img src={images.flagAmber} alt="Bandera ambar" width="12" height="12" />
                             ) : (
                               ''
@@ -470,10 +482,8 @@ export default component$(
                           <td data-label="Linea/Tipo" style={props.verLineaMarca ? '' : { display: 'none' }}>
                             {lineaTipo}
                           </td>
-                          <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
-                            {marca}
-                          </td>
-                          <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td>
+                          <td data-label="Marca">{marca}</td>
+                          {/* <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td> */}
                           <td
                             data-label="Stock"
                             class="comoNumeroLeft"
@@ -484,10 +494,30 @@ export default component$(
                             //   (e.target as HTMLTableElement).style.animation = 'example 0.3s linear 0s 1 alternate';
                             // }}
                           >
+                            {typeof idKardex !== 'undefined' ? (
+                              <button
+                                style={{ color: 'purple', fontWeight: 'bold', cursor: 'pointer' }}
+                                onClick$={() => {
+                                  ctx_buscar_mercaderia_out.descripcion = descripcion;
+                                  ctx_buscar_mercaderia_out.elIdKardex = idKardex;
+                                  ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                  ctx_buscar_mercaderia_out.lote = lote;
+                                  ctx_buscar_mercaderia_out.fechaVencimiento = fechaVencimiento;
+                                  ctx_buscar_mercaderia_out.promedioCostoUnitarioMovil = promedioCostoUnitarioMovil;
+
+                                  ctx_buscar_mercaderia_out.mostrarPanelUbigeosStocksOUT = true;
+                                  ctx_buscar_mercaderia_out.mostrarSpinner = true;
+                                }}
+                              >
+                                {laSumStocks}
+                              </button>
+                            ) : (
+                              ''
+                            )}
                             {/* <strong style={{ color: 'purple' }}> */}
-                            {totalCantidadSaldo.$numberDecimal
+                            {/* {totalCantidadSaldo.$numberDecimal
                               ? formatear_6Decimales(totalCantidadSaldo.$numberDecimal)
-                              : formatear_6Decimales(totalCantidadSaldo)}
+                              : formatear_6Decimales(totalCantidadSaldo)} */}
                             {/* </strong> */}
                           </td>
                           <td data-label="Uni">{unidad}</td>
@@ -524,7 +554,7 @@ export default component$(
                             {KARDEXS.length === 0 ? 'No' : 'Si'}
                           </td> */}
                           <td data-label="Acciones" class="accionesLeft">
-                            <input
+                            {/* <input
                               title="Seleccionar mercadería"
                               type="image"
                               src={images.check32}
@@ -570,7 +600,7 @@ export default component$(
                                   //console.log('la mercade seleccionada OUT -INDIRECTA', ctx_buscar_mercaderia_out.mM);
                                 }
                               }}
-                            />
+                            /> */}
                             {typeof aplicacion !== 'undefined' && (
                               <input
                                 // id="in_BuscarDetraccion"
@@ -616,30 +646,30 @@ export default component$(
                             />
                             {/* )} */}
                             <input
-                              title="Editar ubigeo"
+                              title="Ver ubigeo antiguo"
                               type="image"
                               src={images.ubigeo}
                               height={12}
                               width={12}
                               style={{ marginRight: '6px' }}
                               onClick$={() => {
-                                if (mercaOUTLocali.KARDEXS.length === 0) {
-                                  alert('El ítem seleccionado no presenta kardex.');
-                                  return;
-                                }
+                                // if (mercaOUTLocali.KARDEXS.length === 0) {
+                                //   alert('El ítem seleccionado no presenta kardex.');
+                                //   return;
+                                // }
 
-                                if (mercaOUTLocali.KARDEXS.length === 1) {
-                                  console.log('🍔🍟🍟🍟🍟 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
+                                // if (mercaOUTLocali.KARDEXS.length === 1) {
+                                //   console.log('🍔🍟🍟🍟🍟 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
 
-                                  ctx_buscar_mercaderia_out.elIdKardex = mercaOUTLocali.KARDEXS[0]._id;
-                                  ctx_buscar_mercaderia_out.elUBIGEO = ubigeo;
-                                  ctx_buscar_mercaderia_out.mostrarPanelNewEditUbigeo = true;
-                                  console.log(
-                                    '🍔🍔🍔🍔🍔 mercaOUTLocali.KARDEXS.length',
-                                    ctx_buscar_mercaderia_out.elIdKardex,
-                                    ctx_buscar_mercaderia_out.elUBIGEO
-                                  );
-                                }
+                                // ctx_buscar_mercaderia_out.elIdKardex = mercaOUTLocali.KARDEXS[0]._id;
+                                ctx_buscar_mercaderia_out.ubigeoAntiguo = ubigeo;
+                                ctx_buscar_mercaderia_out.mostrarPanelVerUbigeoAntiguo = true;
+                                // console.log(
+                                //   '🍔🍔🍔🍔🍔 mercaOUTLocali.KARDEXS.length',
+                                //   ctx_buscar_mercaderia_out.elIdKardex,
+                                //   ctx_buscar_mercaderia_out.elUBIGEO
+                                // );
+                                // }
                                 // if (mercaOUTLocali.KARDEXS.length > 1) {
                                 //   console.log('🥗🥗🥗🥗🥗 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
                                 //   ctx.mM = mercaOUTLocali;
@@ -660,30 +690,35 @@ export default component$(
                               // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
                                 console.log('☪☪☪☪☪☪');
-                                if (mercaOUTLocali.KARDEXS.length === 0) {
-                                  alert('No se localizan kardex/s');
-                                  // ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                  // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                  // //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                if (mercaOUTLocali.idKardex === '' || mercaOUTLocali.idKardex === null || mercaOUTLocali.idKardex === undefined) {
+                                  alert('El ítem seleccionado no presenta kardex.');
+                                  return;
                                 }
+                                // if (mercaOUTLocali.KARDEXS.length === 0) {
+                                //   alert('No se localizan kardex/s');
+                                //   // ctx_buscar_mercaderia_in.mM = mercaINLocali;
+                                //   // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
+                                //   // //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                // }
                                 if (typeof mercaOUTLocali.porcentajeUtilidad === 'undefined' || mercaOUTLocali.porcentajeUtilidad === null) {
                                   alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
                                   return;
                                 }
-                                if (mercaOUTLocali.KARDEXS.length === 1) {
-                                  console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥', mercaOUTLocali);
-                                  ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
-                                  ctx_buscar_mercaderia_out.kK = mercaOUTLocali.KARDEXS[0];
-                                  ctx_buscar_mercaderia_out.mostrarPanelKARDEX = true;
+                                // if (mercaOUTLocali.KARDEXS.length === 1) {
+                                console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥', mercaOUTLocali);
+                                ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                // ctx_buscar_mercaderia_out.kK = mercaOUTLocali.KARDEXS[0];
+                                ctx_buscar_mercaderia_out.elIdKardex = mercaOUTLocali.idKardex;
+                                ctx_buscar_mercaderia_out.mostrarPanelKARDEX = true;
 
-                                  //console.log('la mercaSeleccionada ', ctx_index_inventario.mM);
-                                  //console.log('la mercaSeleccionada KARDEX', ctx_index_inventario.kK);
-                                }
-                                if (mercaOUTLocali.KARDEXS.length > 1) {
-                                  ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
-                                  ctx_buscar_mercaderia_out.mostrarPanelKARDEXS = true;
-                                  //console.log('la mercaSeleccionada KARDEXS', ctx_index_inventario.mM);
-                                }
+                                //console.log('la mercaSeleccionada ', ctx_index_inventario.mM);
+                                //console.log('la mercaSeleccionada KARDEX', ctx_index_inventario.kK);
+                                // }
+                                // if (mercaOUTLocali.KARDEXS.length > 1) {
+                                //   ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                //   ctx_buscar_mercaderia_out.mostrarPanelKARDEXS = true;
+                                //   //console.log('la mercaSeleccionada KARDEXS', ctx_index_inventario.mM);
+                                // }
                               }}
                             />
                             {parametrosGlobales.actualizarPrecioPublico && (

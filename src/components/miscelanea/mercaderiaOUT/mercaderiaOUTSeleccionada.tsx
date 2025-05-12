@@ -17,15 +17,25 @@ import { CTX_NOTA_VENTA } from '~/components/notaVenta/addNotaVenta';
 import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
 import { CTX_KARDEXS_OUT } from './kardexsOUT';
 import { parametrosGlobales } from '~/routes/login';
+// import { text } from 'stream/consumers';
 export default component$(
   (props: {
     mercaOUTSelecci: any;
-    elKardex: any;
+
+    // elKardex?: any;
+    elIDKardex: string; //****** */
+    elUbigeoStock: any;
+    lote: string;
+    fechaVencimiento: string;
+    promedioCostoUnitarioMovil: any;
+
     esAlmacen: boolean;
     esProduccion?: boolean;
     esOrdenServicio?: boolean;
+
     contexto: string;
     contextoParaDocumento: string;
+
     porcentaje: any;
   }) => {
     //#region CONTEXTOS
@@ -33,6 +43,10 @@ export default component$(
     let documento: any = [];
 
     switch (props.contextoParaDocumento) {
+      case 'new_out_almacen':
+        //console.log('contextoParaDocumento::: new_out_almacen');
+        documento = useContext(CTX_OUT_ALMACEN).itemsMercaderias;
+        break;
       case 'orden_servicio':
         //console.log('contextoParaDocumento::: orden_servicio');
         documento = useContext(CTX_O_S).requisiciones;
@@ -55,10 +69,6 @@ export default component$(
         //console.log('contextoParaDocumento::: new_edit_cotizacion');
         documento = useContext(CTX_COTIZACION).repuestosLubri;
         break;
-      case 'new_out_almacen':
-        //console.log('contextoParaDocumento::: new_out_almacen');
-        documento = useContext(CTX_OUT_ALMACEN).itemsMercaderias;
-        break;
     }
 
     switch (props.contexto) {
@@ -77,6 +87,7 @@ export default component$(
     const ini = useSignal(0);
     const cantidadSacada = useSignal(1);
     const precioEquivalencia = useSignal(0);
+    // const monto = useSignal(0);
 
     const equivalencia = useStore<IMercaEquivalenciaOUT>({
       _id: '',
@@ -145,17 +156,17 @@ export default component$(
         {/* BOTONES DEL MARCO */}
         <div style={{ display: 'flex', justifyContent: 'end' }}>
           {/* <Button name="T/C" onClick={tipoCambio} /> */}
-          {/* <ImgButton
+          <ImgButton
             src={images.see}
             alt="Icono de cerrar"
             height={14}
             width={14}
-            title="Cerrar el  props.mercaOUTSelecci"
+            title="Cerrar el  props.elUbigeoStock"
             onClick={$(() => {
-              console.log(' props.mercaOUTSelecci', props.mercaOUTSelecci);
+              console.log(' props.elUbigeoStock', props.elUbigeoStock);
               // //console.log('elKardex', props.elKardex);
             })}
-          /> */}
+          />
           <ImgButton
             src={images.x}
             alt="Icono de cerrar"
@@ -206,30 +217,38 @@ export default component$(
             </div>
             <div style={{ margin: '4px 0' }}>
               <label style={{ color: '#777' }}>Descripción:</label>
-              <label style={{ color: '#555' }}>{` ${props.mercaOUTSelecci.descripcion}`}</label>
+              <label style={{ color: '#555', fontWeight: 'bold' }}>{` ${props.mercaOUTSelecci.descripcion}`}</label>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '4px 0' }}>
               <div>
-                <label style={{ color: '#777' }}>Lote:</label> <label style={{ color: '#555' }}>{props.elKardex.lote}</label>
+                <label style={{ color: '#777' }}>Lote:</label>
+                <label style={{ color: '#555' }}>{props.lote}</label>
               </div>
               <div>
                 <label style={{ color: '#777' }}>Fecha vencimiento:</label>{' '}
-                <label style={{ color: '#555' }}>{formatoDDMMYYYY_PEN(props.elKardex.fechaVencimiento)}</label>
+                <label style={{ color: '#555' }}>{formatoDDMMYYYY_PEN(props.fechaVencimiento)}</label>
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
               <div>
                 <label style={{ color: '#777' }}>Stock:</label>
-                <strong style={{ marginLeft: '2px', color: 'green' }}>
-                  {props.elKardex.cantidadSaldo !== null
+                <label style={{ marginLeft: '2px', color: 'purple', fontWeight: 'bold' }}>
+                  {props.elUbigeoStock.stock !== null
+                    ? ` ${
+                        props.elUbigeoStock.stock.$numberDecimal
+                          ? redondeo6Decimales(props.elUbigeoStock.stock.$numberDecimal)
+                          : redondeo6Decimales(props.elUbigeoStock.stock)
+                      }`
+                    : ``}
+                  {/* {props.elKardex.cantidadSaldo !== null
                     ? ` ${
                         props.elKardex.cantidadSaldo.$numberDecimal
                           ? redondeo6Decimales(props.elKardex.cantidadSaldo.$numberDecimal)
                           : redondeo6Decimales(props.elKardex.cantidadSaldo)
                       }`
-                    : ``}
+                    : ``} */}
                   {props.mercaOUTSelecci.unidad !== null ? ` ${props.mercaOUTSelecci.unidad}` : ``}
-                </strong>
+                </label>
               </div>
               {props.esAlmacen || props.esProduccion ? (
                 <div>
@@ -237,12 +256,20 @@ export default component$(
                   <b style={{ marginLeft: '2px' }}>
                     {
                       //props.mercaderiaSeleccionadaOUT.costoUnitarioMovil !== null
+                      typeof props.promedioCostoUnitarioMovil !== 'undefined'
+                        ? props.promedioCostoUnitarioMovil.$numberDecimal
+                          ? props.promedioCostoUnitarioMovil.$numberDecimal
+                          : props.promedioCostoUnitarioMovil
+                        : ''
+                    }
+                    {/* {
+                      //props.mercaderiaSeleccionadaOUT.costoUnitarioMovil !== null
                       typeof props.elKardex.costoUnitarioMovil !== 'undefined'
                         ? props.elKardex.costoUnitarioMovil.$numberDecimal
                           ? props.elKardex.costoUnitarioMovil.$numberDecimal
                           : props.elKardex.costoUnitarioMovil
                         : ''
-                    }
+                    } */}
                   </b>
                 </div>
               ) : (
@@ -266,12 +293,25 @@ export default component$(
           {/* -----------------------------------------------------------------------------------------------------*/}
           {/* EQUIVALENCIA */}
           <div style={{ fontSize: 'small', margin: '10px 0', background: '#FFFF4C' }}>
+            {/* UBIGEO */}
+            <div class="form-control">
+              <div class="form-control form-agrupado">
+                <input
+                  id="inputUBIGEO"
+                  style={{ width: '100%', background: '#FFFFCC', fontWeight: 'bold', textAlign: 'end' }}
+                  type="text"
+                  disabled={props.esAlmacen}
+                  // placeholder="Add descripción equivalencia"
+                  value={props.elUbigeoStock.ubigeo}
+                />
+              </div>
+            </div>
             {/* descripcion EQUIVALENCIA */}
             <div class="form-control">
               <div class="form-control form-agrupado">
                 <input
                   id="inputDescripcionEquivalencia"
-                  style={{ width: '100%', background: '#FFFFCC' }}
+                  style={{ width: '100%', background: '#FFFFCC', fontWeight: 'bold' }}
                   type="text"
                   disabled={props.esAlmacen}
                   placeholder="Add descripción equivalencia"
@@ -279,158 +319,188 @@ export default component$(
                 />
               </div>
             </div>
-            {/* cantidad */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  id="in_Cantidad_mercaderiaOUTSeleccionada"
-                  style={{ width: '100%', textAlign: 'end', marginRight: '2px', background: '#FFFFCC' }}
-                  type="number"
-                  placeholder="Add cantidad"
-                  value={cantidadSacada.value}
-                  onChange$={(e) => {
-                    cantidadSacada.value = parseFloat((e.target as HTMLInputElement).value);
-                  }}
-                  onFocusin$={(e) => {
-                    (e.target as HTMLInputElement).select();
-                  }}
-                  onKeyPress$={(e) => {
-                    if (e.key === 'Enter') {
-                      props.esAlmacen || props.esProduccion
-                        ? (document.getElementById('btn_Grabar_mercaderiaOUTSeleccionada') as HTMLInputElement).focus()
-                        : (document.getElementById('in_PrecioEquivalente_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
-                    }
-                  }}
-                />
-                <ElSelect
-                  id={'selectUniEquivalencia_MICE'}
-                  estilos={{ background: '#FFFFCC' }}
-                  registros={props.mercaOUTSelecci.equivalencias}
-                  valorSeleccionado={equivalencia.unidadEquivalencia}
-                  registroID={'idUnidadEquivalencia'}
-                  registroTEXT={'unidadEquivalencia'}
-                  seleccione="-- Seleccione equivalencia --"
-                  onChange={$(() => {
-                    const elSelec = document.getElementById('selectUniEquivalencia_MICE') as HTMLSelectElement;
-                    const elIdx = elSelec.selectedIndex;
-                    //console.log('ElSelect', elSelec, elIdx, elSelec[elIdx].id);
-                    if (elSelec[elIdx].id === '') {
-                      equivalencia._id = '';
-                      equivalencia.idAuxiliar = 0;
-                      equivalencia.descripcionEquivalencia = '';
-                      equivalencia.laEquivalencia = 0;
-                      equivalencia.idUnidadEquivalencia = '';
-                      equivalencia.unidadEquivalencia = '';
-                      equivalencia.pesoKg = 0;
-                      equivalencia.factor = 0;
-                      equivalencia.tipoEquivalencia = false;
-                      precioEquivalencia.value = 0;
-                    } else {
-                      const lencias = props.mercaOUTSelecci.equivalencias;
-                      const laEqui = lencias.find(({ idUnidadEquivalencia }: any) => idUnidadEquivalencia === elSelec[elIdx].id);
-                      //console.log('laEqui', laEqui);
-                      //console.log('props.mercaOUTSelecci', props.mercaOUTSelecci);
-                      equivalencia._id = laEqui._id;
-                      equivalencia.descripcionEquivalencia = laEqui.descripcionEquivalencia;
-                      equivalencia.laEquivalencia = laEqui.laEquivalencia;
-                      equivalencia.idUnidadEquivalencia = laEqui.idUnidadEquivalencia;
-                      equivalencia.unidadEquivalencia = laEqui.unidadEquivalencia;
-                      equivalencia.pesoKg = laEqui.pesoKg;
-                      equivalencia.factor = laEqui.factor;
-                      equivalencia.tipoEquivalencia = laEqui.tipoEquivalencia;
-                      //console.log(
-                      //   'laEquivalencia - factor - tipoEqui',
-                      //   parseFloat(laEqui.laEquivalencia.$numberDecimal),
-                      //   equivalencia.laEquivalencia,
-                      //   equivalencia.factor,
-                      //   equivalencia.tipoEquivalencia
-                      // );
-                      if (props.esAlmacen || props.esProduccion) {
-                        //chequear COSTO
-                        // const pCUM =
-                        //   props.mercaOUTSelecci.promedioCostoUnitarioMovil.$numberDecimal *
-                        //   parseFloat(laEqui.laEquivalencia.$numberDecimal);
-                        // const pCUM = props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal;
-                        //console.log('pCUM', pCUM);
-                      } else {
-                        //chequear PRECIO
-                        if (typeof props.mercaOUTSelecci.precioUnitarioPEN !== 'undefined') {
-                          precioEquivalencia.value =
-                            // parseFloat(props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal) *
-                            parseFloat(
-                              props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal
-                                ? props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal
-                                : props.mercaOUTSelecci.precioUnitarioPEN
-                            ) * parseFloat(laEqui.laEquivalencia.$numberDecimal);
-                        }
-                      }
-
-                      (document.getElementById('in_Cantidad_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
-                    }
-                  })}
-                  onKeyPress={$((e: any) => {
-                    if (e.key === 'Enter') {
-                      //  props.esAlmacen
-                      //    ? (document.getElementById('btn_Grabar_mercaderiaOUTSeleccionada') as HTMLInputElement).focus()
-                      //    : (document.getElementById('in_PrecioEquivalente_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
-                    }
-                  })}
-                />
+            {/* STOCK EQUIVALENTE  ---  COSTO EQUIV */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', margin: '8px 0' }}>
+              <div>
+                Stock equivalente:
+                <label style={{ marginLeft: '2px', color: 'purple', fontWeight: 'bold' }}>
+                  {equivalencia.laEquivalencia.$numberDecimal === 0
+                    ? ''
+                    : equivalencia.idUnidadEquivalencia !== ''
+                    ? redondeo6Decimales(props.elUbigeoStock.stock.$numberDecimal / equivalencia.laEquivalencia.$numberDecimal)
+                    : ''}
+                  {equivalencia.unidadEquivalencia !== null ? ` ${equivalencia.unidadEquivalencia}` : ``}
+                </label>
+              </div>
+              <div>
+                Costo equiv. (PEN):
+                <strong style={{ marginLeft: '2px', color: 'purple' }}>
+                  {equivalencia.laEquivalencia.$numberDecimal === 0
+                    ? ''
+                    : equivalencia.idUnidadEquivalencia !== ''
+                    ? redondeo6Decimales(props.promedioCostoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal)
+                    : ''}
+                </strong>
               </div>
             </div>
+            {/* CANTIDAD  ---  UNIDAD EQUIVALENTE */}
+            {/* <div class="form-control">
+              <div class="form-control form-agrupado"> */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', margin: '8px 0' }}>
+              <input
+                id="in_Cantidad_mercaderiaOUTSeleccionada"
+                style={{ width: '100%', textAlign: 'end', marginRight: '2px', background: '#FFFFCC' }}
+                // style={{ width: '100%', textAlign: 'end', marginRight: '2px', background: 'pink' }}
+                type="number"
+                placeholder="Add cantidad"
+                min={0}
+                // step="any"
+                max={props.elUbigeoStock.stock.$numberDecimal}
+                value={cantidadSacada.value}
+                onChange$={(e) => {
+                  cantidadSacada.value = parseFloat((e.target as HTMLInputElement).value);
+                  if (cantidadSacada.value < 0) {
+                    cantidadSacada.value = 0;
+                  }
+                  if (cantidadSacada.value > props.elUbigeoStock.stock.$numberDecimal) {
+                    cantidadSacada.value = props.elUbigeoStock.stock.$numberDecimal;
+                  }
+                }}
+                onFocusin$={(e) => {
+                  (e.target as HTMLInputElement).select();
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    props.esAlmacen || props.esProduccion
+                      ? (document.getElementById('btn_Grabar_mercaderiaOUTSeleccionada') as HTMLInputElement).focus()
+                      : (document.getElementById('in_PrecioEquivalente_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
+                  }
+                }}
+              />
+              <ElSelect
+                id={'selectUniEquivalencia_MICE'}
+                estilos={{ background: '#FFFFCC' }}
+                registros={props.mercaOUTSelecci.equivalencias}
+                valorSeleccionado={equivalencia.unidadEquivalencia}
+                registroID={'idUnidadEquivalencia'}
+                registroTEXT={'unidadEquivalencia'}
+                seleccione="-- Seleccione equivalencia --"
+                onChange={$(() => {
+                  const elSelec = document.getElementById('selectUniEquivalencia_MICE') as HTMLSelectElement;
+                  const elIdx = elSelec.selectedIndex;
+                  //console.log('ElSelect', elSelec, elIdx, elSelec[elIdx].id);
+                  if (elSelec[elIdx].id === '') {
+                    equivalencia._id = '';
+                    equivalencia.idAuxiliar = 0;
+                    equivalencia.descripcionEquivalencia = '';
+                    equivalencia.laEquivalencia = 0;
+                    equivalencia.idUnidadEquivalencia = '';
+                    equivalencia.unidadEquivalencia = '';
+                    equivalencia.pesoKg = 0;
+                    equivalencia.factor = 0;
+                    equivalencia.tipoEquivalencia = false;
+                    precioEquivalencia.value = 0;
+                  } else {
+                    const lencias = props.mercaOUTSelecci.equivalencias;
+                    const laEqui = lencias.find(({ idUnidadEquivalencia }: any) => idUnidadEquivalencia === elSelec[elIdx].id);
+                    //console.log('laEqui', laEqui);
+                    //console.log('props.mercaOUTSelecci', props.mercaOUTSelecci);
+                    equivalencia._id = laEqui._id;
+                    equivalencia.descripcionEquivalencia = laEqui.descripcionEquivalencia;
+                    equivalencia.laEquivalencia = laEqui.laEquivalencia;
+                    equivalencia.idUnidadEquivalencia = laEqui.idUnidadEquivalencia;
+                    equivalencia.unidadEquivalencia = laEqui.unidadEquivalencia;
+                    equivalencia.pesoKg = laEqui.pesoKg;
+                    equivalencia.factor = laEqui.factor;
+                    equivalencia.tipoEquivalencia = laEqui.tipoEquivalencia;
+                    //console.log(
+                    //   'laEquivalencia - factor - tipoEqui',
+                    //   parseFloat(laEqui.laEquivalencia.$numberDecimal),
+                    //   equivalencia.laEquivalencia,
+                    //   equivalencia.factor,
+                    //   equivalencia.tipoEquivalencia
+                    // );
+                    if (props.esAlmacen || props.esProduccion) {
+                      //chequear COSTO
+                      // const pCUM =
+                      //   props.mercaOUTSelecci.promedioCostoUnitarioMovil.$numberDecimal *
+                      //   parseFloat(laEqui.laEquivalencia.$numberDecimal);
+                      // const pCUM = props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal;
+                      //console.log('pCUM', pCUM);
+                    } else {
+                      //chequear PRECIO
+                      if (typeof props.mercaOUTSelecci.precioUnitarioPEN !== 'undefined') {
+                        precioEquivalencia.value =
+                          // parseFloat(props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal) *
+                          parseFloat(
+                            props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal
+                              ? props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal
+                              : props.mercaOUTSelecci.precioUnitarioPEN
+                          ) * parseFloat(laEqui.laEquivalencia.$numberDecimal);
+                      }
+                    }
 
-            {/* ------------------------------------------------------------------------------ marginBottom: '5px'*/}
-
-            {equivalencia.laEquivalencia !== null ? (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', margin: '10px 0' }}>
-                <div>
-                  Stock equivalente:
-                  <strong style={{ marginLeft: '2px', color: 'green' }}>
-                    {equivalencia.laEquivalencia.$numberDecimal === 0
-                      ? ''
-                      : equivalencia.idUnidadEquivalencia !== ''
-                      ? redondeo6Decimales(props.elKardex.cantidadSaldo.$numberDecimal / equivalencia.laEquivalencia.$numberDecimal)
-                      : ''}
-                    {equivalencia.unidadEquivalencia !== null ? ` ${equivalencia.unidadEquivalencia}` : ``}
-                  </strong>
-                </div>
-                {props.esAlmacen || props.esProduccion ? (
-                  <div>
-                    Costo equiv. (PEN):
-                    <strong style={{ marginLeft: '2px', color: 'purple' }}>
-                      {equivalencia.laEquivalencia.$numberDecimal === 0
-                        ? ''
-                        : equivalencia.idUnidadEquivalencia !== ''
-                        ? redondeo6Decimales(props.elKardex.costoUnitarioMovil.$numberDecimal * equivalencia.laEquivalencia.$numberDecimal)
-                        : ''}
-                    </strong>
-                  </div>
-                ) : (
-                  <div>
-                    Precio equiv. (PEN):
-                    <input
-                      id="in_PrecioEquivalente_mercaderiaOUTSeleccionada"
-                      type="number"
-                      style={{ marginLeft: '2px', width: '80px', textAlign: 'end', background: '#FFFFCC' }}
-                      value={precioEquivalencia.value}
-                      onChange$={(e) => {
-                        precioEquivalencia.value = parseFloat((e.target as HTMLInputElement).value);
-                      }}
-                      onFocusin$={(e) => {
-                        (e.target as HTMLInputElement).select();
-                      }}
-                      onKeyPress$={(e) => {
-                        if (e.key === 'Enter') {
-                          (document.getElementById('btn_Grabar_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
-                        }
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            ) : (
+                    (document.getElementById('in_Cantidad_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
+                  }
+                })}
+                onKeyPress={$((e: any) => {
+                  if (e.key === 'Enter') {
+                    //  props.esAlmacen
+                    //    ? (document.getElementById('btn_Grabar_mercaderiaOUTSeleccionada') as HTMLInputElement).focus()
+                    //    : (document.getElementById('in_PrecioEquivalente_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
+                  }
+                })}
+              />
+            </div>
+            {/*  PRECIO --- MONTO */}
+            {props.esAlmacen || props.esProduccion ? (
               ''
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', margin: '8px 0' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <label>Precio equiv. (PEN):</label>
+                  <input
+                    id="in_PrecioEquivalente_mercaderiaOUTSeleccionada"
+                    type="number"
+                    style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: '#FFFFCC' }}
+                    value={precioEquivalencia.value}
+                    onChange$={(e) => {
+                      precioEquivalencia.value = parseFloat((e.target as HTMLInputElement).value);
+                    }}
+                    onFocusin$={(e) => {
+                      (e.target as HTMLInputElement).select();
+                    }}
+                    onKeyPress$={(e) => {
+                      if (e.key === 'Enter') {
+                        (document.getElementById('btn_Grabar_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
+                      }
+                    }}
+                  />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <label>Monto. (PEN):</label>
+                  <input
+                    id="in_Monto_mercaderiaOUTSeleccionada"
+                    type="number"
+                    readOnly
+                    style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: '#FFFFCC' }}
+                    value={cantidadSacada.value * precioEquivalencia.value}
+                    // onChange$={(e) => {
+                    //   precioEquivalencia.value = parseFloat((e.target as HTMLInputElement).value);
+                    // }}
+                    // onFocusin$={(e) => {
+                    //   (e.target as HTMLInputElement).select();
+                    // }}
+                    // onKeyPress$={(e) => {
+                    //   if (e.key === 'Enter') {
+                    //     (document.getElementById('btn_Grabar_mercaderiaOUTSeleccionada') as HTMLInputElement).focus();
+                    //   }
+                    // }}
+                  />
+                </div>
+              </div>
             )}
+            {/* ------------------------------------------------------------------------------ marginBottom: '5px'*/}
           </div>
           <br />
           {/* GRABAR */}
@@ -441,6 +511,11 @@ export default component$(
             style={{ height: '40px' }}
             class="btn-centro"
             onClick$={() => {
+              if (cantidadSacada.value <= 0) {
+                alert('Ingrese una cantidad mayor a 0');
+                document.getElementById('in_Cantidad_mercaderiaOUTSeleccionada')?.focus();
+                return;
+              }
               // const tipoImpuesto = ['IGV', 'ISC', 'IVAP', 'exoneradas', 'exportación', 'gratuitas', 'inafecta', 'otrosTributos'];
               // let tipoImpuesto = 'IGV';
               // props.mercaOUTSelecci.exonerado === true ? (tipoImpuesto = 'exoneradas') : '';
@@ -457,7 +532,11 @@ export default component$(
                   idAuxiliar: unicoAux,
                   idMercaderia: props.mercaOUTSelecci._id,
                   idEquivalencia: equivalencia._id,
-                  idKardex: props.elKardex._id,
+
+                  idKardex: props.elIDKardex, // props.elKardex._id,
+                  idUbigeoStock: props.elUbigeoStock._id,
+                  ubigeo: props.elUbigeoStock.ubigeo,
+
                   item: 0,
                   tipo: 'MERCADERIA',
 
@@ -472,18 +551,16 @@ export default component$(
                   unidad: props.mercaOUTSelecci.unidad,
                   unidadEquivalencia: equivalencia.unidadEquivalencia,
 
-                  costoUnitarioPEN: parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal),
+                  costoUnitarioPEN: parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal),
                   costoUnitarioEquivalenciaPEN:
-                    parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+                    parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal) * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
 
-                  subPEN: cantidadSacada.value * parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal),
+                  subPEN: cantidadSacada.value * parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal),
                   subEquivalenciaPEN:
-                    cantidadSacada.value *
-                    parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) *
-                    parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+                    cantidadSacada.value * parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal) * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
 
                   stockMinimo: props.mercaOUTSelecci.stockMinimo,
-                  stockEquivalente: redondeo6Decimales(props.elKardex.cantidadSaldo.$numberDecimal / equivalencia.laEquivalencia.$numberDecimal),
+                  stockEquivalente: redondeo6Decimales(props.elUbigeoStock.stock.$numberDecimal / equivalencia.laEquivalencia.$numberDecimal),
                   totalCantidadSaldo: props.mercaOUTSelecci.totalCantidadSaldo,
 
                   precioUnitarioUSD: 0,
@@ -514,7 +591,7 @@ export default component$(
               } else {
                 tPVU = '02';
               }
-              console.log('👔👔👔👔👔👔👔', props.mercaOUTSelecci.tipoImpuesto[1], props.mercaOUTSelecci.tipoImpuesto);
+              // console.log('👔👔👔👔👔👔👔', props.mercaOUTSelecci.tipoImpuesto[1], props.mercaOUTSelecci.tipoImpuesto);
 
               let elTImp;
               if (props.mercaOUTSelecci.tipoImpuesto.length > 1) {
@@ -522,7 +599,7 @@ export default component$(
               } else {
                 elTImp = props.mercaOUTSelecci.tipoImpuesto[0];
               }
-              console.log('👔👔👔👔👔👔👔', elTImp);
+              // console.log('👔👔👔👔👔👔👔', elTImp);
               if (
                 props.contextoParaDocumento === 'orden_servicio' ||
                 props.contextoParaDocumento === 'new_venta' ||
@@ -533,7 +610,17 @@ export default component$(
                   idAuxiliar: unicoAux,
                   idMercaderia: props.mercaOUTSelecci._id,
                   idEquivalencia: equivalencia._id,
-                  idKardex: props.elKardex._id,
+
+                  idKardex: props.elIDKardex, // props.elKardex._id,
+                  idUbigeoStock: props.elUbigeoStock._id,
+                  ubigeo: props.elUbigeoStock.ubigeo,
+                  stock:
+                    equivalencia.laEquivalencia.$numberDecimal === 0
+                      ? 0
+                      : equivalencia.idUnidadEquivalencia !== ''
+                      ? redondeo6Decimales(props.elUbigeoStock.stock.$numberDecimal / equivalencia.laEquivalencia.$numberDecimal)
+                      : 0,
+
                   item: 0,
                   tipo: 'MERCADERIA',
 
@@ -559,9 +646,9 @@ export default component$(
                   unidad: props.mercaOUTSelecci.unidad,
                   unidadEquivalencia: equivalencia.unidadEquivalencia,
 
-                  costoUnitarioPEN: parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal),
+                  costoUnitarioPEN: parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal),
                   costoUnitarioEquivalenciaPEN:
-                    parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+                    parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal) * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
 
                   porcentajeUtilidad: props.mercaOUTSelecci.porcentajeUtilidad,
 
@@ -592,7 +679,11 @@ export default component$(
                   idAuxiliar: unicoAux,
                   idMercaderia: props.mercaOUTSelecci._id,
                   idEquivalencia: equivalencia._id,
-                  idKardex: props.elKardex._id,
+
+                  idKardex: props.elIDKardex, // props.elKardex._id,
+                  idUbigeoStock: props.elUbigeoStock._id,
+                  ubigeo: props.elUbigeoStock.ubigeo,
+
                   item: 0,
                   tipo: 'MERCADERIA',
 
@@ -615,14 +706,12 @@ export default component$(
                   unidad: props.mercaOUTSelecci.unidad,
                   unidadEquivalencia: equivalencia.unidadEquivalencia,
 
-                  costoUnitarioPEN: parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal),
+                  costoUnitarioPEN: parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal),
                   costoUnitarioEquivalenciaPEN:
-                    parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+                    parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal) * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
 
                   costoEquivalenciaPEN:
-                    cantidadSacada.value *
-                    parseFloat(props.elKardex.costoUnitarioMovil.$numberDecimal) *
-                    parseFloat(equivalencia.laEquivalencia.$numberDecimal),
+                    cantidadSacada.value * parseFloat(props.promedioCostoUnitarioMovil.$numberDecimal) * parseFloat(equivalencia.laEquivalencia.$numberDecimal),
 
                   porcentajeUtilidad: props.mercaOUTSelecci.porcentajeUtilidad,
 

@@ -4,7 +4,8 @@ import { images } from '~/assets';
 import { CTX_INDEX_IN_ALMACEN } from '~/routes/(inventario)/inAlmacen';
 import { parametrosGlobales } from '~/routes/login';
 // import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
-import { cerosALaIzquierda, formatear_6Decimales, formatoDDMMYYYY_PEN, redondeo2Decimales } from '~/functions/comunes';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN, formatear_6Decimales, redondeo2Decimales } from '~/functions/comunes';
+// import { cerosALaIzquierda, formatoDDMMYYYY_PEN, redondeo2Decimales } from '~/functions/comunes';
 import { CTX_KARDEX } from '../kardex/kardex';
 
 // export default component$((props: { indexItem?: number }) => {
@@ -76,7 +77,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
       {/* FORMULARIO */}
       <div class="add-form">
         <h3 style={{ fontSize: '0.8rem' }}>
-          In almacén - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+          In almacén - {parametrosGlobales.RazonSocial} - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>
         </h3>
         {/* ----------------------------------------------------- */}
         {/* GENERALES */}
@@ -131,12 +132,18 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                 // value={cerosALaIzquierda(props.inSelecci.numero, 8)}
               />
               {/* motivo de ingreso */}
-              <input id="in_Motivo" type="text" disabled={props.inSelecci._id !== ''} style={{ width: '100%' }} value={props.inSelecci.motivoIngresoAlmacen} />
+              <input
+                id="in_Motivo"
+                type="text"
+                disabled={props.inSelecci._id !== ''}
+                style={{ width: '100%', fontWeight: 'bold' }}
+                value={props.inSelecci.motivoIngresoAlmacen}
+              />
             </div>
             {/* obesrvacion */}
             <input
               id="in_Observacion"
-              style={{ background: '#F4FF7A', width: '100%' }}
+              style={{ background: 'yellow', width: '100%' }}
               type="text"
               // autoFocus
               disabled
@@ -275,8 +282,6 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                   <tr>
                     <th>Ítem</th>
                     <th>Kx</th>
-                    <th>idMerca</th>
-                    {/* <th>Código</th> */}
                     <th>Descripción</th>
                     <th>IGV</th>
                     <th>Ubi</th>
@@ -304,9 +309,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                     if (typeof iTMercaIN.subUSD !== 'undefined') {
                       // console.log('iTMercaIN.subUSD', iTMercaIN.subUSD);
                       suma_SubUSD = suma_SubUSD + redondeo2Decimales(iTMercaIN.subUSD.$numberDecimal ? iTMercaIN.subUSD.$numberDecimal : iTMercaIN.subUSD);
-
                       suma_TotUSD = suma_TotUSD + redondeo2Decimales(iTMercaIN.totUSD.$numberDecimal ? iTMercaIN.totUSD.$numberDecimal : iTMercaIN.totUSD);
-
                       suma_IGVUSD = suma_TotUSD - suma_SubUSD;
                     } else {
                       // console.log('iTMercaIN.subUSD ==>> undefined');
@@ -322,10 +325,6 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                         <td data-label="Kx" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
                           {typeof iTMercaIN.idKardex !== 'undefined' ? iTMercaIN.idKardex.substring(iTMercaIN.idKardex.length - 6) : '-'}
                         </td>
-                        <td data-label="idMerca">{iTMercaIN.idMercaderia}</td>
-                        {/* <td data-label="Código" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
-                          {iTMercaIN.codigo}
-                        </td> */}
                         <td data-label="Descripción" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
                           <strong>{!props.inSelecci.reingreso ? iTMercaIN.descripcion : iTMercaIN.descripcionEquivalencia}</strong>
                         </td>
@@ -333,16 +332,17 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                         <td data-label="Ubi" class="comoNumeroLeft">
                           {iTMercaIN.ubigeo}
                         </td>
-                        <td data-label="Cantidad" style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple' } : {}}>
-                          <strong>
-                            {!props.inSelecci.reingreso
+                        <td
+                          data-label="Cantidad"
+                          style={props.codigoMercaderia === iTMercaIN.codigo ? { color: 'purple', fontWeight: 'bold' } : { fontWeight: 'bold' }}
+                        >
+                          {!props.inSelecci.reingreso
+                            ? iTMercaIN.cantidadIngresada.$numberDecimal
                               ? iTMercaIN.cantidadIngresada.$numberDecimal
-                                ? iTMercaIN.cantidadIngresada.$numberDecimal
-                                : iTMercaIN.cantidadIngresada
-                              : iTMercaIN.cantidadIngresadaEquivalencia.$numberDecimal
-                              ? iTMercaIN.cantidadIngresadaEquivalencia.$numberDecimal
-                              : iTMercaIN.cantidadIngresadaEquivalencia}
-                          </strong>
+                              : iTMercaIN.cantidadIngresada
+                            : iTMercaIN.cantidadIngresadaEquivalencia.$numberDecimal
+                            ? iTMercaIN.cantidadIngresadaEquivalencia.$numberDecimal
+                            : iTMercaIN.cantidadIngresadaEquivalencia}
                         </td>
                         <td data-label="Uni">{!props.inSelecci.reingreso ? iTMercaIN.unidad : iTMercaIN.unidadEquivalencia}</td>
                         <td data-label={props.inSelecci.enDolares ? 'CostoUniUSD' : 'CostoUniPEN'}>

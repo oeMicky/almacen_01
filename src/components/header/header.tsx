@@ -31,8 +31,8 @@ export default component$(() => {
               </a>
             </li>
             <li class="main-menu__item">
-              <a class="main-menu__link" href="#portafolio" target="_blank">
-                Portafolio
+              <a class="main-menu__link" href="#servicios" target="_blank">
+                Servicios
               </a>
             </li>
             <li

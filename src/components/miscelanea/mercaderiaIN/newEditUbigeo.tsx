@@ -2,10 +2,11 @@ import { $, component$, useContext, useSignal, useTask$ } from '@builder.io/qwik
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
-import { upUbigeo } from '~/apis/kardex.api';
+import { inUpUbigeo2 } from '~/apis/kardex.api';
 import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_MERCADERIA_OUT } from '../mercaderiaOUT/buscarMercaderiaOUT';
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
+import { CTX_LISTA_UBIGEOS_STOCKS_IN } from './listaUbigeosStocksIN';
 
 export default component$((props: { idKardex: any; ubigeo: string; contexto: string }) => {
   //#region CONTEXTOS
@@ -16,6 +17,9 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
   switch (props.contexto) {
     case 'buscar_mercaderia_in':
       ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
+      break;
+    case 'lista_ubigeos_stocks_in':
+      ctx = useContext(CTX_LISTA_UBIGEOS_STOCKS_IN);
       break;
     case 'buscar_mercaderia_out':
       ctx = useContext(CTX_BUSCAR_MERCADERIA_OUT);
@@ -50,9 +54,14 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
       document.getElementById('in_ubigeoIN_MICE')?.focus();
       return;
     }
+    if (UBI.value.trim().toLocaleUpperCase() === 'TRASLADO') {
+      alert('No puede usar la palabra clave TRASLADO como ubigeo.');
+      document.getElementById('in_ubigeoIN_MICE')?.focus();
+      return;
+    }
     ctx.mostrarSpinner = true;
     // const lt =
-    await upUbigeo({
+    await inUpUbigeo2({
       idKardex: props.idKardex,
       ubigeo: UBI.value as string,
 
@@ -60,9 +69,9 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
     });
     // ctx.mostrarSpinner = false;
 
-    ctx.grabo_ubigeo = true;
+    ctx.grabo_UbigeoStock++;
     // ctx_buscar_mercaderia_in.laLineaTipo = lt.data;
-    ctx.mostrarPanelNewEditUbigeo = false;
+    ctx.mostrarPanelNewEditUbigeosStocksIN = false;
   });
   //#endregion GRABAR UBIGEO
   return (
@@ -84,12 +93,12 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx.mostrarPanelNewEditUbigeo = false;
+            ctx.mostrarPanelNewEditUbigeosStocksIN = false;
           })}
         />
       </div>
       {/* TITULO */}
-      <h3>Registro de ubigeo</h3>
+      <h3>Registro de ubigeo 8</h3>
       {/* FORMULARIO */}
 
       <div class="add-form">

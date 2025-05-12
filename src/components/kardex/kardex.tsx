@@ -17,7 +17,7 @@ import { CTX_INVENTARIO_EXTERNO } from '../miscelanea/inventarioExterno/inventar
 
 export const CTX_KARDEX = createContextId<any>('ctx_kardex__');
 
-export default component$((props: { mercaSelecci: any; kardex: any; contexto: string }) => {
+export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: string; contexto: string }) => {
   useStyles$(styles);
 
   //#region DEFINICION CTX_KARDEX
@@ -82,7 +82,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
       body: JSON.stringify({
         idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
         idEmpresa: parametrosGlobales.idEmpresa,
-        idKardex: props.kardex._id,
+        idKardex: props.elIDKardex, // props.kardex._id,
       }),
       signal: abortController.signal,
     });
@@ -153,7 +153,22 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
             <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Descripción:<strong> {` ${props.mercaSelecci.descripcion}`}</strong>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
+            <div class={'linea_1_1111'}>
+              <div style={{ color: '#61605c' }}>
+                Linea/Tipo:<strong> {` ${props.mercaSelecci.lineaTipo}`}</strong>
+              </div>
+              <div style={{ color: '#61605c' }}>
+                Marca:<strong>{` ${props.mercaSelecci.marca}`}</strong>
+              </div>
+              <div style={{ color: '#61605c' }}>
+                Unidad:<strong> {` ${props.mercaSelecci.unidad}`}</strong>
+              </div>
+
+              <div style={{ color: '#61605c' }}>
+                % Utilidad:<strong> {` ${props.mercaSelecci.porcentajeUtilidad.$numberDecimal + ' %'}`}</strong>
+              </div>
+            </div>
+            {/* <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Linea/Tipo:<strong> {` ${props.mercaSelecci.lineaTipo}`}</strong>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
@@ -162,12 +177,12 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
             <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Unidad:<strong> {` ${props.mercaSelecci.unidad}`}</strong>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
+             <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               Ubigeo:<strong> {` ${props.mercaSelecci.ubigeo}`}</strong>
-            </div>
+            </div> 
             <div style={{ display: 'grid', gridTemplateColumns: '84px 1fr', margin: '4px 0', color: '#61605c' }}>
               % Utilidad:<strong> {` ${props.mercaSelecci.porcentajeUtilidad.$numberDecimal + ' %'}`}</strong>
-            </div>
+            </div> */}
           </div>
         </div>
         {/*  tabla KARDEXS  */}
@@ -196,6 +211,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                       <thead>
                         <tr>
                           <th>FISMA</th>
+                          <th>UBI</th>
                           <th>Cnt.Entrada</th>
                           <th>Cnt.Salida</th>
                           <th>Cnt.Saldo</th>
@@ -216,6 +232,8 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                             tabla,
                             IS,
                             FISMA,
+
+                            ubigeo,
                             // fechaHoraMovimiento,
 
                             cantidadIngresada,
@@ -233,6 +251,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; contexto: st
                           return (
                             <tr key={_id} style={IS ? { color: 'blue' } : { color: 'red' }}>
                               <td data-label="FISMA">{formatoDDMMYYYY_PEN(FISMA)}</td>
+                              <td data-label="UBI">{ubigeo ? ubigeo : '-'}</td>
                               <td
                                 data-label="Cnt.Entrada"
                                 title={IS ? (cantidadOrigenEquivalencia ? cantidadOrigenEquivalencia.$numberDecimal + ' ' + unidadEquivalencia : '') : ''}

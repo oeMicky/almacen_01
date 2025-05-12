@@ -106,6 +106,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       motivoIngresoAlmacen: props.inSelecci.motivoIngresoAlmacen ? props.inSelecci.motivoIngresoAlmacen : '',
       idDocumento: props.inSelecci.idDocumento ? props.inSelecci.idDocumento : '',
 
+      idSucursalOrigen: props.inSelecci.idSucursalOrigen ? props.inSelecci.idSucursalOrigen : '',
+      sucursalOrigen: props.inSelecci.sucursalOrigen ? props.inSelecci.sucursalOrigen : '',
+
       idSerieNotaIngreso: props.inSelecci.idSerieNotaIngreso ? props.inSelecci.idSerieNotaIngreso : parametrosGlobales.idSerieNotaIngreso,
       serie: props.inSelecci.serie ? props.inSelecci.serie : parametrosGlobales.serieNotaIngreso,
 
@@ -235,6 +238,19 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     item: 0,
     codigo: '',
     descripcion: '',
+  });
+
+  useTask$(({ track }) => {
+    track(() => ini.value);
+
+    if (ini.value === 0) {
+      // (document.getElementById('IN_IN_codigoDescripcion_MICE') as HTMLInputElement)?.select();
+
+      setTimeout(() => {
+        document.getElementById('in_FISMA')?.focus();
+      }, 100);
+      ini.value++;
+    }
   });
 
   // const FISMAenDate = new Date(definicion_CTX_IN_ALMACEN.FISMA);
@@ -546,6 +562,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
       motivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen,
       idDocumento: definicion_CTX_IN_ALMACEN.idDocumento,
 
+      // idSucursalOrigen: definicion_CTX_IN_ALMACEN.idSucursalOrigen,
+      // sucursalOrigen: definicion_CTX_IN_ALMACEN.sucursalOrigen,
+
       idSerieNotaIngreso: definicion_CTX_IN_ALMACEN.idSerieNotaIngreso,
       serie: definicion_CTX_IN_ALMACEN.serie,
 
@@ -629,6 +648,16 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           width={16}
           onClick={$(() => {
             console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
+          })}
+        />
+        <ImgButton
+          title="Ver el definicion_CTX_IN_ALMACEN"
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          onClick={$(() => {
+            console.log('definicion_CTX_IN_ALMACEN.itemsMercaderias', definicion_CTX_IN_ALMACEN.itemsMercaderias);
           })}
         />
 
@@ -740,6 +769,11 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   onChange$={(e) => {
                     definicion_CTX_IN_ALMACEN.FISMA = (e.target as HTMLInputElement).value;
                   }}
+                  onKeyUp$={$((e: any) => {
+                    if (e.key === 'Enter') {
+                      (document.getElementById('se_motivoIngreso') as HTMLSelectElement)?.focus();
+                    }
+                  })}
                 />
               </div>
               {/* motivo de ingreso */}
@@ -1045,29 +1079,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
 
             <br />
           </div>
-          {/* ----------------------------------------------------- */}
-          {/* IGV - TC */}
-          <div>
-            {/* IGV */}
-            <div class="form-control">
-              <div class="form-control form-agrupado">
-                <input
-                  type={'text'}
-                  id={'in_IGV'}
-                  style={{ width: '100%' }}
-                  disabled
-                  value={definicion_CTX_IN_ALMACEN.elIgv + ' %'}
-                  onKeyPress$={$((e: any) => {
-                    if (e.key === 'Enter') {
-                      (document.getElementById('bu_Add_Documento') as HTMLButtonElement)?.focus();
-                    }
-                  })}
-                />
-              </div>
-            </div>
 
-            <br />
-          </div>
           {/* ----------------------------------------------------- */}
         </div>
         {/* ----------------------------------------------------- */}
@@ -1081,118 +1093,84 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
         >
           <div>
             <div class="linea_1_1111">
-              <div>
-                <select
-                  id="se_tcpIN_DOCUMENTO"
-                  style={{ cursor: 'pointer', width: '100%' }}
-                  onChange$={(e) => {
-                    const idx = (e.target as HTMLSelectElement).selectedIndex;
-                    const elSelect = e.target as HTMLSelectElement;
-                    const elOption = elSelect[idx];
+              <select
+                id="se_tcpIN_DOCUMENTO"
+                style={{ cursor: 'pointer', width: '100%' }}
+                onChange$={(e) => {
+                  const idx = (e.target as HTMLSelectElement).selectedIndex;
+                  const elSelect = e.target as HTMLSelectElement;
+                  const elOption = elSelect[idx];
 
-                    documento.codigoTCP = elOption.id;
-                    documento.descripcionTCP = (e.target as HTMLSelectElement).value;
-                    console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀', documento.codigoTCP, documento.descripcionTCP);
+                  documento.codigoTCP = elOption.id;
+                  documento.descripcionTCP = (e.target as HTMLSelectElement).value;
+                  console.log('🚀🚀🚀🚀🚀🚀🚀🚀🚀', documento.codigoTCP, documento.descripcionTCP);
 
-                    document.getElementById('in_Fecha_DOCUMENTO')?.focus();
-                  }}
-                  // onKeyUp$={$((e: any) => {
-                  //   if (e.key === 'Enter') {
-                  //     (document.getElementById('in_Fecha_DOCUMENTO') as HTMLSelectElement)?.focus();
-                  //   }
-                  // })}
-                >
-                  <option value="">-- Seleccione TCP --</option>
-                  {LosTCPcargados.value.map((ser: any) => {
-                    return (
-                      <option id={ser.codigo} value={ser.descripcion} selected={ser.descripcion === documento.descripcionTCP}>
-                        {ser.descripcion}
-                      </option>
-                    );
-                  })}
-                </select>
-                {/* <ElSelect
-                  id={'se_tcpIN_DOCUMENTO'}
-                  valorSeleccionado={documento.descripcionTCP}
-                  registros={LosTCPcargados.value}
-                  registroID={'codigo'}
-                  registroTEXT={'descripcion'}
-                  seleccione={'-- Seleccione TCP --'}
-                  onChange={$(() => {
-                    // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
-                    const elSelec = document.getElementById('se_tcpIN_DOCUMENTO') as HTMLSelectElement;
-                    const elIdx = elSelec.selectedIndex;
-                    // //console.log('?', elIdx, elSelec[elIdx].id);
-                    documento.codigoTCP = elSelec[elIdx].id;
-                    if (documento.codigoTCP === '') {
-                      documento.descripcionTCP = '';
-                    } else {
-                      documento.descripcionTCP = elSelec.value;
-                      // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
-                    }
-                  })}
-                  onKeyPress={$((e: any) => {
-                    if (e.key === 'Enter') {
-                      (document.getElementById('in_Fecha_DOCUMENTO') as HTMLSelectElement)?.focus();
-                    }
-                  })}
-                /> */}
-              </div>
-              <div>
-                <input
-                  id="in_Fecha_DOCUMENTO"
-                  style={{ cursor: 'pointer', width: '100%' }}
-                  type="date"
-                  autoFocus
-                  placeholder="Add fecha"
-                  value={documento.fecha}
-                  onInput$={(e) => {
-                    documento.fecha = (e.target as HTMLInputElement).value.trim().toUpperCase();
-                  }}
-                  onKeyPress$={(e) => {
-                    if (e.key === 'Enter') {
-                      (document.getElementById('in_Serie_DOCUMENTO') as HTMLInputElement)?.focus();
-                    }
-                  }}
-                />
-              </div>
-              <div>
-                <input
-                  id="in_Serie_DOCUMENTO"
-                  style={{ width: '100%' }}
-                  type="text"
-                  autoFocus
-                  placeholder="Add serie"
-                  value={documento.serie}
-                  onInput$={(e) => {
-                    documento.serie = (e.target as HTMLInputElement).value.trim().toUpperCase();
-                  }}
-                  onKeyPress$={(e) => {
-                    if (e.key === 'Enter') {
-                      (document.getElementById('in_Numero_DOCUMENTO') as HTMLInputElement)?.focus();
-                    }
-                  }}
-                />
-              </div>
-              <div>
-                <input
-                  id="in_Numero_DOCUMENTO"
-                  style={{ width: '100%' }}
-                  type="number"
-                  placeholder="Add número"
-                  value={documento.numero}
-                  onChange$={(e) => {
-                    documento.numero = (e.target as HTMLInputElement).value.trim();
-                  }}
-                  onKeyPress$={(e) => {
-                    if (e.key === 'Enter') {
-                      (document.getElementById('btn_Add_Mercaderia') as HTMLInputElement)?.focus();
-                    }
-                  }}
-                />
-              </div>
+                  document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+                }}
+                // onKeyUp$={$((e: any) => {
+                //   if (e.key === 'Enter') {
+                //     (document.getElementById('in_Fecha_DOCUMENTO') as HTMLSelectElement)?.focus();
+                //   }
+                // })}
+              >
+                <option value="">-- Seleccione TCP --</option>
+                {LosTCPcargados.value.map((ser: any) => {
+                  return (
+                    <option id={ser.codigo} value={ser.descripcion} selected={ser.descripcion === documento.descripcionTCP}>
+                      {ser.descripcion}
+                    </option>
+                  );
+                })}
+              </select>
+              <input
+                id="in_Fecha_DOCUMENTO"
+                style={{ cursor: 'pointer', width: '100%' }}
+                type="date"
+                autoFocus
+                placeholder="Add fecha"
+                value={documento.fecha}
+                onInput$={(e) => {
+                  documento.fecha = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_Serie_DOCUMENTO') as HTMLInputElement)?.focus();
+                  }
+                }}
+              />
+              <input
+                id="in_Serie_DOCUMENTO"
+                style={{ width: '100%' }}
+                type="text"
+                autoFocus
+                placeholder="Add serie"
+                value={documento.serie}
+                onInput$={(e) => {
+                  documento.serie = (e.target as HTMLInputElement).value.trim().toUpperCase();
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('in_Numero_DOCUMENTO') as HTMLInputElement)?.focus();
+                  }
+                }}
+              />
+              <input
+                id="in_Numero_DOCUMENTO"
+                style={{ width: '100%' }}
+                type="number"
+                placeholder="Add número"
+                value={documento.numero}
+                onChange$={(e) => {
+                  documento.numero = (e.target as HTMLInputElement).value.trim();
+                }}
+                onKeyPress$={(e) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('btn_Add_Mercaderia') as HTMLInputElement)?.focus();
+                  }
+                }}
+              />
             </div>
-            <br />
+            {/* <br /> */}
             {/* {definicion_CTX_IN_ALMACEN._id === '' ? (
               <div style={{ marginBottom: '4px' }}>
                 <ElButton
@@ -1290,11 +1268,26 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
           <br />
         </div>
-        {/* TIPO DE CAMBIO       htmlFor={'checkboxTipoCambio'}*/}
+        {/* IGV ---- TIPO DE CAMBIO       htmlFor={'checkboxTipoCambio'}*/}
         <div>
           {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr  1fr', gap: '4px' }}> */}
           {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '4px' }}> */}
-          <div class="linea_1_11">
+          <div class="linea_1_111">
+            {/* IGV */}
+            <div>
+              <input
+                type="text"
+                id="in_IGV"
+                style={{ width: '100%' }}
+                disabled
+                value={definicion_CTX_IN_ALMACEN.elIgv + ' %'}
+                onKeyPress$={$((e: any) => {
+                  if (e.key === 'Enter') {
+                    (document.getElementById('bu_Add_Documento') as HTMLButtonElement)?.focus();
+                  }
+                })}
+              />
+            </div>
             {/* Tipo Cambio    SUNAT */}
             {/* <div style={{ display: 'flex', flexDirection: 'row' }}> */}
             {/* <div style={{ display: 'flex', justifyContent: 'space-between' }}> */}
@@ -1561,7 +1554,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                         </td>
                         <td data-label="IGV">{iTMercaIN.IGV.$numberDecimal ? iTMercaIN.IGV.$numberDecimal : iTMercaIN.IGV} %</td>
                         <td data-label="Ubi" class="comoNumeroLeft">
-                          <input
+                          {iTMercaIN.ubigeo}
+                          {/* <input
                             type="text"
                             disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN._id !== ''}
                             style={{ width: '100%', textAlign: 'start' }}
@@ -1572,7 +1566,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                             onFocusin$={(e) => {
                               (e.target as HTMLInputElement).select();
                             }}
-                          />
+                          /> */}
                         </td>
                         <td data-label="Cantidad" class="comoNumeroLeft">
                           <input

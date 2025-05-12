@@ -12,9 +12,12 @@ import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGui
 import Kardexs from '~/components/kardex/kardexs';
 import Kardex from '~/components/kardex/kardex';
 import EditPrecioPublicoIN from './editPrecioPublicoIN';
-import NewEditUbigeo from './newEditUbigeo';
+// import NewEditUbigeo from './newEditUbigeo';
 import { verOtrosAlmacenes } from '~/apis/usuario.api';
 import InventarioExterno from '../inventarioExterno/inventarioExterno';
+import ListaUbigeosStocksIN from './listaUbigeosStocksIN';
+import VerUbigeoAntiguo from '~/components/kardex/verUbigeoAntiguo';
+// import TrasladoEntreUbigeosIN from './trasladoEntreUbigeosIN';
 // import MercaderiaINSelec from "./mercaderiaINSelec";
 
 export const CTX_BUSCAR_MERCADERIA_IN = createContextId<any>('buscar_mercaderia_in');
@@ -40,11 +43,19 @@ export default component$(
 
       mM: [],
       kK: [],
+      uS: [],
+
+      mostrarPanelListaUbigeosStocksIN: false,
+      nuevoUbigeo: false,
+      // mostrarPanelTrasladoEntreUbigeosIN: false,
 
       mostrarPanelNewEditUbigeo: false,
       elIdKardex: '',
       elUBIGEO: '',
+      ubigeoAntiguo: '',
       grabo_ubigeo: false,
+
+      mostrarPanelVerUbigeoAntiguo: false,
 
       mostrarPanelNewEditMercaderiaIN: false,
       abuscar: '',
@@ -55,7 +66,10 @@ export default component$(
       mostrarPanelKARDEX: false,
       mostrarPanelKARDEXS: false,
 
+      //para MERCADERIA NUEVA
       mostrarPanelMercaderiaINSeleccionada: false,
+      //para MERCADERIA CON KARDEX
+      mostrarPanelMercaderiaINSeleccionada_2: false,
 
       mostrarPanelEditPrecioPublicoIN: false,
       grabo_precio_publico: false,
@@ -98,7 +112,7 @@ export default component$(
       idEmpresa: parametrosGlobales.idEmpresa,
       idAlmacen: parametrosGlobales.idAlmacen,
       buscarPor: 'Descripción', //por.value,
-      cadenaABuscar: '', // 'acce 5', //cadena.value,
+      cadenaABuscar: 'hist', // 'geo', //'bien' 'acce 5', //cadena.value,
     });
 
     useTask$(({ track }) => {
@@ -109,7 +123,7 @@ export default component$(
 
         setTimeout(() => {
           document.getElementById('in_codigoDescripcion_BUSCAR_MERCADERIA_IN')?.focus();
-        }, 200);
+        }, 100);
         ini.value++;
       }
     });
@@ -314,7 +328,7 @@ export default component$(
                   type="image"
                   src={images.searchPLUS}
                   alt="icono buscar"
-                  height={16}
+                  height={20}
                   width={16}
                   style={{ margin: '0 4px' }}
                   onClick$={() => {
@@ -327,7 +341,7 @@ export default component$(
                     type="image"
                     src={images.arrowUpRight}
                     alt="icono ir a ..."
-                    height={16}
+                    height={20}
                     width={16}
                     onClick$={async () => {
                       const losAlmacenes = await verOtrosAlmacenes({
@@ -355,7 +369,7 @@ export default component$(
                   type="image"
                   src={images.add}
                   alt="icono add"
-                  height={16}
+                  height={20}
                   width={16}
                   style={{ margin: '0 4px' }}
                   onClick$={() => {
@@ -448,7 +462,7 @@ export default component$(
                   // }}
                 />
                 <label for="in_verLineaMarca_BUSCAR_MERCADERIA_IN" style={{ marginRight: '16px' }}>
-                  Ver Linea / Marca
+                  Ver Linea
                 </label>
               </div>
               <div>
@@ -494,15 +508,18 @@ export default component$(
             ) : (
               ''
             )}
+            {/* MERCADERIA NUEVA */}
             {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelMercaderiaINSeleccionada && (
               <div class="modal">
-                {/* <MercaderiaINSelec /> */}
                 <MercaderiaINSeleccionada
                   mercaINSelecci={definicion_CTX_BUSCAR_MERCADERIA_IN.mM}
                   elKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.kK}
+                  elIDKardex={''}
+                  elUbigeoStock={[]}
                   esAlmacen={true}
                   enDolares={props.enDolares}
                   tipoCambio={props.tipoCambio}
+                  contextoBase={'buscar_mercaderia_in'}
                   contextoInmediato={'buscar_mercaderia_in'}
                   contextoParaDocumento={props.contexto}
                   igv={props.igv}
@@ -532,6 +549,7 @@ export default component$(
                 <Kardex
                   mercaSelecci={definicion_CTX_BUSCAR_MERCADERIA_IN.mM}
                   kardex={definicion_CTX_BUSCAR_MERCADERIA_IN.kK}
+                  elIDKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.elIdKardex}
                   // esAlmacen={props.esAlmacen}
                   // esAlmacen={false}
                   contexto={'buscar_mercaderia_IN'}
@@ -540,7 +558,7 @@ export default component$(
                 />
               </div>
             )}
-            {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelNewEditUbigeo && (
+            {/* {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelNewEditUbigeo && (
               <div class="modal">
                 <NewEditUbigeo
                   idKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.elIdKardex}
@@ -548,13 +566,53 @@ export default component$(
                   contexto="buscar_mercaderia_in"
                 />
               </div>
-            )}
+            )} */}
             {/*  ADICIONAR MERCADERIA IN  idMercaderia */}
             {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelNewEditMercaderiaIN && (
               <div class="modal">
                 <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_BUSCAR_MERCADERIA_IN.mM} contexto={props.contexto} />
               </div>
             )}
+            {/*  UBIGEO ANTIGUO  */}
+            {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelVerUbigeoAntiguo && (
+              <div class="modal">
+                <VerUbigeoAntiguo ubigeo={definicion_CTX_BUSCAR_MERCADERIA_IN.ubigeoAntiguo} contexto="buscar_mercaderia_in" />
+              </div>
+            )}
+            {/*  LISTA DE UBIGEOS  */}
+            {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelListaUbigeosStocksIN && (
+              <div class="modal">
+                <ListaUbigeosStocksIN
+                  descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
+                  idKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.elIdKardex}
+                  esAlmacen={true}
+                  enDolares={props.enDolares}
+                  tipoCambio={props.tipoCambio}
+                  contextoInmediato={'buscar_mercaderia_in'}
+                  contextoParaDocumento={props.contexto}
+                  igv={props.igv}
+                  motivo={props.motivo}
+                  conIGV={props.conIGV}
+                  porMontoUnitario={props.porMontoUnitario}
+
+                  // idMercaderia={definicion_CTX_BUSCAR_MERCADERIA_IN.idMercaderia}
+                  // descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
+                  // cuMASigv={definicion_CTX_BUSCAR_MERCADERIA_IN.cuMASigv}
+                  // pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
+                  // contexto="buscar_mercaderia_in"
+                  // precioUnitarioPEN={definicion_CTX_BUSCAR_MERCADERIA_IN.precioUnitarioPEN}
+                />
+              </div>
+            )}
+            {/*  TRASLADO ENTRE UBIGEOS  */}
+            {/* {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelTrasladoEntreUbigeosIN && (
+              <div class="modal">
+                <TrasladoEntreUbigeosIN
+                  descripcion={definicion_CTX_BUSCAR_MERCADERIA_IN.descripcion}
+                  idKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.elIdKardex}
+                />
+              </div>
+            )} */}
             {/*  EDITAR PRECIO PUBLICO IN  */}
             {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelEditPrecioPublicoIN && (
               <div class="modal">
@@ -568,6 +626,7 @@ export default component$(
                 />
               </div>
             )}
+
             {/*  INVENTARIO EXTERNO  */}
             {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelInventarioExterno && (
               <div class="modal">

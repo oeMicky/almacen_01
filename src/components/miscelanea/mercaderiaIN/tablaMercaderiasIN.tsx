@@ -111,12 +111,12 @@ export default component$(
         value={lasMercaderiasIN}
         onPending={() => {
           //console.log('onPending 🍉🍉🍉🍉');
-          return <div>Cargando...</div>;
+          return <div style={{ color: 'green' }}>Cargando...</div>;
         }}
         onRejected={() => {
           //console.log('onRejected 🍍🍍🍍🍍');
           ctx.mostrarSpinner = false;
-          return <div>Fallo en la carga de datos</div>;
+          return <div style={{ color: 'red' }}>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercaderiasIN) => {
           console.log('onResolved 🍓🍓🍓🍓', mercaderiasIN);
@@ -148,8 +148,8 @@ export default component$(
                         <th>Descripción</th>
                         <th style={props.verAplicacion ? '' : { display: 'none' }}>Aplicación</th>
                         <th style={props.verLineaMarca ? '' : { display: 'none' }}>Linea/Tipo</th>
-                        <th style={props.verLineaMarca ? '' : { display: 'none' }}>Marca</th>
-                        <th>Ubi</th>
+                        <th>Marca</th>
+                        {/* <th>Ubi</th> */}
 
                         <th>Stock</th>
                         <th>Uni</th>
@@ -177,32 +177,40 @@ export default component$(
                           aplicacion,
                           lineaTipo,
                           marca,
-                          totalCantidadSaldo,
+                          // totalCantidadSaldo,
                           unidad,
                           stockMinimo,
                           costoUnitarioPENMasIGV,
-                          // costoDeInicioPEN,
+                          // // costoDeInicioPEN,
                           precioUnitarioPEN,
-                          // promedioCostoUnitarioMovil,
+                          // // promedioCostoUnitarioMovil,
                           porcentajeUtilidad,
                           // KARDEXS,
                           activo,
                           noFacturar,
                           ubigeo,
+                          idKardex,
+                          sumStocks,
                         } = mercaINLocali;
                         let elSM = 0;
-                        let elTCS = 0;
+                        // let elTCS = 0;
+                        let laSumStocks = 0;
                         if (typeof stockMinimo === 'undefined' || stockMinimo === null) {
                           elSM = 0;
                         } else {
                           elSM = stockMinimo.$numberDecimal ? parseFloat(stockMinimo.$numberDecimal) : stockMinimo;
                         }
-                        if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
-                          elTCS = 0;
+                        // if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
+                        //   elTCS = 0;
+                        // } else {
+                        //   elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                        // }
+                        if (typeof sumStocks === 'undefined' || sumStocks === null) {
+                          laSumStocks = 0;
                         } else {
-                          elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                          laSumStocks = sumStocks.$numberDecimal ? parseFloat(sumStocks.$numberDecimal) : sumStocks;
                         }
-                        console.log(' 🍍🍍🍍🍍', elSM, elTCS);
+                        console.log(' 🍍🍍🍍🍍', elSM, laSumStocks);
 
                         return (
                           <tr
@@ -212,21 +220,16 @@ export default component$(
                                 ? { background: '#272727', color: 'white' }
                                 : noFacturar
                                 ? { background: '#ff5aff' }
-                                : (totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo) === 0
+                                : laSumStocks === 0
                                 ? { color: 'red' }
                                 : {}
                             }
-                            // style={
-                            //   (totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo) === 0
-                            //     ? { color: 'red' }
-                            //     : { color: '' }
-                            // }
                           >
                             <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                             <td data-label="Descripción" style={{ fontWeight: 'bold' }}>
-                              {elSM >= elTCS ? (
+                              {elSM >= laSumStocks ? (
                                 <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
-                              ) : elSM + 5 >= elTCS ? (
+                              ) : elSM + 5 >= laSumStocks ? (
                                 <img src={images.flagAmber} alt="Bandera ambar" width="12" height="12" />
                               ) : (
                                 ''
@@ -240,14 +243,28 @@ export default component$(
                               {lineaTipo}
                             </td>
 
-                            <td data-label="Marca" style={props.verLineaMarca ? '' : { display: 'none' }}>
-                              {marca}
-                            </td>
-                            <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== '' && ubigeo !== null ? ubigeo : '-'}</td>
-                            {/* <td data-label="Ubigeo">{typeof ubigeo === 'undefined' && ubigeo === '' && ubigeo === null ? '-' : ubigeo}</td> */}
+                            <td data-label="Marca">{marca}</td>
+                            {/* <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== '' && ubigeo !== null ? ubigeo : '-'}</td> */}
 
-                            <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
-                              <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
+                            <td data-label="Stock" class="comoNumeroLeft">
+                              {typeof idKardex !== 'undefined' ? (
+                                <button
+                                  style={{ color: 'purple', fontWeight: 'bold', cursor: 'pointer' }}
+                                  onClick$={() => {
+                                    ctx.descripcion = descripcion;
+                                    ctx.elIdKardex = idKardex;
+                                    ctx.mM = mercaINLocali;
+                                    // ctx.kK = mercaINLocali.KARDEXS[0];
+                                    // ctx.mostrarPanelMercaderiaINSeleccionada = true;
+                                    ctx.mostrarPanelListaUbigeosStocksIN = true;
+                                    ctx.mostrarSpinner = true;
+                                  }}
+                                >
+                                  {laSumStocks}
+                                </button>
+                              ) : (
+                                ''
+                              )}
                             </td>
                             <td data-label="Uni">{unidad}</td>
                             <td data-label="Costo PEN + IGV" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
@@ -257,25 +274,7 @@ export default component$(
                                   : formatear_2Decimales(costoUnitarioPENMasIGV)
                                 : '-'}
                             </td>
-                            {/* {props.esAlmacen ? (
-                              props.motivo === 'APERTURA DE INVENTARIO' ? (
-                                <td data-label="Costo Inicio PEN" class="comoNumero">
-                                  {typeof costoDeInicioPEN !== 'undefined' && costoDeInicioPEN !== null
-                                    ? costoDeInicioPEN.$numberDecimal
-                                      ? formatear_6Decimales(costoDeInicioPEN.$numberDecimal)
-                                      : costoDeInicioPEN
-                                    : '-'}
-                                </td>
-                              ) : (
-                                <td data-label="Costo Promd PEN" class="comoNumero">
-                                  {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
-                                    ? promedioCostoUnitarioMovil.$numberDecimal
-                                      ? formatear_6Decimales(promedioCostoUnitarioMovil.$numberDecimal)
-                                      : promedioCostoUnitarioMovil
-                                    : '-'}
-                                </td>
-                              )
-                            ) : ( */}
+
                             <td data-label="Precio PEN" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
                               {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                                 ? precioUnitarioPEN.$numberDecimal
@@ -283,8 +282,6 @@ export default component$(
                                   : precioUnitarioPEN
                                 : '-'}
                             </td>
-                            {/* )} */}
-                            {/* <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td> */}
                             <td data-label="Uti" style={props.verLineaMarca ? '' : { display: 'none' }}>
                               {typeof porcentajeUtilidad !== 'undefined' && porcentajeUtilidad !== null
                                 ? porcentajeUtilidad.$numberDecimal
@@ -293,51 +290,56 @@ export default component$(
                                 : ''}
                             </td>
                             <td data-label="Acciones" class="accionesLeft">
-                              <input
-                                title="Seleccionar mercadería"
-                                src={images.check32}
-                                type="image"
-                                height={12}
-                                width={12}
-                                style={{ marginRight: '6px' }}
-                                // onFocusin$={() => //console.log('☪☪☪☪☪☪')} class="acciones"
-                                onClick$={() => {
-                                  //console.log('mercaINLocali', mercaINLocali);
-                                  if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
-                                    alert('No se ha definido el porcentaje de utilidad para esta mercadería. Adicionelo para realizar cualquier operación.');
-                                    return;
-                                  }
+                              {typeof idKardex === 'undefined' ? (
+                                <input
+                                  title="Seleccionar mercadería"
+                                  src={images.check32}
+                                  type="image"
+                                  height={12}
+                                  width={12}
+                                  style={{ marginRight: '6px' }}
+                                  // onFocusin$={() => //console.log('☪☪☪☪☪☪')} class="acciones"
+                                  onClick$={() => {
+                                    //console.log('mercaINLocali', mercaINLocali);
+                                    if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
+                                      alert('No se ha definido el porcentaje de utilidad para esta mercadería. Adicionelo para realizar cualquier operación.');
+                                      return;
+                                    }
 
-                                  if (mercaINLocali.KARDEXS.length === 0) {
-                                    console.log('🍑🍑🍑 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
-                                    ctx.mM = mercaINLocali;
-                                    ctx.kK = [];
-                                    ctx.mostrarPanelMercaderiaINSeleccionada = true;
-                                    //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
-                                  }
+                                    // if (mercaINLocali.KARDEXS.length === 0) {
+                                    //   console.log('🍑🍑🍑 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+                                    //   ctx.mM = mercaINLocali;
+                                    //   ctx.kK = [];
+                                    //   ctx.mostrarPanelMercaderiaINSeleccionada = true;
+                                    //   //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                    // }
 
-                                  if (mercaINLocali.KARDEXS.length === 1) {
-                                    console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+                                    // if (mercaINLocali.KARDEXS.length === 1) {
+                                    // console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
                                     ctx.mM = mercaINLocali;
-                                    ctx.kK = mercaINLocali.KARDEXS[0];
+                                    // ctx.kK = mercaINLocali.KARDEXS[0];
                                     ctx.mostrarPanelMercaderiaINSeleccionada = true;
                                     //console.log('la mercaSeleccionada IN DIRECTA', ctx.mM);
-                                  }
-                                  if (mercaINLocali.KARDEXS.length > 1) {
-                                    console.log('🥗🥗🥗🥗🥗 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
-                                    ctx.mM = mercaINLocali;
-                                    ctx.mostrarPanelKardexsIN = true;
-                                    //console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);
-                                  }
-                                }}
-                                onKeyUp$={(e) => {
-                                  if (e.key === 'Escape') {
-                                    alert('Escape presionado: Seleccionar mercadería');
-                                    // ctx.mostrarPanelMercaderiaINSeleccionada = false;
-                                    // ctx.mM = null;
-                                  }
-                                }}
-                              />
+                                    // }
+                                    // if (mercaINLocali.KARDEXS.length > 1) {
+                                    //   console.log('🥗🥗🥗🥗🥗 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+                                    //   ctx.mM = mercaINLocali;
+                                    //   ctx.mostrarPanelKardexsIN = true;
+                                    //   //console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);
+                                    // }
+                                  }}
+                                  onKeyUp$={(e) => {
+                                    if (e.key === 'Escape') {
+                                      alert('Escape presionado: Seleccionar mercadería');
+                                      // ctx.mostrarPanelMercaderiaINSeleccionada = false;
+                                      // ctx.mM = null;
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                ''
+                              )}
+
                               {typeof aplicacion !== 'undefined' && (
                                 <input
                                   // id="in_BuscarDetraccion"
@@ -362,31 +364,39 @@ export default component$(
                                 style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
-                                  console.log('☪☪☪☪☪☪');
-                                  if (mercaINLocali.KARDEXS.length === 0) {
-                                    alert('No se localizan kardex/s');
-                                    // ctx_buscar_mercaderia_in.mM = mercaINLocali;
-                                    // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
-                                    // //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                  console.log('☪☪☪☪☪☪', mercaINLocali.idKardex);
+                                  // if (mercaINLocali.KARDEXS.length === 0) {
+                                  if (mercaINLocali.idKardex === '' || mercaINLocali.idKardex === null || mercaINLocali.idKardex === undefined) {
+                                    alert('El ítem seleccionado no presenta kardex.');
+                                    return;
                                   }
+                                  // alert('No se localizan kardex/s');
+                                  // ctx_buscar_mercaderia_in.mM = mercaINLocali;
+                                  // ctx_buscar_mercaderia_in.mostrarPanelMercaderiaINSeleccionada = true;
+                                  // //console.log('la mercaSeleccionada IN - length', mercaINLocali.KARDEXS.length);
+                                  // }
                                   if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
                                     alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
                                     return;
                                   }
-                                  if (mercaINLocali.KARDEXS.length === 1) {
-                                    console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥', mercaINLocali);
-                                    ctx.mM = mercaINLocali;
-                                    ctx.kK = mercaINLocali.KARDEXS[0];
-                                    ctx.mostrarPanelKARDEX = true;
+                                  console.log('💥💥💥💥💥☮☮☮☮');
+                                  // if (mercaINLocali.KARDEXS.length === 1) {
+                                  //   console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥', mercaINLocali);
+                                  ctx.mM = mercaINLocali;
+                                  // ctx.kK = mercaINLocali.KARDEXS[0];
+                                  ctx.elIdKardex = mercaINLocali.idKardex;
+                                  ctx.mostrarPanelKARDEX = true;
 
-                                    //console.log('la mercaSeleccionada ', ctx_index_inventario.mM);
-                                    //console.log('la mercaSeleccionada KARDEX', ctx_index_inventario.kK);
-                                  }
-                                  if (mercaINLocali.KARDEXS.length > 1) {
-                                    ctx.mM = mercaINLocali;
-                                    ctx.mostrarPanelKARDEXS = true;
-                                    //console.log('la mercaSeleccionada KARDEXS', ctx_index_inventario.mM);
-                                  }
+                                  //console.log('la mercaSeleccionada ', ctx_index_inventario.mM);
+                                  //console.log('la mercaSeleccionada KARDEX', ctx_index_inventario.kK);
+                                  // }
+                                  // console.log('☮☮☮☮💥💥💥💥💥');
+                                  // if (mercaINLocali.KARDEXS.length > 1) {
+                                  //   ctx.mM = mercaINLocali;
+                                  //   ctx.mostrarPanelKARDEXS = true;
+                                  //   //console.log('la mercaSeleccionada KARDEXS', ctx_index_inventario.mM);
+                                  // }
+                                  // console.log('💥💥💥💥💥');
                                 }}
                               />
                               <input
@@ -413,27 +423,27 @@ export default component$(
                                 style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
-                                  if (mercaINLocali.KARDEXS.length === 0) {
-                                    alert('El ítem seleccionado no presenta kardex.');
-                                    return;
-                                  }
+                                  // if (mercaINLocali.KARDEXS.length === 0) {
+                                  //   alert('El ítem seleccionado no presenta kardex.');
+                                  //   return;
+                                  // }
 
-                                  if (mercaINLocali.KARDEXS.length === 1) {
-                                    console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+                                  // if (mercaINLocali.KARDEXS.length === 1) {
+                                  //   console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
 
-                                    ctx.elIdKardex = mercaINLocali.KARDEXS[0]._id;
-                                    ctx.elUBIGEO = ubigeo;
-                                    ctx.mostrarPanelNewEditUbigeo = true;
-                                    //console.log('la mercaSeleccionada IN DIRECTA', ctx.mM);
-                                  }
-                                  if (mercaINLocali.KARDEXS.length > 1) {
-                                    console.log('🥗🥗🥗🥗🥗 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
-                                    ctx.mM = mercaINLocali;
-                                    ctx.mostrarPanelKardexsIN = true;
-                                    //console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);
-                                  }
+                                  // ctx.elIdKardex = mercaINLocali.KARDEXS[0]._id;
+                                  ctx.ubigeoAntiguo = ubigeo;
+                                  ctx.mostrarPanelVerUbigeoAntiguo = true;
+                                  //console.log('la mercaSeleccionada IN DIRECTA', ctx.mM);
+                                  // }
+                                  // if (mercaINLocali.KARDEXS.length > 1) {
+                                  //   console.log('🥗🥗🥗🥗🥗 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
+                                  //   ctx.mM = mercaINLocali;
+                                  //   ctx.mostrarPanelKardexsIN = true;
+                                  //   //console.log('la mercaSeleccionada IN INDIRECTA', ctx.mM);
+                                  // }
 
-                                  ctx.mostrarSpinner = true;
+                                  // ctx.mostrarSpinner = true;
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />
@@ -480,7 +490,7 @@ export default component$(
                 </>
               ) : (
                 <div>
-                  <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
+                  <i style={{ fontSize: '0.8rem', color: 'red' }}>No se encontraron registros</i>
                 </div>
               )}
             </>
@@ -490,3 +500,35 @@ export default component$(
     );
   }
 );
+
+// style={
+//   (totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo) === 0
+//     ? { color: 'red' }
+//     : { color: '' }
+// }
+
+{
+  /* {totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo} */
+}
+
+{
+  /* {props.esAlmacen ? (
+                              props.motivo === 'APERTURA DE INVENTARIO' ? (
+                                <td data-label="Costo Inicio PEN" class="comoNumero">
+                                  {typeof costoDeInicioPEN !== 'undefined' && costoDeInicioPEN !== null
+                                    ? costoDeInicioPEN.$numberDecimal
+                                      ? formatear_6Decimales(costoDeInicioPEN.$numberDecimal)
+                                      : costoDeInicioPEN
+                                    : '-'}
+                                </td>
+                              ) : (
+                                <td data-label="Costo Promd PEN" class="comoNumero">
+                                  {typeof promedioCostoUnitarioMovil !== 'undefined' && promedioCostoUnitarioMovil !== null
+                                    ? promedioCostoUnitarioMovil.$numberDecimal
+                                      ? formatear_6Decimales(promedioCostoUnitarioMovil.$numberDecimal)
+                                      : promedioCostoUnitarioMovil
+                                    : '-'}
+                                </td>
+                              )
+                            ) : ( */
+}

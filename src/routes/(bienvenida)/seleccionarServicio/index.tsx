@@ -63,7 +63,7 @@ export default component$(() => {
         <img src={images.buildings} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.RazonSocial}
       </p>
-      <p title="Sucursal" style={{ paddingLeft: '24px', fontSize: '0.8rem', color: 'red' }}>
+      <p title="Sucursal" style={{ paddingLeft: '24px', fontSize: '0.8rem', color: 'red', fontWeight: 'bold' }}>
         <img src={images.sucursal} width={16} height={16} style={{ marginRight: '8px' }} />
         {parametrosGlobales.sucursal}
       </p>
@@ -141,7 +141,9 @@ export default component$(() => {
             cursorMano={parametrosGlobales.inventario}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              navegarA('/inventario');
+              // navegarA('/inventario');
+              // navegarA('/inAlmacen');
+              navegarA('/outAlmacen');
             })}
           />
           <Servicio2024

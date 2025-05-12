@@ -207,10 +207,12 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                             </td>
                             <td data-label="Fecha" class="comoCadena">
                               {/* {notaVenta.fechaLocal.substring(8, 10) + '/' + notaVenta.fechaLocal.substring(5, 7) + '/' + notaVenta.fechaLocal.substring(0, 4)} */}
+
                               {notaVenta.fechaLocal.substring(0, 2) + '/' + notaVenta.fechaLocal.substring(3, 5) + '/' + notaVenta.fechaLocal.substring(6, 10)}
                             </td>
                             <td data-label="Ser-Nro" class="comoCadena">
                               {notaVenta.serie + ' - ' + cerosALaIzquierda(notaVenta.numero, 8)}
+                              {notaVenta.existeOtros ? <img src={images.puntoAzul} alt="Punto verde" width="12" height="12" /> : ''}
                             </td>
                             <td data-label="Importe" class="comoNumero">
                               {notaVenta.moneda === 'PEN'

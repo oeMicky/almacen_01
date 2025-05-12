@@ -4,7 +4,7 @@ import { CTX_COTIZACION, CTX_NEW_EDIT_COTIZACION } from '~/components/cotizacion
 import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 import TablaMercaderiasOUT from './tablaMercaderiasOUT';
-import MercaderiaOUTSeleccionada from './mercaderiaOUTSeleccionada';
+// import MercaderiaOUTSeleccionada from './mercaderiaOUTSeleccionada';
 import AsignarPrecioOUT from './asignarPrecioOUT';
 import { CTX_ADD_VENTA, CTX_F_B_NC_ND } from '~/components/venta/addVenta';
 import { CTX_NEW_EDIT_ORDEN_SERVICIO, CTX_O_S } from '~/components/ordenServicio/newEditOrdenServicio';
@@ -22,12 +22,15 @@ import {
 import Spinner from '~/components/system/spinner';
 import { elIdAuxiliar } from '~/functions/comunes';
 import NewEditMercaderiaIN from '../mercaderiaIN/newEditMercaderiaIN';
-import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
+// import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
 import { verOtrosAlmacenes } from '~/apis/usuario.api';
 import InventarioExterno from '../inventarioExterno/inventarioExterno';
 import Kardexs from '~/components/kardex/kardexs';
 import Kardex from '~/components/kardex/kardex';
 import EditPrecioPublicoIN from '../mercaderiaIN/editPrecioPublicoIN';
+import VerUbigeoAntiguo from '~/components/kardex/verUbigeoAntiguo';
+import ListaUbigeosStocksOUT from './listaUbigeosStocksOUT';
+// import ListaUbigeosStocksIN from '../mercaderiaIN/listaUbigeosStocksIN';
 // import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
 
 export const CTX_BUSCAR_MERCADERIA_OUT = createContextId<any>('buscar_mercaderia_out__');
@@ -53,7 +56,16 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     mostrarPanelNewEditUbigeo: false,
     elIdKardex: '',
     elUBIGEO: '',
+    lote: '',
+    fechaVencimiento: '',
+    promedioCostoUnitarioMovil: 0,
+    ubigeoAntiguo: '',
     grabo_ubigeo: false,
+
+    mostrarPanelVerUbigeoAntiguo: false,
+    mostrarPanelUbigeosStocksOUT: false,
+
+    // mostrarPanelMercaderiaINSeleccionada2: false,
 
     mostrarPanelKardexsOUT: false,
 
@@ -123,7 +135,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: '', // 'bls 838', // 'acce 5', //cadena.value,
+    cadenaABuscar: 'hist', // 'geo', //'bien' 'bls 838', // 'acce 5', //cadena.value,
   });
 
   useTask$(({ track }) => {
@@ -603,7 +615,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 id="IN_IN_codigoDescripcion_MICE"
                 autoFocus={true}
                 // tabIndex={0}
-                style={{ width: '100%' }}
+                style={{ fontWeight: 'bold', width: '100%' }}
                 type="text"
                 placeholder="Ingrese la mercadería a buscar"
                 value={parametrosBusqueda.cadenaABuscar}
@@ -770,7 +782,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                   verLineaMarca.value = (e.target as HTMLInputElement).checked;
                 }}
               />
-              <label for="in_VerLineaMarca_MICE">Ver linea / marca</label>
+              <label for="in_VerLineaMarca_MICE">Ver linea</label>
             </div>
             <div>
               <input
@@ -815,7 +827,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
           ) : (
             ''
           )}
-          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelMercaderiaOUTSeleccionada && (
+          {/* {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelMercaderiaOUTSeleccionada && (
             <div class="modal">
               <MercaderiaOUTSeleccionada
                 mercaOUTSelecci={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM}
@@ -825,6 +837,34 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 contexto={'buscar_mercaderia_out'}
                 contextoParaDocumento={props.contexto}
                 porcentaje={props.porcentaje}
+              />
+            </div>
+          )} */}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelVerUbigeoAntiguo && (
+            <div class="modal">
+              <VerUbigeoAntiguo ubigeo={definicion_CTX_BUSCAR_MERCADERIA_OUT.ubigeoAntiguo} contexto="buscar_mercaderia_out" />
+            </div>
+          )}
+          {/*  LISTA DE UBIGEOS  */}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelUbigeosStocksOUT && (
+            <div class="modal">
+              <ListaUbigeosStocksOUT
+                descripcion={definicion_CTX_BUSCAR_MERCADERIA_OUT.descripcion}
+                idKardex={definicion_CTX_BUSCAR_MERCADERIA_OUT.elIdKardex}
+                lote={definicion_CTX_BUSCAR_MERCADERIA_OUT.lote}
+                fechaVencimiento={definicion_CTX_BUSCAR_MERCADERIA_OUT.fechaVencimiento}
+                promedioCostoUnitarioMovil={definicion_CTX_BUSCAR_MERCADERIA_OUT.promedioCostoUnitarioMovil}
+                esAlmacen={props.esAlmacen}
+                esProduccion={false}
+                porcentaje={props.porcentaje}
+                // enDolares={props.enDolares}
+                // tipoCambio={props.tipoCambio}
+                // contextoInmediato={'buscar_mercaderia_out'}
+                contextoParaDocumento={props.contexto}
+                // igv={props.igv}
+                // motivo={props.motivo}
+                // conIGV={props.conIGV}
+                // porMontoUnitario={props.porMontoUnitario}
               />
             </div>
           )}
@@ -859,6 +899,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               <Kardex
                 mercaSelecci={definicion_CTX_BUSCAR_MERCADERIA_OUT.mM}
                 kardex={definicion_CTX_BUSCAR_MERCADERIA_OUT.kK}
+                elIDKardex={definicion_CTX_BUSCAR_MERCADERIA_OUT.elIdKardex}
                 // esAlmacen={props.esAlmacen}
                 // esAlmacen={false}
                 contexto={'buscar_mercaderia_out'}
@@ -867,7 +908,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
               />
             </div>
           )}
-          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelNewEditUbigeo && (
+          {/* {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelNewEditUbigeo && (
             <div class="modal">
               <NewEditUbigeo
                 idKardex={definicion_CTX_BUSCAR_MERCADERIA_OUT.elIdKardex}
@@ -875,7 +916,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 contexto="buscar_mercaderia_out"
               />
             </div>
-          )}
+          )} */}
           {/*  EDITAR MERCADERIA IN   contexto={props.contexto}*/}
           {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelNewEditMercaderiaIN && (
             <div class="modal">

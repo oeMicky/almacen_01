@@ -31,6 +31,8 @@ import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionApertu
 import ListaFavoritosAlmacen from '../miscelanea/favoritos/listaFavoritosAlmacen';
 import { loadTiposComprobantePago } from '~/apis/sunat.api';
 import { getPersonaPorDniRuc } from '~/apis/persona.api';
+import { verOtrosAlmacenes } from '~/apis/usuario.api';
+import ListaOtrosAlmacenesOUT from './listaOtrosAlmacenesOUT';
 // import { IDocumento } from '~/interfaces/iDocumento';
 
 export const CTX_NEW_OUT_ALMACEN = createContextId<any>('new_out_almacen');
@@ -53,6 +55,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     mostrarSelectNotaSalida: false,
     idSerieNotaSalida_porDefault: '',
     serieNotaSalida_porDefault: '',
+
+    otrosAlmacenes: [],
+    mostrarPanelListaOtrosAlmacenesOUT: false,
+    idSucursalDestino: '',
+    sucursalDestino: '',
+    idSerieNotaIngresoDestino: '',
+    serieNotaIngresoDestino: '',
+    idMotivoIngresoDestino: '',
+    motivoIngresoDestino: '',
 
     mostrarPanelBuscarPersona: false,
     mostrarPanelAdjuntarDocumento: false,
@@ -98,6 +109,13 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       idMotivoEgresoAlmacen: props.outSelecci.idMotivoEgresoAlmacen ? props.outSelecci.idMotivoEgresoAlmacen : '',
       motivoEgresoAlmacen: props.outSelecci.motivoEgresoAlmacen ? props.outSelecci.motivoEgresoAlmacen : '',
       idDocumento: props.outSelecci.idDocumento ? props.outSelecci.idDocumento : '',
+
+      idSucursalDestino: props.outSelecci.idSucursalDestino ? props.outSelecci.idSucursalDestino : '',
+      sucursalDestino: props.outSelecci.sucursalDestino ? props.outSelecci.sucursalDestino : '',
+      idSerieNotaIngresoDestino: props.outSelecci.idSerieNotaIngresoDestino ? props.outSelecci.idSerieNotaIngresoDestino : '',
+      serieNotaIngresoDestino: props.outSelecci.serieNotaIngresoDestino ? props.outSelecci.serieNotaIngresoDestino : '',
+      idMotivoIngresoDestino: props.outSelecci.idMotivoIngresoDestino ? props.outSelecci.idMotivoIngresoDestino : '',
+      motivoIngresoDestino: props.outSelecci.motivoIngresoDestino ? props.outSelecci.motivoIngresoDestino : '',
 
       idSerieNotaSalida: props.outSelecci.idSerieNotaSalida ? props.outSelecci.idSerieNotaSalida : parametrosGlobales.idSerieNotaSalida,
       serie: props.outSelecci.serie ? props.outSelecci.serie : parametrosGlobales.serieNotaSalida,
@@ -206,7 +224,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   //#region CARGAR LOS TCP
   const cargarLosTCP = $(async () => {
     const losTCP = await loadTiposComprobantePago();
-    console.log('losTCP', losTCP);
+    // console.log('losTCP', losTCP);
     LosTCPcargados.value = losTCP.data;
     //console.log(' LosTCPcargados.value', LosTCPcargados.value);
   });
@@ -253,6 +271,29 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     cargarLosTCP();
   });
   //#endregion CARGAR MOTIVOS DE EGRESO
+
+  //#region ACTUALIZAR ALMACEN DESTINO
+  useTask$(({ track }) => {
+    track(() => definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino);
+
+    if (definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino !== '') {
+      //console.log('actualiza el almacen', definicion_CTX_OUT_ALMACEN.idAlmacen);
+      definicion_CTX_OUT_ALMACEN.idSucursalDestino = definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino;
+      definicion_CTX_OUT_ALMACEN.sucursalDestino = definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino;
+      definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino = definicion_CTX_NEW_OUT_ALMACEN.idSerieNotaIngresoDestino;
+      definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino = definicion_CTX_NEW_OUT_ALMACEN.serieNotaIngresoDestino;
+      definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino = definicion_CTX_NEW_OUT_ALMACEN.idMotivoIngresoDestino;
+      definicion_CTX_OUT_ALMACEN.motivoIngresoDestino = definicion_CTX_NEW_OUT_ALMACEN.motivoIngresoDestino;
+    } else {
+      definicion_CTX_OUT_ALMACEN.idSucursalDestino = '';
+      definicion_CTX_OUT_ALMACEN.sucursalDestino = '';
+      definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino = '';
+      definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino = '';
+      definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino = '';
+      definicion_CTX_OUT_ALMACEN.motivoIngresoDestino = '';
+    }
+  });
+  //#endregion ACTUALIZAR ALMACEN DESTINO
 
   //#region DESTINATARIO
   useTask$(({ track }) => {
@@ -323,6 +364,18 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
       document.getElementById('se_motivoIngreso')?.focus();
       return;
     }
+    if (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO A SUCURSAL') {
+      if (
+        definicion_CTX_OUT_ALMACEN.idSucursalDestino === '' ||
+        typeof definicion_CTX_OUT_ALMACEN.idSucursalDestino === 'undefined' ||
+        definicion_CTX_OUT_ALMACEN.sucursalDestino === '' ||
+        typeof definicion_CTX_OUT_ALMACEN.sucursalDestino === 'undefined'
+      ) {
+        alert('Seleccione la sucursal destino');
+        document.getElementById('se_motivoIngreso')?.focus();
+        return;
+      }
+    }
     //DESTINATARIO
     //console.log(
     //   ' //DESTINATARIO',
@@ -352,7 +405,11 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     // }
     //DOCUMENTOS ADJUNTOS
     //console.log(' //documentosAdjuntos');
-    if (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'NOTA DE SALIDA' && definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO') {
+    if (
+      definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'NOTA DE SALIDA' &&
+      definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO' &&
+      definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO A SUCURSAL'
+    ) {
       // if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
       //   alert('Agregue al menos un documento');
       //   document.getElementById('btn_Add_Documento')?.focus();
@@ -401,6 +458,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     const horaLocal =
       cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
     //
+    console.log('definicion_CTX_OUT_ALMACEN.itemsMercaderias', definicion_CTX_OUT_ALMACEN.itemsMercaderias);
+
     try {
       const outAlma = await inEgresoDeAlmacen({
         idEgresoDeAlmacen: definicion_CTX_OUT_ALMACEN._id,
@@ -410,16 +469,27 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         idAlmacen: definicion_CTX_OUT_ALMACEN.idAlmacen,
         idPeriodo: definicion_CTX_OUT_ALMACEN.idPeriodo,
         periodo: definicion_CTX_OUT_ALMACEN.periodo,
+
         ruc: definicion_CTX_OUT_ALMACEN.ruc,
         empresa: definicion_CTX_OUT_ALMACEN.empresa,
         direccion: definicion_CTX_OUT_ALMACEN.direccion,
+        sucursal: parametrosGlobales.sucursal,
 
         idMotivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen,
         motivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen,
         idDocumento: definicion_CTX_OUT_ALMACEN.idDocumento,
 
+        idSucursalDestino: definicion_CTX_OUT_ALMACEN.idSucursalDestino,
+        sucursalDestino: definicion_CTX_OUT_ALMACEN.sucursalDestino,
+        idSerieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino,
+        serieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino,
+        idMotivoIngresoDestino: definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino,
+        motivoIngresoDestino: definicion_CTX_OUT_ALMACEN.motivoIngresoDestino,
+
         idSerieNotaSalida: definicion_CTX_OUT_ALMACEN.idSerieNotaSalida,
         serie: definicion_CTX_OUT_ALMACEN.serie,
+
+        igv: definicion_CTX_OUT_ALMACEN.igv,
 
         observacion: definicion_CTX_OUT_ALMACEN.observacion,
 
@@ -438,7 +508,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
         itemsMercaderias: definicion_CTX_OUT_ALMACEN.itemsMercaderias,
 
-        usuarioCrea: parametrosGlobales.usuario,
+        usuario: parametrosGlobales.usuario,
       });
 
       //console.log('Grabó el egreso de almacén - outAlma: ', outAlma);
@@ -462,7 +532,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 96%, 1096px)',
+        width: 'clamp(330px, 100%, 1096px)',
         // width: 'auto',
         padding: '2px',
         background: '#eee',
@@ -598,13 +668,17 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                   registroTEXT={'motivoSalida'}
                   seleccione={'-- Seleccione motivo egreso --'}
                   disabled={definicion_CTX_OUT_ALMACEN.itemsMercaderias.length === 0 ? false : true}
-                  onChange={$(() => {
+                  onChange={$(async () => {
                     // //console.log('🎢🎢🎢🎢🎢🎢🎢🎢🎢🎢');
                     const elSelec = document.getElementById('se_motivoEgreso') as HTMLSelectElement;
                     const elIdx = elSelec.selectedIndex;
                     // //console.log('??', elIdx, elSelec[elIdx].id);
                     definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen = elSelec[elIdx].id;
                     if (definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === '') {
+                      //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
+                      definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                      definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
+                      //
                       definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen = '';
                       definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                     } else {
@@ -612,6 +686,10 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                       // obtenerUnidades(definicion_CTX_MERCADERIA_IN.idLineaTipo);
                       switch (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen) {
                         case 'NOTA DE SALIDA':
+                          //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
+                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
+                          //
                           cargarSeriesNotaSalida_DelaSucursal();
                           //
                           elDocSelecionado.value = {
@@ -624,21 +702,33 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = true;
                           break;
                         case 'ORDEN DE PRODUCCIÓN':
+                          //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
+                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           // alert('Elegio os');
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarOrdenProduccionAperturado = true;
                           break;
                         case 'ORDEN DE SERVICIO':
+                          //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
+                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           // alert('Elegio os');
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado = true;
                           break;
                         case 'VENTA':
+                          //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
+                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           //alert('Elegio venta');
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
                           break;
                         case 'TRASLADO':
+                          //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
+                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           //alert('Elegio venta');
                           // definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
                           definicion_CTX_OUT_ALMACEN.idDestinatario = parametrosGlobales.idEmpresa;
@@ -647,7 +737,40 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           definicion_CTX_OUT_ALMACEN.numeroIdentidad = parametrosGlobales.RUC;
                           definicion_CTX_OUT_ALMACEN.razonSocialNombre = parametrosGlobales.RazonSocial;
                           break;
+                        case 'TRASLADO A SUCURSAL':
+                          // alert('Elegio os');
+                          const losAlmacenes = await verOtrosAlmacenes({
+                            usuario: parametrosGlobales.usuario,
+                            idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                            idSucursal: parametrosGlobales.idSucursal,
+                          });
+                          console.log('losAlmacenes.data', losAlmacenes.data.length, losAlmacenes.data);
+                          if (losAlmacenes.data.length === 0) {
+                            alert('No existe otros almacenes.');
+                            return;
+                          }
+                          if (losAlmacenes.data.length === 1) {
+                            if (typeof losAlmacenes.data[0].idSerieNotaIngreso === 'undefined' || losAlmacenes.data[0].idSerieNotaIngreso === '') {
+                              alert('No existe la serie de ingreso para el almacén destino.');
+                              return;
+                            }
+                            if (typeof losAlmacenes.data[0].idMotivoIngreso === 'undefined' || losAlmacenes.data[0].idMotivoIngreso === '') {
+                              alert('No existe el motivo de ingreso para el almacén destino.');
+                              return;
+                            }
+                            //ir directo al panel de busqueda
+                            definicion_CTX_OUT_ALMACEN.idSucursalDestino = losAlmacenes.data[0]._id;
+                            definicion_CTX_OUT_ALMACEN.sucursalDestino = losAlmacenes.data[0].sucursal;
+                          } else {
+                            //ir al panel de listado de almacenes disponibles
+                            definicion_CTX_NEW_OUT_ALMACEN.otrosAlmacenes = losAlmacenes.data;
+                            definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelListaOtrosAlmacenesOUT = true;
+                          }
+                          break;
                         case 'NOTA DE VENTA':
+                          //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
+                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           //alert('Elegio venta');
                           // definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
                           definicion_CTX_OUT_ALMACEN.idDestinatario = parametrosGlobales.idEmpresa;
@@ -675,6 +798,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     }
                   })}
                 />
+                <label
+                  style={
+                    definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO A SUCURSAL'
+                      ? { display: '', color: '#fc84a4', fontWeight: 'bold', margin: '4px' }
+                      : { display: 'none' }
+                  }
+                >
+                  {definicion_CTX_OUT_ALMACEN.sucursalDestino}
+                </label>
               </div>
               {/* SERIE */}
               <div>
@@ -733,19 +865,11 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
             </div>
           )}
 
-          {/* {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona_Venta && (
+          {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelListaOtrosAlmacenesOUT && (
             <div class="modal">
-              <BuscarPersona
-                seleccionar="cliente"
-                soloPersonasNaturales={false}
-                contexto={'new_out_almacen'}
-                rol="cliente"
-                motivo={true}
-                valorABuscarAUTOMATICAMENTE={definicion_CTX_OUT_ALMACEN.numeroIdentidad}
-                mensajeErrorPersona={definicion_CTX_NEW_OUT_ALMACEN.mensajeErrorCliente}
-              />
+              <ListaOtrosAlmacenesOUT otrosAlmacenes={definicion_CTX_NEW_OUT_ALMACEN.otrosAlmacenes} />
             </div>
-          )} */}
+          )}
 
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL DESTINATARIO */}
@@ -944,7 +1068,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
           )}
           {/* ----------------------------------------------------- */}
           {/* IGV - TC */}
-          <div>
+          <div hidden>
             {/* IGV */}
             <div class="form-control">
               <div class="form-control form-agrupado">
@@ -969,7 +1093,13 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         {/* ----------------------------------------------------- */}
         {/* GENERALES DE LOS DOCUMENTOS ADJUNTOS   hidden={definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida}
          */}
-        <div style={definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO' ? { display: 'none' } : ''}>
+        <div
+          style={
+            definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO' || definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO A SUCURSAL'
+              ? { display: 'none' }
+              : ''
+          }
+        >
           <div>
             <div class="linea_1_1111">
               <div>
@@ -1230,8 +1360,8 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 <thead>
                   <tr>
                     <th>Ítem</th>
-                    {/* <th>idMerca</th> */}
                     <th>Descripción</th>
+                    <th>Ubigeo</th>
                     <th>Stock</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
@@ -1257,12 +1387,12 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                         ? parseFloat(iTMercaOUT.totalCantidadSaldo.$numberDecimal)
                         : iTMercaOUT.totalCantidadSaldo;
                     }
-                    console.log(' 🍍🍍🍍🍍', elSM, elTCS);
+                    // console.log(' 🍍🍍🍍🍍', elSM, elTCS);
 
                     return (
                       <tr key={iTMercaOUT.idAuxiliar}>
                         <td data-label="Ítem" key={iTMercaOUT.idAuxiliar}>{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
-                        {/* <td data-label="idMerca" >{iTMercaOUT.idMercaderia}</td> */}
+
                         <td data-label="Descripción" style={{ fontWeight: 'bold' }}>
                           {elSM >= elTCS ? (
                             <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
@@ -1273,6 +1403,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           )}
                           {iTMercaOUT.descripcionEquivalencia}
                         </td>
+                        <td data-label="Ubigeo">{iTMercaOUT.ubigeo}</td>
                         <td data-label="Stock" style={{ fontWeight: 'bold' }}>
                           {iTMercaOUT.stockEquivalente}
                         </td>
@@ -1372,7 +1503,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 <br />
               </table>
             ) : (
-              <i style={{ fontSize: '0.8rem' }}>No existen mercaderías registradas</i>
+              <i style={{ fontSize: '0.8rem', color: 'red' }}>No existen mercaderías para salida</i>
             )}
             {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT && (
               <div class="modal">

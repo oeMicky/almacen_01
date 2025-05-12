@@ -15,6 +15,13 @@ export interface IEgresoDeAlmacen {
   motivoEgresoAlmacen: string;
   idDocumento: string;
 
+  idSucursalDestino: string;
+  sucursalDestino: string;
+  idSerieNotaIngresoDestino: string;
+  serieNotaIngresoDestino: string;
+  idMotivoIngresoDestino: string;
+  motivoIngresoDestino: string;
+
   idSerieNotaSalida: string;
   serie: string;
 

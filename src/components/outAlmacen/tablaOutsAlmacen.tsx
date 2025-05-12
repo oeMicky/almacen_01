@@ -72,28 +72,31 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                   <thead>
                     <tr>
                       <th>Ítem</th>
-                      <th>ID</th>
+                      {/* <th>ID</th> */}
                       <th>Respon</th>
                       <th>FISMA</th>
                       <th>Motivo</th>
                       <th>Doc</th>
                       <th>Razón social</th>
+                      <th>Obs</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
                     {misOutsAlmacen.map((outAlmaLocali, index) => {
-                      const { _id, usuarioCrea, FISMA, motivoEgresoAlmacen, numeroIdentidad, tipoDocumentoIdentidad, razonSocialNombre } = outAlmaLocali;
+                      const { _id, usuarioCrea, FISMA, observacion, motivoEgresoAlmacen, numeroIdentidad, tipoDocumentoIdentidad, razonSocialNombre } =
+                        outAlmaLocali;
                       const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
                           <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
-                          <td data-label="ID">{_id}</td>
+                          {/* <td data-label="ID">{_id}</td> */}
                           <td data-label="Respon">{usuarioCrea.substring(0, 10)}</td>
                           <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '-'}</td>
                           <td data-label="Motivo">{motivoEgresoAlmacen ? motivoEgresoAlmacen : '-'}</td>
                           <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '-'}</td>
                           <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '-'}</td>
+                          <td data-label="Obs">{observacion ? observacion : '-'}</td>
                           {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '-'}</td> */}
                           <td data-label="Acciones" class="accionesLeft">
                             <input

@@ -15,6 +15,9 @@ export interface IIngresoAAlmacen {
   motivoIngresoAlmacen: string;
   idDocumento: string;
 
+  idSucursalOrigen: string;
+  sucursalOrigen: string;
+
   idSerieNotaIngreso: string;
   serie: string;
 

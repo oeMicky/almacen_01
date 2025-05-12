@@ -75,29 +75,32 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                   <thead>
                     <tr>
                       <th>Ítem</th>
-                      <th>ID</th>
+                      {/* <th>ID</th> */}
                       <th>Respon</th>
                       <th>FISMA</th>
                       <th>Motivo</th>
                       <th>Doc</th>
                       <th>Razón social</th>
+                      <th>Obs</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
                     {misInsAlmacen.map((inAlmaLocali, index) => {
-                      const { _id, usuarioCrea, FISMA, motivoIngresoAlmacen, tipoDocumentoIdentidad, numeroIdentidad, razonSocialNombre } = inAlmaLocali;
+                      const { _id, usuarioCrea, FISMA, observacion, motivoIngresoAlmacen, tipoDocumentoIdentidad, numeroIdentidad, razonSocialNombre } =
+                        inAlmaLocali;
+                      // const { _id, usuarioCrea, FISMA } = inAlmaLocali;
                       const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
                           <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
-                          <td data-label="ID">{_id}</td>
+                          {/* <td data-label="ID">{_id}</td> */}
                           <td data-label="Respon">{usuarioCrea.substring(0, 10)}</td>
                           <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '-'}</td>
                           <td data-label="Motivo">{motivoIngresoAlmacen ? motivoIngresoAlmacen : '-'}</td>
                           <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '-'}</td>
                           <td data-label="Razón social">{razonSocialNombre ? razonSocialNombre : '-'}</td>
-                          {/* <td data-label="Precio">{precio.$numberDecimal ? precio.$numberDecimal : '-'}</td> */}
+                          <td data-label="Obs">{observacion ? observacion : '-'}</td>
                           <td data-label="Acciones" class="accionesLeft">
                             <input
                               type="image"

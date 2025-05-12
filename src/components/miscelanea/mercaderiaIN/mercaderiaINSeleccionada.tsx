@@ -12,17 +12,24 @@ import { CTX_REGISTRO_PRODUCTOS_TERMINADOS } from '../ordenProduccionTerminado/r
 import { CTX_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
 import { upPrecioPublicoPEN } from '~/apis/mercaderia.api';
 import { parametrosGlobales } from '~/routes/login';
-import { upUbigeo } from '~/apis/kardex.api';
+// import { upUbigeo } from '~/apis/kardex.api';
 
 export default component$(
   (props: {
     mercaINSelecci: any;
+
     elKardex: any;
+    elIDKardex: string; //****** */
+    elUbigeoStock?: any;
+
     esAlmacen: boolean;
     enDolares?: boolean;
     tipoCambio?: any;
+
+    contextoBase: string;
     contextoInmediato: string;
     contextoParaDocumento: string;
+
     igv: number;
     motivo?: string;
     OP?: any;
@@ -49,7 +56,7 @@ export default component$(
 
     // const ctx_buscar_mercaderia_in = useContext(CTX_BUSCAR_MERCADERIA_IN);
     let ctx: any = [];
-    switch (props.contextoInmediato) {
+    switch (props.contextoBase) {
       case 'buscar_mercaderia_in':
         ctx = useContext(CTX_BUSCAR_MERCADERIA_IN);
         break;
@@ -76,7 +83,7 @@ export default component$(
           : props.mercaINSelecci.promedioCostoUnitarioMovil
         : 0
     );
-    const ubigeo = useSignal(props.mercaINSelecci.ubigeo);
+    const ubigeo = useSignal(props.elUbigeoStock.ubigeo);
     // const costo = useSignal(typeof props.CUP !== 'undefined' ? props.CUP : 0);
     // const precio = useSignal(typeof props.CUP !== "undefined" ? props.CUP : 0);
     const costoPENMasIGV = useSignal(0);
@@ -107,7 +114,7 @@ export default component$(
       }
 
       if (ini.value === 0) {
-        //console.log('💫💫💫💫💫💫💫💫');
+        console.log('💫💫💫💫💫💫💫💫');
         if (props.motivo === 'APERTURA DE INVENTARIO') {
           costoPEN.value = props.mercaINSelecci.costoDeInicioPEN.$numberDecimal;
           if (elIGV.value === 0) {
@@ -159,12 +166,14 @@ export default component$(
           }
         }
         //
+        console.log('💫💫💫💫');
         setTimeout(() => {
           // document.getElementById('image_BuscarCliente')?.focus();
           document.getElementById('in_Cantidad_MICE')?.focus();
         }, 100);
 
         ini.value++;
+        console.log(ini.value);
       }
     });
     //#endregion INICIALIZACION
@@ -325,6 +334,20 @@ export default component$(
             title="Cerrar el ver"
             onClick={$(() => {
               console.log('props.mercaINSelecci', props.mercaINSelecci);
+              console.log('props.elKardex', props.elIDKardex);
+              console.log('props.contextoBase', props.contextoBase);
+              console.log('props.contextoInmediato', props.contextoInmediato);
+              console.log('props.contextoParaDocumento', props.contextoParaDocumento);
+            })}
+          />
+          <ImgButton
+            src={images.see}
+            alt="Icono de cerrar"
+            height={18}
+            width={18}
+            title="Cerrar el ver"
+            onClick={$(() => {
+              console.log('props.elUbigeoStock', props.elUbigeoStock);
             })}
           />
           <ImgButton
@@ -334,8 +357,12 @@ export default component$(
             width={18}
             title="Cerrar el formulario"
             onClick={$(() => {
-              if (props.contextoInmediato === 'buscar_mercaderia_in' || props.contextoInmediato === 'registro_productos_terminados') {
+              // if (props.contextoInmediato === 'buscar_mercaderia_in' || props.contextoInmediato === 'registro_productos_terminados') {
+              if (props.contextoBase === 'buscar_mercaderia_in' && props.contextoInmediato === 'buscar_mercaderia_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada = false;
+              }
+              if (props.contextoBase === 'buscar_mercaderia_in' && props.contextoInmediato === 'ubigeos_stocks_in') {
+                ctx.mostrarPanelMercaderiaINSeleccionada_2 = false;
               }
               if (props.contextoInmediato === 'kardexs_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = false;
@@ -352,8 +379,8 @@ export default component$(
           {/* MERCADERIA */}
           <div>
             <div class="linea-formulario12">
-              <label>Kardex</label>
-              {typeof props.elKardex._id !== 'undefined' ? ' ' + props.elKardex._id : ''}
+              <label>Kardex111</label>
+              {typeof props.elIDKardex !== 'undefined' ? ' ' + props.elIDKardex : ''}
             </div>
             <div class="linea-formulario12">
               <label>Código</label>
@@ -376,15 +403,18 @@ export default component$(
             <div class="linea-formulario12">
               <label>Stock</label>
               <strong style={{ color: 'green' }}>
-                {typeof props.elKardex.cantidadSaldo !== 'undefined' && props.elKardex.cantidadSaldo !== null
-                  ? ` ${props.elKardex.cantidadSaldo.$numberDecimal ? props.elKardex.cantidadSaldo.$numberDecimal : props.elKardex.cantidadSaldo}`
+                {typeof props.elUbigeoStock.stock !== 'undefined' && props.elUbigeoStock.stock !== null
+                  ? ` ${props.elUbigeoStock.stock.$numberDecimal ? props.elUbigeoStock.stock.$numberDecimal : props.elUbigeoStock.stock}`
                   : ``}
+                {/* {typeof props.elKardex.cantidadSaldo !== 'undefined' && props.elKardex.cantidadSaldo !== null
+                  ? ` ${props.elKardex.cantidadSaldo.$numberDecimal ? props.elKardex.cantidadSaldo.$numberDecimal : props.elKardex.cantidadSaldo}`
+                  : ``} */}
                 {props.mercaINSelecci.unidad !== null ? ` ${props.mercaINSelecci.unidad}` : ``}
               </strong>
             </div>
             {/* conLote */}
             {props.mercaINSelecci.conLote ? (
-              props.elKardex._id !== '' ? (
+              props.elIDKardex !== '' ? (
                 <>
                   {/* Lote: */}
                   <div class="linea-formulario12">
@@ -441,7 +471,7 @@ export default component$(
             )}
             {/* conFechaProduccion */}
             {props.mercaINSelecci.conFechaProduccion ? (
-              props.elKardex._id !== '' ? (
+              props.elIDKardex !== '' ? (
                 <>
                   {/* Fecha Produccion */}
                   <div class="linea-formulario12">
@@ -498,7 +528,7 @@ export default component$(
             )}
             {/* conFechaVencimiento */}
             {props.mercaINSelecci.conFechaVencimiento ? (
-              props.elKardex._id !== '' ? (
+              props.elIDKardex !== '' ? (
                 <>
                   {/* Fecha Vencimiento: */}
                   <div class="linea-formulario12">
@@ -553,79 +583,162 @@ export default component$(
             ) : (
               ''
             )}
+            {/* ****************************************************************************************** */}
+            {/* ****************************************************************************************** */}
+            {/* ****************************************************************************************** */}
             {/* Cantidad: */}
             <div class="linea-formulario12">
               <label>Cantidad</label>
-              <input
-                id="in_Cantidad_MICE"
-                // style={{ textAlign: "end" }}
-                type="number"
-                // autoFocus
-                placeholder="Add cantidad"
-                value={cantidad.value}
-                onChange$={(e) => {
-                  cantidad.value = parseFloat((e.target as HTMLInputElement).value);
+              <div style={{ display: 'flex' }}>
+                <input
+                  id="in_Cantidad_MICE"
+                  style={{ width: 'clamp(100px, 100%, 166px)', marginRight: '4px' }}
+                  type="number"
+                  // max={props.elUbigeoStock.stock.$numberDecimal ? Number(props.elUbigeoStock.stock.$numberDecimal) : Number(props.elUbigeoStock.stock)}
+                  // autoFocus
+                  placeholder="Add cantidad"
+                  value={cantidad.value}
+                  onChange$={(e) => {
+                    cantidad.value = parseFloat((e.target as HTMLInputElement).value);
 
-                  // precio.value = cantidad.value * costo.value;
-                  if (props.porMontoUnitario) {
-                    if (props.enDolares) {
-                      if (cantidad.value !== 0) {
-                        subUSD.value = cantidad.value * costoUSD.value;
-                        totUSD.value = cantidad.value * costoUSDMasIGV.value;
-                        subPEN.value = cantidad.value * costoPEN.value;
-                        totPEN.value = cantidad.value * costoPENMasIGV.value;
-                      } else {
-                        subUSD.value = 0;
-                        totUSD.value = 0;
-                        subPEN.value = 0;
-                        totPEN.value = 0;
-                      }
-                    } else {
-                      if (cantidad.value !== 0) {
-                        subPEN.value = cantidad.value * costoPEN.value;
-                        totPEN.value = cantidad.value * costoPENMasIGV.value;
-                      } else {
-                        subPEN.value = 0;
-                        totPEN.value = 0;
-                      }
-                    }
-                  } else {
-                    if (props.enDolares) {
-                      calcularCostoUSD();
-                      // if (props.conIGV) {
-                      //   calcularCostoUSDMasIGV();
-                      // } else {
-
-                      // }
-                    } else {
-                      calcularCostoPEN();
-                      // if (props.conIGV) {
-                      //   calcularCostoPENMasIGV();
-                      // } else {
-
-                      // }
-                    }
-                  }
-                }}
-                onFocus$={(e) => {
-                  (e.target as HTMLInputElement).select();
-                }}
-                onKeyPress$={(e) => {
-                  if (e.key === 'Enter') {
-                    // (document.getElementById("in_CostoPEN_MICE") as HTMLInputElement).focus();
-                    //console.log('ingreso a ENTER 0> in_CostoPEN_M_IN_SELECCIONADA');
+                    // precio.value = cantidad.value * costo.value;
                     if (props.porMontoUnitario) {
-                      (document.getElementById('in_CostoPEN_M_IN_SELECCIONADA') as HTMLInputElement).focus();
-                    } else {
-                      if (props.conIGV) {
-                        (document.getElementById('in_TOT_M_IN_SELECCIONADA') as HTMLInputElement).focus();
+                      if (props.enDolares) {
+                        if (cantidad.value !== 0) {
+                          subUSD.value = cantidad.value * costoUSD.value;
+                          totUSD.value = cantidad.value * costoUSDMasIGV.value;
+                          subPEN.value = cantidad.value * costoPEN.value;
+                          totPEN.value = cantidad.value * costoPENMasIGV.value;
+                        } else {
+                          subUSD.value = 0;
+                          totUSD.value = 0;
+                          subPEN.value = 0;
+                          totPEN.value = 0;
+                        }
                       } else {
-                        (document.getElementById('in_SUB_M_IN_SELECCIONADA') as HTMLInputElement).focus();
+                        if (cantidad.value !== 0) {
+                          subPEN.value = cantidad.value * costoPEN.value;
+                          totPEN.value = cantidad.value * costoPENMasIGV.value;
+                        } else {
+                          subPEN.value = 0;
+                          totPEN.value = 0;
+                        }
+                      }
+                    } else {
+                      if (props.enDolares) {
+                        calcularCostoUSD();
+                        // if (props.conIGV) {
+                        //   calcularCostoUSDMasIGV();
+                        // } else {
+
+                        // }
+                      } else {
+                        calcularCostoPEN();
+                        // if (props.conIGV) {
+                        //   calcularCostoPENMasIGV();
+                        // } else {
+
+                        // }
                       }
                     }
-                  }
-                }}
-              />
+                  }}
+                  onFocus$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      // (document.getElementById("in_CostoPEN_MICE") as HTMLInputElement).focus();
+                      //console.log('ingreso a ENTER 0> in_CostoPEN_M_IN_SELECCIONADA');
+                      // (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                      if (props.elIDKardex === '') {
+                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                      } else {
+                        if (props.porMontoUnitario) {
+                          // console.log('ingreso a ENTER 1> in_CostoPEN_M_IN_SELECCIONADA');
+
+                          (document.getElementById('in_CostoPEN_M_IN_SELECCIONADA') as HTMLInputElement).focus();
+                        } else {
+                          // console.log('ingreso a ENTER 2> in_CostoPEN_M_IN_SELECCIONADA');
+
+                          if (props.conIGV) {
+                            (document.getElementById('in_TOT_M_IN_SELECCIONADA') as HTMLInputElement).focus();
+                          } else {
+                            (document.getElementById('in_SUB_M_IN_SELECCIONADA') as HTMLInputElement).focus();
+                          }
+                        }
+                      }
+                    }
+                  }}
+                />
+                {/* {props.elKardex.length === 0 ? ( */}
+                {/* {props.elIDKardex === '' ? ( */}
+                <input
+                  id="in_ubigeo_MERCADERIA_IN_MICE_SELEC"
+                  // style={{ textAlign: "end" }}
+                  type="text"
+                  placeholder="Add ubigeo"
+                  disabled={props.elIDKardex === '' ? false : true}
+                  value={ubigeo.value}
+                  onChange$={(e) => {
+                    ubigeo.value = (e.target as HTMLInputElement).value.toUpperCase();
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      if (props.porMontoUnitario) {
+                        (document.getElementById('in_CostoPEN_M_IN_SELECCIONADA') as HTMLInputElement).focus();
+                      } else {
+                        if (props.conIGV) {
+                          (document.getElementById('in_TOT_M_IN_SELECCIONADA') as HTMLInputElement).focus();
+                        } else {
+                          (document.getElementById('in_SUB_M_IN_SELECCIONADA') as HTMLInputElement).focus();
+                        }
+                      }
+                    }
+                  }}
+                />
+                {/* ) : (
+                  <>
+                    <select
+                      id="select_ubigeo_MERCADERIA_IN_MICE_SELEC"
+                      style={{ width: 'clamp(100px, 100%, 166px)' }}
+                      value={ubigeo.value}
+                      // onChange$={(e) => (ubigeo.value = (e.target as HTMLInputElement).value)}
+                    >
+                      <option value="">--Ubigeo--</option>
+                      <option value="1C3E">1C3E</option>
+                      <option value="1C6A">1C6A</option>
+                      <option value="1C8EE">1C8EE</option>
+                    </select>
+                    <input
+                      title="Registar nuevo ubigeo"
+                      type="image"
+                      src={images.add}
+                      alt="icono add"
+                      height={20}
+                      width={16}
+                      style={{ margin: '0 4px' }}
+                      // onClick$={() => {
+                      //   adicionarMercaderiasIN();
+                      // }}
+                    />
+                    <input
+                      title="Editar ubigeo"
+                      type="image"
+                      src={images.edit}
+                      alt="icono add"
+                      height={20}
+                      width={16}
+                      // style={{ margin: '0 4px' }}
+                      // onClick$={() => {
+                      //   adicionarMercaderiasIN();
+                      // }}
+                    />
+                  </>
+                )} */}
+              </div>
             </div>
             {/* POR MONTO UNITARIO */}
             <div hidden={!props.porMontoUnitario}>
@@ -692,7 +805,7 @@ export default component$(
                       }
                     }}
                   />
-                  <label style={{ marginLeft: '4px' }}>{props.enDolares === true ? 'USD' : 'PEN'}</label>
+                  <label style={{ width: '42px', marginLeft: '4px' }}>{props.enDolares === true ? 'USD' : 'PEN'}</label>
                 </div>
               </div>
               {/* Costo UNITARIO + IGV (PEN): */}
@@ -758,11 +871,12 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                        // (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                        document.getElementById('btn_Registrar_MercaderiaIN_MICE')?.focus();
                       }
                     }}
                   />
-                  <label style={{ marginLeft: '4px' }}>{props.enDolares === true ? 'USD' : 'PEN'}</label>
+                  <label style={{ width: '42px', marginLeft: '4px' }}>{props.enDolares === true ? 'USD' : 'PEN'}</label>
                 </div>
               </div>
             </div>
@@ -795,7 +909,7 @@ export default component$(
                       }
                     }}
                   />
-                  <label style={{ marginLeft: '4px' }}>{props.enDolares ? 'USD' : 'PEN'}</label>
+                  <label style={{ width: '42px', marginLeft: '4px' }}>{props.enDolares ? 'USD' : 'PEN'}</label>
                 </div>
               </div>
               {/* SUB */}
@@ -884,11 +998,12 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                        // (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                        document.getElementById('btn_Registrar_MercaderiaIN_MICE')?.focus();
                       }
                     }}
                   />
-                  <label style={{ marginLeft: '4px' }}>{props.enDolares ? 'USD' : 'PEN'}</label>
+                  <label style={{ width: '42px', marginLeft: '4px' }}>{props.enDolares ? 'USD' : 'PEN'}</label>
                 </div>
               </div>
             </div>
@@ -921,7 +1036,7 @@ export default component$(
                       }
                     }}
                   />
-                  <label style={{ marginLeft: '4px' }}>{props.enDolares ? 'USD' : 'PEN'}</label>
+                  <label style={{ width: '42px', marginLeft: '4px' }}>{props.enDolares ? 'USD' : 'PEN'}</label>
                 </div>
               </div>
               {/* TOT */}
@@ -1008,19 +1123,20 @@ export default component$(
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                        // (document.getElementById('in_ubigeo_MERCADERIA_IN_MICE_SELEC') as HTMLInputElement).focus();
+                        document.getElementById('btn_Registrar_MercaderiaIN_MICE')?.focus();
                       }
                     }}
                   />
-                  <label style={{ marginLeft: '4px' }}>{props.enDolares === true ? 'USD' : 'PEN'}</label>
+                  <label style={{ width: '42px', marginLeft: '4px' }}>{props.enDolares === true ? 'USD' : 'PEN'}</label>
                 </div>
               </div>
             </div>
             <br />
           </div>
-          <hr style={{ margin: '5px 0 5px 0' }} color={'#aaa'}></hr>
+          <hr style={{ margin: '5px 0 5px 0', display: 'none' }} color={'#aaa'}></hr>
           {/* Ubigeo */}
-          <div class="form-control">
+          {/* <div class="form-control" style={{ display: 'none' }}>
             <div class="form-control form-agrupado">
               <input
                 id="in_ubigeo_MERCADERIA_IN_MICE_SELEC"
@@ -1039,13 +1155,13 @@ export default component$(
                 }}
               />
             </div>
-          </div>
+          </div> */}
           {/* Ejm Ubigeo */}
-          <div class="form-control">
+          {/* <div class="form-control" style={{ display: 'none' }}>
             <div class="form-control form-agrupado">
               <label style={{ color: '#666666' }}>Ejm: 1A8H (1:Piso, A:Sección, 8:Columna, H:Fila)</label>
             </div>
-          </div>
+          </div> */}
           <hr hidden={!parametrosGlobales.actualizarPrecioPublico} style={{ margin: '5px 0 5px 0' }} color={'#aaa'}></hr>
           {/* PRECIO PUBLICO PEN */}
           <div hidden={!parametrosGlobales.actualizarPrecioPublico}>
@@ -1224,116 +1340,220 @@ export default component$(
               // documentoItems.push({ idAuxiliar: 6265, codigo: 'ds687', descripcionEquivalencia: 'anteojos', cantidad: 555, unidadEquivalencia: 'VIV' });
               if (props.enDolares) {
                 console.log('🍘🍘🍘🍘🍘🍘', cantidad.value * costoUSD.value, costoUSD.value, costoUSDMasIGV.value, costoPEN.value, costoPENMasIGV.value);
-                documentoItems.push({
-                  idAuxiliar: parseInt(elIdAuxiliar()),
-                  idMercaderia: props.mercaINSelecci._id,
-                  idKardex: props.elKardex._id,
-                  item: 0,
+                //NUEVA MERCADERIA -> NO EXITE KARDEX
+                if (props.elIDKardex === '') {
+                  documentoItems.push({
+                    idAuxiliar: parseInt(elIdAuxiliar()),
+                    idMercaderia: props.mercaINSelecci._id,
 
-                  codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '-',
+                    item: 0,
 
-                  descripcion: props.mercaINSelecci.descripcion,
-                  // descripcionEquivalencia: props.mercaINSelecci.descripcion,
-                  ubigeo: ubigeo.value.toUpperCase(),
+                    codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '-',
 
-                  lote: lote.value,
-                  fechaProduccion: fechaProduccion.value,
-                  fechaVencimiento: fechaVencimiento.value,
-                  precioVentaSugerido: props.PRECIO_VENTA_SUGERIDO,
+                    descripcion: props.mercaINSelecci.descripcion,
+                    // descripcionEquivalencia: props.mercaINSelecci.descripcion,
+                    ubigeo: ubigeo.value.toUpperCase(),
 
-                  IGV: elIGV.value,
+                    lote: lote.value,
+                    fechaProduccion: fechaProduccion.value,
+                    fechaVencimiento: fechaVencimiento.value,
+                    precioVentaSugerido: props.PRECIO_VENTA_SUGERIDO,
 
-                  cantidadIngresada: cantidad.value,
-                  // cantidad: cantidad.value,
+                    IGV: elIGV.value,
 
-                  unidad: props.mercaINSelecci.unidad,
-                  // unidadEquivalencia: props.mercaINSelecci.unidad,
-                  //********  PEN  *******/
+                    cantidadIngresada: cantidad.value,
+                    // cantidad: cantidad.value,
 
-                  costoUnitarioPEN: costoPEN.value, // * props.tipoCambio,
+                    unidad: props.mercaINSelecci.unidad,
+                    // unidadEquivalencia: props.mercaINSelecci.unidad,
+                    //********  PEN  *******/
 
-                  subPEN: subPEN.value, // cantidad.value * costoPEN.value * props.tipoCambio,
+                    costoUnitarioPEN: costoPEN.value, // * props.tipoCambio,
 
-                  valorUnitarioPEN: costoPENMasIGV.value, // * props.tipoCambio,
-                  totPEN: totPEN.value, // cantidad.value * costoPENMasIGV.value * props.tipoCambio,
-                  //********  USD  *******/
-                  costoUnitarioUSD: costoUSD.value,
+                    subPEN: subPEN.value, // cantidad.value * costoPEN.value * props.tipoCambio,
 
-                  subUSD: subUSD.value, //cantidad.value * costoUSD.value,
+                    valorUnitarioPEN: costoPENMasIGV.value, // * props.tipoCambio,
+                    totPEN: totPEN.value, // cantidad.value * costoPENMasIGV.value * props.tipoCambio,
+                    //********  USD  *******/
+                    costoUnitarioUSD: costoUSD.value,
 
-                  valorUnitarioUSD: costoUSDMasIGV.value,
-                  totUSD: totUSD.value, // cantidad.value * costoUSDMasIGV.value,
-                  //********************************* */
-                  porcentajeUtilidad: props.mercaINSelecci.porcentajeUtilidad,
-                });
+                    subUSD: subUSD.value, //cantidad.value * costoUSD.value,
+
+                    valorUnitarioUSD: costoUSDMasIGV.value,
+                    totUSD: totUSD.value, // cantidad.value * costoUSDMasIGV.value,
+                    //********************************* */
+                    porcentajeUtilidad: props.mercaINSelecci.porcentajeUtilidad,
+                  });
+                } else {
+                  documentoItems.push({
+                    idAuxiliar: parseInt(elIdAuxiliar()),
+                    idMercaderia: props.mercaINSelecci._id,
+
+                    idKardex: props.elIDKardex,
+                    idUbigeoStock: props.elUbigeoStock._id,
+
+                    item: 0,
+
+                    codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '-',
+
+                    descripcion: props.mercaINSelecci.descripcion,
+                    // descripcionEquivalencia: props.mercaINSelecci.descripcion,
+                    ubigeo: ubigeo.value.toUpperCase(),
+
+                    lote: lote.value,
+                    fechaProduccion: fechaProduccion.value,
+                    fechaVencimiento: fechaVencimiento.value,
+                    precioVentaSugerido: props.PRECIO_VENTA_SUGERIDO,
+
+                    IGV: elIGV.value,
+
+                    cantidadIngresada: cantidad.value,
+                    // cantidad: cantidad.value,
+
+                    unidad: props.mercaINSelecci.unidad,
+                    // unidadEquivalencia: props.mercaINSelecci.unidad,
+                    //********  PEN  *******/
+
+                    costoUnitarioPEN: costoPEN.value, // * props.tipoCambio,
+
+                    subPEN: subPEN.value, // cantidad.value * costoPEN.value * props.tipoCambio,
+
+                    valorUnitarioPEN: costoPENMasIGV.value, // * props.tipoCambio,
+                    totPEN: totPEN.value, // cantidad.value * costoPENMasIGV.value * props.tipoCambio,
+                    //********  USD  *******/
+                    costoUnitarioUSD: costoUSD.value,
+
+                    subUSD: subUSD.value, //cantidad.value * costoUSD.value,
+
+                    valorUnitarioUSD: costoUSDMasIGV.value,
+                    totUSD: totUSD.value, // cantidad.value * costoUSDMasIGV.value,
+                    //********************************* */
+                    porcentajeUtilidad: props.mercaINSelecci.porcentajeUtilidad,
+                  });
+                }
+
                 console.log('🍘🍘🍘🍘🍘🍘');
               } else {
                 console.log('🍙🍙🍙🍙🍙🍙', cantidad.value * costoPEN.value, costoPEN.value, costoPENMasIGV.value);
+                //NUEVA MERCADERIA -> NO EXITE KARDEX
+                if (props.elIDKardex === '') {
+                  documentoItems.push({
+                    idAuxiliar: parseInt(elIdAuxiliar()),
+                    idMercaderia: props.mercaINSelecci._id,
 
-                documentoItems.push({
-                  idAuxiliar: parseInt(elIdAuxiliar()),
-                  idMercaderia: props.mercaINSelecci._id,
-                  idKardex: props.elKardex._id,
-                  item: 0,
+                    item: 0,
 
-                  codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '-',
+                    codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '-',
 
-                  descripcion: props.mercaINSelecci.descripcion,
-                  // descripcionEquivalencia: props.mercaINSelecci.descripcion,
-                  ubigeo: ubigeo.value.toUpperCase(),
+                    descripcion: props.mercaINSelecci.descripcion,
+                    // descripcionEquivalencia: props.mercaINSelecci.descripcion,
+                    ubigeo: ubigeo.value.toUpperCase(),
 
-                  lote: lote.value,
-                  fechaProduccion: fechaProduccion.value,
-                  fechaVencimiento: fechaVencimiento.value,
-                  precioVentaSugerido: props.PRECIO_VENTA_SUGERIDO,
+                    lote: lote.value,
+                    fechaProduccion: fechaProduccion.value,
+                    fechaVencimiento: fechaVencimiento.value,
+                    precioVentaSugerido: props.PRECIO_VENTA_SUGERIDO,
 
-                  IGV: elIGV.value,
+                    IGV: elIGV.value,
 
-                  cantidadIngresada: cantidad.value,
-                  // cantidad: cantidad.value,
+                    cantidadIngresada: cantidad.value,
+                    // cantidad: cantidad.value,
 
-                  unidad: props.mercaINSelecci.unidad,
-                  // unidadEquivalencia: props.mercaINSelecci.unidad,
-                  //********  PEN  *******/
+                    unidad: props.mercaINSelecci.unidad,
+                    // unidadEquivalencia: props.mercaINSelecci.unidad,
+                    //********  PEN  *******/
 
-                  costoUnitarioPEN: costoPEN.value,
+                    costoUnitarioPEN: costoPEN.value,
 
-                  subPEN: subPEN.value, //cantidad.value * costoPEN.value,
+                    subPEN: subPEN.value, //cantidad.value * costoPEN.value,
 
-                  valorUnitarioPEN: costoPENMasIGV.value,
-                  totPEN: totPEN.value, // cantidad.value * costoPENMasIGV.value,
-                  //********  USD  *******/
-                  costoUnitarioUSD: 0,
+                    valorUnitarioPEN: costoPENMasIGV.value,
+                    totPEN: totPEN.value, // cantidad.value * costoPENMasIGV.value,
+                    //********  USD  *******/
+                    costoUnitarioUSD: 0,
 
-                  subUSD: 0,
+                    subUSD: 0,
 
-                  valorUnitarioUSD: 0,
-                  totUSD: 0,
-                  //********************************* */
-                  porcentajeUtilidad: props.mercaINSelecci.porcentajeUtilidad,
-                });
+                    valorUnitarioUSD: 0,
+                    totUSD: 0,
+                    //********************************* */
+                    porcentajeUtilidad: props.mercaINSelecci.porcentajeUtilidad,
+                  });
+                } else {
+                  documentoItems.push({
+                    idAuxiliar: parseInt(elIdAuxiliar()),
+                    idMercaderia: props.mercaINSelecci._id,
+                    idKardex: props.elIDKardex,
+                    idUbigeoStock: props.elUbigeoStock._id,
+                    item: 0,
+
+                    codigo: props.mercaINSelecci.codigo ? props.mercaINSelecci.codigo : '-',
+
+                    descripcion: props.mercaINSelecci.descripcion,
+                    // descripcionEquivalencia: props.mercaINSelecci.descripcion,
+                    ubigeo: ubigeo.value.toUpperCase(),
+
+                    lote: lote.value,
+                    fechaProduccion: fechaProduccion.value,
+                    fechaVencimiento: fechaVencimiento.value,
+                    precioVentaSugerido: props.PRECIO_VENTA_SUGERIDO,
+
+                    IGV: elIGV.value,
+
+                    cantidadIngresada: cantidad.value,
+                    // cantidad: cantidad.value,
+
+                    unidad: props.mercaINSelecci.unidad,
+                    // unidadEquivalencia: props.mercaINSelecci.unidad,
+                    //********  PEN  *******/
+
+                    costoUnitarioPEN: costoPEN.value,
+
+                    subPEN: subPEN.value, //cantidad.value * costoPEN.value,
+
+                    valorUnitarioPEN: costoPENMasIGV.value,
+                    totPEN: totPEN.value, // cantidad.value * costoPENMasIGV.value,
+                    //********  USD  *******/
+                    costoUnitarioUSD: 0,
+
+                    subUSD: 0,
+
+                    valorUnitarioUSD: 0,
+                    totUSD: 0,
+                    //********************************* */
+                    porcentajeUtilidad: props.mercaINSelecci.porcentajeUtilidad,
+                  });
+                }
               }
 
-              if (props.contextoInmediato === 'buscar_mercaderia_in' || props.contextoInmediato === 'registro_productos_terminados') {
+              // if (props.contextoInmediato === 'buscar_mercaderia_in' || props.contextoInmediato === 'registro_productos_terminados') {
+              console.log('🎄🎄🎄🍘🍘🍘', props.contextoInmediato);
+              if (props.contextoBase === 'buscar_mercaderia_in' && props.contextoInmediato === 'buscar_mercaderia_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada = false;
-                document.getElementById('ttt_MERCADERIAS_IN')?.focus();
               }
+              if (props.contextoBase === 'buscar_mercaderia_in' && props.contextoInmediato === 'ubigeos_stocks_in') {
+                ctx.mostrarPanelMercaderiaINSeleccionada_2 = false;
+              }
+
+              // if (props.contextoInmediato === 'ubigeos_stocks_in' || props.contextoInmediato === 'registro_productos_terminados') {
+              //   console.log('🍘🍘🍘🍘🍘🍘');
+              //   ctx.mostrarPanelMercaderiaINSeleccionada = false;
+              //   document.getElementById('ttt_MERCADERIAS_IN')?.focus();
+              // }
               if (props.contextoInmediato === 'kardexs_in') {
                 ctx.mostrarPanelMercaderiaINSeleccionada_DesdeKARDEXS = false;
               }
+              //
               // ACTUALIZAR UBIGEO
-              // console.log('props.elKardex._id', props.elKardex._id);
+              // if (ubigeo.value !== null && ubigeo.value !== '' && typeof props.elIDKardex !== 'undefined') {
+              //   const ubi = await upUbigeo({
+              //     idKardex: props.elIDKardex,
+              //     ubigeo: ubigeo.value.toUpperCase(),
 
-              if (ubigeo.value !== null && ubigeo.value !== '' && typeof props.elKardex._id !== 'undefined') {
-                const ubi = await upUbigeo({
-                  idKardex: props.elKardex._id,
-                  ubigeo: ubigeo.value.toUpperCase(),
-
-                  usuario: parametrosGlobales.usuario,
-                });
-
-                console.log('ubi.......', ubi);
-              }
+              //     usuario: parametrosGlobales.usuario,
+              //   });
+              //   console.log('ubi.......', ubi);
+              // }
 
               // ACTUALIZAR PRECIO PUBLICO PEN
               if (actualizarPrecioPublicoPEN.value) {

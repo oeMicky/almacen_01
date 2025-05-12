@@ -50,6 +50,7 @@ export interface IMercaderiaOUT_BUSCAR {
   UNSPSC: string;
 
   ubigeo: string;
+  sumStocks: any;
 
   codigoContableVenta: string;
   descripcionContableVenta: string;
@@ -187,6 +188,7 @@ export interface IMercaderiaIN_BUSCAR {
   UNSPSC: string;
 
   ubigeo: string;
+  sumStocks: any;
 
   porcentajeUtilidadXDefecto: boolean;
   porcentajeUtilidad: any;
@@ -198,6 +200,8 @@ export interface IMercaderiaIN_BUSCAR {
   idKardex: string;
   lote: string;
   fechaVencimiento: string;
+
+  // observacion: string;
 
   // costoUnitarioMovil: any;
   idLineaTipo: string;

@@ -41,7 +41,7 @@ export default component$((props: { buscarUnidadesSUNAT: number; cadenaABuscar: 
       }}
       onRejected={() => {
         //console.log('onRejected 🍍🍍🍍🍍');
-        return <div>Fallo en la carga de datos</div>;
+        return <div style={{ color: 'red' }}>Fallo en la carga de datos</div>;
       }}
       onResolved={(unidadesSUNAT) => {
         //console.log('onResolved 🍓🍓🍓🍓');
@@ -102,7 +102,7 @@ export default component$((props: { buscarUnidadesSUNAT: number; cadenaABuscar: 
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem', color: 'red' }}>No se encontraron registros</i>
               </div>
             )}
           </>

@@ -411,6 +411,8 @@ export interface IReporteNotaVenta {
 
   igv: any;
 
+  existeOtros: boolean;
+
   itemsNotaVenta: any;
 
   totalPEN: any;

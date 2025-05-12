@@ -92,7 +92,9 @@ import pdf from '../images/pdf.svg';
 import pdf_2 from '../images/pdf_2.svg';
 import pencil from '../images/pencil.svg';
 import print from '../images/print.svg';
+import puntoAzul from '../images/puntoAzul.svg';
 import puntoVerde from '../images/puntoVerde.svg';
+import puntoRosado from '../images/puntoRosado.svg';
 import resendEmail from '../images/resend_email.svg';
 import searchPLUS from '../images/searchPLUS.svg';
 // import searchW from '../images/searchW.svg';
@@ -108,6 +110,7 @@ import seguimientoCostoClaro from '../images/seguimiento-de-costosClaro.svg';
 import seguimientoCostoDisable from '../images/seguimiento-de-costosDisable.svg';
 import seguimientoCostoOscuro from '../images/seguimiento-de-costosOscuro.svg';
 import sucursal from '../images/sucursal.svg';
+import traslado from '../images/traslado.svg';
 import three_dots from '../images/three-dots.svg';
 import three_dots2 from '../images/three-dots2.svg';
 import trash from '../images/trash.svg';
@@ -212,7 +215,9 @@ export default {
   pdf_2,
   pencil,
   print,
+  puntoAzul,
   puntoVerde,
+  puntoRosado,
   resendEmail,
   searchPLUS,
   // searchW from '../images/searchW.svg';
@@ -228,6 +233,7 @@ export default {
   seguimientoCostoDisable,
   seguimientoCostoOscuro,
   sucursal,
+  traslado,
   three_dots,
   three_dots2,
   trash,

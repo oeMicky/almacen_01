@@ -9,6 +9,8 @@ export interface IMovimientoKARDEX {
   FISMA: string;
   fechaHoraMovimiento: string;
 
+  ubigeo: string;
+
   cantidadIngresada: any;
   cantidadSacada: any;
   cantidadSaldo: any;
@@ -20,4 +22,10 @@ export interface IMovimientoKARDEX {
 
   cantidadOrigenEquivalencia: any;
   unidadEquivalencia: any;
+}
+
+export interface IUbigeoStock {
+  _id: string;
+  ubigeo: string;
+  stock: any;
 }

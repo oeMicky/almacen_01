@@ -65,7 +65,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
       {/* FORMULARIO */}
       <div class="add-form">
         <h3 style={{ fontSize: '0.8rem' }}>
-          Out almacén - {parametrosGlobales.RazonSocial} - {parametrosGlobales.sucursal}
+          Out almacén - {parametrosGlobales.RazonSocial} - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>
         </h3>
         {/* ----------------------------------------------------- */}
         {/* GENERALES */}
@@ -123,14 +123,15 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                 id="in_MotivoEgresoAlmacen"
                 type="text"
                 disabled={props.outSelecci._id !== ''}
-                style={{ width: '100%' }}
+                style={{ width: '100%', fontWeight: 'bold' }}
                 value={props.outSelecci.motivoEgresoAlmacen}
               />
             </div>
             {/* obesrvacion */}
             <input
               id="in_Observacion"
-              style={{ background: '#F4FF7A', width: '100%' }}
+              // style={{ background: '#F4FF7A', width: '100%' }}
+              style={{ background: 'yellow', width: '100%' }}
               type="text"
               // autoFocus
               disabled
@@ -244,8 +245,9 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                 <thead>
                   <tr>
                     <th>Ítem</th>
-                    <th>idMerca</th>
+                    {/* <th>idMerca</th> */}
                     <th>Descripción</th>
+                    <th>Ubigeo</th>
                     <th>Cantidad</th>
                     <th>Uni</th>
                     <th>Costo Unit PEN</th>
@@ -263,12 +265,13 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                           key={iTMercaOUT.idAuxiliar}
                           style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}
                         >{`${cerosALaIzquierda(indexItemMerca, 3)}`}</td>
-                        <td data-label="idMerca" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
+                        {/* <td data-label="idMerca" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
                           {iTMercaOUT.idMercaderia}
-                        </td>
+                        </td> */}
                         <td data-label="Descripción" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
                           {iTMercaOUT.descripcionEquivalencia}
                         </td>
+                        <td data-label="Ubigeo">{iTMercaOUT.ubigeo}</td>
                         <td data-label="Cantidad" class="comoNumeroLeft" style={props.codigoMercaderia === iTMercaOUT.codigo ? { color: 'purple' } : {}}>
                           <strong>
                             {iTMercaOUT.cantidadSacadaEquivalencia.$numberDecimal

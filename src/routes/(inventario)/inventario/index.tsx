@@ -5,10 +5,13 @@ import { images } from '~/assets';
 import Kardex from '~/components/kardex/kardex';
 import Kardexs from '~/components/kardex/kardexs';
 import TablaMercaderiasKardex from '~/components/kardex/tablaMercaderiasKardex';
+import VerListaUbigeos from '~/components/kardex/verListaUbigeos';
+import VerUbigeoAntiguo from '~/components/kardex/verUbigeoAntiguo';
 import InventarioExterno from '~/components/miscelanea/inventarioExterno/inventarioExterno';
 import EditPrecioPublicoIN from '~/components/miscelanea/mercaderiaIN/editPrecioPublicoIN';
+// import ListaUbigeosStocksIN from '~/components/miscelanea/mercaderiaIN/listaUbigeosStocksIN';
 import NewEditMercaderiaIN from '~/components/miscelanea/mercaderiaIN/newEditMercaderiaIN';
-import NewEditUbigeo from '~/components/miscelanea/mercaderiaIN/newEditUbigeo';
+// import NewEditUbigeo from '~/components/miscelanea/mercaderiaIN/newEditUbigeo';
 import Spinner from '~/components/system/spinner';
 import { cerosALaIzquierda, hoy } from '~/functions/comunes';
 // import ImgButton from '~/components/system/imgButton';
@@ -31,6 +34,10 @@ export default component$(() => {
     elIdKardex: '',
     elUBIGEO: '',
     grabo_ubigeo: false,
+
+    mostrarPanelVerUbigeoAntiguo: false,
+
+    mostrarPanelVerListaUbigeos: false,
 
     // mostrarPanelNewEditMercaderiaIN: false,
     mostrarPanelVerInAlmacen: false,
@@ -57,7 +64,8 @@ export default component$(() => {
   const ini = useSignal(0);
   const navegarA = useNavigate();
   const buscarMercaderiasKARDEX = useSignal(0);
-  const verTODOS = useSignal(false);
+  const verTODOS = useSignal(true);
+  const visualizarStocksCeros = useSignal(true);
   // const mercaderiaIN = useSignal(false);
 
   const parametrosBusqueda = useStore({
@@ -65,7 +73,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: '', //cadena.value,   'mobil bal'
+    cadenaABuscar: 'hist', // 'geo', // bien //cadena.value,   'mobil bal'
   });
   //#endregion INICIALIZANDO
 
@@ -179,7 +187,7 @@ export default component$(() => {
       </h1> */}
       <div style={{ background: '#00778F' }}>
         {/* <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}> */}
-        <label style={{ color: '#ccc', fontSize: '0.7rem', paddingLeft: '2px' }}>
+        <label style={{ color: '#890263', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -299,6 +307,20 @@ export default component$(() => {
               // value={parametrosBusqueda.cadenaABuscar}
             />
             <label for="in_verTODOS_KARDEX">Ver TODOS</label>
+          </div>
+          <div style={{ marginTop: '8px' }}>
+            <input
+              id="in_visualizarStocksCeros_KARDEX"
+              type="checkbox"
+              placeholder="Visualizar stocks ceros"
+              checked={visualizarStocksCeros.value}
+              onChange$={(e) => {
+                visualizarStocksCeros.value = (e.target as HTMLInputElement).checked;
+                // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
+              }}
+              // value={parametrosBusqueda.cadenaABuscar}
+            />
+            <label for="in_visualizarStocksCeros_KARDEX">Visualizar stocks ceros</label>
           </div>
         </div>
         {/* ACCIONES */}
@@ -428,6 +450,7 @@ export default component$(() => {
             // contexto={props.contexto}
             esAlmacen={true}
             verTODOS={verTODOS.value}
+            visualizarStocksCeros={visualizarStocksCeros.value}
             //   buscarMercaderiaOUT={buscarMercaderiaOUT.value}
             //   parametrosBusqueda={parametrosBusqueda}
           />
@@ -449,6 +472,7 @@ export default component$(() => {
             <Kardex
               mercaSelecci={definicion_CTX_INDEX_INVENTARIO.mM}
               kardex={definicion_CTX_INDEX_INVENTARIO.kK}
+              elIDKardex={definicion_CTX_INDEX_INVENTARIO.elIdKardex}
               // esAlmacen={props.esAlmacen}
               // esAlmacen={false}
               contexto="index_kardexs"
@@ -457,9 +481,15 @@ export default component$(() => {
             />
           </div>
         )}
-        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditUbigeo && (
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelVerUbigeoAntiguo && (
           <div class="modal">
-            <NewEditUbigeo idKardex={definicion_CTX_INDEX_INVENTARIO.elIdKardex} ubigeo={definicion_CTX_INDEX_INVENTARIO.elUBIGEO} contexto="index_kardexs" />
+            <VerUbigeoAntiguo ubigeo={definicion_CTX_INDEX_INVENTARIO.elUBIGEO} contexto="index_inventario" />
+          </div>
+        )}
+        {/*  LISTA DE UBIGEOS  */}
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelVerListaUbigeos && (
+          <div class="modal">
+            <VerListaUbigeos descripcion={definicion_CTX_INDEX_INVENTARIO.descripcion} idKardex={definicion_CTX_INDEX_INVENTARIO.elIdKardex} />
           </div>
         )}
         {definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN && (
