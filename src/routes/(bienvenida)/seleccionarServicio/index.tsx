@@ -141,9 +141,9 @@ export default component$(() => {
             cursorMano={parametrosGlobales.inventario}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              // navegarA('/inventario');
+              navegarA('/inventario');
               // navegarA('/inAlmacen');
-              navegarA('/outAlmacen');
+              // navegarA('/outAlmacen');
             })}
           />
           <Servicio2024
