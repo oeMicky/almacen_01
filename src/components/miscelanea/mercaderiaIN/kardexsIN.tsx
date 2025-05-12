@@ -138,8 +138,10 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean; con
           <MercaderiaINSeleccionada
             mercaINSelecci={ctx_buscar_mercaderia_in.mM}
             elKardex={ctx_buscar_mercaderia_in.kK}
+            elIDKardex=""
             esAlmacen={props.esAlmacen}
             // esAlmacen={false}
+            contextoBase="kardexs_in"
             contextoInmediato={'kardexs_in'}
             contextoParaDocumento={props.contexto}
             igv={props.igv}

@@ -150,6 +150,7 @@ export default component$((props: { mercaINSelecci: any; esAlmacen: boolean }) =
           <Kardex
             mercaSelecci={ctx_index_inventario.mM}
             kardex={ctx_index_inventario.kK}
+            elIDKardex=""
             // esAlmacen={props.esAlmacen}
             // esAlmacen={false}
             contexto={'kardexs'}

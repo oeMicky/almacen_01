@@ -142,7 +142,12 @@ export default component$((props: { mercaOUTSelecci: any; esAlmacen: boolean; es
         <div class="modal">
           <MercaderiaOUTSeleccionada
             mercaOUTSelecci={ctx_buscar_mercaderia_out.mM}
-            elKardex={ctx_buscar_mercaderia_out.kK}
+            // elKardex={ctx_buscar_mercaderia_out.kK}
+            elIDKardex=""
+            elUbigeoStock={ctx_buscar_mercaderia_out.kK.almacen}
+            lote={ctx_buscar_mercaderia_out.kK.lote}
+            fechaVencimiento={ctx_buscar_mercaderia_out.kK.fechaVencimiento}
+            promedioCostoUnitarioMovil={ctx_buscar_mercaderia_out.kK.costoUnitarioMovil}
             esAlmacen={props.esAlmacen}
             esProduccion={props.esProduccion}
             contexto={'kardexs_out'}

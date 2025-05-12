@@ -367,7 +367,9 @@ export default component$((props: { opSeleccionada: any; motivo: string; igv: nu
               <MercaderiaINSeleccionada
                 mercaINSelecci={definicion_CTX_REGISTRO_PRODUCTOS_TERMINADOS.mM}
                 elKardex={definicion_CTX_REGISTRO_PRODUCTOS_TERMINADOS.kK}
+                elIDKardex=""
                 esAlmacen={true}
+                contextoBase="kardexs_in"
                 contextoInmediato={'registro_productos_terminados'}
                 contextoParaDocumento={'new_in_almacen'}
                 igv={props.igv}

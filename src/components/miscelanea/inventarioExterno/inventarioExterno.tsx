@@ -286,6 +286,7 @@ export default component$((props: { contexto: string; almacen: any; buscar: stri
               <Kardex
                 mercaSelecci={definicion_CTX_INVENTARIO_EXTERNO.mM}
                 kardex={definicion_CTX_INVENTARIO_EXTERNO.kK}
+                elIDKardex=""
                 // esAlmacen={props.esAlmacen}
                 // esAlmacen={false}
                 contexto={'inventario_externo'}
