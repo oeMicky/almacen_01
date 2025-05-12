@@ -112,7 +112,7 @@ export default component$(
       idEmpresa: parametrosGlobales.idEmpresa,
       idAlmacen: parametrosGlobales.idAlmacen,
       buscarPor: 'Descripción', //por.value,
-      cadenaABuscar: 'hist', // 'geo', //'bien' 'acce 5', //cadena.value,
+      cadenaABuscar: '', // 'geo', //'bien' 'acce 5', //cadena.value,
     });
 
     useTask$(({ track }) => {
