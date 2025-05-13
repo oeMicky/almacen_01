@@ -191,7 +191,7 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                           {/* )} */}
                           {/* <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td> */}
                           <td data-label="Acciones" class="accionesLeft">
-                            <input
+                            {/* <input
                               title="Ver kardex/s"
                               type="image"
                               src={images.see}
@@ -216,7 +216,7 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                                 ctx_inventario_externo.elIdKardex = mercaINLocali.idKardex; //mercaINLocali.KARDEXS[0];
                                 ctx_inventario_externo.mostrarPanelKARDEX = true;
                               }}
-                            />
+                            /> */}
                             <input
                               title="Ver ubigeo"
                               type="image"

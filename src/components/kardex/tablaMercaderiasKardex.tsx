@@ -224,7 +224,7 @@ export default component$(
                             {/* <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td> */}
                             {/* <td data-label="Obs">{observacion ? observacion : '-'}</td> */}
                             <td data-label="Acciones" class="accionesLeft">
-                              {/* <input
+                              <input
                                 title="Ver kardex/s"
                                 type="image"
                                 src={images.see}
@@ -263,7 +263,7 @@ export default component$(
                                   //   //console.log('la mercaSeleccionada KARDEXS', ctx_index_inventario.mM);
                                   // }
                                 }}
-                              /> */}
+                              />
                               <input
                                 title="Editar mercadería"
                                 type="image"
