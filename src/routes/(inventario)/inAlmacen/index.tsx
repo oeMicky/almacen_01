@@ -141,7 +141,8 @@ export default component$(() => {
       </h1> */}
       <div style={{ background: '#00778F' }}>
         {/* <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.8rem', paddingLeft: '2px' }}> */}
-        <label style={{ color: '#890263', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
+        {/* <label style={{ color: '#890263', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}> */}
+        <label style={{ color: 'white', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(

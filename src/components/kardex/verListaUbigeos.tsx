@@ -5,13 +5,15 @@ import type { IUbigeoStock } from '~/interfaces/iKardex';
 // import { CTX_BUSCAR_MERCADERIA_IN } from './buscarMercaderiaIN';
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import TrasladoEntreUbigeosIN from '../miscelanea/mercaderiaIN/trasladoEntreUbigeosIN';
+import { CTX_INVENTARIO_EXTERNO } from '../miscelanea/inventarioExterno/inventarioExterno';
+import NewEditUbigeo from '../miscelanea/mercaderiaIN/newEditUbigeo';
 // import MercaderiaINSeleccionada from './mercaderiaINSeleccionada';
 // import NewEditUbigeo from './newEditUbigeo';
 // import MercaderiaINSeleccionada2 from './mercaderiaINSeleccionada2';
 
 export const CTX_VER_LISTA_UBIGEOS_STOCKS_IN = createContextId('lista_ubigeos_stocks_in');
 
-export default component$((props: { descripcion: string; idKardex: string }) => {
+export default component$((props: { descripcion: string; idKardex: string; contexto: string }) => {
   //#region DEFINICION CTX_VER_LISTA_UBIGEOS_STOCKS_IN
   const definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN = useStore<any>({
     mostrarPanelNewEditUbigeosStocksIN: false,
@@ -27,9 +29,24 @@ export default component$((props: { descripcion: string; idKardex: string }) => 
   useContextProvider(CTX_VER_LISTA_UBIGEOS_STOCKS_IN, definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN);
   //#endregion DEFINICION CTX_VER_LISTA_UBIGEOS_STOCKS_IN
 
-  //#region CONTEXTO
-  const ctx_index_inventario = useContext(CTX_INDEX_INVENTARIO);
-  //#endregion CONTEXTO
+  //#region CONTEXTOS
+  // const ctx_index_inventario = useContext(CTX_INDEX_INVENTARIO);
+  let ctx: any = [];
+  switch (props.contexto) {
+    case 'index_inventario':
+      ctx = useContext(CTX_INDEX_INVENTARIO);
+      break;
+    case 'inventario_externo':
+      ctx = useContext(CTX_INVENTARIO_EXTERNO);
+      break;
+    // case 'cotizacion':
+    //   ctx = useContext(CTX_DOCS_COTIZACION);
+    //   break;
+    // case 'new_edit_cotizacion':
+    //   ctx = useContext(CTX_NEW_EDIT_COTIZACION);
+    //   break;
+  }
+  //#endregion CONTEXTOS
 
   //#region INICIALIZACION
 
@@ -80,19 +97,22 @@ export default component$((props: { descripcion: string; idKardex: string }) => 
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            ctx_index_inventario.mostrarPanelVerListaUbigeos = false;
+            ctx.mostrarPanelVerListaUbigeos = false;
           })}
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'grey' }}>{props.descripcion}</h3>
-      {/* <button
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'grey' }}>
+        <img src={images.puntoRosado} alt="Bandera roja" width="12" height="12" /> {props.descripcion}
+      </h3>
+      <button
+        hidden={props.contexto === 'inventario_externo'}
         onClick$={() => {
-          definicion_CTX_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelNewEditUbigeosStocksIN = true;
+          definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelNewEditUbigeosStocksIN = true;
         }}
       >
         ADICIONAR UBIGEO
-      </button> */}
+      </button>
       {/* FORMULARIO */}
       <div class="add-form">
         <Resource
@@ -103,7 +123,7 @@ export default component$((props: { descripcion: string; idKardex: string }) => 
           }}
           onRejected={() => {
             //console.log('onRejected 🍍🍍🍍🍍');
-            ctx_index_inventario.mostrarSpinner = false;
+            ctx.mostrarSpinner = false;
             definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarSpinner = false;
             return <div style={{ color: 'red' }}>Fallo en la carga de datos</div>;
           }}
@@ -111,7 +131,7 @@ export default component$((props: { descripcion: string; idKardex: string }) => 
             console.log('onResolved 🍋🍋🍋🍋', ubigeosStocks);
             const { data } = ubigeosStocks; //{ status, data, message }
             const misUbigeosStocks: IUbigeoStock[] = data;
-            ctx_index_inventario.mostrarSpinner = false;
+            ctx.mostrarSpinner = false;
             definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarSpinner = false;
             return (
               <>
@@ -132,7 +152,7 @@ export default component$((props: { descripcion: string; idKardex: string }) => 
                           return (
                             <tr>
                               <td data-label="Ubigeo">{ubigeo}</td>
-                              <td data-label="Stock" class="comoNumeroLeft">
+                              <td data-label="Stock" class="accionesLeft">
                                 {stock.$numberDecimal}
                               </td>
                               <td data-label="Acc" class="accionesLeft">
@@ -160,10 +180,10 @@ export default component$((props: { descripcion: string; idKardex: string }) => 
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colSpan={1} style={{ textAlign: 'right', fontWeight: 'bold' }}>
+                          <td colSpan={1} style={{ textAlign: 'center', fontWeight: 'bold' }}>
                             Total:
                           </td>
-                          <td colSpan={1} class="comoNumero" style={{ fontWeight: 'bold' }}>
+                          <td colSpan={1} class="accionesLeft" style={{ fontWeight: 'bold' }}>
                             {total}
                           </td>
                         </tr>
@@ -180,6 +200,11 @@ export default component$((props: { descripcion: string; idKardex: string }) => 
           }}
         />
       </div>
+      {definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelNewEditUbigeosStocksIN && (
+        <div class="modal">
+          <NewEditUbigeo idKardex={props.idKardex} ubigeo={definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.elUbigeo} contexto="ver_lista_ubigeos" />
+        </div>
+      )}
       {definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelTrasladoEntreUbigeosIN && (
         <div class="modal">
           <TrasladoEntreUbigeosIN

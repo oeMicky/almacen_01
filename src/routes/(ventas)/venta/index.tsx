@@ -275,7 +275,7 @@ export default component$(() => {
           {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
         </h1>                , border: '1px green solid'       */}
       <div style={{ background: '#00778F' }}>
-        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
+        <label style={{ color: 'white', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {/* {` ${localStorage.getItem('numeroIdentidad')} - ${localStorage
               .getItem('empresa')
               ?.toLocaleUpperCase()} - Sucursal: ${localStorage.getItem('sucursal')} - Usuario: ${localStorage.getItem(

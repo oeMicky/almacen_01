@@ -86,7 +86,7 @@ export default component$(
           />
         </div>
         {/* TITULO */}
-        <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'grey' }}>{props.descripcion}</h3>
+        <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'DarkSlateBlue' }}>{props.descripcion}</h3>
         {/* <button
         onClick$={() => {
           definicion_CTX_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelNewEditUbigeosStocksIN = true;
@@ -151,6 +151,10 @@ export default component$(
                                     //   style={{ padding: '2px',  }}
                                     //   onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                     onClick$={() => {
+                                      if (parseFloat(stock.$numberDecimal) <= 0) {
+                                        alert(ubigeo + ': Este ubigeo no puede ser seleccionado.');
+                                        return;
+                                      }
                                       // console.log('props.idKardex', props.idKardex);
                                       // console.log('ubiLoca', ubiLoca);
                                       // console.log('props.promedioCostoUnitarioMovil', props.promedioCostoUnitarioMovil);

@@ -6,6 +6,7 @@ import TablaMercaderiasInventarioExterno from './tablaMercaderiasInventarioExter
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import { CTX_BUSCAR_MERCADERIA_OUT } from '../mercaderiaOUT/buscarMercaderiaOUT';
 import Kardex from '~/components/kardex/kardex';
+import VerListaUbigeos from '~/components/kardex/verListaUbigeos';
 
 export const CTX_INVENTARIO_EXTERNO = createContextId<any>('ctx_inventario_externo__');
 
@@ -16,6 +17,10 @@ export default component$((props: { contexto: string; almacen: any; buscar: stri
     kK: [],
 
     mostrarPanelKARDEX: false,
+
+    descripcion: '',
+    elIdKardex: '',
+    mostrarPanelVerListaUbigeos: false,
 
     mostrarSpinner: false,
   });
@@ -89,13 +94,13 @@ export default component$((props: { contexto: string; almacen: any; buscar: stri
       style={
         verLineaMarca.value || verAplicacion.value
           ? {
-              width: 'clamp(320px, 100%, 1112px)',
+              width: 'clamp(300px, 100%, 1112px)',
               background: 'linear-gradient(to right,#f1bffc 0%,#cababa 100%)',
               border: '1px solid red',
               padding: '2px',
             }
           : {
-              width: 'clamp(320px, 100%, 960px)',
+              width: 'clamp(300px, 100%, 960px)',
               background: 'linear-gradient(to right,#f1bffc 0%,#cababa 100%)',
               border: '1px solid red',
               padding: '2px',
@@ -292,6 +297,15 @@ export default component$((props: { contexto: string; almacen: any; buscar: stri
                 contexto={'inventario_externo'}
                 // contextoParaDocumento={props.contexto}
                 // igv={props.igv}
+              />
+            </div>
+          )}
+          {definicion_CTX_INVENTARIO_EXTERNO.mostrarPanelVerListaUbigeos && (
+            <div class="modal">
+              <VerListaUbigeos
+                descripcion={definicion_CTX_INVENTARIO_EXTERNO.descripcion}
+                idKardex={definicion_CTX_INVENTARIO_EXTERNO.elIdKardex}
+                contexto="inventario_externo"
               />
             </div>
           )}

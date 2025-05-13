@@ -24,6 +24,9 @@ export default component$(
     motivo?: string;
     conIGV?: boolean;
     porMontoUnitario?: boolean;
+
+    // inOut:boolean;
+    // seleccionar:boolean;
   }) => {
     //#region DEFINICION CTX_LISTA_UBIGEOS_STOCKS_IN
     const definicion_CTX_LISTA_UBIGEOS_STOCKS_IN = useStore<any>({
@@ -118,8 +121,12 @@ export default component$(
           />
         </div>
         {/* TITULO */}
-        <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'grey' }}>{props.descripcion}</h3>
+        <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'grey' }}>
+          <img src={images.puntoVerde} alt="Bandera roja" width="12" height="12" />
+          {props.descripcion}
+        </h3>
         <button
+          // hidden={!props.inOut}
           onClick$={() => {
             definicion_CTX_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelNewEditUbigeosStocksIN = true;
             // ctx_buscar_mercaderia_in.mostrarPanelUbigeosStocksIN = false;
@@ -174,6 +181,7 @@ export default component$(
                                 <td data-label="Acciones" class="accionesLeft">
                                   <input
                                     // id="in_BuscarDetraccion"
+                                    // hidden={!props.seleccionar}
                                     title="Seleccionar"
                                     type="image"
                                     src={images.check32}
@@ -213,10 +221,10 @@ export default component$(
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colSpan={1} style={{ textAlign: 'right', fontWeight: 'bold' }}>
+                            <td colSpan={1} style={{ textAlign: 'center', fontWeight: 'bold' }}>
                               Total:
                             </td>
-                            <td colSpan={2} style={{ textAlign: 'left', fontWeight: 'bold' }}>
+                            <td colSpan={1} style={{ textAlign: 'left', fontWeight: 'bold' }}>
                               {total}
                             </td>
                           </tr>

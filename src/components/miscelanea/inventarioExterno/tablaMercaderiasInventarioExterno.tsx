@@ -1,11 +1,11 @@
 import { component$, Resource, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
 import style from '../../tabla/tabla.css?inline';
-// import { CTX_INVENTARIO_EXTERNO } from './inventarioExterno';
-import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
-import { cerosALaIzquierda } from '~/functions/comunes';
-import { images } from '~/assets'; //formatear_2Decimales
-import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
 import { CTX_INVENTARIO_EXTERNO } from './inventarioExterno';
+import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
+import { cerosALaIzquierda, formatear_2Decimales } from '~/functions/comunes';
+import { images } from '~/assets'; //
+import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
+// import { CTX_INVENTARIO_EXTERNO } from './inventarioExterno';
 
 export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; parametrosBusqueda: any; verTODOS: boolean }) => {
   useStyles$(style);
@@ -77,13 +77,13 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                       <th>Descripción</th>
                       <th>Linea/Tipo</th>
                       <th>Marca</th>
-                      <th>Ubi</th>
+                      {/* <th>Ubi</th> */}
                       <th>Stock</th>
                       <th>Uni</th>
                       {/* {props.esAlmacen ? <th>Costo PEN + IGV</th> : <th>Precio Uni PEN</th>} */}
-                      {/* <th>Costo PEN + IGV</th>
-                      <th>Precio PEN</th> */}
-                      <th>Kx</th>
+                      <th>Costo PEN + IGV</th>
+                      <th>Precio PEN</th>
+                      {/* <th>Kx</th> */}
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -95,39 +95,47 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                         descripcion,
                         lineaTipo,
                         marca,
-                        totalCantidadSaldo,
+                        // totalCantidadSaldo,
                         unidad,
                         stockMinimo,
-                        // costoUnitarioPENMasIGV,
-                        // precioUnitarioPEN,
+                        costoUnitarioPENMasIGV,
+                        precioUnitarioPEN,
                         // promedioCostoUnitarioMovil,
-                        KARDEXS,
+                        idKardex,
+                        sumStocks,
+                        // KARDEXS,
                         noFacturar,
                         activo,
                         ubigeo,
                       } = mercaINLocali;
                       let elSM = 0;
-                      let elTCS = 0;
+                      // let elTCS = 0;
+                      let laSumStocks = 0;
                       if (typeof stockMinimo === 'undefined' || stockMinimo === null) {
                         elSM = 0;
                       } else {
                         elSM = stockMinimo.$numberDecimal ? parseFloat(stockMinimo.$numberDecimal) : stockMinimo;
                       }
-                      if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
-                        elTCS = 0;
+                      // if (typeof totalCantidadSaldo === 'undefined' || totalCantidadSaldo === null) {
+                      //   elTCS = 0;
+                      // } else {
+                      //   elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                      // }
+                      if (typeof sumStocks === 'undefined' || sumStocks === null) {
+                        laSumStocks = 0;
                       } else {
-                        elTCS = totalCantidadSaldo.$numberDecimal ? parseFloat(totalCantidadSaldo.$numberDecimal) : totalCantidadSaldo;
+                        laSumStocks = sumStocks.$numberDecimal ? parseFloat(sumStocks.$numberDecimal) : sumStocks;
                       }
-                      console.log(' 🍍🍍🍍🍍', elSM, elTCS);
+                      // console.log(' 🍍🍍🍍🍍', elSM, elTCS);
 
                       return (
                         <tr key={_id} style={!activo ? { background: 'black', color: 'white' } : noFacturar ? { background: '#ff5aff' } : {}}>
                           <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
                           {/* <td data-label="idMercaderia">{_id}</td> */}
                           <td data-label="Descripción">
-                            {elSM >= elTCS ? (
+                            {elSM >= laSumStocks ? (
                               <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
-                            ) : elSM + 5 >= elTCS ? (
+                            ) : elSM + 5 >= laSumStocks ? (
                               <img src={images.flagAmber} alt="Bandera ambar" width="12" height="12" />
                             ) : (
                               ''
@@ -136,9 +144,25 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                           </td>
                           <td data-label="Linea/Tipo">{lineaTipo}</td>
                           <td data-label="Marca">{marca}</td>
-                          <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td>
+                          {/* <td data-label="Ubigeo">{typeof ubigeo !== 'undefined' && ubigeo !== null && ubigeo !== '' ? ubigeo : '-'}</td> */}
                           <td data-label="Stock" class="comoNumeroLeft" style={{ color: 'purple' }}>
-                            <strong>{totalCantidadSaldo.$numberDecimal ? totalCantidadSaldo.$numberDecimal : totalCantidadSaldo}</strong>
+                            {typeof idKardex !== 'undefined' ? (
+                              <button
+                                style={{ color: 'purple', fontWeight: 'bold', cursor: 'pointer' }}
+                                onClick$={() => {
+                                  ctx_inventario_externo.descripcion = descripcion;
+                                  ctx_inventario_externo.elIdKardex = idKardex;
+                                  // ctx_inventario_externo.mM = mercaINLocali;
+
+                                  ctx_inventario_externo.mostrarPanelVerListaUbigeos = true;
+                                  ctx_inventario_externo.mostrarSpinner = true;
+                                }}
+                              >
+                                {laSumStocks}
+                              </button>
+                            ) : (
+                              '-'
+                            )}
                           </td>
                           <td data-label="Uni">{unidad}</td>
                           {/* {props.esAlmacen ? (
@@ -150,7 +174,7 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                                   : '-'}
                               </td>
                             ) : ( */}
-                          {/* <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
+                          <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
                             {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
                               ? costoUnitarioPENMasIGV.$numberDecimal
                                 ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
@@ -163,9 +187,9 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                                 ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
                                 : formatear_2Decimales(precioUnitarioPEN)
                               : '-'}
-                          </td> */}
+                          </td>
                           {/* )} */}
-                          <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td>
+                          {/* <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td> */}
                           <td data-label="Acciones" class="accionesLeft">
                             <input
                               title="Ver kardex/s"
@@ -177,24 +201,37 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                               style={{ marginRight: '8px' }}
                               onClick$={() => {
                                 //console.log('mercaINLocali', mercaINLocali);
-                                if (mercaINLocali.KARDEXS.length === 0) {
-                                  alert('No se localizan kardex/s');
+                                if (mercaINLocali.idKardex === '' || mercaINLocali.idKardex === null || mercaINLocali.idKardex === undefined) {
+                                  alert('El ítem seleccionado no presenta kardex.');
+                                  return;
                                 }
                                 if (typeof mercaINLocali.porcentajeUtilidad === 'undefined' || mercaINLocali.porcentajeUtilidad === null) {
                                   alert('No se ha definido el porcentaje de utilidad para esta mercadería. Editelo antes de ver el kardex.');
                                   return;
                                 }
-                                if (mercaINLocali.KARDEXS.length === 1) {
-                                  console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥');
-
-                                  ctx_inventario_externo.mM = mercaINLocali;
-                                  ctx_inventario_externo.kK = mercaINLocali.KARDEXS[0];
-                                  ctx_inventario_externo.mostrarPanelKARDEX = true;
+                                // if (mercaINLocali.KARDEXS.length === 1) {
+                                console.log('💥💥💥💥💥☮☮☮☮💥💥💥💥💥💥');
+                                ctx_inventario_externo.mM = mercaINLocali;
+                                // ctx_index_inventario.kK = mercaINLocali.KARDEXS[0];
+                                ctx_inventario_externo.elIdKardex = mercaINLocali.idKardex; //mercaINLocali.KARDEXS[0];
+                                ctx_inventario_externo.mostrarPanelKARDEX = true;
+                              }}
+                            />
+                            <input
+                              title="Ver ubigeo"
+                              type="image"
+                              src={images.ubigeo}
+                              height={14}
+                              width={14}
+                              style={{ marginRight: '8px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
+                                if (typeof ubigeo === 'undefined' || ubigeo === null || ubigeo === '') {
+                                  alert('No se ha definido el ubigeo para esta mercadería.');
+                                  return;
+                                } else {
+                                  alert('El ubigeo anterior es: ' + ubigeo);
                                 }
-                                // if (mercaINLocali.KARDEXS.length > 1) {
-                                //   ctx_index_inventario.mM = mercaINLocali;
-                                //   ctx_index_inventario.mostrarPanelKARDEXS = true;
-                                // }
                               }}
                             />
                             {/* <input
@@ -210,38 +247,7 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                                 ctx_index_inventario.mostrarPanelNewEditMercaderiaIN = true;
                               }}
                             /> */}
-                            {/* <input
-                              title="Editar ubigeo"
-                              type="image"
-                              src={images.ubigeo}
-                              height={14}
-                              width={14}
-                              style={{ marginRight: '8px' }}
-                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
-                              onClick$={() => {
-                                if (mercaINLocali.KARDEXS.length === 0) {
-                                  alert('El ítem seleccionado no presenta kardex.');
-                                  return;
-                                }
-
-                                if (mercaINLocali.KARDEXS.length === 1) {
-                                  console.log('🍔🍟🍟🍟🍟 mercaINLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
-
-                                  ctx_index_inventario.elIdKardex = mercaINLocali.KARDEXS[0]._id;
-                                  ctx_index_inventario.elUBIGEO = ubigeo;
-                                  ctx_index_inventario.mostrarPanelNewEditUbigeo = true;
-                                  console.log('🍔🍔🍔🍔🍔 mercaINLocali.KARDEXS.length', ctx_index_inventario.elIdKardex, ctx_index_inventario.elUBIGEO);
-                                }
-                                // if (mercaINLocali.KARDEXS.length > 1) {
-                                //   console.log('🥗🥗🥗🥗🥗 mercaOUTLocali.KARDEXS.length', mercaINLocali.KARDEXS.length);
-                                //   ctx.mM = mercaINLocali;
-                                //   ctx.mostrarPanelKardexsIN = true;
-                                // }
-
-                                // ctx_buscar_mercaderia_out.mostrarSpinner = true;
-                                //console.log('la merca A Editar IN', ctx.mM);
-                              }}
-                            />
+                            {/* 
                             <input
                               title="Editar precio público"
                               type="image"

@@ -187,7 +187,8 @@ export default component$(() => {
       </h1> */}
       <div style={{ background: '#00778F' }}>
         {/* <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}> */}
-        <label style={{ color: '#890263', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
+        {/* <label style={{ color: '#890263', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}> */}
+        <label style={{ color: 'white', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
             .getItem('empresa')
             ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
@@ -200,8 +201,7 @@ export default component$(() => {
         <u>Inventario</u>
       </h4>
       {/* <br /> */}
-      {/* BUSCAR POR       style={{ display: 'flex', margin: '10px 0' }}  justifyContent: 'space-between', alignItems: 'center' */}
-      {/* style={{ marginRight: '10px' margin: '10px 0'}} */}
+      {/* BUSCAR POR  --- INVENTARIOR EXTERNO --- AGREGAR MERCADERIA */}
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
         <div style={{ display: 'flex', marginTop: '8px' }}>
           <label>Buscar </label>
@@ -282,45 +282,49 @@ export default component$(() => {
         >
           ADD MERCADERÍA
         </button>
-
-        {/* <br />
-        <div style={{ margin: '0 5px' }}></div> */}
       </div>
       <br />
       {/* LEYENDA */}
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         {/* LEYENDA */}
-        <div style={{ display: 'flex' }}>
-          <label style={{ marginRight: '4px', marginTop: '8px' }}>Leyenda:</label>
-          <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px', marginTop: '8px' }}>Inactivo</label>
-          <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px', marginRight: '4px', marginTop: '8px' }}>No facturable</label>
-          <div style={{ marginTop: '8px' }}>
-            <input
-              id="in_verTODOS_KARDEX"
-              type="checkbox"
-              placeholder="Ver TODOS"
-              checked={verTODOS.value}
-              onChange$={(e) => {
-                verTODOS.value = (e.target as HTMLInputElement).checked;
-                // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
-              }}
-              // value={parametrosBusqueda.cadenaABuscar}
-            />
-            <label for="in_verTODOS_KARDEX">Ver TODOS</label>
+        {/* <div style={{ display: 'flex' }}> */}
+        <div class="linea_1_11">
+          <div>
+            <label style={{ marginRight: '4px', marginTop: '8px' }}>Leyenda:</label>
+            {/* <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px', marginTop: '8px' }}>Inactivo</label> */}
+            <label style={{ background: 'black', color: 'white', marginRight: '4px', padding: '0 4px', borderRadius: '4px' }}>Inactivo</label>
+            {/* <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px', marginRight: '4px', marginTop: '8px' }}>No facturable</label> */}
+            <label style={{ background: '#ff5aff', padding: '0 4px', borderRadius: '4px', marginRight: '4px' }}>No facturable</label>
           </div>
-          <div style={{ marginTop: '8px' }}>
-            <input
-              id="in_visualizarStocksCeros_KARDEX"
-              type="checkbox"
-              placeholder="Visualizar stocks ceros"
-              checked={visualizarStocksCeros.value}
-              onChange$={(e) => {
-                visualizarStocksCeros.value = (e.target as HTMLInputElement).checked;
-                // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
-              }}
-              // value={parametrosBusqueda.cadenaABuscar}
-            />
-            <label for="in_visualizarStocksCeros_KARDEX">Visualizar stocks ceros</label>
+          <div style={{ display: 'flex' }}>
+            <div style={{ marginRight: '8px' }}>
+              <input
+                id="in_verTODOS_KARDEX"
+                type="checkbox"
+                placeholder="Ver TODOS"
+                checked={verTODOS.value}
+                onChange$={(e) => {
+                  verTODOS.value = (e.target as HTMLInputElement).checked;
+                  // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+              />
+              <label for="in_verTODOS_KARDEX">Ver TODOS</label>
+            </div>
+            <div>
+              <input
+                id="in_visualizarStocksCeros_KARDEX"
+                type="checkbox"
+                placeholder="Visualizar stocks ceros"
+                checked={visualizarStocksCeros.value}
+                onChange$={(e) => {
+                  visualizarStocksCeros.value = (e.target as HTMLInputElement).checked;
+                  // document.getElementById('in_codigoDescripcion_KARDEX')?.focus();
+                }}
+                // value={parametrosBusqueda.cadenaABuscar}
+              />
+              <label for="in_visualizarStocksCeros_KARDEX">Visualizar stocks ceros</label>
+            </div>
           </div>
         </div>
         {/* ACCIONES */}
@@ -489,7 +493,11 @@ export default component$(() => {
         {/*  LISTA DE UBIGEOS  */}
         {definicion_CTX_INDEX_INVENTARIO.mostrarPanelVerListaUbigeos && (
           <div class="modal">
-            <VerListaUbigeos descripcion={definicion_CTX_INDEX_INVENTARIO.descripcion} idKardex={definicion_CTX_INDEX_INVENTARIO.elIdKardex} />
+            <VerListaUbigeos
+              descripcion={definicion_CTX_INDEX_INVENTARIO.descripcion}
+              idKardex={definicion_CTX_INDEX_INVENTARIO.elIdKardex}
+              contexto="index_inventario"
+            />
           </div>
         )}
         {definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN && (
