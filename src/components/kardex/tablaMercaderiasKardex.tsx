@@ -229,8 +229,8 @@ export default component$(
                                 type="image"
                                 src={images.see}
                                 alt="icono de adicionar"
-                                height={14}
-                                width={14}
+                                height={16}
+                                width={16}
                                 style={{ marginRight: '8px' }}
                                 onClick$={() => {
                                   //console.log('mercaINLocali', mercaINLocali);
@@ -268,10 +268,10 @@ export default component$(
                                 title="Editar mercadería"
                                 type="image"
                                 src={images.edit}
-                                alt="icono de editar"
-                                height={14}
-                                width={14}
-                                style={{ marginRight: '8px' }}
+                                // alt="icono de editar"
+                                height={16}
+                                width={16}
+                                style={{ cursor: 'pointer', marginRight: '8px' }}
                                 onClick$={() => {
                                   ctx_index_inventario.mM = mercaINLocali;
                                   ctx_index_inventario.mostrarPanelNewEditMercaderiaIN = true;
@@ -284,8 +284,8 @@ export default component$(
                                 title="Editar ubigeo"
                                 type="image"
                                 src={images.ubigeo}
-                                height={14}
-                                width={14}
+                                height={16}
+                                width={16}
                                 style={{ marginRight: '8px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
@@ -312,12 +312,13 @@ export default component$(
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />
+
                               <input
                                 title="Editar precio público"
                                 type="image"
                                 src={images.moneyBag}
-                                height={14}
-                                width={14}
+                                height={16}
+                                width={16}
                                 style={{ marginRight: '8px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
@@ -354,8 +355,8 @@ export default component$(
                                 title="Ver ubigeo antiguo"
                                 type="image"
                                 src={images.xo}
-                                height={14}
-                                width={14}
+                                height={16}
+                                width={16}
                                 style={{ marginRight: '8px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={async () => {

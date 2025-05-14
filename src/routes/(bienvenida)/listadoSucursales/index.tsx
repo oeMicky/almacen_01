@@ -65,7 +65,7 @@ export default component$(() => {
                   <td data-label="Empresa">{sucur.empresa}</td>
                   <td
                     data-label="Sucursal"
-                    style={{ cursor: 'pointer', color: 'red' }}
+                    style={{ cursor: 'pointer', color: 'red', fontWeight: 'bold' }}
                     onClick$={async () => {
                       let activo = await getActivoGEEMPSUCUR({
                         idGrupoEmpresarial: sucur.idGrupoEmpresarial,
@@ -181,9 +181,9 @@ export default component$(() => {
                       type="image"
                       src={images.check32}
                       title="Seleccionar sucursal"
-                      height={14}
-                      width={14}
-                      // style={{ padding: '2px' }}
+                      height={16}
+                      width={16}
+                      style={{ cursor: 'pointer' }}
                       // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                       onClick$={async () => {
                         let activo = await getActivoGEEMPSUCUR({

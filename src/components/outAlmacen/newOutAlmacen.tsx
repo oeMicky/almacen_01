@@ -340,6 +340,17 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   });
   //#endregion ELIMINAR ITEM MERCADERIA
 
+  //#region LIMPIAR SUCURSAL DESTINO
+  const limpiarSucusalDestino = $(() => {
+    definicion_CTX_OUT_ALMACEN.idSucursalDestino = '';
+    definicion_CTX_OUT_ALMACEN.sucursalDestino = '';
+    definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino = '';
+    definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino = '';
+    definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino = '';
+    definicion_CTX_OUT_ALMACEN.motivoIngresoDestino = '';
+  });
+  //#endregion LIMPIAR SUCURSAL DESTINO
+
   //#region REGISTRAR_EGRESO
   const registrarEgreso = $(async () => {
     //periodo FISMA idMotivoEgresoAlmacen
@@ -687,8 +698,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                       switch (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen) {
                         case 'NOTA DE SALIDA':
                           //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
-                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
-                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
+                          limpiarSucusalDestino();
+                          // definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          // definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           //
                           cargarSeriesNotaSalida_DelaSucursal();
                           //
@@ -703,32 +715,36 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           break;
                         case 'ORDEN DE PRODUCCIÓN':
                           //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
-                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
-                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
+                          limpiarSucusalDestino();
+                          // definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          // definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           // alert('Elegio os');
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarOrdenProduccionAperturado = true;
                           break;
                         case 'ORDEN DE SERVICIO':
                           //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
-                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
-                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
+                          limpiarSucusalDestino();
+                          // definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          // definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           // alert('Elegio os');
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarOrdenServicioAperturado = true;
                           break;
                         case 'VENTA':
                           //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
-                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
-                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
+                          limpiarSucusalDestino();
+                          // definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          // definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           //alert('Elegio venta');
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarSelectNotaSalida = false;
                           definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
                           break;
                         case 'TRASLADO':
                           //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
-                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
-                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
+                          limpiarSucusalDestino();
+                          // definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          // definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           //alert('Elegio venta');
                           // definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
                           definicion_CTX_OUT_ALMACEN.idDestinatario = parametrosGlobales.idEmpresa;
@@ -759,8 +775,12 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                               return;
                             }
                             //ir directo al panel de busqueda
-                            definicion_CTX_OUT_ALMACEN.idSucursalDestino = losAlmacenes.data[0]._id;
+                            definicion_CTX_OUT_ALMACEN.idSucursalDestino = losAlmacenes.data[0].idAlmacen;
                             definicion_CTX_OUT_ALMACEN.sucursalDestino = losAlmacenes.data[0].sucursal;
+                            definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino = losAlmacenes.data[0].idSerieNotaIngreso;
+                            definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino = losAlmacenes.data[0].serieNotaIngreso;
+                            definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino = losAlmacenes.data[0].idMotivoIngreso;
+                            definicion_CTX_OUT_ALMACEN.motivoIngresoDestino = losAlmacenes.data[0].motivoIngreso;
                           } else {
                             //ir al panel de listado de almacenes disponibles
                             definicion_CTX_NEW_OUT_ALMACEN.otrosAlmacenes = losAlmacenes.data;
@@ -769,8 +789,9 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                           break;
                         case 'NOTA DE VENTA':
                           //para limpiar el almacen destino: idSucursalDestino y sucursalDestino
-                          definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
-                          definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
+                          limpiarSucusalDestino();
+                          // definicion_CTX_NEW_OUT_ALMACEN.idSucursalDestino = '';
+                          // definicion_CTX_NEW_OUT_ALMACEN.sucursalDestino = '';
                           //alert('Elegio venta');
                           // definicion_CTX_NEW_IN_ALMACEN.mostrarPanelBuscarPersona_Venta = true;
                           definicion_CTX_OUT_ALMACEN.idDestinatario = parametrosGlobales.idEmpresa;

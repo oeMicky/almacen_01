@@ -483,7 +483,7 @@ export default component$(
                     id="in_Monto_mercaderiaOUTSeleccionada"
                     type="number"
                     readOnly
-                    style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: '#FFFFCC' }}
+                    style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: 'oranje' }}
                     value={cantidadSacada.value * precioEquivalencia.value}
                     // onChange$={(e) => {
                     //   precioEquivalencia.value = parseFloat((e.target as HTMLInputElement).value);
@@ -733,6 +733,7 @@ export default component$(
               }
               // ctx.mostrarPanelMercaderiaOUTSeleccionada = false;
               if (props.contexto === 'buscar_mercaderia_out') {
+                ctx.mostrarPanelUbigeosStocksOUT = false;
                 ctx.mostrarPanelMercaderiaOUTSeleccionada = false;
               }
               if (props.contexto === 'kardexs_out') {

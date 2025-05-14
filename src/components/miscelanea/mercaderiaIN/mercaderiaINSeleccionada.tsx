@@ -1529,9 +1529,11 @@ export default component$(
               // if (props.contextoInmediato === 'buscar_mercaderia_in' || props.contextoInmediato === 'registro_productos_terminados') {
               console.log('🎄🎄🎄🍘🍘🍘', props.contextoInmediato);
               if (props.contextoBase === 'buscar_mercaderia_in' && props.contextoInmediato === 'buscar_mercaderia_in') {
+                ctx.mostrarPanelListaUbigeosStocksIN = false;
                 ctx.mostrarPanelMercaderiaINSeleccionada = false;
               }
               if (props.contextoBase === 'buscar_mercaderia_in' && props.contextoInmediato === 'ubigeos_stocks_in') {
+                ctx.mostrarPanelListaUbigeosStocksIN = false;
                 ctx.mostrarPanelMercaderiaINSeleccionada_2 = false;
               }
 

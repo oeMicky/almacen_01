@@ -1,5 +1,5 @@
 import { Resource, component$, useContext, useResource$, useStyles$ } from '@builder.io/qwik';
-import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
+import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes'; //
 import style from '../tabla/tabla.css?inline';
 import { CTX_INDEX_OUT_ALMACEN } from '~/routes/(inventario)/outAlmacen';
 import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
@@ -85,13 +85,15 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                   <tbody>
                     {misOutsAlmacen.map((outAlmaLocali, index) => {
                       const { _id, usuarioCrea, FISMA, observacion, motivoEgresoAlmacen, numeroIdentidad, tipoDocumentoIdentidad, razonSocialNombre } =
+                        // const { _id, usuarioCrea,  observacion }
                         outAlmaLocali;
                       const indexItem = index + 1; //, index
                       return (
                         <tr key={_id}>
                           <td data-label="Ítem">{cerosALaIzquierda(indexItem, 3)}</td>
                           {/* <td data-label="ID">{_id}</td> */}
-                          <td data-label="Respon">{usuarioCrea.substring(0, 10)}</td>
+                          <td data-label="Respon">{usuarioCrea ? usuarioCrea.substring(0, 10) : '-'}</td>
+                          {/* <td data-label="Respon">{usuarioCrea}</td> */}
                           <td data-label="FISMA">{FISMA ? formatoDDMMYYYY_PEN(FISMA) : '-'}</td>
                           <td data-label="Motivo">{motivoEgresoAlmacen ? motivoEgresoAlmacen : '-'}</td>
                           <td data-label="Doc">{numeroIdentidad ? tipoDocumentoIdentidad + ': ' + numeroIdentidad : '-'}</td>
