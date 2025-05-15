@@ -351,8 +351,13 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
   });
   //#endregion LIMPIAR SUCURSAL DESTINO
 
-  //#region REGISTRAR_EGRESO
+  //#region REGISTRAR_EGRESO parametrosGlobales.usuario
   const registrarEgreso = $(async () => {
+    if (parametrosGlobales.usuario === '' || typeof parametrosGlobales.usuario === 'undefined') {
+      alert('No se identificado adecuadamente el usuario, por favor verifique.');
+      // document.getElementById('se_motivoIngreso')?.focus();
+      return;
+    }
     //periodo FISMA idMotivoEgresoAlmacen
     //console.log(' //periodo FISMA idMotivoEgresoAlmacen');
     if (definicion_CTX_OUT_ALMACEN.idAlmacen === '' || typeof definicion_CTX_OUT_ALMACEN.idAlmacen === 'undefined') {

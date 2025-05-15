@@ -85,7 +85,7 @@ export default component$(
                     <thead>
                       <tr>
                         <th>Ítem</th>
-                        {/* <th>idMercaderia</th> */}
+                        <th>idMercaderia</th>
                         <th>Descripción</th>
                         <th>Linea/Tipo</th>
                         <th>Marca</th>
@@ -161,7 +161,7 @@ export default component$(
                             // style={laSumStocks === 0 ? { background: 'white', color: 'red' } : {}}
                           >
                             <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
-                            {/* <td data-label="idMercaderia">{_id}</td> */}
+                            <td data-label="idMercaderia">{_id}</td>
                             <td data-label="Descripción" style={{ fontWeight: 'bold' }}>
                               {elSM >= laSumStocks ? (
                                 <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
