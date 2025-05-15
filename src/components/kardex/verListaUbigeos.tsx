@@ -17,6 +17,7 @@ export default component$((props: { descripcion: string; idKardex: string; conte
   //#region DEFINICION CTX_VER_LISTA_UBIGEOS_STOCKS_IN
   const definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN = useStore<any>({
     mostrarPanelNewEditUbigeosStocksIN: false,
+    elIDUbigeo: '',
     elUbigeo: '',
 
     mostrarPanelTrasladoEntreUbigeosIN: false,
@@ -90,6 +91,16 @@ export default component$((props: { descripcion: string; idKardex: string; conte
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
+        {/* <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={18}
+          width={18}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log(losUbigeosStocks);
+          })}
+        /> */}
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"
@@ -147,7 +158,7 @@ export default component$((props: { descripcion: string; idKardex: string; conte
                       </thead>
                       <tbody>
                         {misUbigeosStocks.map((ubiLoca) => {
-                          const { ubigeo, stock } = ubiLoca;
+                          const { _id, ubigeo, stock } = ubiLoca;
                           total = total + Number(stock.$numberDecimal);
                           return (
                             <tr>
@@ -157,13 +168,32 @@ export default component$((props: { descripcion: string; idKardex: string; conte
                               </td>
                               <td data-label="Acc" class="accionesLeft">
                                 <input
+                                  title="Editar ubigeo"
+                                  type="image"
+                                  src={images.edit}
+                                  // alt="icono de editar"
+                                  height={14}
+                                  width={14}
+                                  style={{ cursor: 'pointer', marginRight: '8px' }}
+                                  onClick$={() => {
+                                    if (ubigeo.toUpperCase().trim() === 'TRASLADO') {
+                                      alert('El ubigeo TRASLADO no puede ser editado.');
+                                      return;
+                                    }
+                                    definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.elIDUbigeo = _id;
+                                    definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.elUbigeo = ubigeo;
+
+                                    definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelNewEditUbigeosStocksIN = true;
+                                  }}
+                                />
+                                <input
                                   // id="in_BuscarDetraccion"
+                                  title="Traslado interno"
                                   type="image"
                                   src={images.traslado}
-                                  title="Traslado interno"
                                   alt="icono buscar"
-                                  height={12}
-                                  width={12}
+                                  height={14}
+                                  width={14}
                                   //   style={{ padding: '2px',  }}
                                   //   onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                   onClick$={() => {
@@ -202,7 +232,12 @@ export default component$((props: { descripcion: string; idKardex: string; conte
       </div>
       {definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelNewEditUbigeosStocksIN && (
         <div class="modal">
-          <NewEditUbigeo idKardex={props.idKardex} ubigeo={definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.elUbigeo} contexto="ver_lista_ubigeos" />
+          <NewEditUbigeo
+            idKardex={props.idKardex}
+            idUbigeoStock={definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.elIDUbigeo}
+            ubigeo={definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.elUbigeo}
+            contexto="ver_lista_ubigeos"
+          />
         </div>
       )}
       {definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelTrasladoEntreUbigeosIN && (

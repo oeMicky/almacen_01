@@ -9,7 +9,7 @@ import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import { CTX_LISTA_UBIGEOS_STOCKS_IN } from './listaUbigeosStocksIN';
 import { CTX_VER_LISTA_UBIGEOS_STOCKS_IN } from '~/components/kardex/verListaUbigeos';
 
-export default component$((props: { idKardex: any; ubigeo: string; contexto: string }) => {
+export default component$((props: { idKardex: any; idUbigeoStock: string; ubigeo: string; contexto: string }) => {
   //#region CONTEXTOS
   // const ctx_buscar_mercaderia_in = useContext();
   //#endregion CONTEXTOS
@@ -36,6 +36,7 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
 
   //#region INICIALIZAR
   const ini = useSignal(0);
+  const idUBI = useSignal(props.idUbigeoStock);
   const UBI = useSignal(props.ubigeo);
 
   useTask$(({ track }) => {
@@ -45,7 +46,8 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
     // obtenerPorcentajesUtilidad();
     setTimeout(() => {
       // document.getElementById('image_BuscarCliente')?.focus();
-      document.getElementById('in_ubigeoIN_MICE')?.focus();
+      // document.getElementById('in_ubigeoIN_MICE')?.focus();
+      (document.getElementById('in_ubigeoIN_MICE') as HTMLInputElement)?.select();
     }, 100);
     ctx.mostrarSpinner = false;
   });
@@ -67,6 +69,7 @@ export default component$((props: { idKardex: any; ubigeo: string; contexto: str
     // const lt =
     await inUpUbigeo2({
       idKardex: props.idKardex,
+      idUbigeoStock: idUBI.value,
       ubigeo: UBI.value as string,
 
       usuario: parametrosGlobales.usuario,

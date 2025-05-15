@@ -229,8 +229,8 @@ export default component$(
                                 type="image"
                                 src={images.see}
                                 alt="icono de adicionar"
-                                height={16}
-                                width={16}
+                                height={14}
+                                width={14}
                                 style={{ marginRight: '8px' }}
                                 onClick$={() => {
                                   //console.log('mercaINLocali', mercaINLocali);
@@ -269,8 +269,8 @@ export default component$(
                                 type="image"
                                 src={images.edit}
                                 // alt="icono de editar"
-                                height={16}
-                                width={16}
+                                height={14}
+                                width={14}
                                 style={{ cursor: 'pointer', marginRight: '8px' }}
                                 onClick$={() => {
                                   ctx_index_inventario.mM = mercaINLocali;
@@ -284,8 +284,8 @@ export default component$(
                                 title="Editar ubigeo"
                                 type="image"
                                 src={images.ubigeo}
-                                height={16}
-                                width={16}
+                                height={14}
+                                width={14}
                                 style={{ marginRight: '8px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
@@ -317,8 +317,8 @@ export default component$(
                                 title="Editar precio público"
                                 type="image"
                                 src={images.moneyBag}
-                                height={16}
-                                width={16}
+                                height={14}
+                                width={14}
                                 style={{ marginRight: '8px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
@@ -355,8 +355,8 @@ export default component$(
                                 title="Ver ubigeo antiguo"
                                 type="image"
                                 src={images.xo}
-                                height={16}
-                                width={16}
+                                height={14}
+                                width={14}
                                 style={{ marginRight: '8px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={async () => {
