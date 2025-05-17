@@ -141,13 +141,16 @@ export default component$(() => {
                       parametrosGlobales.verFactura = sucur.verFactura;
                       parametrosGlobales.verReporteFacturacion = sucur.verReporteFacturacion;
                       parametrosGlobales.verCotizacion = sucur.verCotizacion;
+                      ///////////
                       parametrosGlobales.guiaElectronica = sucur.guiaElectronica;
                       parametrosGlobales.SIRE = sucur.SIRE;
                       parametrosGlobales.compras = sucur.compras;
+                      ///////////
                       parametrosGlobales.inventario = sucur.inventario; //******* */
                       parametrosGlobales.verOtrosAlmacenes = sucur.verOtrosAlmacenes; //******* */
                       parametrosGlobales.verInAlmacen = sucur.verInAlmacen;
                       parametrosGlobales.verOutAlmacen = sucur.verOutAlmacen;
+                      ////////////
                       parametrosGlobales.ordenesProduccion = sucur.ordenesProduccion;
                       parametrosGlobales.ordenesServicio = sucur.ordenesServicio;
                       parametrosGlobales.bancos = sucur.bancos;
@@ -266,13 +269,16 @@ export default component$(() => {
                         parametrosGlobales.verFactura = sucur.verFactura;
                         parametrosGlobales.verReporteFacturacion = sucur.verReporteFacturacion;
                         parametrosGlobales.verCotizacion = sucur.verCotizacion;
+                        //////////
                         parametrosGlobales.guiaElectronica = sucur.guiaElectronica;
                         parametrosGlobales.SIRE = sucur.SIRE;
                         parametrosGlobales.compras = sucur.compras;
+                        ///////////
                         parametrosGlobales.inventario = sucur.inventario; //******* */
                         parametrosGlobales.verOtrosAlmacenes = sucur.verOtrosAlmacenes; //******* */
                         parametrosGlobales.verInAlmacen = sucur.verInAlmacen;
                         parametrosGlobales.verOutAlmacen = sucur.verOutAlmacen;
+                        ///////////
                         parametrosGlobales.ordenesProduccion = sucur.ordenesProduccion;
                         parametrosGlobales.ordenesServicio = sucur.ordenesServicio;
                         parametrosGlobales.bancos = sucur.bancos;

@@ -282,6 +282,7 @@ export default component$(() => {
         >
           ADD MERCADERÍA
         </button>
+        <button onClick$={() => console.log(parametrosGlobales)}>paramt</button>
       </div>
       <br />
       {/* LEYENDA */}

@@ -143,6 +143,9 @@ export default component$(() => {
     mostrarSpinner: false,
 
     //-- BETA --
+    // email: 'taty_vizconde@hotmail.com',
+    // contrasena: '123456',
+    //-- BETA --
     // email: 'mvizconde@msn.com',
     // contrasena: 'Pamela123',
 
@@ -278,8 +281,8 @@ export default component$(() => {
       ////////////
       parametrosGlobales.inventario = sucursales.data[0].inventario; //******* */
       parametrosGlobales.verOtrosAlmacenes = sucursales.data[0].verOtrosAlmacenes; //******* */
-      parametrosGlobales.verInAlmacen = sucursales.data[0].verOtrosAlmacenes;
-      parametrosGlobales.verOutAlmacen = sucursales.data[0].verOtrosAlmacenes;
+      parametrosGlobales.verInAlmacen = sucursales.data[0].verInAlmacen;
+      parametrosGlobales.verOutAlmacen = sucursales.data[0].verOutAlmacen;
       ///////////
       parametrosGlobales.ordenesProduccion = sucursales.data[0].ordenesProduccion;
       parametrosGlobales.ordenesServicio = sucursales.data[0].ordenesServicio;
