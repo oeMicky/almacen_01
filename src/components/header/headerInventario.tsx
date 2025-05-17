@@ -28,7 +28,7 @@ export default component$(() => {
           <input type="checkbox" class="toggle-menu__checkbox" id="toggle-menu-checkbox" />
           <ul class="main-menu" style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
             <li
-              // hidden={!parametrosGlobales.almacenActivo}
+              hidden={!parametrosGlobales.verInAlmacen}
               class="main-menu__item"
               style={{ cursor: 'pointer' }}
               onClick$={() => {
@@ -41,7 +41,7 @@ export default component$(() => {
               {/* </Link> */}
             </li>
             <li
-              // hidden={!parametrosGlobales.almacenActivo}
+              hidden={!parametrosGlobales.verOutAlmacen}
               class="main-menu__item"
               style={{ cursor: 'pointer' }}
               onClick$={() => {

@@ -95,11 +95,17 @@ export const parametrosGlobales = {
   ejercicio: 0,
   //servicios
   facturaElectronica: false,
+  verNotaVenta: false,
+  verFactura: false,
+  verReporteFacturacion: false,
+  verCotizacion: false,
   guiaElectronica: false,
   SIRE: false,
   compras: false,
   inventario: false,
   verOtrosAlmacenes: false,
+  verInAlmacen: false,
+  verOutAlmacen: false,
   ordenesProduccion: false,
   ordenesServicio: false,
   seguimientoCosto: false,
@@ -261,11 +267,20 @@ export default component$(() => {
       parametrosGlobales.almacenActivo = activo[0].almacenActivo;
       //SERVICIOS
       parametrosGlobales.facturaElectronica = sucursales.data[0].facturaElectronica;
+      parametrosGlobales.verNotaVenta = sucursales.data[0].verNotaVenta;
+      parametrosGlobales.verFactura = sucursales.data[0].verFactura;
+      parametrosGlobales.verReporteFacturacion = sucursales.data[0].verReporteFacturacion;
+      parametrosGlobales.verCotizacion = sucursales.data[0].verCotizacion;
+      ///////////
       parametrosGlobales.guiaElectronica = sucursales.data[0].guiaElectronica;
       parametrosGlobales.SIRE = sucursales.data[0].SIRE;
       parametrosGlobales.compras = sucursales.data[0].compras;
+      ////////////
       parametrosGlobales.inventario = sucursales.data[0].inventario; //******* */
       parametrosGlobales.verOtrosAlmacenes = sucursales.data[0].verOtrosAlmacenes; //******* */
+      parametrosGlobales.verInAlmacen = sucursales.data[0].verOtrosAlmacenes;
+      parametrosGlobales.verOutAlmacen = sucursales.data[0].verOtrosAlmacenes;
+      ///////////
       parametrosGlobales.ordenesProduccion = sucursales.data[0].ordenesProduccion;
       parametrosGlobales.ordenesServicio = sucursales.data[0].ordenesServicio;
       parametrosGlobales.seguimientoCosto = sucursales.data[0].seguimientoCosto;

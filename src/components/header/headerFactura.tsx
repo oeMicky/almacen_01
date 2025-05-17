@@ -28,6 +28,7 @@ export default component$(() => {
           <input type="checkbox" class="toggle-menu__checkbox" id="toggle-menu-checkbox" />
           <ul class="main-menu" style={parametrosGlobales.colorHeaderEmpresarial !== '' ? { background: parametrosGlobales.colorHeaderEmpresarial } : ''}>
             <li
+              hidden={!parametrosGlobales.verNotaVenta}
               class="main-menu__item"
               title="Nota de venta"
               style={{ cursor: 'pointer' }}
@@ -55,6 +56,7 @@ export default component$(() => {
               {/* </Link> */}
             </li>
             <li
+              hidden={!parametrosGlobales.verFactura}
               class="main-menu__item"
               title="Facturación electrónica"
               style={{ cursor: 'pointer' }}
@@ -82,6 +84,7 @@ export default component$(() => {
               {/* </Link> */}
             </li>
             <li
+              hidden={!parametrosGlobales.verReporteFacturacion}
               class="main-menu__item"
               title="Reporte de venta"
               style={{ cursor: 'pointer' }}
@@ -109,6 +112,7 @@ export default component$(() => {
               {/* </Link> */}
             </li>
             <li
+              hidden={!parametrosGlobales.verCotizacion}
               class="main-menu__item"
               title="Cotización"
               style={{ cursor: 'pointer' }}
