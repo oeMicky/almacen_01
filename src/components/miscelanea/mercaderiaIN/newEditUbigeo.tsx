@@ -7,7 +7,7 @@ import { parametrosGlobales } from '~/routes/login';
 import { CTX_BUSCAR_MERCADERIA_OUT } from '../mercaderiaOUT/buscarMercaderiaOUT';
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import { CTX_LISTA_UBIGEOS_STOCKS_IN } from './listaUbigeosStocksIN';
-import { CTX_VER_LISTA_UBIGEOS_STOCKS_IN } from '~/components/kardex/verListaUbigeos';
+import { CTX_VER_LISTA_UBIGEOS_STOCKS_IN } from '~/components/inventario/verListaUbigeos';
 
 export default component$((props: { idKardex: any; idUbigeoStock: string; ubigeo: string; contexto: string }) => {
   //#region CONTEXTOS
@@ -28,7 +28,7 @@ export default component$((props: { idKardex: any; idUbigeoStock: string; ubigeo
     case 'buscar_mercaderia_out':
       ctx = useContext(CTX_BUSCAR_MERCADERIA_OUT);
       break;
-    case 'index_kardexs':
+    case 'index_inventario':
       ctx = useContext(CTX_INDEX_INVENTARIO);
       break;
   }

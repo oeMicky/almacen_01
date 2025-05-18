@@ -37,7 +37,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
   //#region CONTEXTOS
   let ctx: any = [];
   switch (props.contexto) {
-    case 'index_kardexs':
+    case 'index_inventario':
       //console.log('contexto::a: index_kardexs');
       ctx = useContext(CTX_INDEX_INVENTARIO);
       break;

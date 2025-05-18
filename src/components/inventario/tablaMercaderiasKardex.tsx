@@ -152,7 +152,7 @@ export default component$(
                                 : noFacturar
                                 ? { background: '#ff5aff', display: props.visualizarStocksCeros ? '' : 'none' }
                                 : laSumStocks === 0
-                                ? { color: 'red', display: props.visualizarStocksCeros ? '' : 'none' }
+                                ? { color: 'FireBrick', display: props.visualizarStocksCeros ? '' : 'none' }
                                 : {}
                             }
                             // hidden={props.visualizarStocksCeros}

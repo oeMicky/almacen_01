@@ -6,7 +6,7 @@ import { parametrosGlobales } from '~/routes/login'; //
 import { cerosALaIzquierda, formatear_6Decimales, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 // import { cerosALaIzquierda, formatear_6Decimales } from '~/functions/comunes';
 // import { cerosALaIzquierda } from '~/functions/comunes';
-import { CTX_KARDEX } from '../kardex/kardex';
+import { CTX_KARDEX } from '../inventario/kardex';
 
 export default component$((props: { outSelecci: any; contexto: string; indexItem?: number; codigoMercaderia?: string }) => {
   //#region CONTEXTO

@@ -9,14 +9,15 @@ import NewEditMercaderiaIN from './newEditMercaderiaIN';
 import KardexsIN from './kardexsIN';
 import Spinner from '~/components/system/spinner';
 import { CTX_NEW_EDIT_GUIA_REMISION } from '~/components/guiaRemision/newEditGuiaRemision';
-import Kardexs from '~/components/kardex/kardexs';
-import Kardex from '~/components/kardex/kardex';
+import Kardexs from '~/components/inventario/kardexs';
+import Kardex from '~/components/inventario/kardex';
 import EditPrecioPublicoIN from './editPrecioPublicoIN';
 // import NewEditUbigeo from './newEditUbigeo';
 import { verOtrosAlmacenes } from '~/apis/usuario.api';
 import InventarioExterno from '../inventarioExterno/inventarioExterno';
 import ListaUbigeosStocksIN from './listaUbigeosStocksIN';
-import VerUbigeoAntiguo from '~/components/kardex/verUbigeoAntiguo';
+import VerUbigeoAntiguo from '~/components/inventario/verUbigeoAntiguo';
+import ListaOtrosAlmacenes from '~/components/inventario/listaOtrosAlmacenes';
 // import TrasladoEntreUbigeosIN from './trasladoEntreUbigeosIN';
 // import MercaderiaINSelec from "./mercaderiaINSelec";
 
@@ -75,7 +76,8 @@ export default component$(
       grabo_precio_publico: false,
 
       mostrarPanelInventarioExterno: false,
-      mostrarPanelVerOtrosAlmacenenes: false,
+      mostrarPanelListaOtrosAlmacenes: false,
+      otrosAlmacenes: [],
       almacenExterno: [],
 
       mostrarSpinner: false,
@@ -360,6 +362,8 @@ export default component$(
                         definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelInventarioExterno = true;
                       } else {
                         //ir al panel de listado de almacenes disponibles
+                        definicion_CTX_BUSCAR_MERCADERIA_IN.otrosAlmacenes = losAlmacenes.data;
+                        definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelListaOtrosAlmacenes = true;
                       }
                     }}
                   />
@@ -639,6 +643,12 @@ export default component$(
                   // pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
                   contexto="buscar_mercaderia_in"
                 />
+              </div>
+            )}
+            {/*  LISTA OTROS ALMACENES */}
+            {definicion_CTX_BUSCAR_MERCADERIA_IN.mostrarPanelListaOtrosAlmacenes && (
+              <div class="modal">
+                <ListaOtrosAlmacenes otrosAlmacenes={definicion_CTX_BUSCAR_MERCADERIA_IN.otrosAlmacenes} contexto={'buscar_mercaderia_in'} />
               </div>
             )}
             {/* MOSTRAR SPINNER */}

@@ -2,11 +2,12 @@ import { $, component$, createContextId, useContextProvider, useSignal, useStore
 import { useNavigate } from '@builder.io/qwik-city';
 import { verOtrosAlmacenes } from '~/apis/usuario.api';
 import { images } from '~/assets';
-import Kardex from '~/components/kardex/kardex';
-import Kardexs from '~/components/kardex/kardexs';
-import TablaMercaderiasKardex from '~/components/kardex/tablaMercaderiasKardex';
-import VerListaUbigeos from '~/components/kardex/verListaUbigeos';
-import VerUbigeoAntiguo from '~/components/kardex/verUbigeoAntiguo';
+import Kardex from '~/components/inventario/kardex';
+import Kardexs from '~/components/inventario/kardexs';
+import ListaOtrosAlmacenes from '~/components/inventario/listaOtrosAlmacenes';
+import TablaMercaderiasKardex from '~/components/inventario/tablaMercaderiasKardex';
+import VerListaUbigeos from '~/components/inventario/verListaUbigeos';
+import VerUbigeoAntiguo from '~/components/inventario/verUbigeoAntiguo';
 import InventarioExterno from '~/components/miscelanea/inventarioExterno/inventarioExterno';
 import EditPrecioPublicoIN from '~/components/miscelanea/mercaderiaIN/editPrecioPublicoIN';
 // import ListaUbigeosStocksIN from '~/components/miscelanea/mercaderiaIN/listaUbigeosStocksIN';
@@ -52,8 +53,9 @@ export default component$(() => {
     grabo_precio_publico: false,
 
     mostrarPanelInventarioExterno: false,
-    mostrarPanelVerOtrosAlmacenenes: false,
+    mostrarPanelListaOtrosAlmacenes: false,
     almacenExterno: [],
+    otrosAlmacenes: [],
 
     mostrarSpinner: false,
   });
@@ -268,6 +270,8 @@ export default component$(() => {
                   definicion_CTX_INDEX_INVENTARIO.mostrarPanelInventarioExterno = true;
                 } else {
                   //ir al panel de listado de almacenes disponibles
+                  definicion_CTX_INDEX_INVENTARIO.otrosAlmacenes = losAlmacenes.data;
+                  definicion_CTX_INDEX_INVENTARIO.mostrarPanelListaOtrosAlmacenes = true;
                 }
               }}
             />
@@ -282,7 +286,7 @@ export default component$(() => {
         >
           ADD MERCADERÍA
         </button>
-        <button onClick$={() => console.log(parametrosGlobales)}>paramt</button>
+        {/* <button onClick$={() => console.log(parametrosGlobales)}>paramt</button> */}
       </div>
       <br />
       {/* LEYENDA */}
@@ -443,7 +447,7 @@ export default component$(() => {
 
       {definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN && (
         <div class="modal">
-          <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_INDEX_INVENTARIO.mM} contexto={'index_kardexs'} />
+          <NewEditMercaderiaIN mercaSeleccio={definicion_CTX_INDEX_INVENTARIO.mM} contexto={'index_inventario'} />
         </div>
       )}
       {/*  TABLA  --  MERCADERIAS LOCALIZADOS */}
@@ -537,6 +541,12 @@ export default component$(() => {
               // pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
               contexto="index_inventario"
             />
+          </div>
+        )}
+        {/*  LISTA OTROS ALMACENES */}
+        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelListaOtrosAlmacenes && (
+          <div class="modal">
+            <ListaOtrosAlmacenes otrosAlmacenes={definicion_CTX_INDEX_INVENTARIO.otrosAlmacenes} contexto={'index_inventario'} />
           </div>
         )}
         {/* MOSTRAR SPINNER */}

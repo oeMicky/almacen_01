@@ -5,8 +5,8 @@ import { CTX_BUSCAR_MERCADERIA_IN } from '../mercaderiaIN/buscarMercaderiaIN';
 import TablaMercaderiasInventarioExterno from './tablaMercaderiasInventarioExterno';
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import { CTX_BUSCAR_MERCADERIA_OUT } from '../mercaderiaOUT/buscarMercaderiaOUT';
-import Kardex from '~/components/kardex/kardex';
-import VerListaUbigeos from '~/components/kardex/verListaUbigeos';
+import Kardex from '~/components/inventario/kardex';
+import VerListaUbigeos from '~/components/inventario/verListaUbigeos';
 
 export const CTX_INVENTARIO_EXTERNO = createContextId<any>('ctx_inventario_externo__');
 

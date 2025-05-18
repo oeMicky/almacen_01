@@ -139,7 +139,7 @@ export default component$((props: { mercaSeleccio: any; contexto: string; conLot
     case 'new_out_almacen':
       ctx = useContext(CTX_BUSCAR_MERCADERIA_OUT);
       break;
-    case 'index_kardexs':
+    case 'index_inventario':
       ctx = useContext(CTX_INDEX_INVENTARIO);
       break;
     case 'registro_productos_terminados':

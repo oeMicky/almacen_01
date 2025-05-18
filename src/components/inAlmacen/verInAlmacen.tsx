@@ -6,7 +6,7 @@ import { parametrosGlobales } from '~/routes/login';
 // import { formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN, formatear_6Decimales, redondeo2Decimales } from '~/functions/comunes';
 // import { cerosALaIzquierda, formatoDDMMYYYY_PEN, redondeo2Decimales } from '~/functions/comunes';
-import { CTX_KARDEX } from '../kardex/kardex';
+import { CTX_KARDEX } from '../inventario/kardex';
 
 // export default component$((props: { indexItem?: number }) => {
 // export default component$((props: { contexto: string; indexItem?: number }) => {
