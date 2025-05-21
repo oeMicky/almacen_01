@@ -238,7 +238,7 @@ async function pdfNotaVenta(notaVenta: any) {
           {
             width: '64%',
             //   margin: [50, 20, 0, 0],
-            text: { text: notaVenta.usuarioCrea, style: 'texto' },
+            text: { text: notaVenta.usuarioCrea.substring(0, 10), style: 'texto' },
           },
         ],
       },
