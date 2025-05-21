@@ -303,7 +303,7 @@ export interface INotaVenta {
   verCuotasCredito: boolean;
   cuotasCredito: any;
   // cuotasCredito: [ICuotaCreditoVenta];
-  importeTotalCuotasCredito: number;
+  importeTotalCuotasCredito: any;
 
   idCotizacion: string;
   serieCotizacion: string;
@@ -341,6 +341,12 @@ export interface INotaVenta {
 
   efectivoIngresado: any;
   vuelto: any;
+
+  clienteSobrenombreChapa: string;
+  placa: string;
+  kilometraje: string;
+  checkACuenta: boolean;
+  aCuenta: string;
 
   // montoSubTotalPEN: any;
   // montoIGVPEN: any;
@@ -399,6 +405,9 @@ export interface IReporteNotaVenta {
   codigoTipoComprobantePago: string;
   serie: string;
   numero: number;
+
+  clienteSobrenombreChapa: string;
+  importeTotalCuotasCredito: any;
 
   fecha: string;
   fechaLocal: string;

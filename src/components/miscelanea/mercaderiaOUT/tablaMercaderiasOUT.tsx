@@ -607,8 +607,8 @@ export default component$(
                                 type="image"
                                 src={images.information}
                                 title={aplicacion}
-                                height={12}
-                                width={12}
+                                height={14}
+                                width={14}
                                 style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log("☪☪☪☪☪☪!!!")}
                                 onClick$={() => {
@@ -634,8 +634,8 @@ export default component$(
                               title="Editar mercadería"
                               type="image"
                               src={images.edit}
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               style={{ marginRight: '6px' }}
                               // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
@@ -649,8 +649,8 @@ export default component$(
                               title="Ver ubigeo antiguo"
                               type="image"
                               src={images.ubigeo}
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               style={{ marginRight: '6px' }}
                               onClick$={() => {
                                 // if (mercaOUTLocali.KARDEXS.length === 0) {
@@ -684,8 +684,8 @@ export default component$(
                               title="Ver kardex/s"
                               src={images.see}
                               type="image"
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               style={{ marginRight: '6px' }}
                               // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                               onClick$={() => {
@@ -726,8 +726,8 @@ export default component$(
                                 title="Editar precio público"
                                 type="image"
                                 src={images.moneyBag}
-                                height={12}
-                                width={12}
+                                height={14}
+                                width={14}
                                 // style={{ marginRight: '2px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {

@@ -54,6 +54,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
   let suma_TOTAL_IMPORTE_PEN = 0;
   let suma_TOTAL_EFECTIVO_PEN = 0;
   let suma_TOTAL_OTROMONTO_PEN = 0;
+  let suma_TOTAL_CREDITO_PEN = 0;
   //#endregion INICIALIZACION
 
   //#region VER PDF
@@ -153,15 +154,17 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                     <thead>
                       <tr>
                         <th>Item</th>
+                        <th>Cliente</th>
                         <th>Observación</th>
                         <th>Fecha</th>
                         <th>Ser-Nro</th>
                         <th>Importe</th>
                         <th>Mon</th>
-                        <th>Metodo pago</th>
+                        <th>Método pago</th>
                         <th>Efectivo</th>
                         <th>O. M. Pago</th>
                         <th>Monto O. M. Pago</th>
+                        <th>Crédito</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
@@ -170,6 +173,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                         const indexItem = index + 1;
                         let efec = 0;
                         let otro = 0;
+                        let cred = 0;
                         let tot = 0;
 
                         efec =
@@ -180,6 +184,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                             : 0;
                         //  notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
                         otro = notaVenta.montoOtroMedioPago.$numberDecimal;
+                        cred = notaVenta.importeTotalCuotasCredito.$numberDecimal;
                         tot = notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
 
                         // const aMod: any = notaVenta.ganancias.find((element: any) => element.tipo === 'MERCADERIA');
@@ -195,26 +200,23 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                         suma_TOTAL_IMPORTE_PEN = suma_TOTAL_IMPORTE_PEN + Number(tot);
                         suma_TOTAL_EFECTIVO_PEN = suma_TOTAL_EFECTIVO_PEN + Number(efec);
                         suma_TOTAL_OTROMONTO_PEN = suma_TOTAL_OTROMONTO_PEN + Number(otro);
+                        suma_TOTAL_CREDITO_PEN = suma_TOTAL_CREDITO_PEN + Number(cred);
 
                         return (
-                          <tr key={notaVenta._id}>
-                            <td data-label="Item" class="comoCadena">
-                              {indexItem}
-                            </td>
-
-                            <td data-label="Observación" class="comoCadena">
-                              {notaVenta.observacion}
-                            </td>
-                            <td data-label="Fecha" class="comoCadena">
+                          <tr key={notaVenta._id} style={notaVenta.metodoPago === 'CRÉDITO' ? { color: 'purple', fontWeight: 'bold' } : {}}>
+                            <td data-label="Item">{cerosALaIzquierda(indexItem, 3)}</td>
+                            <td data-label="Cliente">{notaVenta.clienteSobrenombreChapa ? notaVenta.clienteSobrenombreChapa : '-'}</td>
+                            <td data-label="Observación">{notaVenta.observacion ? notaVenta.observacion : '-'}</td>
+                            <td data-label="Fecha">
                               {/* {notaVenta.fechaLocal.substring(8, 10) + '/' + notaVenta.fechaLocal.substring(5, 7) + '/' + notaVenta.fechaLocal.substring(0, 4)} */}
 
                               {notaVenta.fechaLocal.substring(0, 2) + '/' + notaVenta.fechaLocal.substring(3, 5) + '/' + notaVenta.fechaLocal.substring(6, 10)}
                             </td>
-                            <td data-label="Ser-Nro" class="comoCadena">
+                            <td data-label="Ser-Nro">
                               {notaVenta.serie + ' - ' + cerosALaIzquierda(notaVenta.numero, 8)}
                               {notaVenta.existeOtros ? <img src={images.puntoAzul} alt="Punto verde" width="12" height="12" /> : ''}
                             </td>
-                            <td data-label="Importe" class="comoNumero">
+                            <td data-label="Importe" class="comoNumeroLeft">
                               {notaVenta.moneda === 'PEN'
                                 ? parseFloat(notaVenta.totalPEN.$numberDecimal).toLocaleString('en-PE', {
                                     // style: 'currency',
@@ -227,13 +229,11 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                                     minimumFractionDigits: 2,
                                   })}
                             </td>
-                            <td data-label="Mon" class="acciones">
-                              {notaVenta.moneda}
-                            </td>
-                            <td data-label="Metodo pago" class="comoCadena">
+                            <td data-label="Mon">{notaVenta.moneda}</td>
+                            <td data-label="Metodo pago" style={notaVenta.metodoPago === 'CRÉDITO' ? { fontWeight: 'bold' } : {}}>
                               {notaVenta.metodoPago}
                             </td>
-                            <td data-label="Efectivo" class="comoNumero">
+                            <td data-label="Efectivo" class="comoNumeroLeft">
                               {notaVenta.metodoPago === 'CONTADO'
                                 ? notaVenta.todoEnEfectivo
                                   ? parseFloat(notaVenta.totalPEN.$numberDecimal).toLocaleString('en-PE', {
@@ -246,19 +246,37 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                                       currency: 'PEN',
                                       minimumFractionDigits: 2,
                                     })
-                                : ''}
+                                : notaVenta.unaParteEnEfectivo
+                                ? parseFloat(notaVenta.montoEnEfectivo.$numberDecimal).toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })
+                                : '-'}
                             </td>
-                            <td data-label="O. M. Pago" class="comoCadena">
-                              {notaVenta.metodoPago === 'CONTADO' ? (notaVenta.todoEnEfectivo ? '' : notaVenta.otroMedioPago) : ''}
+                            <td data-label="O. M. Pago">
+                              {notaVenta.otroMedioPago ? notaVenta.otroMedioPago : '-'}
+                              {/* {notaVenta.metodoPago === 'CONTADO' ? (notaVenta.todoEnEfectivo ? '' : notaVenta.otroMedioPago) : ''} */}
                             </td>
-                            <td data-label="Monto O. M. Pago" class="comoNumero">
-                              {parseFloat(notaVenta.montoOtroMedioPago.$numberDecimal).toLocaleString('en-PE', {
-                                // style: 'currency',
-                                currency: 'PEN',
-                                minimumFractionDigits: 2,
-                              })}
+                            <td data-label="Monto O. M. Pago" class="comoNumeroLeft">
+                              {parseFloat(notaVenta.montoOtroMedioPago.$numberDecimal) === 0
+                                ? '-'
+                                : parseFloat(notaVenta.montoOtroMedioPago.$numberDecimal).toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })}
                             </td>
-                            <td data-label="Acciones" class="acciones">
+                            <td data-label="Crédito" class="comoNumeroLeft">
+                              {parseFloat(notaVenta.importeTotalCuotasCredito.$numberDecimal) === 0
+                                ? '-'
+                                : parseFloat(notaVenta.importeTotalCuotasCredito.$numberDecimal).toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })}
+                            </td>
+                            <td data-label="Acciones" class="accionesLeft">
                               <input
                                 type="image"
                                 src={images.print}
@@ -379,7 +397,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colSpan={4} class="comoNumero" style={{ color: '#2E1800' }}>
+                        <td colSpan={5} class="comoNumero" style={{ color: '#2E1800' }}>
                           TOTALES PEN
                         </td>
                         <td class="comoNumero" style={{ color: '#2E1800' }}>
@@ -401,6 +419,13 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                         <td class="comoNumero"></td>
                         <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {`${suma_TOTAL_OTROMONTO_PEN.toLocaleString('en-PE', {
+                            // style: 'currency',
+                            currency: 'PEN',
+                            minimumFractionDigits: 2,
+                          })}`}
+                        </td>
+                        <td class="comoNumero" style={{ color: '#2E1800' }}>
+                          {`${suma_TOTAL_CREDITO_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
                             currency: 'PEN',
                             minimumFractionDigits: 2,

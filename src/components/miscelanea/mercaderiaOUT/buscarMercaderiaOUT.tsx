@@ -30,6 +30,7 @@ import Kardex from '~/components/inventario/kardex';
 import EditPrecioPublicoIN from '../mercaderiaIN/editPrecioPublicoIN';
 import VerUbigeoAntiguo from '~/components/inventario/verUbigeoAntiguo';
 import ListaUbigeosStocksOUT from './listaUbigeosStocksOUT';
+import ListaOtrosAlmacenes from '~/components/inventario/listaOtrosAlmacenes';
 // import ListaUbigeosStocksIN from '../mercaderiaIN/listaUbigeosStocksIN';
 // import NewEditUbigeo from '../mercaderiaIN/newEditUbigeo';
 
@@ -76,7 +77,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     grabo_PrecioOUT: false,
 
     mostrarPanelInventarioExterno: false,
-    mostrarPanelVerOtrosAlmacenenes: false,
+    mostrarPanelListaOtrosAlmacenes: false,
+    otrosAlmacenes: [],
     almacenExterno: [],
 
     mostrarPanelKARDEX: false,
@@ -711,6 +713,8 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                       definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelInventarioExterno = true;
                     } else {
                       //ir al panel de listado de almacenes disponibles
+                      definicion_CTX_BUSCAR_MERCADERIA_OUT.otrosAlmacenes = losAlmacenes.data;
+                      definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelListaOtrosAlmacenes = true;
                     }
                   }}
                 />
@@ -948,6 +952,12 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
                 // pUtilidad={definicion_CTX_BUSCAR_MERCADERIA_IN.pUtilidad}
                 contexto="buscar_mercaderia_out"
               />
+            </div>
+          )}
+          {/*  LISTA OTROS ALMACENES */}
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelListaOtrosAlmacenes && (
+            <div class="modal">
+              <ListaOtrosAlmacenes otrosAlmacenes={definicion_CTX_BUSCAR_MERCADERIA_OUT.otrosAlmacenes} contexto={'buscar_mercaderia_out'} />
             </div>
           )}
           {/* MOSTRAR SPINNER */}

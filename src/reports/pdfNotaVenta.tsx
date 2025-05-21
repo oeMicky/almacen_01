@@ -163,7 +163,7 @@ async function pdfNotaVenta(notaVenta: any) {
               { text: notaVenta.sucursal + '\n', style: 'texto' },
               { text: notaVenta.sucursalDireccion + '\n\n', style: 'texto' },
 
-              { text: 'PROFORMA' + '\n', style: 'texto' },
+              { text: 'NOTA DE VENTA' + '\n', style: 'texto' },
               { text: notaVenta.serie + ' - ' + cerosALaIzquierda(notaVenta.numero, 8) + '\n', style: 'texto' },
               //   { text: 'Sucursal\n', style: 'textoBold10' },
               //   { text: notaVenta.sucursal + '\n', style: 'texto' },
@@ -245,7 +245,7 @@ async function pdfNotaVenta(notaVenta: any) {
       {
         margin: [0, 10, 0, 0],
         columns: [
-          //RUC
+          //
           {
             width: '100%',
             //   margin: [50, 20, 0, 0],
@@ -302,6 +302,147 @@ async function pdfNotaVenta(notaVenta: any) {
           },
         ],
       },
+      {
+        margin: [0, 10, 0, 0],
+        columns: [
+          //
+          {
+            width: '100%',
+            //   margin: [50, 20, 0, 0],
+            text: { text: notaVenta.observacion, style: 'texto' },
+          },
+        ],
+      },
+      //EFCTIVO
+      notaVenta.metodoPago === 'CONTADO'
+        ? notaVenta.todoEnEfectivo
+          ? {
+              // margin: [0, 10, 0, 0],
+              columns: [
+                //TOTAL
+                {
+                  width: '36%',
+                  //   margin: [50, 20, 0, 0],
+                  text: { text: 'EFECTIVO', style: 'texto' },
+                },
+                //totalPEN
+                {
+                  width: '64%',
+                  margin: [0, 0, 5, 0],
+                  text: { text: formatearMonedaPEN(notaVenta.totalPEN.$numberDecimal), style: 'texto8Derecho' },
+                },
+              ],
+            }
+          : {
+              // margin: [0, 10, 0, 0],
+              columns: [
+                //TOTAL
+                {
+                  width: '36%',
+                  //   margin: [50, 20, 0, 0],
+                  text: { text: 'EFECTIVO', style: 'texto' },
+                },
+                //totalPEN
+                {
+                  width: '64%',
+                  margin: [0, 0, 5, 0],
+                  text: { text: formatearMonedaPEN(notaVenta.montoEnEfectivo.$numberDecimal), style: 'texto8Derecho' },
+                },
+              ],
+            }
+        : notaVenta.unaParteEnEfectivo
+        ? {
+            // margin: [0, 10, 0, 0],
+            columns: [
+              //TOTAL
+              {
+                width: '36%',
+                //   margin: [50, 20, 0, 0],
+                text: { text: 'EFECTIVO', style: 'texto' },
+              },
+              //totalPEN
+              {
+                width: '64%',
+                margin: [0, 0, 5, 0],
+                text: { text: formatearMonedaPEN(notaVenta.montoEnEfectivo.$numberDecimal), style: 'texto8Derecho' },
+              },
+            ],
+          }
+        : {},
+
+      //OTRO MEDIO PAGO
+      // notaVenta.metodoPago === 'CRÉDITO' &&
+      notaVenta.otroMedioPago != ''
+        ? {
+            // margin: [0, 10, 0, 0],
+            columns: [
+              //otroMedioPago
+              {
+                width: '56%',
+                //   margin: [50, 20, 0, 0],
+                text: { text: notaVenta.otroMedioPago, style: 'texto' },
+              },
+              //montoOtroMedioPago
+              {
+                width: '44%',
+                margin: [0, 0, 5, 0],
+                text: { text: formatearMonedaPEN(notaVenta.montoOtroMedioPago.$numberDecimal), style: 'texto8Derecho' },
+              },
+            ],
+          }
+        : {},
+      //CREDITO
+      notaVenta.metodoPago === 'CRÉDITO'
+        ? {
+            // margin: [0, 10, 0, 0],
+            columns: [
+              //otroMedioPago
+              {
+                width: '36%',
+                //   margin: [50, 20, 0, 0],
+                text: { text: 'CRÉDITO', style: 'texto' },
+              },
+              //montoOtroMedioPago
+              {
+                width: '64%',
+                margin: [0, 0, 5, 0],
+                text: { text: formatearMonedaPEN(notaVenta.importeTotalCuotasCredito.$numberDecimal), style: 'texto8Derecho' },
+              },
+            ],
+          }
+        : {},
+      ////////////ESPACIO
+      {
+        margin: [0, 10, 0, 0],
+        columns: [
+          //
+          {
+            width: '100%',
+            //   margin: [50, 20, 0, 0],
+            text: { text: notaVenta.observacion, style: 'texto' },
+          },
+        ],
+      },
+      //CLIENTE SOBRENOMBRE CHAPA
+      notaVenta.clienteSobrenombreChapa != ''
+        ? {
+            // margin: [0, 10, 0, 0],
+            columns: [
+              //otroMedioPago
+              {
+                width: '36%',
+                //   margin: [50, 20, 0, 0],
+                text: { text: 'CLIENTE', style: 'texto' },
+              },
+              //montoOtroMedioPago
+              {
+                width: '64%',
+                margin: [0, 0, 5, 0],
+                text: { text: notaVenta.clienteSobrenombreChapa, style: 'texto8Derecho' },
+              },
+            ],
+          }
+        : {},
       // QR
       {
         // margin: [0, 10, 0, 0],

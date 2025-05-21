@@ -26,8 +26,9 @@ export default component$((props: { contexto: string; esEdit: boolean; cuota: IC
     track(() => ini.value);
     if (ini.value === 0) {
       setTimeout(() => {
-        document.getElementById('inputFechaCuota')?.focus();
-      }, 200);
+        // document.getElementById('inputImporteCuota')?.focus();
+        (document.getElementById('inputImporteCuota') as HTMLInputElement).select();
+      }, 100);
     }
   });
   //#endregion INICIALIZACION
@@ -67,14 +68,14 @@ export default component$((props: { contexto: string; esEdit: boolean; cuota: IC
     >
       {/* BOTONES DEL MARCO   */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        <ImgButton
+        {/* <ImgButton
           src={images.see}
           alt="Icono de see"
           height={16}
           width={16}
           title="imprimir see"
           onClick={$(() => console.log('cuota.idAuxiliar', props.cuota))}
-        />
+        /> */}
         <ImgButton
           title="Cerrar formulario"
           src={images.x}
