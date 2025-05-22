@@ -141,6 +141,7 @@ export default component$(() => {
                       parametrosGlobales.verFactura = sucur.verFactura;
                       parametrosGlobales.verReporteFacturacion = sucur.verReporteFacturacion;
                       parametrosGlobales.verCotizacion = sucur.verCotizacion;
+                      parametrosGlobales.verGestionNotaVentaCredito = sucur.verGestionNotaVentaCredito;
                       ///////////
                       parametrosGlobales.guiaElectronica = sucur.guiaElectronica;
                       parametrosGlobales.SIRE = sucur.SIRE;
@@ -269,6 +270,7 @@ export default component$(() => {
                         parametrosGlobales.verFactura = sucur.verFactura;
                         parametrosGlobales.verReporteFacturacion = sucur.verReporteFacturacion;
                         parametrosGlobales.verCotizacion = sucur.verCotizacion;
+                        parametrosGlobales.verGestionNotaVentaCredito = sucur.verGestionNotaVentaCredito;
                         //////////
                         parametrosGlobales.guiaElectronica = sucur.guiaElectronica;
                         parametrosGlobales.SIRE = sucur.SIRE;

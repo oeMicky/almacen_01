@@ -99,13 +99,17 @@ export const parametrosGlobales = {
   verFactura: false,
   verReporteFacturacion: false,
   verCotizacion: false,
+  verGestionNotaVentaCredito: false,
+  /////////////
   guiaElectronica: false,
   SIRE: false,
   compras: false,
+  ////////////
   inventario: false,
   verOtrosAlmacenes: false,
   verInAlmacen: false,
   verOutAlmacen: false,
+  ////////////
   ordenesProduccion: false,
   ordenesServicio: false,
   seguimientoCosto: false,
@@ -146,12 +150,12 @@ export default component$(() => {
     // email: 'taty_vizconde@hotmail.com',
     // contrasena: '123456',
     //-- BETA --
-    // email: 'mvizconde@msn.com',
-    // contrasena: 'Pamela123',
+    email: 'mvizconde@cao.com',
+    contrasena: '12345678',
 
     //PRODUCCION
-    email: '',
-    contrasena: '',
+    // email: '',
+    // contrasena: '',
   });
   //#endregion INICIALIZACION
 
@@ -274,6 +278,7 @@ export default component$(() => {
       parametrosGlobales.verFactura = sucursales.data[0].verFactura;
       parametrosGlobales.verReporteFacturacion = sucursales.data[0].verReporteFacturacion;
       parametrosGlobales.verCotizacion = sucursales.data[0].verCotizacion;
+      parametrosGlobales.verGestionNotaVentaCredito = sucursales.data[0].verGestionNotaVentaCredito;
       ///////////
       parametrosGlobales.guiaElectronica = sucursales.data[0].guiaElectronica;
       parametrosGlobales.SIRE = sucursales.data[0].SIRE;

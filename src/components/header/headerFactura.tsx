@@ -56,6 +56,22 @@ export default component$(() => {
               {/* </Link> */}
             </li>
             <li
+              hidden={!parametrosGlobales.verGestionNotaVentaCredito}
+              class="main-menu__item"
+              title="Gestión de crédito: nota de venta"
+              style={{ cursor: 'pointer' }}
+              onClick$={() => {
+                mostrarSpinner.value = true;
+                (document.getElementById('toggle-menu-checkbox') as HTMLInputElement).checked = false;
+                navegarA('/gestionNotaVentaCredito');
+                mostrarSpinner.value = false;
+              }}
+            >
+              {/* <Link href="/cotizacion/"> */}
+              <img src={images.gestionCredito} style={{ width: '30px' }} />
+              {/* </Link> */}
+            </li>
+            <li
               hidden={!parametrosGlobales.verFactura}
               class="main-menu__item"
               title="Facturación electrónica"
@@ -127,6 +143,7 @@ export default component$(() => {
               <img src={images.Ctz} style={{ width: '30px' }} />
               {/* </Link> */}
             </li>
+
             <li
               class="main-menu__item"
               title="Seleccionar servicio"

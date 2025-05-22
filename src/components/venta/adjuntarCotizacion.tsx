@@ -33,7 +33,7 @@ export default component$(() => {
     <div
       class="container-modal"
       style={{
-        width: 'clamp(330px, 86%, 768px)',
+        width: 'clamp(320px, 100%, 768px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

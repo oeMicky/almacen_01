@@ -61,6 +61,7 @@ import facturasOscuro from '../images/FACelec_IIOscuro.svg';
 import facturasDisable from '../images/FACelec_IIDisable.svg';
 import flagAmber from '../images/flagAmber.svg';
 import flagRed from '../images/flagRed.svg';
+import gestionCredito from '../images/gestionCredito.svg';
 import guiasClaro from '../images/GR_IIClaro.svg';
 import guiasOscuro from '../images/GR_IIOscuro.svg';
 import guiasDisable from '../images/GR_IIDisable.svg';
@@ -184,6 +185,7 @@ export default {
   facturasDisable,
   flagAmber,
   flagRed,
+  gestionCredito,
   guiasClaro,
   guiasOscuro,
   guiasDisable,
