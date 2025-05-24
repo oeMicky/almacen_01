@@ -32,7 +32,7 @@ export default component$((props: { idLineaTipo: string; lineaTipo: string }) =>
   return (
     <div
       style={{
-        width: 'clamp(330px, 86%, 420px)',
+        width: 'clamp(320px, 100%, 420px)',
         // width: 'auto',
         border: '1px solid red',
         padding: '2px',

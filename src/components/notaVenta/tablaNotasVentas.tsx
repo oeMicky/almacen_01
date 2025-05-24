@@ -176,13 +176,16 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                         let cred = 0;
                         let tot = 0;
 
-                        efec =
-                          notaVenta.metodoPago === 'CONTADO'
-                            ? notaVenta.todoEnEfectivo
-                              ? notaVenta.totalPEN.$numberDecimal
-                              : notaVenta.montoEnEfectivo.$numberDecimal
-                            : 0;
+                        // efec =
+                        //   notaVenta.metodoPago === 'CONTADO'
+                        //     ? notaVenta.todoEnEfectivo
+                        //       ? notaVenta.totalPEN.$numberDecimal
+                        //       : notaVenta.montoEnEfectivo.$numberDecimal
+                        //     : 0;
                         //  notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
+                        efec = notaVenta.montoEnEfectivo.$numberDecimal ? notaVenta.montoEnEfectivo.$numberDecimal : notaVenta.montoEnEfectivo;
+                        console.log('efec', efec, notaVenta.montoEnEfectivo.$numberDecimal, notaVenta.montoEnEfectivo);
+
                         otro = notaVenta.montoOtroMedioPago.$numberDecimal;
                         cred = notaVenta.importeTotalCuotasCredito.$numberDecimal;
                         tot = notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
@@ -234,9 +237,16 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                               {notaVenta.metodoPago}
                             </td>
                             <td data-label="Efectivo" class="comoNumeroLeft">
-                              {notaVenta.metodoPago === 'CONTADO'
+                              {parseFloat(notaVenta.montoEnEfectivo.$numberDecimal) === 0
+                                ? '-'
+                                : parseFloat(notaVenta.montoEnEfectivo.$numberDecimal).toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })}
+                              {/* {notaVenta.metodoPago === 'CONTADO'
                                 ? notaVenta.todoEnEfectivo
-                                  ? parseFloat(notaVenta.totalPEN.$numberDecimal).toLocaleString('en-PE', {
+                                  ? parseFloat(notaVenta.montoEnEfectivo.$numberDecimal).toLocaleString('en-PE', {
                                       // style: 'currency',
                                       currency: 'PEN',
                                       minimumFractionDigits: 2,
@@ -252,7 +262,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })
-                                : '-'}
+                                : '-'} */}
                             </td>
                             <td data-label="O. M. Pago">
                               {notaVenta.otroMedioPago ? notaVenta.otroMedioPago : '-'}

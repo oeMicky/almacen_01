@@ -1,7 +1,7 @@
 import { component$, Resource, useContext, useResource$ } from '@builder.io/qwik';
 import { images } from '~/assets';
 import { cerosALaIzquierda } from '~/functions/comunes';
-import type { IReporteNotaVenta } from '~/interfaces/iVenta';
+import type { IReporteNotaVentaCredito } from '~/interfaces/iVenta';
 import { CTX_INDEX_GESTION_NOTA_VENTA_CREDITO } from '~/routes/(ventas)/gestionNotaVentaCredito';
 
 export default component$((props: { parametrosBusqueda: any; buscarPorFechaConceptos: boolean }) => {
@@ -68,7 +68,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
         onResolved={(notasVentas) => {
           console.log('onResolved 🍓🍓🍓🍓g', notasVentas);
           const { data } = notasVentas; //{ status, data, message }
-          const misNotasVentas: IReporteNotaVenta[] = data;
+          const misNotasVentas: IReporteNotaVentaCredito[] = data;
           //   ctx_index_nota_venta.miscNtsVts = misNotasVentas;
           ctx_index_gestion_nota_venta_credito.mostrarSpinner = false;
           // //console.log(misNotasVentas);
@@ -92,6 +92,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                         <th>O. M. Pago</th>
                         <th>Monto O. M. Pago</th>
                         <th>Crédito</th>
+                        <th>Crédito Cobrado</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
@@ -103,13 +104,14 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                         let cred = 0;
                         let tot = 0;
 
-                        efec =
-                          notaVenta.metodoPago === 'CONTADO'
-                            ? notaVenta.todoEnEfectivo
-                              ? notaVenta.totalPEN.$numberDecimal
-                              : notaVenta.montoEnEfectivo.$numberDecimal
-                            : 0;
+                        // efec =
+                        //   notaVenta.metodoPago === 'CONTADO'
+                        //     ? notaVenta.todoEnEfectivo
+                        //       ? notaVenta.totalPEN.$numberDecimal
+                        //       : notaVenta.montoEnEfectivo.$numberDecimal
+                        //     : 0;
                         //  notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
+                        efec = notaVenta.montoEnEfectivo.$numberDecimal;
                         otro = notaVenta.montoOtroMedioPago.$numberDecimal;
                         cred = notaVenta.importeTotalCuotasCredito.$numberDecimal;
                         tot = notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
@@ -130,7 +132,8 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                         suma_TOTAL_CREDITO_PEN = suma_TOTAL_CREDITO_PEN + Number(cred);
 
                         return (
-                          <tr key={notaVenta._id} style={notaVenta.metodoPago === 'CRÉDITO' ? { color: 'purple', fontWeight: 'bold' } : {}}>
+                          // <tr key={notaVenta._id} style={notaVenta.metodoPago === 'CRÉDITO' ? { color: 'purple', fontWeight: 'bold' } : {}}>
+                          <tr key={notaVenta._id}>
                             <td data-label="Item">{cerosALaIzquierda(indexItem, 3)}</td>
                             <td data-label="Cliente">{notaVenta.clienteSobrenombreChapa ? notaVenta.clienteSobrenombreChapa : '-'}</td>
                             <td data-label="Observación">{notaVenta.observacion ? notaVenta.observacion : '-'}</td>
@@ -161,7 +164,14 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                               {notaVenta.metodoPago}
                             </td> */}
                             <td data-label="Efectivo" class="comoNumeroLeft">
-                              {notaVenta.metodoPago === 'CONTADO'
+                              {parseFloat(notaVenta.montoEnEfectivo.$numberDecimal) === 0
+                                ? '-'
+                                : parseFloat(notaVenta.montoEnEfectivo.$numberDecimal).toLocaleString('en-PE', {
+                                    // style: 'currency',
+                                    currency: 'PEN',
+                                    minimumFractionDigits: 2,
+                                  })}
+                              {/* {notaVenta.metodoPago === 'CONTADO'
                                 ? notaVenta.todoEnEfectivo
                                   ? parseFloat(notaVenta.totalPEN.$numberDecimal).toLocaleString('en-PE', {
                                       // style: 'currency',
@@ -179,7 +189,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,
                                   })
-                                : '-'}
+                                : '-'} */}
                             </td>
                             <td data-label="O. M. Pago">
                               {notaVenta.otroMedioPago ? notaVenta.otroMedioPago : '-'}
@@ -203,8 +213,30 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                                     minimumFractionDigits: 2,
                                   })}
                             </td>
+                            <td data-label="Crédito Cobrado" class="accionesLeft">
+                              {notaVenta.creditoCobrado ? 'SI' : '-'}
+                              {/* {notaVenta.metodoPago === 'CONTADO' ? (notaVenta.todoEnEfectivo ? '' : notaVenta.otroMedioPago) : ''} */}
+                            </td>
                             <td data-label="Acciones" class="accionesLeft">
                               <input
+                                type="image"
+                                src={images.moneyBag}
+                                title="Registrar cobro"
+                                height={14}
+                                width={14}
+                                onClick$={() => {
+                                  ctx_index_gestion_nota_venta_credito.GNVC = notaVenta;
+                                  ctx_index_gestion_nota_venta_credito.mostrarPanelCobrosNVCredito = true;
+                                }}
+                                // style={{ marginRight: '6px' }}
+                                // onClick$={async () => {
+                                //   ctx_index_gestion_nota_venta_credito.mostrarSpinner = true;
+                                //   //   idNotaVentaSeleccionada.value = notaVenta._id;
+                                //   //   clickPDF.value++;
+                                //   ctx_index_gestion_nota_venta_credito.mostrarSpinner = false;
+                                // }}
+                              />
+                              {/* <input
                                 type="image"
                                 src={images.print}
                                 title="Imprimir"
@@ -217,8 +249,8 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                                   //   clickPDF.value++;
                                   ctx_index_gestion_nota_venta_credito.mostrarSpinner = false;
                                 }}
-                              />
-                              <input
+                              /> */}
+                              {/* <input
                                 type="image"
                                 src={images.see}
                                 title="Ver detalle"
@@ -232,89 +264,89 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                                   ctx_index_gestion_nota_venta_credito.NV = notaVenta;
                                   ctx_index_gestion_nota_venta_credito.mostrarPanelNotaVenta = true;
                                 }}
-                              />
-                              {typeof notaVenta.idVenta === 'undefined' || notaVenta.idVenta.trim() === '' ? (
+                              /> */}
+                              {/* {typeof notaVenta.idVenta === 'undefined' || notaVenta.idVenta.trim() === '' ? (
                                 <input
                                   type="image"
                                   src={images.arrowRight}
                                   title="Facturar..."
                                   height={14}
                                   width={14}
-                                  // style={{ marginRight: '4px' }}
-                                  //   onClick$={async () => {
-                                  //     if (parametrosGlobales.idGrupoEmpresarial === '') {
-                                  //       // console.log('estaVACIA');
-                                  //       alert('Faltan datos... vuelva a logearse..');
-                                  //       navegarA('/login');
-                                  //       return;
-                                  //     }
-                                  //     //INICIALIZANDO
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.idNotaVenta = '';
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.serieNotaVenta = '';
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.numeroNotaVenta = 0;
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.detalle = [];
-                                  //     //validar PERIODO
-                                  //     let anioAnterior = '';
-                                  //     let mesAnterior = '';
-                                  //     const anio = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(0, 4);
-                                  //     const mes = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(5, 7);
+                                  style={{ marginRight: '4px' }}
+                                    onClick$={async () => {
+                                      if (parametrosGlobales.idGrupoEmpresarial === '') {
+                                        // console.log('estaVACIA');
+                                        alert('Faltan datos... vuelva a logearse..');
+                                        navegarA('/login');
+                                        return;
+                                      }
+                                      //INICIALIZANDO
+                                      ctx_index_nota_venta.notaVentaENVIADA.idNotaVenta = '';
+                                      ctx_index_nota_venta.notaVentaENVIADA.serieNotaVenta = '';
+                                      ctx_index_nota_venta.notaVentaENVIADA.numeroNotaVenta = 0;
+                                      ctx_index_nota_venta.notaVentaENVIADA.detalle = [];
+                                      //validar PERIODO
+                                      let anioAnterior = '';
+                                      let mesAnterior = '';
+                                      const anio = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(0, 4);
+                                      const mes = (document.getElementById('in_laFechaHoyVenta') as HTMLInputElement).value.substring(5, 7);
 
-                                  //     const periodoActual = anio + mes;
-                                  //     const PPP = props.periodosCargados;
-                                  //     if (parseInt(mes) === 1) {
-                                  //       anioAnterior = (parseInt(anio) - 1).toString();
-                                  //       mesAnterior = '12';
-                                  //     } else {
-                                  //       anioAnterior = anio;
-                                  //       mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
-                                  //     }
-                                  //     const periodoANTE = anioAnterior + mesAnterior;
+                                      const periodoActual = anio + mes;
+                                      const PPP = props.periodosCargados;
+                                      if (parseInt(mes) === 1) {
+                                        anioAnterior = (parseInt(anio) - 1).toString();
+                                        mesAnterior = '12';
+                                      } else {
+                                        anioAnterior = anio;
+                                        mesAnterior = cerosALaIzquierda(parseInt(mes) - 1, 2).toString();
+                                      }
+                                      const periodoANTE = anioAnterior + mesAnterior;
 
-                                  //     const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
-                                  //     console.log('⚠⚠⚠⚠ elPeriodo', elPeriodo);
-                                  //     if (typeof elPeriodo === 'undefined') {
-                                  //       alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
-                                  //       return;
-                                  //     }
-                                  //     periodo.idPeriodo = elPeriodo._id;
-                                  //     periodo.periodo = elPeriodo.periodo;
-                                  //     //************* */
-                                  //     const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
-                                  //     periodoAnterior.idPeriodo = elPeriodoAnterior._id;
-                                  //     periodoAnterior.periodo = elPeriodoAnterior.periodo;
+                                      const elPeriodo: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoActual));
+                                      console.log('⚠⚠⚠⚠ elPeriodo', elPeriodo);
+                                      if (typeof elPeriodo === 'undefined') {
+                                        alert(`🔰 El período ${periodoActual} no ha sido hallado, verifique.`);
+                                        return;
+                                      }
+                                      periodo.idPeriodo = elPeriodo._id;
+                                      periodo.periodo = elPeriodo.periodo;
+                                   
+                                      const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
+                                      periodoAnterior.idPeriodo = elPeriodoAnterior._id;
+                                      periodoAnterior.periodo = elPeriodoAnterior.periodo;
 
-                                  //     if (periodo.idPeriodo === '') {
-                                  //       alert('🔰 Seleccione el periodo.');
-                                  //       document.getElementById('se_periodo')?.focus();
-                                  //       // ini.value++;
-                                  //       return;
-                                  //     }
-                                  //     ctx_index_nota_venta.mostrarSpinner = true;
+                                      if (periodo.idPeriodo === '') {
+                                        alert('🔰 Seleccione el periodo.');
+                                        document.getElementById('se_periodo')?.focus();
+                                        // ini.value++;
+                                        return;
+                                      }
+                                      ctx_index_nota_venta.mostrarSpinner = true;
 
-                                  //     let elIgv = await getIgvVenta({
-                                  //       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                                  //       idEmpresa: parametrosGlobales.idEmpresa,
-                                  //     });
-                                  //     elIgv = elIgv.data;
-                                  //     //
-                                  //     igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
+                                      let elIgv = await getIgvVenta({
+                                        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                                        idEmpresa: parametrosGlobales.idEmpresa,
+                                      });
+                                      elIgv = elIgv.data;
+                                      //
+                                      igv.value = elIgv[0].igv; //18; //elIgv[0].igv; //
 
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.idNotaVenta = notaVenta._id;
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.serieNotaVenta = notaVenta.serie;
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.numeroNotaVenta = notaVenta.numero;
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.igv = igv.value;
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.detalle = notaVenta.itemsNotaVenta;
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.addPeriodo = periodo;
-                                  //     ctx_index_nota_venta.notaVentaENVIADA.addPeriodoAnterior = periodoAnterior;
+                                      ctx_index_nota_venta.notaVentaENVIADA.idNotaVenta = notaVenta._id;
+                                      ctx_index_nota_venta.notaVentaENVIADA.serieNotaVenta = notaVenta.serie;
+                                      ctx_index_nota_venta.notaVentaENVIADA.numeroNotaVenta = notaVenta.numero;
+                                      ctx_index_nota_venta.notaVentaENVIADA.igv = igv.value;
+                                      ctx_index_nota_venta.notaVentaENVIADA.detalle = notaVenta.itemsNotaVenta;
+                                      ctx_index_nota_venta.notaVentaENVIADA.addPeriodo = periodo;
+                                      ctx_index_nota_venta.notaVentaENVIADA.addPeriodoAnterior = periodoAnterior;
 
-                                  //     console.log('ctx_index_nota_venta', ctx_index_nota_venta);
+                                      console.log('ctx_index_nota_venta', ctx_index_nota_venta);
 
-                                  //     ctx_index_nota_venta.mostrarPanelVenta = true;
-                                  //   }}
+                                      ctx_index_nota_venta.mostrarPanelVenta = true;
+                                    }}
                                 />
                               ) : (
                                 ''
-                              )}
+                              )} */}
                             </td>
                           </tr>
                         );
@@ -333,7 +365,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td colSpan={2} class="comoCadena" style={{ color: '#2E1800' }}></td>
+                        <td class="comoCadena" style={{ color: '#2E1800' }}></td>
                         <td class="comoNumero" style={{ color: '#2E1800' }}>
                           {`${suma_TOTAL_EFECTIVO_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
@@ -356,7 +388,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                             minimumFractionDigits: 2,
                           })}`}
                         </td>
-                        <td class="comoNumero"></td>
+                        <td colSpan={2} class="comoNumero"></td>
                       </tr>
                     </tfoot>
                   </table>

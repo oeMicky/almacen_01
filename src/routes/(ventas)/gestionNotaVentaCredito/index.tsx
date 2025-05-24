@@ -1,6 +1,7 @@
 import { component$, createContextId, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
+import CobrosNotaVentaCredito from '~/components/gestionNotaVentaCredito/cobrosNotaVentaCredito';
 import TablaGestionNotaVentaCredito from '~/components/gestionNotaVentaCredito/tablaGestionNotaVentaCredito';
 import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
@@ -13,6 +14,8 @@ export default component$(() => {
     GNVC: [],
     buscarGestionNotasVentasCredito: 0,
     miscNtsVtsCred: [],
+
+    mostrarPanelCobrosNVCredito: false,
 
     // mostrarPanelPrueba: false,
     // prueb: { idAuxiliar: 123, codigo: 'cod', descripcion: 'des' },
@@ -255,6 +258,28 @@ export default component$(() => {
           ''
         )}
       </div>
+      {/* COBROS NV CREDITO */}
+      {definicion_CTX_INDEX_GESTION_NOTA_VENTA_CREDITO.mostrarPanelCobrosNVCredito && (
+        <div class="modal">
+          <CobrosNotaVentaCredito
+            notaVenta={definicion_CTX_INDEX_GESTION_NOTA_VENTA_CREDITO.GNVC}
+            // mercaINSelecci={definicion_CTX_BUSCAR_MERCADERIA_IN.mM}
+            // elKardex={definicion_CTX_BUSCAR_MERCADERIA_IN.kK}
+            // elIDKardex={''}
+            // elUbigeoStock={[]}
+            // esAlmacen={true}
+            // enDolares={props.enDolares}
+            // tipoCambio={props.tipoCambio}
+            // contextoBase={'buscar_mercaderia_in'}
+            // contextoInmediato={'buscar_mercaderia_in'}
+            // contextoParaDocumento={props.contexto}
+            // igv={props.igv}
+            // motivo={props.motivo}
+            // conIGV={props.conIGV}
+            // porMontoUnitario={props.porMontoUnitario}
+          />
+        </div>
+      )}
 
       {/* MOSTRAR SPINNER */}
       {/* {definicion_CTX_INDEX_NOTA_VENTA.mostrarSpinner && (

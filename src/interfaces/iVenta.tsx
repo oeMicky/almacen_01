@@ -447,3 +447,66 @@ export interface IReporteNotaVenta {
   serieVenta: string;
   numeroVenta: number;
 }
+
+export interface IReporteNotaVentaCredito {
+  _id: string;
+  ruc: string;
+
+  // clienteVentasVarias: boolean;
+  // codigoTipoDocumentoIdentidad: string;
+  // tipoDocumentoIdentidad: string;
+  // numeroIdentidad: string;
+  // razonSocialNombre: string;
+
+  observacion: string;
+
+  facturaJSON: boolean;
+  facturaXML: boolean;
+
+  codigoTipoComprobantePago: string;
+  serie: string;
+  numero: number;
+
+  clienteSobrenombreChapa: string;
+  importeTotalCuotasCredito: any;
+  cuotas: any;
+  creditoCobrado: boolean;
+
+  fecha: string;
+  fechaLocal: string;
+
+  todoEnEfectivo: boolean;
+  unaParteEnEfectivo: boolean;
+  montoEnEfectivo: any;
+  otroMedioPago: string;
+  montoOtroMedioPago: any;
+
+  igv: any;
+
+  existeOtros: boolean;
+
+  itemsNotaVenta: any;
+
+  totalPEN: any;
+
+  totalUSD: any;
+
+  vendedor: string;
+  metodoPago: string;
+
+  enDolares: boolean;
+  moneda: string;
+  tipoCambio: number;
+
+  ganancias: any;
+
+  estado: string;
+  proveedor_estatus: boolean;
+  sunat_estatus: boolean;
+  sunat_estatusAnulacion: boolean;
+  // xml: string;
+  // sunat_CDR_Xml: string;
+  idVenta: string;
+  serieVenta: string;
+  numeroVenta: number;
+}
