@@ -23,6 +23,7 @@ import AddNotaVenta from '~/components/notaVenta/addNotaVenta';
 import TablaNotasVentas from '~/components/notaVenta/tablaNotasVentas';
 import AddVenta from '~/components/venta/addVenta';
 import PanelPrueba from '~/components/notaVenta/panelPrueba';
+import VerNotaVenta from '~/components/notaVenta/verNotaVenta';
 
 // export async function getVentasPorFechas(parameBusqueda: any, controller?: AbortController): Promise<string[]> {
 //
@@ -56,6 +57,8 @@ export default component$(() => {
 
     mostrarPanelNotaVenta: false,
     grabo_NotaVenta: false,
+
+    mostrarPanelVerNotaVenta: false,
 
     mostrarPanelVenta: false,
     grabo_Venta: false,
@@ -424,6 +427,11 @@ export default component$(() => {
             definicion_CTX_INDEX_NOTA_VENTA.mostrarSpinner = true;
           }}
         />
+        {definicion_CTX_INDEX_NOTA_VENTA.mostrarPanelVerNotaVenta && (
+          <div class="modal">
+            <VerNotaVenta nvSelecci={definicion_CTX_INDEX_NOTA_VENTA.NV} contexto="index_nota_venta" />
+          </div>
+        )}
         {definicion_CTX_INDEX_NOTA_VENTA.mostrarPanelNotaVenta && (
           <div
             class="modal"

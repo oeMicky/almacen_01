@@ -146,8 +146,8 @@ export default component$(
                                     src={images.check32}
                                     title="Seleccionar"
                                     alt="icono buscar"
-                                    height={12}
-                                    width={12}
+                                    height={14}
+                                    width={14}
                                     //   style={{ padding: '2px',  }}
                                     //   onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                     onClick$={() => {

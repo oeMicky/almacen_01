@@ -993,7 +993,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           ? parseFloat(definicion_CTX_NOTA_VENTA.totalPEN.$numberDecimal)
           : parseFloat(definicion_CTX_NOTA_VENTA.totalPEN);
 
-        if (monCUOTOT !== TOT) {
+        if (monCUOTOT !== redondeo6Decimales(TOT)) {
           console.log('PEN monCUOTOT - TOT', monCUOTOT, TOT);
           alert('La suma de las CUOTAS del CRÉDITO no coincide con el TOTAL.');
           document.getElementById('inputMontoEnEfectivo')?.focus();
@@ -2573,18 +2573,18 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           }
           <br />
           {/* ----------------------------------------------------- */}
-          {/* VENDEDOR - METODO DE PAGO */}
+          {/*  METODO DE PAGO */}
           <div>
             {definicion_CTX_NOTA_VENTA.itemsNotaVenta.length > 0 ? (
               <>
                 {/* <div class="form-control"> */}
                 <div>
                   {/* <div class="form-control form-agrupado" style={{ display: 'flex', gap: '4px' }}> */}
-                  <div class="linea_1_11">
+                  <div class="linea_1_11" style={{ marginBottom: '8px' }}>
                     <select
                       id="metodoPago"
                       value={definicion_CTX_NOTA_VENTA.metodoPago}
-                      // onChange={changeMetodoPago}
+                      style={{ background: 'orange' }}
                       onChange$={(e) => {
                         // const idx = (e.target as HTMLSelectElement).selectedIndex;
                         // const elSelect = e.target as HTMLSelectElement;

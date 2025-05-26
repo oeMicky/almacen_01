@@ -224,6 +224,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                                 title="Registrar cobro"
                                 height={14}
                                 width={14}
+                                style={{ marginRight: '6px' }}
                                 onClick$={() => {
                                   ctx_index_gestion_nota_venta_credito.GNVC = notaVenta;
                                   ctx_index_gestion_nota_venta_credito.mostrarPanelCobrosNVCredito = true;
@@ -250,7 +251,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                                   ctx_index_gestion_nota_venta_credito.mostrarSpinner = false;
                                 }}
                               /> */}
-                              {/* <input
+                              <input
                                 type="image"
                                 src={images.see}
                                 title="Ver detalle"
@@ -261,10 +262,24 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                                   // ctx_index_nota_venta.mostrarSpinner = true;
 
                                   // ctx_index_nota_venta.buscarNotasVentas++;
-                                  ctx_index_gestion_nota_venta_credito.NV = notaVenta;
-                                  ctx_index_gestion_nota_venta_credito.mostrarPanelNotaVenta = true;
+                                  ctx_index_gestion_nota_venta_credito.GNVC = notaVenta;
+                                  ctx_index_gestion_nota_venta_credito.mostrarPanelVerNotaVenta = true;
                                 }}
-                              /> */}
+                              />
+                              <input
+                                type="image"
+                                src={images.edit}
+                                title="Editar"
+                                height={14}
+                                width={14}
+                                // style={{ marginRight: '6px' }}
+                                onClick$={async () => {
+                                  // ctx_index_nota_venta.mostrarSpinner = true;
+                                  ctx_index_gestion_nota_venta_credito.GNVC = notaVenta;
+                                  ctx_index_gestion_nota_venta_credito.mostrarPanelEditarClienteObservacion = true;
+                                  // mostrarPanelEditarClienteObservacionCredito.value = true;
+                                }}
+                              />
                               {/* {typeof notaVenta.idVenta === 'undefined' || notaVenta.idVenta.trim() === '' ? (
                                 <input
                                   type="image"

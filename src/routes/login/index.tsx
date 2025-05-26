@@ -150,8 +150,8 @@ export default component$(() => {
     // email: 'taty_vizconde@hotmail.com',
     // contrasena: '123456',
     //-- BETA --
-    // email: 'mvizconde@cao.com',
-    // contrasena: '12345678',
+    // email: 'mvizconde@msn.com',
+    // contrasena: 'Cielo123',
 
     //PRODUCCION
     email: '',

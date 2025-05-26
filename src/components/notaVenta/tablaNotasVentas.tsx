@@ -184,7 +184,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                         //     : 0;
                         //  notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
                         efec = notaVenta.montoEnEfectivo.$numberDecimal ? notaVenta.montoEnEfectivo.$numberDecimal : notaVenta.montoEnEfectivo;
-                        console.log('efec', efec, notaVenta.montoEnEfectivo.$numberDecimal, notaVenta.montoEnEfectivo);
+                        // console.log('efec', efec, notaVenta.montoEnEfectivo.$numberDecimal, notaVenta.montoEnEfectivo);
 
                         otro = notaVenta.montoOtroMedioPago.$numberDecimal;
                         cred = notaVenta.importeTotalCuotasCredito.$numberDecimal;
@@ -316,8 +316,37 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                                   // ctx_index_nota_venta.buscarNotasVentas++;
                                   ctx_index_nota_venta.NV = notaVenta;
                                   ctx_index_nota_venta.mostrarPanelNotaVenta = true;
+                                  // ctx_index_nota_venta.mostrarPanelVerNotaVenta = true;
                                 }}
                               />
+                              {notaVenta.metodoPago === 'CONTADO' ? (
+                                <input
+                                  type="image"
+                                  src={images.crOK}
+                                  title="Es crédito"
+                                  height={14}
+                                  width={14}
+                                  style={{ marginRight: '6px' }}
+                                  onClick$={() => {
+                                    if (
+                                      confirm(
+                                        notaVenta.serie +
+                                          '-' +
+                                          cerosALaIzquierda(notaVenta.numero, 8) +
+                                          '. Desea convertir esta nota de venta al CONTADO en CRÉDITO? -- ADVERTENCIA: esta operación NO es reversible.'
+                                      )
+                                    ) {
+                                      // ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
+                                      console.log('entro a cerrar el formulario');
+                                    } else {
+                                      console.log('NO entro a cerrar el formulario');
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                ''
+                              )}
+
                               {typeof notaVenta.idVenta === 'undefined' || notaVenta.idVenta.trim() === '' ? (
                                 <input
                                   type="image"

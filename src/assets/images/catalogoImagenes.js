@@ -40,6 +40,7 @@ import bancosOscuro from '../images/bancosOscuro.svg';
 import bancosDisable from '../images/bancosDisable.svg';
 import basedatos from '../images/basedatos.svg';
 import buildings from '../images/buildings.svg';
+
 import cancelDoc from '../images/cancelDoc.svg';
 import cdr from '../images/CDR.svg';
 import check from '../images/check.svg';
@@ -48,6 +49,7 @@ import comprasClaro from '../images/comprasClaro.svg';
 import comprasOscuro from '../images/comprasOscuro.svg';
 import comprasDisable from '../images/comprasDisable.svg';
 import copy from '../images/copy.svg';
+import crOK from '../images/CR_ok.svg';
 import dolar from '../images/dollar.svg';
 import download from '../images/download.svg';
 import edit from '../images/edit.svg';
@@ -172,6 +174,7 @@ export default {
   comprasOscuro,
   comprasDisable,
   copy,
+  crOK,
   dolar,
   download,
   edit,

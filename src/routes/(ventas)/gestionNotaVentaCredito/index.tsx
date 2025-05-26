@@ -2,7 +2,10 @@ import { component$, createContextId, useContextProvider, useSignal, useStore } 
 import { useNavigate } from '@builder.io/qwik-city';
 import { images } from '~/assets';
 import CobrosNotaVentaCredito from '~/components/gestionNotaVentaCredito/cobrosNotaVentaCredito';
+import EditClienteObservacionCredito from '~/components/gestionNotaVentaCredito/editClienteObservacionCredito';
 import TablaGestionNotaVentaCredito from '~/components/gestionNotaVentaCredito/tablaGestionNotaVentaCredito';
+// import AddNotaVenta from '~/components/notaVenta/addNotaVenta';
+import VerNotaVenta from '~/components/notaVenta/verNotaVenta';
 import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -16,6 +19,12 @@ export default component$(() => {
     miscNtsVtsCred: [],
 
     mostrarPanelCobrosNVCredito: false,
+
+    mostrarPanelNotaVenta: false,
+
+    mostrarPanelVerNotaVenta: false,
+
+    mostrarPanelEditarClienteObservacion: false,
 
     // mostrarPanelPrueba: false,
     // prueb: { idAuxiliar: 123, codigo: 'cod', descripcion: 'des' },
@@ -278,6 +287,16 @@ export default component$(() => {
             // conIGV={props.conIGV}
             // porMontoUnitario={props.porMontoUnitario}
           />
+        </div>
+      )}
+      {definicion_CTX_INDEX_GESTION_NOTA_VENTA_CREDITO.mostrarPanelVerNotaVenta && (
+        <div class="modal">
+          <VerNotaVenta nvSelecci={definicion_CTX_INDEX_GESTION_NOTA_VENTA_CREDITO.GNVC} contexto="index_gestion_nota_venta_credito" />
+        </div>
+      )}
+      {definicion_CTX_INDEX_GESTION_NOTA_VENTA_CREDITO.mostrarPanelEditarClienteObservacion && (
+        <div class="modal">
+          <EditClienteObservacionCredito nvSelec={definicion_CTX_INDEX_GESTION_NOTA_VENTA_CREDITO.GNVC} />
         </div>
       )}
 

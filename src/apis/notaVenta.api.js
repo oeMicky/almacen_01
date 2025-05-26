@@ -1,8 +1,21 @@
 const API = import.meta.env.VITE_URL + '/api/notaVenta';
 
+export const upNotaVentaCreditoCliObs = async (parametros) => {
+  // console.log('//////api////////////******************obtener a upNotaVentaCreditoCliObs');
+  // console.log('parametros upNotaVentaCreditoCliObs', parametros);
+  const res = await fetch(API + '/upNotaVentaCreditoCliObs', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
 export const inNotaVenta = async (parametros) => {
-  console.log('//////api////////////******************obtener a inUpNotaVenta');
-  console.log('parametros inUpNotaVenta', parametros);
+  // console.log('//////api////////////******************obtener a inUpNotaVenta');
+  // console.log('parametros inUpNotaVenta', parametros);
   const res = await fetch(API + '/inNotaVenta', {
     method: 'POST',
     headers: {
@@ -14,8 +27,8 @@ export const inNotaVenta = async (parametros) => {
 };
 
 export const getNotaVenta = async (parametros) => {
-  console.log('//////api////////////******************obtener a getNotaVenta');
-  console.log('parametros getNotaVenta', parametros);
+  // console.log('//////api////////////******************obtener a getNotaVenta');
+  // console.log('parametros getNotaVenta', parametros);
   const res = await fetch(API + '/obtenerNotaVenta', {
     method: 'POST',
     headers: {
