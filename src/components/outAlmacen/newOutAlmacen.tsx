@@ -269,6 +269,12 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     track(() => ini.value);
     cargarMotivosEgreso();
     cargarLosTCP();
+    if (ini.value === 0) {
+      setTimeout(() => {
+        document.getElementById('in_FISMA')?.focus();
+      }, 100);
+      ini.value++;
+    }
   });
   //#endregion CARGAR MOTIVOS DE EGRESO
 
