@@ -102,17 +102,17 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        {/* <ImgButton
+        <ImgButton
           src={images.see}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.mercaSelecci', props.mercaSelecci);
+            console.log('props.contexto', props.contexto);
             //console.log('props.kardex', props.kardex);
           })}
-        /> */}
+        />
         <ImgButton
           src={images.x}
           alt="Icono de cerrar"

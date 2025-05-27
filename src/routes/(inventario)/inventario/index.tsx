@@ -484,7 +484,7 @@ export default component$(() => {
               elIDKardex={definicion_CTX_INDEX_INVENTARIO.elIdKardex}
               // esAlmacen={props.esAlmacen}
               // esAlmacen={false}
-              contexto="index_kardexs"
+              contexto="index_inventario"
               // contextoParaDocumento={props.contexto}
               // igv={props.igv}
             />
