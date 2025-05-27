@@ -7,6 +7,7 @@ import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import TrasladoEntreUbigeosIN from '../miscelanea/mercaderiaIN/trasladoEntreUbigeosIN';
 import { CTX_INVENTARIO_EXTERNO } from '../miscelanea/inventarioExterno/inventarioExterno';
 import NewEditUbigeo from '../miscelanea/mercaderiaIN/newEditUbigeo';
+import Spinner from '../system/spinner';
 // import MercaderiaINSeleccionada from './mercaderiaINSeleccionada';
 // import NewEditUbigeo from './newEditUbigeo';
 // import MercaderiaINSeleccionada2 from './mercaderiaINSeleccionada2';
@@ -119,6 +120,8 @@ export default component$((props: { descripcion: string; idKardex: string; conte
       <button
         hidden={props.contexto === 'inventario_externo'}
         onClick$={() => {
+          definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.elIDUbigeo = '';
+          definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.elUbigeo = '';
           definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarPanelNewEditUbigeosStocksIN = true;
         }}
       >
@@ -162,8 +165,10 @@ export default component$((props: { descripcion: string; idKardex: string; conte
                           total = total + Number(stock.$numberDecimal);
                           return (
                             <tr>
-                              <td data-label="Ubigeo">{ubigeo}</td>
-                              <td data-label="Stock" class="accionesLeft">
+                              <td data-label="Ubigeo" style={{ fontWeight: 'bold' }}>
+                                {ubigeo}
+                              </td>
+                              <td data-label="Stock" class="accionesLeft" style={{ color: 'purple', fontWeight: 'bold' }}>
                                 {stock.$numberDecimal}
                               </td>
                               <td data-label="Acc" class="accionesLeft">
@@ -248,6 +253,12 @@ export default component$((props: { descripcion: string; idKardex: string; conte
             desde={definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.uS}
             listaOrigen={definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.listaUbigeos}
           />
+        </div>
+      )}
+      {/* MOSTRAR SPINNER */}
+      {definicion_CTX_VER_LISTA_UBIGEOS_STOCKS_IN.mostrarSpinner && (
+        <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Spinner />
         </div>
       )}
     </div>

@@ -263,7 +263,7 @@ export default component$(
                                   {laSumStocks}
                                 </button>
                               ) : (
-                                ''
+                                '-'
                               )}
                             </td>
                             <td data-label="Uni">{unidad}</td>

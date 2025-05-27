@@ -84,7 +84,7 @@ export default component$((props: { idKardex: any; idUbigeoStock: string; ubigeo
   return (
     <div
       style={{
-        width: 'clamp(320px, 100%, 390px)',
+        width: 'clamp(264px, 100%, 280px)',
         // width: 'auto',
         padding: '2px',
         // background: '#c0c0c0',
@@ -105,7 +105,7 @@ export default component$((props: { idKardex: any; idUbigeoStock: string; ubigeo
         />
       </div>
       {/* TITULO */}
-      <h3>Registro de ubigeo 8</h3>
+      <h3>Registro de ubigeo</h3>
       {/* FORMULARIO */}
 
       <div class="add-form">

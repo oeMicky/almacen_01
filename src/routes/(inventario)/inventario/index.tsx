@@ -98,7 +98,7 @@ export default component$(() => {
         if (document !== undefined) {
           setTimeout(() => {
             document.getElementById('in_CodigoDescripcion_KARDEX')?.focus(); //m
-          }, 200);
+          }, 100);
         }
 
         // ini.value++;
@@ -502,17 +502,6 @@ export default component$(() => {
               descripcion={definicion_CTX_INDEX_INVENTARIO.descripcion}
               idKardex={definicion_CTX_INDEX_INVENTARIO.elIdKardex}
               contexto="index_inventario"
-            />
-          </div>
-        )}
-        {definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN && (
-          <div class="modal">
-            <NewEditMercaderiaIN
-              mercaSeleccio={definicion_CTX_INDEX_INVENTARIO.mM}
-              contexto="index_kardexs"
-              //esAlmacen={true}
-              // contexto={props.contexto}
-              // igv={props.igv}
             />
           </div>
         )}

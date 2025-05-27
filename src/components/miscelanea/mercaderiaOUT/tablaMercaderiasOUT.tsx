@@ -512,7 +512,7 @@ export default component$(
                                 {laSumStocks}
                               </button>
                             ) : (
-                              ''
+                              '-'
                             )}
                             {/* <strong style={{ color: 'purple' }}> */}
                             {/* {totalCantidadSaldo.$numberDecimal

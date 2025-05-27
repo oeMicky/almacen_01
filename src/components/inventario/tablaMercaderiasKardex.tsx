@@ -312,7 +312,6 @@ export default component$(
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />
-
                               <input
                                 title="Editar precio público"
                                 type="image"
