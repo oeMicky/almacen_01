@@ -850,29 +850,40 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
       if (definicion_CTX_NOTA_VENTA.unaParteEnEfectivo) {
         let monEFEC = definicion_CTX_NOTA_VENTA.montoEnEfectivo;
         let monOTR = definicion_CTX_NOTA_VENTA.montoOtroMedioPago;
-        console.log('monEFEC', monEFEC);
-        console.log('monOTR', monOTR);
+        // console.log('monEFEC', monEFEC);
+        // console.log('monOTR', monOTR);
 
-        if (monEFEC === undefined || monEFEC === '' || monEFEC === 0) {
+        if (monEFEC === undefined || monEFEC === '' || monEFEC === 0 || monEFEC.toString() === 'NaN') {
           monEFEC = 0;
+          // console.log('🎭🎭🎭monEFE: ', monEFEC);
         } else {
           monEFEC = parseFloat(definicion_CTX_NOTA_VENTA.montoEnEfectivo);
         }
-        if (!Number.parseFloat(monEFEC)) {
-          alert('Verifique el monto en efectivo.');
-          document.getElementById('inputMontoEnEfectivo')?.focus();
-          return;
+        if (monEFEC === 0) {
+          //
+        } else {
+          if (!Number.parseFloat(monEFEC)) {
+            alert('🎭Verifique el monto en efectivo: ' + monEFEC);
+            document.getElementById('inputMontoEnEfectivo')?.focus();
+            return;
+          }
         }
-        if (monOTR === undefined || monOTR === '' || monOTR === 0) {
+
+        if (monOTR === undefined || monOTR === '' || monOTR === 0 || monOTR.toString() === 'NaN') {
           monOTR = 0;
         } else {
           monOTR = parseFloat(definicion_CTX_NOTA_VENTA.montoOtroMedioPago);
         }
-        if (!Number.parseFloat(monOTR)) {
-          alert('Verifique el monto de otro medio de pago.');
-          document.getElementById('inputMontoOtroMedioPago')?.focus();
-          return;
+        if (monOTR === 0) {
+          //
+        } else {
+          if (!Number.parseFloat(monOTR)) {
+            alert('Verifique el monto de otro medio de pago.');
+            document.getElementById('inputMontoOtroMedioPago')?.focus();
+            return;
+          }
         }
+
         montoCONTADO_DOS_PARTES.value = monEFEC + monOTR;
 
         // montoCONTADO_DOS_PARTES.value = parseFloat(definicion_CTX_NOTA_VENTA.montoEnEfectivo) + parseFloat(definicion_CTX_NOTA_VENTA.montoOtroMedioPago);
@@ -881,7 +892,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             ? parseFloat(definicion_CTX_NOTA_VENTA.totalUSD.$numberDecimal)
             : parseFloat(definicion_CTX_NOTA_VENTA.totalUSD);
           if (montoCONTADO_DOS_PARTES.value !== TOT) {
-            console.log('USD monto - total', montoCONTADO_DOS_PARTES.value, TOT);
+            // console.log('USD monto - total', montoCONTADO_DOS_PARTES.value, TOT);
             alert('La suma de los montos de al CONTADO no coincide con el TOTAL.');
             document.getElementById('inputMontoEnEfectivo')?.focus();
             return;
@@ -891,7 +902,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             ? parseFloat(definicion_CTX_NOTA_VENTA.totalPEN.$numberDecimal)
             : parseFloat(definicion_CTX_NOTA_VENTA.totalPEN);
           if (montoCONTADO_DOS_PARTES.value !== TOT) {
-            console.log('PEN monto - total', montoCONTADO_DOS_PARTES.value, TOT);
+            // console.log('PEN monto - total', montoCONTADO_DOS_PARTES.value, TOT);
             alert('La suma de los montos de al CONTADO no coincide con el TOTAL.');
             document.getElementById('inputMontoEnEfectivo')?.focus();
             return;
@@ -901,7 +912,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
     }
     //A CREDITO
     if (definicion_CTX_NOTA_VENTA.verCuotasCredito) {
-      console.log('✴📛📛📛📛📛📛📛📛📛📛📛');
+      // console.log('✴📛📛📛📛📛📛📛📛📛📛📛');
 
       if (definicion_CTX_NOTA_VENTA.clienteSobrenombreChapa.trim() === '') {
         alert('Ingrese el cliente / sobrenombre / chapa.');
@@ -914,44 +925,56 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
         return;
       }
       if (definicion_CTX_NOTA_VENTA.unaParteEnEfectivo) {
-        let monEFEC = parseFloat(definicion_CTX_NOTA_VENTA.montoEnEfectivo);
-        let monOTR = parseFloat(
-          definicion_CTX_NOTA_VENTA.montoOtroMedioPago.$numberDecimal
-            ? definicion_CTX_NOTA_VENTA.montoOtroMedioPago.$numberDecimal
-            : definicion_CTX_NOTA_VENTA.montoOtroMedioPago
-        );
-        console.log('monEFEC', monEFEC);
-        console.log('monOTR', monOTR);
+        // let monEFEC = parseFloat(definicion_CTX_NOTA_VENTA.montoEnEfectivo);
+        // let monOTR = parseFloat(
+        //   definicion_CTX_NOTA_VENTA.montoOtroMedioPago.$numberDecimal
+        //     ? definicion_CTX_NOTA_VENTA.montoOtroMedioPago.$numberDecimal
+        //     : definicion_CTX_NOTA_VENTA.montoOtroMedioPago
+        // );
+        let monEFEC = definicion_CTX_NOTA_VENTA.montoEnEfectivo;
+        let monOTR = definicion_CTX_NOTA_VENTA.montoOtroMedioPago;
+        // console.log('monEFEC', monEFEC);
+        // console.log('monOTR', monOTR);
 
-        if (monEFEC === undefined || monEFEC.toString().trim() === '' || monEFEC === null) {
+        if (monEFEC === undefined || monEFEC.toString().trim() === '' || monEFEC === null || monEFEC.toString() === 'NaN') {
           monEFEC = 0;
         } else {
           monEFEC = parseFloat(definicion_CTX_NOTA_VENTA.montoEnEfectivo);
         }
         // if (!Number.parseFloat(monEFEC.toString().trim())) {
-        if (!Number.isFinite(monEFEC) && isNaN(monEFEC)) {
-          alert('Verifique el monto en efectivo.');
-          document.getElementById('inputMontoEnEfectivo')?.focus();
-          return;
+        if (monEFEC === 0) {
+          //
+        } else {
+          if (!Number.isFinite(monEFEC) && isNaN(monEFEC)) {
+            alert('🎃Verifique el monto en efectivo: ' + monEFEC);
+            document.getElementById('inputMontoEnEfectivo')?.focus();
+            return;
+          }
         }
+
         if (monOTR === undefined || monOTR.toString().trim() === '' || monOTR === null || monOTR.toString() === 'NaN') {
-          console.log('monOTR 0');
+          // console.log('monOTR 0');
 
           monOTR = 0;
         } else {
-          console.log('monOTR 1');
+          // console.log('monOTR 1');
 
           monOTR = parseFloat(definicion_CTX_NOTA_VENTA.montoOtroMedioPago);
         }
-        console.log('monOTR 000000000000000000000', monOTR);
+        // console.log('monOTR 000000000000000000000', monOTR);
         // if (!Number.parseFloat(monOTR.toString().trim())) {
-        if (!Number.isFinite(monOTR) && isNaN(monOTR)) {
-          // if () {
-          console.log(monOTR);
-          alert('Verifique el monto de otro medio de pago.');
-          document.getElementById('inputMontoOtroMedioPago')?.focus();
-          return;
+        if (monEFEC === 0) {
+          //
+        } else {
+          if (!Number.isFinite(monOTR) && isNaN(monOTR)) {
+            // if () {
+            // console.log(monOTR);
+            alert('Verifique el monto de otro medio de pago.');
+            document.getElementById('inputMontoOtroMedioPago')?.focus();
+            return;
+          }
         }
+
         let monCUOTOT = definicion_CTX_NOTA_VENTA.importeTotalCuotasCredito;
         if (monCUOTOT === undefined || monCUOTOT === '' || monCUOTOT === null) {
           monCUOTOT = 0;
@@ -966,7 +989,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             ? parseFloat(definicion_CTX_NOTA_VENTA.totalUSD.$numberDecimal)
             : parseFloat(definicion_CTX_NOTA_VENTA.totalUSD);
           if (montoCONTADO_DOS_PARTES.value !== TOT) {
-            console.log('USD monto - total', montoCONTADO_DOS_PARTES.value, TOT);
+            // console.log('USD monto - total', montoCONTADO_DOS_PARTES.value, TOT);
             alert('La suma de las CUOTAS del CRÉDITO no coincide con el TOTAL.');
             document.getElementById('inputMontoEnEfectivo')?.focus();
             return;
@@ -976,7 +999,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             ? parseFloat(definicion_CTX_NOTA_VENTA.totalPEN.$numberDecimal)
             : parseFloat(definicion_CTX_NOTA_VENTA.totalPEN);
           if (montoCONTADO_DOS_PARTES.value !== TOT) {
-            console.log('PEN monto - total', montoCONTADO_DOS_PARTES.value, TOT);
+            // console.log('PEN monto - total', montoCONTADO_DOS_PARTES.value, TOT);
             alert('La suma de las CUOTAS del CRÉDITO no coincide con el TOTAL.');
             document.getElementById('inputMontoEnEfectivo')?.focus();
             return;
@@ -994,7 +1017,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           : parseFloat(definicion_CTX_NOTA_VENTA.totalPEN);
 
         if (monCUOTOT !== redondeo6Decimales(TOT)) {
-          console.log('PEN monCUOTOT - TOT', monCUOTOT, TOT);
+          // console.log('PEN monCUOTOT - TOT', monCUOTOT, TOT);
           alert('La suma de las CUOTAS del CRÉDITO no coincide con el TOTAL.');
           document.getElementById('inputMontoEnEfectivo')?.focus();
           return;
@@ -2711,11 +2734,11 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         value={definicion_CTX_NOTA_VENTA.otroMedioPago}
                         onChange$={(e) => {
                           definicion_CTX_NOTA_VENTA.otroMedioPago = (e.target as HTMLSelectElement).value;
-                          document.getElementById('in_otroMedio')?.focus();
+                          document.getElementById('inputMontoOtroMedioPagoI')?.focus();
                         }}
                         onKeyPress$={(e) => {
                           if (e.key === 'Enter') {
-                            document.getElementById('inputMontoOtroMedioPago')?.focus();
+                            document.getElementById('inputMontoOtroMedioPagoI')?.focus();
                           }
                         }}
                         // style={definicion_CTX_NOTA_VENTA.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
@@ -2727,7 +2750,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         <option value={'DEPÓSITO EN CUENTA'}>DEPÓSITO EN CUENTA</option>
                       </select>
                       <input
-                        id="inputMontoOtroMedioPago"
+                        id="inputMontoOtroMedioPagoI"
                         type="number"
                         placeholder="Otro medio"
                         style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
@@ -2897,11 +2920,11 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     value={definicion_CTX_NOTA_VENTA.otroMedioPago}
                     onChange$={(e) => {
                       definicion_CTX_NOTA_VENTA.otroMedioPago = (e.target as HTMLSelectElement).value;
-                      document.getElementById('in_otroMedio')?.focus();
+                      document.getElementById('inputMontoOtroMedioPagoII')?.focus();
                     }}
                     onKeyPress$={(e) => {
                       if (e.key === 'Enter') {
-                        document.getElementById('inputMontoOtroMedioPago')?.focus();
+                        document.getElementById('inputMontoOtroMedioPagoII')?.focus();
                       }
                     }}
                     // style={definicion_CTX_NOTA_VENTA.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
@@ -2913,7 +2936,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     <option value={'DEPÓSITO EN CUENTA'}>DEPÓSITO EN CUENTA</option>
                   </select>
                   <input
-                    id="inputMontoOtroMedioPago"
+                    id="inputMontoOtroMedioPagoII"
                     type="number"
                     placeholder="Otro medio"
                     style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}

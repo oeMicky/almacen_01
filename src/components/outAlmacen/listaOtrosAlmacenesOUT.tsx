@@ -31,14 +31,14 @@ export default component$((props: { otrosAlmacenes: any }) => {
         />
       </div>
       {/* TITULO */}
-      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'grey' }}>Sucursales</h3>
+      <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'grey' }}>Seleccione una sucursal</h3>
       {/* FORMULARIO */}
       <div class="add-form">
         <table style={{ fontSize: '0.8rem', fontWeight: 'lighter ' }}>
           <thead>
             <tr>
               <th>Sucursal</th>
-              <th>Acciones</th>
+              {/* <th>Acciones</th> */}
             </tr>
           </thead>
           <tbody>
@@ -46,8 +46,35 @@ export default component$((props: { otrosAlmacenes: any }) => {
               const { idAlmacen, sucursal, idSerieNotaIngreso, serieNotaIngreso, idMotivoIngreso, motivoIngreso } = almaLoca;
               return (
                 <tr key={idAlmacen}>
-                  <td data-label="Sucursal">{sucursal}</td>
-                  <td data-label="Acciones" class="accionesLeft">
+                  <td
+                    data-label="Sucursal"
+                    style={{ cursor: 'pointer', fontWeight: 'bold' }}
+                    onDblClick$={() => {
+                      try {
+                        if (typeof almaLoca.idSerieNotaIngreso === 'undefined' || almaLoca.idSerieNotaIngreso === '') {
+                          alert('No existe la serie de ingreso para el almacén destino. Consulte con el administrador.');
+                          return;
+                        }
+                        if (typeof almaLoca.idMotivoIngreso === 'undefined' || almaLoca.idMotivoIngreso === '') {
+                          alert('No existe el motivo de ingreso para el almacén destino. Consulte con el administrador.');
+                          return;
+                        }
+
+                        ctx_new_out_almacen.idSucursalDestino = idAlmacen;
+                        ctx_new_out_almacen.sucursalDestino = sucursal;
+                        ctx_new_out_almacen.idSerieNotaIngresoDestino = idSerieNotaIngreso;
+                        ctx_new_out_almacen.serieNotaIngresoDestino = serieNotaIngreso;
+                        ctx_new_out_almacen.idMotivoIngresoDestino = idMotivoIngreso;
+                        ctx_new_out_almacen.motivoIngresoDestino = motivoIngreso;
+                        ctx_new_out_almacen.mostrarPanelListaOtrosAlmacenesOUT = false;
+                      } catch (error) {
+                        console.error('Error al hacer doble clic en la cabecera de Sucursal:', error);
+                      }
+                    }}
+                  >
+                    {sucursal}
+                  </td>
+                  {/* <td data-label="Acciones" class="accionesLeft">
                     <input
                       // id="in_BuscarDetraccion"
                       title="Seleccionar"
@@ -77,7 +104,7 @@ export default component$((props: { otrosAlmacenes: any }) => {
                         ctx_new_out_almacen.mostrarPanelListaOtrosAlmacenesOUT = false;
                       }}
                     />
-                  </td>
+                  </td> */}
                 </tr>
               );
             })}
