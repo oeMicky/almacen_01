@@ -81,7 +81,7 @@ async function pdfNotaVenta(notaVenta: any) {
       '|' +
       notaVenta.fechaLocal +
       '|' +
-      notaVenta.usuarioCrea +
+      notaVenta.usuarioCrea.substring(0, 10) +
       '|',
     {
       errorCorrectionLevel: 'H',
@@ -141,9 +141,11 @@ async function pdfNotaVenta(notaVenta: any) {
     pageSize: {
       // width: 222,
       width: 216,
+      // width: 316,
+      // width: 210,
       height: 'auto',
     },
-    pageMargins: [4, 12, 4, 15],
+    pageMargins: [2, 12, 2, 15],
 
     // header: [reportTitle],
     content: [

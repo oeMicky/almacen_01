@@ -1,4 +1,5 @@
 import {
+  // $,
   component$,
   createContextId,
   useContextProvider,
@@ -147,6 +148,29 @@ export default component$(() => {
     }
   });
   //#endregion REFRESCAR REGISTROS
+
+  //#region VER PDF
+  // const verPDF = $((notaVenta: any) => {
+  //   pdfNotaVenta(notaVenta);
+  //   // }
+  // });
+
+  // useTask$(async ({ track }) => {
+  //   track(() => clickPDF.value);
+  //   //OBTENIENDO LA VENTA
+  //   if (clickPDF.value > 0) {
+  //     const notaVentaSeleccionada = await getNotaVenta({
+  //       idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //       idEmpresa: parametrosGlobales.idEmpresa,
+  //       idNotaVenta: idNotaVentaSeleccionada.value,
+  //     });
+
+  //     if (notaVentaSeleccionada.data.length === 1) {
+  //       await verPDF(notaVentaSeleccionada.data[0]);
+  //     }
+  //   }
+  // });
+  //#endregion VER PDF
 
   //#region CREAR Y DOWNLOAD TXT
   // const createAndDownloadFile = $((nameFile: string, texto: string) => {
@@ -381,6 +405,7 @@ export default component$(() => {
         >
           ADD NOTA VENTA
         </button>
+
         <input
           id="in_laFechaHoyVenta"
           type="date"

@@ -138,7 +138,9 @@ export default component$(
                             return (
                               <tr>
                                 <td data-label="Ubigeo">{ubigeo}</td>
-                                <td data-label="Stock">{stock.$numberDecimal}</td>
+                                <td data-label="Stock" style={{ color: 'purple', fontWeight: 'bold' }}>
+                                  {stock.$numberDecimal}
+                                </td>
                                 <td data-label="Acciones" class="accionesLeft">
                                   <input
                                     // id="in_BuscarDetraccion"

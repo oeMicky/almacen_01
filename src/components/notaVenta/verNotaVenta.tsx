@@ -638,7 +638,6 @@ export default component$((props: { nvSelecci: any; contexto: string }) => {
                               {iTNotVen.porcentaje.$numberDecimal ? iTNotVen.porcentaje.$numberDecimal : iTNotVen.porcentaje}
                             </td>
                             <td data-label="Imp" class="comoCadena" style={verParametrosAdicionales_Items.value ? { display: 'none' } : ''}>
-                              {/* {iTVen.tipoImpuesto.substring(0, 6)} */}
                               {iTNotVen.tipoImpuesto}
                             </td>
                             <td data-label="Afec" class="acciones" style={verParametrosAdicionales_Items.value ? { display: 'none' } : ''}>
@@ -676,7 +675,6 @@ export default component$((props: { nvSelecci: any; contexto: string }) => {
                             ? formatear_2Decimales(definicion_CTX_NOTA_VENTA.baseImponiblePEN.$numberDecimal)
                             : formatear_2Decimales(definicion_CTX_NOTA_VENTA.baseImponiblePEN)}
                         </td>
-                        {/* <td colSpan={3} /> */}
                       </tr>
 
                       <tr>
@@ -694,7 +692,6 @@ export default component$((props: { nvSelecci: any; contexto: string }) => {
                             ? formatear_2Decimales(definicion_CTX_NOTA_VENTA.igvPEN.$numberDecimal)
                             : formatear_2Decimales(definicion_CTX_NOTA_VENTA.igvPEN)}
                         </td>
-                        {/* <td colSpan={3} /> */}
                       </tr>
                       <tr>
                         <td colSpan={7} class="comoNumeroLeft" style={{ color: '#2E1800' }}>
@@ -711,13 +708,11 @@ export default component$((props: { nvSelecci: any; contexto: string }) => {
                             ? formatear_2Decimales(definicion_CTX_NOTA_VENTA.totalPEN.$numberDecimal)
                             : formatear_2Decimales(definicion_CTX_NOTA_VENTA.totalPEN)}
                         </td>
-                        {/* <td colSpan={3} /> */}
                       </tr>
                       <tr>
                         <td colSpan={9} class="comoNumeroLeft" style={{ color: '#494641' }}>
                           {definicion_CTX_NOTA_VENTA.lite}
                         </td>
-                        {/* <td colSpan={3} /> */}
                       </tr>
                       <tr style={definicion_CTX_NOTA_VENTA.todoEnEfectivo ? {} : { display: 'none' }}>
                         <td colSpan={8} class="comoNumeroLeft" style={{ color: '#494641' }}>

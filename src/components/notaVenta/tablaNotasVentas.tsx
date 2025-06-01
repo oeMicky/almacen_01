@@ -10,19 +10,15 @@ import {
 import { images } from '~/assets';
 // import styles from '../../components/tabla.css?inline';
 import style from '../tabla/tabla.css?inline';
-// import ImgButton from '../system/imgButton';
-// import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
-// import pdfVentaMG from '~/reports/pdfVentaMG';
-// import pdfVentaMG from '~/reports/MG/pdfVentaMG';
-// import pdfFactura00 from '~/reports/pdfFactura00';
+
 import type { IReporteNotaVenta } from '~/interfaces/iVenta'; //IVenta
-// import { CTX_INDEX_VENTA } from '~/routes/(ventas)/venta';
 import { parametrosGlobales } from '~/routes/login';
 import { getIgvVenta } from '~/apis/venta.api';
 import { CTX_INDEX_NOTA_VENTA } from '~/routes/(ventas)/notaVenta';
 import { useNavigate } from '@builder.io/qwik-city';
 import { getNotaVenta } from '~/apis/notaVenta.api';
 import pdfNotaVenta from '~/reports/pdfNotaVenta';
+import pdfNotasVentaDelDia from '~/reports/pdfNotasVentaDelDia';
 
 //ejecutarCreacionXML
 
@@ -42,20 +38,42 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
 
   //#region INICIALIZACION
   const navegarA = useNavigate();
+  // const clickPDFDia = useSignal(0);
   const clickPDF = useSignal(0);
   const idNotaVentaSeleccionada = useSignal('');
   const igv = useSignal(0);
 
   const periodo = useStore({ idPeriodo: '', periodo: '' });
   const periodoAnterior = useStore({ idPeriodo: '', periodo: '' });
-  // const ventaSeleccionada = useSignal<IVenta>();
-  // let suma_GAxM = 0;
-  // let suma_GAxS = 0;
-  let suma_TOTAL_IMPORTE_PEN = 0;
+
   let suma_TOTAL_EFECTIVO_PEN = 0;
+  let suma_TOTAL_IMPORTE_PEN = 0;
   let suma_TOTAL_OTROMONTO_PEN = 0;
   let suma_TOTAL_CREDITO_PEN = 0;
   //#endregion INICIALIZACION
+
+  //#region VER PDF DIA
+  const verPDFDia = $((notasVenta: any) => {
+    pdfNotasVentaDelDia(notasVenta);
+    // }
+  });
+
+  // useTask$(async ({ track }) => {
+  //   track(() => clickPDFDia.value);
+  //   //OBTENIENDO LA VENTA
+  //   if (clickPDFDia.value > 0) {
+  //     // const notaVentaSeleccionada = await getNotaVenta({
+  //     //   idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+  //     //   idEmpresa: parametrosGlobales.idEmpresa,
+  //     //   idNotaVenta: idNotaVentaSeleccionada.value,
+  //     // });
+
+  //     // if (notaVentaSeleccionada.data.length === 1) {
+  //       await verPDFDia();
+  //     // }
+  //   }
+  // });
+  //#endregion VER PDF DIA
 
   //#region VER PDF
   const verPDF = $((notaVenta: any) => {
@@ -150,6 +168,27 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
             <>
               {misNotasVentas.length > 0 ? (
                 <>
+                  <div style={{ display: 'flex', justifyContent: 'end', marginBottom: '6px' }}>
+                    <input
+                      title="Ver en pdf"
+                      type="image"
+                      src={images.print}
+                      height={21.5}
+                      width={21.5}
+                      style={{ align: 'end', marginRight: '6px' }}
+                      onClick$={async () => {
+                        // alert('Generando PDF... espere por favor.');
+                        // console.log('misNotasVentas', misNotasVentas);
+                        verPDFDia(misNotasVentas);
+                        // ctx_index_nota_venta.mostrarSpinner = true;
+
+                        // ctx_index_nota_venta.buscarNotasVentas++;
+                        // ctx_index_nota_venta.NV = notaVenta;
+                        // ctx_index_nota_venta.mostrarPanelNotaVenta = true;
+                        // ctx_index_nota_venta.mostrarPanelVerNotaVenta = true;
+                      }}
+                    />
+                  </div>
                   <table class="tabla-venta" style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
                     <thead>
                       <tr>
@@ -176,32 +215,18 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                         let cred = 0;
                         let tot = 0;
 
-                        // efec =
-                        //   notaVenta.metodoPago === 'CONTADO'
-                        //     ? notaVenta.todoEnEfectivo
-                        //       ? notaVenta.totalPEN.$numberDecimal
-                        //       : notaVenta.montoEnEfectivo.$numberDecimal
-                        //     : 0;
-                        //  notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
-                        efec = notaVenta.montoEnEfectivo.$numberDecimal ? notaVenta.montoEnEfectivo.$numberDecimal : notaVenta.montoEnEfectivo;
-                        // console.log('efec', efec, notaVenta.montoEnEfectivo.$numberDecimal, notaVenta.montoEnEfectivo);
+                        // console.log('notaVenta.montoEnEfectivo', notaVenta.montoEnEfectivo);
 
-                        otro = notaVenta.montoOtroMedioPago.$numberDecimal;
-                        cred = notaVenta.importeTotalCuotasCredito.$numberDecimal;
+                        efec = notaVenta.montoEnEfectivo.$numberDecimal ? notaVenta.montoEnEfectivo.$numberDecimal : notaVenta.montoEnEfectivo;
+
+                        otro = notaVenta.montoOtroMedioPago.$numberDecimal ? notaVenta.montoOtroMedioPago.$numberDecimal : notaVenta.montoOtroMedioPago;
+                        cred = notaVenta.importeTotalCuotasCredito.$numberDecimal
+                          ? notaVenta.importeTotalCuotasCredito.$numberDecimal
+                          : notaVenta.importeTotalCuotasCredito;
                         tot = notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
 
-                        // const aMod: any = notaVenta.ganancias.find((element: any) => element.tipo === 'MERCADERIA');
-                        // // //console.log('aMod', aMod);
-                        // if (typeof aMod !== 'undefined') {
-                        //   mer = aMod.gan.$numberDecimal ? aMod.gan.$numberDecimal : aMod.gan;
-                        // }
-                        // const aSod: any = notaVenta.ganancias.find((element: any) => element.tipo === 'SERVICIO');
-                        // // //console.log('aSod', aSod);
-                        // if (typeof aSod !== 'undefined') {
-                        //   ser = aSod.gan.$numberDecimal ? aSod.gan.$numberDecimal : aSod.gan;
-                        // }
-                        suma_TOTAL_IMPORTE_PEN = suma_TOTAL_IMPORTE_PEN + Number(tot);
                         suma_TOTAL_EFECTIVO_PEN = suma_TOTAL_EFECTIVO_PEN + Number(efec);
+                        suma_TOTAL_IMPORTE_PEN = suma_TOTAL_IMPORTE_PEN + Number(tot);
                         suma_TOTAL_OTROMONTO_PEN = suma_TOTAL_OTROMONTO_PEN + Number(otro);
                         suma_TOTAL_CREDITO_PEN = suma_TOTAL_CREDITO_PEN + Number(cred);
 
@@ -211,8 +236,6 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                             <td data-label="Cliente">{notaVenta.clienteSobrenombreChapa ? notaVenta.clienteSobrenombreChapa : '-'}</td>
                             <td data-label="Observación">{notaVenta.observacion ? notaVenta.observacion : '-'}</td>
                             <td data-label="Fecha">
-                              {/* {notaVenta.fechaLocal.substring(8, 10) + '/' + notaVenta.fechaLocal.substring(5, 7) + '/' + notaVenta.fechaLocal.substring(0, 4)} */}
-
                               {notaVenta.fechaLocal.substring(0, 2) + '/' + notaVenta.fechaLocal.substring(3, 5) + '/' + notaVenta.fechaLocal.substring(6, 10)}
                             </td>
                             <td data-label="Ser-Nro">
@@ -264,10 +287,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                                   })
                                 : '-'} */}
                             </td>
-                            <td data-label="O. M. Pago">
-                              {notaVenta.otroMedioPago ? notaVenta.otroMedioPago : '-'}
-                              {/* {notaVenta.metodoPago === 'CONTADO' ? (notaVenta.todoEnEfectivo ? '' : notaVenta.otroMedioPago) : ''} */}
-                            </td>
+                            <td data-label="O. M. Pago">{notaVenta.otroMedioPago ? notaVenta.otroMedioPago : '-'}</td>
                             <td data-label="Monto O. M. Pago" class="comoNumeroLeft">
                               {parseFloat(notaVenta.montoOtroMedioPago.$numberDecimal) === 0
                                 ? '-'
@@ -315,8 +335,8 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
 
                                   // ctx_index_nota_venta.buscarNotasVentas++;
                                   ctx_index_nota_venta.NV = notaVenta;
-                                  ctx_index_nota_venta.mostrarPanelNotaVenta = true;
-                                  // ctx_index_nota_venta.mostrarPanelVerNotaVenta = true;
+                                  // ctx_index_nota_venta.mostrarPanelNotaVenta = true;
+                                  ctx_index_nota_venta.mostrarPanelVerNotaVenta = true;
                                 }}
                               />
                               {notaVenta.metodoPago === 'CONTADO' ? (
@@ -392,7 +412,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                                     }
                                     periodo.idPeriodo = elPeriodo._id;
                                     periodo.periodo = elPeriodo.periodo;
-                                    //************* */
+
                                     const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
                                     periodoAnterior.idPeriodo = elPeriodoAnterior._id;
                                     periodoAnterior.periodo = elPeriodoAnterior.periodo;
@@ -440,7 +460,6 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                           TOTALES PEN
                         </td>
                         <td class="comoNumero" style={{ color: '#2E1800' }}>
-                          {/* {suma_TOTAL_IMPORTE_PEN} */}
                           {`${suma_TOTAL_IMPORTE_PEN.toLocaleString('en-PE', {
                             // style: 'currency',
                             currency: 'PEN',
@@ -487,3 +506,36 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
     </>
   );
 });
+
+{
+  /* {notaVenta.fechaLocal.substring(8, 10) + '/' + notaVenta.fechaLocal.substring(5, 7) + '/' + notaVenta.fechaLocal.substring(0, 4)} */
+}
+// import ImgButton from '../system/imgButton';
+// import pdfFactura98 from '~/reports/98/pdfFactura98.jsx';
+// import pdfVentaMG from '~/reports/pdfVentaMG';
+// import pdfVentaMG from '~/reports/MG/pdfVentaMG';
+// import pdfFactura00 from '~/reports/pdfFactura00';
+
+// const aMod: any = notaVenta.ganancias.find((element: any) => element.tipo === 'MERCADERIA');
+// // //console.log('aMod', aMod);
+// if (typeof aMod !== 'undefined') {
+//   mer = aMod.gan.$numberDecimal ? aMod.gan.$numberDecimal : aMod.gan;
+// }
+// const aSod: any = notaVenta.ganancias.find((element: any) => element.tipo === 'SERVICIO');
+// // //console.log('aSod', aSod);
+// if (typeof aSod !== 'undefined') {
+//   ser = aSod.gan.$numberDecimal ? aSod.gan.$numberDecimal : aSod.gan;
+// }
+// console.log('efec', efec, notaVenta.montoEnEfectivo.$numberDecimal, notaVenta.montoEnEfectivo);
+
+// efec =
+//   notaVenta.metodoPago === 'CONTADO'
+//     ? notaVenta.todoEnEfectivo
+//       ? notaVenta.totalPEN.$numberDecimal
+//       : notaVenta.montoEnEfectivo.$numberDecimal
+//     : 0;
+//  notaVenta.totalPEN.$numberDecimal ? notaVenta.totalPEN.$numberDecimal : notaVenta.totalPEN;
+
+// const ventaSeleccionada = useSignal<IVenta>();
+// let suma_GAxM = 0;
+// let suma_GAxS = 0;
