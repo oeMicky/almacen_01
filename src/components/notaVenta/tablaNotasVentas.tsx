@@ -1,6 +1,8 @@
 import { $, component$, Resource, useContext, useResource$, useSignal, useStore, useStyles$, useTask$ } from '@builder.io/qwik';
 import {
   cerosALaIzquierda,
+  // hoy,
+  redondeo2Decimales,
   // formatoDDMMYYYY_PEN,
   // formatoHH_MM_SS_PEN,
   // formatoYYYY_MM_DD_PEN,
@@ -119,6 +121,33 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
   });
   //#endregion BUSCANDO REGISTROS
 
+  //#region CREAR Y DOWNLOAD CSV
+  const createAndDownloadFile = $((nameFile: string, texto: string) => {
+    // const xmltext = '<sometag><someothertag></someothertag></sometag>';
+    // const texto = 'hOLA A TODOS';
+
+    const filename = nameFile; ///'file.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([texto], { type: 'text/plain' });
+
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    // pom.setAttribute('download', filename);
+    // pom.setAttribute('download', filename + '.txt');
+    pom.setAttribute('download', filename + '.csv');
+
+    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
+
+    // const stupidExample = '<?xml version="1.0" encoding="utf-8"?><aTag>something</aTag>';
+    // // document.open('data:Application/octet-stream,' + encodeURIComponent(stupidExample));
+    // window.open('data:application/xml,' + encodeURIComponent(stupidExample), '_self');
+    // console.log('first txt');
+  });
+  //#endregion CREAR Y DOWNLOAD CSV
+
   //#region CREAR Y DOWNLOAD XML
   // const createAndDownloadFileXML = $((nameFile: string, xmlString: string) => {
   //   // const xmltext = '<sometag><someothertag></someothertag></sometag>';
@@ -175,7 +204,7 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                       src={images.print}
                       height={21.5}
                       width={21.5}
-                      style={{ align: 'end', marginRight: '6px' }}
+                      style={{ marginRight: '6px' }}
                       onClick$={async () => {
                         // alert('Generando PDF... espere por favor.');
                         // console.log('misNotasVentas', misNotasVentas);
@@ -186,6 +215,122 @@ export default component$((props: { parametrosBusqueda: any; periodosCargados: a
                         // ctx_index_nota_venta.NV = notaVenta;
                         // ctx_index_nota_venta.mostrarPanelNotaVenta = true;
                         // ctx_index_nota_venta.mostrarPanelVerNotaVenta = true;
+                      }}
+                    />
+                    <input
+                      title="Descargar"
+                      type="image"
+                      src={images.download}
+                      height={21.5}
+                      width={21.5}
+                      style={{ marginRight: '6px' }}
+                      onClick$={async () => {
+                        // alert('Datos KARDEX.');
+                        // console.log(misNotasVentas.length);
+                        ctx_index_nota_venta.mostrarSpinner = true;
+                        //FECHA HORA LOCAL
+                        // const elHoy = hoy();
+                        const elHoy = misNotasVentas[0].fechaLocal; //hoy();
+                        // console.log('elHoy', elHoy);
+
+                        const fechaLocal = elHoy; // elHoy.substring(0, 2) + '/' + elHoy.substring(4, 6) + '/' + elHoy.substring(8, 12);
+                        // const fechaLocal_2 = elHoy.substring(8, 10) + '-' + elHoy.substring(5, 7) + '-' + elHoy.substring(0, 4);
+
+                        // const hhhhDate = new Date();
+                        // const horaLocal =
+                        //   cerosALaIzquierda(hhhhDate.getHours(), 2) +
+                        //   ':' +
+                        //   cerosALaIzquierda(hhhhDate.getMinutes(), 2) +
+                        //   ':' +
+                        //   cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+                        // const horaLocal_2 =
+                        //   cerosALaIzquierda(hhhhDate.getHours(), 2) +
+                        //   '-' +
+                        //   cerosALaIzquierda(hhhhDate.getMinutes(), 2) +
+                        //   '-' +
+                        //   cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+
+                        let aExportar = '';
+                        aExportar = 'NOTAS DE VENTA - ' + parametrosGlobales.sucursal + ': ' + fechaLocal + '|\n';
+                        aExportar += '\n';
+                        aExportar += 'ITEM|CLIENTE|OBSERVACION|SER-NUM|IMPORTE|MON|MET.PAGO|EFECTIVO|O.M.PAGO|MON.O.M.P.|CREDITO|\n';
+                        misNotasVentas.map((com: any, index: number) => {
+                          const {
+                            clienteSobrenombreChapa,
+                            observacion,
+                            serie,
+                            numero,
+                            totalPEN,
+                            moneda,
+                            metodoPago,
+                            montoEnEfectivo,
+                            otroMedioPago,
+                            montoOtroMedioPago,
+                            importeTotalCuotasCredito,
+                          } = com;
+                          const elIndex = index + 1;
+                          // const bI = typeof baseImponiblePEN === 'undefined' ? '' : baseImponiblePEN.$numberDecimal;
+                          // const iGV = typeof igvPEN === 'undefined' ? '' : igvPEN.$numberDecimal;
+                          // const adNO = typeof adquisicionesNoGravadasPEN === 'undefined' ? '' : adquisicionesNoGravadasPEN.$numberDecimal;
+                          // const isc = typeof iscPEN === 'undefined' ? '' : iscPEN.$numberDecimal;
+                          // const icbp = typeof icbpPEN === 'undefined' ? '' : icbpPEN.$numberDecimal;
+                          // const otros = typeof otrosPEN === 'undefined' ? '' : otrosPEN.$numberDecimal;
+                          // const total = typeof totalPEN === 'undefined' ? '' : totalPEN.$numberDecimal;
+                          // const detra = typeof detraccion === 'undefined' ? '' : detraccion;
+                          // const detraConsta = typeof detraccionConstancia === 'undefined' ? '' : detraccionConstancia;
+                          // const detraM = typeof detraccionMontoPEN === 'undefined' ? '' : detraccionMontoPEN.$numberDecimal;
+                          // const detraPorc = typeof detraccionPorcentaje === 'undefined' ? '' : detraccionPorcentaje.$numberDecimal;
+
+                          aExportar =
+                            aExportar +
+                            elIndex +
+                            '|' +
+                            clienteSobrenombreChapa +
+                            '|' +
+                            observacion +
+                            '|' +
+                            serie +
+                            '-' +
+                            cerosALaIzquierda(numero, 8) +
+                            '|' +
+                            (typeof totalPEN !== 'undefined' && totalPEN !== null
+                              ? totalPEN.$numberDecimal
+                                ? redondeo2Decimales(totalPEN.$numberDecimal)
+                                : redondeo2Decimales(totalPEN)
+                              : '-') +
+                            '|' +
+                            moneda +
+                            '|' +
+                            metodoPago +
+                            '|' +
+                            (typeof montoEnEfectivo !== 'undefined' && montoEnEfectivo !== null
+                              ? montoEnEfectivo.$numberDecimal
+                                ? redondeo2Decimales(montoEnEfectivo.$numberDecimal)
+                                : redondeo2Decimales(montoEnEfectivo)
+                              : '-') +
+                            '|' +
+                            otroMedioPago +
+                            '|' +
+                            (typeof montoOtroMedioPago !== 'undefined' && montoOtroMedioPago !== null
+                              ? montoOtroMedioPago.$numberDecimal
+                                ? redondeo2Decimales(montoOtroMedioPago.$numberDecimal)
+                                : redondeo2Decimales(montoOtroMedioPago)
+                              : '-') +
+                            '|' +
+                            (typeof importeTotalCuotasCredito !== 'undefined' && importeTotalCuotasCredito !== null
+                              ? importeTotalCuotasCredito.$numberDecimal
+                                ? redondeo2Decimales(importeTotalCuotasCredito.$numberDecimal)
+                                : redondeo2Decimales(importeTotalCuotasCredito)
+                              : '-') +
+                            '\n';
+                        });
+                        // console.log('aExportar', aExportar);
+
+                        // // createAndDownloadFile('elPLE' + periodo.periodo, 'Hola a todos desde el PLE');
+                        createAndDownloadFile('NotasVentasss_' + parametrosGlobales.sucursal + '_' + fechaLocal, aExportar);
+
+                        ctx_index_nota_venta.mostrarSpinner = false;
+                        alert('Archivo descargado.');
                       }}
                     />
                   </div>

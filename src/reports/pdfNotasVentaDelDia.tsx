@@ -169,6 +169,9 @@ async function pdfNotasVentaDelDia(regNVs: any) {
         style: 'tableExample',
         table: {
           headerRows: 1,
+          // pageBreak: 'after',
+          // dontBreakRows: true,
+          // keepWithHeaderRows: 1,
           // widths: ['*', 'auto', '*', '*', '*', '*'],
           // widths: ['*', 'auto', '*', '*', '*', '*'],
           widths: [16, '*', '*', '*', 40, 16, 34, 40, '*', 40, 40],
