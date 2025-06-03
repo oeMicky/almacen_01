@@ -38,7 +38,7 @@ async function pdfNotasVentaDelDia(regNVs: any) {
   let PtotalOTRO = 0;
   let PtotalCREDITO = 0;
 
-  const reportTitle: any = [];
+  // const reportTitle: any = [];
   // const details = [];
   // const rodape = [];
 
@@ -95,18 +95,42 @@ async function pdfNotasVentaDelDia(regNVs: any) {
   //#region FUNCION PIE DE PAGINA
   // margin: [izq, top, der, button],
   function Pie(currentPage: number, pageCount: number) {
+    // function Pie() {
     return [
       {
         image: 'poweredBy',
         fit: [70, 35],
         alignment: 'center',
-        margin: [0, -35, 0, 0],
+        // margin: [0, -35, 0, 0],
       },
       {
         text: currentPage + ' / ' + pageCount,
         style: 'textoPaginacion',
-        margin: [0, -15, 17, 15],
+        // margin: [0, -15, 17, 15],
+        margin: [0, -15, 17, 0],
       },
+      // columns: [
+      //   {
+      //     backgound: 'pink',
+      //     width: '50%',
+      //     height: 30,
+      //     margin: [45, 0, 0, 0],
+      //     text: [
+      //       { text: 'Total en soles PEN: ', style: 'textoBold' },
+      //       { text: formatearMonedaPEN(PtotalPEN), style: 'textoBold' },
+      //     ],
+      //   },
+      //   {
+      //     width: '50%',
+      //     margin: [0, 0, 45, 0],
+      //     text: [
+      //       { text: 'Total en efectivo PEN: ', style: 'textoBold' },
+      //       { text: formatearMonedaPEN(PtotalEFECTIVO), style: 'textoBold' },
+      //     ],
+      //   },
+
+      // ],
+      // margin: [15, 100, 15, 10],
     ];
   }
   //#endregion FUNCION PIE DE PAGINA
@@ -114,54 +138,59 @@ async function pdfNotasVentaDelDia(regNVs: any) {
   //#region DEFINICION DEL DOCUMENTO
   const docDefinitios: any = {
     pageSize: 'A4',
-    pageMargins: [13, 11, 13, 15],
+    // pageMargins: [13, 11, 13, 15],
+    // pageMargins: currentPage===1?[13, 110, 13, 50]:[13, 11, 13, 15],
+    pageMargins: [13, 80, 13, 50],
+    // pageOrientation: 'portrait',
+    // pageOrientation: 'landscape',
 
-    header: [reportTitle],
-    content: [
-      //ENCABEZADO
+    // header: [reportTitle],
+    header: [
       {
+        // pageMargins: [13, 11, 13, 15],
+        // text: 'Razón social\n',
+        // style: 'textoBold10',
         // margin: [izq, top, der, button],
+        // height: 66,
         columns: [
           { width: '30%', margin: [45, 11, 0, 2], image: 'logoEmp', fit: [190, 66] },
           {
-            width: '30%',
-            margin: [20, 11, 18, 0],
+            // width: '30%',
+            // width: '100%',
+            margin: [0, 11, 0, 0],
             // alignment: 'center',
             text: [
-              { text: 'Razón social\n', style: 'textoBold10' },
-              { text: parametrosGlobales.RazonSocial + '\n', style: 'texto' },
+              // { text: 'Razón social\n', style: 'textoBold10' },
+              // { text: parametrosGlobales.RazonSocial + '\n', style: 'texto' },
               { text: 'Sucursal\n', style: 'textoBold10' },
               { text: parametrosGlobales.sucursal + '\n', style: 'texto' },
               { text: 'Dirección fiscal\n', style: 'textoBold10' },
               { text: parametrosGlobales.Direccion, style: 'texto' },
             ],
           },
-          // {
-          //   width: '40%',
-          //   margin: [22, 11, 34, 0],
-          //   alignment: 'center',
-          //   table: {
-          //     // headers are automatically repeated if the table spans over multiple pages
-          //     // you can declare how many rows should be treated as headers
-          //     headerRows: 0,
-          //     widths: ['*'],
-
-          //     body: [['R U C N° ' + parametrosGlobales.RUC + '\n\nORDEN DE PRODUCCION\n\n' + regNVs.serie + ' - ' + cerosALaIzquierda(regNVs.numero, 8) + '\n']],
-          //   },
-          //   // text: [
-          //   //   { text: 'R U C N° 20602683321\n', style: 'textoBold10' },
-          //   //   { text: '\n', style: 'texto6' },
-          //   //   { text: 'COTIZACIÓN\n', style: 'textoBold10' },
-          //   //   { text: '\n', style: 'texto6' },
-          //   //   { text: cerosALaIzquierda(cotizacion.correlativo, 8) + '\n', style: 'textoBold10' },
-          //   // ],
-          // },
         ],
       },
-
-      //MANUFACTURAS
+    ],
+    content: [
+      //ENCABEZADO
       // {
-      //   columns: [{ width: '24%', margin: [50, 10, 0, 0], text: { text: 'MANUFACTURAS:', style: 'textoBold10' } }],
+      //   // margin: [izq, top, der, button],
+      //   columns: [
+      //     { width: '30%', margin: [45, 11, 0, 2], image: 'logoEmp', fit: [190, 66] },
+      //     {
+      //       width: '30%',
+      //       margin: [20, 11, 18, 0],
+      //       // alignment: 'center',
+      //       text: [
+      //         { text: 'Razón social\n', style: 'textoBold10' },
+      //         { text: parametrosGlobales.RazonSocial + '\n', style: 'texto' },
+      //         { text: 'Sucursal\n', style: 'textoBold10' },
+      //         { text: parametrosGlobales.sucursal + '\n', style: 'texto' },
+      //         { text: 'Dirección fiscal\n', style: 'textoBold10' },
+      //         { text: parametrosGlobales.Direccion, style: 'texto' },
+      //       ],
+      //     },
+      //   ],
       // },
       {
         // margin: [izq, top, der, button],
@@ -169,8 +198,9 @@ async function pdfNotasVentaDelDia(regNVs: any) {
         style: 'tableExample',
         table: {
           headerRows: 1,
-          // pageBreak: 'after',
-          // dontBreakRows: true,
+          // height: 200,
+          pageBreak: 'before',
+          dontBreakRows: false,
           // keepWithHeaderRows: 1,
           // widths: ['*', 'auto', '*', '*', '*', '*'],
           // widths: ['*', 'auto', '*', '*', '*', '*'],
@@ -208,51 +238,6 @@ async function pdfNotasVentaDelDia(regNVs: any) {
         // layout: 'itemsVentaLayout', //{ defaultBorder: false }, //'lightHorizontalLines', // 'noBorders', //'lightHorizontalLines',
         layout: 'noBorders',
       },
-
-      // {
-      //   columns: [
-      //     {
-      //       width: '100%',
-      //       // margin: [0, 0, 60, 0],
-      //       margin: [0, 0, 30, 0],
-      //       text: { text: 'TOTAL PEN   ' + formatear6_MonedaPEN(totalManufacturas), style: 'tableBodyRight' },
-      //       // alignment: "right",
-      //     },
-      //   ],
-      // },
-
-      //TOTAL - COSTO DE PRODUCCION - COSTO UNITARIO DE PRODUCCION
-      // margin: [izq, top, der, button],
-      // {
-      //   columns: [
-      //     {
-      //       margin: [50, 16, 30, 0],
-      //       text: { text: 'COSTOS DE PRODUCCION TOTAL PEN:   ' + formatear6_MonedaPEN(totalManufacturas + totalSuministros), style: 'textoBold9' },
-      //       alignment: 'left',
-      //     },
-      //   ],
-      // },
-      // {
-      //   columns: [
-      //     {
-      //       margin: [50, 5, 30, 0],
-      //       text: { text: 'DIVISOR:   ' + op.divisor.$numberDecimal, style: 'textoBold9' },
-      //       alignment: 'left',
-      //     },
-      //   ],
-      // },
-      // {
-      //   columns: [
-      //     {
-      //       margin: [50, 5, 30, 0],
-      //       text: {
-      //         text: 'COSTOS UNITARIO DE PRODUCCION PEN:   ' + formatear6_MonedaPEN((totalManufacturas + totalSuministros) / op.divisor.$numberDecimal),
-      //         style: 'textoBold9',
-      //       },
-      //       alignment: 'left',
-      //     },
-      //   ],
-      // },
     ],
     footer: Pie,
 

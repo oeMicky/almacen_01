@@ -115,7 +115,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
     // idPeriodo: '',
-    fechaInicio: hoy(), // fechas.desde,
+    fechaInicio: '2025-05-24', // hoy(), // fechas.desde,
     fechaFinal: hoy(), //fechas.hasta,
   });
 
@@ -413,6 +413,7 @@ export default component$(() => {
           max={hoy()}
           // min={menosXdiasHoy(2)}
           value={parametrosBusqueda.fechaInicio}
+          // value="2025-05-24"
           style={{ marginLeft: '4px' }}
           onChange$={(e) => {
             if (parametrosGlobales.idGrupoEmpresarial === '') {

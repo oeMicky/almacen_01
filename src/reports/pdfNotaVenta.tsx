@@ -153,6 +153,18 @@ async function pdfNotaVenta(notaVenta: any) {
       {
         // margin: [izq, top, der, button],
         columns: [
+          {
+            // width: '100%',
+            margin: [0, 0, 0, 8],
+            alignment: 'center',
+            image: 'logoEmp',
+            fit: [190, 66],
+          },
+        ],
+      },
+      {
+        // margin: [izq, top, der, button],
+        columns: [
           //   { width: '30%', margin: [45, 11, 0, 2], image: 'logoEmp', fit: [190, 66] },
           {
             width: '100%',
