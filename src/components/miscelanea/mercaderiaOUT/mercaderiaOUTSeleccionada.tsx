@@ -358,7 +358,7 @@ export default component$(
                 max={props.elUbigeoStock.stock.$numberDecimal}
                 value={cantidadSacada.value}
                 onChange$={(e) => {
-                  cantidadSacada.value = parseFloat((e.target as HTMLInputElement).value);
+                  cantidadSacada.value = parseFloat((e.target as HTMLInputElement).value.toString().trim() === '' ? '1' : (e.target as HTMLInputElement).value);
                   if (cantidadSacada.value < 0) {
                     cantidadSacada.value = 0;
                   }
@@ -465,7 +465,9 @@ export default component$(
                     style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: '#FFFFCC' }}
                     value={precioEquivalencia.value}
                     onChange$={(e) => {
-                      precioEquivalencia.value = parseFloat((e.target as HTMLInputElement).value);
+                      precioEquivalencia.value = parseFloat(
+                        (e.target as HTMLInputElement).value.toString().trim() === '' ? '0' : (e.target as HTMLInputElement).value
+                      );
                     }}
                     onFocusin$={(e) => {
                       (e.target as HTMLInputElement).select();
@@ -483,8 +485,8 @@ export default component$(
                     id="in_Monto_mercaderiaOUTSeleccionada"
                     type="number"
                     readOnly
-                    style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: 'oranje' }}
-                    value={cantidadSacada.value * precioEquivalencia.value}
+                    style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: 'orange' }}
+                    value={cantidadSacada.value * (precioEquivalencia.value.toString() === '' ? 0 : precioEquivalencia.value)}
                     // onChange$={(e) => {
                     //   precioEquivalencia.value = parseFloat((e.target as HTMLInputElement).value);
                     // }}
@@ -575,6 +577,7 @@ export default component$(
                   sujetoAPercepcion: props.mercaOUTSelecci.sujetoAPercepcion,
                   percepcion: props.mercaOUTSelecci.percepcion,
                 });
+                console.log('💈💈💈💈💈💈💈', props.contextoParaDocumento);
               }
               let tPVU = '';
               if (
@@ -599,7 +602,7 @@ export default component$(
               } else {
                 elTImp = props.mercaOUTSelecci.tipoImpuesto[0];
               }
-              // console.log('👔👔👔👔👔👔👔', elTImp);
+              console.log('👔👔👔👔👔👔👔', elTImp);
               if (
                 props.contextoParaDocumento === 'orden_servicio' ||
                 props.contextoParaDocumento === 'new_venta' ||
@@ -653,9 +656,9 @@ export default component$(
                   porcentajeUtilidad: props.mercaOUTSelecci.porcentajeUtilidad,
 
                   //precio = c + IGV
-                  precioUnitarioPEN: precioEquivalencia.value,
+                  precioUnitarioPEN: precioEquivalencia.value.toString() === '' ? 0 : precioEquivalencia.value, //props.mercaOUTSelecci.precioUnitarioPEN.$numberDecimal,
                   //venta = k * precio
-                  ventaPEN: cantidadSacada.value * precioEquivalencia.value,
+                  ventaPEN: cantidadSacada.value * (precioEquivalencia.value.toString() === '' ? 0 : precioEquivalencia.value),
 
                   precioUnitarioUSD: 0,
                   ventaUSD: 0,
@@ -672,7 +675,7 @@ export default component$(
                   descripcionContableVenta: props.mercaOUTSelecci.descripcionContableVenta,
                   tipoContableVenta: props.mercaOUTSelecci.tipoContableVenta,
                 });
-                console.log(props.contextoParaDocumento);
+                console.log('🪐🪐🪐🪐🪐', props.contextoParaDocumento);
               }
               if (props.contextoParaDocumento === 'orden_produccion') {
                 documento.push({
@@ -730,6 +733,7 @@ export default component$(
                   descripcionContableVenta: props.mercaOUTSelecci.descripcionContableVenta,
                   tipoContableVenta: props.mercaOUTSelecci.tipoContableVenta,
                 });
+                console.log('🚧🚧🚧🚧🚧🚧', props.contextoParaDocumento);
               }
               // ctx.mostrarPanelMercaderiaOUTSeleccionada = false;
               if (props.contexto === 'buscar_mercaderia_out') {

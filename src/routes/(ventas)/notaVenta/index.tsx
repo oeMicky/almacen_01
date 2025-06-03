@@ -115,7 +115,7 @@ export default component$(() => {
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
     // idPeriodo: '',
-    fechaInicio: '2025-05-24', // hoy(), // fechas.desde,
+    fechaInicio: hoy(), // fechas.desde,
     fechaFinal: hoy(), //fechas.hasta,
   });
 

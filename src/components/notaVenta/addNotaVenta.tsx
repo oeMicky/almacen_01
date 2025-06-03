@@ -2292,7 +2292,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                   }
                                   onChange$={(e) => {
                                     //console.log('ON CHANGE: Cantidad........');
-                                    iTNotVen.cantidadEquivalencia = parseFloat((e.target as HTMLInputElement).value);
+                                    iTNotVen.cantidadEquivalencia = parseFloat(
+                                      (e.target as HTMLInputElement).value.toString().trim() === '' ? '1' : (e.target as HTMLInputElement).value
+                                    );
                                     if (definicion_CTX_NOTA_VENTA.enDolares) {
                                       iTNotVen.ventaUSD = iTNotVen.cantidadEquivalencia * iTNotVen.precioUnitarioUSD;
                                       iTNotVen.ventaPEN = iTNotVen.cantidadEquivalencia * iTNotVen.precioUnitarioPEN;
@@ -2347,7 +2349,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                 }
                                 onChange$={(e) => {
                                   //console.log('ON CHANGE: Precio Uni.........');
-                                  const precio = parseFloat((e.target as HTMLInputElement).value);
+                                  const precio = parseFloat(
+                                    (e.target as HTMLInputElement).value.toString().trim() === '' ? '0' : (e.target as HTMLInputElement).value
+                                  );
 
                                   if (definicion_CTX_NOTA_VENTA.enDolares) {
                                     iTNotVen.precioUnitarioUSD = precio;
@@ -2718,7 +2722,11 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
                         disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
                         value={definicion_CTX_NOTA_VENTA.montoEnEfectivo}
-                        onChange$={(e) => (definicion_CTX_NOTA_VENTA.montoEnEfectivo = (e.target as HTMLInputElement).value)}
+                        onChange$={(e) =>
+                          (definicion_CTX_NOTA_VENTA.montoEnEfectivo = parseFloat(
+                            (e.target as HTMLInputElement).value.toString().trim() === '' ? '0' : (e.target as HTMLInputElement).value
+                          ))
+                        }
                         onKeyPress$={(e) => {
                           if (e.key === 'Enter') {
                             document.getElementById('select_contado')?.focus();
