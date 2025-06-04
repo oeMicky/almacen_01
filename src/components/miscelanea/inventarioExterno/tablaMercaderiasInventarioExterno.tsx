@@ -5,6 +5,7 @@ import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import { cerosALaIzquierda, formatear_2Decimales } from '~/functions/comunes';
 import { images } from '~/assets'; //
 import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
+import { parametrosGlobales } from '~/routes/login';
 // import { CTX_INVENTARIO_EXTERNO } from './inventarioExterno';
 
 export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; parametrosBusqueda: any; verTODOS: boolean }) => {
@@ -81,10 +82,10 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                       <th>Stock</th>
                       <th>Uni</th>
                       {/* {props.esAlmacen ? <th>Costo PEN + IGV</th> : <th>Precio Uni PEN</th>} */}
-                      <th>Costo PEN + IGV</th>
-                      <th>Precio PEN</th>
+                      <th hidden={parametrosGlobales.almaceneroBajo}>Costo PEN + IGV</th>
+                      <th hidden={parametrosGlobales.almaceneroBajo}>Precio PEN</th>
                       {/* <th>Kx</th> */}
-                      <th>Acciones</th>
+                      <th hidden={parametrosGlobales.almaceneroBajo}>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -174,14 +175,22 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                                   : '-'}
                               </td>
                             ) : ( */}
-                          <td data-label="Costo PEN + IGV" class="comoNumeroLeft">
+                          <td
+                            data-label="Costo PEN + IGV"
+                            class="comoNumeroLeft"
+                            style={parametrosGlobales.almaceneroBajo ? { display: 'none' } : { fontWeight: 'bold' }}
+                          >
                             {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
                               ? costoUnitarioPENMasIGV.$numberDecimal
                                 ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
                                 : formatear_2Decimales(costoUnitarioPENMasIGV)
                               : '-'}
                           </td>
-                          <td data-label="Precio PEN" class="comoNumeroLeft">
+                          <td
+                            data-label="Precio PEN"
+                            class="comoNumeroLeft"
+                            style={parametrosGlobales.almaceneroBajo ? { display: 'none' } : { fontWeight: 'bold' }}
+                          >
                             {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                               ? precioUnitarioPEN.$numberDecimal
                                 ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
@@ -190,7 +199,7 @@ export default component$((props: { buscarMercaderiasINVENTARIOEXTERNO: number; 
                           </td>
                           {/* )} */}
                           {/* <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td> */}
-                          <td data-label="Acciones" class="accionesLeft">
+                          <td data-label="Acciones" class="accionesLeft" style={parametrosGlobales.almaceneroBajo ? { display: 'none' } : {}}>
                             {/* <input
                               title="Ver kardex/s"
                               type="image"

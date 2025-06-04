@@ -278,7 +278,7 @@ export default component$(() => {
           )}
         </div>
         <button
-          style={{ cursor: 'pointer', marginLeft: '4px', marginTop: '8px' }}
+          style={parametrosGlobales.almaceneroBajo ? { display: 'none' } : { cursor: 'pointer', marginLeft: '4px', marginTop: '8px' }}
           onClick$={() => {
             definicion_CTX_INDEX_INVENTARIO.mM = [];
             definicion_CTX_INDEX_INVENTARIO.mostrarPanelNewEditMercaderiaIN = true;
@@ -340,7 +340,7 @@ export default component$(() => {
             src={images.download}
             height={21.5}
             width={21.5}
-            style={{ marginRight: '8px' }}
+            style={parametrosGlobales.almaceneroBajo ? { display: 'none' } : { marginRight: '8px' }}
             // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
             onClick$={() => {
               if (definicion_CTX_INDEX_INVENTARIO.kK.length === 0) {

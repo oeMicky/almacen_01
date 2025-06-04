@@ -6,6 +6,8 @@ import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import style from '../tabla/tabla.css?inline';
 import { cerosALaIzquierda, formatear_2Decimales } from '~/functions/comunes';
 import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
+import { parametrosGlobales } from '~/routes/login';
+// import { parametrosGlobales } from '~/routes/login';
 
 export default component$(
   (props: { buscarMercaderiasKARDEX: number; parametrosBusqueda: any; esAlmacen: boolean; verTODOS: boolean; visualizarStocksCeros: boolean }) => {
@@ -85,7 +87,7 @@ export default component$(
                     <thead>
                       <tr>
                         <th>Ítem</th>
-                        <th>idMercaderia</th>
+                        <th hidden={parametrosGlobales.almaceneroBajo || parametrosGlobales.almaceneroMedio}>idMercaderia</th>
                         <th>Descripción</th>
                         <th>Linea/Tipo</th>
                         <th>Marca</th>
@@ -93,11 +95,11 @@ export default component$(
                         <th>Stock</th>
                         <th>Uni</th>
                         {/* {props.esAlmacen ? <th>Costo PEN + IGV</th> : <th>Precio Uni PEN</th>} */}
-                        <th>Costo PEN + IGV</th>
-                        <th>Precio PEN</th>
+                        <th hidden={parametrosGlobales.almaceneroBajo}>Costo PEN + IGV</th>
+                        <th hidden={parametrosGlobales.almaceneroBajo}>Precio PEN</th>
                         {/* <th>Kx</th> */}
                         {/* <th>Obs</th> */}
-                        <th>Acciones</th>
+                        <th hidden={parametrosGlobales.almaceneroBajo}>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -161,7 +163,12 @@ export default component$(
                             // style={laSumStocks === 0 ? { background: 'white', color: 'red' } : {}}
                           >
                             <td data-label="Ítem">{cerosALaIzquierda(elIndex, 3)}</td>
-                            <td data-label="idMercaderia">{_id}</td>
+                            <td
+                              data-label="idMercaderia"
+                              style={parametrosGlobales.almaceneroBajo || parametrosGlobales.almaceneroMedio ? { display: 'none' } : {}}
+                            >
+                              {_id}
+                            </td>
                             <td data-label="Descripción" style={{ fontWeight: 'bold' }}>
                               {elSM >= laSumStocks ? (
                                 <img src={images.flagRed} alt="Bandera roja" width="12" height="12" />
@@ -206,14 +213,22 @@ export default component$(
                                 : '-'}
                             </td>
                           ) : ( */}
-                            <td data-label="Costo PEN + IGV" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                            <td
+                              data-label="Costo PEN + IGV"
+                              class="comoNumeroLeft"
+                              style={parametrosGlobales.almaceneroBajo ? { display: 'none' } : { fontWeight: 'bold' }}
+                            >
                               {typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
                                 ? costoUnitarioPENMasIGV.$numberDecimal
                                   ? formatear_2Decimales(costoUnitarioPENMasIGV.$numberDecimal)
                                   : formatear_2Decimales(costoUnitarioPENMasIGV)
                                 : '-'}
                             </td>
-                            <td data-label="Precio PEN" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
+                            <td
+                              data-label="Precio PEN"
+                              class="comoNumeroLeft"
+                              style={parametrosGlobales.almaceneroBajo ? { display: 'none' } : { fontWeight: 'bold' }}
+                            >
                               {typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                                 ? precioUnitarioPEN.$numberDecimal
                                   ? formatear_2Decimales(precioUnitarioPEN.$numberDecimal)
@@ -223,7 +238,7 @@ export default component$(
                             {/* )} */}
                             {/* <td data-label="Kx">{KARDEXS.length === 0 ? 'No' : 'Si'}</td> */}
                             {/* <td data-label="Obs">{observacion ? observacion : '-'}</td> */}
-                            <td data-label="Acciones" class="accionesLeft">
+                            <td data-label="Acciones" class="accionesLeft" style={parametrosGlobales.almaceneroBajo ? { display: 'none' } : {}}>
                               <input
                                 title="Ver kardex/s"
                                 type="image"
