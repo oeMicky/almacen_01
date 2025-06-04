@@ -48,6 +48,14 @@ export const parametrosGlobales = {
   ubigeo: '',
   agenteRetencion: false,
   agentePercepcion: false,
+  //PERFILES - ROLES
+  supervisor: false,
+  almaceneroAlto: false,
+  almaceneroMedio: false,
+  almaceneroBajo: false,
+  vendedorAlto: false,
+  vendedorMedio: false,
+  vendedorBajo: false,
   //Sucursal
   sucursalesAdjuntas: [],
   idSucursal: '', //'651ad18424595a30fe7926d2',
@@ -147,15 +155,18 @@ export default component$(() => {
     mostrarSpinner: false,
 
     //-- BETA --
+    // email: 'paolo@cao.com',
+    // contrasena: '123',
+    //-- BETA --
     // email: 'taty_vizconde@hotmail.com',
     // contrasena: '123456',
     //-- BETA --
-    // email: 'mvizconde@msn.com',
-    // contrasena: 'Cielo123',
+    email: 'mvizconde@cao.com',
+    contrasena: '12345678',
 
     //PRODUCCION
-    email: '',
-    contrasena: '',
+    // email: '',
+    // contrasena: '',
   });
   //#endregion INICIALIZACION
 
@@ -688,9 +699,18 @@ export default component$(() => {
       clave: definicion_CTX_LOGEO.contrasena.trim(),
     });
     elLogeo = elLogeo.data;
-    // //console.log('********--elLogeo--******', elLogeo);
+    console.log('********--elLogeo--******', elLogeo);
     if (elLogeo.length === 1) {
       if (elLogeo[0].activo) {
+        //PERFILES - ROLES
+        parametrosGlobales.supervisor = elLogeo[0].supervisor;
+        parametrosGlobales.almaceneroAlto = elLogeo[0].almaceneroAlto;
+        parametrosGlobales.almaceneroMedio = elLogeo[0].almaceneroMedio;
+        parametrosGlobales.almaceneroBajo = elLogeo[0].almaceneroBajo;
+        parametrosGlobales.vendedorAlto = elLogeo[0].vendedorAlto;
+        parametrosGlobales.vendedorMedio = elLogeo[0].vendedorMedio;
+        parametrosGlobales.vendedorBajo = elLogeo[0].vendedorBajo;
+        //
         analisisDeLogeo(elLogeo[0]._id, elLogeo[0].usuario);
       } else {
         definicion_CTX_LOGEO.mostrarSpinner = false;

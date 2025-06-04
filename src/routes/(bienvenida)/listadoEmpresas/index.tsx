@@ -70,9 +70,9 @@ export default component$(() => {
                   <td data-label="Acciones" class="acciones">
                     <input
                       // id="in_BuscarDetraccion"
+                      title="Seleccionar empresa"
                       type="image"
                       src={images.check32}
-                      title="Seleccionar empresa"
                       height={14}
                       width={14}
                       // style={{ padding: '2px' }}

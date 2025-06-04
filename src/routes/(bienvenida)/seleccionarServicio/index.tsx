@@ -213,6 +213,13 @@ export default component$(() => {
       >
         Logout
       </button>
+      {/* <button
+        onClick$={() => {
+          console.log('ppp', parametrosGlobales);
+        }}
+      >
+        ppppppppp
+      </button> */}
       {/* MOSTRAR SPINNER */}
       {mostrarSpinner.value && (
         <div class="modal" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
