@@ -1380,18 +1380,19 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           >
             {/* ADD MERCADERIA: CON IGV / SIN IGV */}
             {definicion_CTX_IN_ALMACEN._id === '' ? (
-              <div
-                style={{ display: 'flex', marginBottom: '12px' }}
-                onFocus$={() => {
-                  console.log('onFocus div ADD MERCADERIA: ', document.activeElement);
-                }}
-              >
+              // <div
+              //   style={{ display: 'flex', marginBottom: '12px' }}
+              //   onFocus$={() => {
+              //     console.log('onFocus div ADD MERCADERIA: ', document.activeElement);
+              //   }}
+              // >
+              <div class="linea_1_11" style={{ marginBottom: '12px' }}>
                 <ElButton
+                  title="Add mercadería"
                   id="btn_Add_Mercaderia"
                   class="btn"
                   name="Add mercadería"
-                  title="Add mercadería"
-                  style={{ marginRight: '12px' }}
+                  style={{ width: '100%', marginRight: '12px' }}
                   disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN.produccion}
                   onClick={$(() => {
                     if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '') {
@@ -1584,11 +1585,16 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                             }
                             onChange$={(e) => {
                               !definicion_CTX_IN_ALMACEN.reingreso
-                                ? (iTMercaIN.cantidadIngresada = parseFloat((e.target as HTMLInputElement).value))
-                                : (iTMercaIN.cantidadIngresadaEquivalencia = parseFloat((e.target as HTMLInputElement).value));
+                                ? (iTMercaIN.cantidadIngresada = parseFloat(
+                                    (e.target as HTMLInputElement).value.toString().trim() === '' ? '1' : (e.target as HTMLInputElement).value
+                                  ))
+                                : (iTMercaIN.cantidadIngresadaEquivalencia = parseFloat(
+                                    (e.target as HTMLInputElement).value.toString().trim() === '' ? '1' : (e.target as HTMLInputElement).value
+                                  ));
                               if (definicion_CTX_IN_ALMACEN.enDolares || definicion_CTX_IN_ALMACEN.enDolaresManual) {
                                 console.log('cantidad 💚💚💚💚💚');
                                 if (definicion_CTX_IN_ALMACEN.porMontoUnitario) {
+                                  console.log('cantidad 💚💚💚💚💚🥗🥗🥗🥗🥗');
                                   ///  USD///
                                   iTMercaIN.subUSD =
                                     (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
@@ -1598,6 +1604,15 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                                     (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
                                     (iTMercaIN.valorUnitarioUSD.$numberDecimal ? iTMercaIN.valorUnitarioUSD.$numberDecimal : iTMercaIN.valorUnitarioUSD);
                                   ///  PEN///
+                                  console.log('iTMercaIN.costoUnitarioUSD', iTMercaIN.costoUnitarioUSD);
+                                  console.log('iTMercaIN.cantidadIngresada', iTMercaIN.cantidadIngresada);
+                                  console.log(
+                                    'definicion_CTX_IN_ALMACEN.TC?',
+                                    definicion_CTX_IN_ALMACEN.enDolaresManual
+                                      ? definicion_CTX_IN_ALMACEN.tipoCambioManual
+                                      : definicion_CTX_IN_ALMACEN.tipoCambio
+                                  );
+                                  console.log('iTMercaIN.totPEN', iTMercaIN.totPEN);
                                   iTMercaIN.subPEN =
                                     (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada) *
                                     (iTMercaIN.costoUnitarioUSD.$numberDecimal ? iTMercaIN.costoUnitarioUSD.$numberDecimal : iTMercaIN.costoUnitarioUSD) *
@@ -1608,24 +1623,43 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                                     (iTMercaIN.valorUnitarioUSD.$numberDecimal ? iTMercaIN.valorUnitarioUSD.$numberDecimal : iTMercaIN.valorUnitarioUSD) *
                                     definicion_CTX_IN_ALMACEN.tipoCambio;
                                 } else {
+                                  console.log('cantidad 💚💚💚💚💚🥫🥫🥫🥫🥫');
                                   ///  USD///
                                   iTMercaIN.costoUnitarioUSD =
                                     (iTMercaIN.subUSD.$numberDecimal ? iTMercaIN.subUSD.$numberDecimal : iTMercaIN.subUSD) /
                                     (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada);
-
+                                  console.log('iTMercaIN.costoUnitarioUSD', iTMercaIN.costoUnitarioUSD);
                                   iTMercaIN.valorUnitarioUSD =
                                     (iTMercaIN.totUSD.$numberDecimal ? iTMercaIN.totUSD.$numberDecimal : iTMercaIN.totUSD) /
                                     (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada);
+                                  console.log('iTMercaIN.valorUnitarioUSD', iTMercaIN.valorUnitarioUSD);
                                   ///  PEN///
-                                  iTMercaIN.costoUnitarioUSD =
-                                    ((iTMercaIN.subPEN.$numberDecimal ? iTMercaIN.subPEN.$numberDecimal : iTMercaIN.subPEN) /
-                                      (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada)) *
-                                    definicion_CTX_IN_ALMACEN.tipoCambio;
-
-                                  iTMercaIN.valorUnitarioUSD =
-                                    ((iTMercaIN.totPEN.$numberDecimal ? iTMercaIN.totPEN.$numberDecimal : iTMercaIN.totPEN) /
-                                      (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada)) *
-                                    definicion_CTX_IN_ALMACEN.tipoCambio;
+                                  console.log('🥫🥫🥫🥫🥫🥫🥫🥫🥫🥫🥫');
+                                  console.log('iTMercaIN.subPEN', iTMercaIN.subPEN);
+                                  console.log('iTMercaIN.cantidadIngresada', iTMercaIN.cantidadIngresada);
+                                  console.log(
+                                    'definicion_CTX_IN_ALMACEN.TC?',
+                                    definicion_CTX_IN_ALMACEN.enDolaresManual
+                                      ? definicion_CTX_IN_ALMACEN.tipoCambioManual
+                                      : definicion_CTX_IN_ALMACEN.tipoCambio
+                                  );
+                                  console.log('iTMercaIN.totPEN', iTMercaIN.totPEN);
+                                  console.log('🥫🥫🥫🥫🥫🥫🥫🥫🥫🥫🥫');
+                                  iTMercaIN.costoUnitarioPEN =
+                                    ((iTMercaIN.subUSD.$numberDecimal ? iTMercaIN.subUSD.$numberDecimal : iTMercaIN.subUSD) *
+                                      (definicion_CTX_IN_ALMACEN.enDolaresManual
+                                        ? definicion_CTX_IN_ALMACEN.tipoCambioManual
+                                        : definicion_CTX_IN_ALMACEN.tipoCambio)) /
+                                    (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada);
+                                  console.log('iTMercaIN.costoUnitarioPEN', iTMercaIN.costoUnitarioPEN);
+                                  iTMercaIN.valorUnitarioPEN =
+                                    ((iTMercaIN.totUSD.$numberDecimal ? iTMercaIN.totUSD.$numberDecimal : iTMercaIN.totUSD) *
+                                      (definicion_CTX_IN_ALMACEN.enDolaresManual
+                                        ? definicion_CTX_IN_ALMACEN.tipoCambioManual
+                                        : definicion_CTX_IN_ALMACEN.tipoCambio)) /
+                                    (iTMercaIN.cantidadIngresada.$numberDecimal ? iTMercaIN.cantidadIngresada.$numberDecimal : iTMercaIN.cantidadIngresada);
+                                  console.log('iTMercaIN.valorUnitarioPEN', iTMercaIN.valorUnitarioPEN);
+                                  console.log('🥫🥫🥫🥫🥫🥫🥫🥫🥫🥫🥫');
                                 }
                               } else {
                                 console.log('cantidad 💛💛💛💛💛');
@@ -1694,7 +1728,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                                     )
                               }
                               onChange$={(e) => {
-                                const costo = parseFloat((e.target as HTMLInputElement).value);
+                                const costo = parseFloat(
+                                  (e.target as HTMLInputElement).value.toString().trim() === '' ? '0' : (e.target as HTMLInputElement).value
+                                );
 
                                 let IGVCalculado;
                                 let costoIncluidoIGV;
@@ -1800,7 +1836,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                                   : formatear_6Decimales(iTMercaIN.subPEN.$numberDecimal ? iTMercaIN.subPEN.$numberDecimal : iTMercaIN.subPEN)
                               }
                               onChange$={(e) => {
-                                const sub = parseFloat((e.target as HTMLInputElement).value);
+                                const sub = parseFloat(
+                                  (e.target as HTMLInputElement).value.toString().trim() === '' ? '0' : (e.target as HTMLInputElement).value
+                                );
 
                                 let IGVCalculado;
                                 let subIncluidoIGV;
@@ -1946,7 +1984,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                                     )
                               }
                               onChange$={(e) => {
-                                const precio = parseFloat((e.target as HTMLInputElement).value);
+                                const precio = parseFloat(
+                                  (e.target as HTMLInputElement).value.toString().trim() === '' ? '0' : (e.target as HTMLInputElement).value
+                                );
 
                                 let IGVCalculado;
                                 let costo;
@@ -2067,7 +2107,9 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                                     )
                               }
                               onChange$={(e) => {
-                                const tot = parseFloat((e.target as HTMLInputElement).value);
+                                const tot = parseFloat(
+                                  (e.target as HTMLInputElement).value.toString().trim() === '' ? '0' : (e.target as HTMLInputElement).value
+                                );
 
                                 let IGVCalculado;
                                 let sub;
