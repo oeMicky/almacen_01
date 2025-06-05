@@ -11,7 +11,7 @@ async function pdfNotaVenta(notaVenta: any) {
 
   //console.log('factura PDF', factura);
 
-  const LOGO_EMPRESA = await import(`../assets/logosEmpresas/${parametrosGlobales.RUC}.js`);
+  const LOGO_EMPRESA = await import(`../assets/logosEmpresas/${parametrosGlobales.RUC}_black.js`);
 
   //#region ITEMS
   const items = notaVenta.itemsNotaVenta;
@@ -140,12 +140,13 @@ async function pdfNotaVenta(notaVenta: any) {
     // pageSize: 'A4',
     pageSize: {
       // width: 222,
-      width: 216,
+      // width: 216,
+      width: 212,
       // width: 316,
       // width: 210,
       height: 'auto',
     },
-    pageMargins: [2, 12, 2, 15],
+    pageMargins: [0, 12, 0, 15],
 
     // header: [reportTitle],
     content: [
