@@ -38,7 +38,7 @@ async function pdfNotaVenta(notaVenta: any) {
     return [
       // { text: indexItem, style: 'tableBody' },
       // { text: codigo, style: 'tableBody' },
-      { border: [false, false, false, true], text: descripcionEquivalencia, style: 'texto' },
+      { border: [false, false, false, true], margin: [0, 0, 0, 0], text: descripcionEquivalencia, style: 'texto' },
       { border: [false, false, false, true], text: formatearMonedaPEN(cantidadEquivalencia.$numberDecimal), style: 'texto8Derecho' },
       //   { text: unidadEquivalencia, style: 'tableBody' },
 
@@ -141,7 +141,8 @@ async function pdfNotaVenta(notaVenta: any) {
     pageSize: {
       // width: 222,
       // width: 216,
-      width: 212,
+      // width: 212,
+      width: 210,
       // width: 316,
       // width: 210,
       height: 'auto',

@@ -67,7 +67,7 @@ export interface IVenta {
   verCuotasCredito: boolean;
   cuotasCredito: any;
   // cuotasCredito: [ICuotaCreditoVenta];
-  importeTotalCuotasCredito: number;
+  importeTotalCuotasCredito: any;
 
   idCotizacion: string;
   serieCotizacion: string;

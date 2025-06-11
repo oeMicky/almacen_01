@@ -1500,7 +1500,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
       class="container-modal"
       style={{
         // width: props.ancho + 'px',
-        width: 'clamp(320px, 100%, 1000px)',
+        width: 'clamp(320px, 100%, 1016px)',
         // width: 'auto',
         // background: `${definicion_CTX_NOTA_VENTA.enDolares ? 'linear-gradient(to right, #aaffaa 0%, #aaaaaa 100%)' : '#eee'}`,
         border: '3px solid purple',
@@ -2241,7 +2241,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             <td data-label="Código" class="comoCadena" style={{ display: 'none' }}>
                               {iTNotVen.codigo}
                             </td>
-                            <td data-label="Descripción">
+                            <td data-label="Descripción" style={{ fontWeight: 'bold' }}>
                               {/* {iTNotVen.tipo === 'OTRO' ? <img src={images.puntoVerde} alt="Punto verde" width="12" height="12" /> : ''} */}
                               {iTNotVen.tipo === 'OTRO' ? <img src={images.puntoAzul} alt="Punto verde" width="12" height="12" /> : ''}
                               {iTNotVen.descripcionEquivalencia}
@@ -2379,7 +2379,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                               />
                             </td>
                             {/* -------------------------------- -------------------- */}
-                            <td data-label="Venta" class="comoNumeroLeft">
+                            <td data-label="Venta" class="comoNumeroLeft" style={{ fontWeight: 'bold' }}>
                               {definicion_CTX_NOTA_VENTA.enDolares
                                 ? iTNotVen.ventaUSD.$numberDecimal
                                   ? redondeo6Decimales(iTNotVen.ventaUSD.$numberDecimal)
@@ -2586,7 +2586,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                   </table>
                 </>
               ) : (
-                <i style={{ fontSize: '0.8rem' }}>No existen ítems para la nota de venta</i>
+                <i style={{ fontSize: '0.8rem', color: 'red' }}>No existen ítems para la nota de venta</i>
               )}
               {definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBorrarItemNotaVenta && (
                 <div class="modal">
@@ -2604,14 +2604,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           <div>
             {definicion_CTX_NOTA_VENTA.itemsNotaVenta.length > 0 ? (
               <>
-                {/* <div class="form-control"> */}
+                {/* Método Pago */}
                 <div>
-                  {/* <div class="form-control form-agrupado" style={{ display: 'flex', gap: '4px' }}> */}
                   <div class="linea_1_11" style={{ marginBottom: '8px' }}>
                     <select
                       id="metodoPago"
                       value={definicion_CTX_NOTA_VENTA.metodoPago}
-                      style={{ background: 'orange' }}
+                      style={{ cursor: 'pointer', background: 'orange' }}
                       onChange$={(e) => {
                         // const idx = (e.target as HTMLSelectElement).selectedIndex;
                         // const elSelect = e.target as HTMLSelectElement;
@@ -2632,40 +2631,17 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             });
                           }
                         }
-
-                        //     definicion_CTX_PERSONA.codigoTipoDocumentoIdentidad = (e.target as HTMLSelectElement).value;
-                        // definicion_CTX_PERSONA.tipoDocumentoIdentidad = e.target.options[e.target.selectedIndex].text;
-                        // document.getElementById('in_numeroIdentidad_PERSONA')?.focus();
-
-                        //console.log('❤❤❤ dataSerie.value ', dataSerie.value);
-                        // const SSS: any = dataSerie.value;
-                        // const der = SSS.find((ew: any) => ew._id === elOption.id);
-
-                        //console.log('❤❤❤ der ', der);
-                        // definicion_CTX_NOTA_VENTA.codigoTipoOperacion = der.codigoTipoOperacionXDefault;
-                        // definicion_CTX_NOTA_VENTA.tipoOperacion = der.tipoOperacionXDefault;
-                        // definicion_CTX_NOTA_VENTA.impresionTipoFacturaBoleta = der.impresionTipoFacturaBoleta;
-
-                        // definicion_CTX_NOTA_VENTA.idSerieNotaVenta = elOption.id;
-                        // definicion_CTX_NOTA_VENTA.serie = (e.target as HTMLSelectElement).value;
-                        // document.getElementById('in_Fecha')?.focus();
                       }}
-                      // onChange$={() => {
-
-                      //   console.log('definicion_CTX_NOTA_VENTA.meto', definicion_CTX_NOTA_VENTA.metodoPago);
-
-                      // }}
-                      // style={definicion_CTX_NOTA_VENTA.verCuotasCredito ? { width: '79%' } : { width: '100%' }}
                     >
-                      <option value={'CONTADO'}>CONTADO</option>
-                      <option value={'CRÉDITO'}>CRÉDITO</option>
+                      <option value="CONTADO">CONTADO</option>
+                      <option value="CRÉDITO">CRÉDITO</option>
                     </select>
                     {definicion_CTX_NOTA_VENTA.verCuotasCredito && (
                       <button
                         title="Adicionar cuota"
                         id="addCuota"
                         class="btn"
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', cursor: 'pointer' }}
                         onClick$={() => {
                           (cuota.idAuxiliar = parseInt(elIdAuxiliar())),
                             (cuota.fechaCuota = masXdiasHoy(30)), //hoy()
@@ -2687,23 +2663,25 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                       type="radio"
                       value="Todo en efectivo"
                       name="Contado"
+                      style={{ cursor: 'pointer' }}
                       checked={definicion_CTX_NOTA_VENTA.todoEnEfectivo}
                       onChange$={(e) => {
                         definicion_CTX_NOTA_VENTA.todoEnEfectivo = (e.target as HTMLInputElement).checked;
                         definicion_CTX_NOTA_VENTA.unaParteEnEfectivo = !definicion_CTX_NOTA_VENTA.todoEnEfectivo;
                       }}
                     />
-                    <label for="Todo en efectivo">Todo en efectivo</label>
+                    <label for="Todo en efectivo" style={{ cursor: 'pointer' }}>
+                      Todo en efectivo
+                    </label>
                     <br />
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', margin: '6px 0' }}>
-                      {/* <div style={{ display: 'grid', gap: '4px', margin: '6px 0' }}> */}
-                      {/* <div style={{ gap: '4px', margin: '6px 0' }}> */}
                       <div>
                         <input
                           id="Una parte en efectivo"
                           type="radio"
                           value="Una parte en efectivo"
                           name="Contado"
+                          style={{ cursor: 'pointer' }}
                           checked={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
                           onChange$={(e) => {
                             definicion_CTX_NOTA_VENTA.unaParteEnEfectivo = (e.target as HTMLInputElement).checked;
@@ -2713,7 +2691,9 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             }
                           }}
                         />
-                        <label for="Una parte en efectivo">Una parte en efectivo</label>
+                        <label for="Una parte en efectivo" style={{ cursor: 'pointer' }}>
+                          Una parte en efectivo
+                        </label>
                       </div>
                       <input
                         id="inputMontoEnEfectivo"
@@ -2764,7 +2744,10 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
                         disabled={!definicion_CTX_NOTA_VENTA.unaParteEnEfectivo}
                         value={definicion_CTX_NOTA_VENTA.montoOtroMedioPago}
-                        onChange$={(e) => (definicion_CTX_NOTA_VENTA.montoOtroMedioPago = (e.target as HTMLInputElement).value)}
+                        onChange$={(e) =>
+                          (definicion_CTX_NOTA_VENTA.montoOtroMedioPago =
+                            (e.target as HTMLInputElement).value.toString().trim() === '' ? '0' : (e.target as HTMLInputElement).value)
+                        }
                         onKeyPress$={(e) => {
                           if (e.key === 'Enter') {
                             document.getElementById('in_Observacion')?.focus();
@@ -2784,8 +2767,6 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     />
                   </div>
                 )}
-
-                {/* <div class="form-control form-agrupado" style={{ display: 'flex' }}> */}
                 {/* ----------------------------------------------------- */}
                 {/* ----------------------------------------------------- */}
                 {/* ----------------------------------------------------- */}
@@ -2872,16 +2853,16 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                   </div>
                 }
                 {/*   {showPanelDeleteCuotaCredito && (
-              <Modal
-                componente={
-                  <DeleteCuotaCredito
-                    elIdAuxiliarCuota={borrarIdAuxiliarCuotaCredito}
-                    ancho={'500px'}
-                    onCerrar={cerrarPanelDeleteCuota}
+                  <Modal
+                    componente={
+                      <DeleteCuotaCredito
+                        elIdAuxiliarCuota={borrarIdAuxiliarCuotaCredito}
+                        ancho={'500px'}
+                        onCerrar={cerrarPanelDeleteCuota}
+                      />
+                    }
                   />
-                }
-              />
-            )} */}
+                )} */}
               </>
             ) : (
               ''

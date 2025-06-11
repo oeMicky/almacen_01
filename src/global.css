@@ -151,6 +151,12 @@ a.linkHeaderPrincipal:hover {
 .form-control .form-agrupado select{
   width: 100%;
 }
+.btn:hover {
+  background-color: rgb(227, 227, 227);
+  color: rgb(100, 100, 100);
+
+  font-weight: 600;
+}
 .btn-centro {
   background-color: rgb(60, 60, 60);
   color:rgb(224, 224, 224); 

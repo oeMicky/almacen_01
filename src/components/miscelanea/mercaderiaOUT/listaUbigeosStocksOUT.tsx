@@ -54,7 +54,7 @@ export default component$(
     return (
       <div
         style={{
-          width: 'clamp(280px, 100%, 320px)',
+          width: 'clamp(280px, 100%, 304px)',
           // width: 'auto',
           // border: '1px solid red',
           padding: '2px',
@@ -118,7 +118,7 @@ export default component$(
               const { data } = ubigeosStocks; //{ status, data, message }
               const misUbigeosStocks: IUbigeoStock[] = data;
               ctx_buscar_mercaderia_out.mostrarSpinner = false;
-              // definicion_CTX_LISTA_UBIGEOS_STOCKS_IN.mostrarSpinner = false;
+              // definicion_CTX_LISTA_UBIGEOS_STOCKS_IN.mostrarSpinner = false;       style={{ color: 'purple', fontWeight: 'bold' }}
               return (
                 <>
                   {misUbigeosStocks.length > 0 ? (
@@ -128,7 +128,7 @@ export default component$(
                           <tr>
                             <th>Ubigeo</th>
                             <th>Stock</th>
-                            <th>Acciones</th>
+                            {/* <th>Acciones</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -138,10 +138,29 @@ export default component$(
                             return (
                               <tr>
                                 <td data-label="Ubigeo">{ubigeo}</td>
-                                <td data-label="Stock" style={{ color: 'purple', fontWeight: 'bold' }}>
-                                  {stock.$numberDecimal}
+                                <td data-label="Stock" style={{ textAlign: 'center' }}>
+                                  {/* {stock.$numberDecimal} */}
+                                  {typeof stock !== 'undefined' ? (
+                                    <button
+                                      style={{ color: 'purple', fontWeight: 'bold', cursor: 'pointer' }}
+                                      onClick$={() => {
+                                        if (parseFloat(stock.$numberDecimal) <= 0) {
+                                          alert(ubigeo + ': Este ubigeo no puede ser seleccionado.');
+                                          return;
+                                        }
+
+                                        ctx_buscar_mercaderia_out.uS = ubiLoca;
+
+                                        ctx_buscar_mercaderia_out.mostrarPanelMercaderiaOUTSeleccionada = true;
+                                      }}
+                                    >
+                                      {stock.$numberDecimal}
+                                    </button>
+                                  ) : (
+                                    '-'
+                                  )}
                                 </td>
-                                <td data-label="Acciones" class="accionesLeft">
+                                {/* <td data-label="Acciones" class="accionesLeft">
                                   <input
                                     // id="in_BuscarDetraccion"
                                     type="image"
@@ -166,7 +185,7 @@ export default component$(
                                       ctx_buscar_mercaderia_out.mostrarPanelMercaderiaOUTSeleccionada = true;
                                     }}
                                   />
-                                </td>
+                                </td> */}
                               </tr>
                             );
                           })}
@@ -176,7 +195,7 @@ export default component$(
                             <td colSpan={1} style={{ textAlign: 'right', fontWeight: 'bold' }}>
                               Total:
                             </td>
-                            <td colSpan={2} style={{ textAlign: 'left', fontWeight: 'bold' }}>
+                            <td colSpan={1} style={{ textAlign: 'center', fontWeight: 'bold' }}>
                               {total}
                             </td>
                           </tr>
