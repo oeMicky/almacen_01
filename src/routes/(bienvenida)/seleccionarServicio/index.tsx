@@ -98,8 +98,8 @@ export default component$(() => {
             cursorMano={parametrosGlobales.facturaElectronica}
             onClick={$(() => {
               mostrarSpinner.value = true;
-              // navegarA('/notaVenta');
-              navegarA('/venta');
+              navegarA('/notaVenta');
+              // navegarA('/venta');
             })}
           />
           <Servicio2024
