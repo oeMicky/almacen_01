@@ -38,7 +38,7 @@ async function pdfNotaVenta(notaVenta: any) {
     return [
       // { text: indexItem, style: 'tableBody' },
       // { text: codigo, style: 'tableBody' },
-      { border: [false, false, false, true], margin: [0, 0, 0, 0], text: descripcionEquivalencia, style: 'texto' },
+      { border: [false, false, false, true], text: descripcionEquivalencia, style: 'texto' },
       { border: [false, false, false, true], text: formatearMonedaPEN(cantidadEquivalencia.$numberDecimal), style: 'texto8Derecho' },
       //   { text: unidadEquivalencia, style: 'tableBody' },
 
@@ -142,7 +142,7 @@ async function pdfNotaVenta(notaVenta: any) {
       // width: 222,
       // width: 216,
       // width: 212,
-      width: 210,
+      width: 208,
       // width: 316,
       // width: 210,
       height: 'auto',
@@ -258,17 +258,17 @@ async function pdfNotaVenta(notaVenta: any) {
           },
         ],
       },
-      {
-        margin: [0, 10, 0, 0],
-        columns: [
-          //
-          {
-            width: '100%',
-            //   margin: [50, 20, 0, 0],
-            text: { text: notaVenta.observacion, style: 'texto' },
-          },
-        ],
-      },
+      // {
+      //   margin: [0, 10, 0, 0],
+      //   columns: [
+      //     //
+      //     {
+      //       width: '100%',
+      //       //   margin: [50, 20, 0, 0],
+      //       text: { text: notaVenta.observacion, style: 'texto' },
+      //     },
+      //   ],
+      // },
       //LOS ITEMS
       {
         margin: [0, 10, 0, 0],

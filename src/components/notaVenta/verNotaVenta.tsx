@@ -587,7 +587,7 @@ export default component$((props: { nvSelecci: any; contexto: string }) => {
                               {iTNotVen.ubigeo ? iTNotVen.ubigeo : '-'}
                             </td>
                             <td data-label="Stock" style={{ color: 'purple', fontWeight: 'bold' }}>
-                              {iTNotVen.stock ? iTNotVen.stock : '-'}
+                              {iTNotVen.stock ? (iTNotVen.stock.$numberDecimal ? iTNotVen.stock.$numberDecimal : iTNotVen.stock) : '-'}
                             </td>
                             {/* ---------------------------------------------------textAlign: 'center'-- */}
                             {/* <td data-label="Cantidad" class="comoNumero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> */}
@@ -710,7 +710,7 @@ export default component$((props: { nvSelecci: any; contexto: string }) => {
                         </td>
                       </tr>
                       <tr>
-                        <td colSpan={9} class="comoNumeroLeft" style={{ color: '#494641' }}>
+                        <td colSpan={8} class="comoNumeroLeft" style={{ color: 'white' }}>
                           {definicion_CTX_NOTA_VENTA.lite}
                         </td>
                       </tr>

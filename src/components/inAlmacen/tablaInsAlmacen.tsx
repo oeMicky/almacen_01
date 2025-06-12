@@ -6,6 +6,7 @@ import { CTX_INDEX_IN_ALMACEN } from '~/routes/(inventario)/inAlmacen';
 import { cerosALaIzquierda, formatoDDMMYYYY_PEN } from '~/functions/comunes';
 import type { IIngresoAAlmacen } from '~/interfaces/iInAlmacen';
 import { images } from '~/assets';
+import { parametrosGlobales } from '~/routes/login';
 // import ImgButton from '../system/imgButton';
 // import { images } from '~/assets';
 
@@ -121,6 +122,7 @@ export default component$((props: { buscarInAlmacen: number; porFechasT_porPerio
                               type="image"
                               src={images.trash}
                               alt="icono de ver"
+                              hidden={parametrosGlobales.almaceneroBajo || parametrosGlobales.almaceneroMedio}
                               height={14}
                               width={14}
                               style={{ marginLeft: '6px' }}

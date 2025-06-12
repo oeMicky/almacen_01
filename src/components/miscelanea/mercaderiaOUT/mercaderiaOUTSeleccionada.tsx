@@ -485,7 +485,7 @@ export default component$(
                     id="in_Monto_mercaderiaOUTSeleccionada"
                     type="number"
                     readOnly
-                    style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: 'orange' }}
+                    style={{ marginLeft: '2px', width: '120px', textAlign: 'end', background: 'orange', color: 'white', fontWeight: 'bold' }}
                     value={cantidadSacada.value * (precioEquivalencia.value.toString() === '' ? 0 : precioEquivalencia.value)}
                     // onChange$={(e) => {
                     //   precioEquivalencia.value = parseFloat((e.target as HTMLInputElement).value);
