@@ -1381,7 +1381,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
     });
 
     if (notaVentaGRABADA.status === 400) {
-      alert('🛑 Falla al registrar la nota de venta. ' + notaVentaGRABADA.message);
+      alert('🛑 Falla al registrar la nota de venta: ' + notaVentaGRABADA.message);
       ctx_index_nota_venta.mostrarSpinner = false;
       return;
     }

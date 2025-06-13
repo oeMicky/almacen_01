@@ -533,10 +533,15 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
         usuario: parametrosGlobales.usuario,
       });
 
-      //console.log('Grabó el egreso de almacén - outAlma: ', outAlma);
+      // console.log('💔💔💔💔💔💔  Grabó el egreso de almacén - outAlma: ', outAlma);
 
       if (outAlma.status === 400) {
-        alert('Falla al registrar la outAlmacen. ' + outAlma.message);
+      // if (typeof outAlma.mensaje !== 'undefined' &&  outAlma.mensaje !== '') {
+        // alert('Falla al registrar la outAlmacen: ' + outAlma.message);
+        // alert('Falla al registrar lel Egreso del Almacen: ' + outAlma.mensaje);
+        alert('🛑 Falla al registrar lel Egreso del Almacen: ' + outAlma.message);
+        ctx_index_out_almacen.grabo_OutAlmacen = false;
+        ctx_index_out_almacen.mostrarSpinner = false;
         return;
       }
 
