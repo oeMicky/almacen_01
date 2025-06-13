@@ -611,7 +611,8 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
     });
 
     if (inAlma.status === 400) {
-      alert('Falla al registrar la inAlmacen. ' + inAlma.message);
+      alert('🛑 Falla al registrar el Ingreso al Almacen: ' + inAlma.message);
+      ctx_index_in_almacen.grabo_InAlmacen = false;
       return;
     }
 
