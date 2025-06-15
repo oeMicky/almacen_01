@@ -1,4 +1,4 @@
-import { $, component$, Resource, useContext, useResource$ } from '@builder.io/qwik';
+import { $, component$, Resource, useContext, useResource$, useSignal } from '@builder.io/qwik';
 import { images } from '~/assets';
 import ImgButton from '~/components/system/imgButton';
 import { CTX_BUSCAR_MERCADERIA_OUT } from './buscarMercaderiaOUT';
@@ -22,6 +22,7 @@ export default component$(
     //#endregion CONTEXTO
 
     //#region INICIALIZACION
+    const ini = useSignal(0);
 
     let total = 0;
 
@@ -47,6 +48,7 @@ export default component$(
         body: JSON.stringify({ idKardex: props.idKardex }),
         signal: abortController.signal,
       });
+
       return res.json();
     });
     //#endregion BUSCANDO REGISTROS
@@ -81,7 +83,7 @@ export default component$(
             width={18}
             title="Cerrar el formulario"
             onClick={$(() => {
-              ctx_buscar_mercaderia_out.mostrarPanelUbigeosStocksOUT = false;
+              ctx_buscar_mercaderia_out.mostrarPanelListaUbigeosStocksOUT = false;
             })}
           />
         </div>
@@ -118,6 +120,31 @@ export default component$(
               const { data } = ubigeosStocks; //{ status, data, message }
               const misUbigeosStocks: IUbigeoStock[] = data;
               ctx_buscar_mercaderia_out.mostrarSpinner = false;
+              // APERTURA AUTOMATICA DE MercaderiaOUTSeleccionada
+              if (misUbigeosStocks.length === 1 && misUbigeosStocks[0].stock.$numberDecimal > 0 && ini.value === 0) {
+                ini.value = 1;
+                // console.log('misUbigeosStocks', misUbigeosStocks.length, misUbigeosStocks[0].stock);
+                ctx_buscar_mercaderia_out.uS = misUbigeosStocks[0];
+
+                ctx_buscar_mercaderia_out.mostrarPanelMercaderiaOUTSeleccionada = true;
+              }
+              if (misUbigeosStocks.length > 1 && ini.value === 0) {
+                let mayoresACero = 0;
+                let elIndex = 0;
+                misUbigeosStocks.forEach((element, index) => {
+                  if (element.stock.$numberDecimal > 0) {
+                    mayoresACero = mayoresACero + 1;
+                    elIndex = index;
+                  }
+                });
+                if (mayoresACero === 1) {
+                  ini.value = 1;
+
+                  ctx_buscar_mercaderia_out.uS = misUbigeosStocks[elIndex];
+
+                  ctx_buscar_mercaderia_out.mostrarPanelMercaderiaOUTSeleccionada = true;
+                }
+              }
               // definicion_CTX_LISTA_UBIGEOS_STOCKS_IN.mostrarSpinner = false;       style={{ color: 'purple', fontWeight: 'bold' }}
               return (
                 <>

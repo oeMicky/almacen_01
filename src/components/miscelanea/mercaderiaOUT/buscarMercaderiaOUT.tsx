@@ -64,7 +64,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     grabo_ubigeo: false,
 
     mostrarPanelVerUbigeoAntiguo: false,
-    mostrarPanelUbigeosStocksOUT: false,
+    mostrarPanelListaUbigeosStocksOUT: false,
 
     // mostrarPanelMercaderiaINSeleccionada2: false,
 
@@ -137,7 +137,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: '', // 'geo', //'bien' 'bls 838', // 'acce 5', //cadena.value,
+    cadenaABuscar: 'filt 153', // 'geo', //'bien' 'bls 838', // 'acce 5', //cadena.value,
   });
 
   useTask$(({ track }) => {
@@ -850,7 +850,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
             </div>
           )}
           {/*  LISTA DE UBIGEOS  */}
-          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelUbigeosStocksOUT && (
+          {definicion_CTX_BUSCAR_MERCADERIA_OUT.mostrarPanelListaUbigeosStocksOUT && (
             <div class="modal">
               <ListaUbigeosStocksOUT
                 descripcion={definicion_CTX_BUSCAR_MERCADERIA_OUT.descripcion}

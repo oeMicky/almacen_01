@@ -505,7 +505,7 @@ export default component$(
                                   ctx_buscar_mercaderia_out.fechaVencimiento = fechaVencimiento;
                                   ctx_buscar_mercaderia_out.promedioCostoUnitarioMovil = promedioCostoUnitarioMovil;
 
-                                  ctx_buscar_mercaderia_out.mostrarPanelUbigeosStocksOUT = true;
+                                  ctx_buscar_mercaderia_out.mostrarPanelListaUbigeosStocksOUT = true;
                                   ctx_buscar_mercaderia_out.mostrarSpinner = true;
                                 }}
                               >

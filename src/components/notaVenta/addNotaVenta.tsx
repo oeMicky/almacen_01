@@ -1225,273 +1225,390 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
       }
     }
 
-    ctx_index_nota_venta.mostrarSpinner = true;
-    //FECHA HORA LOCAL
-    // const ffffDate: any = new Date(definicion_CTX_NOTA_VENTA.fecha);
-    // //console.log('🧧🧧🧧🧧', definicion_CTX_NOTA_VENTA.fecha, ffffDate);
-    // //console.log('🧧🧧🧧🧧', ffffDate);
+    try {
+      //VERIFICAR SI LOS DUPLICADOS AL AGRUPARSE TIENEN EL STOCK SUFICIENTE
+      //PARA SER ATENDIDOS DESDE EL ALMACEN
+      // let repetidos: any = [];
+      // let temporal: any = [];
+      const nroElementos = definicion_CTX_NOTA_VENTA.itemsNotaVenta.length;
+      //forEACH
+      definicion_CTX_NOTA_VENTA.itemsNotaVenta.forEach((pivote: any, index: number) => {
+        if (nroElementos === index + 1) {
+          console.log('final', nroElementos, index);
+        } else {
+          console.log('...', nroElementos, index);
+          let stockPIVOTE = pivote.stock;
+          let cantidadACUMULADA = pivote.cantidadSacada;
 
-    const fechaLocal =
-      definicion_CTX_NOTA_VENTA.fecha.substring(8, 10) +
-      '-' +
-      definicion_CTX_NOTA_VENTA.fecha.substring(5, 7) +
-      '-' +
-      definicion_CTX_NOTA_VENTA.fecha.substring(0, 4);
+          // const  arraySECUNDARIO  = definicion_CTX_NOTA_VENTA.itemsNotaVenta.slice(index+1,nroElementos-1);
+          const arraySECUNDARIO = definicion_CTX_NOTA_VENTA.itemsNotaVenta.slice(index + 1, nroElementos);
+          console.log('arraySECUNDARIO', arraySECUNDARIO);
+          arraySECUNDARIO.forEach((element: any) => {
+            if (
+              pivote.idMercaderia === element.idMercaderia &&
+              pivote.idEquivalencia === element.idEquivalencia &&
+              pivote.idKardex === element.idKardex &&
+              pivote.idUbigeoStock === element.idUbigeoStock
+            ) {
+              console.log('Son iguales');
+              if (stockPIVOTE < element.stock) {
+                stockPIVOTE = element.stock;
+              }
+              cantidadACUMULADA = cantidadACUMULADA + element.cantidadSacada;
+              if (stockPIVOTE < cantidadACUMULADA) {
+                alert('CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo);
+                throw new Error(
+                  'CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo
+                );
+              }
+            } else {
+              console.log('No son iguales');
+            }
+          });
+        }
+        // temporal = Object.assign([],definicion_CTX_NOTA_VENTA.itemsNotaVenta[index+1 ... nroElementos]); //Copiado de elemento
+        // console.log('index - temporal', index, temporal[0].idMercaderia);
 
-    const hhhhDate = new Date();
-    const horaLocal =
-      cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+        // temporal.splice(index,1); //Se elimina el elemnto q se compara
+        /**
+         * Se busca en temporal el elemento, y en repetido para
+         * ver si esta ingresado al array. indexOf returna
+         * -1 si el elemento no se encuetra
+         **/
+        // if(temporal.indexOf(value)!=-1 && repetidos.indexOf(value)==-1)      repetidos.push(value);
+      }); //fin forEACH
 
-    //
-    const notaVentaGRABADA = await inNotaVenta({
-      idLibroDiario: parametrosGlobales.idLibroDiario,
+      console.log('definicion_CTX_NOTA_VENTA.itemsNotaVenta INTER: ', definicion_CTX_NOTA_VENTA.itemsNotaVenta);
 
-      idGrupoEmpresarial: definicion_CTX_NOTA_VENTA.idGrupoEmpresarial,
-      idEmpresa: definicion_CTX_NOTA_VENTA.idEmpresa,
-      idAlmacen: definicion_CTX_NOTA_VENTA.idAlmacen,
-      idSucursal: definicion_CTX_NOTA_VENTA.idSucursal,
-      sucursal: definicion_CTX_NOTA_VENTA.sucursal,
-      sucursalDireccion: definicion_CTX_NOTA_VENTA.sucursalDireccion,
-      idPeriodo: definicion_CTX_NOTA_VENTA.idPeriodo,
-      periodo: definicion_CTX_NOTA_VENTA.periodo,
+      //AGRUPAR DUPLICADOS
+      definicion_CTX_NOTA_VENTA.itemsNotaVenta.forEach((pivote: any, index: number) => {
+        if (nroElementos === index + 1) {
+          console.log('final', nroElementos, index);
+        } else {
+          console.log('...', nroElementos, index);
+          let stockPIVOTE = pivote.stock;
+          let cantidadACUMULADA = pivote.cantidad;
+          let cantidadEquivalenciaACUMULADA = pivote.cantidadEquivalencia;
+          let cantidadSacadaACUMULADA = pivote.cantidadSacada;
+          let cantidadSacadaEquivalenciaACUMULADA = pivote.cantidadSacadaEquivalencia;
 
-      ruc: definicion_CTX_NOTA_VENTA.ruc,
-      empresa: definicion_CTX_NOTA_VENTA.empresa,
-      direccion: definicion_CTX_NOTA_VENTA.direccion,
-      departamento: definicion_CTX_NOTA_VENTA.departamento,
-      provincia: definicion_CTX_NOTA_VENTA.provincia,
-      distrito: definicion_CTX_NOTA_VENTA.distrito,
-      ubigeo: definicion_CTX_NOTA_VENTA.ubigeo,
+          // let sonIGUALES=false;
 
-      // codigoTipoOperacion: definicion_CTX_NOTA_VENTA.codigoTipoOperacion,
-      // tipoOperacion: definicion_CTX_NOTA_VENTA.tipoOperacion,
-      idSerieNotaSalida: definicion_CTX_NOTA_VENTA.idSerieNotaSalida,
-      serieNotaSalida: definicion_CTX_NOTA_VENTA.serieNotaSalida,
-      // codigoTipoComprobantePago: definicion_CTX_NOTA_VENTA.codigoTipoComprobantePago,
-      // tipoComprobantePago: definicion_CTX_NOTA_VENTA.tipoComprobantePago,
-      idSerieNotaVenta: definicion_CTX_NOTA_VENTA.idSerieNotaVenta,
-      serie: definicion_CTX_NOTA_VENTA.serie,
-      // numero: definicion_CTX_NOTA_VENTA.numero,
-      fecha: definicion_CTX_NOTA_VENTA.fecha, //YYYY-MM-DD
-      fechaLocal: fechaLocal, //DD-MM-YYYY
-      horaLocal: horaLocal,
+          const arraySECUNDARIO = definicion_CTX_NOTA_VENTA.itemsNotaVenta.slice(index + 1, nroElementos);
+          console.log('arraySECUNDARIO', arraySECUNDARIO);
+          arraySECUNDARIO.forEach((element: any) => {
+            // let elAUX='';
+            if (
+              pivote.idMercaderia === element.idMercaderia &&
+              pivote.idEquivalencia === element.idEquivalencia &&
+              pivote.idKardex === element.idKardex &&
+              pivote.idUbigeoStock === element.idUbigeoStock
+            ) {
+              // sonIGUALES=true;
+              const elAUX = element.idAuxiliar;
+              console.log('Son iguales');
+              if (stockPIVOTE < element.stock) {
+                stockPIVOTE = element.stock;
+              }
+              cantidadACUMULADA = cantidadACUMULADA + element.cantidad;
+              cantidadEquivalenciaACUMULADA = cantidadEquivalenciaACUMULADA + element.cantidadEquivalencia;
+              cantidadSacadaACUMULADA = cantidadSacadaACUMULADA + element.cantidadSacada;
+              cantidadSacadaEquivalenciaACUMULADA = cantidadSacadaEquivalenciaACUMULADA + element.cantidadSacadaEquivalencia;
 
-      clienteVentasVarias: definicion_CTX_NOTA_VENTA.clienteVentasVarias,
-      // idCliente: definicion_CTX_NOTA_VENTA.idCliente,
-      // codigoTipoDocumentoIdentidad: definicion_CTX_NOTA_VENTA.codigoTipoDocumentoIdentidad,
-      // tipoDocumentoIdentidad: definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad,
-      // numeroIdentidad: definicion_CTX_NOTA_VENTA.numeroIdentidad,
-      // razonSocialNombre: definicion_CTX_NOTA_VENTA.razonSocialNombre,
-      // email: definicion_CTX_NOTA_VENTA.email,
-      // telefono: definicion_CTX_NOTA_VENTA.telefono,
-      // actualizarEmailCliente: definicion_CTX_NOTA_VENTA.actualizarEmailCliente,
+              //ACTUALIZANDO los datos del ARRAY ORIGEN
+              definicion_CTX_NOTA_VENTA.itemsNotaVenta[index].stock = stockPIVOTE;
+              definicion_CTX_NOTA_VENTA.itemsNotaVenta[index].cantidad = cantidadACUMULADA;
+              definicion_CTX_NOTA_VENTA.itemsNotaVenta[index].cantidadEquivalencia = cantidadEquivalenciaACUMULADA;
+              definicion_CTX_NOTA_VENTA.itemsNotaVenta[index].cantidadSacada = cantidadSacadaACUMULADA;
+              definicion_CTX_NOTA_VENTA.itemsNotaVenta[index].cantidadSacadaEquivalencia = cantidadSacadaEquivalenciaACUMULADA;
+              // CALCULO de VENTA
+              definicion_CTX_NOTA_VENTA.itemsNotaVenta[index].ventaPEN =
+                definicion_CTX_NOTA_VENTA.itemsNotaVenta[index].precioUnitarioPEN * cantidadSacadaEquivalenciaACUMULADA;
+              //HALLANDO el indice del elemento DUPLICADO para ELIMINARLO
+              const elIndexAEliminar = definicion_CTX_NOTA_VENTA.itemsNotaVenta.findIndex((item: any) => item.idAuxiliar === elAUX);
+              //ELIMINAR elemento del ARRAY ORIGEN
+              definicion_CTX_NOTA_VENTA.itemsNotaVenta.splice(elIndexAEliminar, 1);
+            } else {
+              console.log('No son iguales');
+            }
+          });
+        }
+      }); //fin forEACH
 
-      igv: definicion_CTX_NOTA_VENTA.igv,
-      moneda: definicion_CTX_NOTA_VENTA.moneda,
-      tipoCambio: definicion_CTX_NOTA_VENTA.tipoCambio,
+      console.log('definicion_CTX_NOTA_VENTA.itemsNotaVenta FINAL: ', definicion_CTX_NOTA_VENTA.itemsNotaVenta);
 
-      vendedor: definicion_CTX_NOTA_VENTA.vendedor,
-      metodoPago: definicion_CTX_NOTA_VENTA.metodoPago,
+      ctx_index_nota_venta.mostrarSpinner = true;
 
-      todoEnEfectivo: definicion_CTX_NOTA_VENTA.todoEnEfectivo,
-      unaParteEnEfectivo: definicion_CTX_NOTA_VENTA.unaParteEnEfectivo,
-      montoEnEfectivo: definicion_CTX_NOTA_VENTA.montoEnEfectivo.trim() === '' ? 0 : definicion_CTX_NOTA_VENTA.montoEnEfectivo,
-      otroMedioPago: definicion_CTX_NOTA_VENTA.otroMedioPago,
-      montoOtroMedioPago: definicion_CTX_NOTA_VENTA.montoOtroMedioPago.trim() === '' ? 0 : definicion_CTX_NOTA_VENTA.montoOtroMedioPago,
+      //FECHA HORA LOCAL
+      const fechaLocal =
+        definicion_CTX_NOTA_VENTA.fecha.substring(8, 10) +
+        '-' +
+        definicion_CTX_NOTA_VENTA.fecha.substring(5, 7) +
+        '-' +
+        definicion_CTX_NOTA_VENTA.fecha.substring(0, 4);
 
-      cuotasPago: definicion_CTX_NOTA_VENTA.cuotasCredito,
-      importeTotalCuotasCredito: definicion_CTX_NOTA_VENTA.importeTotalCuotasCredito,
+      const hhhhDate = new Date();
+      const horaLocal =
+        cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
 
-      idCotizacion: definicion_CTX_NOTA_VENTA.idCotizacion,
-      serieCotizacion: definicion_CTX_NOTA_VENTA.serieCotizacion,
-      numeroCotizacion: definicion_CTX_NOTA_VENTA.numeroCotizacion,
+      //
+      const notaVentaGRABADA = await inNotaVenta({
+        idLibroDiario: parametrosGlobales.idLibroDiario,
 
-      idOrdenServicio: definicion_CTX_NOTA_VENTA.idOrdenServicio,
-      serieOrdenServicio: definicion_CTX_NOTA_VENTA.serieOrdenServicio,
-      numeroOrdenServicio: definicion_CTX_NOTA_VENTA.numeroOrdenServicio,
+        idGrupoEmpresarial: definicion_CTX_NOTA_VENTA.idGrupoEmpresarial,
+        idEmpresa: definicion_CTX_NOTA_VENTA.idEmpresa,
+        idAlmacen: definicion_CTX_NOTA_VENTA.idAlmacen,
+        idSucursal: definicion_CTX_NOTA_VENTA.idSucursal,
+        sucursal: definicion_CTX_NOTA_VENTA.sucursal,
+        sucursalDireccion: definicion_CTX_NOTA_VENTA.sucursalDireccion,
+        idPeriodo: definicion_CTX_NOTA_VENTA.idPeriodo,
+        periodo: definicion_CTX_NOTA_VENTA.periodo,
 
-      verificarObservacionVenta: definicion_CTX_NOTA_VENTA.verificarObservacionVenta,
-      observacion: definicion_CTX_NOTA_VENTA.observacion.toUpperCase(),
+        ruc: definicion_CTX_NOTA_VENTA.ruc,
+        empresa: definicion_CTX_NOTA_VENTA.empresa,
+        direccion: definicion_CTX_NOTA_VENTA.direccion,
+        departamento: definicion_CTX_NOTA_VENTA.departamento,
+        provincia: definicion_CTX_NOTA_VENTA.provincia,
+        distrito: definicion_CTX_NOTA_VENTA.distrito,
+        ubigeo: definicion_CTX_NOTA_VENTA.ubigeo,
 
-      idMotivoEgresoAlmacen: definicion_CTX_NOTA_VENTA.idMotivoEgresoAlmacen,
-      // motivoEgresoAlmacen: 'NOTA DE VENTA',
-      existeOtros: definicion_CTX_NOTA_VENTA.itemsNotaVenta.find((element: any) => element.tipo === 'OTRO') ? true : false,
-      // impresionTipoFacturaBoleta: definicion_CTX_NOTA_VENTA.impresionTipoFacturaBoleta,
-      itemsNotaVenta: definicion_CTX_NOTA_VENTA.itemsNotaVenta,
+        // codigoTipoOperacion: definicion_CTX_NOTA_VENTA.codigoTipoOperacion,
+        // tipoOperacion: definicion_CTX_NOTA_VENTA.tipoOperacion,
+        idSerieNotaSalida: definicion_CTX_NOTA_VENTA.idSerieNotaSalida,
+        serieNotaSalida: definicion_CTX_NOTA_VENTA.serieNotaSalida,
+        // codigoTipoComprobantePago: definicion_CTX_NOTA_VENTA.codigoTipoComprobantePago,
+        // tipoComprobantePago: definicion_CTX_NOTA_VENTA.tipoComprobantePago,
+        idSerieNotaVenta: definicion_CTX_NOTA_VENTA.idSerieNotaVenta,
+        serie: definicion_CTX_NOTA_VENTA.serie,
+        // numero: definicion_CTX_NOTA_VENTA.numero,
+        fecha: definicion_CTX_NOTA_VENTA.fecha, //YYYY-MM-DD
+        fechaLocal: fechaLocal, //DD-MM-YYYY
+        horaLocal: horaLocal,
 
-      baseImponiblePEN: definicion_CTX_NOTA_VENTA.baseImponiblePEN,
-      exoneradoPEN: definicion_CTX_NOTA_VENTA.exoneradoPEN,
-      inafectoPEN: definicion_CTX_NOTA_VENTA.inafectoPEN,
-      iscPEN: definicion_CTX_NOTA_VENTA.iscPEN,
-      exportPEN: definicion_CTX_NOTA_VENTA.exportPEN,
-      otrosPEN: definicion_CTX_NOTA_VENTA.otrosPEN,
-      igvPEN: definicion_CTX_NOTA_VENTA.igvPEN,
-      totalPEN: definicion_CTX_NOTA_VENTA.totalPEN,
+        clienteVentasVarias: definicion_CTX_NOTA_VENTA.clienteVentasVarias,
+        // idCliente: definicion_CTX_NOTA_VENTA.idCliente,
+        // codigoTipoDocumentoIdentidad: definicion_CTX_NOTA_VENTA.codigoTipoDocumentoIdentidad,
+        // tipoDocumentoIdentidad: definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad,
+        // numeroIdentidad: definicion_CTX_NOTA_VENTA.numeroIdentidad,
+        // razonSocialNombre: definicion_CTX_NOTA_VENTA.razonSocialNombre,
+        // email: definicion_CTX_NOTA_VENTA.email,
+        // telefono: definicion_CTX_NOTA_VENTA.telefono,
+        // actualizarEmailCliente: definicion_CTX_NOTA_VENTA.actualizarEmailCliente,
 
-      baseImponibleUSD: definicion_CTX_NOTA_VENTA.baseImponibleUSD,
-      exoneradoUSD: definicion_CTX_NOTA_VENTA.exoneradoUSD,
-      inafectoUSD: definicion_CTX_NOTA_VENTA.inafectoUSD,
-      iscUSD: definicion_CTX_NOTA_VENTA.iscUSD,
-      exportUSD: definicion_CTX_NOTA_VENTA.exportUSD,
-      otrosUSD: definicion_CTX_NOTA_VENTA.otrosUSD,
-      igvUSD: definicion_CTX_NOTA_VENTA.igvUSD,
-      totalUSD: definicion_CTX_NOTA_VENTA.totalUSD,
+        igv: definicion_CTX_NOTA_VENTA.igv,
+        moneda: definicion_CTX_NOTA_VENTA.moneda,
+        tipoCambio: definicion_CTX_NOTA_VENTA.tipoCambio,
 
-      literal: definicion_CTX_NOTA_VENTA.lite,
+        vendedor: definicion_CTX_NOTA_VENTA.vendedor,
+        metodoPago: definicion_CTX_NOTA_VENTA.metodoPago,
 
-      efectivoIngresado: definicion_CTX_NOTA_VENTA.efectivoIngresado,
-      vuelto: definicion_CTX_NOTA_VENTA.vuelto,
+        todoEnEfectivo: definicion_CTX_NOTA_VENTA.todoEnEfectivo,
+        unaParteEnEfectivo: definicion_CTX_NOTA_VENTA.unaParteEnEfectivo,
+        montoEnEfectivo: definicion_CTX_NOTA_VENTA.montoEnEfectivo.trim() === '' ? 0 : definicion_CTX_NOTA_VENTA.montoEnEfectivo,
+        otroMedioPago: definicion_CTX_NOTA_VENTA.otroMedioPago,
+        montoOtroMedioPago: definicion_CTX_NOTA_VENTA.montoOtroMedioPago.trim() === '' ? 0 : definicion_CTX_NOTA_VENTA.montoOtroMedioPago,
 
-      clienteSobrenombreChapa: definicion_CTX_NOTA_VENTA.clienteSobrenombreChapa,
-      placa: definicion_CTX_NOTA_VENTA.placa,
-      kilometraje: definicion_CTX_NOTA_VENTA.kilometraje,
-      checkACuenta: definicion_CTX_NOTA_VENTA.checkACuenta,
-      aCuenta: definicion_CTX_NOTA_VENTA.aCuenta,
+        cuotasPago: definicion_CTX_NOTA_VENTA.cuotasCredito,
+        importeTotalCuotasCredito: definicion_CTX_NOTA_VENTA.importeTotalCuotasCredito,
 
-      // referenciaCodigo: definicion_CTX_NOTA_VENTA.referenciaCodigo,
-      // referenciaDescripcion: definicion_CTX_NOTA_VENTA.referenciaDescripcion,
-      // referenciaFecha: definicion_CTX_NOTA_VENTA.referenciaFecha,
-      // referenciaTipo: definicion_CTX_NOTA_VENTA.referenciaTipo,
-      // referenciaSerie: definicion_CTX_NOTA_VENTA.referenciaSerie,
-      // referenciaNumero: definicion_CTX_NOTA_VENTA.referenciaNumero,
+        idCotizacion: definicion_CTX_NOTA_VENTA.idCotizacion,
+        serieCotizacion: definicion_CTX_NOTA_VENTA.serieCotizacion,
+        numeroCotizacion: definicion_CTX_NOTA_VENTA.numeroCotizacion,
 
-      // facturacionElectronica: definicion_CTX_NOTA_VENTA.facturacionElectronica,
-      // facturacionElectronicaAutomatica: definicion_CTX_NOTA_VENTA.facturacionElectronicaAutomatica,
-      // facturaJSON: parametrosGlobales.facturaJSON,
-      // facturaXML: parametrosGlobales.facturaXML,
+        idOrdenServicio: definicion_CTX_NOTA_VENTA.idOrdenServicio,
+        serieOrdenServicio: definicion_CTX_NOTA_VENTA.serieOrdenServicio,
+        numeroOrdenServicio: definicion_CTX_NOTA_VENTA.numeroOrdenServicio,
 
-      contabilizarOperaciones: definicion_CTX_NOTA_VENTA.contabilizarOperaciones,
-      asientoContable: definicion_CTX_NOTA_VENTA.asientoContable,
-      totalDebePEN: definicion_CTX_NOTA_VENTA.totalDebePEN,
-      totalHaberPEN: definicion_CTX_NOTA_VENTA.totalHaberPEN,
-      totalDebeUSD: definicion_CTX_NOTA_VENTA.totalDebeUSD,
-      totalHaberUSD: definicion_CTX_NOTA_VENTA.totalHaberUSD,
+        verificarObservacionVenta: definicion_CTX_NOTA_VENTA.verificarObservacionVenta,
+        observacion: definicion_CTX_NOTA_VENTA.observacion.toUpperCase(),
 
-      ventaConDetraccion: parametrosGlobales.ventaConDetraccion,
-      // detraccion: definicion_CTX_NOTA_VENTA.detraccion,
-      // detraccionCodigo: definicion_CTX_NOTA_VENTA.detraccionCodigo,
-      // detraccionDescripcion: definicion_CTX_NOTA_VENTA.detraccionDescripcion,
-      // detraccionMedioPagoCodigo: definicion_CTX_NOTA_VENTA.detraccionMedioPagoCodigo,
-      // detraccionMedioPagoDescripcion: definicion_CTX_NOTA_VENTA.detraccionMedioPagoDescripcion,
-      // detraccionNumCuentaBancoNacion: definicion_CTX_NOTA_VENTA.detraccionNumCuentaBancoNacion,
-      // detraccionPorcentaje: definicion_CTX_NOTA_VENTA.detraccionPorcentaje,
-      // detraccionMontoPEN: definicion_CTX_NOTA_VENTA.detraccionMontoPEN,
+        idMotivoEgresoAlmacen: definicion_CTX_NOTA_VENTA.idMotivoEgresoAlmacen,
+        // motivoEgresoAlmacen: 'NOTA DE VENTA',
+        existeOtros: definicion_CTX_NOTA_VENTA.itemsNotaVenta.find((element: any) => element.tipo === 'OTRO') ? true : false,
+        // impresionTipoFacturaBoleta: definicion_CTX_NOTA_VENTA.impresionTipoFacturaBoleta,
+        itemsNotaVenta: definicion_CTX_NOTA_VENTA.itemsNotaVenta,
 
-      usuario: parametrosGlobales.usuario,
-    });
+        baseImponiblePEN: definicion_CTX_NOTA_VENTA.baseImponiblePEN,
+        exoneradoPEN: definicion_CTX_NOTA_VENTA.exoneradoPEN,
+        inafectoPEN: definicion_CTX_NOTA_VENTA.inafectoPEN,
+        iscPEN: definicion_CTX_NOTA_VENTA.iscPEN,
+        exportPEN: definicion_CTX_NOTA_VENTA.exportPEN,
+        otrosPEN: definicion_CTX_NOTA_VENTA.otrosPEN,
+        igvPEN: definicion_CTX_NOTA_VENTA.igvPEN,
+        totalPEN: definicion_CTX_NOTA_VENTA.totalPEN,
 
-    if (notaVentaGRABADA.status === 400) {
-      alert('🛑 Falla al registrar la nota de venta: ' + notaVentaGRABADA.message);
+        baseImponibleUSD: definicion_CTX_NOTA_VENTA.baseImponibleUSD,
+        exoneradoUSD: definicion_CTX_NOTA_VENTA.exoneradoUSD,
+        inafectoUSD: definicion_CTX_NOTA_VENTA.inafectoUSD,
+        iscUSD: definicion_CTX_NOTA_VENTA.iscUSD,
+        exportUSD: definicion_CTX_NOTA_VENTA.exportUSD,
+        otrosUSD: definicion_CTX_NOTA_VENTA.otrosUSD,
+        igvUSD: definicion_CTX_NOTA_VENTA.igvUSD,
+        totalUSD: definicion_CTX_NOTA_VENTA.totalUSD,
+
+        literal: definicion_CTX_NOTA_VENTA.lite,
+
+        efectivoIngresado: definicion_CTX_NOTA_VENTA.efectivoIngresado,
+        vuelto: definicion_CTX_NOTA_VENTA.vuelto,
+
+        clienteSobrenombreChapa: definicion_CTX_NOTA_VENTA.clienteSobrenombreChapa,
+        placa: definicion_CTX_NOTA_VENTA.placa,
+        kilometraje: definicion_CTX_NOTA_VENTA.kilometraje,
+        checkACuenta: definicion_CTX_NOTA_VENTA.checkACuenta,
+        aCuenta: definicion_CTX_NOTA_VENTA.aCuenta,
+
+        // referenciaCodigo: definicion_CTX_NOTA_VENTA.referenciaCodigo,
+        // referenciaDescripcion: definicion_CTX_NOTA_VENTA.referenciaDescripcion,
+        // referenciaFecha: definicion_CTX_NOTA_VENTA.referenciaFecha,
+        // referenciaTipo: definicion_CTX_NOTA_VENTA.referenciaTipo,
+        // referenciaSerie: definicion_CTX_NOTA_VENTA.referenciaSerie,
+        // referenciaNumero: definicion_CTX_NOTA_VENTA.referenciaNumero,
+
+        // facturacionElectronica: definicion_CTX_NOTA_VENTA.facturacionElectronica,
+        // facturacionElectronicaAutomatica: definicion_CTX_NOTA_VENTA.facturacionElectronicaAutomatica,
+        // facturaJSON: parametrosGlobales.facturaJSON,
+        // facturaXML: parametrosGlobales.facturaXML,
+
+        contabilizarOperaciones: definicion_CTX_NOTA_VENTA.contabilizarOperaciones,
+        asientoContable: definicion_CTX_NOTA_VENTA.asientoContable,
+        totalDebePEN: definicion_CTX_NOTA_VENTA.totalDebePEN,
+        totalHaberPEN: definicion_CTX_NOTA_VENTA.totalHaberPEN,
+        totalDebeUSD: definicion_CTX_NOTA_VENTA.totalDebeUSD,
+        totalHaberUSD: definicion_CTX_NOTA_VENTA.totalHaberUSD,
+
+        ventaConDetraccion: parametrosGlobales.ventaConDetraccion,
+        // detraccion: definicion_CTX_NOTA_VENTA.detraccion,
+        // detraccionCodigo: definicion_CTX_NOTA_VENTA.detraccionCodigo,
+        // detraccionDescripcion: definicion_CTX_NOTA_VENTA.detraccionDescripcion,
+        // detraccionMedioPagoCodigo: definicion_CTX_NOTA_VENTA.detraccionMedioPagoCodigo,
+        // detraccionMedioPagoDescripcion: definicion_CTX_NOTA_VENTA.detraccionMedioPagoDescripcion,
+        // detraccionNumCuentaBancoNacion: definicion_CTX_NOTA_VENTA.detraccionNumCuentaBancoNacion,
+        // detraccionPorcentaje: definicion_CTX_NOTA_VENTA.detraccionPorcentaje,
+        // detraccionMontoPEN: definicion_CTX_NOTA_VENTA.detraccionMontoPEN,
+
+        usuario: parametrosGlobales.usuario,
+      });
+
+      if (notaVentaGRABADA.status === 400) {
+        alert('🛑 Falla al registrar la nota de venta: ' + notaVentaGRABADA.message);
+        ctx_index_nota_venta.mostrarSpinner = false;
+        return;
+      }
+
+      pasoProcesoGrabacion.value = true;
+      if (notaVentaGRABADA) {
+        grabo.value = true;
+
+        // definicion_CTX_NOTA_VENTA.fecha = hoy();
+
+        definicion_CTX_NOTA_VENTA.clienteVentasVarias = false;
+        // definicion_CTX_NOTA_VENTA.idCliente = '';
+        // definicion_CTX_NOTA_VENTA.codigoTipoDocumentoIdentidad = '6';
+        // definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad = 'RUC';
+        // definicion_CTX_NOTA_VENTA.numeroIdentidad = '';
+        // definicion_CTX_NOTA_VENTA.razonSocialNombre = '';
+        // definicion_CTX_NOTA_VENTA.email = '';
+        // definicion_CTX_NOTA_VENTA.telefono = '';
+
+        definicion_CTX_NOTA_VENTA.enDolares = false;
+        definicion_CTX_NOTA_VENTA.moneda = 'PEN';
+        definicion_CTX_NOTA_VENTA.tipoCambio = 0;
+
+        definicion_CTX_NOTA_VENTA.vendedor = '';
+        definicion_CTX_NOTA_VENTA.metodoPago = 'CONTADO';
+
+        definicion_CTX_NOTA_VENTA.todoEnEfectivo = true;
+        definicion_CTX_NOTA_VENTA.unaParteEnEfectivo = false;
+        definicion_CTX_NOTA_VENTA.montoEnEfectivo = '';
+        definicion_CTX_NOTA_VENTA.otroMedioPago = 'TRANSF. DE FONDOS - YAPE';
+        definicion_CTX_NOTA_VENTA.montoOtroMedioPago = '';
+
+        definicion_CTX_NOTA_VENTA.verCuotasCredito = false;
+        definicion_CTX_NOTA_VENTA.cuotasCredito = [];
+        definicion_CTX_NOTA_VENTA.importeTotalCuotasCredito = 0;
+
+        definicion_CTX_NOTA_VENTA.idCotizacion = '';
+        definicion_CTX_NOTA_VENTA.serieCotizacion = '';
+        definicion_CTX_NOTA_VENTA.numeroCotizacion = 0;
+
+        definicion_CTX_NOTA_VENTA.idOrdenServicio = '';
+        definicion_CTX_NOTA_VENTA.serieOrdenServicio = '';
+        definicion_CTX_NOTA_VENTA.numeroOrdenServicio = 0;
+
+        definicion_CTX_NOTA_VENTA.observacion = '';
+
+        definicion_CTX_NOTA_VENTA.itemsNotaVenta = [];
+
+        definicion_CTX_NOTA_VENTA.baseImponiblePEN = 0;
+        definicion_CTX_NOTA_VENTA.igvPEN = 0;
+        definicion_CTX_NOTA_VENTA.exoneradoPEN = 0;
+        definicion_CTX_NOTA_VENTA.inafectoPEN = 0;
+        definicion_CTX_NOTA_VENTA.iscPEN = 0;
+        definicion_CTX_NOTA_VENTA.exportPEN = 0;
+        definicion_CTX_NOTA_VENTA.otrosPEN = 0;
+        definicion_CTX_NOTA_VENTA.totalPEN = 0;
+
+        definicion_CTX_NOTA_VENTA.baseImponibleUSD = 0;
+        definicion_CTX_NOTA_VENTA.igvUSD = 0;
+        definicion_CTX_NOTA_VENTA.exoneradoUSD = 0;
+        definicion_CTX_NOTA_VENTA.inafectoUSD = 0;
+        definicion_CTX_NOTA_VENTA.iscUSD = 0;
+        definicion_CTX_NOTA_VENTA.exportUSD = 0;
+        definicion_CTX_NOTA_VENTA.otrosUSD = 0;
+        definicion_CTX_NOTA_VENTA.totalUSD = 0;
+
+        definicion_CTX_NOTA_VENTA.lite = '';
+
+        definicion_CTX_NOTA_VENTA.efectivoIngresado = 0;
+        definicion_CTX_NOTA_VENTA.vuelto = 0;
+
+        definicion_CTX_NOTA_VENTA.clienteSobrenombreChapa = '';
+        definicion_CTX_NOTA_VENTA.placa = '';
+        definicion_CTX_NOTA_VENTA.kilometraje = '';
+        definicion_CTX_NOTA_VENTA.checkACuenta = false;
+        definicion_CTX_NOTA_VENTA.aCuenta = '';
+
+        // definicion_CTX_NOTA_VENTA.referenciaCodigo = '';
+        // definicion_CTX_NOTA_VENTA.referenciaDescripcion = '';
+        // definicion_CTX_NOTA_VENTA.referenciaFecha = '';
+        // definicion_CTX_NOTA_VENTA.referenciaTipo = '';
+        // definicion_CTX_NOTA_VENTA.referenciaSerie = '';
+        // definicion_CTX_NOTA_VENTA.referenciaNumero = 0;
+
+        // definicion_CTX_NOTA_VENTA.facturacionElectronica = parametrosGlobales.facturacionElectronica;
+        // definicion_CTX_NOTA_VENTA.facturacionElectronicaAutomatica = parametrosGlobales.facturacionElectronicaAutomatica;
+        definicion_CTX_NOTA_VENTA.verificarObservacionVenta = parametrosGlobales.verificarObservacionVenta;
+
+        definicion_CTX_NOTA_VENTA.contabilizarOperaciones = parametrosGlobales.contabilizarOperaciones;
+        definicion_CTX_NOTA_VENTA.asientoContable = [];
+        definicion_CTX_NOTA_VENTA.totalDebePEN = 0;
+        definicion_CTX_NOTA_VENTA.totalHaberPEN = 0;
+        definicion_CTX_NOTA_VENTA.totalDebeUSD = 0;
+        definicion_CTX_NOTA_VENTA.totalHaberUSD = 0;
+
+        // definicion_CTX_NOTA_VENTA.detraccion = false;
+        // definicion_CTX_NOTA_VENTA.detraccionCodigo = '';
+        // definicion_CTX_NOTA_VENTA.detraccionDescripcion = '';
+        // definicion_CTX_NOTA_VENTA.detraccionMedioPagoCodigo = '';
+        // definicion_CTX_NOTA_VENTA.detraccionMedioPagoDescripcion = '';
+        // definicion_CTX_NOTA_VENTA.detraccionNumCuentaBancoNacion = '';
+        // definicion_CTX_NOTA_VENTA.detraccionPorcentaje = 0;
+        // definicion_CTX_NOTA_VENTA.detraccionMontoPEN = 0;
+      }
+
+      definicion_CTX_ADD_NOTA_VENTA.desabilitarAlmacenServicios = false;
       ctx_index_nota_venta.mostrarSpinner = false;
-      return;
+
+      //OCULTAR MENSAJE DE GRABACION
+      setTimeout(() => (pasoProcesoGrabacion.value = false), 3000);
+      alert('✅ Registro satisfactorio!!!');
+    } catch (error) {
+      console.log('termino 666');
+      // await safeAbortAndEndSession(session, error, 'in_EgresoDeAlmacen');
+      throw error;
+    } finally {
+      console.log('termino 1 🪷🪷🪷🪷🪷');
     }
-
-    pasoProcesoGrabacion.value = true;
-    if (notaVentaGRABADA) {
-      grabo.value = true;
-
-      // definicion_CTX_NOTA_VENTA.fecha = hoy();
-
-      definicion_CTX_NOTA_VENTA.clienteVentasVarias = false;
-      // definicion_CTX_NOTA_VENTA.idCliente = '';
-      // definicion_CTX_NOTA_VENTA.codigoTipoDocumentoIdentidad = '6';
-      // definicion_CTX_NOTA_VENTA.tipoDocumentoIdentidad = 'RUC';
-      // definicion_CTX_NOTA_VENTA.numeroIdentidad = '';
-      // definicion_CTX_NOTA_VENTA.razonSocialNombre = '';
-      // definicion_CTX_NOTA_VENTA.email = '';
-      // definicion_CTX_NOTA_VENTA.telefono = '';
-
-      definicion_CTX_NOTA_VENTA.enDolares = false;
-      definicion_CTX_NOTA_VENTA.moneda = 'PEN';
-      definicion_CTX_NOTA_VENTA.tipoCambio = 0;
-
-      definicion_CTX_NOTA_VENTA.vendedor = '';
-      definicion_CTX_NOTA_VENTA.metodoPago = 'CONTADO';
-
-      definicion_CTX_NOTA_VENTA.todoEnEfectivo = true;
-      definicion_CTX_NOTA_VENTA.unaParteEnEfectivo = false;
-      definicion_CTX_NOTA_VENTA.montoEnEfectivo = '';
-      definicion_CTX_NOTA_VENTA.otroMedioPago = 'TRANSF. DE FONDOS - YAPE';
-      definicion_CTX_NOTA_VENTA.montoOtroMedioPago = '';
-
-      definicion_CTX_NOTA_VENTA.verCuotasCredito = false;
-      definicion_CTX_NOTA_VENTA.cuotasCredito = [];
-      definicion_CTX_NOTA_VENTA.importeTotalCuotasCredito = 0;
-
-      definicion_CTX_NOTA_VENTA.idCotizacion = '';
-      definicion_CTX_NOTA_VENTA.serieCotizacion = '';
-      definicion_CTX_NOTA_VENTA.numeroCotizacion = 0;
-
-      definicion_CTX_NOTA_VENTA.idOrdenServicio = '';
-      definicion_CTX_NOTA_VENTA.serieOrdenServicio = '';
-      definicion_CTX_NOTA_VENTA.numeroOrdenServicio = 0;
-
-      definicion_CTX_NOTA_VENTA.observacion = '';
-
-      definicion_CTX_NOTA_VENTA.itemsNotaVenta = [];
-
-      definicion_CTX_NOTA_VENTA.baseImponiblePEN = 0;
-      definicion_CTX_NOTA_VENTA.igvPEN = 0;
-      definicion_CTX_NOTA_VENTA.exoneradoPEN = 0;
-      definicion_CTX_NOTA_VENTA.inafectoPEN = 0;
-      definicion_CTX_NOTA_VENTA.iscPEN = 0;
-      definicion_CTX_NOTA_VENTA.exportPEN = 0;
-      definicion_CTX_NOTA_VENTA.otrosPEN = 0;
-      definicion_CTX_NOTA_VENTA.totalPEN = 0;
-
-      definicion_CTX_NOTA_VENTA.baseImponibleUSD = 0;
-      definicion_CTX_NOTA_VENTA.igvUSD = 0;
-      definicion_CTX_NOTA_VENTA.exoneradoUSD = 0;
-      definicion_CTX_NOTA_VENTA.inafectoUSD = 0;
-      definicion_CTX_NOTA_VENTA.iscUSD = 0;
-      definicion_CTX_NOTA_VENTA.exportUSD = 0;
-      definicion_CTX_NOTA_VENTA.otrosUSD = 0;
-      definicion_CTX_NOTA_VENTA.totalUSD = 0;
-
-      definicion_CTX_NOTA_VENTA.lite = '';
-
-      definicion_CTX_NOTA_VENTA.efectivoIngresado = 0;
-      definicion_CTX_NOTA_VENTA.vuelto = 0;
-
-      definicion_CTX_NOTA_VENTA.clienteSobrenombreChapa = '';
-      definicion_CTX_NOTA_VENTA.placa = '';
-      definicion_CTX_NOTA_VENTA.kilometraje = '';
-      definicion_CTX_NOTA_VENTA.checkACuenta = false;
-      definicion_CTX_NOTA_VENTA.aCuenta = '';
-
-      // definicion_CTX_NOTA_VENTA.referenciaCodigo = '';
-      // definicion_CTX_NOTA_VENTA.referenciaDescripcion = '';
-      // definicion_CTX_NOTA_VENTA.referenciaFecha = '';
-      // definicion_CTX_NOTA_VENTA.referenciaTipo = '';
-      // definicion_CTX_NOTA_VENTA.referenciaSerie = '';
-      // definicion_CTX_NOTA_VENTA.referenciaNumero = 0;
-
-      // definicion_CTX_NOTA_VENTA.facturacionElectronica = parametrosGlobales.facturacionElectronica;
-      // definicion_CTX_NOTA_VENTA.facturacionElectronicaAutomatica = parametrosGlobales.facturacionElectronicaAutomatica;
-      definicion_CTX_NOTA_VENTA.verificarObservacionVenta = parametrosGlobales.verificarObservacionVenta;
-
-      definicion_CTX_NOTA_VENTA.contabilizarOperaciones = parametrosGlobales.contabilizarOperaciones;
-      definicion_CTX_NOTA_VENTA.asientoContable = [];
-      definicion_CTX_NOTA_VENTA.totalDebePEN = 0;
-      definicion_CTX_NOTA_VENTA.totalHaberPEN = 0;
-      definicion_CTX_NOTA_VENTA.totalDebeUSD = 0;
-      definicion_CTX_NOTA_VENTA.totalHaberUSD = 0;
-
-      // definicion_CTX_NOTA_VENTA.detraccion = false;
-      // definicion_CTX_NOTA_VENTA.detraccionCodigo = '';
-      // definicion_CTX_NOTA_VENTA.detraccionDescripcion = '';
-      // definicion_CTX_NOTA_VENTA.detraccionMedioPagoCodigo = '';
-      // definicion_CTX_NOTA_VENTA.detraccionMedioPagoDescripcion = '';
-      // definicion_CTX_NOTA_VENTA.detraccionNumCuentaBancoNacion = '';
-      // definicion_CTX_NOTA_VENTA.detraccionPorcentaje = 0;
-      // definicion_CTX_NOTA_VENTA.detraccionMontoPEN = 0;
-    }
-
-    definicion_CTX_ADD_NOTA_VENTA.desabilitarAlmacenServicios = false;
-    ctx_index_nota_venta.mostrarSpinner = false;
-    //OCULTAR MENSAJE DE GRABACION
-    setTimeout(() => (pasoProcesoGrabacion.value = false), 3000);
-    alert('✅ Registro satisfactorio!!!');
   });
   //#endregion SUBMIT
 
@@ -1605,7 +1722,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL CLIENTE */}
           <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '4px',
+              }}
+            >
               {/* cliente VENTAS VARIAS*/}
 
               <div>
@@ -1724,7 +1847,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 />
               )}
               {/* IGV */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 {/* <strong style={{ fontSize: '0.9rem', fontWeight: '400', paddingLeft: '4px', paddingRight: '24px' }}>IGV</strong> */}
                 {/* style={{ paddingLeft: '4px', paddingRight: '12px' }} */}
                 <label style={{ paddingRight: '4px' }}>IGV</label>
@@ -1742,7 +1871,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 />
               </div>
               {/* Tipo Cambio    htmlFor={'checkboxTipoCambio'}*/}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <div style={{ display: 'flex', paddingRight: '4px' }}>
                   <input
                     type="checkbox"
@@ -1776,14 +1911,21 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           {/* ----------------------------------------------------- */}
           {/* BOTONES */}
           <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', backgroundColor: '#74a6ab' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr',
+                // backgroundColor: '#74a6ab',
+              }}
+            >
               {/* //ver ALMACEN OUT */}
               <button
                 id="btnVerAlmacen"
                 hidden={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
                 disabled={definicion_CTX_ADD_NOTA_VENTA.desabilitarAlmacenServicios}
                 onClick$={() => (definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBuscarMercaderiaOUT = true)}
-                style={{ cursor: 'pointer', height: '40px' }}
+                style={{ cursor: 'pointer', height: '40px', borderRadius: '4px', border: '1px solid black' }}
+                class="btn"
               >
                 VER ALMACÉN
               </button>
@@ -1851,7 +1993,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
           </div>
           {/* ----------------------------------------------------- */}
           {/* OTROS */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '4px' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 2fr 1fr',
+              gap: '4px',
+            }}
+          >
             <div>
               <input
                 id="in_Cantidad_OTROS"
@@ -2061,7 +2209,15 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 <>
                   <div>
                     <label style={{ marginLeft: '2px', marginRight: '8px' }}>Leyenda:</label>
-                    <label style={{ background: '#ff5aff', padding: '2px 4px', borderRadius: '4px' }}>No facturable</label>
+                    <label
+                      style={{
+                        background: '#ff5aff',
+                        padding: '2px 4px',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      No facturable
+                    </label>
                   </div>
                   <br />
                   <table style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
@@ -2249,7 +2405,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                             <td data-label="Ubigeo" class="accionesLeft">
                               {iTNotVen.ubigeo ? iTNotVen.ubigeo : '-'}
                             </td>
-                            <td data-label="Stock" style={{ color: 'purple', fontWeight: 'bold' }}>
+                            <td
+                              data-label="Stock"
+                              style={{
+                                color: 'purple',
+                                fontWeight: 'bold',
+                              }}
+                            >
                               {iTNotVen.stock ? iTNotVen.stock : '-'}
                             </td>
                             {/* ---------------------------------------------------textAlign: 'center'-- */}
@@ -2286,7 +2448,10 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                 <input
                                   type="number"
                                   disabled={definicion_CTX_NOTA_VENTA._id === '' ? false : true}
-                                  style={{ width: '60px', textAlign: 'end' }}
+                                  style={{
+                                    width: '60px',
+                                    textAlign: 'end',
+                                  }}
                                   value={
                                     iTNotVen.cantidadEquivalencia.$numberDecimal ? iTNotVen.cantidadEquivalencia.$numberDecimal : iTNotVen.cantidadEquivalencia
                                   }
@@ -2577,7 +2742,11 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                 ? definicion_CTX_NOTA_VENTA.vuelto.$numberDecimal
                                 : definicion_CTX_NOTA_VENTA.vuelto
                             }
-                            style={{ color: 'purple', background: '#fefea8', display: 'flex' }}
+                            style={{
+                              color: 'purple',
+                              background: '#fefea8',
+                              display: 'flex',
+                            }}
                             // onClick$={() => (definicion_CTX_ADD_VENTA.mostrarPanelBuscarPersona = true)}
                           />
                         </td>
@@ -2674,7 +2843,14 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                       Todo en efectivo
                     </label>
                     <br />
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', margin: '6px 0' }}>
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '4px',
+                        margin: '6px 0',
+                      }}
+                    >
                       <div>
                         <input
                           id="Una parte en efectivo"
@@ -2714,7 +2890,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                         }}
                       />
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '4px',
+                      }}
+                    >
                       <select
                         id="select_contado"
                         style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}
@@ -2774,7 +2956,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 {
                   <div class="form-control">
                     {definicion_CTX_NOTA_VENTA.metodoPago === 'CRÉDITO' && definicion_CTX_NOTA_VENTA.cuotasCredito.length > 0 ? (
-                      <table style={{ fontSize: '0.8rem', fontWeight: 'lighter', margin: '4px 0' }}>
+                      <table
+                        style={{
+                          fontSize: '0.8rem',
+                          fontWeight: 'lighter',
+                          margin: '4px 0',
+                        }}
+                      >
                         <thead>
                           <tr>
                             <th>Nro. Cuota</th>
@@ -2869,7 +3057,14 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             )}
             {definicion_CTX_NOTA_VENTA.verCuotasCredito && (
               <>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', margin: '6px 0' }}>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '4px',
+                    margin: '6px 0',
+                  }}
+                >
                   {/* <div style={{ display: 'grid', gap: '4px', margin: '6px 0' }}> */}
                   {/* <div style={{ gap: '4px', margin: '6px 0' }}> */}
                   <div>
@@ -2901,7 +3096,13 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                     }}
                   />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '4px',
+                  }}
+                >
                   <select
                     id="select_contado"
                     style={definicion_CTX_NOTA_VENTA.unaParteEnEfectivo ? { background: 'white' } : { background: '#eeeeee' }}

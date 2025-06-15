@@ -737,7 +737,7 @@ export default component$(
               }
               // ctx.mostrarPanelMercaderiaOUTSeleccionada = false;
               if (props.contexto === 'buscar_mercaderia_out') {
-                ctx.mostrarPanelUbigeosStocksOUT = false;
+                ctx.mostrarPanelListaUbigeosStocksOUT = false;
                 ctx.mostrarPanelMercaderiaOUTSeleccionada = false;
               }
               if (props.contexto === 'kardexs_out') {
