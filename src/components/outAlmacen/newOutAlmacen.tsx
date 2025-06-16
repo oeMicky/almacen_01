@@ -25,7 +25,8 @@ import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
 import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
 import BorrarItemMercaderiaOUT from './borrarItemMercaderiaOUT';
 import BorrarDocumentoOUT from './borrarDocumentoOUT';
-import { getSeriesDeNotaSalidaDeLaSucursal, inEgresoDeAlmacen, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
+// import { getSeriesDeNotaSalidaDeLaSucursal, inEgresoDeAlmacen, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
+import { getSeriesDeNotaSalidaDeLaSucursal, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
 import BuscarOrdenServicioAperturado from '../miscelanea/ordenServicioAperturado/buscarOrdenServicioAperturado';
 import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionAperturado/buscarOrdenProduccionAperturado';
 import ListaFavoritosAlmacen from '../miscelanea/favoritos/listaFavoritosAlmacen';
@@ -359,191 +360,298 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
   //#region REGISTRAR_EGRESO parametrosGlobales.usuario
   const registrarEgreso = $(async () => {
-    if (parametrosGlobales.usuario === '' || typeof parametrosGlobales.usuario === 'undefined') {
-      alert('No se identificado adecuadamente el usuario, por favor verifique.');
-      // document.getElementById('se_motivoIngreso')?.focus();
-      return;
-    }
-    //periodo FISMA idMotivoEgresoAlmacen
-    //console.log(' //periodo FISMA idMotivoEgresoAlmacen');
-    if (definicion_CTX_OUT_ALMACEN.idAlmacen === '' || typeof definicion_CTX_OUT_ALMACEN.idAlmacen === 'undefined') {
-      alert('No se identificado el almacén, por favor verifique.');
-      // document.getElementById('se_motivoIngreso')?.focus();
-      return;
-    }
-    if (definicion_CTX_OUT_ALMACEN.periodo.toString() === '' || typeof definicion_CTX_OUT_ALMACEN.periodo === 'undefined') {
-      alert('Ingrese el periodo');
-      document.getElementById('in_Periodo')?.focus();
-      return;
-    }
-    if (definicion_CTX_OUT_ALMACEN.FISMA === '' || typeof definicion_CTX_OUT_ALMACEN.FISMA === 'undefined') {
-      alert('Ingrese la fecha FISMA');
-      document.getElementById('in_FISMA')?.focus();
-      return;
-    }
-    if (definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === '' || typeof definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === 'undefined') {
-      alert('Seleccione el motivo de egreso');
-      document.getElementById('se_motivoIngreso')?.focus();
-      return;
-    }
-    if (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO A SUCURSAL') {
-      if (
-        definicion_CTX_OUT_ALMACEN.idSucursalDestino === '' ||
-        typeof definicion_CTX_OUT_ALMACEN.idSucursalDestino === 'undefined' ||
-        definicion_CTX_OUT_ALMACEN.sucursalDestino === '' ||
-        typeof definicion_CTX_OUT_ALMACEN.sucursalDestino === 'undefined'
-      ) {
-        alert('Seleccione la sucursal destino');
+    try {
+      if (parametrosGlobales.usuario === '' || typeof parametrosGlobales.usuario === 'undefined') {
+        alert('No se identificado adecuadamente el usuario, por favor verifique.');
+        // document.getElementById('se_motivoIngreso')?.focus();
+        return;
+      }
+      //periodo FISMA idMotivoEgresoAlmacen
+      //console.log(' //periodo FISMA idMotivoEgresoAlmacen');
+      if (definicion_CTX_OUT_ALMACEN.idAlmacen === '' || typeof definicion_CTX_OUT_ALMACEN.idAlmacen === 'undefined') {
+        alert('No se identificado el almacén, por favor verifique.');
+        // document.getElementById('se_motivoIngreso')?.focus();
+        return;
+      }
+      if (definicion_CTX_OUT_ALMACEN.periodo.toString() === '' || typeof definicion_CTX_OUT_ALMACEN.periodo === 'undefined') {
+        alert('Ingrese el periodo');
+        document.getElementById('in_Periodo')?.focus();
+        return;
+      }
+      if (definicion_CTX_OUT_ALMACEN.FISMA === '' || typeof definicion_CTX_OUT_ALMACEN.FISMA === 'undefined') {
+        alert('Ingrese la fecha FISMA');
+        document.getElementById('in_FISMA')?.focus();
+        return;
+      }
+      if (definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === '' || typeof definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === 'undefined') {
+        alert('Seleccione el motivo de egreso');
         document.getElementById('se_motivoIngreso')?.focus();
         return;
       }
-    }
-    //DESTINATARIO
-    //console.log(
-    //   ' //DESTINATARIO',
-    //   definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
-    //   definicion_CTX_OUT_ALMACEN.numeroIdentidad,
-    //   definicion_CTX_OUT_ALMACEN.razonSocialNombre
-    // );
-    if (definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === '' || typeof definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === 'undefined') {
-      alert('Identifique al destinatario');
-      document.getElementById('img_buscarDESTINATARIO')?.focus();
-      return;
-    }
-    if (definicion_CTX_OUT_ALMACEN.numeroIdentidad === '' || typeof definicion_CTX_OUT_ALMACEN.numeroIdentidad === 'undefined') {
-      alert('Identifique al destinatario');
-      document.getElementById('img_buscarDESTINATARIO')?.focus();
-      return;
-    }
-    if (definicion_CTX_OUT_ALMACEN.razonSocialNombre === '' || typeof definicion_CTX_OUT_ALMACEN.razonSocialNombre === 'undefined') {
-      alert('Identifique al destinatario');
-      document.getElementById('img_buscarDESTINATARIO')?.focus();
-      return;
-    }
-    // if (definicion_CTX_OUT_ALMACEN.elIgv.toString() === '') {
-    //   alert('Identifique el igv');
-    //   document.getElementById('in_IGV')?.focus();
-    //   return;
-    // }
-    //DOCUMENTOS ADJUNTOS
-    //console.log(' //documentosAdjuntos');
-    if (
-      definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'NOTA DE SALIDA' &&
-      definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO' &&
-      definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO A SUCURSAL'
-    ) {
-      // if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
-      //   alert('Agregue al menos un documento');
-      //   document.getElementById('btn_Add_Documento')?.focus();
+      if (definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen === 'TRASLADO A SUCURSAL') {
+        if (
+          definicion_CTX_OUT_ALMACEN.idSucursalDestino === '' ||
+          typeof definicion_CTX_OUT_ALMACEN.idSucursalDestino === 'undefined' ||
+          definicion_CTX_OUT_ALMACEN.sucursalDestino === '' ||
+          typeof definicion_CTX_OUT_ALMACEN.sucursalDestino === 'undefined'
+        ) {
+          alert('Seleccione la sucursal destino');
+          document.getElementById('se_motivoIngreso')?.focus();
+          return;
+        }
+      }
+      //DESTINATARIO
+      //console.log(
+      //   ' //DESTINATARIO',
+      //   definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
+      //   definicion_CTX_OUT_ALMACEN.numeroIdentidad,
+      //   definicion_CTX_OUT_ALMACEN.razonSocialNombre
+      // );
+      if (definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === '' || typeof definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad === 'undefined') {
+        alert('Identifique al destinatario');
+        document.getElementById('img_buscarDESTINATARIO')?.focus();
+        return;
+      }
+      if (definicion_CTX_OUT_ALMACEN.numeroIdentidad === '' || typeof definicion_CTX_OUT_ALMACEN.numeroIdentidad === 'undefined') {
+        alert('Identifique al destinatario');
+        document.getElementById('img_buscarDESTINATARIO')?.focus();
+        return;
+      }
+      if (definicion_CTX_OUT_ALMACEN.razonSocialNombre === '' || typeof definicion_CTX_OUT_ALMACEN.razonSocialNombre === 'undefined') {
+        alert('Identifique al destinatario');
+        document.getElementById('img_buscarDESTINATARIO')?.focus();
+        return;
+      }
+      // if (definicion_CTX_OUT_ALMACEN.elIgv.toString() === '') {
+      //   alert('Identifique el igv');
+      //   document.getElementById('in_IGV')?.focus();
       //   return;
       // }
-      if (documento.descripcionTCP === '') {
-        alert('Seleccione el tipo de comprobante de pago');
-        document.getElementById('se_tcpIN_DOCUMENTO')?.focus();
+      //DOCUMENTOS ADJUNTOS
+      //console.log(' //documentosAdjuntos');
+      if (
+        definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'NOTA DE SALIDA' &&
+        definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO' &&
+        definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen !== 'TRASLADO A SUCURSAL'
+      ) {
+        // if (definicion_CTX_OUT_ALMACEN.documentosAdjuntos.length < 1) {
+        //   alert('Agregue al menos un documento');
+        //   document.getElementById('btn_Add_Documento')?.focus();
+        //   return;
+        // }
+        if (documento.descripcionTCP === '') {
+          alert('Seleccione el tipo de comprobante de pago');
+          document.getElementById('se_tcpIN_DOCUMENTO')?.focus();
+          return;
+        }
+        if (documento.fecha === '') {
+          alert('Seleccione la fecha del comprobante de pago');
+          document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+          return;
+        }
+        if (documento.serie === '') {
+          alert('Ingrese la serie del comprobante de pago');
+          document.getElementById('in_Serie_DOCUMENTO')?.focus();
+          return;
+        }
+        if (documento.numero === '') {
+          alert('Ingrese el número de comprobante de pago');
+          document.getElementById('in_Numero_DOCUMENTO')?.focus();
+          return;
+        }
+      }
+
+      //itemsMercaderias
+      //console.log(' //itemsMercaderias');
+      if (definicion_CTX_OUT_ALMACEN.itemsMercaderias.length < 1) {
+        alert('Agregue al menos una mercadería');
+        document.getElementById('btn_Add_Mercaderia')?.focus();
         return;
       }
-      if (documento.fecha === '') {
-        alert('Seleccione la fecha del comprobante de pago');
-        document.getElementById('in_Fecha_DOCUMENTO')?.focus();
-        return;
-      }
-      if (documento.serie === '') {
-        alert('Ingrese la serie del comprobante de pago');
-        document.getElementById('in_Serie_DOCUMENTO')?.focus();
-        return;
-      }
-      if (documento.numero === '') {
-        alert('Ingrese el número de comprobante de pago');
-        document.getElementById('in_Numero_DOCUMENTO')?.focus();
-        return;
-      }
-    }
 
-    //itemsMercaderias
-    //console.log(' //itemsMercaderias');
-    if (definicion_CTX_OUT_ALMACEN.itemsMercaderias.length < 1) {
-      alert('Agregue al menos una mercadería');
-      document.getElementById('btn_Add_Mercaderia')?.focus();
-      return;
-    }
+      //VERIFICAR SI LOS DUPLICADOS AL AGRUPARSE TIENEN EL STOCK SUFICIENTE
+      //PARA SER ATENDIDOS DESDE EL ALMACEN
+      // let repetidos: any = [];
+      // let temporal: any = [];
+      const nroElementos = definicion_CTX_OUT_ALMACEN.itemsMercaderias.length;
+      //forEACH
+      definicion_CTX_OUT_ALMACEN.itemsMercaderias.forEach((pivote: any, index: number) => {
+        if (nroElementos === index + 1) {
+          console.log('final', nroElementos, index);
+          if (nroElementos === 1) {
+            if (pivote.stockEquivalente < pivote.cantidadSacadaEquivalencia) {
+              alert('CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo);
+              throw new Error(
+                'CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo
+              );
+            }
+          }
+        } else {
+          console.log('...', nroElementos, index);
+          let stockPIVOTE = pivote.stockEquivalente;
+          let cantidadSacadaEquivalenciaACUMULADA = pivote.cantidadSacadaEquivalencia;
 
-    ctx_index_out_almacen.mostrarSpinner = true;
-    //FECHA HORA LOCAL
-    const fechaLocal =
-      definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10) +
-      '-' +
-      definicion_CTX_OUT_ALMACEN.FISMA.substring(5, 7) +
-      '-' +
-      definicion_CTX_OUT_ALMACEN.FISMA.substring(0, 4);
+          // const  arraySECUNDARIO  = definicion_CTX_NOTA_VENTA.itemsNotaVenta.slice(index+1,nroElementos-1);
+          const arraySECUNDARIO = definicion_CTX_OUT_ALMACEN.itemsMercaderias.slice(index + 1, nroElementos);
+          console.log('arraySECUNDARIO', arraySECUNDARIO);
+          arraySECUNDARIO.forEach((element: any) => {
+            if (
+              pivote.idMercaderia === element.idMercaderia &&
+              pivote.idEquivalencia === element.idEquivalencia &&
+              pivote.idKardex === element.idKardex &&
+              pivote.idUbigeoStock === element.idUbigeoStock
+            ) {
+              console.log('Son iguales');
+              if (stockPIVOTE < element.stock) {
+                stockPIVOTE = element.stock;
+              }
+              cantidadSacadaEquivalenciaACUMULADA = cantidadSacadaEquivalenciaACUMULADA + element.cantidadSacada;
+              if (stockPIVOTE < cantidadSacadaEquivalenciaACUMULADA) {
+                alert('CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo);
+                throw new Error(
+                  'CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo
+                );
+              }
+            } else {
+              console.log('No son iguales');
+            }
+          });
+        }
+      }); //fin forEACH
 
-    const hhhhDate = new Date();
-    const horaLocal =
-      cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
-    //
-    console.log('definicion_CTX_OUT_ALMACEN.itemsMercaderias', definicion_CTX_OUT_ALMACEN.itemsMercaderias);
+      console.log('definicion_CTX_OUT_ALMACEN.itemsMercaderias INTER: ', definicion_CTX_OUT_ALMACEN.itemsMercaderias);
 
-    try {
-      const outAlma = await inEgresoDeAlmacen({
-        idEgresoDeAlmacen: definicion_CTX_OUT_ALMACEN._id,
-        idGrupoEmpresarial: definicion_CTX_OUT_ALMACEN.idGrupoEmpresarial,
-        idEmpresa: definicion_CTX_OUT_ALMACEN.idEmpresa,
-        idSucursal: definicion_CTX_OUT_ALMACEN.idSucursal,
-        idAlmacen: definicion_CTX_OUT_ALMACEN.idAlmacen,
-        idPeriodo: definicion_CTX_OUT_ALMACEN.idPeriodo,
-        periodo: definicion_CTX_OUT_ALMACEN.periodo,
+      //AGRUPAR DUPLICADOS
+      definicion_CTX_OUT_ALMACEN.itemsMercaderias.forEach((pivote: any, index: number) => {
+        if (nroElementos === index + 1) {
+          console.log('final', nroElementos, index);
+        } else {
+          console.log('...', nroElementos, index);
+          let stockPIVOTE = pivote.stock;
+          let cantidadACUMULADA = pivote.cantidad;
+          let cantidadEquivalenciaACUMULADA = pivote.cantidadEquivalencia;
+          let cantidadSacadaACUMULADA = pivote.cantidadSacada;
+          let cantidadSacadaEquivalenciaACUMULADA = pivote.cantidadSacadaEquivalencia;
 
-        ruc: definicion_CTX_OUT_ALMACEN.ruc,
-        empresa: definicion_CTX_OUT_ALMACEN.empresa,
-        direccion: definicion_CTX_OUT_ALMACEN.direccion,
-        sucursal: parametrosGlobales.sucursal,
+          // let sonIGUALES=false;
 
-        idMotivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen,
-        motivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen,
-        idDocumento: definicion_CTX_OUT_ALMACEN.idDocumento,
+          const arraySECUNDARIO = definicion_CTX_OUT_ALMACEN.itemsMercaderias.slice(index + 1, nroElementos);
+          console.log('arraySECUNDARIO', arraySECUNDARIO);
+          arraySECUNDARIO.forEach((element: any) => {
+            // let elAUX='';
+            if (
+              pivote.idMercaderia === element.idMercaderia &&
+              pivote.idEquivalencia === element.idEquivalencia &&
+              pivote.idKardex === element.idKardex &&
+              pivote.idUbigeoStock === element.idUbigeoStock
+            ) {
+              // sonIGUALES=true;
+              const elAUX = element.idAuxiliar;
+              console.log('Son iguales');
+              if (stockPIVOTE < element.stock) {
+                stockPIVOTE = element.stock;
+              }
+              cantidadACUMULADA = cantidadACUMULADA + element.cantidad;
+              cantidadEquivalenciaACUMULADA = cantidadEquivalenciaACUMULADA + element.cantidadEquivalencia;
+              cantidadSacadaACUMULADA = cantidadSacadaACUMULADA + element.cantidadSacada;
+              cantidadSacadaEquivalenciaACUMULADA = cantidadSacadaEquivalenciaACUMULADA + element.cantidadSacadaEquivalencia;
 
-        idSucursalDestino: definicion_CTX_OUT_ALMACEN.idSucursalDestino,
-        sucursalDestino: definicion_CTX_OUT_ALMACEN.sucursalDestino,
-        idSerieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino,
-        serieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino,
-        idMotivoIngresoDestino: definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino,
-        motivoIngresoDestino: definicion_CTX_OUT_ALMACEN.motivoIngresoDestino,
+              //ACTUALIZANDO los datos del ARRAY ORIGEN
+              definicion_CTX_OUT_ALMACEN.itemsMercaderias[index].stock = stockPIVOTE;
+              definicion_CTX_OUT_ALMACEN.itemsMercaderias[index].cantidad = cantidadACUMULADA;
+              definicion_CTX_OUT_ALMACEN.itemsMercaderias[index].cantidadEquivalencia = cantidadEquivalenciaACUMULADA;
+              definicion_CTX_OUT_ALMACEN.itemsMercaderias[index].cantidadSacada = cantidadSacadaACUMULADA;
+              definicion_CTX_OUT_ALMACEN.itemsMercaderias[index].cantidadSacadaEquivalencia = cantidadSacadaEquivalenciaACUMULADA;
+              // CALCULO de VENTA
+              definicion_CTX_OUT_ALMACEN.itemsMercaderias[index].ventaPEN =
+                definicion_CTX_OUT_ALMACEN.itemsMercaderias[index].precioUnitarioPEN * cantidadSacadaEquivalenciaACUMULADA;
+              //HALLANDO el indice del elemento DUPLICADO para ELIMINARLO
+              const elIndexAEliminar = definicion_CTX_OUT_ALMACEN.itemsMercaderias.findIndex((item: any) => item.idAuxiliar === elAUX);
+              //ELIMINAR elemento del ARRAY ORIGEN
+              definicion_CTX_OUT_ALMACEN.itemsMercaderias.splice(elIndexAEliminar, 1);
+            } else {
+              console.log('No son iguales');
+            }
+          });
+        }
+      }); //fin forEACH
 
-        idSerieNotaSalida: definicion_CTX_OUT_ALMACEN.idSerieNotaSalida,
-        serie: definicion_CTX_OUT_ALMACEN.serie,
+      ctx_index_out_almacen.mostrarSpinner = true;
+      //FECHA HORA LOCAL
+      // const fechaLocal =
+      //   definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10) +
+      //   '-' +
+      //   definicion_CTX_OUT_ALMACEN.FISMA.substring(5, 7) +
+      //   '-' +
+      //   definicion_CTX_OUT_ALMACEN.FISMA.substring(0, 4);
 
-        igv: definicion_CTX_OUT_ALMACEN.igv,
+      // const hhhhDate = new Date();
+      // const horaLocal =
+      //   cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+      //
+      console.log('definicion_CTX_OUT_ALMACEN.itemsMercaderias', definicion_CTX_OUT_ALMACEN.itemsMercaderias);
 
-        observacion: definicion_CTX_OUT_ALMACEN.observacion,
+      // const outAlma = await inEgresoDeAlmacen({
+      //   idEgresoDeAlmacen: definicion_CTX_OUT_ALMACEN._id,
+      //   idGrupoEmpresarial: definicion_CTX_OUT_ALMACEN.idGrupoEmpresarial,
+      //   idEmpresa: definicion_CTX_OUT_ALMACEN.idEmpresa,
+      //   idSucursal: definicion_CTX_OUT_ALMACEN.idSucursal,
+      //   idAlmacen: definicion_CTX_OUT_ALMACEN.idAlmacen,
+      //   idPeriodo: definicion_CTX_OUT_ALMACEN.idPeriodo,
+      //   periodo: definicion_CTX_OUT_ALMACEN.periodo,
 
-        FISMA: definicion_CTX_OUT_ALMACEN.FISMA,
-        fechaLocal: fechaLocal, //DD-MM-YYYY
-        horaLocal: horaLocal,
-        // idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
-        // elIgv: definicion_CTX_IN_ALMACEN.elIgv,
-        idDestinatario: definicion_CTX_OUT_ALMACEN.idDestinatario,
-        codigoTipoDocumentoIdentidad: definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
-        tipoDocumentoIdentidad: definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad,
-        numeroIdentidad: definicion_CTX_OUT_ALMACEN.numeroIdentidad,
-        razonSocialNombre: definicion_CTX_OUT_ALMACEN.razonSocialNombre,
+      //   ruc: definicion_CTX_OUT_ALMACEN.ruc,
+      //   empresa: definicion_CTX_OUT_ALMACEN.empresa,
+      //   direccion: definicion_CTX_OUT_ALMACEN.direccion,
+      //   sucursal: parametrosGlobales.sucursal,
 
-        documentosAdjuntos: documento, // definicion_CTX_OUT_ALMACEN.documentosAdjuntos,
+      //   idMotivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen,
+      //   motivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen,
+      //   idDocumento: definicion_CTX_OUT_ALMACEN.idDocumento,
 
-        itemsMercaderias: definicion_CTX_OUT_ALMACEN.itemsMercaderias,
+      //   idSucursalDestino: definicion_CTX_OUT_ALMACEN.idSucursalDestino,
+      //   sucursalDestino: definicion_CTX_OUT_ALMACEN.sucursalDestino,
+      //   idSerieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino,
+      //   serieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino,
+      //   idMotivoIngresoDestino: definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino,
+      //   motivoIngresoDestino: definicion_CTX_OUT_ALMACEN.motivoIngresoDestino,
 
-        usuario: parametrosGlobales.usuario,
-      });
+      //   idSerieNotaSalida: definicion_CTX_OUT_ALMACEN.idSerieNotaSalida,
+      //   serie: definicion_CTX_OUT_ALMACEN.serie,
+
+      //   igv: definicion_CTX_OUT_ALMACEN.igv,
+
+      //   observacion: definicion_CTX_OUT_ALMACEN.observacion,
+
+      //   FISMA: definicion_CTX_OUT_ALMACEN.FISMA,
+      //   fechaLocal: fechaLocal, //DD-MM-YYYY
+      //   horaLocal: horaLocal,
+      //   // idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
+      //   // elIgv: definicion_CTX_IN_ALMACEN.elIgv,
+      //   idDestinatario: definicion_CTX_OUT_ALMACEN.idDestinatario,
+      //   codigoTipoDocumentoIdentidad: definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
+      //   tipoDocumentoIdentidad: definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad,
+      //   numeroIdentidad: definicion_CTX_OUT_ALMACEN.numeroIdentidad,
+      //   razonSocialNombre: definicion_CTX_OUT_ALMACEN.razonSocialNombre,
+
+      //   documentosAdjuntos: documento, // definicion_CTX_OUT_ALMACEN.documentosAdjuntos,
+
+      //   itemsMercaderias: definicion_CTX_OUT_ALMACEN.itemsMercaderias,
+
+      //   usuario: parametrosGlobales.usuario,
+      // });
 
       // console.log('💔💔💔💔💔💔  Grabó el egreso de almacén - outAlma: ', outAlma);
 
-      if (outAlma.status === 400) {
-      // if (typeof outAlma.mensaje !== 'undefined' &&  outAlma.mensaje !== '') {
-        // alert('Falla al registrar la outAlmacen: ' + outAlma.message);
-        // alert('Falla al registrar lel Egreso del Almacen: ' + outAlma.mensaje);
-        alert('🛑 Falla al registrar lel Egreso del Almacen: ' + outAlma.message);
-        ctx_index_out_almacen.grabo_OutAlmacen = false;
-        ctx_index_out_almacen.mostrarSpinner = false;
-        return;
-      }
+      // if (outAlma.status === 400) {
+      //   // if (typeof outAlma.mensaje !== 'undefined' &&  outAlma.mensaje !== '') {
+      //   // alert('Falla al registrar la outAlmacen: ' + outAlma.message);
+      //   // alert('Falla al registrar lel Egreso del Almacen: ' + outAlma.mensaje);
+      //   alert('🛑 Falla al registrar lel Egreso del Almacen: ' + outAlma.message);
+      //   ctx_index_out_almacen.grabo_OutAlmacen = false;
+      //   ctx_index_out_almacen.mostrarSpinner = false;
+      //   return;
+      // }
 
       ctx_index_out_almacen.grabo_OutAlmacen = true;
       ctx_index_out_almacen.mostrarPanelNewOutAlmacen = false;
@@ -551,6 +659,11 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
     } catch (error) {
       //console.log('ERROR - outAlma: ', error);
       ctx_index_out_almacen.mostrarSpinner = false;
+      console.log('termino 666');
+      // await safeAbortAndEndSession(session, error, 'in_EgresoDeAlmacen');
+      throw error;
+    } finally {
+      console.log('termino 1 🪷🪷🪷🪷🪷');
     }
   });
   //#endregion REGISTRAR_EGRESO
@@ -1367,12 +1480,13 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
             }}
           >
             {definicion_CTX_OUT_ALMACEN._id === '' ? (
-              <div style={{ marginBottom: '8px' }}>
+              <div class="linea_1_11" style={{ marginBottom: '16px' }}>
                 <ElButton
                   id="btn_Add_Mercaderia"
                   class="btn"
                   name="Add mercadería"
                   title="Add mercadería"
+                  style={{ cursor: 'pointer', height: '40px', borderRadius: '4px', border: '1px solid black' }}
                   onClick={$(() => {
                     if (definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen === '') {
                       alert('Seleccione el motivo de egreso');
@@ -1382,6 +1496,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                     definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelBuscarMercaderiaOUT = true;
                   })}
                 />
+                <div></div>
               </div>
             ) : (
               ''
@@ -1540,7 +1655,7 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
                 <br />
               </table>
             ) : (
-              <i style={{ fontSize: '0.8rem', color: 'red' }}>No existen mercaderías para salida</i>
+              <i style={{ fontSize: '0.8rem', color: 'red', marginBottom: '8px' }}>No existen mercaderías para salida</i>
             )}
             {definicion_CTX_NEW_OUT_ALMACEN.mostrarPanelDeleteItemMercaderiaOUT && (
               <div class="modal">

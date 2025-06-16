@@ -137,7 +137,7 @@ export default component$((props: { contexto: string; esAlmacen: boolean; esProd
     idEmpresa: parametrosGlobales.idEmpresa,
     idAlmacen: parametrosGlobales.idAlmacen,
     buscarPor: 'Descripción', //por.value,
-    cadenaABuscar: 'filt 153', // 'geo', //'bien' 'bls 838', // 'acce 5', //cadena.value,
+    cadenaABuscar: '', // 'geo', //'bien' 'bls 838', // 'acce 5', //cadena.value,
   });
 
   useTask$(({ track }) => {

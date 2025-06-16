@@ -1235,10 +1235,18 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
       definicion_CTX_NOTA_VENTA.itemsNotaVenta.forEach((pivote: any, index: number) => {
         if (nroElementos === index + 1) {
           console.log('final', nroElementos, index);
+          if (nroElementos === 1) {
+            if (pivote.stock < pivote.cantidadEquivalencia) {
+              alert('CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo);
+              throw new Error(
+                'CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo
+              );
+            }
+          }
         } else {
           console.log('...', nroElementos, index);
           let stockPIVOTE = pivote.stock;
-          let cantidadACUMULADA = pivote.cantidadSacada;
+          let cantidadSacadaACUMULADA = pivote.cantidadSacada;
 
           // const  arraySECUNDARIO  = definicion_CTX_NOTA_VENTA.itemsNotaVenta.slice(index+1,nroElementos-1);
           const arraySECUNDARIO = definicion_CTX_NOTA_VENTA.itemsNotaVenta.slice(index + 1, nroElementos);
@@ -1254,8 +1262,8 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
               if (stockPIVOTE < element.stock) {
                 stockPIVOTE = element.stock;
               }
-              cantidadACUMULADA = cantidadACUMULADA + element.cantidadSacada;
-              if (stockPIVOTE < cantidadACUMULADA) {
+              cantidadSacadaACUMULADA = cantidadSacadaACUMULADA + element.cantidadSacada;
+              if (stockPIVOTE < cantidadSacadaACUMULADA) {
                 alert('CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo);
                 throw new Error(
                   'CANTIDAD EXCESIVA DE ::| ' + pivote.idMercaderia + ' |::| ' + pivote.descripcion.substring(0, 34).trim() + ' |::| ' + pivote.ubigeo
@@ -1336,7 +1344,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
       }); //fin forEACH
 
       console.log('definicion_CTX_NOTA_VENTA.itemsNotaVenta FINAL: ', definicion_CTX_NOTA_VENTA.itemsNotaVenta);
-
+      // throw new Error('OKOKOKOKOKOK ::| ');
       ctx_index_nota_venta.mostrarSpinner = true;
 
       //FECHA HORA LOCAL
@@ -1605,6 +1613,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
     } catch (error) {
       console.log('termino 666');
       // await safeAbortAndEndSession(session, error, 'in_EgresoDeAlmacen');
+      ctx_index_nota_venta.mostrarSpinner = false;
       throw error;
     } finally {
       console.log('termino 1 🪷🪷🪷🪷🪷');
