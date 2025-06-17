@@ -459,165 +459,176 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
 
   //#region REGISTRAR_INGRESO
   const registrarIngreso = $(async () => {
-    if (definicion_CTX_IN_ALMACEN.idAlmacen === '' || typeof definicion_CTX_IN_ALMACEN.idAlmacen === 'undefined') {
-      alert('No se identificado el almacén, por favor verifique.');
-      // document.getElementById('se_motivoIngreso')?.focus();
-      return;
-    }
-    if (definicion_CTX_IN_ALMACEN.periodo.toString() === '' || typeof definicion_CTX_IN_ALMACEN.periodo === 'undefined') {
-      alert('Ingrese el periodo');
-      document.getElementById('in_Periodo')?.focus();
-      return;
-    }
-    if (definicion_CTX_IN_ALMACEN.FISMA === '' || typeof definicion_CTX_IN_ALMACEN.FISMA === 'undefined') {
-      alert('Ingrese la fecha FISMA');
-      document.getElementById('in_FISMA')?.focus();
-      return;
-    }
-    if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '' || typeof definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === 'undefined') {
-      alert('Seleccione el motivo de ingreso');
-      document.getElementById('se_motivoIngreso')?.focus();
-      return;
-    }
-    if (definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad === '' || typeof definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad === 'undefined') {
-      alert('Identifique al remitente');
-      document.getElementById('img_buscarREMITENTE')?.focus();
-      return;
-    }
-    if (definicion_CTX_IN_ALMACEN.numeroIdentidad === '' || typeof definicion_CTX_IN_ALMACEN.numeroIdentidad === 'undefined') {
-      alert('Identifique al remitente');
-      document.getElementById('img_buscarREMITENTE')?.focus();
-      return;
-    }
-    if (definicion_CTX_IN_ALMACEN.razonSocialNombre === '' || typeof definicion_CTX_IN_ALMACEN.razonSocialNombre === 'undefined') {
-      alert('Identifique al remitente');
-      document.getElementById('img_buscarREMITENTE')?.focus();
-      return;
-    }
-    if (definicion_CTX_IN_ALMACEN.elIgv.toString() === '' || typeof definicion_CTX_IN_ALMACEN.elIgv === 'undefined') {
-      alert('Identifique el igv');
-      document.getElementById('in_IGV')?.focus();
-      return;
-    }
-    if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'APERTURA DE INVENTARIO' && definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'TRASLADO') {
-      // if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length < 1) {
-      //   alert('Agregue al menos un documento');
-      //   document.getElementById('bu_Add_Documento')?.focus();
-      //   return;
-      // }
-      if (documento.descripcionTCP === '') {
-        alert('Seleccione el tipo de comprobante de pago');
-        document.getElementById('se_tcpIN_DOCUMENTO')?.focus();
+    try {
+      if (definicion_CTX_IN_ALMACEN.idAlmacen === '' || typeof definicion_CTX_IN_ALMACEN.idAlmacen === 'undefined') {
+        alert('No se identificado el almacén, por favor verifique.');
+        // document.getElementById('se_motivoIngreso')?.focus();
         return;
       }
-      if (documento.fecha === '') {
-        alert('Seleccione la fecha del comprobante de pago');
-        document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+      if (definicion_CTX_IN_ALMACEN.periodo.toString() === '' || typeof definicion_CTX_IN_ALMACEN.periodo === 'undefined') {
+        alert('Ingrese el periodo');
+        document.getElementById('in_Periodo')?.focus();
         return;
       }
-      if (documento.serie === '') {
-        alert('Ingrese la serie del comprobante de pago');
-        document.getElementById('in_Serie_DOCUMENTO')?.focus();
+      if (definicion_CTX_IN_ALMACEN.FISMA === '' || typeof definicion_CTX_IN_ALMACEN.FISMA === 'undefined') {
+        alert('Ingrese la fecha FISMA');
+        document.getElementById('in_FISMA')?.focus();
         return;
       }
-      if (documento.numero === '') {
-        alert('Ingrese el número de comprobante de pago');
-        document.getElementById('in_Numero_DOCUMENTO')?.focus();
+      if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '' || typeof definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === 'undefined') {
+        alert('Seleccione el motivo de ingreso');
+        document.getElementById('se_motivoIngreso')?.focus();
         return;
       }
+      if (definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad === '' || typeof definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad === 'undefined') {
+        alert('Identifique al remitente');
+        document.getElementById('img_buscarREMITENTE')?.focus();
+        return;
+      }
+      if (definicion_CTX_IN_ALMACEN.numeroIdentidad === '' || typeof definicion_CTX_IN_ALMACEN.numeroIdentidad === 'undefined') {
+        alert('Identifique al remitente');
+        document.getElementById('img_buscarREMITENTE')?.focus();
+        return;
+      }
+      if (definicion_CTX_IN_ALMACEN.razonSocialNombre === '' || typeof definicion_CTX_IN_ALMACEN.razonSocialNombre === 'undefined') {
+        alert('Identifique al remitente');
+        document.getElementById('img_buscarREMITENTE')?.focus();
+        return;
+      }
+      if (definicion_CTX_IN_ALMACEN.elIgv.toString() === '' || typeof definicion_CTX_IN_ALMACEN.elIgv === 'undefined') {
+        alert('Identifique el igv');
+        document.getElementById('in_IGV')?.focus();
+        return;
+      }
+      if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'APERTURA DE INVENTARIO' && definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen !== 'TRASLADO') {
+        // if (definicion_CTX_IN_ALMACEN.documentosAdjuntos.length < 1) {
+        //   alert('Agregue al menos un documento');
+        //   document.getElementById('bu_Add_Documento')?.focus();
+        //   return;
+        // }
+        if (documento.descripcionTCP === '') {
+          alert('Seleccione el tipo de comprobante de pago');
+          document.getElementById('se_tcpIN_DOCUMENTO')?.focus();
+          return;
+        }
+        if (documento.fecha === '') {
+          alert('Seleccione la fecha del comprobante de pago');
+          document.getElementById('in_Fecha_DOCUMENTO')?.focus();
+          return;
+        }
+        if (documento.serie === '') {
+          alert('Ingrese la serie del comprobante de pago');
+          document.getElementById('in_Serie_DOCUMENTO')?.focus();
+          return;
+        }
+        if (documento.numero === '') {
+          alert('Ingrese el número de comprobante de pago');
+          document.getElementById('in_Numero_DOCUMENTO')?.focus();
+          return;
+        }
+      }
+      if (definicion_CTX_IN_ALMACEN.itemsMercaderias.length < 1) {
+        alert('Agregue al menos una mercadería');
+        document.getElementById('bu_Add_Mercaderia')?.focus();
+        return;
+      }
+
+      ctx_index_in_almacen.mostrarSpinner = true;
+      //FECHA HORA LOCAL
+      const fechaLocal =
+        definicion_CTX_IN_ALMACEN.FISMA.substring(8, 10) +
+        '-' +
+        definicion_CTX_IN_ALMACEN.FISMA.substring(5, 7) +
+        '-' +
+        definicion_CTX_IN_ALMACEN.FISMA.substring(0, 4);
+
+      const hhhhDate = new Date();
+      const horaLocal =
+        cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+      //
+      const inAlma = await inIngresoAAlmacen({
+        idIngresoAAlmacen: definicion_CTX_IN_ALMACEN._id,
+        idGrupoEmpresarial: definicion_CTX_IN_ALMACEN.idGrupoEmpresarial,
+        idEmpresa: definicion_CTX_IN_ALMACEN.idEmpresa,
+        idSucursal: definicion_CTX_IN_ALMACEN.idSucursal,
+        idAlmacen: definicion_CTX_IN_ALMACEN.idAlmacen,
+        idPeriodo: definicion_CTX_IN_ALMACEN.idPeriodo,
+        periodo: definicion_CTX_IN_ALMACEN.periodo,
+
+        ruc: definicion_CTX_IN_ALMACEN.ruc,
+        empresa: definicion_CTX_IN_ALMACEN.empresa,
+        direccion: definicion_CTX_IN_ALMACEN.direccion,
+
+        idMotivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen,
+        motivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen,
+        idDocumento: definicion_CTX_IN_ALMACEN.idDocumento,
+
+        // idSucursalOrigen: definicion_CTX_IN_ALMACEN.idSucursalOrigen,
+        // sucursalOrigen: definicion_CTX_IN_ALMACEN.sucursalOrigen,
+
+        idSerieNotaIngreso: definicion_CTX_IN_ALMACEN.idSerieNotaIngreso,
+        serie: definicion_CTX_IN_ALMACEN.serie,
+
+        // serie: definicion_CTX_IN_ALMACEN.serie,
+        // numero: definicion_CTX_IN_ALMACEN.numero,
+        FISMA: definicion_CTX_IN_ALMACEN.FISMA,
+        fechaLocal: fechaLocal, //DD-MM-YYYY
+        horaLocal: horaLocal,
+        reingreso: definicion_CTX_IN_ALMACEN.reingreso,
+
+        idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
+        elIgv: definicion_CTX_IN_ALMACEN.elIgv,
+
+        enDolares: definicion_CTX_IN_ALMACEN.enDolares,
+        moneda: definicion_CTX_IN_ALMACEN.moneda,
+        tipoCambio: definicion_CTX_IN_ALMACEN.tipoCambio,
+
+        enDolaresManual: definicion_CTX_IN_ALMACEN.enDolaresManual,
+        tipoCambioManual: definicion_CTX_IN_ALMACEN.tipoCambioManual,
+
+        idRemitente: definicion_CTX_IN_ALMACEN.idRemitente,
+        codigoTipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad,
+        tipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad,
+        numeroIdentidad: definicion_CTX_IN_ALMACEN.numeroIdentidad,
+        razonSocialNombre: definicion_CTX_IN_ALMACEN.razonSocialNombre,
+
+        observacion: definicion_CTX_IN_ALMACEN.observacion,
+
+        documentosAdjuntos: documento, // definicion_CTX_IN_ALMACEN.documentosAdjuntos,
+
+        conIGV: definicion_CTX_IN_ALMACEN.conIGV,
+        porMontoUnitario: definicion_CTX_IN_ALMACEN.porMontoUnitario,
+        itemsMercaderias: definicion_CTX_IN_ALMACEN.itemsMercaderias,
+
+        montoSubTotalPEN: definicion_CTX_IN_ALMACEN.montoSubTotalPEN,
+        montoIGVPEN: definicion_CTX_IN_ALMACEN.montoIGVPEN,
+        montoTotalPEN: definicion_CTX_IN_ALMACEN.montoTotalPEN,
+
+        montoSubTotalUSD: definicion_CTX_IN_ALMACEN.montoSubTotalUSD,
+        montoIGVUSD: definicion_CTX_IN_ALMACEN.montoIGVUSD,
+        montoTotalUSD: definicion_CTX_IN_ALMACEN.montoTotalUSD,
+
+        usuario: parametrosGlobales.usuario,
+      });
+
+      if (inAlma.status === 400) {
+        alert('🛑 Falla al registrar el Ingreso al Almacen: ' + inAlma.message);
+        ctx_index_in_almacen.grabo_InAlmacen = false;
+        ctx_index_in_almacen.mostrarSpinner = false;
+        return;
+      }
+
+      ctx_index_in_almacen.grabo_InAlmacen = true;
+      ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
+    } catch (error) {
+      //console.log('ERROR - outAlma: ', error);
+      ctx_index_in_almacen.mostrarSpinner = false;
+      console.log('termino 666');
+      // await safeAbortAndEndSession(session, error, 'in_EgresoDeAlmacen');
+      throw error;
+    } finally {
+      console.log('termino 1 🪷🪷🪷🪷🪷');
     }
-    if (definicion_CTX_IN_ALMACEN.itemsMercaderias.length < 1) {
-      alert('Agregue al menos una mercadería');
-      document.getElementById('bu_Add_Mercaderia')?.focus();
-      return;
-    }
-
-    ctx_index_in_almacen.mostrarSpinner = true;
-    //FECHA HORA LOCAL
-    const fechaLocal =
-      definicion_CTX_IN_ALMACEN.FISMA.substring(8, 10) +
-      '-' +
-      definicion_CTX_IN_ALMACEN.FISMA.substring(5, 7) +
-      '-' +
-      definicion_CTX_IN_ALMACEN.FISMA.substring(0, 4);
-
-    const hhhhDate = new Date();
-    const horaLocal =
-      cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
-    //
-    const inAlma = await inIngresoAAlmacen({
-      idIngresoAAlmacen: definicion_CTX_IN_ALMACEN._id,
-      idGrupoEmpresarial: definicion_CTX_IN_ALMACEN.idGrupoEmpresarial,
-      idEmpresa: definicion_CTX_IN_ALMACEN.idEmpresa,
-      idSucursal: definicion_CTX_IN_ALMACEN.idSucursal,
-      idAlmacen: definicion_CTX_IN_ALMACEN.idAlmacen,
-      idPeriodo: definicion_CTX_IN_ALMACEN.idPeriodo,
-      periodo: definicion_CTX_IN_ALMACEN.periodo,
-
-      ruc: definicion_CTX_IN_ALMACEN.ruc,
-      empresa: definicion_CTX_IN_ALMACEN.empresa,
-      direccion: definicion_CTX_IN_ALMACEN.direccion,
-
-      idMotivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen,
-      motivoIngresoAlmacen: definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen,
-      idDocumento: definicion_CTX_IN_ALMACEN.idDocumento,
-
-      // idSucursalOrigen: definicion_CTX_IN_ALMACEN.idSucursalOrigen,
-      // sucursalOrigen: definicion_CTX_IN_ALMACEN.sucursalOrigen,
-
-      idSerieNotaIngreso: definicion_CTX_IN_ALMACEN.idSerieNotaIngreso,
-      serie: definicion_CTX_IN_ALMACEN.serie,
-
-      // serie: definicion_CTX_IN_ALMACEN.serie,
-      // numero: definicion_CTX_IN_ALMACEN.numero,
-      FISMA: definicion_CTX_IN_ALMACEN.FISMA,
-      fechaLocal: fechaLocal, //DD-MM-YYYY
-      horaLocal: horaLocal,
-      reingreso: definicion_CTX_IN_ALMACEN.reingreso,
-
-      idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
-      elIgv: definicion_CTX_IN_ALMACEN.elIgv,
-
-      enDolares: definicion_CTX_IN_ALMACEN.enDolares,
-      moneda: definicion_CTX_IN_ALMACEN.moneda,
-      tipoCambio: definicion_CTX_IN_ALMACEN.tipoCambio,
-
-      enDolaresManual: definicion_CTX_IN_ALMACEN.enDolaresManual,
-      tipoCambioManual: definicion_CTX_IN_ALMACEN.tipoCambioManual,
-
-      idRemitente: definicion_CTX_IN_ALMACEN.idRemitente,
-      codigoTipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.codigoTipoDocumentoIdentidad,
-      tipoDocumentoIdentidad: definicion_CTX_IN_ALMACEN.tipoDocumentoIdentidad,
-      numeroIdentidad: definicion_CTX_IN_ALMACEN.numeroIdentidad,
-      razonSocialNombre: definicion_CTX_IN_ALMACEN.razonSocialNombre,
-
-      observacion: definicion_CTX_IN_ALMACEN.observacion,
-
-      documentosAdjuntos: documento, // definicion_CTX_IN_ALMACEN.documentosAdjuntos,
-
-      conIGV: definicion_CTX_IN_ALMACEN.conIGV,
-      porMontoUnitario: definicion_CTX_IN_ALMACEN.porMontoUnitario,
-      itemsMercaderias: definicion_CTX_IN_ALMACEN.itemsMercaderias,
-
-      montoSubTotalPEN: definicion_CTX_IN_ALMACEN.montoSubTotalPEN,
-      montoIGVPEN: definicion_CTX_IN_ALMACEN.montoIGVPEN,
-      montoTotalPEN: definicion_CTX_IN_ALMACEN.montoTotalPEN,
-
-      montoSubTotalUSD: definicion_CTX_IN_ALMACEN.montoSubTotalUSD,
-      montoIGVUSD: definicion_CTX_IN_ALMACEN.montoIGVUSD,
-      montoTotalUSD: definicion_CTX_IN_ALMACEN.montoTotalUSD,
-
-      usuario: parametrosGlobales.usuario,
-    });
-
-    if (inAlma.status === 400) {
-      alert('🛑 Falla al registrar el Ingreso al Almacen: ' + inAlma.message);
-      ctx_index_in_almacen.grabo_InAlmacen = false;
-      return;
-    }
-
-    ctx_index_in_almacen.grabo_InAlmacen = true;
-    ctx_index_in_almacen.mostrarPanelNewInAlmacen = false;
   });
   //#endregion REGISTRAR_INGRESO
 
@@ -1051,7 +1062,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                   value={definicion_CTX_IN_ALMACEN.razonSocialNombre}
                   onKeyPress$={$((e: any) => {
                     if (e.key === 'Enter') {
-                      (document.getElementById('in_IGV') as HTMLInputElement)?.focus();
+                      (document.getElementById('btn_Add_Mercaderia') as HTMLInputElement)?.focus();
                     }
                   })}
                 />
@@ -1386,14 +1397,14 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
               //   onFocus$={() => {
               //     console.log('onFocus div ADD MERCADERIA: ', document.activeElement);
               //   }}
-              // >
+              // >width: '100%',
               <div class="linea_1_11" style={{ marginBottom: '12px' }}>
                 <ElButton
                   title="Add mercadería"
                   id="btn_Add_Mercaderia"
                   class="btn"
                   name="Add mercadería"
-                  style={{ width: '100%', marginRight: '12px' }}
+                  style={{ marginRight: '12px', cursor: 'pointer', borderRadius: '4px', border: '1px solid black' }}
                   disabled={definicion_CTX_IN_ALMACEN.reingreso || definicion_CTX_IN_ALMACEN.produccion}
                   onClick={$(() => {
                     if (definicion_CTX_IN_ALMACEN.idMotivoIngresoAlmacen === '') {
@@ -2312,7 +2323,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                 </tfoot>
               </table>
             ) : (
-              <i style={{ fontSize: '0.8rem' }}>No existen mercaderías registradas</i>
+              <i style={{ fontSize: '0.8rem', color: 'red' }}>No existen mercaderías registradas</i>
             )}
             {definicion_CTX_NEW_IN_ALMACEN.mostrarPanelDeleteItemMercaderiaIN && (
               <div class="modal">

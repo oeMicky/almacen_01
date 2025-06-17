@@ -25,8 +25,8 @@ import type { IEgresoDeAlmacen } from '~/interfaces/iOutAlmacen';
 import BuscarMercaderiaOUT from '../miscelanea/mercaderiaOUT/buscarMercaderiaOUT';
 import BorrarItemMercaderiaOUT from './borrarItemMercaderiaOUT';
 import BorrarDocumentoOUT from './borrarDocumentoOUT';
-// import { getSeriesDeNotaSalidaDeLaSucursal, inEgresoDeAlmacen, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
-import { getSeriesDeNotaSalidaDeLaSucursal, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
+import { getSeriesDeNotaSalidaDeLaSucursal, inEgresoDeAlmacen, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
+// import { getSeriesDeNotaSalidaDeLaSucursal, loadMotivosEgresoDeAlmacen } from '~/apis/egresosDeAlmacen.api';
 import BuscarOrdenServicioAperturado from '../miscelanea/ordenServicioAperturado/buscarOrdenServicioAperturado';
 import BuscarOrdenProduccionAperturado from '../miscelanea/ordenProduccionAperturado/buscarOrdenProduccionAperturado';
 import ListaFavoritosAlmacen from '../miscelanea/favoritos/listaFavoritosAlmacen';
@@ -578,80 +578,80 @@ export default component$((props: { addPeriodo: any; outSelecci: any; igv: numbe
 
       ctx_index_out_almacen.mostrarSpinner = true;
       //FECHA HORA LOCAL
-      // const fechaLocal =
-      //   definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10) +
-      //   '-' +
-      //   definicion_CTX_OUT_ALMACEN.FISMA.substring(5, 7) +
-      //   '-' +
-      //   definicion_CTX_OUT_ALMACEN.FISMA.substring(0, 4);
+      const fechaLocal =
+        definicion_CTX_OUT_ALMACEN.FISMA.substring(8, 10) +
+        '-' +
+        definicion_CTX_OUT_ALMACEN.FISMA.substring(5, 7) +
+        '-' +
+        definicion_CTX_OUT_ALMACEN.FISMA.substring(0, 4);
 
-      // const hhhhDate = new Date();
-      // const horaLocal =
-      //   cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
-      //
+      const hhhhDate = new Date();
+      const horaLocal =
+        cerosALaIzquierda(hhhhDate.getHours(), 2) + ':' + cerosALaIzquierda(hhhhDate.getMinutes(), 2) + ':' + cerosALaIzquierda(hhhhDate.getSeconds(), 2);
+
       console.log('definicion_CTX_OUT_ALMACEN.itemsMercaderias', definicion_CTX_OUT_ALMACEN.itemsMercaderias);
 
-      // const outAlma = await inEgresoDeAlmacen({
-      //   idEgresoDeAlmacen: definicion_CTX_OUT_ALMACEN._id,
-      //   idGrupoEmpresarial: definicion_CTX_OUT_ALMACEN.idGrupoEmpresarial,
-      //   idEmpresa: definicion_CTX_OUT_ALMACEN.idEmpresa,
-      //   idSucursal: definicion_CTX_OUT_ALMACEN.idSucursal,
-      //   idAlmacen: definicion_CTX_OUT_ALMACEN.idAlmacen,
-      //   idPeriodo: definicion_CTX_OUT_ALMACEN.idPeriodo,
-      //   periodo: definicion_CTX_OUT_ALMACEN.periodo,
+      const outAlma = await inEgresoDeAlmacen({
+        idEgresoDeAlmacen: definicion_CTX_OUT_ALMACEN._id,
+        idGrupoEmpresarial: definicion_CTX_OUT_ALMACEN.idGrupoEmpresarial,
+        idEmpresa: definicion_CTX_OUT_ALMACEN.idEmpresa,
+        idSucursal: definicion_CTX_OUT_ALMACEN.idSucursal,
+        idAlmacen: definicion_CTX_OUT_ALMACEN.idAlmacen,
+        idPeriodo: definicion_CTX_OUT_ALMACEN.idPeriodo,
+        periodo: definicion_CTX_OUT_ALMACEN.periodo,
 
-      //   ruc: definicion_CTX_OUT_ALMACEN.ruc,
-      //   empresa: definicion_CTX_OUT_ALMACEN.empresa,
-      //   direccion: definicion_CTX_OUT_ALMACEN.direccion,
-      //   sucursal: parametrosGlobales.sucursal,
+        ruc: definicion_CTX_OUT_ALMACEN.ruc,
+        empresa: definicion_CTX_OUT_ALMACEN.empresa,
+        direccion: definicion_CTX_OUT_ALMACEN.direccion,
+        sucursal: parametrosGlobales.sucursal,
 
-      //   idMotivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen,
-      //   motivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen,
-      //   idDocumento: definicion_CTX_OUT_ALMACEN.idDocumento,
+        idMotivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.idMotivoEgresoAlmacen,
+        motivoEgresoAlmacen: definicion_CTX_OUT_ALMACEN.motivoEgresoAlmacen,
+        idDocumento: definicion_CTX_OUT_ALMACEN.idDocumento,
 
-      //   idSucursalDestino: definicion_CTX_OUT_ALMACEN.idSucursalDestino,
-      //   sucursalDestino: definicion_CTX_OUT_ALMACEN.sucursalDestino,
-      //   idSerieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino,
-      //   serieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino,
-      //   idMotivoIngresoDestino: definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino,
-      //   motivoIngresoDestino: definicion_CTX_OUT_ALMACEN.motivoIngresoDestino,
+        idSucursalDestino: definicion_CTX_OUT_ALMACEN.idSucursalDestino,
+        sucursalDestino: definicion_CTX_OUT_ALMACEN.sucursalDestino,
+        idSerieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.idSerieNotaIngresoDestino,
+        serieNotaIngresoDestino: definicion_CTX_OUT_ALMACEN.serieNotaIngresoDestino,
+        idMotivoIngresoDestino: definicion_CTX_OUT_ALMACEN.idMotivoIngresoDestino,
+        motivoIngresoDestino: definicion_CTX_OUT_ALMACEN.motivoIngresoDestino,
 
-      //   idSerieNotaSalida: definicion_CTX_OUT_ALMACEN.idSerieNotaSalida,
-      //   serie: definicion_CTX_OUT_ALMACEN.serie,
+        idSerieNotaSalida: definicion_CTX_OUT_ALMACEN.idSerieNotaSalida,
+        serie: definicion_CTX_OUT_ALMACEN.serie,
 
-      //   igv: definicion_CTX_OUT_ALMACEN.igv,
+        igv: definicion_CTX_OUT_ALMACEN.igv,
 
-      //   observacion: definicion_CTX_OUT_ALMACEN.observacion,
+        observacion: definicion_CTX_OUT_ALMACEN.observacion,
 
-      //   FISMA: definicion_CTX_OUT_ALMACEN.FISMA,
-      //   fechaLocal: fechaLocal, //DD-MM-YYYY
-      //   horaLocal: horaLocal,
-      //   // idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
-      //   // elIgv: definicion_CTX_IN_ALMACEN.elIgv,
-      //   idDestinatario: definicion_CTX_OUT_ALMACEN.idDestinatario,
-      //   codigoTipoDocumentoIdentidad: definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
-      //   tipoDocumentoIdentidad: definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad,
-      //   numeroIdentidad: definicion_CTX_OUT_ALMACEN.numeroIdentidad,
-      //   razonSocialNombre: definicion_CTX_OUT_ALMACEN.razonSocialNombre,
+        FISMA: definicion_CTX_OUT_ALMACEN.FISMA,
+        fechaLocal: fechaLocal, //DD-MM-YYYY
+        horaLocal: horaLocal,
+        // idElIgv: definicion_CTX_IN_ALMACEN.idElIgv,
+        // elIgv: definicion_CTX_IN_ALMACEN.elIgv,
+        idDestinatario: definicion_CTX_OUT_ALMACEN.idDestinatario,
+        codigoTipoDocumentoIdentidad: definicion_CTX_OUT_ALMACEN.codigoTipoDocumentoIdentidad,
+        tipoDocumentoIdentidad: definicion_CTX_OUT_ALMACEN.tipoDocumentoIdentidad,
+        numeroIdentidad: definicion_CTX_OUT_ALMACEN.numeroIdentidad,
+        razonSocialNombre: definicion_CTX_OUT_ALMACEN.razonSocialNombre,
 
-      //   documentosAdjuntos: documento, // definicion_CTX_OUT_ALMACEN.documentosAdjuntos,
+        documentosAdjuntos: documento, // definicion_CTX_OUT_ALMACEN.documentosAdjuntos,
 
-      //   itemsMercaderias: definicion_CTX_OUT_ALMACEN.itemsMercaderias,
+        itemsMercaderias: definicion_CTX_OUT_ALMACEN.itemsMercaderias,
 
-      //   usuario: parametrosGlobales.usuario,
-      // });
+        usuario: parametrosGlobales.usuario,
+      });
 
-      // console.log('💔💔💔💔💔💔  Grabó el egreso de almacén - outAlma: ', outAlma);
+      console.log('💔💔💔💔💔💔  Grabó el egreso de almacén - outAlma: ', outAlma);
 
-      // if (outAlma.status === 400) {
-      //   // if (typeof outAlma.mensaje !== 'undefined' &&  outAlma.mensaje !== '') {
-      //   // alert('Falla al registrar la outAlmacen: ' + outAlma.message);
-      //   // alert('Falla al registrar lel Egreso del Almacen: ' + outAlma.mensaje);
-      //   alert('🛑 Falla al registrar lel Egreso del Almacen: ' + outAlma.message);
-      //   ctx_index_out_almacen.grabo_OutAlmacen = false;
-      //   ctx_index_out_almacen.mostrarSpinner = false;
-      //   return;
-      // }
+      if (outAlma.status === 400) {
+        // if (typeof outAlma.mensaje !== 'undefined' &&  outAlma.mensaje !== '') {
+        // alert('Falla al registrar la outAlmacen: ' + outAlma.message);
+        // alert('Falla al registrar lel Egreso del Almacen: ' + outAlma.mensaje);
+        alert('🛑 Falla al registrar lel Egreso del Almacen: ' + outAlma.message);
+        ctx_index_out_almacen.grabo_OutAlmacen = false;
+        ctx_index_out_almacen.mostrarSpinner = false;
+        return;
+      }
 
       ctx_index_out_almacen.grabo_OutAlmacen = true;
       ctx_index_out_almacen.mostrarPanelNewOutAlmacen = false;
