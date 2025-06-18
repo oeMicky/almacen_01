@@ -533,6 +533,77 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
         return;
       }
 
+      //AGRUPAR DUPLICADOS
+      const nroElementos = definicion_CTX_IN_ALMACEN.itemsMercaderias.length;
+      definicion_CTX_IN_ALMACEN.itemsMercaderias.forEach((pivote: any, index: number) => {
+        if (nroElementos === index + 1) {
+          console.log('final', nroElementos, index);
+        } else {
+          console.log('...', nroElementos, index);
+          // let stockPIVOTE = pivote.stock;
+          let cantidadIngresadaACUMULADA = pivote.cantidadIngresada;
+          let subPENACUMULADA = pivote.subPEN;
+          let totPENACUMULADA = pivote.totPEN;
+
+          let subUSDACUMULADA = pivote.subUSD;
+          let totUSDACUMULADA = pivote.totUSD;
+
+          // let cantidadSacadaEquivalenciaACUMULADA = pivote.cantidadSacadaEquivalencia;
+
+          // let sonIGUALES=false;
+
+          const arraySECUNDARIO = definicion_CTX_IN_ALMACEN.itemsMercaderias.slice(index + 1, nroElementos);
+          console.log('arraySECUNDARIO', arraySECUNDARIO);
+          arraySECUNDARIO.forEach((element: any) => {
+            // let elAUX='';
+            if (
+              pivote.idMercaderia === element.idMercaderia &&
+              // pivote.idEquivalencia === element.idEquivalencia &&
+              pivote.idKardex === element.idKardex &&
+              pivote.idUbigeoStock === element.idUbigeoStock
+            ) {
+              // sonIGUALES=true;
+              const elAUX = element.idAuxiliar;
+              console.log('Son iguales');
+              // if (stockPIVOTE < element.stock) {
+              //   stockPIVOTE = element.stock;
+              // }
+              cantidadIngresadaACUMULADA = cantidadIngresadaACUMULADA + element.cantidadIngresada;
+              subPENACUMULADA = subPENACUMULADA + element.subPEN;
+              totPENACUMULADA = totPENACUMULADA + element.totPEN;
+
+              subUSDACUMULADA = subUSDACUMULADA + element.subUSD;
+              totUSDACUMULADA = totUSDACUMULADA + element.totUSD;
+              // cantidadSacadaEquivalenciaACUMULADA = cantidadSacadaEquivalenciaACUMULADA + element.cantidadSacadaEquivalencia;
+
+              //ACTUALIZANDO los datos del ARRAY ORIGEN
+              // definicion_CTX_IN_ALMACEN.itemsMercaderias[index].stock = stockPIVOTE;
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].cantidadIngresada = cantidadIngresadaACUMULADA;
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].subPEN = subPENACUMULADA;
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].totPEN = totPENACUMULADA;
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].costoUnitarioPEN = subPENACUMULADA / cantidadIngresadaACUMULADA;
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].valorUnitarioPEN = totPENACUMULADA / cantidadIngresadaACUMULADA;
+
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].subUSD = subUSDACUMULADA;
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].totUSD = totUSDACUMULADA;
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].costoUnitarioUSD = subUSDACUMULADA / cantidadIngresadaACUMULADA;
+              definicion_CTX_IN_ALMACEN.itemsMercaderias[index].valorUnitarioUSD = totUSDACUMULADA / cantidadIngresadaACUMULADA;
+              // CALCULO de VENTA
+              // definicion_CTX_IN_ALMACEN.itemsMercaderias[index].ventaPEN =
+              //   definicion_CTX_IN_ALMACEN.itemsMercaderias[index].precioUnitarioPEN * cantidadSacadaEquivalenciaACUMULADA;
+              //HALLANDO el indice del elemento DUPLICADO para ELIMINARLO
+              const elIndexAEliminar = definicion_CTX_IN_ALMACEN.itemsMercaderias.findIndex((item: any) => item.idAuxiliar === elAUX);
+              //ELIMINAR elemento del ARRAY ORIGEN
+              definicion_CTX_IN_ALMACEN.itemsMercaderias.splice(elIndexAEliminar, 1);
+            } else {
+              console.log('No son iguales');
+            }
+          });
+        }
+      }); //fin forEACH
+
+      // throw new Error('okokokokokokok ::| ' + definicion_CTX_IN_ALMACEN.itemsMercaderias);
+
       ctx_index_in_almacen.mostrarSpinner = true;
       //FECHA HORA LOCAL
       const fechaLocal =
@@ -652,22 +723,22 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           justifyContent: 'end',
         }}
       >
-        <ImgButton
+        {/*<ImgButton
           title="Ver el definicion_CTX_IN_ALMACEN"
           src={images.see}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           onClick={$(() => {
             console.log('definicion_CTX_IN_ALMACEN', definicion_CTX_IN_ALMACEN);
           })}
-        />
+        />*/}
         <ImgButton
           title="Ver el definicion_CTX_IN_ALMACEN"
           src={images.see}
           alt="Icono de cerrar"
-          height={16}
-          width={16}
+          height={18}
+          width={18}
           onClick={$(() => {
             console.log('definicion_CTX_IN_ALMACEN.itemsMercaderias', definicion_CTX_IN_ALMACEN.itemsMercaderias);
           })}
