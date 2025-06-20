@@ -49,7 +49,7 @@ export default component$((props: { otrosAlmacenes: any }) => {
                   <td
                     data-label="Sucursal"
                     style={{ cursor: 'pointer', fontWeight: 'bold' }}
-                    onDblClick$={() => {
+                    onClick$={() => {
                       try {
                         if (typeof almaLoca.idSerieNotaIngreso === 'undefined' || almaLoca.idSerieNotaIngreso === '') {
                           alert('No existe la serie de ingreso para el almacén destino. Consulte con el administrador.');

@@ -2586,10 +2586,10 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   borrarItemNotaVenta.idAuxiliar = iTNotVen.idAuxiliar;
-                                  // borrarItemVenta.item = indexItemServi;
                                   borrarItemNotaVenta.codigo = iTNotVen.codigo;
                                   borrarItemNotaVenta.descripcion = iTNotVen.descripcionEquivalencia;
-                                  definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBorrarItemNotaVenta = true;
+                                  // definicion_CTX_ADD_NOTA_VENTA.mostrarPanelBorrarItemNotaVenta = true;
+                                  definicion_CTX_ADD_NOTA_VENTA.borrar_idAuxilarNotaVenta = iTNotVen.idAuxiliar;
                                 }}
                               />
                             </td>

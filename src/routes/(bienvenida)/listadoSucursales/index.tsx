@@ -51,7 +51,7 @@ export default component$(() => {
               {/* <th>Grupo Empresarial</th> */}
               <th>Empresa</th>
               <th>Sucursal</th>
-              <th>Acciones</th>
+              {/* <th>Acciones</th> */}
             </tr>
           </thead>
           <tbody>
@@ -185,7 +185,7 @@ export default component$(() => {
                   >
                     {sucur.sucursal}
                   </td>
-                  <td data-label="Acciones" class="accionesLeft">
+                  {/* <td data-label="Acciones" class="accionesLeft">
                     <input
                       // id="in_BuscarDetraccion"
                       type="image"
@@ -219,7 +219,7 @@ export default component$(() => {
                         parametrosGlobales.idSucursal = sucur.idSucursal;
                         parametrosGlobales.sucursal = sucur.sucursal;
                         parametrosGlobales.sucursalDireccion = sucur.sucursalDireccion;
-                        parametrosGlobales.idAlmacen = sucur.idSucursal; //******* */
+                        parametrosGlobales.idAlmacen = sucur.idSucursal; 
                         parametrosGlobales.idGrupoEmpresarial = sucur.idGrupoEmpresarial;
                         parametrosGlobales.nombreGrupoEmpresarial = sucur.grupoEmpresarial;
                         parametrosGlobales.idEmpresa = sucur.idEmpresa;
@@ -276,8 +276,8 @@ export default component$(() => {
                         parametrosGlobales.SIRE = sucur.SIRE;
                         parametrosGlobales.compras = sucur.compras;
                         ///////////
-                        parametrosGlobales.inventario = sucur.inventario; //******* */
-                        parametrosGlobales.verOtrosAlmacenes = sucur.verOtrosAlmacenes; //******* */
+                        parametrosGlobales.inventario = sucur.inventario; 
+                        parametrosGlobales.verOtrosAlmacenes = sucur.verOtrosAlmacenes; 
                         parametrosGlobales.verInAlmacen = sucur.verInAlmacen;
                         parametrosGlobales.verOutAlmacen = sucur.verOutAlmacen;
                         ///////////
@@ -312,7 +312,7 @@ export default component$(() => {
                         // }
                       }}
                     />
-                  </td>
+                  </td> */}
                 </tr>
               );
             })}

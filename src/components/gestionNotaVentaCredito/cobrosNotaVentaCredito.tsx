@@ -124,6 +124,8 @@ export default component$((props: { notaVenta: any }) => {
 
         <br />
         <button
+          style={{ cursor: 'pointer', borderRadius: '4px', border: '1px solid black', height: '40px' }}
+          class="btn"
           onClick$={() => {
             definicion_CTX_COBROS_NOTA_VENTA_CREDITO.cobroSeleccionado = [];
             definicion_CTX_COBROS_NOTA_VENTA_CREDITO.mostrarPanelCobroNVCredito = true;
@@ -209,7 +211,7 @@ export default component$((props: { notaVenta: any }) => {
           </>
         ) : (
           <div>
-            <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
+            <i style={{ fontSize: '0.8rem', color: 'red' }}>No se encontraron registros</i>
           </div>
         )}
         <br />
