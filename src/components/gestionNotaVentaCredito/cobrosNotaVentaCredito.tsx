@@ -4,6 +4,8 @@ import { images } from '~/assets';
 import { CTX_INDEX_GESTION_NOTA_VENTA_CREDITO } from '~/routes/(ventas)/gestionNotaVentaCredito';
 import { cerosALaIzquierda } from '~/functions/comunes';
 import CobroNotaVentaCredito from './cobroNotaVentaCredito';
+import { upNotaVentaCreditoADDCobros } from '~/apis/notaVenta.api';
+import { parametrosGlobales } from '~/routes/login';
 
 export const CTX_COBROS_NOTA_VENTA_CREDITO = createContextId<any>('cobros_nota_venta_credito');
 export const CTX_NOTA_VENTA_CREDITO = createContextId<any>('nota_venta_credito');
@@ -15,7 +17,6 @@ export default component$((props: { notaVenta: any }) => {
     // buscarGestionNotasVentasCredito: 0,
     // miscNtsVtsCred: [],
     cobroSeleccionado: [],
-    grabo_cobro: false,
 
     mostrarPanelCobroNVCredito: false,
 
@@ -28,7 +29,8 @@ export default component$((props: { notaVenta: any }) => {
   const definicion_CTX_NOTA_VENTA_CREDITO = useStore<any>(
     {
       _id: props.notaVenta._id ? props.notaVenta._id : '',
-      cuotas: props.notaVenta.cuotas ? props.notaVenta.cuotas : [],
+      // cuotas: props.notaVenta.cuotas ? props.notaVenta.cuotas : [],
+      cobros: props.notaVenta.cobros ? props.notaVenta.cobros : [],
     },
     { deep: true }
   );
@@ -48,7 +50,7 @@ export default component$((props: { notaVenta: any }) => {
     track(() => definicion_CTX_COBROS_NOTA_VENTA_CREDITO.grabo_cobro);
 
     if (definicion_CTX_COBROS_NOTA_VENTA_CREDITO.grabo_cobro) {
-      const aMODIFICAR: any = props.notaVenta.cuotas.filter(
+      const aMODIFICAR: any = props.notaVenta.cobros.filter(
         (cuota: any) => cuota.idAuxiliar === definicion_CTX_COBROS_NOTA_VENTA_CREDITO.cobroSeleccionado.idAuxiliar
       );
       aMODIFICAR[0].fechaCobro = definicion_CTX_COBROS_NOTA_VENTA_CREDITO.cobroSeleccionado.fechaCobro;
@@ -73,6 +75,16 @@ export default component$((props: { notaVenta: any }) => {
     >
       {/* BOTONES DEL MARCO */}
       <div style={{ display: 'flex', justifyContent: 'end' }}>
+        <ImgButton
+          title="Cerrar el formulario"
+          src={images.see}
+          alt="Icono de ver"
+          height={18}
+          width={18}
+          onClick={$(() => {
+            console.log('ver notaVenta---', props.notaVenta);
+          })}
+        />
         <ImgButton
           title="Cerrar el formulario"
           src={images.x}
@@ -135,7 +147,7 @@ export default component$((props: { notaVenta: any }) => {
         </button>
         <br />
         {/*  -- TABLA COUTAS -- */}
-        {typeof definicion_CTX_NOTA_VENTA_CREDITO.cuotas != 'undefined' && definicion_CTX_NOTA_VENTA_CREDITO.cuotas.length > 0 ? (
+        {typeof definicion_CTX_NOTA_VENTA_CREDITO.cobros != 'undefined' && definicion_CTX_NOTA_VENTA_CREDITO.cobros.length > 0 ? (
           <>
             <table class="tabla-venta" style={{ fontSize: '0.8rem', fontWeight: 'lighter' }}>
               <thead>
@@ -147,12 +159,12 @@ export default component$((props: { notaVenta: any }) => {
                 </tr>
               </thead>
               <tbody>
-                {definicion_CTX_NOTA_VENTA_CREDITO.cuotas.map((cuota: any, index: any) => {
+                {definicion_CTX_NOTA_VENTA_CREDITO.cobros.map((cobro: any, index: any) => {
                   const indexItem = index + 1;
 
                   let tot = 0;
 
-                  tot = cuota.importeCobroPEN.$numberDecimal ? cuota.importeCobroPEN.$numberDecimal : cuota.importeCobroPEN;
+                  tot = cobro.importeCobroPEN.$numberDecimal ? cobro.importeCobroPEN.$numberDecimal : cobro.importeCobroPEN;
 
                   suma_TOTAL_IMPORTE_PEN = suma_TOTAL_IMPORTE_PEN + Number(tot);
 
@@ -160,12 +172,12 @@ export default component$((props: { notaVenta: any }) => {
                     <tr key={index}>
                       <td data-label="Item">{cerosALaIzquierda(indexItem, 3)}</td>
                       <td data-label="Fecha">
-                        {cuota.fechaCobro.substring(8, 10) + '/' + cuota.fechaCobro.substring(5, 7) + '/' + cuota.fechaCobro.substring(0, 4)}
+                        {cobro.fechaCobro.substring(8, 10) + '/' + cobro.fechaCobro.substring(5, 7) + '/' + cobro.fechaCobro.substring(0, 4)}
 
                         {/* {cuota.fechaCobro.substring(0, 2) + '/' + cuota.fechaCobro.substring(3, 5) + '/' + cuota.fechaCobro.substring(6, 10)} */}
                       </td>
                       <td data-label="Importe" class="comoNumeroLeft">
-                        {parseFloat(cuota.importeCobroPEN.$numberDecimal ? cuota.importeCobroPEN.$numberDecimal : cuota.importeCobroPEN).toLocaleString(
+                        {parseFloat(cobro.importeCobroPEN.$numberDecimal ? cobro.importeCobroPEN.$numberDecimal : cobro.importeCobroPEN).toLocaleString(
                           'en-PE',
                           {
                             // style: 'currency',
@@ -182,7 +194,9 @@ export default component$((props: { notaVenta: any }) => {
                           height={14}
                           width={14}
                           onClick$={() => {
-                            definicion_CTX_COBROS_NOTA_VENTA_CREDITO.cobroSeleccionado = cuota;
+                            console.log('Editar cobro___:::', cobro);
+
+                            definicion_CTX_COBROS_NOTA_VENTA_CREDITO.cobroSeleccionado = cobro;
                             definicion_CTX_COBROS_NOTA_VENTA_CREDITO.mostrarPanelCobroNVCredito = true;
                           }}
                         />
@@ -222,7 +236,20 @@ export default component$((props: { notaVenta: any }) => {
           value="Grabar COBROS"
           style={{ cursor: 'pointer', height: '40px' }}
           class="btn-centro"
-          onClick$={() => {}}
+          onClick$={async () => {
+            await upNotaVentaCreditoADDCobros({
+              idNotaVenta: definicion_CTX_NOTA_VENTA_CREDITO._id,
+              cobros: definicion_CTX_NOTA_VENTA_CREDITO.cobros,
+              creditoCobrado: suma_TOTAL_IMPORTE_PEN >= parseFloat(props.notaVenta.importeTotalCuotasCredito.$numberDecimal),
+              idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+              idEmpresa: parametrosGlobales.idEmpresa,
+              usuario: parametrosGlobales.usuario,
+            }).then((res) => {
+              console.log('Respuesta de upNotaVentaCreditoADDCobros', res);
+            });
+            ctx.grabo_cobros = true;
+            ctx.mostrarPanelCobrosNVCredito = false;
+          }}
         />
       </div>
       {/* COBROS NV CREDITO */}

@@ -1,5 +1,18 @@
 const API = import.meta.env.VITE_URL + '/api/notaVenta';
 
+export const upNotaVentaCreditoADDCobros = async (parametros) => {
+  console.log('//////api////////////******************obtener a upNotaVentaCreditoADDCobros');
+  console.log('parametros upNotaVentaCreditoADDCobros', parametros);
+  const res = await fetch(API + '/upNotaVentaCreditoADDCobros', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(parametros),
+  });
+  return res.json();
+};
+
 export const upNotaVentaCreditoCliObs = async (parametros) => {
   // console.log('//////api////////////******************obtener a upNotaVentaCreditoCliObs');
   // console.log('parametros upNotaVentaCreditoCliObs', parametros);

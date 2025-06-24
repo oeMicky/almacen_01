@@ -7,7 +7,8 @@ import { elIdAuxiliar } from '~/functions/comunes';
 export default component$((props: { cobroSeleccionado: any }) => {
   //#region CONTEXTOS
   const ctx = useContext(CTX_COBROS_NOTA_VENTA_CREDITO);
-  const documento = useContext(CTX_NOTA_VENTA_CREDITO).cuotas;
+  // const documento = useContext(CTX_NOTA_VENTA_CREDITO).cuotas;
+  const documento = useContext(CTX_NOTA_VENTA_CREDITO).cobros;
   //#endregion CONTEXTOS
 
   return (
@@ -53,7 +54,15 @@ export default component$((props: { cobroSeleccionado: any }) => {
             id="fechaCobro"
             type="date"
             class="input-form"
-            value={props.cobroSeleccionado.fechaCobro}
+            value={
+              props.cobroSeleccionado.fechaCobro
+                ? props.cobroSeleccionado.fechaCobro.substring(0, 4) +
+                  '-' +
+                  props.cobroSeleccionado.fechaCobro.substring(5, 7) +
+                  '-' +
+                  props.cobroSeleccionado.fechaCobro.substring(8, 10)
+                : ''
+            }
             style={{ width: '170px' }}
             onChange$={(e) => {
               props.cobroSeleccionado.fechaCobro = e.target.value;
@@ -68,7 +77,13 @@ export default component$((props: { cobroSeleccionado: any }) => {
             id="cobro"
             type="number"
             class="input-form"
-            value={props.cobroSeleccionado.importeCobroPEN}
+            value={
+              typeof props.cobroSeleccionado.importeCobroPEN !== 'undefined'
+                ? props.cobroSeleccionado.importeCobroPEN.$numberDecimal
+                  ? props.cobroSeleccionado.importeCobroPEN.$numberDecimal
+                  : props.cobroSeleccionado.importeCobroPEN
+                : ''
+            }
             onChange$={(e) => {
               props.cobroSeleccionado.importeCobroPEN = e.target.value;
             }}
@@ -99,11 +114,32 @@ export default component$((props: { cobroSeleccionado: any }) => {
               return;
             }
 
-            documento.push({
-              idAuxiliar: parseInt(elIdAuxiliar()),
-              fechaCobro: props.cobroSeleccionado.fechaCobro,
-              importeCobroPEN: props.cobroSeleccionado.importeCobroPEN,
-            });
+            if (
+              typeof props.cobroSeleccionado.idAuxiliar === 'undefined' ||
+              props.cobroSeleccionado.idAuxiliar === 0 ||
+              props.cobroSeleccionado.idAuxiliar === ''
+            ) {
+              //INSERCION
+              console.log('INSERTANDO NUEVO COBRO');
+
+              documento.push({
+                idAuxiliar: parseInt(elIdAuxiliar()),
+                fechaCobro: props.cobroSeleccionado.fechaCobro,
+                importeCobroPEN: props.cobroSeleccionado.importeCobroPEN,
+              });
+            } else {
+              //EDICION
+              console.log('EDITANDO COBRO EXISTENTE', props.cobroSeleccionado.idAuxiliar);
+
+              const index = documento.findIndex((item: any) => item.idAuxiliar === props.cobroSeleccionado.idAuxiliar);
+              if (index !== -1) {
+                documento[index].fechaCobro = props.cobroSeleccionado.fechaCobro;
+                documento[index].importeCobroPEN = props.cobroSeleccionado.importeCobroPEN;
+              } else {
+                alert('No se encontró el cobro para editar');
+                return;
+              }
+            }
 
             ctx.mostrarPanelCobroNVCredito = false;
           }}

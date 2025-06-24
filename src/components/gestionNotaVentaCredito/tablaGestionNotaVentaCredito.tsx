@@ -97,7 +97,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                       </tr>
                     </thead>
                     <tbody>
-                      {misNotasVentas.map((notaVenta, index) => {
+                      {misNotasVentas.map((notaVenta: any, index: number) => {
                         const indexItem = index + 1;
                         let efec = 0;
                         let otro = 0;

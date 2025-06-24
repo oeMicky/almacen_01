@@ -19,6 +19,7 @@ export default component$(() => {
     miscNtsVtsCred: [],
 
     mostrarPanelCobrosNVCredito: false,
+    grabo_cobros: false,
 
     mostrarPanelNotaVenta: false,
 
