@@ -126,10 +126,20 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                         // if (typeof aSod !== 'undefined') {
                         //   ser = aSod.gan.$numberDecimal ? aSod.gan.$numberDecimal : aSod.gan;
                         // }
+
+                        const iniciao = 0;
+                        const sumaCobros: any = notaVenta.cobros.reduce((acumulador: number, cobro: any) => {
+                          // console.log('cobro', cobro);
+                          // console.log('cobro.montoCobrado.$numberDecimal', cobro.montoCobrado.$numberDecimal);
+                          return acumulador + Number(cobro.importeCobroPEN.$numberDecimal ? cobro.importeCobroPEN.$numberDecimal : 0);
+                        }, iniciao);
+                        // notaVenta.cobros.reduce
+                        console.log('sumaCobros', sumaCobros);
+
                         suma_TOTAL_IMPORTE_PEN = suma_TOTAL_IMPORTE_PEN + Number(tot);
                         suma_TOTAL_EFECTIVO_PEN = suma_TOTAL_EFECTIVO_PEN + Number(efec);
                         suma_TOTAL_OTROMONTO_PEN = suma_TOTAL_OTROMONTO_PEN + Number(otro);
-                        suma_TOTAL_CREDITO_PEN = suma_TOTAL_CREDITO_PEN + Number(cred);
+                        suma_TOTAL_CREDITO_PEN = suma_TOTAL_CREDITO_PEN + Number(cred - sumaCobros);
 
                         return (
                           // <tr key={notaVenta._id} style={notaVenta.metodoPago === 'CRÉDITO' ? { color: 'purple', fontWeight: 'bold' } : {}}>
@@ -207,7 +217,7 @@ export default component$((props: { parametrosBusqueda: any; buscarPorFechaConce
                             <td data-label="Crédito" class="comoNumeroLeft">
                               {parseFloat(notaVenta.importeTotalCuotasCredito.$numberDecimal) === 0
                                 ? '-'
-                                : parseFloat(notaVenta.importeTotalCuotasCredito.$numberDecimal).toLocaleString('en-PE', {
+                                : (parseFloat(notaVenta.importeTotalCuotasCredito.$numberDecimal) - sumaCobros).toLocaleString('en-PE', {
                                     // style: 'currency',
                                     currency: 'PEN',
                                     minimumFractionDigits: 2,

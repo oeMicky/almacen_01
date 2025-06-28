@@ -114,7 +114,7 @@ export default component$(
         if (props.mensajeErrorPersona === '') {
           definicion_CTX_BUSCAR_PERSONA.buscarPersona++;
         } else {
-          if (props.mensajeErrorPersona === 'Persona no encontrada') {
+          if (props.mensajeErrorPersona === 'Persona no encontrada' || props.mensajeErrorPersona === '') {
             definicion_CTX_BUSCAR_PERSONA.mostrarPanelNewEditPersona = true;
           }
         }

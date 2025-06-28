@@ -3296,7 +3296,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
             // type="submit"
             value={'Grabar NOTA DE VENTA ' + diaDeLaSemana(definicion_CTX_NOTA_VENTA.fecha) + ' ' + definicion_CTX_NOTA_VENTA.fecha.substring(8, 10)}
             class="btn-centro"
-            style={{ height: '40px' }}
+            style={{ height: '40px', cursor: 'pointer' }}
             onClick$={() => grabandoNotaVenta()}
           />
         ) : (

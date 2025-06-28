@@ -100,6 +100,7 @@ export default component$(() => {
               mostrarSpinner.value = true;
               navegarA('/notaVenta');
               // navegarA('/venta');
+              // navegarA('/cotizacion');
             })}
           />
           <Servicio2024

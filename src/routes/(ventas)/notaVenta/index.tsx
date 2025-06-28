@@ -92,6 +92,7 @@ export default component$(() => {
   //#region INICIALIZACION
   const navegarA = useNavigate();
   const ini = useSignal(0);
+
   // const buscarVentas = useSignal(0);
   const igv = useSignal(0);
   // const xmlDoc = useSignal<any>();
@@ -101,6 +102,7 @@ export default component$(() => {
   // const losPeriodosCargados = useSignal<any>(localStorage.getItem('periodos'));
   // const losPeriodosCargados = useSignal(JSON.parse(localStorage.getItem('periodos') || '[]'));
   // const losPeriodosCargados = useSignal<any>([]);
+
   const periodo = useStore({ idPeriodo: '', periodo: '' });
   const periodoAnterior = useStore({ idPeriodo: '', periodo: '' });
 
@@ -253,37 +255,14 @@ export default component$(() => {
       </div>
 
       <h4 style={{ margin: '8px 0 4px 2px' }}>
-        <u>Nota de Venta</u>
+        <u>
+          Nota de Venta - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>
+        </u>
       </h4>
 
       {/*  BOTONES   */}
       {/* <div style={{ marginBottom: '10px', paddingLeft: '3px' }}> */}
       <div style={{ display: 'flex' }}>
-        {/* <button
-          id="in_panel"
-          tabIndex={1}
-          onClick$={() => {
-            // navigator.mediaDevices
-            //   .enumerateDevices()
-            //   .then((devices) => {
-            //     devices.forEach((device) => {
-            //       console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
-            //     });
-            //   })
-            //   .catch((err) => {
-            //     console.error(`${err.name}: ${err.message}`);
-            //   });
-            ///////////////////////
-            // document.getElementById('btn_Add_Nota_Venta')?.blur();
-            definicion_CTX_INDEX_NOTA_VENTA.mostrarPanelPrueba = true;
-            console.log('🐘🐘🐘🐘', document.getSelection());
-            // document.getElementById('in_Pier')?.focus({ preventScroll: true });
-            // document.getElementById('in_Pier')?.tabIndex('1');
-            console.log('🐘🐘🐘🐘🐘🐘');
-          }}
-        >
-          panel
-        </button> */}
         <button
           title="Adiciona nota de venta"
           tabIndex={3}
@@ -377,7 +356,7 @@ export default component$(() => {
             }
             periodo.idPeriodo = elPeriodo._id;
             periodo.periodo = elPeriodo.periodo;
-            //************* */
+
             const elPeriodoAnterior: any = PPP.find((ele: any) => ele.periodo === parseInt(periodoANTE));
             periodoAnterior.idPeriodo = elPeriodoAnterior._id;
             periodoAnterior.periodo = elPeriodoAnterior.periodo;
@@ -405,7 +384,6 @@ export default component$(() => {
         >
           ADD NOTA VENTA
         </button>
-
         <input
           id="in_laFechaHoyVenta"
           type="date"
@@ -535,3 +513,31 @@ export default component$(() => {
     // </main>
   );
 });
+
+{
+  /* <button
+          id="in_panel"
+          tabIndex={1}
+          onClick$={() => {
+            // navigator.mediaDevices
+            //   .enumerateDevices()
+            //   .then((devices) => {
+            //     devices.forEach((device) => {
+            //       console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
+            //     });
+            //   })
+            //   .catch((err) => {
+            //     console.error(`${err.name}: ${err.message}`);
+            //   });
+            ///////////////////////
+            // document.getElementById('btn_Add_Nota_Venta')?.blur();
+            definicion_CTX_INDEX_NOTA_VENTA.mostrarPanelPrueba = true;
+            console.log('🐘🐘🐘🐘', document.getSelection());
+            // document.getElementById('in_Pier')?.focus({ preventScroll: true });
+            // document.getElementById('in_Pier')?.tabIndex('1');
+            console.log('🐘🐘🐘🐘🐘🐘');
+          }}
+        >
+          panel
+        </button> */
+}

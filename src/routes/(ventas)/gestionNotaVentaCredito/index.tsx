@@ -87,7 +87,9 @@ export default component$(() => {
       </div>
 
       <h4 style={{ margin: '8px 0 8px 2px' }}>
-        <u>Gestión Nota de Venta a Crédito</u>
+        <u>
+          Gestión Nota de Venta a Crédito - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>
+        </u>
       </h4>
 
       {/*  BOTONES   */}
@@ -113,6 +115,10 @@ export default component$(() => {
             style={{ width: '151px', marginLeft: '6px' }}
             onInput$={(e) => {
               fechas.desde = (e.target as HTMLInputElement).value;
+            }}
+            onChange$={() => {
+              // console.log('fechas.desde', fechas.desde);
+              parametrosBusqueda.desde = fechas.desde;
             }}
           />
           {/* class="fechas" style={{ width: '174px', display: 'flex', justifyContent: 'space-between', marginLeft: '10px' }}*/}

@@ -1,7 +1,7 @@
 import { $, component$, createContextId, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
-// import { images } from '~/assets';
+import { images } from '~/assets';
 // import ImgButton from '~/components/system/imgButton';
-// import { hoy, primeroDelMes } from '~/functions/comunes';
+import { hoy, primeroDelMes } from '~/functions/comunes';
 import { parametrosGlobales } from '../../login/index';
 import TablaCotizaciones from '~/components/cotizacion/tablaCotizaciones';
 import ElButton from '~/components/system/elButton';
@@ -9,7 +9,7 @@ import NewEditCotizacion from '~/components/cotizacion/newEditCotizacion';
 import { getIgvVenta } from '~/apis/venta.api';
 import ElSelect from '~/components/system/elSelect';
 import Spinner from '~/components/system/spinner';
-import { images } from '~/assets';
+// import { images } from '~/assets';
 import { useNavigate } from '@builder.io/qwik-city';
 // import { getPeriodos } from '~/apis/grupoEmpresarial.api';
 // import TablaCotizaciones from '~/components/venta/tablaCotizaciones';
@@ -31,7 +31,9 @@ export default component$(() => {
   //#region INICIALIZACION
   const ini = useSignal(0);
   const navegarA = useNavigate();
+
   const buscarCotizaciones = useSignal(0);
+
   const igv = useSignal(0);
   // const showAddCotizacion = useSignal(false);
   // //
@@ -40,17 +42,17 @@ export default component$(() => {
   const losPeriodosCargados = useSignal(parametrosGlobales.periodos);
   const periodo = useStore({ idPeriodo: '', periodo: '' });
   //*Fechas
-  // const fechas = useStore({
-  //   desde: primeroDelMes(), //  '2023-01-01', // hoy(),
-  //   hasta: hoy(),
-  // });
+  const fechas = useStore({
+    desde: primeroDelMes(), //  '2023-01-01', // hoy(),
+    hasta: hoy(),
+  });
   const parametrosBusqueda = useStore({
     idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
     idEmpresa: parametrosGlobales.idEmpresa,
     idSucursal: parametrosGlobales.idSucursal,
     idPeriodo: '',
-    // fechaInicio: fechas.desde,
-    // fechaFinal: fechas.hasta,
+    fechaInicio: fechas.desde,
+    fechaFinal: fechas.hasta,
   });
   // useTask$(({ track }) => {
   //   const fI = track(() => fechas.desde);
@@ -101,17 +103,14 @@ export default component$(() => {
           {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
         </h1> */}
         <div style={{ background: '#00778F' }}>
-          <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.8rem', paddingLeft: '2px' }}>
-            {/* {` ${sessionStorage.getItem('numeroIdentidad')} - ${sessionStorage
-              .getItem('empresa')
-              ?.toLocaleUpperCase()} - Sucursal: ${sessionStorage.getItem('sucursal')} - Usuario: ${sessionStorage.getItem(
-              'usuario'
-            )}`} */}
+          <label style={{ color: 'white', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
             {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
           </label>
         </div>
         <h4 style={{ margin: '8px 0 4px 2px' }}>
-          <u>Cotizaciones</u>
+          <u>
+            Cotizaciones - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>
+          </u>
         </h4>
         {/*  INTERVALOS DE FECHAS */}
         {/* <div class="intervalo-fechas">

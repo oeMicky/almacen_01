@@ -62,17 +62,14 @@ export default component$(() => {
           {`${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial}`}
         </h1>                , border: '1px green solid'       */}
       <div style={{ background: '#00778F' }}>
-        <label style={{ color: '#ccc', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
-          {/* {` ${localStorage.getItem('numeroIdentidad')} - ${localStorage
-              .getItem('empresa')
-              ?.toLocaleUpperCase()} - Sucursal: ${localStorage.getItem('sucursal')} - Usuario: ${localStorage.getItem(
-              'usuario'
-            )}`} */}
+        <label style={{ color: 'white', fontWeight: 'bold', fontSize: '0.7rem', paddingLeft: '2px' }}>
           {` ${parametrosGlobales.RUC} - ${parametrosGlobales.RazonSocial} - Sucursal: ${parametrosGlobales.sucursal} - Usuario: ${parametrosGlobales.usuario}`}
         </label>
       </div>
       <h4 style={{ margin: '8px 0 4px 2px' }}>
-        <u>Reporte de venta</u>
+        <u>
+          Reporte de venta - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>
+        </u>
       </h4>
       {/*  INTERVALOS DE FECHAS  border: '1px pink solid' style={{ display: 'flex', margin: '10px 0' }}*/}
       {/*  BOTONES   */}

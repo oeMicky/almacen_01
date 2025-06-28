@@ -20,12 +20,15 @@ export interface ICotizacion {
 
   //correlativo: number;
 
+  clienteVentasVarias: boolean;
   idCliente: string;
   codigoTipoDocumentoIdentidad: string;
   tipoDocumentoIdentidad: string;
   numeroIdentidad: string;
   razonSocialNombre: string;
+  direccionCliente: string;
   email: string;
+  telefono: string;
 
   idVehiculo: string;
   placa: string;

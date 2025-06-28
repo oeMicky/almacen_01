@@ -219,7 +219,7 @@ export default component$((props: { buscarCotizaciones: number; modoSeleccion: b
               </>
             ) : (
               <div>
-                <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
+                <i style={{ fontSize: '0.8rem', color: 'red' }}>No se encontraron registros</i>
               </div>
             )}
           </>

@@ -98,14 +98,17 @@ export default component$(
       mostrarSpinner.value = true;
       // POR RUC
       if (persona.codigoTipoDocumentoIdentidad === '6') {
+        console.log('💮💮💮💮💮');
         const laIdentidad = await getRUC(persona.numeroIdentidad);
         //console.log('laIdentidad - RUC:', laIdentidad);
         const laData = laIdentidad.data;
         persona.razonSocialNombre = laData.nombre;
         condicion.value = laData.condicion;
       } else {
+        console.log('🉑🉑🉑');
         // POR DNI
         if (persona.codigoTipoDocumentoIdentidad === '1') {
+          console.log('🉑🉑🉑🉑🉑🉑');
           const laIdentidad = await getDNI(persona.numeroIdentidad);
           //console.log('laIdentidad - DNI:', laIdentidad);
           const laData = laIdentidad.data;
@@ -129,11 +132,16 @@ export default component$(
           // (props.valorABuscarAUTOMATICAMENTE.substring(0, 2) === '20' || props.valorABuscarAUTOMATICAMENTE.substring(0, 2) === '10')
         ) {
           // document.getElementById('in_BuscarPersona')?.focus();
+
           // console.log('.............buscando por RUC', definicion_CTX_BUSCAR_PERSONA.conceptoABuscar);
           // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = true;
           persona.numeroIdentidad = props.valorABuscarAUTOMATICAMENTE;
           buscarPersonaEnAPIExterna();
           // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = false;
+        }
+        if (props.valorABuscarAUTOMATICAMENTE.length === 8) {
+          persona.numeroIdentidad = props.valorABuscarAUTOMATICAMENTE;
+          buscarPersonaEnAPIExterna();
         }
       }
     });
@@ -240,7 +248,7 @@ export default component$(
         class="container-modal"
       >
         {/* BOTONES DEL MARCO */}
-        <div style={{ display: 'flex', justifyContent: 'end' }}>
+        <div style={{ display: 'flex', justifyContent: 'end', backgroundColor: 'pink' }}>
           <ImgButton
             title="Ver persona"
             src={images.see}

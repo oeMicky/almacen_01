@@ -239,7 +239,7 @@ a.linkHeaderPrincipal:hover {
 .linea_1_11 {
   /* border: rgb(215, 215, 216) 1px dashed; */
   display: grid;
-  grid-template-columns: 1fr; 
+  grid-template-columns: 1fr ; 
   gap: 4px;
    /* justify-content: space-between */
   /* padding: 15px 15px */
@@ -253,6 +253,13 @@ a.linkHeaderPrincipal:hover {
   margin-bottom:  4px
    /* justify-content: space-between */
   /* padding: 15px 15px */
+}
+.linea_1_123 {
+  display: grid;
+  grid-template-columns: 1fr; 
+  gap: 4px;
+
+  margin-bottom:  4px
 }
 .linea_1_1111 {
   /* border: rgb(215, 215, 216) 1px dashed; */
@@ -280,8 +287,9 @@ a.linkHeaderPrincipal:hover {
   /* *********************************************************** */
   /* *********************************************************** */
   /* *********************************************************** */
-/*MAS DE 768px*/
+/*MAS DE 768px - PANTALLAS COMPUTADORAS */
 @media screen and (min-width:768px) {
+ 
   .linea_1_11 {
     display: grid;
     grid-template-columns: 1fr 1fr ;
@@ -291,6 +299,13 @@ a.linkHeaderPrincipal:hover {
   .linea_1_111 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
+    /* padding: 15px 15px */
+  }
+  .linea_1_123 {
+    display: grid;
+    /* grid-template-columns: 1fr 1fr 1fr; */
+    grid-template-columns: 1fr 2fr 3fr;
     gap: 4px;
     /* padding: 15px 15px */
   }
@@ -307,9 +322,14 @@ a.linkHeaderPrincipal:hover {
     /* padding: 15px 15px */
   }
   .linea-celda-row-space-between {
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    gap: 4px;
     /* border: rgb(59, 59, 224) 1px dashed; */
-    display: flex;
-    flex-direction:row ; 
+    /* display: flex;
+    flex-wrap: wrap;
+    flex-direction:row ;  */
+    /* width: max-content ; */
     /*  */
     justify-content: flex-start;
   }

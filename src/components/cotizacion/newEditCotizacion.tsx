@@ -83,12 +83,15 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
 
       //correlativo: props.cotizacionSelecci.correlativo ? props.cotizacionSelecci.correlativo : 0,
 
+      clienteVentasVarias: false,
       idCliente: props.cotizacionSelecci.idCliente ? props.cotizacionSelecci.idCliente : '',
       codigoTipoDocumentoIdentidad: props.cotizacionSelecci.codigoTipoDocumentoIdentidad ? props.cotizacionSelecci.codigoTipoDocumentoIdentidad : '',
       tipoDocumentoIdentidad: props.cotizacionSelecci.tipoDocumentoIdentidad ? props.cotizacionSelecci.tipoDocumentoIdentidad : '',
       numeroIdentidad: props.cotizacionSelecci.numeroIdentidad ? props.cotizacionSelecci.numeroIdentidad : '',
       razonSocialNombre: props.cotizacionSelecci.razonSocialNombre ? props.cotizacionSelecci.razonSocialNombre : '',
       email: props.cotizacionSelecci.email ? props.cotizacionSelecci.email : '',
+      direccionCliente: '',
+      telefono: '',
 
       idVehiculo: props.cotizacionSelecci.idVehiculo ? props.cotizacionSelecci.idVehiculo : null, // '',
       placa: props.cotizacionSelecci.placa ? props.cotizacionSelecci.placa : '',
@@ -135,6 +138,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
 
   //#region INICIALIZACION
   const ini = useSignal(0);
+  // const buscando = useSignal(false);
   // const mensajeErrorCliente = useSignal('');
 
   // const igvPorDefault = useStore({ idElIgv: '', elIgv: '' });
@@ -428,6 +432,16 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           })}
         />
         <ImgButton
+          src={images.see}
+          alt="Icono de cerrar"
+          height={16}
+          width={16}
+          title="Cerrar el formulario"
+          onClick={$(() => {
+            console.log('ini.value', ini.value);
+          })}
+        />
+        <ImgButton
           src={images.x}
           alt="Icono de cerrar"
           height={18}
@@ -542,7 +556,33 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL CLIENTE */}
           <div>
-            <div class="linea_1_111">
+            {/* cliente VENTAS VARIAS*/}
+            <div style={{ marginBottom: '8px' }}>
+              <div>
+                <input
+                  id="chk_clienteVentasVarias_VENTA"
+                  type="checkbox"
+                  title="Cliente Ventas Varias"
+                  style={{ margin: '2px' }}
+                  checked={definicion_CTX_COTIZACION.clienteVentasVarias}
+                  onChange$={(e) => {
+                    definicion_CTX_COTIZACION.clienteVentasVarias = (e.target as HTMLInputElement).checked;
+                  }}
+                  onKeyPress$={(e) => {
+                    if (e.key === 'Enter') {
+                      document.getElementById('btn_PlanContableOrigen_GRUPO_EMPRESARIAL')?.focus();
+                    }
+                  }}
+                  onFocusin$={(e) => {
+                    (e.target as HTMLInputElement).select();
+                  }}
+                />
+                <label for="chk_clienteVentasVarias_VENTA" style={{ marginLeft: '2px' }}>
+                  Cliente Ventas Varias
+                </label>
+              </div>
+            </div>
+            <div class="linea_1_123" style={definicion_CTX_COTIZACION.clienteVentasVarias ? { display: 'none' } : { display: '' }}>
               {/* tipo de documento identidad*/}
               <div>
                 <input
@@ -571,70 +611,82 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   </option>
                 </select> */}
               </div>
-              {/* numero identidad     marginTop: '1px',   */}
+              {/* numero identidad     marginTop: '1px',   fontWeight: 'bold'  */}
               <div style={{ display: 'flex' }}>
                 <input
                   id="in_NumeroDocumentoIdentidad"
-                  style={{ width: '100%', fontWeight: 'bold' }}
+                  style={{ width: '100%' }}
                   type="number"
                   placeholder="Add número de RUC / DNI"
                   value={definicion_CTX_COTIZACION.numeroIdentidad}
                   onInput$={async (e) => {
                     definicion_CTX_COTIZACION.numeroIdentidad = (e.target as HTMLInputElement).value;
-                    if (
-                      definicion_CTX_COTIZACION.numeroIdentidad.length === 11
-                      // &&
-                      // (definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '20' || definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '10')
-                    ) {
-                      // document.getElementById('in_BuscarPersona')?.focus();  //206 105 176 34  // no encontrado  //no determinado
-                      console.log('.............buscando por RUC', definicion_CTX_COTIZACION.numeroIdentidad);
-                      ctx_index_cotizacion.mostrarSpinner = true;
-                      const cliente = await getPersonaPorDniRuc({
-                        idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
-                        idEmpresa: parametrosGlobales.idEmpresa,
-                        buscarPor: 'DNI / RUC',
-                        cadenaABuscar: definicion_CTX_COTIZACION.numeroIdentidad,
-                      });
-                      ctx_index_cotizacion.mostrarSpinner = false;
-                      console.log('.............buscando por RUC - cliente', cliente.data);
-                      if (cliente.status === 400) {
-                        alert(cliente.message);
-                        return;
-                      }
-                      if (cliente.data.length === 0) {
-                        // alert('Cliente no encontrado :|');
-                        definicion_CTX_COTIZACION.idCliente = '';
-                        definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = '';
-                        definicion_CTX_COTIZACION.tipoDocumentoIdentidad = '';
-                        // definicion_CTX_COTIZACION.numeroIdentidad = '';
-                        definicion_CTX_COTIZACION.razonSocialNombre = '';
-                        definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = 'Persona no encontrada';
-                        return;
-                      }
-                      if (cliente.data.length === 1) {
-                        definicion_CTX_COTIZACION.idCliente = cliente.data[0]._id;
-                        definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = cliente.data[0].codigoTipoDocumentoIdentidad;
-                        definicion_CTX_COTIZACION.tipoDocumentoIdentidad = cliente.data[0].tipoDocumentoIdentidad;
-                        definicion_CTX_COTIZACION.numeroIdentidad = cliente.data[0].numeroIdentidad;
-                        definicion_CTX_COTIZACION.razonSocialNombre = cliente.data[0].razonSocialNombre;
-                        definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = '';
-                        return;
-                      }
-                      if (cliente.data.length > 1) {
-                        // alert('Cliente no determinado :|');
-                        definicion_CTX_COTIZACION.idCliente = '';
-                        definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = '';
-                        definicion_CTX_COTIZACION.tipoDocumentoIdentidad = '';
-                        // definicion_CTX_COTIZACION.numeroIdentidad = '';
-                        definicion_CTX_COTIZACION.razonSocialNombre = '';
-                        definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = 'Persona no determinada';
-                        return;
-                      }
+                    setTimeout(async () => {
+                      if (
+                        definicion_CTX_COTIZACION.numeroIdentidad.length === 11 ||
+                        definicion_CTX_COTIZACION.numeroIdentidad.length === 8
+                        //&&                        buscando.value === false
+                        // &&
+                        // (definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '20' || definicion_CTX_COTIZACION.numeroIdentidad.substring(0, 2) === '10')
+                      ) {
+                        // document.getElementById('in_BuscarPersona')?.focus();  //206 105 176 34  // no encontrado  //no determinado
+                        ini.value += 1; // para que se ejecute el useTask$ de abajo
+                        // buscando.value = true;
+                        console.log('.............buscando por RUC', definicion_CTX_COTIZACION.numeroIdentidad);
+                        ctx_index_cotizacion.mostrarSpinner = true;
+                        const cliente = await getPersonaPorDniRuc({
+                          idGrupoEmpresarial: parametrosGlobales.idGrupoEmpresarial,
+                          idEmpresa: parametrosGlobales.idEmpresa,
+                          buscarPor: 'DNI / RUC',
+                          cadenaABuscar: definicion_CTX_COTIZACION.numeroIdentidad,
+                        });
+                        ctx_index_cotizacion.mostrarSpinner = false;
+                        console.log('.............buscando por RUC - cliente', cliente.data);
+                        if (cliente.status === 400) {
+                          alert(cliente.message);
+                          // buscando.value = false;
+                          definicion_CTX_COTIZACION.idCliente = '';
+                          return;
+                        }
+                        if (cliente.data.length === 0) {
+                          // alert('Cliente no encontrado :|');
+                          definicion_CTX_COTIZACION.idCliente = '';
+                          definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = '';
+                          definicion_CTX_COTIZACION.tipoDocumentoIdentidad = '';
+                          // definicion_CTX_COTIZACION.numeroIdentidad = '';
+                          definicion_CTX_COTIZACION.razonSocialNombre = '';
+                          definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = 'Persona no encontrada';
+                          // buscando.value = false;
+                          return;
+                        }
+                        if (cliente.data.length === 1) {
+                          definicion_CTX_COTIZACION.idCliente = cliente.data[0]._id;
+                          definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = cliente.data[0].codigoTipoDocumentoIdentidad;
+                          definicion_CTX_COTIZACION.tipoDocumentoIdentidad = cliente.data[0].tipoDocumentoIdentidad;
+                          definicion_CTX_COTIZACION.numeroIdentidad = cliente.data[0].numeroIdentidad;
+                          definicion_CTX_COTIZACION.razonSocialNombre = cliente.data[0].razonSocialNombre;
+                          definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = '';
+                          return;
+                        }
+                        if (cliente.data.length > 1) {
+                          // alert('Cliente no determinado :|');
+                          definicion_CTX_COTIZACION.idCliente = '';
+                          definicion_CTX_COTIZACION.codigoTipoDocumentoIdentidad = '';
+                          definicion_CTX_COTIZACION.tipoDocumentoIdentidad = '';
+                          // definicion_CTX_COTIZACION.numeroIdentidad = '';
+                          definicion_CTX_COTIZACION.razonSocialNombre = '';
+                          definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente = 'Persona no determinada';
+                          // buscando.value = false;
+                          return;
+                        }
 
-                      // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = true;
-                      // localizarPersonas();
-                      // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = false;
-                    }
+                        // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = true;
+                        // localizarPersonas();
+                        // definicion_CTX_BUSCAR_PERSONA.mostrarSpinner = false;
+                      }
+                      // }, 230);
+                    }, 130);
+                    // clearTimeout(timmerBusqueda);
                   }}
                   onKeyUp$={(e) => {
                     if (e.key === 'Enter') {
@@ -653,8 +705,8 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
                   readOnly
                   title="Buscar cliente"
                   alt="icono buscar"
-                  height={20}
-                  width={16}
+                  height={17}
+                  width={17}
                   style={{ marginLeft: '4px' }}
                   onClick$={() => {
                     definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona = true;
@@ -678,15 +730,66 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
               </div>
             </div>
             {definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente !== '' && (
-              <label style={{ display: 'block', textAlign: 'center', color: 'red' }}>{definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente}</label>
+              // <label style={{ display: 'block', textAlign: 'center', color: 'red' }}>{definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente}</label>
+              <div class="linea_1_123">
+                <div></div>
+                <div>
+                  <label style={{ display: 'block', textAlign: 'center', color: 'red' }}>{definicion_CTX_NEW_EDIT_COTIZACION.mensajeErrorCliente}</label>
+                </div>
+                <div></div>
+              </div>
             )}
+            {/* DIRECCION - EMAIL - TELEFONO  */}
+            {/* <div class="linea_1_111" style={definicion_CTX_COTIZACION.clienteVentasVarias ? { display: 'none' } : { display: '' }}> */}
+            <div class="linea_1_111" style={{ display: 'none' }}>
+              {/* Dirección Cliente */}
+              <div>
+                <input
+                  id="inputDireccionCliente"
+                  style={{ width: '100%' }}
+                  type="text"
+                  disabled
+                  placeholder="Direccion cliente"
+                  value={definicion_CTX_COTIZACION.direccionCliente}
+                  // onChange={(e) => setRazonSocialNombre(e.target.value)}
+                />
+              </div>
+              {/* Email  */}
+              <div>
+                <input
+                  id="inputEmail"
+                  style={{ width: '100%' }}
+                  type="email"
+                  placeholder="Email"
+                  value={definicion_CTX_COTIZACION.email}
+                  onChange$={(e) => {
+                    definicion_CTX_COTIZACION.email = (e.target as HTMLInputElement).value;
+                  }}
+                  // onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              {/* Telefono */}
+              <div>
+                <input
+                  id="inputTelefono"
+                  style={{ width: '100%' }}
+                  type="tel"
+                  placeholder="Telefono"
+                  value={definicion_CTX_COTIZACION.telefono}
+                  onChange$={(e) => {
+                    definicion_CTX_COTIZACION.telefono = (e.target as HTMLInputElement).value;
+                  }}
+                  // onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
             <br />
           </div>
           {/* {showSeleccionarPersona.value && ( */}
           {definicion_CTX_NEW_EDIT_COTIZACION.mostrarPanelBuscarPersona && (
             <div class="modal">
               <BuscarPersona
-                soloPersonasNaturales={false}
+                soloPersonasNaturales={definicion_CTX_COTIZACION.numeroIdentidad.length === 11 ? false : true}
                 seleccionar="cliente"
                 contexto="cotizacion"
                 rol="cliente"
@@ -697,7 +800,7 @@ export default component$((props: { addPeriodo: any; cotizacionSelecci: any; igv
           )}
           {/*  -------------------------------------------------- */}
           {/* IGV - TC */}
-          <div>
+          <div hidden>
             {/* IGV */}
             <div class="form-control">
               <div class="form-control form-agrupado">

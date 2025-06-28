@@ -52,8 +52,10 @@ export interface IVenta {
 
   igv: any;
   enDolares: boolean;
+  enDolaresManual: boolean;
   moneda: string;
   tipoCambio: number;
+  tipoCambioManual: any;
 
   vendedor: string;
   metodoPago: string;

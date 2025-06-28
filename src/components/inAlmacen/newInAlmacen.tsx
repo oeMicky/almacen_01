@@ -968,6 +968,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           {/* ----------------------------------------------------- */}
           {/* GENERALES DEL REMITENTE */}
           <div>
+            {/* DNI RUC - NUMERO - RAZON SOCIAL */}
             <div class="linea_1_111">
               {/* tipo de documento identidad REMITENTE*/}
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -1351,7 +1352,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
           {/* <hr style={{ margin: '5px 0' }}></hr> */}
           <br />
         </div>
-        {/* IGV ---- TIPO DE CAMBIO       htmlFor={'checkboxTipoCambio'}*/}
+        {/* IGV ---- TIPO DE CAMBIO  ---- TIPO DE CAMBIO MANUAL  */}
         <div>
           {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr  1fr', gap: '4px' }}> */}
           {/* <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '4px' }}> */}
@@ -1377,9 +1378,10 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             <div class="linea-celda-row-space-between">
               <div>
                 <input
+                  id="chbx_TipoCambio_IN_ALMACEN"
                   type="checkbox"
                   checked={definicion_CTX_IN_ALMACEN.enDolares}
-                  id="chbx_TipoCambio_IN_ALMACEN"
+                  style={{ cursor: 'pointer' }}
                   onClick$={(e) => {
                     console.log('click en chbx_TipoCambio_IN_ALMACEN');
                     if (definicion_CTX_IN_ALMACEN.motivoIngresoAlmacen === 'APERTURA DE INVENTARIO') {
@@ -1394,7 +1396,7 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
                     }
                   }}
                 />
-                <label for="chbx_TipoCambio_IN_ALMACEN" style={{ marginRight: '8px' }}>
+                <label for="chbx_TipoCambio_IN_ALMACEN" style={{ marginRight: '8px', cursor: 'pointer' }}>
                   USD SUNAT
                 </label>
               </div>
@@ -1419,16 +1421,17 @@ export default component$((props: { addPeriodo?: any; inSelecci: any; losIgvsCom
             <div class="linea-celda-row-space-between">
               <div>
                 <input
-                  type="checkbox"
-                  checked={definicion_CTX_IN_ALMACEN.enDolaresManual}
                   id="chbx_TipoCambio_MANUAL_IN_ALMACEN"
+                  type="checkbox"
+                  style={{ cursor: 'pointer' }}
+                  checked={definicion_CTX_IN_ALMACEN.enDolaresManual}
                   onClick$={(e) => {
                     console.log('click en chbx_TipoCambio_MANUAL_IN_ALMACEN');
 
                     obtenerTipoCambioManual(e.target as HTMLInputElement);
                   }}
                 />
-                <label for="chbx_TipoCambio_MANUAL_IN_ALMACEN" style={{ marginRight: '8px' }}>
+                <label for="chbx_TipoCambio_MANUAL_IN_ALMACEN" style={{ marginRight: '8px', cursor: 'pointer' }}>
                   USD MANUAL
                 </label>
               </div>

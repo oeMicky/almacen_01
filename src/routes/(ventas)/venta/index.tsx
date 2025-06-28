@@ -292,7 +292,9 @@ export default component$(() => {
         parametros
       </button> */}
       <h4 style={{ margin: '8px 0 4px 2px' }}>
-        <u>Facturación</u>
+        <u>
+          Facturación - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>
+        </u>
       </h4>
       {/*  INTERVALOS DE FECHAS  border: '1px pink solid' style={{ display: 'flex', margin: '10px 0' }}*/}
       {/*  style={{ marginRight: '1px', border: ' 1px solid blue' }}  style={{ marginRight: '10px', border: ' 1px solid red' }}*/}
