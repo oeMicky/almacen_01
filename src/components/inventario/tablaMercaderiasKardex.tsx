@@ -66,12 +66,12 @@ export default component$(
         value={lasMercaderiasKARDEX}
         onPending={() => {
           //console.log('onPending 🍉🍉🍉🍉');
-          return <div>Cargando...</div>;
+          return <div style={{ color: 'green' }}>Cargando...</div>;
         }}
         onRejected={() => {
           //console.log('onRejected 🍍🍍🍍🍍');
           ctx_index_inventario.mostrarSpinner = false;
-          return <div>Fallo en la carga de datos</div>;
+          return <div style={{ color: 'red' }}>Fallo en la carga de datos</div>;
         }}
         onResolved={(mercaderias) => {
           // console.log('onResolved 🍓🍓🍓🍓', mercaderias);
@@ -388,7 +388,7 @@ export default component$(
                 </>
               ) : (
                 <div>
-                  <i style={{ fontSize: '0.8rem' }}>No se encontraron registros</i>
+                  <i style={{ fontSize: '0.8rem', color: 'red' }}>No se encontraron registros</i>
                 </div>
               )}
             </>

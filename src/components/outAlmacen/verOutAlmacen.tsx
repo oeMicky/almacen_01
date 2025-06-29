@@ -22,6 +22,18 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
   }
   //#endregion CONTEXTO
 
+  const opciones: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
+
+  const fechaUTC = props.outSelecci.createdAt;
+  const fechaLocal = new Date(fechaUTC);
+
   return (
     <div
       class="container-modal"
@@ -37,6 +49,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
         style={{
           display: 'flex',
           justifyContent: 'end',
+          backgroundColor: '#ff000020',
         }}
       >
         <ImgButton
@@ -99,12 +112,20 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                 type="text"
                 // autoFocus
                 disabled
-                value={props.outSelecci.usuarioCrea + '; ' + props.outSelecci.fechaLocal + ' ' + props.outSelecci.horaLocal}
+                // value={props.outSelecci.usuarioCrea + '; ' + props.outSelecci.fechaLocal + ' ' + props.outSelecci.horaLocal}
+                // value={props.inSelecci.usuarioCrea + '; ' + fechaLocal.toString()}
+                value={props.outSelecci.usuarioCrea + '; ' + fechaLocal.toLocaleString('es-PE', opciones)}
               />
             </div>
             <div class="linea_1_111">
               {/* FISMA */}
-              <input id="in_FISMA" type="text" disabled={props.outSelecci._id !== ''} style={{ width: '100%' }} value={props.outSelecci.FISMA} />
+              <input
+                id="in_FISMA"
+                type="text"
+                disabled={props.outSelecci._id !== ''}
+                style={{ width: '100%' }}
+                value={formatoDDMMYYYY_PEN(props.outSelecci.FISMA)}
+              />
 
               {/* Nota de salida: serie - número */}
               {props.outSelecci.numero && props.outSelecci.serie && (
@@ -123,7 +144,7 @@ export default component$((props: { outSelecci: any; contexto: string; indexItem
                 id="in_MotivoEgresoAlmacen"
                 type="text"
                 disabled={props.outSelecci._id !== ''}
-                style={{ width: '100%', fontWeight: 'bold' }}
+                style={{ width: '100%', fontWeight: 'bold', backgroundColor: 'orange', color: 'white' }}
                 value={props.outSelecci.motivoEgresoAlmacen}
               />
             </div>

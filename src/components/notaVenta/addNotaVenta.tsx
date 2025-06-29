@@ -1785,7 +1785,7 @@ export default component$((props: { addPeriodo: any; nvSelecci: any; igv: number
                 type="date"
                 style={{ width: '100%' }}
                 // disabled
-                min={menosXdiasHoy(3)}
+                min={menosXdiasHoy(7)}
                 max={hoy()}
                 // min={props.addPeriodo.periodo.substring(0, 4) + '-' + props.addPeriodo.periodo.substring(4, 6) + '-01'}
                 // max={ultimoDiaDelPeriodoX(props.addPeriodo.periodo)}

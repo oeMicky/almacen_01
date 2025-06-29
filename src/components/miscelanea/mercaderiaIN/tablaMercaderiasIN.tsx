@@ -188,7 +188,7 @@ export default component$(
                           // KARDEXS,
                           activo,
                           noFacturar,
-                          ubigeo,
+                          // ubigeo,
                           idKardex,
                           sumStocks,
                         } = mercaINLocali;
@@ -339,22 +339,6 @@ export default component$(
                               ) : (
                                 ''
                               )}
-
-                              {typeof aplicacion !== 'undefined' && (
-                                <input
-                                  // id="in_BuscarDetraccion"
-                                  type="image"
-                                  src={images.information}
-                                  title={aplicacion}
-                                  height={14}
-                                  width={14}
-                                  style={{ marginRight: '6px' }}
-                                  // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
-                                  onClick$={() => {
-                                    alert(aplicacion);
-                                  }}
-                                />
-                              )}
                               <input
                                 title="Ver kardex/s"
                                 src={images.see}
@@ -414,7 +398,7 @@ export default component$(
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />
-                              <input
+                              {/* <input
                                 title="Editar ubigeo"
                                 type="image"
                                 src={images.ubigeo}
@@ -446,13 +430,14 @@ export default component$(
                                   // ctx.mostrarSpinner = true;
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
-                              />
+                              /> */}
                               <input
                                 title="Editar precio público"
                                 type="image"
                                 src={images.moneyBag}
                                 height={14}
                                 width={14}
+                                style={{ marginRight: '6px' }}
                                 // style={{ marginRight: '2px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
@@ -481,6 +466,21 @@ export default component$(
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />
+                              {typeof aplicacion !== 'undefined' && (
+                                <input
+                                  // id="in_BuscarDetraccion"
+                                  type="image"
+                                  src={images.information}
+                                  title={aplicacion}
+                                  height={14}
+                                  width={14}
+                                  style={{ marginRight: '6px' }}
+                                  // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                                  onClick$={() => {
+                                    alert(aplicacion);
+                                  }}
+                                />
+                              )}
                             </td>
                           </tr>
                         );

@@ -296,8 +296,17 @@ export default component$(
                   type="text"
                   placeholder="Ingrese la mercadería a buscar"
                   value={parametrosBusqueda.cadenaABuscar}
-                  onInput$={(e) => {
+                  onChange$={(e) => {
                     parametrosBusqueda.cadenaABuscar = (e.target as HTMLInputElement).value;
+                    if (parametrosBusqueda.cadenaABuscar.trim() !== '') {
+                      // BUSCAR PRODUCTOS
+                      // if ((document.getElementById('in_ADD_AUTOMATICA_MICE') as HTMLInputElement).checked) {
+                      //   localizarMercaderiasOUT_EnAUTOMATICO();
+                      //   // buscarMercaderiasOUT_EnAUTOMATICO.value++;
+                      // } else {
+                      buscarMercaderiasIN.value++;
+                      // }
+                    }
                   }}
                   // onFocusin$={(e) => {
                   //   (e.target as HTMLInputElement).select();

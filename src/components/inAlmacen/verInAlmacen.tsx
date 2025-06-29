@@ -32,6 +32,18 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
   let suma_SubUSD = 0;
   let suma_IGVUSD = 0;
   let suma_TotUSD = 0;
+
+  const opciones: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
+
+  const fechaUTC = props.inSelecci.createdAt;
+  const fechaLocal = new Date(fechaUTC);
   //#endregion INICIALIZCION
   console.log('💥💥💥💥💥💥💥💥💥💥💥');
 
@@ -51,6 +63,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
         style={{
           display: 'flex',
           justifyContent: 'end',
+          backgroundColor: '#0000ff20',
         }}
       >
         <ImgButton
@@ -111,7 +124,13 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                 type="text"
                 // autoFocus
                 disabled
-                value={props.inSelecci.usuarioCrea + '; ' + props.inSelecci.createdAt}
+                // value={
+                //   props.inSelecci.usuarioCrea + '; ' + props.inSelecci.createdAt.toLocaleDateString() + ' ' + props.inSelecci.createdAt.toLocaleTimeString()
+                // }
+                // value={props.inSelecci.usuarioCrea + '; ' + props.inSelecci.createdAt.toLocaleTimeString('en-US')}
+                // value={props.inSelecci.usuarioCrea + '; ' + fechaLocal.toString()}
+                value={props.inSelecci.usuarioCrea + '; ' + fechaLocal.toLocaleString('es-PE', opciones)}
+                // value={props.inSelecci.usuarioCrea + '; ' + props.inSelecci.fechaLocal + ' ' + props.inSelecci.horaLocal}
               />
             </div>
             <div class="linea_1_111">
@@ -136,7 +155,7 @@ export default component$((props: { inSelecci: any; contexto: string; indexItem?
                 id="in_Motivo"
                 type="text"
                 disabled={props.inSelecci._id !== ''}
-                style={{ width: '100%', fontWeight: 'bold' }}
+                style={{ width: '100%', fontWeight: 'bold', backgroundColor: 'orange', color: 'white' }}
                 value={props.inSelecci.motivoIngresoAlmacen}
               />
             </div>

@@ -290,7 +290,7 @@ export default component$(
                         // KARDEXS,
                         activo,
                         noFacturar,
-                        ubigeo,
+                        // ubigeo,
                         //
                         lote,
                         fechaVencimiento,
@@ -601,21 +601,6 @@ export default component$(
                                 }
                               }}
                             /> */}
-                            {typeof aplicacion !== 'undefined' && (
-                              <input
-                                // id="in_BuscarDetraccion"
-                                type="image"
-                                src={images.information}
-                                title={aplicacion}
-                                height={14}
-                                width={14}
-                                style={{ marginRight: '6px' }}
-                                // onFocusin$={() => //console.log("☪☪☪☪☪☪!!!")}
-                                onClick$={() => {
-                                  alert(aplicacion);
-                                }}
-                              />
-                            )}
                             {/* <input
                                 type="image"
                                 src={images.moneyBag}
@@ -630,56 +615,6 @@ export default component$(
                                 }}
                               /> */}
                             {/* {props.esAlmacen && ( */}
-                            <input
-                              title="Editar mercadería"
-                              type="image"
-                              src={images.edit}
-                              height={14}
-                              width={14}
-                              style={{ marginRight: '6px' }}
-                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
-                              onClick$={() => {
-                                ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
-                                console.log('mercaOUTLocali', mercaOUTLocali);
-                                ctx_buscar_mercaderia_out.mostrarPanelNewEditMercaderiaIN = true;
-                              }}
-                            />
-                            {/* )} */}
-                            <input
-                              title="Ver ubigeo antiguo"
-                              type="image"
-                              src={images.ubigeo}
-                              height={14}
-                              width={14}
-                              style={{ marginRight: '6px' }}
-                              onClick$={() => {
-                                // if (mercaOUTLocali.KARDEXS.length === 0) {
-                                //   alert('El ítem seleccionado no presenta kardex.');
-                                //   return;
-                                // }
-
-                                // if (mercaOUTLocali.KARDEXS.length === 1) {
-                                //   console.log('🍔🍟🍟🍟🍟 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
-
-                                // ctx_buscar_mercaderia_out.elIdKardex = mercaOUTLocali.KARDEXS[0]._id;
-                                ctx_buscar_mercaderia_out.ubigeoAntiguo = ubigeo;
-                                ctx_buscar_mercaderia_out.mostrarPanelVerUbigeoAntiguo = true;
-                                // console.log(
-                                //   '🍔🍔🍔🍔🍔 mercaOUTLocali.KARDEXS.length',
-                                //   ctx_buscar_mercaderia_out.elIdKardex,
-                                //   ctx_buscar_mercaderia_out.elUBIGEO
-                                // );
-                                // }
-                                // if (mercaOUTLocali.KARDEXS.length > 1) {
-                                //   console.log('🥗🥗🥗🥗🥗 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
-                                //   ctx.mM = mercaOUTLocali;
-                                //   ctx.mostrarPanelKardexsIN = true;
-                                // }
-
-                                // ctx_buscar_mercaderia_out.mostrarSpinner = true;
-                                //console.log('la merca A Editar IN', ctx.mM);
-                              }}
-                            />
                             <input
                               title="Ver kardex/s"
                               src={images.see}
@@ -721,6 +656,55 @@ export default component$(
                                 // }
                               }}
                             />
+                            <input
+                              title="Editar mercadería"
+                              type="image"
+                              src={images.edit}
+                              height={14}
+                              width={14}
+                              style={{ marginRight: '6px' }}
+                              // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
+                              onClick$={() => {
+                                ctx_buscar_mercaderia_out.mM = mercaOUTLocali;
+                                console.log('mercaOUTLocali', mercaOUTLocali);
+                                ctx_buscar_mercaderia_out.mostrarPanelNewEditMercaderiaIN = true;
+                              }}
+                            />
+                            {/* <input
+                              title="Ver ubigeo antiguo"
+                              type="image"
+                              src={images.ubigeo}
+                              height={14}
+                              width={14}
+                              style={{ marginRight: '6px' }}
+                              onClick$={() => {
+                                // if (mercaOUTLocali.KARDEXS.length === 0) {
+                                //   alert('El ítem seleccionado no presenta kardex.');
+                                //   return;
+                                // }
+
+                                // if (mercaOUTLocali.KARDEXS.length === 1) {
+                                //   console.log('🍔🍟🍟🍟🍟 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
+
+                                // ctx_buscar_mercaderia_out.elIdKardex = mercaOUTLocali.KARDEXS[0]._id;
+                                ctx_buscar_mercaderia_out.ubigeoAntiguo = ubigeo;
+                                ctx_buscar_mercaderia_out.mostrarPanelVerUbigeoAntiguo = true;
+                                // console.log(
+                                //   '🍔🍔🍔🍔🍔 mercaOUTLocali.KARDEXS.length',
+                                //   ctx_buscar_mercaderia_out.elIdKardex,
+                                //   ctx_buscar_mercaderia_out.elUBIGEO
+                                // );
+                                // }
+                                // if (mercaOUTLocali.KARDEXS.length > 1) {
+                                //   console.log('🥗🥗🥗🥗🥗 mercaOUTLocali.KARDEXS.length', mercaOUTLocali.KARDEXS.length);
+                                //   ctx.mM = mercaOUTLocali;
+                                //   ctx.mostrarPanelKardexsIN = true;
+                                // }
+
+                                // ctx_buscar_mercaderia_out.mostrarSpinner = true;
+                                //console.log('la merca A Editar IN', ctx.mM);
+                              }}
+                            /> */}
                             {parametrosGlobales.actualizarPrecioPublico && (
                               <input
                                 title="Editar precio público"
@@ -728,7 +712,7 @@ export default component$(
                                 src={images.moneyBag}
                                 height={14}
                                 width={14}
-                                // style={{ marginRight: '2px' }}
+                                style={{ marginRight: '6px' }}
                                 // onFocusin$={() => //console.log('☪☪☪☪☪☪')}
                                 onClick$={() => {
                                   if (typeof mercaOUTLocali.porcentajeUtilidad === 'undefined' || mercaOUTLocali.porcentajeUtilidad === null) {
@@ -754,6 +738,21 @@ export default component$(
                                   // ctx.mostrarSpinner = true;
 
                                   //console.log('la merca A Editar IN', ctx.mM);
+                                }}
+                              />
+                            )}
+                            {typeof aplicacion !== 'undefined' && (
+                              <input
+                                // id="in_BuscarDetraccion"
+                                type="image"
+                                src={images.information}
+                                title={aplicacion}
+                                height={14}
+                                width={14}
+                                style={{ marginRight: '6px' }}
+                                // onFocusin$={() => //console.log("☪☪☪☪☪☪!!!")}
+                                onClick$={() => {
+                                  alert(aplicacion);
                                 }}
                               />
                             )}
