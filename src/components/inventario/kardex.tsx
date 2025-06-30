@@ -109,8 +109,8 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
           width={18}
           title="Cerrar el formulario"
           onClick={$(() => {
-            console.log('props.contexto', props.contexto);
-            //console.log('props.kardex', props.kardex);
+            // console.log('props.contexto', props.contexto);
+            console.log('props.kardex', props.kardex);
           })}
         />
         <ImgButton
@@ -139,7 +139,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
       {/* TITULO */}
       <h3 style={{ marginBottom: '10px', fontSize: '0.9rem', color: 'red' }}>{parametrosGlobales.sucursal}</h3>
       <h2 style={{ display: 'grid', gridTemplateColumns: '84px 1fr', marginBottom: '4px', fontSize: '1rem' }}>
-        Kardex: <strong>{props.kardex._id}</strong>
+        Kardex: {parametrosGlobales.almaceneroBajo || parametrosGlobales.almaceneroMedio ? '' : <strong>{props.elIDKardex}</strong>}
       </h2>
       {/* FORMULARIO */}
       <div class="add-form">
@@ -293,13 +293,14 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
 
                               <td data-label="Acc" class="accionesLeft">
                                 <input
+                                  title="Ver movimiento"
                                   type="image"
                                   src={images.see}
                                   // disabled
                                   alt="icono de ver"
-                                  height={12}
-                                  width={12}
-                                  title="Ver movimiento"
+                                  height={14}
+                                  width={14}
+                                  style={{ marginRight: '6px' }}
                                   onClick$={async () => {
                                     console.log('tabla, clave ', tabla, clave);
                                     if (tabla === 'registroingresosaalmacenes') {
@@ -323,6 +324,15 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
                                       definicion_CTX_KARDEX.mostrarPanelVerOutAlmacen = true;
                                     }
                                   }}
+                                />
+                                <input
+                                  title="Recalcular saldos"
+                                  type="image"
+                                  src={images.masMenos}
+                                  hidden={parametrosGlobales.almaceneroBajo || parametrosGlobales.almaceneroMedio}
+                                  alt="icono de ver"
+                                  height={14}
+                                  width={14}
                                 />
                               </td>
                             </tr>

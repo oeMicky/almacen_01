@@ -79,6 +79,7 @@ import listaFavoritos from '../images/listaFavoritos.svg';
 import logout from '../images/logout.svg';
 import logout24 from '../images/logout24.svg';
 import logout32 from '../images/logout32.svg';
+import masMenos from '../images/masMenos.svg';
 import mercaderia from '../images/mercaderia.svg';
 import menu from '../images/menu.svg';
 import moneyBag from '../images/moneyBag.svg';
@@ -204,6 +205,7 @@ export default {
   logout,
   logout24,
   logout32,
+  masMenos,
   mercaderia,
   menu,
   moneyBag,

@@ -105,8 +105,8 @@ export default component$((props: { buscarOUTAlmacen: number; porFechasT_porPeri
                               type="image"
                               src={images.see}
                               alt="icono de ver"
-                              height={12}
-                              width={12}
+                              height={14}
+                              width={14}
                               title="Ver egreso"
                               onClick$={() => {
                                 ctx_index_out_almacen.oNS = outAlmaLocali;
