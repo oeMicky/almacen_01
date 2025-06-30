@@ -5,6 +5,7 @@ export interface IMovimientoKARDEX {
   tabla: string;
 
   IS: boolean;
+  motivoIS: string;
 
   FISMA: string;
   fechaHoraMovimiento: string;

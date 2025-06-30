@@ -211,6 +211,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
                       <thead>
                         <tr>
                           <th>FISMA</th>
+                          <th>Motivo</th>
                           <th>UBI</th>
                           <th>Cnt.Entrada</th>
                           <th>Cnt.Salida</th>
@@ -231,6 +232,7 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
                             clave,
                             tabla,
                             IS,
+                            motivoIS,
                             FISMA,
 
                             ubigeo,
@@ -249,8 +251,9 @@ export default component$((props: { mercaSelecci: any; kardex: any; elIDKardex: 
                           } = movimiento;
 
                           return (
-                            <tr key={_id} style={IS ? { color: 'blue' } : { color: 'red' }}>
+                            <tr key={_id} style={IS ? { fontSize: '0.8em', color: 'blue' } : { fontSize: '0.8em', color: 'red' }}>
                               <td data-label="FISMA">{formatoDDMMYYYY_PEN(FISMA)}</td>
+                              <td data-label="Motivo">{motivoIS ? motivoIS.substring(0, 9) : '-'}</td>
                               <td data-label="UBI">{ubigeo ? ubigeo : '-'}</td>
                               <td
                                 data-label="Cnt.Entrada"

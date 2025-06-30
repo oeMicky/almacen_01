@@ -5,7 +5,7 @@ import type { IMercaderiaIN_BUSCAR } from '~/interfaces/iMercaderia';
 import { CTX_INDEX_INVENTARIO } from '~/routes/(inventario)/inventario';
 import style from '../tabla/tabla.css?inline';
 import { cerosALaIzquierda, formatear_2Decimales } from '~/functions/comunes';
-import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
+// import { verUbigeoAntiguo } from '~/apis/mercaderia.api';
 import { parametrosGlobales } from '~/routes/login';
 // import { parametrosGlobales } from '~/routes/login';
 
@@ -122,7 +122,7 @@ export default component$(
                           // KARDEXS,
                           noFacturar,
                           activo,
-                          ubigeo,
+                          // ubigeo,
                         } = mercaINLocali;
                         let elSM = 0;
                         // let elTCS = 0;
@@ -295,7 +295,7 @@ export default component$(
                                   //console.log('la merca A Editar IN-->', ctx_index_inventario.mM);
                                 }}
                               />
-                              <input
+                              {/* <input
                                 title="Editar ubigeo"
                                 type="image"
                                 src={images.ubigeo}
@@ -326,7 +326,7 @@ export default component$(
                                   // ctx_buscar_mercaderia_out.mostrarSpinner = true;
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
-                              />
+                              /> */}
                               <input
                                 title="Editar precio público"
                                 type="image"
@@ -365,7 +365,7 @@ export default component$(
                                   //console.log('la merca A Editar IN', ctx.mM);
                                 }}
                               />
-                              <input
+                              {/* <input
                                 title="Ver ubigeo antiguo"
                                 type="image"
                                 src={images.xo}
@@ -378,7 +378,7 @@ export default component$(
                                   // console.log('resp ubigeo', resp.data);
                                   alert('El ubigeo antiguo es: ' + resp.data[0].ubigeo);
                                 }}
-                              />
+                              /> */}
                             </td>
                           </tr>
                         );

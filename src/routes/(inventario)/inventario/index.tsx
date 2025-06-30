@@ -200,7 +200,9 @@ export default component$(() => {
         </label>
       </div>
       <h4 style={{ margin: '8px 0 4px 2px' }}>
-        <u>Inventario</u>
+        <u>
+          Inventario - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>
+        </u>
       </h4>
       {/* <br /> */}
       {/* BUSCAR POR  --- INVENTARIOR EXTERNO --- AGREGAR MERCADERIA */}

@@ -152,7 +152,9 @@ export default component$(() => {
         </label>
       </div>
       <h4 style={{ margin: '8px 0 0 2px' }}>
-        <u>Almacén: </u>
+        <u>
+          Almacén - <label style={{ color: 'red' }}>{parametrosGlobales.sucursal}</label>{' '}
+        </u>
       </h4>
       {/* SUB - TITULO: INGRESOS DE MERCADERIAS   border: '1px solid #ff0000',   border: '1px solid blue'*/}
       <h4 style={{ margin: '4px 0 4px 0', display: 'flex' }}>
