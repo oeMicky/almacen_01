@@ -14,7 +14,7 @@ import EditPrecioPublicoIN from '~/components/miscelanea/mercaderiaIN/editPrecio
 import NewEditMercaderiaIN from '~/components/miscelanea/mercaderiaIN/newEditMercaderiaIN';
 // import NewEditUbigeo from '~/components/miscelanea/mercaderiaIN/newEditUbigeo';
 import Spinner from '~/components/system/spinner';
-import { cerosALaIzquierda, hoy } from '~/functions/comunes';
+import { cerosALaIzquierda, hoy, redondeo6Decimales } from '~/functions/comunes';
 // import ImgButton from '~/components/system/imgButton';
 import { parametrosGlobales } from '~/routes/login';
 
@@ -374,21 +374,41 @@ export default component$(() => {
                 let aExportar = '';
                 aExportar = 'INVENTARIO AL ' + fechaLocal + ' ' + horaLocal + '|\n';
                 aExportar += '\n';
-                aExportar += 'ITEM|DESCRIPCIÓN|LINEA|MARCA|UBIGEO|STOCK|UNI|COSTO PEN|PRECIO PEN|KX|\n';
+                aExportar += 'ITEM|DESCRIPCIÓN|LINEA|MARCA|aSTOCK|STOCK|UNI|UBI-CANT|COSTO PEN|PRECIO PEN|\n';
                 definicion_CTX_INDEX_INVENTARIO.kK.map((com: any, index: number) => {
-                  const { descripcion, lineaTipo, marca, ubigeo, totalCantidadSaldo, unidad, costoUnitarioPENMasIGV, precioUnitarioPEN, KARDEXS } = com;
+                  const { descripcion, lineaTipo, marca, STOCK, unidad, costoUnitarioPENMasIGV, precioUnitarioPEN, UBIS_STOCKS } = com;
                   const elIndex = index + 1;
-                  // const bI = typeof baseImponiblePEN === 'undefined' ? '' : baseImponiblePEN.$numberDecimal;
-                  // const iGV = typeof igvPEN === 'undefined' ? '' : igvPEN.$numberDecimal;
-                  // const adNO = typeof adquisicionesNoGravadasPEN === 'undefined' ? '' : adquisicionesNoGravadasPEN.$numberDecimal;
-                  // const isc = typeof iscPEN === 'undefined' ? '' : iscPEN.$numberDecimal;
-                  // const icbp = typeof icbpPEN === 'undefined' ? '' : icbpPEN.$numberDecimal;
-                  // const otros = typeof otrosPEN === 'undefined' ? '' : otrosPEN.$numberDecimal;
-                  // const total = typeof totalPEN === 'undefined' ? '' : totalPEN.$numberDecimal;
-                  // const detra = typeof detraccion === 'undefined' ? '' : detraccion;
-                  // const detraConsta = typeof detraccionConstancia === 'undefined' ? '' : detraccionConstancia;
-                  // const detraM = typeof detraccionMontoPEN === 'undefined' ? '' : detraccionMontoPEN.$numberDecimal;
-                  // const detraPorc = typeof detraccionPorcentaje === 'undefined' ? '' : detraccionPorcentaje.$numberDecimal;
+
+                  let elSTOCK = '';
+                  let elUBI_CANT = '';
+                  if (UBIS_STOCKS.length === 0) {
+                    elSTOCK = '-';
+                    elUBI_CANT = '-';
+                  } else {
+                    let sumSTOCK = 0;
+                    const cuantos = UBIS_STOCKS.length;
+                    UBIS_STOCKS.map((kardex: any, index: number) => {
+                      sumSTOCK = sumSTOCK + (kardex.stock ? parseFloat(kardex.stock.$numberDecimal ? kardex.stock.$numberDecimal : kardex.stock) : 0);
+                      if (cuantos - 1 === index) {
+                        elUBI_CANT =
+                          elUBI_CANT +
+                          (kardex.ubigeo ? kardex.ubigeo + ' (' + (kardex.stock.$numberDecimal ? kardex.stock.$numberDecimal : kardex.stock) + ')' : '-');
+                        // if (kardex.ubigeo) {
+                        //   elUBI_CANT = kardex.ubigeo + ' (' + (kardex.stock.$numberDecimal ? kardex.stock.$numberDecimal : kardex.stock) + ')';
+                        // } else {
+                        //   elUBI_CANT = '-';
+                        // }
+                      } else {
+                        elUBI_CANT =
+                          elUBI_CANT +
+                          (kardex.ubigeo ? kardex.ubigeo + ' (' + (kardex.stock.$numberDecimal ? kardex.stock.$numberDecimal : kardex.stock) + ') - ' : '-');
+                      }
+
+                      console.log('index', index, 'kardex.stock', kardex.stock, 'kardex.ubigeo', kardex.ubigeo);
+                    });
+                    elSTOCK = sumSTOCK.toString();
+                  }
+                  console.log('com........');
 
                   aExportar =
                     aExportar +
@@ -400,29 +420,41 @@ export default component$(() => {
                     '|' +
                     marca +
                     '|' +
-                    (typeof ubigeo !== 'undefined' && ubigeo !== null ? ubigeo.toString() : '-') +
-                    '|' +
-                    (typeof totalCantidadSaldo !== 'undefined' && totalCantidadSaldo !== null
-                      ? totalCantidadSaldo.$numberDecimal
-                        ? totalCantidadSaldo.$numberDecimal
-                        : totalCantidadSaldo
+                    (typeof STOCK !== 'undefined' && STOCK !== null
+                      ? STOCK.$numberDecimal
+                        ? redondeo6Decimales(STOCK.$numberDecimal)
+                        : redondeo6Decimales(STOCK)
                       : '-') +
                     '|' +
+                    elSTOCK +
+                    '|' +
+                    // (typeof ubigeo !== 'undefined' && ubigeo !== null ? ubigeo.toString() : '-') +
+                    // '|' +
+                    // (typeof totalCantidadSaldo !== 'undefined' && totalCantidadSaldo !== null
+                    //   ? totalCantidadSaldo.$numberDecimal
+                    //     ? totalCantidadSaldo.$numberDecimal
+                    //     : totalCantidadSaldo
+                    //   : '-') +
                     unidad +
+                    '|' +
+                    elUBI_CANT +
                     '|' +
                     (typeof costoUnitarioPENMasIGV !== 'undefined' && costoUnitarioPENMasIGV !== null
                       ? costoUnitarioPENMasIGV.$numberDecimal
-                        ? costoUnitarioPENMasIGV.$numberDecimal
-                        : costoUnitarioPENMasIGV
+                        ? redondeo6Decimales(costoUnitarioPENMasIGV.$numberDecimal)
+                        : redondeo6Decimales(costoUnitarioPENMasIGV)
                       : '-') +
                     '|' +
                     (typeof precioUnitarioPEN !== 'undefined' && precioUnitarioPEN !== null
                       ? precioUnitarioPEN.$numberDecimal
-                        ? precioUnitarioPEN.$numberDecimal
-                        : precioUnitarioPEN
+                        ? redondeo6Decimales(precioUnitarioPEN.$numberDecimal)
+                        : redondeo6Decimales(precioUnitarioPEN)
                       : '-') +
                     '|' +
-                    (KARDEXS.length === 0 ? 'No' : 'Si') +
+                    // typeof KARDEXS !==
+                    // 'undefined' && KARDEXS !== null
+                    // ? 'Si'
+                    // : 'No' +
                     '\n';
                 });
                 console.log('aExportar', aExportar);

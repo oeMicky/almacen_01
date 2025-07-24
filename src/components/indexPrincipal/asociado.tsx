@@ -3,6 +3,7 @@ import style from './asociado.css?inline';
 
 export interface AsociadoProps {
   imagen: string;
+  alt: string;
   ancho: number;
 }
 
@@ -13,7 +14,7 @@ export default component$((props: AsociadoProps) => {
   return (
     <>
       <center>
-        <img loading="lazy" class="imagen-asociado" src={props.imagen} width={props.ancho} />
+        <img alt={props.alt} loading="lazy" class="imagen-asociado" src={props.imagen} width={props.ancho} />
         {/* <img src={imagen} width={ancho} /> */}
       </center>
     </>

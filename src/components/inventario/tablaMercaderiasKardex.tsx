@@ -15,7 +15,7 @@ export default component$(
     //#region CONTEXTOS
     const ctx_index_inventario = useContext(CTX_INDEX_INVENTARIO);
     //#endregion CONTEXTOS
-
+    console.log('🚌🚌🚌');
     //#region BUSCANDO REGISTROS
     const lasMercaderiasKARDEX = useResource$<{ status: number; data: any; message: string }>(async ({ track, cleanup }) => {
       track(() => props.buscarMercaderiasKARDEX.valueOf());
@@ -24,7 +24,10 @@ export default component$(
       cleanup(() => abortController.abort('cleanup'));
 
       //console.log('parametrosBusqueda', props.parametrosBusqueda);
+
       if (props.verTODOS) {
+        console.log('verTODOS');
+
         const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcionTODOS', {
           // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
           method: 'POST',
@@ -48,7 +51,10 @@ export default component$(
         return res.json();
       }
 
-      // const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorDescripcion', {
+      //::: POR TIPO :::
+      // console.log('🚌🚌🚌🚌🚌🚌🚌');
+
+      // const res = await fetch(import.meta.env.VITE_URL + '/api/mercaderia/buscarMercaderiasPorLineaTipo', {
       //   // const res = await fetch('https://backendalmacen-production.up.railway.app/api/servicio/getServiciosPorDescripcion', {
       //   method: 'POST',
       //   headers: {

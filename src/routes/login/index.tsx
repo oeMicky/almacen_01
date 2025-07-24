@@ -165,6 +165,8 @@ export default component$(() => {
     // contrasena: '12345678',
 
     //PRODUCCION
+    // email: 'mvizconde@msn.com',
+    // contrasena: 'Cielo123',
     email: '',
     contrasena: '',
   });

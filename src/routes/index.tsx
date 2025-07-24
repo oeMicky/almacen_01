@@ -79,10 +79,10 @@ export default component$(() => {
           <section id="asociados" class="seccion-asociados">
             <h2 style={{ marginLeft: '16px' }}>ASOCIADOS</h2>
             <div class="asociados">
-              <Asociado imagen={images.panafoodsBnWB} ancho={240} />
-              <Asociado imagen={images.igmBnWB} ancho={160} />
-              <Asociado imagen={images.mgBnWB} ancho={160} />
-              <Asociado imagen={images.sanMiguelBnWB} ancho={180} />
+              <Asociado alt="Panafoods" imagen={images.panafoodsBnWB} ancho={240} />
+              <Asociado alt="Inversiones del Mar" imagen={images.igmBnWB} ancho={160} />
+              <Asociado alt="Mega" imagen={images.mgBnWB} ancho={160} />
+              <Asociado alt="San Miguel" imagen={images.sanMiguelBnWB} ancho={180} />
               {/* <Asociado imagen={images.panafoodsBnWB} ancho={'350px'} />
               <Asociado imagen={images.igmBnWB} ancho={'200px'} />
               <Asociado imagen={images.mgBnWB} ancho={'200px'} />
